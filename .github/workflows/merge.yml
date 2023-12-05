@@ -1,0 +1,96 @@
+name: Merge
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - '.github/**'
+      - '.graphics/**'
+      - '!.github/workflows/.deploy.yml'
+      - '!.github/workflows/merge.yml'
+  workflow_dispatch:
+    inputs:
+      pr_no:
+        description: "PR-numbered container set to deploy"
+        type: number
+        required: true
+
+jobs:
+  vars:
+    name: Set Variables
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      # Get last merged (or current) PR number
+      - uses: actions/checkout@v4
+      - name: Get PR Number
+        id: tag
+        run: |
+          # Accept a provided PR as input or use the API
+          if [ ! -z "${{ inputs.pr_no }}" ]; then
+            PR_NO="${{ inputs.pr_no }}"
+          else
+            HEAD=$(git log main --oneline | head -n1 | awk '{print $1}')
+            PR_NO=$(\
+              curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ github.token }}" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                https://api.github.com/repos/bcgov/quickstart-openshift/commits/${HEAD}/pulls \
+                  | jq .[0].number
+            )
+          fi
+          echo -e "Last PR: ${PR_NO}"
+
+          # Validate PR number and send to output
+          if [ ! "${PR_NO}" =~ ^[0-9]+$ ]; then
+            echo "PR number not found"
+            exit 1
+          fi
+          echo "tag=${PR_NO}" >> $GITHUB_OUTPUT
+
+  deploy-test:
+    name: Deploy (test)
+    needs: [vars]
+    uses: ./.github/workflows/.deploy.yml
+    secrets: inherit
+    with:
+      environment: test
+      tag: ${{ needs.vars.outputs.tag }}
+      release: test
+
+  integration-e2e:
+    name: Integration and E2E Tests
+    needs: [deploy-test, vars]
+    uses: ./.github/workflows/.tests.yml
+    with:
+      target: test
+
+  deploy-prod:
+    name: Deploy (prod)
+    needs: [integration-e2e]
+    uses: ./.github/workflows/.deploy.yml
+    secrets: inherit
+    with:
+      environment: prod
+      tag: ${{ needs.vars.outputs.tag }}
+      release: prod
+
+  promote:
+    name: Promote Images
+    needs: [deploy-prod, vars]
+    runs-on: ubuntu-22.04
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        package: [migrations, backend, frontend]
+    timeout-minutes: 1
+    steps:
+      - uses: shrink/actions-docker-registry-tag@v3
+        with:
+          registry: ghcr.io
+          repository: ${{ github.repository }}/${{ matrix.package }}
+          target: ${{ needs.vars.outputs.tag }}
+          tags: prod
