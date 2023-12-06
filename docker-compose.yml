@@ -1,0 +1,91 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: ${PROJECT}-db
+    restart: always
+    env_file: .env
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - tc
+
+  frontend:
+    image: ${PROJECT}-frontend:${GIT_LOCAL_BRANCH}
+    container_name: ${PROJECT}-frontend
+    command: 'npm run start'
+    build:
+      context: './frontend'
+      target: dev
+    restart: always
+    stdin_open: true
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      # uncomment if hot reload fails
+      # WDS_SOCKET_HOST: "127.0.0.1"
+      ALLOW_EMPTY_PASSWORD: "yes"
+      PORT: 3000
+    ports:
+    - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - tc
+
+  backend:
+    container_name: ${PROJECT}-backend
+    image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
+    build:
+      context: './backend'
+      target: dev
+    restart: always
+    stdin_open: true
+    command: 'npm run start:dev'
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CHOKIDAR_USEPOLLING: "true"
+      ALLOW_EMPTY_PASSWORD: "yes"
+    
+    volumes:
+      - /usr/src/app/node_modules
+      - ./backend:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - tc
+
+  nginx:
+    image: ${PROJECT}-nginx:${GIT_LOCAL_BRANCH}
+    build: 
+      context: './nginx'
+    ports:
+      - "3050:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - tc
+
+volumes:
+  pg_data: {}
+networks:
+  tc:
+    driver: bridge
