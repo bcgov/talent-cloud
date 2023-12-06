@@ -9,7 +9,10 @@ WORKDIR /usr/src/app
 ENV PORT 8080
 ENV NODE_ENV local
 
-COPY *.json ./
+COPY *.json .
+
+RUN npm ci 
+
 COPY . .
 
 
@@ -18,28 +21,31 @@ EXPOSE 8080
 # BUILD FOR PROD
 #############################
 
-FROM node:20.10.0-bullseye-slim AS build
+FROM node:20.10.0-alpine AS build
 
 WORKDIR /usr/src/app
 
-COPY *.json ./
+COPY *.json .
+
+# neeeded to run build gives access to nest pkg
+COPY --from=dev /usr/src/app/node_modules ./node_modules
+
 COPY . .
+
+RUN npm run build
+
+ENV NODE_ENV production
 
 RUN npm pkg delete scripts.prepare
 
-RUN npm ci --no-update-notifier --omit=dev && \
-    npm run build
+RUN npm ci --only=production && npm cache clean --force
+
 
 ############################
 # PRODUCTION
 #############################
 
 FROM gcr.io/distroless/nodejs20-debian11:nonroot AS production
-
-ENV NODE_ENV production
-
-# Copy over app
-WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist

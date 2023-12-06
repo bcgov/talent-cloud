@@ -1,5 +1,5 @@
 module.exports = {
-    ignorePatterns: ['.eslintrc.js', 'build', 'node_modules'],
+    ignorePatterns: ['.eslintrc.js', 'build','public', 'index.tsx',  'node_modules'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
       tsconfigRootDir: __dirname,
@@ -70,15 +70,6 @@ module.exports = {
         }
       ],
       'comma-dangle': 'off',
-      'no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_'
-        }
-      ]
     }
   };
   
