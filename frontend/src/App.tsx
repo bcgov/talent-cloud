@@ -2,7 +2,7 @@ function App() {
   return (
     <div className="w-full">
       <div className="w-full flex  items-center justify-center h-screen">
-        <h1>Coming zsdaxd Soon</h1>
+        <h1>Coming Soon</h1>
       </div>
     </div>
   );
