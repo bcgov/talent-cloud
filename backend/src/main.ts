@@ -1,12 +1,11 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Documentation } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = parseInt(process.env.PORT ?? "8080");
+  const port = parseInt(process.env.PORT ?? '8080');
 
   app.setGlobalPrefix('api/v1');
 
@@ -17,10 +16,7 @@ async function bootstrap() {
     }),
   );
 
-
-
   Documentation(app);
-
 
   await app.listen(port);
 }

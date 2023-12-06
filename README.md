@@ -12,7 +12,9 @@
 
 ### Local Development
 
-This project runs three containers for local development, and uses nginx for networking.
+This project runs three containers for local development.
+
+In order to avoid cors errors during development we are running a reverse proxy on an nginx server.
 
 To run the project:
 - ensure your node and npm version match those listed in the dependencies

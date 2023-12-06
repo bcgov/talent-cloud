@@ -23,7 +23,9 @@ FROM node:20.10.0-bullseye-slim AS build
 WORKDIR /app
 COPY *.json *.ts index.html ./
 COPY ./src ./src
-RUN npm ci --ignore-scripts --no-update-notifier --omit=dev && \
+
+RUN npm pkg delete scripts.prepare
+RUN npm ci --no-update-notifier --omit=dev && \
     npm run build
 
 ###################

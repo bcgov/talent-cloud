@@ -25,7 +25,9 @@ WORKDIR /usr/src/app
 COPY *.json ./
 COPY . .
 
-RUN npm ci --ignore-scripts --no-update-notifier --omit=dev && \
+RUN npm pkg delete scripts.prepare
+
+RUN npm ci --no-update-notifier --omit=dev && \
     npm run build
 
 ############################
