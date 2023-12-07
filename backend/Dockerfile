@@ -15,12 +15,10 @@ RUN npm ci
 
 COPY . .
 
-
 EXPOSE 8080
 ############################
 # BUILD FOR PROD
 #############################
-
 FROM node:20.10.0-alpine AS build
 
 WORKDIR /usr/src/app
