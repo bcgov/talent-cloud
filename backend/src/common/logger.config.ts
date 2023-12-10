@@ -7,17 +7,14 @@ const globalLoggerFormat: winston.Logform.Format = winston.format.timestamp({
 });
 
 const localLoggerFormat: winston.Logform.Format = winston.format.combine(
-  winston.format.colorize(),
+  winston.format.colorize({ all: true }),
   winston.format.align(),
-  utilities.format.nestLike('Backend', { prettyPrint: true }),
+  utilities.format.nestLike('API', { prettyPrint: true, colors: true }),
 );
 
 export const customLogger: LoggerService = WinstonModule.createLogger({
-  transports: [
-    new winston.transports.Console({
-      level: 'silly',
-      format: winston.format.combine(globalLoggerFormat, localLoggerFormat),
-    }),
-  ],
+  transports: [new winston.transports.Console({})],
+  level: 'silly',
+  format: winston.format.combine(globalLoggerFormat, localLoggerFormat),
   exitOnError: false,
 });

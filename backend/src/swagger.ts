@@ -1,16 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { HealthModule } from './health/health.module';
 
 export const Documentation = (app: INestApplication) => {
   const options = new DocumentBuilder()
     .setTitle('TC API Docs')
-    .setVersion(process.env.API_VERSION || '1.0.1')
+    .setVersion(process.env.API_VERSION || '0.0.1')
     .setDescription('TC API')
     .build();
 
   const baseDocument = SwaggerModule.createDocument(app, options, {
-    include: [AppModule],
+    include: [AppModule, HealthModule],
   });
 
   SwaggerModule.setup('api', app, baseDocument, {
@@ -24,4 +25,3 @@ export const Documentation = (app: INestApplication) => {
     },
   });
 };
-
