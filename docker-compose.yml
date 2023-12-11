@@ -101,6 +101,7 @@ services:
       context: ./keycloak
     command:
       - start-dev
+      - --import-realm
       - --hostname-strict=false
       - --hostname-strict-https=false
       # - --hostname=localhost
@@ -110,7 +111,9 @@ services:
     platform: linux/arm64/v8
     volumes:
       - keycloak:/opt/keycloak/data
+      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
     environment:
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
       DB_VENDOR: ${DB_TYPE}
       DB_ADDR: db
       DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
