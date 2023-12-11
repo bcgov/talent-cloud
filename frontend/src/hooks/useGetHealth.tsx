@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAppHealth, getDBHealth } from '../services/health';
+import { getAppHealth } from '../services/health';
 
 interface Health {
   status?: string;
@@ -15,18 +15,19 @@ export const useGetHealth = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: appHealth } = await getAppHealth();
-        const { data: dbHealth } = await getDBHealth();
+        const {
+          data: { db, api },
+        } = await getAppHealth();
 
         setAppHealth({
-          status: appHealth?.status,
-          error: appHealth?.error,
-          details: appHealth?.details,
+          status: api?.status,
+          error: api?.error,
+          details: api?.details,
         });
         setDBHealth({
-          status: dbHealth?.status,
-          error: dbHealth?.error,
-          details: dbHealth?.details,
+          status: db?.status,
+          error: db?.error,
+          details: db?.details,
         });
       } catch (e) {
         console.log(e);

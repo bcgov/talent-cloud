@@ -37,7 +37,12 @@ Local Dev Containers:
 
 A default realm and client have been set up.
 
-To login:
+To login to the master realm:
+
+- username: "admin"
+- password: "password"
+
+To login to the local client:
 
 - username: "local-user"
-- password: "password"
+- password: "admin"

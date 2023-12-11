@@ -13,6 +13,7 @@ export const AppRoutes = () => {
     url: KeycloakVars.URL,
     clientId: KeycloakVars.CLIENT_ID,
   });
+
   const handleTokens = (tokens: any) => {
     store.set('TOKENS', tokens);
   };
@@ -26,14 +27,13 @@ export const AppRoutes = () => {
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<AppHealth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route />
           </Route>
-
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

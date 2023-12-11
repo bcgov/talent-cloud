@@ -8,6 +8,7 @@ import { useGetHealth } from '../hooks';
 export const AppHealth = () => {
   const { appHealth, dbHealth } = useGetHealth();
   const { keycloak } = useKeycloak();
+
   return (
     <Layout isLoading={false}>
       <div className="flex flex-col justify-around h-auto">

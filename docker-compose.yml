@@ -12,11 +12,6 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_ROOT_PASSWORD=${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
-      timeout: 45s
-      interval: 10s
-      retries: 10
     ports:
       - "5432:5432"
     volumes:
@@ -39,7 +34,6 @@ services:
       REACT_APP_KEYCLOAK_HOST: ${REACT_APP_KEYCLOAK_HOST}
       REACT_APP_URL: ${REACT_APP_URL}
       REACT_APP_PORT: ${REACT_APP_PORT}
-      PORT: ${REACT_APP_PORT}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
       # uncomment if hot reload fails (windows only?)
@@ -70,8 +64,6 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      PORT: ${API_PORT}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
