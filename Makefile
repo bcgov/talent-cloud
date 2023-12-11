@@ -31,6 +31,10 @@ run-local:
 	@echo "+\n++ Make: Running locally ...\n+"
 	@docker-compose   up -d
 
+build-keycloak:
+	@echo "+\n++ Make: Buidling keycloak ...\n+"
+	@docker-compose build --no-cache keycloak
+
 build-frontend:
 	@echo "+\n++ Make: Building frontend ...\n+"
 	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/frontend:latest ./frontend
