@@ -32,3 +32,12 @@ Local Dev Containers:
 - Backend/NestJS: http://localhost:3050/api
 - Keycloak: http://localhost:8080
 - Postgres: http://localhost:5432
+
+### Keycloak - Local
+
+A default realm and client have been set up.
+
+To login:
+
+- username: "local-user"
+- password: "password"
