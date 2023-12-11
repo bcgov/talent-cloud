@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,css}'],
-
   theme: {
     extend: {
       fontFamily: {
@@ -9,17 +8,17 @@ module.exports = {
       },
       colors: {
         primary: '#003366',
-        // /* header, footer, beta status */
+        // header, footer, beta status
         secondary: '#fcba19',
-        // /* headings and paragraphs */
+        // headings and paragraphs
         text: '#313132',
-        // /* Links */
+        // links
         links: '#1a5a96',
-        // /* Nav BG */
+        // nav BG
         bgNav: '#38598a',
-        // /* text input, textarea, checkbox, radio button */
+        //  text input, textarea, checkbox, radio button
         formComponents: '#606060',
-        // /* Semantic Colours */
+        // semantic colours
         error: '#d8292f',
         success: '#2e8540',
       },
