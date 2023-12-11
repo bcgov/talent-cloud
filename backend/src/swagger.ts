@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 export const Documentation = (app: INestApplication) => {
   const options = new DocumentBuilder()
     .setTitle('TC API Docs')
-    .setVersion(process.env.API_VERSION || '1.0.1')
+    .setVersion(process.env.API_VERSION || '0.0.1')
     .setDescription('TC API')
     .build();
 
@@ -24,4 +24,3 @@ export const Documentation = (app: INestApplication) => {
     },
   });
 };
-
