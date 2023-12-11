@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
-import { HealthModule } from './health/health.module';
 import { LoggerModule } from './logger/logger.module';
+import { AppController } from './app.controller';
+import { HttpModule } from '@nestjs/axios';
+import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-  imports: [DatabaseModule, HealthModule, LoggerModule],
+  imports: [DatabaseModule, LoggerModule, TerminusModule, HttpModule],
+  controllers: [AppController],
 })
 export class AppModule {}
