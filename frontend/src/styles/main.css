@@ -3,6 +3,7 @@
 @import './navigation.css';
 @import './footer.css';
 @import './button.css';
+@import './login.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

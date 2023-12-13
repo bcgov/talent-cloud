@@ -4,6 +4,7 @@ export default Object.freeze({
   Dashboard: '/dashboard',
   Profile: '/profile',
   Keycloak: '/keycloak',
-  AppHealth: '/',
+  AppHealth: '/health',
+  LandingPage: '/',
   NotFound: '*',
 });

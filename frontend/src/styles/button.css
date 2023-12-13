@@ -17,6 +17,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
+  width: 100%;
 }
 
 .BC-Gov-PrimaryButton:hover {
@@ -32,7 +33,7 @@
 .BC-Gov-PrimaryButton:active {
   opacity: 1;
 }
-HTML
+/* HTML
   -
   Dark
   Background
@@ -44,8 +45,8 @@ HTML
   > CSS
   -
   Dark
-  Background
-  .BC-Gov-PrimaryButton-Dark {
+  Background */
+.BC-Gov-PrimaryButton-Dark {
   background-color: #fff;
   border: none;
   border-radius: 4px;
@@ -64,6 +65,7 @@ HTML
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;
+  width: 100%;
 }
 
 .BC-Gov-PrimaryButton-Dark:hover {
@@ -164,4 +166,5 @@ HTML
   font-weight: 700;
   letter-spacing: 1px;
   cursor: not-allowed;
+  width: 100%;
 }

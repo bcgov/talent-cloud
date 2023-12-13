@@ -1,12 +1,10 @@
-import { useKeycloak } from '@react-keycloak/web';
-
 import { Button, ButtonTypes } from '../components';
 import { useGetHealth } from '../hooks';
+import { logout } from '../services/keycloak';
 
 //TODO remove - this is just for development
 const AppHealth = () => {
   const { appHealth, dbHealth } = useGetHealth();
-  const { keycloak } = useKeycloak();
 
   return (
     <div className="flex flex-col justify-around h-auto">
@@ -44,7 +42,7 @@ const AppHealth = () => {
       <div>
         <Button
           text="Logout"
-          onClick={keycloak.logout}
+          onClick={logout}
           type={ButtonTypes.PRIMARY}
           disabled={false}
         />

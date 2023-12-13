@@ -12,7 +12,7 @@ export default () => {
   const { state } = useLocation();
 
   useEffect(() => {
-    const redirect = state ? state.redirectOnLogin : Routes.Dashboard;
+    const redirect = state ? state.redirectOnLogin : Routes.AppHealth;
     store.set('REDIRECT', redirect);
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Keycloak, ''));
   }, [keycloak, state]);

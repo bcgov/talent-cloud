@@ -3,9 +3,10 @@ import { Suspense } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import store from 'store';
 import ApplicationRoutes from './constants';
-import { Layout, Loading } from '../components';
+import { PrivateLayout, Loading, PublicLayout } from '../components';
 import { AppHealth, Dashboard, Login, NotFound, Profile } from '../pages';
 import KeycloakPage from '../pages/Keycloak';
+import LandingPage from '../pages/LandingPage';
 import { _kc } from '../services/keycloak';
 
 const PrivateRoute = () => {
@@ -14,9 +15,17 @@ const PrivateRoute = () => {
     return <Navigate to="/login" replace />;
   }
   return (
-    <Layout>
+    <PrivateLayout>
       <Outlet />
-    </Layout>
+    </PrivateLayout>
+  );
+};
+
+const PublicRoute = () => {
+  return (
+    <PublicLayout>
+      <Outlet />
+    </PublicLayout>
   );
 };
 
@@ -36,14 +45,20 @@ export default () => {
       <BrowserRouter>
         <Suspense fallback={<Loading />}>
           <Routes>
+            <Route element={<PublicRoute />}>
+              <Route
+                path={ApplicationRoutes.LandingPage}
+                element={<LandingPage />}
+              />
+              <Route path={ApplicationRoutes.Keycloak} element={<KeycloakPage />} />
+              <Route path={ApplicationRoutes.Login} element={<Login />} />
+              <Route path={ApplicationRoutes.NotFound} element={<NotFound />} />
+            </Route>
             <Route element={<PrivateRoute />}>
               <Route path={ApplicationRoutes.AppHealth} element={<AppHealth />} />
               <Route path={ApplicationRoutes.Dashboard} element={<Dashboard />} />
               <Route path={ApplicationRoutes.Profile} element={<Profile />} />
             </Route>
-            <Route path={ApplicationRoutes.Keycloak} element={<KeycloakPage />} />
-            <Route path={ApplicationRoutes.Login} element={<Login />} />
-            <Route path={ApplicationRoutes.NotFound} element={<NotFound />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

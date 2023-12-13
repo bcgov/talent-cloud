@@ -5,23 +5,6 @@ import { LinkProps, NavProps } from './types';
 export const Navigation = ({ links, header }: NavProps) => {
   return (
     <>
-      <header>
-        <div className="banner">
-          <a href="https://gov.bc.ca">
-            <img
-              src="https://www2.gov.bc.ca/errors/images/bc_logo_transparent.png"
-              alt="Go to the Government of British Columbia website"
-            />
-          </a>
-          <h1>{header}</h1>
-        </div>
-        {/* // right side of logo */}
-        <div className="other">
-          <a className="nav-btn">
-            <i className="fas fa-bars" id="menu"></i>
-          </a>
-        </div>
-      </header>
       <nav className="navigation-main" id="navbar">
         <div className="container">
           <ul>

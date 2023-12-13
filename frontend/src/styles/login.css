@@ -1,0 +1,31 @@
+.card-pf {
+  background: #fff;
+  border-top: 2px solid transparent;
+  box-shadow: 0 1px 1px rgba(3, 3, 3, 0.175);
+  margin: 0 -10px 20px;
+  padding: 0 20px;
+  width: 100%;
+}
+.kc-page-title {
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: 1px solid #b3b1b3;
+  color: #036;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.login-pf {
+  background: none;
+  background-color: #0f3362;
+  font-family: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif;
+  color: #036;
+}
+
+.login-pf-header {
+  padding-top: 20px;
+  margin-bottom: 0 !important;
+  text-align: center;
+  position: relative;
+}
