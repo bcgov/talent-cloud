@@ -1,5 +1,5 @@
-import { Link } from './Link';
-import { LinkProps, NavProps } from '../common';
+import { Link } from 'react-router-dom';
+import { LinkProps, NavProps } from './types';
 
 //TODO replace img url with static img
 export const Navigation = ({ links, header }: NavProps) => {
@@ -28,10 +28,15 @@ export const Navigation = ({ links, header }: NavProps) => {
             {links.map(({ href, label }: LinkProps, i: number) => (
               <li key={i}>
                 <Link
-                  href={href}
-                  active={window.location.pathname.includes(label.toLowerCase())}
-                  label={label}
-                />
+                  to={href}
+                  className={
+                    window.location.pathname.includes(label.toLowerCase())
+                      ? 'active'
+                      : ''
+                  }
+                >
+                  {label}
+                </Link>
               </li>
             ))}
           </ul>

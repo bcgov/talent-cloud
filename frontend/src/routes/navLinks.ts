@@ -1,7 +1,8 @@
-import { LinkProps } from '../common';
+import { LinkProps } from '../components';
+import Routes from '../routes/constants';
 
 export const navLinks: LinkProps[] = [
-  { href: '/', label: 'Home' },
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/profile', label: 'Profile' },
+  { href: Routes.AppHealth, label: 'Home' },
+  { href: Routes.Dashboard, label: 'Dashboard' },
+  { href: Routes.Profile, label: 'Profile' },
 ];

@@ -1,9 +1,8 @@
-import { ButtonTypes, LinkTypes } from './constants';
+import { ButtonTypes } from './constants';
 
 export type LinkProps = {
   href: string;
   label: string;
-  type?: LinkTypes;
   active?: boolean;
 };
 

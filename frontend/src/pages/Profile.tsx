@@ -1,9 +1,5 @@
-import { Layout } from '../components';
-
-export const Profile = () => {
-  return (
-    <Layout isLoading={false}>
-      <h2>Profile</h2>
-    </Layout>
-  );
+const Profile = () => {
+  return <h2>Profile</h2>;
 };
+
+export default Profile;

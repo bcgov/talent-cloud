@@ -1,5 +1,5 @@
-import { Link } from './Link';
-import { FooterProps, LinkProps } from '../common';
+import { Link } from 'react-router-dom';
+import { FooterProps, LinkProps } from './types';
 
 export const Footer = ({ links }: FooterProps) => {
   return (
@@ -7,9 +7,11 @@ export const Footer = ({ links }: FooterProps) => {
       <footer className="footer">
         <div className="container">
           <ul>
-            {links.map(({ href, label }: LinkProps, i: number) => (
+            {links.map(({ href, label, active }: LinkProps, i: number) => (
               <li key={i}>
-                <Link href={href} label={label} />
+                <Link to={href} className={active ? 'active' : ''}>
+                  {label}
+                </Link>
               </li>
             ))}
           </ul>
