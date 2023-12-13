@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5434:5432"
+      - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
@@ -29,12 +29,12 @@ services:
     restart: always
     stdin_open: true
     environment:
-      REACT_APP_KEYCLOAK_CLIENT: ${REACT_APP_KEYCLOAK_CLIENT}
-      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM}
-      REACT_APP_KEYCLOAK_HOST: ${REACT_APP_KEYCLOAK_HOST}
+      REACT_APP_SSO_REDIRECT_URI: ${REACT_APP_SSO_REDIRECT_URI}
+      REACT_APP_SSO_AUTH_SERVER_URL: ${REACT_APP_SSO_AUTH_SERVER_URL}
+      REACT_APP_SSO_REALM: ${REACT_APP_SSO_REALM}
+      REACT_APP_SSO_CLIENT_ID: ${REACT_APP_SSO_CLIENT_ID}
       REACT_APP_URL: ${REACT_APP_URL}
       REACT_APP_PORT: ${REACT_APP_PORT}
-      PORT: ${REACT_APP_PORT}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
       # uncomment if hot reload fails (windows only?)
@@ -59,12 +59,12 @@ services:
     stdin_open: true
     command: "npm run start:dev"
     environment:
+      PORT: ${API_PORT}
+      DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      PORT: ${API_PORT}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
