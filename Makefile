@@ -3,12 +3,11 @@
 # Run in the bash context and not /bin/sh (default)
 SHELL := /bin/bash
 
-# Environment variables for project
-export $(sed 's/=.*//' .env)
-ENV := $(PWD)/.env
-include $(ENV)
 
-export ENV_NAME=dev
+export $(sed 's/=.*//' .env)
+
+
+
 # Project
 export PROJECT := tc
 
@@ -23,29 +22,33 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+ 
+build-test:
+	@echo "+\n++ Make: Running test build ...\n+"
+	@cp .env.pipeline ./.env
+	@export $(sed 's/=.*//' .env)
+	@cp ./keycloak/test.json ./keycloak/default.json
+	@docker-compose up -d --force-recreate --build 
+
+run-test-backend-pipeline:
+	@docker exec tc-backend-ci npm run test:pipeline
+
+run-test-frontend-pipeline:
+	@docker exec tc-frontend-ci npm run test:pipeline
+
 build-local:
 	@echo "+\n++ Make: Run/Build locally ...\n+"
+	@cp .env.local ./.env
+	@export $(sed 's/=.*//' .env)
+	@cp ./keycloak/local.json ./keycloak/default.json
 	@docker-compose up --build -d
 
 run-local:
 	@echo "+\n++ Make: Running locally ...\n+"
-	@docker-compose   up -d
-
-build-keycloak:
-	@echo "+\n++ Make: Buidling keycloak ...\n+"
-	@docker-compose build --no-cache keycloak
-
-build-frontend:
-	@echo "+\n++ Make: Building frontend ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/frontend:latest ./frontend
-
-build-backend:
-	@echo "+\n++ Make: Building backend ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/backend:latest ./backend
-
-build-nginx:
-	@echo "+\n++ Make: Building Nginx ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/nginx:latest ./nginx
+	@cp .env.local ./.env
+	@cp ./nginx/local.conf ./nginx/default.conf
+	@cp ./keycloak/local.json ./keycloak/default.json
+	@docker-compose up -d
 
 local-frontend-logs:
 	@docker logs $(PROJECT)-frontend --tail 25 --follow
@@ -72,10 +75,6 @@ local-frontend-workspace:
 
 local-nginx-workspace:
 	@docker exec -it $(PROJECT)-nginx sh
-
-close-local:
-	@echo "+\n++ Make: Close Local ...\n+"
-	@docker-compose -f docker-compose.yml down -v --remove-orphans
 
 close:
 	@echo "+\n++ Make: Run/Close ...\n+"

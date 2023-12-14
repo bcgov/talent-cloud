@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,6 +17,13 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "cypress.d.ts",
+    "cypress/components/Dashboard.cy.tsx",
+    "cypress/components/Loading.cy.tsx",
+    "cypress/components/NotFound.cy.tsx",
+    "cypress/components/Profile.cy.tsx",
+    "cypress/components/AppHealth.cy.tsx",
+    "cypress/components/RoutesComponent.cy.tsx"
   ]
 }

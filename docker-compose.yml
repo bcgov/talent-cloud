@@ -2,9 +2,9 @@ version: "3.7"
 services:
   db:
     image: postgres:15-alpine
-    container_name: ${PROJECT}-db
+    container_name: ${PROJECT}-db-${ENV}
     restart: always
-    env_file: .env
+    env_file: ./.env
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
@@ -15,32 +15,33 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data_${ENV}:/var/lib/postgresql/data
     networks:
-      - tc
+      - tc-${ENV}
 
   frontend:
     image: ${PROJECT}-frontend:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-frontend
+    container_name: ${PROJECT}-frontend-${ENV}
     command: "npm run start"
     build:
       context: "./frontend"
-      target: dev
+      target: ${TARGET}
+      dockerfile: ${FRONTEND_DOCKERFILE}
     restart: always
     stdin_open: true
+    env_file: ./.env
     environment:
-      REACT_APP_SSO_REDIRECT_URI: ${REACT_APP_SSO_REDIRECT_URI}
-      REACT_APP_SSO_AUTH_SERVER_URL: ${REACT_APP_SSO_AUTH_SERVER_URL}
-      REACT_APP_SSO_REALM: ${REACT_APP_SSO_REALM}
-      REACT_APP_SSO_CLIENT_ID: ${REACT_APP_SSO_CLIENT_ID}
-      REACT_APP_URL: ${REACT_APP_URL}
+      REACT_APP_SSO_REDIRECT_URI: ${KEYCLOAK_REDIRECT}
+      REACT_APP_SSO_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER}
+      REACT_APP_SSO_REALM: ${KEYCLOAK_REALM}
+      REACT_APP_SSO_CLIENT_ID: ${KEYCLOAK_CLIENT}
       REACT_APP_PORT: ${REACT_APP_PORT}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
       # uncomment if hot reload fails (windows only?)
       # WDS_SOCKET_HOST: "127.0.0.1"
     ports:
-      - "3000:3000"
+      - ${FRONTEND_PORTS}
     volumes:
       - /app/node_modules
       - ./frontend:/app
@@ -48,9 +49,9 @@ services:
       - backend
       - keycloak
     networks:
-      - tc
+      - tc-${ENV}
   backend:
-    container_name: ${PROJECT}-backend
+    container_name: ${PROJECT}-backend-${ENV}
     image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
     build:
       context: "./backend"
@@ -58,40 +59,43 @@ services:
     restart: always
     stdin_open: true
     command: "npm run start:dev"
+    env_file: ./.env
     environment:
       PORT: ${API_PORT}
       DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
+      KEYCLOAK_REALM:  ${KEYCLOAK_REALM}
+      KEYCLOAK_AUTH_SERVER: ${KEYCLOAK_AUTH_SERVER}
+      KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       DB_PASSWORD: ${DB_PASSWORD}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "8081:8081"
+      - ${BACKEND_PORTS}
     volumes:
       - /usr/src/app/node_modules
       - ./backend:/usr/src/app
     depends_on:
       - db
     networks:
-      - tc
+      - tc-${ENV}
 
   nginx:
     image: ${PROJECT}-nginx:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-nginx
+    container_name: ${PROJECT}-nginx-${ENV}
     build:
-      context: "./nginx"
+      context: ./nginx
     ports:
-      - "3050:80"
+      - ${NGINX_PORTS}
     depends_on:
       - backend
       - frontend
     networks:
-      - tc
-
+      - tc-${ENV}
   keycloak:
-    container_name: keycloak
+    container_name: ${PROJECT}-keycloak-${ENV}
     build:
       context: ./keycloak
     command:
@@ -99,14 +103,11 @@ services:
       - --import-realm
       - --hostname-strict=false
       - --hostname-strict-https=false
-      # - --hostname=localhost
-      # - --proxy=edge
-      # - --hostname-url=http://localhost:3050
-      # - --hostname-strict-backchannel=true
     platform: linux/arm64/v8
     volumes:
-      - keycloak:/opt/keycloak/data
+      - keycloak_${ENV}:/opt/keycloak/data
       - ./keycloak/default.json:/opt/keycloak/data/import/default.json
+    env_file: ./.env
     environment:
       KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
       DB_VENDOR: ${DB_TYPE}
@@ -122,13 +123,17 @@ services:
     depends_on:
       - db
     ports:
-      - "8080:8080"
-      - "8787:8787" # debug port
+      - ${KEYCLOAK_PORTS}
     networks:
-      - tc
+      - tc-${ENV}
 volumes:
-  pg_data: {}
-  keycloak: {}
+  pg_data_local: {}
+  pg_data_ci: {}
+  keycloak_local: {}
+  keycloak_ci: {}
 networks:
-  tc:
+  tc-local:
     driver: bridge
+  tc-ci:
+    driver: bridge
+

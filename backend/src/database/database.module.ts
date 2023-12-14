@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_ENV } from 'src/common/const';
+import { APP_ENV } from '../common/const';
 import { DataSource } from 'typeorm';
 
 const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;

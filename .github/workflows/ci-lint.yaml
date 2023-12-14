@@ -1,0 +1,83 @@
+name: Lint
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      # - edited
+      # - reopened
+      # - synchronize
+      # - ready_for_review
+
+jobs:
+  check_directory:
+    runs-on: "ubuntu-20.04"
+    # Declare outputs for next jobs
+    outputs:
+      frontend_changed: ${{ steps.check_file_changed.outputs.frontend_changed }}
+      backend_changed: ${{ steps.check_file_changed.outputs.backend_changed }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Checkout as many commits as needed for the diff
+          fetch-depth: 2
+      - shell: pwsh
+        id: check_file_changed
+        run: |
+          # Diff HEAD with the previous commit
+          $diff = git diff --name-only HEAD^ HEAD
+
+          # Check if a file under frontend has changed (added, modified, deleted)
+          $SourceDiff = $diff | Where-Object { $_ -match '^frontend/' }
+          $HasDiff = $SourceDiff.Length -gt 0
+
+          # Set the output named "frontend_changed"
+          Write-Host "::set-output name=frontend_changed::$HasDiff"
+
+          # Check if a file under backend has changed (added, modified, deleted)
+          $SourceDiff = $diff | Where-Object { $_ -match '^backend/' }
+          $HasDiff = $SourceDiff.Length -gt 0
+
+          # Set the output named "frontend_changed"
+          Write-Host "::set-output name=backend_changed::$HasDiff"
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    needs: [check_directory]
+    if: needs.check_directory.outputs.frontend_changed == 'True'
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install Dependencies
+        run: cd frontend && npm ci
+
+      - name: Lint Check Frontend
+        run: cd frontend && npm run lint
+
+  lint-backend:
+    runs-on: ubuntu-latest
+    needs: [check_directory]
+    if: needs.check_directory.outputs.backend_changed == 'True'
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install Dependencies
+        run: cd backend && npm ci
+
+      - name: Lint Check Backend
+        run: cd backend && npm run lint

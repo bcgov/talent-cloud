@@ -1,0 +1,13 @@
+FROM cypress/base:latest AS dev
+
+WORKDIR /app
+
+ENV PORT 3000
+
+COPY *.json .
+
+RUN npm ci
+
+COPY . .
+
+EXPOSE 3000

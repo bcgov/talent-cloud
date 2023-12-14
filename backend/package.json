@@ -16,12 +16,13 @@
     "start:dev": "nest start --tsc --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "lint": "eslint \"./**/*.ts\" --fix",
+    "test": "jest --verbose --forceExit --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:pipeline": "NODE_ENV=ci RUNTIME_ENV=ci jest  --config ./test/jest.json --runInBand --detectOpenHandles --verbose",
     "prepare": "cd ../ && husky install ./backend/.husky"
   },
   "dependencies": {
@@ -79,7 +80,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "test",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       ".+\\.(t|j)s$": "ts-jest"
