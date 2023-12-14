@@ -1,27 +1,27 @@
 version: "3.7"
 services:
-  db:
+  db-test:
     image: postgres:15-alpine
-    container_name: ${PROJECT}-db
+    container_name: ${PROJECT}-db-test
     restart: always
     env_file: .env
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PORT: ${POSTGRES_PORT_TEST}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5454:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data_test:/var/lib/postgresql/data
     networks:
-      - tc
+      - tc-test
 
-  frontend:
-    image: ${PROJECT}-frontend:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-frontend
+  frontend-test:
+    image: ${PROJECT}-frontend-test:${GIT_LOCAL_BRANCH}
+    container_name: ${PROJECT}-frontend-test
     command: "npm run start"
     build:
       context: "./frontend"
@@ -29,29 +29,31 @@ services:
     restart: always
     stdin_open: true
     environment:
-      REACT_APP_SSO_REDIRECT_URI: ${REACT_APP_SSO_REDIRECT_URI_LOCAL}
-      REACT_APP_SSO_AUTH_SERVER_URL: ${REACT_APP_SSO_AUTH_SERVER_URL_LOCAL}
-      REACT_APP_SSO_REALM: ${REACT_APP_SSO_REALM_LOCAL}
-      REACT_APP_SSO_CLIENT_ID: ${REACT_APP_SSO_CLIENT_ID_LOCAL}
-      REACT_APP_URL: ${REACT_APP_URL_LOCAL}
-      REACT_APP_PORT: ${REACT_APP_PORT_LOCAL}
+      NODE_ENV: test
+      REACT_APP_SSO_REDIRECT_URI: ${REACT_APP_SSO_REDIRECT_URI_TEST}
+      REACT_APP_SSO_AUTH_SERVER_URL: ${REACT_APP_SSO_AUTH_SERVER_URL_TEST}
+      REACT_APP_SSO_REALM: ${REACT_APP_SSO_REALM_TEST}
+      REACT_APP_SSO_CLIENT_ID: ${REACT_APP_SSO_CLIENT_ID_TEST}
+      REACT_APP_URL: ${REACT_APP_URL_TEST}
+      REACT_APP_PORT: ${REACT_APP_PORT}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
       # uncomment if hot reload fails (windows only?)
       # WDS_SOCKET_HOST: "127.0.0.1"
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - /app/node_modules
       - ./frontend:/app
     depends_on:
-      - backend
-      - keycloak
+      - backend-test
+      - keycloak-test
     networks:
-      - tc
-  backend:
-    container_name: ${PROJECT}-backend
-    image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
+      - tc-test
+  backend-test:
+    container_name: ${PROJECT}-backend-test
+
+    image: ${PROJECT}-backend-test:${GIT_LOCAL_BRANCH}
     build:
       context: "./backend"
       target: dev
@@ -59,39 +61,40 @@ services:
     stdin_open: true
     command: "npm run start:dev"
     environment:
+      NODE_ENV: test
       PORT: ${API_PORT}
       DB_PORT: ${DB_PORT}
-      DB_HOST: ${DB_HOST}
+      DB_HOST: ${DB_HOST_TEST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "8081:8081"
+      - "8082:8081"
     volumes:
       - /usr/src/app/node_modules
       - ./backend:/usr/src/app
     depends_on:
-      - db
+      - db-test
     networks:
-      - tc
+      - tc-test
 
-  nginx:
-    image: ${PROJECT}-nginx:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-nginx
+  nginx-test:
+    image: ${PROJECT}-nginx-test:${GIT_LOCAL_BRANCH}
+    container_name: ${PROJECT}-nginx-test
     build:
-      context: "./nginx"
+      context: "./nginx/test"
     ports:
-      - "3050:80"
+      - "3051:80"
     depends_on:
-      - backend
-      - frontend
+      - backend-test
+      - frontend-test
     networks:
-      - tc
+      - tc-test
 
-  keycloak:
-    container_name: keycloak
+  keycloak-test:
+    container_name: keycloak-test
     build:
       context: ./keycloak
     command:
@@ -105,13 +108,13 @@ services:
       # - --hostname-strict-backchannel=true
     platform: linux/arm64/v8
     volumes:
-      - keycloak:/opt/keycloak/data
-      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
+      - keycloak_test:/opt/keycloak/data
+      - ./keycloak/test.json:/opt/keycloak/data/import/test.json
     environment:
-      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/test.json
       DB_VENDOR: ${DB_TYPE}
-      DB_ADDR: db
-      DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
+      DB_ADDR: db-test
+      DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT_TEST}/${DB_NAME}
       DB_USERNAME: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
@@ -120,15 +123,14 @@ services:
       HTTP_ENABLED: "true"
       METRICS_ENABLED: "true"
     depends_on:
-      - db
+      - db-test
     ports:
-      - "8080:8080"
-      - "8787:8787" # debug port
+      - "8083:8080"
     networks:
-      - tc
+      - tc-test
 volumes:
-  pg_data: {}
-  keycloak: {}
+  pg_data_test: {}
+  keycloak_test: {}
 networks:
-  tc:
+  tc-test:
     driver: bridge

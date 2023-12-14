@@ -23,6 +23,24 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+
+build-test:
+	@echo "+\n++ Make: Running test build ...\n+"
+	@docker-compose -f docker-compose-test.yml up --build -d --force-recreate
+
+run-test-backend-pipeline:
+	@docker exec tc-backend-test npm run test:pipeline
+
+# run-test-frontend-pipeline:
+# 	@docker exec -i tc-frontend-test npm run test:pipeline
+
+run-test-coverage:
+	@docker exec -i tc-backend-test npm run test:cov
+
+close-test:
+	@echo "+\n++ Make: Closing test container ...\n+"
+	@docker-compose -f docker-compose-test.yml down
+
 build-local:
 	@echo "+\n++ Make: Run/Build locally ...\n+"
 	@docker-compose up --build -d

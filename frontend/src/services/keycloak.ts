@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js';
-import { KeycloakVars } from '../common';
+import { APP_URL, KeycloakVars } from '../common';
 
 export const _kc = new Keycloak({
   realm: KeycloakVars.REALM,
@@ -8,7 +8,7 @@ export const _kc = new Keycloak({
 });
 
 export const loginOptions = {
-  redirectUri: process.env.REACT_APP_SSO_REDIRECT_URI,
+  redirectUri: APP_URL,
   idpHint: '',
 };
 

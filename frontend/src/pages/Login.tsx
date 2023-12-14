@@ -7,7 +7,7 @@ import store from 'store';
 import Routes from '../routes/constants';
 import { createCustomLoginUrl } from '../utils/custom-login-url';
 
-export default () => {
+const Login = () => {
   const { keycloak } = useKeycloak();
   const { state } = useLocation();
 
@@ -17,5 +17,11 @@ export default () => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Keycloak, ''));
   }, [keycloak, state]);
 
-  return <div>Redirecting...</div>;
+  return (
+    <div>
+      <div>Redirecting...</div>
+    </div>
+  );
 };
+
+export default Login;

@@ -1,0 +1,43 @@
+name: Tests pipeline
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Setup ENV file
+        run: cp .env.example .env
+
+      - name: Install Backend Dependencies
+        run: cd backend && npm ci
+
+      - name: Build Backend
+        run: cd backend && npm run build
+
+      - name: Install Frontend Dependencies
+        run: cd frontend && npm ci
+
+      - name: Build Frontend
+        run: cd frontend && npm run build
+
+      - name: Run Docker containers
+        run: make build-test
+
+      - name: Run Tests
+        run: make run-test-backend-pipeline
+
+      - name: Stop containers
+        run: make close-test
+        if: ${{ always() }}
