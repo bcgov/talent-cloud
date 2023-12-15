@@ -1,6 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AuthGuard } from './auth/auth.guard';
 import { Documentation } from './swagger';
 
 async function bootstrap() {
@@ -17,6 +18,7 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalGuards(new AuthGuard(new Reflector()));
   Documentation(app);
 
   await app.listen(port);
