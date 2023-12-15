@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   HealthCheckService,
   HealthCheck,
@@ -14,6 +14,7 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
   ) {}
 
+  @Public()
   @Get('/health')
   @HealthCheck()
   async checkApp() {
