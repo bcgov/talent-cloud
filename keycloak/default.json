@@ -288,7 +288,17 @@
         }
       ],
       "security-admin-console": [],
-      "local-client": [],
+      "local-client": [
+        {
+          "id": "e3876943-74ed-4cc0-b836-3d942c47c7e8",
+          "name": "Coordinator",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "a0c11add-51f1-46b4-ad80-fee782550ab8",
+          "attributes": {}
+        }
+      ],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -434,6 +444,35 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
+    {
+      "id": "94fc713d-7e21-46a2-9ce7-38283910df27",
+      "createdTimestamp": 1702658995463,
+      "username": "local-coordinator",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "firstName": "Local",
+      "lastName": "Coordinator",
+      "email": "coordinator@gov.bc.ca",
+      "credentials": [
+        {
+          "id": "a01db8d2-8299-4be7-83a0-daa93e576707",
+          "type": "password",
+          "userLabel": "My password",
+          "createdDate": 1702660853337,
+          "secretData": "{\"value\":\"8JPkA7LMzwxbnclZTCVjKXeapnhGWB98wFTeecLDvDw=\",\"salt\":\"5br983/IAXbZEYIQW9D2LA==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": ["default-roles-local"],
+      "clientRoles": {
+        "local-client": ["coordinator"]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
     {
       "id": "1fc0e8d5-6902-417c-9b4d-56885681e4f3",
       "createdTimestamp": 1702238762006,
@@ -591,7 +630,9 @@
       "publicClient": true,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -629,7 +670,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -716,7 +759,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -927,7 +972,8 @@
           "config": {
             "id.token.claim": "true",
             "introspection.token.claim": "true",
-            "access.token.claim": "true"
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
           }
         }
       ]
@@ -991,6 +1037,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1405,11 +1452,11 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-property-mapper",
             "saml-role-list-mapper",
             "oidc-full-name-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "saml-user-property-mapper",
+            "oidc-usermodel-property-mapper",
             "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
             "saml-user-attribute-mapper"
@@ -1452,14 +1499,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-role-list-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-address-mapper",
             "saml-user-property-mapper",
             "oidc-full-name-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-address-mapper",
+            "saml-user-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-attribute-mapper"
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       }
@@ -2150,12 +2197,16 @@
     "cibaExpiresIn": "120",
     "cibaAuthRequestedUserHint": "login_hint",
     "oauth2DeviceCodeLifespan": "600",
+    "clientOfflineSessionMaxLifespan": "0",
     "oauth2DevicePollingInterval": "5",
+    "clientSessionIdleTimeout": "0",
     "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
+    "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false"
   },
-  "keycloakVersion": "23.0.1",
+  "keycloakVersion": "23.0.3",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []

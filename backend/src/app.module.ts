@@ -1,12 +1,19 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { TerminusModule } from '@nestjs/terminus';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './logger/logger.module';
-import { AppController } from './app.controller';
-import { HttpModule } from '@nestjs/axios';
-import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-  imports: [DatabaseModule, LoggerModule, TerminusModule, HttpModule],
+  imports: [
+    DatabaseModule,
+    LoggerModule,
+    TerminusModule,
+    HttpModule,
+    AuthModule,
+  ],
   controllers: [AppController],
 })
 export class AppModule {}

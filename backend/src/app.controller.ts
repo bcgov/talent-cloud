@@ -1,10 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   HealthCheckService,
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from './auth/public.decorator';
 
+@UseGuards(AuthGuard)
 @Controller()
 export class AppController {
   constructor(
@@ -12,6 +15,7 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
   ) {}
 
+  @Public()
   @Get('/health')
   @HealthCheck()
   async checkApp() {
