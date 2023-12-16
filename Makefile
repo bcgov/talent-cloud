@@ -13,9 +13,6 @@ export PROJECT := tc
 
 export CONTAINER_REGISTRY := ""
 
-export APP_VERSION := $(shell cat apps/backend/package.json | jq '.version' -r)
-export API_VERSION := $(API_VERSION)
-
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-color --format="%h, %cn, %f, %D" | sed 's/->/:/')

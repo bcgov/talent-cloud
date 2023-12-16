@@ -36,5 +36,5 @@ jobs:
         run: make run-test-frontend-pipeline
 
       - name: Stop containers
-        run: make close-test
+        run: make close
         if: ${{ always() }}
