@@ -2,15 +2,10 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "20.x.x",
-    "npm": "10.x.x"
-  },
   "scripts": {
     "start": "react-scripts start",
     "start:prod": "node server.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "cd ../ && husky install ./frontend/.husky",
     "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/"
@@ -42,6 +37,7 @@
     "@typescript-eslint/parser": "6.13.2",
     "autoprefixer": "10.4.16",
     "babel-plugin-macros": "3.1.0",
+    "cypress": "13.6.1",
     "eslint": "8.55.0",
     "eslint-config-airbnb-typescript": "17.1.0",
     "eslint-config-prettier": "9.1.0",
