@@ -1,54 +1,58 @@
 import {
+  Injectable,
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
-  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
-import jwt from 'jsonwebtoken';
-import { REALM, AUTH_SERVER } from './const';
-import { Token } from './interface';
-import { IS_PUBLIC_KEY } from './public.decorator';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+
+import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
+import { Role, Token } from './interface';
+import { Metadata } from './metadata';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(private reflector: Reflector) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Bypass auth for public endpoint
-    const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
-      IS_PUBLIC_KEY,
+  canActivate(context: ExecutionContext): boolean {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(
+      Metadata.IS_PUBLIC,
       [context.getHandler(), context.getClass()],
     );
-    if (publicEndpoint) {
+    if (isPublic) {
+      // 💡 See this condition
       return true;
     }
 
-    const req = context.switchToHttp().getRequest();
+    const requiredRole: Role = this.reflector.getAllAndOverride<Role>(
+      Metadata.ROLE,
+      [context.getHandler(), context.getClass()],
+    );
 
-    try {
-      const token = this.extractToken(req);
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization;
+    const token = this.parseJwt(authHeader);
 
-      this.validateToken(token);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  /**
-   * Extracts a client id and secret from basic auth passed into the request
-   * @param request Express Request
-   * @returns { clientId: string, clientSecret: string } extracted from request
-   */
-  extractToken(request: Request): Token {
-    if (!request.headers.authorization.includes('Bearer ')) {
+    if (!authHeader.includes('Bearer ')) {
       throw new UnauthorizedException('Unauthorized user without credentials');
     }
 
-    return this.parseJwt(request.headers.authorization);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    try {
+      const payload = this.validateToken(token);
+      if (!requiredRole) {
+        return true;
+      }
+      const userRoles = this.setRequestRoles(payload, request);
+      this.verifyRole(requiredRole, userRoles);
+    } catch {
+      throw new UnauthorizedException();
+    }
+    return true;
   }
 
   parseJwt(token: string): Token {
@@ -66,33 +70,34 @@ export class AuthGuard implements CanActivate {
     return JSON.parse(jsonPayload);
   }
 
-  /**
-   * Decodes a jwt and throws errors for issues on the token
-   * Checks issuer, audience, and role
-   * @param token string
-   */
   validateToken(token: Token) {
-    console.log(token);
     if (!token) {
-      throw new UnauthorizedException('Invalid JWT returned from Auth Client');
+      throw new UnauthorizedException();
     }
     const payload = token as jwt.JwtPayload;
-    console.log(`${AUTH_SERVER}/realms/${REALM}`);
-    if (payload.iss !== `${AUTH_SERVER}/realms/${REALM}`) {
-      throw new UnauthorizedException(
-        'Incorrect issuer returned from Auth Client',
-      );
+
+    if (payload.iss !== `${AUTH_SERVER}/realms/${AUTH_REALM}`) {
+      throw new UnauthorizedException();
     }
 
     if (payload.aud !== 'account') {
-      throw new UnauthorizedException(
-        'Incorrect Audience returned from Auth Client',
-      );
+      throw new UnauthorizedException();
     }
 
-    // Error if no roles. Expand this for RBAC
-    if (!payload['resource_access']?.['account']?.roles?.length) {
-      throw new ForbiddenException('Invalid roles for user');
+    //YODO check expiry
+    return payload;
+  }
+
+  setRequestRoles(payload: JwtPayload, request: Request): Role[] {
+    if (payload.resource_access?.[AUTH_CLIENT].roles) {
+      request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
+    } else {
+      request['roles'] = [];
     }
+    return request['roles'];
+  }
+
+  verifyRole(allowedRole: Role, userRoles: Role[]): boolean {
+    return userRoles.includes(allowedRole);
   }
 }

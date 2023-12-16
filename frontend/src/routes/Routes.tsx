@@ -4,9 +4,16 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import store from 'store';
 import ApplicationRoutes from './constants';
 import { PrivateLayout, Loading, PublicLayout } from '../components';
-import { AppHealth, Dashboard, Login, NotFound, Profile } from '../pages';
-import KeycloakPage from '../pages/Keycloak';
-import LandingPage from '../pages/LandingPage';
+import {
+  AppHealth,
+  Dashboard,
+  Login,
+  KeycloakPage,
+  NotFound,
+  LandingPage,
+  Profile,
+} from '../pages';
+
 import { _kc } from '../services/keycloak';
 
 const PrivateRoute = () => {
@@ -30,16 +37,12 @@ const PublicRoute = () => {
 };
 
 export default () => {
-  const handleTokens = (tokens: any) => {
-    store.set('TOKEN', tokens.token);
-  };
-
   return (
     <ReactKeycloakProvider
       authClient={_kc}
       autoRefreshToken={true}
       initOptions={{ pkceMethod: 'S256', checkLoginIframe: false }}
-      onTokens={handleTokens}
+      onTokens={(tokens) => store.set('TOKENS', tokens)}
       LoadingComponent={<Loading />}
     >
       <BrowserRouter>

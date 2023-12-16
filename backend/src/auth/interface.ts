@@ -1,5 +1,9 @@
 import { JwtPayload } from 'jsonwebtoken';
 
+export enum Role {
+  COORDINATOR = 'coordinator',
+}
+
 export interface Token extends JwtPayload {
   exp: number;
   iat: number;
@@ -17,12 +21,7 @@ export interface Token extends JwtPayload {
   realm_access: {
     roles: string[];
   };
-  resource_access: {
-    'local-client': {
-      roles: ['coordinator'];
-    };
-    account: { roles: Role[] };
-  };
+  resource_access: ResourceAccess;
   scope: string;
   sid: string;
   email_verified: boolean;
@@ -33,9 +32,7 @@ export interface Token extends JwtPayload {
   email: string;
 }
 
-export enum Role {
-  Manage_Account = 'manage-account',
-  Manage_Account_Links = 'manage-account-links',
-  View_Profile = 'view-profile',
-  Coordinator = 'coordinator',
+interface ResourceAccess {
+  account: { roles: Role[] };
+  [key: string]: { roles: Role[] };
 }
