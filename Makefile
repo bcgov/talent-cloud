@@ -26,7 +26,7 @@ build-test:
 	@docker-compose up --force-recreate -d --build 
 
 test-backend-pipeline:
-	@docker exec tc-backend-local npm run test:pipeline
+	@docker exec tc-backend-ci npm run test:pipeline
 
 test-frontend-pipeline:
 	@docker exec tc-frontend-ci npm run test:pipeline
