@@ -1,5 +1,11 @@
 module.exports = {
-  ignorePatterns: ['.eslintrc.js', 'build', 'node_modules'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'build',
+    'cypress',
+    'cypress.config.ts',
+    'node_modules',
+  ],
   extends: ['react-app', 'prettier'],
   plugins: [
     'eslint-plugin-prettier',
