@@ -1,48 +1,33 @@
-# talent-cloud
+# TC
 
-## Developer Set Up
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 
-### Dependencies:
+## Documentation
 
-- npm v10.2.4
-- node v20.10.0
-- docker
-- docker-compose
-- nest-cli
+- [Developer Setup](DEV.md)
 
-### Local Development
+## How to Contribute
 
-This project runs three containers for local development.
+If you would like to contribute, please see our [contributing](CONTRIBUTING.md)
+guidelines.
 
-In order to avoid cors errors during development we are running a reverse proxy
-on an nginx server.
+Please note that this project is released with a
+[Contributor Code of Conduct](CODE-OF-CONDUCT.md). By participating in this
+project you agree to abide by its terms.
 
-Running The Project:
+## License
 
-- ensure your node and npm version match those listed in the dependencies
-- If it's the first time running the application: `cp .env.example .env`
-- `cd frontend && npm i`
-- `cd backend && npm i`
-- `make build-local`
+    Copyright 2020 Province of British Columbia
 
-Local Dev Containers:
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-- Nginx Reverse Proxy: http://localhost:3050
-- Frontend/React: http://localhost:3050
-- Backend/NestJS: http://localhost:3050/api
-- Keycloak: http://localhost:8080
-- Postgres: http://localhost:5432
+       http://www.apache.org/licenses/LICENSE-2.0
 
-### Keycloak - Local
-
-A default realm and client have been set up.
-
-To login to the master realm:
-
-- username: "admin"
-- password: "password"
-
-To login to the local client:
-
-- username: "local-user"
-- password: "admin"
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
