@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
-import { Role, Token } from './interface';
+import { AUTH_SERVER, AUTH_REALM } from './const';
+import { Token } from './interface';
 import { Metadata } from './metadata';
 
 @Injectable()
@@ -20,6 +20,7 @@ export class AuthGuard implements CanActivate {
       Metadata.IS_PUBLIC,
       [context.getHandler(), context.getClass()],
     );
+
     if (isPublic) {
       return true;
     }
@@ -36,8 +37,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = this.validateToken(token);
-      this.setRequestRoles(payload, request);
+      this.validateToken(token);
     } catch {
       throw new UnauthorizedException();
     }
@@ -75,14 +75,5 @@ export class AuthGuard implements CanActivate {
 
     //YODO check expiry
     return payload;
-  }
-
-  setRequestRoles(payload: JwtPayload, request: Request): Role[] {
-    if (payload.resource_access?.[AUTH_CLIENT].roles) {
-      request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
-    } else {
-      request['roles'] = [];
-    }
-    return request['roles'];
   }
 }
