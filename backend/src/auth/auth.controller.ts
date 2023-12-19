@@ -3,7 +3,7 @@ import { Controller, Get } from '@nestjs/common';
 @Controller('auth')
 export class AuthController {
   @Roles('coordinator')
-  @Get('role')
+  @Get(Role.COORDINATOR)
   async getRole(@Request() req) {
     try {
       return { roles: req.roles };
