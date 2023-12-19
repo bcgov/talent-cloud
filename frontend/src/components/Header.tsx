@@ -1,4 +1,3 @@
-import { ReactComponent as ReactLogo } from '../assets/images/bcgovlogo.svg';
 import logo2 from '../assets/images/logo-banner.png';
 
 export const Header = ({ header }: { header: string }) => {
@@ -11,9 +10,9 @@ export const Header = ({ header }: { header: string }) => {
         <h1>{header}</h1>
       </div>
       <div className="other">
-        <a className="nav-btn">
+        <button className="nav-btn">
           <i className="fas fa-bars" id="menu"></i>
-        </a>
+        </button>
       </div>
     </header>
   );
