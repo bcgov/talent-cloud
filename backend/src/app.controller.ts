@@ -14,7 +14,6 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
   ) {}
 
-  @Public()
   @Get('/health')
   @HealthCheck()
   async checkApp() {

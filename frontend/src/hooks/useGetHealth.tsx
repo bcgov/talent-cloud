@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAppHealth, getAuth } from '../services/health';
+import { getAppHealth, getRole, getAuth } from '../services/health';
 
 interface Health {
   status?: string;
@@ -12,6 +12,7 @@ export const useGetHealth = () => {
   const [appHealth, setAppHealth] = useState<Health>();
   const [dbHealth, setDBHealth] = useState<Health>();
   const [authRoutes, setAuthRoutes] = useState<boolean>(false);
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -47,6 +48,7 @@ export const useGetHealth = () => {
   return {
     appHealth,
     dbHealth,
+    roles,
     authRoutes,
   };
 };
