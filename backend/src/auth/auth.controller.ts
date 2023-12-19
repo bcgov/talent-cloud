@@ -1,9 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Request, Controller, Get } from '@nestjs/common';
+import { Role } from './interface';
+import { Roles } from './roles.decorator';
 
 @Controller('auth')
 export class AuthController {
-  @Roles('coordinator')
-  @Get(Role.COORDINATOR)
+  @Roles(Role.COORDINATOR)
+  @Get('roles')
   async getRole(@Request() req) {
     try {
       return { roles: req.roles };
@@ -12,7 +14,7 @@ export class AuthController {
     }
   }
 
-  @Get('authenticated')
+  @Get()
   getAuth() {
     return { authenticated: true };
   }

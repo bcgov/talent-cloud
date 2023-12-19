@@ -8,3 +8,7 @@ export const getAppHealth = async (): Promise<AxiosResponse> => {
 export const getAuth = async (): Promise<AxiosResponse> => {
   return await AxiosPrivate.get('/auth');
 };
+
+export const getRoles = async (): Promise<AxiosResponse> => {
+  return await AxiosPrivate.get('/auth/roles');
+};

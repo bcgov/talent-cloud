@@ -4,7 +4,7 @@ import { logout } from '../services/keycloak';
 
 //TODO remove - this is just for development
 const AppHealth = () => {
-  const { appHealth, dbHealth, authRoutes } = useGetHealth();
+  const { appHealth, dbHealth, authRoutes, roles } = useGetHealth();
 
   return (
     <div className="flex flex-col justify-around h-auto">
@@ -52,6 +52,28 @@ const AppHealth = () => {
             </p>
           </div>
         )}
+
+        <h3 className="mt-4 text-xl font-bold tracking-tight text-gray-900 sm:text-lg">
+          Roles:
+        </h3>
+
+        <div>
+          {roles.length > 0 ? (
+            roles.map((itm, index) => (
+              <p key={index}>
+                role:{' '}
+                <span className="text-base font-semibold text-indigo-600">
+                  {itm}
+                </span>
+              </p>
+            ))
+          ) : (
+            <p>
+              role:{' '}
+              <span className="text-base font-semibold text-indigo-600">n/a</span>
+            </p>
+          )}
+        </div>
       </div>
       <div>
         <Button

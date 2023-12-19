@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
 import { Token } from './interface';
@@ -82,7 +82,7 @@ export class AuthGuard implements CanActivate {
   }
 
   setRequestRoles(payload: JwtPayload, request: Request): void {
-    if (payload.resource_access?.[AUTH_CLIENT].roles) {
+    if (payload.resource_access?.[AUTH_CLIENT]) {
       request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
     } else {
       request['roles'] = [];
