@@ -20,6 +20,7 @@ export class AuthGuard implements CanActivate {
       Metadata.IS_PUBLIC,
       [context.getHandler(), context.getClass()],
     );
+
     if (isPublic) {
       return true;
     }
@@ -36,8 +37,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = this.validateToken(token);
-      this.setRequestRoles(payload, request);
+      this.validateToken(token);
     } catch {
       throw new UnauthorizedException();
     }

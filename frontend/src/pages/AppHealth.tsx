@@ -4,7 +4,7 @@ import { logout } from '../services/keycloak';
 
 //TODO remove - this is just for development
 const AppHealth = () => {
-  const { appHealth, dbHealth, roles, authRoutes } = useGetHealth();
+  const { appHealth, dbHealth, authRoutes } = useGetHealth();
 
   return (
     <div className="flex flex-col justify-around h-auto">
