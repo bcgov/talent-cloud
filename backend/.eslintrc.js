@@ -3,19 +3,19 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   plugins: [
     '@typescript-eslint/eslint-plugin',
     'import',
     'prettier',
-    'unused-imports'
+    'unused-imports',
   ],
   extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   root: false,
   env: {
     node: true,
-    jest: true
+    jest: true,
   },
   rules: {
     'no-console': 'off',
@@ -25,7 +25,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: false }
+      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     ],
     '@typescript-eslint/no-var-requires': 'off',
 
@@ -38,28 +38,28 @@ module.exports = {
           'internal',
           'sibling',
           'parent',
-          'index'
+          'index',
         ],
         pathGroups: [
           {
             pattern: '@/**',
-            group: 'external'
+            group: 'external',
           },
           {
             pattern: './**',
-            group: 'internal'
+            group: 'internal',
           },
           {
             pattern: '../**',
-            group: 'internal'
-          }
+            group: 'internal',
+          },
         ],
         pathGroupsExcludedImportTypes: ['internal'],
         alphabetize: {
           order: 'asc',
-          caseInsensitive: true
-        }
-      }
+          caseInsensitive: true,
+        },
+      },
     ],
     'comma-dangle': 'off',
     'unused-imports/no-unused-imports': 'error',
@@ -69,8 +69,8 @@ module.exports = {
         vars: 'all',
         varsIgnorePattern: '^_',
         args: 'after-used',
-        argsIgnorePattern: '^_'
-      }
-    ]
-  }
+        argsIgnorePattern: '^_',
+      },
+    ],
+  },
 };

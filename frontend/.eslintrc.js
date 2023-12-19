@@ -1,29 +1,35 @@
 module.exports = {
-  ignorePatterns: ['.eslintrc.js', 'dist', 'node_modules'],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    tsconfigRootDir: __dirname,
-    sourceType: 'module',
-  },
+  ignorePatterns: [
+    '.eslintrc.js',
+    'build',
+    'cypress',
+    'cypress.config.ts',
+    'node_modules',
+  ],
   extends: ['react-app', 'prettier'],
+  plugins: [
+    'eslint-plugin-prettier',
+    'eslint-plugin-react',
+    'eslint-plugin-react-hooks',
+    'import',
+    'unused-imports',
+  ],
+  overrides: [
+    {
+      files: ['**/*.ts?(x)'],
+      rules: {
+        'import/no-anonymous-default-export': 'off',
+      },
+    },
+  ],
   rules: {
-    'no-console': 'off',
-    '@typescript-eslint/comma-dangle': ['error', 'only-multiline'],
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
-    ],
-    '@typescript-eslint/no-var-requires': 'off',
     'import/order': [
       1,
       {
         groups: ['external', 'builtin', 'internal', 'sibling', 'parent', 'index'],
         pathGroups: [
           {
-            pattern: '',
+            pattern: '@/**',
             group: 'external',
           },
           {
@@ -42,6 +48,17 @@ module.exports = {
         },
       },
     ],
+
     'comma-dangle': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
 };

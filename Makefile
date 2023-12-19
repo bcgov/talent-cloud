@@ -8,14 +8,11 @@ export $(sed 's/=.*//' .env)
 ENV := $(PWD)/.env
 include $(ENV)
 
-export ENV_NAME=dev
 # Project
 export PROJECT := tc
 
 export CONTAINER_REGISTRY := ""
 
-export APP_VERSION := $(shell cat apps/backend/package.json | jq '.version' -r)
-export API_VERSION := $(API_VERSION)
 
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
@@ -23,29 +20,26 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+build-test:
+	@echo "+\n++ Make: Running test build ...\n+"
+	@$(shell echo ./scripts/setenv.sh local ci )
+	@docker-compose up --force-recreate -d --build 
+
+test-backend-pipeline:
+	@docker exec tc-backend-ci npm run test:pipeline
+
+test-frontend-pipeline:
+	@docker exec tc-frontend-ci npm run test:pipeline
+
 build-local:
 	@echo "+\n++ Make: Run/Build locally ...\n+"
-	@docker-compose up --build -d
+	@$(shell echo ./scripts/setenv.sh ci local )
+	@docker-compose up --force-recreate -d --build 
 
 run-local:
 	@echo "+\n++ Make: Running locally ...\n+"
-	@docker-compose   up -d
-
-build-keycloak:
-	@echo "+\n++ Make: Buidling keycloak ...\n+"
-	@docker-compose build --no-cache keycloak
-
-build-frontend:
-	@echo "+\n++ Make: Building frontend ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/frontend:latest ./frontend
-
-build-backend:
-	@echo "+\n++ Make: Building backend ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/backend:latest ./backend
-
-build-nginx:
-	@echo "+\n++ Make: Building Nginx ...\n+"
-	@docker build --platform linux/amd64 -t $(CONTAINER_REGISTRY)/nginx:latest ./nginx
+	@$(shell echo ./scripts/setenv.sh ci local )
+	@docker-compose up -d
 
 local-frontend-logs:
 	@docker logs $(PROJECT)-frontend --tail 25 --follow
@@ -72,10 +66,6 @@ local-frontend-workspace:
 
 local-nginx-workspace:
 	@docker exec -it $(PROJECT)-nginx sh
-
-close-local:
-	@echo "+\n++ Make: Close Local ...\n+"
-	@docker-compose -f docker-compose.yml down -v --remove-orphans
 
 close:
 	@echo "+\n++ Make: Run/Close ...\n+"
