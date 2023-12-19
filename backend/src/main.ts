@@ -18,7 +18,10 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalGuards(new AuthGuard(new Reflector()));
+  const reflector = app.get(Reflector);
+
+  app.useGlobalGuards(new AuthGuard(reflector));
+
   Documentation(app);
 
   await app.listen(port);
