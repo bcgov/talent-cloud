@@ -1,0 +1,6 @@
+export enum Experience {
+  INTERESTED,
+  EXPERIENCED,
+  CHIEF_EXPERIENCED,
+  OUTSIDE_EXPERIENCED,
+}
