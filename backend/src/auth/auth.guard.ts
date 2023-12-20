@@ -82,7 +82,13 @@ export class AuthGuard implements CanActivate {
   }
 
   setRequestRoles(payload: JwtPayload, request: Request): void {
-    if (payload.resource_access?.[AUTH_CLIENT]) {
+    if (payload.client_roles) {
+      request['roles'] = payload.client_roles;
+    }
+    if (
+      process.env.NODE_ENV === 'local' &&
+      payload.resource_access?.[AUTH_CLIENT]
+    ) {
       request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
     } else {
       request['roles'] = [];
