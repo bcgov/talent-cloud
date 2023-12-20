@@ -11,9 +11,9 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { QueryTransformPipe, QueryDto } from 'src/query-validation.pipe';
 import { CreatePersonnelDTO } from './personnel.dto';
 import { PersonnelService } from './personnel.service';
+import { QueryTransformPipe, QueryDto } from '../query-validation.pipe';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
