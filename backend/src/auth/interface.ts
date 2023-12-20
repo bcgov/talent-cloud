@@ -21,6 +21,7 @@ export interface Token extends JwtPayload {
   realm_access: {
     roles: string[];
   };
+  client_roles: string[];
   resource_access: ResourceAccess;
   scope: string;
   sid: string;

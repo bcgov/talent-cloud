@@ -3,6 +3,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/auth.guard';
 import { Documentation } from './swagger';
+import { RolesGuard } from './auth/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,7 +11,7 @@ async function bootstrap() {
   const logger = new Logger('NestApplication');
 
   app.setGlobalPrefix('api');
-  app.enableCors({ origin: '*' });
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -20,7 +21,7 @@ async function bootstrap() {
 
   const reflector = app.get(Reflector);
 
-  app.useGlobalGuards(new AuthGuard(reflector));
+  app.useGlobalGuards(new AuthGuard(reflector), new RolesGuard(reflector));
 
   Documentation(app);
 

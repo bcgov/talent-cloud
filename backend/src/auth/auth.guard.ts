@@ -5,9 +5,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-import { AUTH_SERVER, AUTH_REALM } from './const';
+import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
 import { Token } from './interface';
 import { Metadata } from './metadata';
 
@@ -16,16 +16,17 @@ export class AuthGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(
-      Metadata.IS_PUBLIC,
+    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
+      Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (isPublic) {
+    if (PublicEndpoint) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
+
     const authHeader = request.headers.authorization;
     const token = this.parseJwt(authHeader);
 
@@ -37,7 +38,8 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      this.validateToken(token);
+      const payload = this.validateToken(token);
+      this.setRequestRoles(payload, request);
     } catch {
       throw new UnauthorizedException();
     }
@@ -75,7 +77,20 @@ export class AuthGuard implements CanActivate {
     if (payload.exp > Date.now()) {
       throw new UnauthorizedException();
     }
-    //YODO check expiry
+
     return payload;
+  }
+
+  setRequestRoles(payload: JwtPayload, request: Request): void {
+    if (payload.client_roles) {
+      request['roles'] = payload.client_roles;
+    } else if (
+      process.env.NODE_ENV === 'local' &&
+      payload.resource_access?.[AUTH_CLIENT]
+    ) {
+      request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
+    } else {
+      request['roles'] = [];
+    }
   }
 }

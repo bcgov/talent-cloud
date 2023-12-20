@@ -1,3 +1,4 @@
 export enum Metadata {
-  IS_PUBLIC = 'isPublic',
+  ROLES = 'roles',
+  PUBLIC_ENDPOINT = 'PublicEndpoint',
 }
