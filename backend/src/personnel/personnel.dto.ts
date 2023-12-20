@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Classification } from 'src/common/enums/classification.enum';
-import { Ministry } from 'src/common/enums/ministry.enum';
-import { Region } from 'src/common/enums/region.enum';
-import { WorkLocation } from 'src/common/enums/work-location.enum';
+import { Classification } from '../common/enums/classification.enum';
+import { Ministry } from '../common/enums/ministry.enum';
+import { Region } from '../common/enums/region.enum';
+import { WorkLocation } from '../common/enums/work-location.enum';
 
 export class CreatePersonnelDTO {
   @ApiProperty({

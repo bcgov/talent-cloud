@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from '../logger/logger.module';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { PersonnelController } from './personnel.controller';
 
 @Module({
