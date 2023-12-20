@@ -77,15 +77,14 @@ export class AuthGuard implements CanActivate {
     if (payload.exp > Date.now()) {
       throw new UnauthorizedException();
     }
-    //YODO check expiry
+
     return payload;
   }
 
   setRequestRoles(payload: JwtPayload, request: Request): void {
     if (payload.client_roles) {
       request['roles'] = payload.client_roles;
-    }
-    if (
+    } else if (
       process.env.NODE_ENV === 'local' &&
       payload.resource_access?.[AUTH_CLIENT]
     ) {
