@@ -17,7 +17,6 @@ const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
         password: process.env.DB_PASSWORD ?? 'tc_password',
         database: process.env.DB_NAME ?? 'tc',
         synchronize: isLocal,
-        dropSchema: true,
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       }),
       dataSourceFactory: async (options) => {
