@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { FunctionEntity } from './function.entity';
 import { PersonnelEntity } from './personnel.entity';
