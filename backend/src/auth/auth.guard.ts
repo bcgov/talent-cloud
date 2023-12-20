@@ -69,10 +69,12 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    if (payload.aud !== 'account') {
+    if (payload.azp !== process.env.KEYCLOAK_CLIENT) {
       throw new UnauthorizedException();
     }
-
+    if (payload.exp > Date.now()) {
+      throw new UnauthorizedException();
+    }
     //YODO check expiry
     return payload;
   }
