@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.getAllAndOverride<boolean>(
-      Metadata.IS_PUBLIC,
+      Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
