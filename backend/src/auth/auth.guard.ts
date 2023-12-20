@@ -16,12 +16,12 @@ export class AuthGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(
+    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (isPublic) {
+    if (PublicEndpoint) {
       return true;
     }
 
