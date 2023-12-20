@@ -1,6 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AuthGuard } from './auth/auth.guard';
 import { Documentation } from './swagger';
 
 async function bootstrap() {
@@ -16,6 +17,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  const reflector = app.get(Reflector);
+
+  app.useGlobalGuards(new AuthGuard(reflector));
 
   Documentation(app);
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAppHealth } from '../services/health';
+import { getAppHealth, getAuth } from '../services/health';
 
 interface Health {
   status?: string;
@@ -7,10 +7,11 @@ interface Health {
   error?: string;
   details?: string;
 }
-
+//TODO - remove this later - just used in development for testting routes
 export const useGetHealth = () => {
   const [appHealth, setAppHealth] = useState<Health>();
   const [dbHealth, setDBHealth] = useState<Health>();
+  const [authRoutes, setAuthRoutes] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -32,11 +33,20 @@ export const useGetHealth = () => {
       } catch (e) {
         console.log(e);
       }
+
+      try {
+        const { data } = await getAuth();
+
+        setAuthRoutes(data.authenticated);
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }, []);
 
   return {
     appHealth,
     dbHealth,
+    authRoutes,
   };
 };
