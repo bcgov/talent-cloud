@@ -1,4 +1,4 @@
 export enum AvailabilityType {
-  AVAILABILITY,
+  UNAVAILABLE,
   DEPLOYED,
 }
