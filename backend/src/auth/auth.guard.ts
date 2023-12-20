@@ -28,6 +28,9 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     const authHeader = request.headers.authorization;
+    if (!authHeader) {
+      throw new UnauthorizedException();
+    }
     const token = this.parseJwt(authHeader);
 
     if (!authHeader.includes('Bearer ')) {

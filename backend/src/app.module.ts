@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './logger/logger.module';
+import { PersonnelModule } from './personnel/personnel.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { LoggerModule } from './logger/logger.module';
     TerminusModule,
     HttpModule,
     AuthModule,
+    PersonnelModule
   ],
   controllers: [AppController],
 })
