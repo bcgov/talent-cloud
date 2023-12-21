@@ -25,7 +25,7 @@ const useTable = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await AxiosPrivate.get(`/resources?${searchParams}`);
+        const { data } = await AxiosPrivate.get(`/personnel?${searchParams}`);
         setTotalRows(data.totalRows);
         setPageRange(
           calculatePages(data.totalRows, parseInt(searchParams.get('rows') ?? '1')),
