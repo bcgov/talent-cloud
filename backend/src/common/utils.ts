@@ -4,7 +4,7 @@ import {
   ExperienceName,
   Region,
   Status,
-  MinistryName,
+  Ministry,
   FunctionNameAbbrv,
   WorkLocationName,
 } from './enums';
@@ -14,7 +14,7 @@ export interface Row {
   status: Status;
   region: Region;
   location: WorkLocationName;
-  ministry: MinistryName;
+  ministry: Ministry;
   classification: ClassificationName;
   function: FunctionNameAbbrv;
   experience: ExperienceName;
@@ -28,7 +28,7 @@ export const rowData = (): Row => {
     status: faker.helpers.arrayElement(Object.values(Status)),
     region: faker.helpers.arrayElement(Object.values(Region)),
     location: faker.helpers.arrayElement(Object.values(WorkLocationName)),
-    ministry: faker.helpers.arrayElement(Object.values(MinistryName)),
+    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     classification: faker.helpers.arrayElement(
       Object.values(ClassificationName),
     ),
