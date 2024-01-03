@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import store from 'store';
-import { APP_URL } from '../common/constants';
+import { APP_URL, API_URL } from '../common/constants';
 
 export const AxiosPublic = axios.create({
-  baseURL: `${APP_URL}/api`,
+  baseURL: `${API_URL}/api`,
   headers: {
     Accept: 'application/json',
     'Content-type': 'application/json',

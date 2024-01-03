@@ -2,8 +2,8 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/auth.guard';
-import { Documentation } from './swagger';
 import { RolesGuard } from './auth/roles.guard';
+import { Documentation } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,7 +25,7 @@ async function bootstrap() {
 
   Documentation(app);
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   logger.log(`listening on port ${port}`);
 }
 
