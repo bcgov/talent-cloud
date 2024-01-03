@@ -23,4 +23,16 @@ export const icons = {
   ArrowRight: <Icon icon={faChevronRight} />,
   ArrowDown: <Icon icon={faChevronDown} />,
   ArrowLeft: <Icon icon={faChevronLeft} />,
+  DoubleArrowLeft: (
+    <>
+      <Icon icon={faChevronLeft} />
+      <Icon icon={faChevronLeft} />
+    </>
+  ),
+  DoubleArrowRight: (
+    <>
+      <Icon icon={faChevronRight} />
+      <Icon icon={faChevronRight} />
+    </>
+  ),
 };

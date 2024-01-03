@@ -1,4 +1,27 @@
+import { dashboardColumns } from './const';
+import { Loading } from '../components';
+import { Table } from '../components/table/Table';
+import useTable from '../hooks/useTable';
+
 const Dashboard = () => {
-  return <h2>Dashboard</h2>;
+  const { pageRange, pageData, totalRows, searchParams, handleParamsChange } =
+    useTable();
+
+  return (
+    <>
+      {pageData && totalRows ? (
+        <Table
+          pageRange={pageRange}
+          pageData={pageData}
+          totalRows={totalRows}
+          searchParams={searchParams}
+          handleParamsChange={handleParamsChange}
+          columns={dashboardColumns}
+        />
+      ) : (
+        <Loading />
+      )}
+    </>
+  );
 };
 export default Dashboard;

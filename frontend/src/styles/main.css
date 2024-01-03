@@ -4,6 +4,8 @@
 @import './footer.css';
 @import './button.css';
 @import './login.css';
+@import './typography.css';
+@import './table.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
