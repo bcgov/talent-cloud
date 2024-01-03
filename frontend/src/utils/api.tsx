@@ -3,7 +3,7 @@ import store from 'store';
 import { APP_URL } from '../common';
 
 export const AxiosPublic = axios.create({
-  baseURL: `${APP_URL}/api`,
+  baseURL: `/api`,
   headers: {
     Accept: 'application/json',
     'Content-type': 'application/json',
@@ -15,7 +15,7 @@ export const AxiosPrivate = axios.create({
     Accept: 'application/json',
     'Content-type': 'application/json',
   },
-  baseURL: `${APP_URL}/api`,
+  baseURL: `/api`,
 });
 
 AxiosPublic.interceptors.response.use((response) => response);

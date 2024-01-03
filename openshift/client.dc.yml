@@ -1,0 +1,125 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+labels:
+  app: ${APP_NAME}
+parameters:
+  - name: APP_NAME
+    description: App name that OpenShift objects will be prefixed with
+    required: true
+  - name: IMAGE_NAMESPACE
+    description: Namespace from which to pull the image
+    required: true
+  - name: IMAGE_TAG
+    description: Image tag from image stream
+    value: latest
+    required: true
+  - name: SERVER_PORT
+    description: Port the server will be exposed on
+    value: '3000'
+    required: true
+  - name: CONFIG_VERSION
+    description: The github repository version of Config (Commit SHA)
+    value: default
+  - name: REPLICAS
+    description: The number of replicas of deployments
+    value: '2'
+objects:
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${APP_NAME}-client
+      annotations:
+        haproxy.router.openshift.io/timeout: 90s
+        haproxy.router.openshift.io/disable_cookies: true
+    spec:
+      host: ''
+      port:
+        targetPort: web
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}-client
+        weight: 100
+      wildcardPolicy: None
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-client
+    spec:
+      strategy:
+        type: Rolling
+        activeDeadlineSeconds: 21600
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${APP_NAME}-client
+            from:
+              kind: ImageStreamTag
+              name: ${APP_NAME}-client:${IMAGE_TAG}
+              namespace: ${IMAGE_NAMESPACE}
+          type: ImageChange
+        - type: ConfigChange
+      replicas: '${{REPLICAS}}'
+      selector:
+        name: ${APP_NAME}-client
+      template:
+        metadata:
+          name: ${APP_NAME}-client
+          labels:
+            name: ${APP_NAME}-client
+        spec:
+          containers:
+            - name: ${APP_NAME}-client
+              env:
+                - name: ENV
+                  value: dev
+                - name: CONFIG_VERSION
+                  value: ${CONFIG_VERSION}
+                - name: REACT_APP_SSO_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      key: realm
+                      name: ${APP_NAME}-keycloak
+                - name: REACT_APP_SSO_AUTH_SERVER_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: auth-url
+                      name: ${APP_NAME}-keycloak
+                - name: REACT_APP_SSO_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: client
+                      name: ${APP_NAME}-keycloak
+              image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-client:${IMAGE_TAG}
+              ports:
+                - containerPort: '${{SERVER_PORT}}'
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: '100m'
+                  memory: 256Mi
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: Always
+          restartPolicy: Always
+          dnsPolicy: ClusterFirst
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-client
+    spec:
+      ports:
+        - name: web
+          protocol: TCP
+          port: ${{SERVER_PORT}}
+          targetPort: ${{SERVER_PORT}}
+      selector:
+        name: ${APP_NAME}-client
+      type: ClusterIP
+      sessionAffinity: None
