@@ -1,11 +1,11 @@
 import { setTableDataStyle } from '../utils';
 import { StatusName } from '../../common';
-import { Row } from '../../common/interface';
+import { DashboardRow } from '../../common/interface';
 
-export const TableBody = ({ pageData }: { pageData: Row[] }) => {
+export const TableBody = ({ pageData }: { pageData: DashboardRow[] }) => {
   return (
     <tbody className="h-full">
-      {pageData?.map((itm: Row, index: number) => (
+      {pageData?.map((itm: DashboardRow, index: number) => (
         <tr
           key={`${itm.name + index.toString}`}
           className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"

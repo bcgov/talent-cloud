@@ -6,7 +6,7 @@ export enum Experience {
 }
 
 export enum ExperienceName {
-  INTERESTED = 'Intersted',
+  INTERESTED = 'Interested',
   EXPERIENCED = 'Experienced',
   CHIEF_EXPERIENCED = 'Chief',
   OUTSIDE_EXPERIENCED = 'Outside',

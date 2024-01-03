@@ -8,7 +8,7 @@ import {
   WorkLocationName,
 } from './enums';
 
-export interface Row {
+export interface DashboardRow {
   name: string;
   status: StatusName;
   region: RegionName;

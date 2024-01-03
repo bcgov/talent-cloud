@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Row, SearchParams } from '../common/interface';
+import { DashboardRow, SearchParams } from '../common/interface';
 import { AxiosPrivate } from '../utils';
 
 const useTable = () => {
   const [totalRows, setTotalRows] = useState<number>();
-  const [pageData, setPageData] = useState<Row[]>();
+  const [pageData, setPageData] = useState<DashboardRow[]>();
   const [pageRange, setPageRange] = useState<number[]>([1]);
 
   const [searchParams, setSearchParams] = useSearchParams(

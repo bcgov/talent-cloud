@@ -2,7 +2,7 @@ import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
 import { Loading } from '../Loading';
-import { Row, SearchParams } from '../../common/interface';
+import { DashboardRow, SearchParams } from '../../common/interface';
 
 export const Table = ({
   pageRange,
@@ -13,7 +13,7 @@ export const Table = ({
   columns,
 }: {
   pageRange: number[];
-  pageData: Row[];
+  pageData: DashboardRow[];
   searchParams: URLSearchParams;
   totalRows: number;
   handleParamsChange: (params: SearchParams) => void;

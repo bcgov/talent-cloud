@@ -9,7 +9,7 @@ import {
   WorkLocationName,
 } from './enums';
 
-export interface Row {
+export interface DashboardRow {
   name: string;
   status: Status;
   region: Region;
@@ -22,7 +22,7 @@ export interface Row {
   willingToTravel: string;
 }
 
-export const rowData = (): Row => {
+export const rowData = (): DashboardRow => {
   return {
     name: `${faker.person.lastName()}, ${faker.person.firstName()}`,
     status: faker.helpers.arrayElement(Object.values(Status)),
@@ -44,8 +44,8 @@ export const rowData = (): Row => {
 export const generateData = (
   numRows: number,
   page: number,
-): { rows: Row[]; totalRows: number } => {
-  const rows: Row[] = [];
+): { rows: DashboardRow[]; totalRows: number } => {
+  const rows: DashboardRow[] = [];
   const totalRows = 500;
 
   for (let i = 0; i < 500; i++) {
