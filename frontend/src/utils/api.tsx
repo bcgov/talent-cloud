@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import store from 'store';
-import { APP_URL } from '../common';
+import store from 'store';;
 
 export const AxiosPublic = axios.create({
   baseURL: `/api`,
