@@ -14,7 +14,7 @@ export PROJECT := tc
 export CONTAINER_REGISTRY := ""
 
 # Openshift
-export APP_NAME:=talent-cloud
+export APP_NAME:=tcloud
 export OS_NAMESPACE_PREFIX:=cd4869
 export OS_NAMESPACE_SUFFIX?=dev
 export TARGET_NAMESPACE=$(OS_NAMESPACE_PREFIX)-$(OS_NAMESPACE_SUFFIX)
@@ -107,7 +107,7 @@ db-create:
 	@oc process -f openshift/patroni.dc.yml -p APP_NAME=$(APP_NAME) | oc apply -n $(TARGET_NAMESPACE) -f -
 
 deployment-prep:
-	@oc process -f openshift/server.prep.yml -p APP_NAME=$(APP_NAME) -p KEYCLOAK_AUTH_SERVER=$(KEYCLOAK_AUTH) -p KEYCLOAK_CLIENT=$(KEYCLOAK_CLIENT) | oc create -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/server.prep.yml -p APP_NAME=$(APP_NAME) -p KEYCLOAK_AUTH_SERVER=$(KEYCLOAK_AUTH) -p KEYCLOAK_CLIENT=$(KEYCLOAK_CLIENT) -p APP_ENV=$(OS_NAMESPACE_SUFFIX) | oc create -n $(TARGET_NAMESPACE) -f -
 	@oc policy add-role-to-user system:image-puller system:serviceaccount:$(TARGET_NAMESPACE):default -n $(TOOLS_NAMESPACE)
 
 server-create:
@@ -140,11 +140,11 @@ deployment-build: build-config-update
 	@echo "Building server image in $(TOOLS_NAMESPACE) namespace"
 	@oc cancel-build bc/$(APP_NAME)-client -n $(TOOLS_NAMESPACE)
 	@oc start-build $(APP_NAME)-client -n $(TOOLS_NAMESPACE) --wait --follow=true --build-arg VERSION="$(LAST_COMMIT)"
-	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-server:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE)
+	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-client:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE)
 
 deployment-tag-to-deploy:
 	@oc tag $(APP_NAME)-server:$(COMMIT_SHA) $(APP_NAME)-server:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
-	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-server:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
+	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-client:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
 
 ### Tagging
 tag-dev:

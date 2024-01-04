@@ -24,7 +24,7 @@ parameters:
     required: true
   - name: DOCKERFILE_NAME
     description: Name of dockerfile
-    value: dockerfile.prod
+    value: Dockerfile.prod
     required: true
 objects:
   - kind: ImageStream
@@ -60,5 +60,5 @@ objects:
           name: ${APP_NAME}-server:${IMAGE_TAG}
       resources:
         limits:
-          cpu: '250m'
+          cpu: '300m'
           memory: 1Gi
