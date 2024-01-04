@@ -5,6 +5,5 @@ export const KeycloakVars = {
 };
 
 export const APP_URL = process.env.REACT_APP_URL ?? 'http://localhost:3050';
-export const API_URL = process.env.REACT_APP_API_URL ?? 'http://localhost:3050';
 
 export const APP_NAME = 'Talent Cloud';

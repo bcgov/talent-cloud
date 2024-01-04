@@ -6,10 +6,6 @@ parameters:
   - name: APP_NAME
     description: App name that OpenShift objects will be prefixed with
     required: true
-  - name: PORT
-    description: Port the app uses
-    value: 8080
-    required: true
   - name: KEYCLOAK_REALM
     description: Keycloak realm identifier
     value: standard
@@ -21,6 +17,10 @@ parameters:
     description: Placeholder for client id for Keycloak
     value: 'talent-cloud-5163'
     required: true
+  - name: APP_ENV
+    description: Environment for the application
+    required: true
+    value: dev
 objects:
   - kind: Secret
     apiVersion: v1
@@ -30,3 +30,9 @@ objects:
       realm: ${KEYCLOAK_REALM}
       auth-url: ${KEYCLOAK_AUTH_SERVER}
       client: ${KEYCLOAK_CLIENT}
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-server-config
+    data:
+      app-env: ${APP_ENV}

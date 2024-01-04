@@ -75,7 +75,10 @@ objects:
             - name: ${APP_NAME}-client
               env:
                 - name: ENV
-                  value: dev
+                  valueFrom:
+                    configMapKeyRef:
+                      key: app-env
+                      name: ${APP_NAME}-server-config
                 - name: CONFIG_VERSION
                   value: ${CONFIG_VERSION}
                 - name: REACT_APP_SSO_REALM
