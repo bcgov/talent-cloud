@@ -1,13 +1,8 @@
-import { ReactElement } from 'react';
-import React from 'react';
+import React, { ReactElement } from 'react';
+import { Header } from '../header';
 import { APP_NAME } from '../../common';
 import { footerLinks } from '../../routes/links';
-import { Footer, Header } from '.';
-
-type Link = {
-  href: string;
-  label: string;
-};
+import { Footer } from '.';
 
 export const Layout = ({
   children,
