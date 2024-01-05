@@ -1,4 +1,8 @@
-FROM cypress/base:latest AS dev
+###################
+# BUILD FOR CI TESTS
+###################
+
+FROM cypress/base:latest
 
 WORKDIR /app
 
@@ -11,3 +15,4 @@ RUN npm ci
 COPY . .
 
 EXPOSE 3000
+

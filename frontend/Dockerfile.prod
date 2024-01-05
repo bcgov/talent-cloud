@@ -8,7 +8,11 @@ COPY server.js .
 RUN npm pkg delete scripts.prepare
 RUN npm ci
 COPY . .
+
 ENV NODE_ENV production
+ENV PORT 3000
+ENV ENV prod
+
 RUN npm run build
 
 ###################
