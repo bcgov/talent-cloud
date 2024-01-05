@@ -22,9 +22,10 @@ module.exports = {
         inactive: '#343633',
       },
       backgroundColor: {
+        
         active: '#EFF7EB',
         inactive: '#D1D1D1',
-        gray: '#f2f2f2',
+        defaultGray: '#f2f2f2',
         blue: '#38598A',
         white: '#FFFFFF',
         errorBannerDark: '#A12622',
