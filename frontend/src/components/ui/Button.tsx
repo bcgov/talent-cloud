@@ -1,5 +1,4 @@
-import { ButtonTypes } from './constants';
-import { ButtonProps } from './types';
+import { ButtonProps, ButtonTypes } from '../../common';
 
 export const Button = ({ type, text, onClick, disabled = false }: ButtonProps) => {
   return (

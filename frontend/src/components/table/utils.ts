@@ -1,4 +1,4 @@
-import { MinistryAcronymName, StatusName } from '../common';
+import { MinistryAcronymName, StatusName } from '../../common';
 
 export const setTableDataStyle = (itm: string) => {
   if (Object.keys(StatusName).includes(itm)) {

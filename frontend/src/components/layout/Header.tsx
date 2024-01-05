@@ -1,4 +1,5 @@
-import logo2 from '../assets/images/logo-banner.png';
+import React from 'react';
+import logo2 from '../../assets/images/logo-banner.png';
 
 export const Header = ({ header }: { header: string }) => {
   return (
