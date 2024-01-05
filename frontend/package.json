@@ -7,9 +7,10 @@
     "npm": "10.x.x"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:prod": "node server.js",
-    "build": "react-scripts build",
+    "start:local": "NODE_ENV=local && react-scripts start",
+    "start:ci": "NODE_ENV=ci && react-scripts start",
+    "start:prod": "NODE_ENV=production && node server.js",
+    "build": "react-scripts build --production",
     "test:pipeline": "cypress run --headless",
     "eject": "react-scripts eject",
     "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
@@ -22,7 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "6.5.1",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@headlessui/react": "1.7.17",
-    "@react-keycloak/web": "^3.4.0",
+    "@react-keycloak/web": "3.4.0",
     "@testing-library/jest-dom": "6.1.5",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.1",
@@ -32,6 +33,8 @@
     "@types/react-dom": "18.2.17",
     "@types/store": "2.0.5",
     "axios": "1.6.2",
+    "express-rate-limit": "7.1.5",
+    "helmet": "7.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.20.1",
@@ -40,6 +43,9 @@
     "typescript": "^4"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@tailwindcss/forms": "0.5.7",
+    "@types/store": "2.0.5",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
     "autoprefixer": "10.4.16",
