@@ -40,8 +40,8 @@ services:
     ports:
      - "3000:3000"
     volumes:
-      - /usr/src/app/node_modules
-      - ./frontend:/usr/src/app
+      - /app/node_modules
+      - ./frontend:/app
     depends_on:
       - backend
       - keycloak
