@@ -42,8 +42,7 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = this.validateToken(token);
-      this.setRequestRoles(payload, request);
-      this.setRequestUser(payload, request);
+      this.setRequestUserInfo(payload, request);
     } catch {
       throw new UnauthorizedException();
     }
@@ -85,7 +84,7 @@ export class AuthGuard implements CanActivate {
     return payload;
   }
 
-  setRequestRoles(payload: JwtPayload, request: Request): void {
+  setRequestUserInfo(payload: JwtPayload, request: Request): void {
     if (payload.client_roles) {
       request['roles'] = payload.client_roles;
     } else if (
@@ -96,9 +95,6 @@ export class AuthGuard implements CanActivate {
     } else {
       request['roles'] = [];
     }
-  }
-
-  setRequestUser(payload: JwtPayload, request: Request): void {
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
