@@ -1,4 +1,6 @@
-import { Button, ButtonTypes } from '../components';
+import React from 'react';
+import { ButtonTypes } from '../common';
+import { Button } from '../components';
 import { useGetHealth } from '../hooks';
 import { logout } from '../services/keycloak';
 

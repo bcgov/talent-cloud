@@ -1,8 +1,11 @@
+import React from 'react';
 import { ReactComponent as ReactLogo } from '../assets/images/logoBlue.svg';
-import { Button, ButtonTypes } from '../components';
+import { ButtonTypes } from '../common';
+import { Button } from '../components';
 
 const LandingPage = () => {
   const login = () => window.location.assign('/login');
+
   return (
     <div className="w-full md:w-1/2 lg:w-1/4">
       <div className="card-pf">

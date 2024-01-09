@@ -1,2 +1,2 @@
-export * from './footerLinks';
-export * from './navLinks';
+export * from './Routes';
+export * from './links';

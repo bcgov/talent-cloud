@@ -1,7 +1,7 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { LinkProps, NavProps } from './types';
+import { LinkProps, NavProps } from '../../common/types';
 
-//TODO replace img url with static img
 export const Navigation = ({ links }: NavProps) => {
   return (
     <nav className="navigation-main" id="navbar">

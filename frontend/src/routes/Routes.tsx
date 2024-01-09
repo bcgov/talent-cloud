@@ -1,9 +1,10 @@
 import { useKeycloak, ReactKeycloakProvider } from '@react-keycloak/web';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import store from 'store';
 import ApplicationRoutes from './constants';
-import { PrivateLayout, Loading, PublicLayout } from '../components';
+import { coordinatorNavLinks, navLinks } from './links';
+import { Layout, Loading } from '../components';
 import {
   AppHealth,
   Dashboard,
@@ -21,18 +22,20 @@ const PrivateRoute = () => {
   if (!keycloak.authenticated) {
     return <Navigate to="/login" replace />;
   }
+  //TODO set dynamically
+  const isCoordinator = true;
   return (
-    <PrivateLayout>
+    <Layout navLinks={isCoordinator ? coordinatorNavLinks : navLinks}>
       <Outlet />
-    </PrivateLayout>
+    </Layout>
   );
 };
 
 const PublicRoute = () => {
   return (
-    <PublicLayout>
+    <Layout>
       <Outlet />
-    </PublicLayout>
+    </Layout>
   );
 };
 

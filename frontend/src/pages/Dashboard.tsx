@@ -1,5 +1,6 @@
-import { dashboardColumns } from './const';
+import React from 'react';
 import { Loading } from '../components';
+import { dashboardColumns } from '../components/table/columns';
 import { Table } from '../components/table/Table';
 import useTable from '../hooks/useTable';
 

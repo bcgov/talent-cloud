@@ -1,4 +1,5 @@
-import { setTableDataStyle } from '../utils';
+import React from 'react';
+import { setTableDataStyle } from './utils';
 import { StatusName } from '../../common';
 import { DashboardRow } from '../../common/interface';
 
