@@ -39,6 +39,7 @@
     "vite/client",
     "cypress.d.ts",
     "cypress.config.ts", 
+    "cypress/e2e/*",
     "cypress/components/Dashboard.cy.tsx",
     "cypress/components/Loading.cy.tsx",
     "cypress/components/NotFound.cy.tsx",

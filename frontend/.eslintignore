@@ -6,3 +6,7 @@ dist/
 public/assets/
 tsconfig.*.json
 .eslintrc.yml
+vitest.config.ts
+vite.config.ts
+e2e.ts
+cypress/support/*
