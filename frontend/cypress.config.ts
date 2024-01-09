@@ -1,15 +1,13 @@
 import { defineConfig } from 'cypress';
+import customViteConfig from './vite.config';
 
 export default defineConfig({
   component: {
     devServer: {
-      framework: 'create-react-app',
-      bundler: 'webpack',
-    },
-  },
-  e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+      framework: 'react',
+      bundler: 'vite',
+      // optionally pass in vite config
+      viteConfig: customViteConfig,
     },
   },
 });

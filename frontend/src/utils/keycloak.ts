@@ -1,4 +1,4 @@
-import Keycloak from 'keycloak-js';
+import type Keycloak from 'keycloak-js';
 
 /***
  * @description used to create custom login url for keycloak, intended purpose was to add idps_to_show

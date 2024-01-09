@@ -1,6 +1,6 @@
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import store from 'store';
-
 
 export const AxiosPublic = axios.create({
   baseURL: `/api/v1`,

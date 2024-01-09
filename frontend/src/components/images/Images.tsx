@@ -1,2 +1,2 @@
-
-export const Logo = () => <img src={new URL('../../../public/assets/images/logo.svg', import.meta.url).href} alt="logo"/>
+const src = new URL('../../../public/assets/images/logo.svg', import.meta.url).href;
+export const Logo = () => <img src={src} alt="logo" />;

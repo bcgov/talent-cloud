@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { DashboardRow, SearchParams } from '../common/interface';
+import type { DashboardRow, SearchParams } from '../common/interface';
 import { AxiosPrivate } from '../utils';
 
 const useTable = () => {

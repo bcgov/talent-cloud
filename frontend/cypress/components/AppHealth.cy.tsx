@@ -1,4 +1,3 @@
-import React from 'react';
 import AppHealth from '../../src/pages/AppHealth';
 
 describe('<AppHealth />', () => {
