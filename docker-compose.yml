@@ -23,9 +23,6 @@ services:
     container_name:  ${PROJECT}-frontend-${ENV}
     entrypoint: sh -c "npm ci && npm run dev"
     environment:
-      VITE_KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
-      VITE_KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
-      VITE_KEYCLOAK_REALM: ${KEYCLOAK_REALM}
       NODE_ENV: ${ENV}
       PORT: 3000
       BACKEND_URL: http://backend:3000
