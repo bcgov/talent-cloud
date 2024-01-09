@@ -34,11 +34,7 @@
 		X-Content-Type-Options "nosniff"
 		Strict-Transport-Security "max-age=31536000"
 		# TODO
-	# 	Content-Security-Policy " 'default-src': "'none'",
-    # 'base-uri': "'self'",
-    # 'object-src': "'none'",
-    # 'script-src': ["'self'"],
-    # 'style-src': ["'self'"]";
+		# 	Content-Security-Policy " 'default-src': "'none'",
 		Referrer-Policy "same-origin"
 		Feature-Policy "fullscreen 'self'; camera 'none'; microphone 'none'"
 	}
