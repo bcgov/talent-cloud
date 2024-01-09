@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup ENV file
+        run: cp .env.example .env
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -50,10 +52,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup ENV file
+        run: cp .env.example .env
       - name: Build & Deploy
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
-          make print-status
-          make server-build
-          make server-deploy
+          make deployment-build
+          make deployment-tag-to-deploy

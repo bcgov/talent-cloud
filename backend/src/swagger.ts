@@ -8,7 +8,7 @@ export const Documentation = (app: INestApplication) => {
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('TC API Docs')
-    .setVersion(process.env.API_VERSION || '0.0.1')
+    .setVersion(process.env.API_VERSION || '1.0.0')
     .setDescription('TC API')
     .build();
 
@@ -16,7 +16,7 @@ export const Documentation = (app: INestApplication) => {
     include: [AppModule, AuthModule, PersonnelModule],
   });
 
-  SwaggerModule.setup('api', app, baseDocument, {
+  SwaggerModule.setup('api/v1', app, baseDocument, {
     swaggerOptions: {
       docExpansion: 'none',
       displayRequestDuration: true,

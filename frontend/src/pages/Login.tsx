@@ -4,7 +4,7 @@ import { ReactComponent as Logo } from '../assets/images/logoBlue.svg';
 import { ButtonTypes } from '../common';
 import { Button } from '../components';
 import Routes from '../routes/constants';
-import { createCustomLoginUrl } from '../utils/custom-login-url';
+import { createCustomLoginUrl } from '../utils/keycloak';
 
 export default () => {
   const { keycloak } = useKeycloak();

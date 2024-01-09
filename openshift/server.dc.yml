@@ -19,7 +19,7 @@ parameters:
     required: true
   - name: SERVER_PORT
     description: Port the server will be exposed on
-    value: '8080'
+    value: '3000'
     required: true
   - name: CONFIG_VERSION
     description: The github repository version of Config (Commit SHA)
@@ -86,7 +86,7 @@ objects:
                 - name: NODE_ENV
                   value: production
                 - name: PORT
-                  value: '8080'
+                  value: '3000'
                 - name: CONFIG_VERSION
                   value: ${CONFIG_VERSION}
                 - name: DB_HOST

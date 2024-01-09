@@ -1,8 +1,9 @@
 import axios, { AxiosError } from 'axios';
-import store from 'store';;
+import store from 'store';
+
 
 export const AxiosPublic = axios.create({
-  baseURL: `/api`,
+  baseURL: `/api/v1`,
   headers: {
     Accept: 'application/json',
     'Content-type': 'application/json',
@@ -14,7 +15,7 @@ export const AxiosPrivate = axios.create({
     Accept: 'application/json',
     'Content-type': 'application/json',
   },
-  baseURL: `/api`,
+  baseURL: `/api/v1`,
 });
 
 AxiosPublic.interceptors.response.use((response) => response);
