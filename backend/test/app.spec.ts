@@ -1,7 +1,7 @@
+import { HttpModule } from '@nestjs/axios';
+import { TerminusModule } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../src/app.controller';
-import { TerminusModule } from '@nestjs/terminus';
-import { HttpModule } from '@nestjs/axios';
 import { DatabaseModule } from '../src/database/database.module';
 import { LoggerModule } from '../src/logger/logger.module';
 

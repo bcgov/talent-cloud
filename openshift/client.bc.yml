@@ -1,0 +1,63 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+labels:
+  app: ${APP_NAME}
+parameters:
+  - name: APP_NAME
+    description: App name that OpenShift objects will be prefixed with
+    required: true
+  - name: REPO
+    description: URL of boilerplate repository
+    value: https://github.com/bcgov/talent-cloud.git
+    required: true
+  - name: REF
+    description: Reference of repository that should be built
+    value: dev
+    required: true
+  - name: IMAGE_TAG
+    description: ImageStream tag for build and deploy
+    value: latest
+    required: true
+  - name: CONTEXT
+    description: Context directory in repository
+    value: frontend
+  - name: DOCKERFILE_NAME
+    description: Name of dockerfile
+    value: Dockerfile.prod
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-client
+    spec:
+      lookupPolicy:
+        local: false
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-client
+    spec:
+      completionDeadlineSeconds: 600
+      triggers:
+        - type: ImageChange
+        - type: ConfigChange
+      runPolicy: SerialLatestOnly
+      source:
+        type: Git
+        git:
+          uri: ${REPO}
+          ref: ${REF}
+        contextDir: ${CONTEXT}
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: ${DOCKERFILE_NAME}
+        type: Docker
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${APP_NAME}-client:${IMAGE_TAG}
+      resources:
+        limits:
+          cpu: '500m'
+          memory: 2Gi

@@ -1,0 +1,62 @@
+# Build and Deploy to dev env.
+# Trigger with tag dev
+# Connected with repo environment 'dev'
+name: OpenShift Build and Deploy to Dev
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - dev
+
+env:
+  CLUSTER: https://api.gold.devops.gov.bc.ca:6443
+  AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
+  TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
+  PROJECT: talent-cloud
+
+jobs:
+  config:
+    name: Deploy Config
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup ENV file
+        run: cp .env.example .env
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'openshift/**'
+          base: ${{ github.ref}}
+      - name: Apply Changes
+        env:
+          OS_NAMESPACE_SUFFIX: dev
+        if: steps.changes.outputs.src == 'true'
+        run: |
+          oc login --token="$AUTH_TOKEN" --server="$CLUSTER"
+          cd "$GITHUB_WORKSPACE"
+          make deployment-update
+  build:
+    name: OpenShift Build & Tag for Deployment
+    environment: dev
+    runs-on: ubuntu-latest
+    concurrency: ci-build
+    timeout-minutes: 20
+    env:
+      BUILD_REF: ${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup ENV file
+        run: cp .env.example .env
+      - name: Build & Deploy
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
+          make deployment-build
+          make deployment-tag-to-deploy

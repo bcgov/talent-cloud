@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { Header } from '../header';
 import { APP_NAME } from '../../common';
 import { footerLinks } from '../../routes/links';
