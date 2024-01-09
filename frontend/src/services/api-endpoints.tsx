@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import { AxiosPrivate } from '../utils';
 
 export const getUserInfo = async (): Promise<AxiosResponse> => {
