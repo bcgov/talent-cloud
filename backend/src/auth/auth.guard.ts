@@ -32,7 +32,6 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     const token = this.parseJwt(authHeader);
-
     if (!authHeader.includes('Bearer ')) {
       throw new UnauthorizedException('Unauthorized user without credentials');
     }
@@ -88,7 +87,7 @@ export class AuthGuard implements CanActivate {
     if (payload.client_roles) {
       request['roles'] = payload.client_roles;
     } else if (
-      process.env.NODE_ENV === 'local' &&
+      process.env.NODE_ENV !== 'production' &&
       payload.resource_access?.[AUTH_CLIENT]
     ) {
       request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;

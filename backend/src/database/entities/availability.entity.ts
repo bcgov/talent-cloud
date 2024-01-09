@@ -5,8 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { PersonnelEntity } from './personnel.entity';
+import { AvailabilityType } from '../../common/enums/availability-type.enum';
 
 @Entity('function')
 export class AvailabilityEntity {
@@ -16,7 +16,12 @@ export class AvailabilityEntity {
   @Column({ name: 'date', type: 'timestamp' })
   date: Date;
 
-  @Column({ name: 'availability_type', type: 'enum', enum: AvailabilityType, enumName: 'availability-type' })
+  @Column({
+    name: 'availability_type',
+    type: 'enum',
+    enum: AvailabilityType,
+    enumName: 'availability-type',
+  })
   availabilityType: AvailabilityType;
 
   @ManyToOne(() => PersonnelEntity, (pe) => pe.availability)

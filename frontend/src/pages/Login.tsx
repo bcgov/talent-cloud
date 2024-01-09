@@ -1,10 +1,10 @@
 import { useKeycloak } from '@react-keycloak/web';
-import React from 'react';
-import { ReactComponent as Logo } from '../assets/images/logoBlue.svg';
-import { ButtonTypes } from '../common';
-import { Button } from '../components';
-import Routes from '../routes/constants';
-import { createCustomLoginUrl } from '../utils/custom-login-url';
+
+import { Button } from '@/components';
+import Routes from '@/routes/constants';
+import { createCustomLoginUrl } from '@/utils/keycloak';
+import { ButtonTypes } from '@/common';
+import { Logo } from '@/components/images';
 
 export default () => {
   const { keycloak } = useKeycloak();

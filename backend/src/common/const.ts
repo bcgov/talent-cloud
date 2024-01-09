@@ -4,5 +4,3 @@ export enum APP_ENV {
   TEST = 'test',
   PROD = 'production',
 }
-
-export const APP_URL = 'http://localhost:3050';

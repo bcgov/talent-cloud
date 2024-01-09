@@ -1,7 +1,4 @@
-export enum ButtonTypes {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-}
+import type { ButtonTypes } from './constants';
 
 export type LinkProps = {
   href: string;

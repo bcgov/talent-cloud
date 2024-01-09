@@ -1,0 +1,38 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+labels:
+  app: ${APP_NAME}
+parameters:
+  - name: APP_NAME
+    description: App name that OpenShift objects will be prefixed with
+    required: true
+  - name: KEYCLOAK_REALM
+    description: Keycloak realm identifier
+    value: standard
+    required: true
+  - name: KEYCLOAK_AUTH_SERVER
+    description: Placeholder for URL used to request authentication actions with Keycloak
+    required: true
+  - name: KEYCLOAK_CLIENT
+    description: Placeholder for client id for Keycloak
+    value: 'talent-cloud-5163'
+    required: true
+  - name: APP_ENV
+    description: Environment for the application
+    required: true
+    value: dev
+objects:
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-keycloak
+    stringData:
+      realm: ${KEYCLOAK_REALM}
+      auth-url: ${KEYCLOAK_AUTH_SERVER}
+      client: ${KEYCLOAK_CLIENT}
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-server-config
+    data:
+      app-env: ${APP_ENV}

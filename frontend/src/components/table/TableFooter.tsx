@@ -1,7 +1,11 @@
-import { ChangeEvent } from 'react';
-import React from 'react';
-import { SearchParams } from '../../common/interface';
-import { icons } from '../../components';
+import type { ChangeEvent } from 'react';
+import type { SearchParams } from '../../common/interface';
+import {
+  ChevronRightIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/24/solid';
 
 export const TableFooter = ({
   searchParams,
@@ -52,7 +56,7 @@ export const TableFooter = ({
               'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900  hover:bg-gray-50 focus:z-20 '
             }
           >
-            {icons.DoubleArrowLeft}
+            <ChevronDoubleLeftIcon />
           </button>
           <button
             onClick={() => handleParamsChange({ page: page - 1, rows, search })}
@@ -60,7 +64,7 @@ export const TableFooter = ({
               'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900  hover:bg-gray-50 focus:z-20 '
             }
           >
-            {icons.ArrowLeft}
+            <ChevronLeftIcon />
           </button>
 
           {pageRange.map((itm) => (
@@ -83,7 +87,7 @@ export const TableFooter = ({
               'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900  hover:bg-gray-50 focus:z-20 '
             }
           >
-            {icons.ArrowRight}
+            <ChevronRightIcon />
           </button>
           <button
             onClick={() =>
@@ -97,7 +101,7 @@ export const TableFooter = ({
               'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900  hover:bg-gray-50 focus:z-20 '
             }
           >
-            {icons.DoubleArrowRight}
+            <ChevronDoubleRightIcon />
           </button>
         </nav>
       </div>

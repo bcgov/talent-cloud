@@ -1,9 +1,8 @@
-import React from 'react';
 import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
 import { Loading } from '../ui/Loading';
-import { DashboardRow, SearchParams } from '../../common/interface';
+import type { DashboardRow, SearchParams } from '../../common/interface';
 
 export const Table = ({
   pageRange,

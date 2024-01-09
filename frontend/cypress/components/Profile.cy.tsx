@@ -1,4 +1,3 @@
-import React from 'react';
 import Profile from '../../src/pages/Profile';
 
 describe('<Profile />', () => {

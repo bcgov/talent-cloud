@@ -1,6 +1,5 @@
-import React from 'react';
+import type { FooterProps, LinkProps } from '@/common';
 import { Link } from 'react-router-dom';
-import { FooterProps, LinkProps } from '../../common';
 
 export const Footer = ({ links }: FooterProps) => {
   return (

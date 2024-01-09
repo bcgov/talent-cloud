@@ -1,5 +1,4 @@
-import React from 'react';
-import Component from '../../src/routes/Routes';
+import Component from '../../src/routes/AppRoutes';
 
 describe('<Component />', () => {
   it('renders', () => {
