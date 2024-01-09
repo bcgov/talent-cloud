@@ -75,7 +75,7 @@ objects:
             - name: ${APP_NAME}-client                
               env:
               - name: BACKEND_URL
-                value: "http://tcloud-server:3000"
+                value: http://${APP_NAME}-server:3000
               - name: LOG_LEVEL
                 value: warn
               - name: ENV
@@ -85,21 +85,6 @@ objects:
                     name: ${APP_NAME}-server-config
               - name: CONFIG_VERSION
                 value: ${CONFIG_VERSION}
-              - name: VITE_KEYCLOAK_REALM
-                valueFrom:
-                  secretKeyRef:
-                    key: realm
-                    name: ${APP_NAME}-keycloak
-              - name: VITE_KEYCLOAK_AUTH_URL
-                valueFrom:
-                  secretKeyRef:
-                    key: auth-url
-                    name: ${APP_NAME}-keycloak
-              - name: VITE_KEYCLOAK_CLIENT
-                valueFrom:
-                  secretKeyRef:
-                    key: client
-                    name: ${APP_NAME}-keycloak
               image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-client:${IMAGE_TAG}
               ports:
                 - containerPort: '${{SERVER_PORT}}'
