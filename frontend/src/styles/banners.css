@@ -1,13 +1,4 @@
-/* body {
-  font-family: 'BC Sans', 'Noto Sans', Arial, 'sans serif';
-  color: #313132;
-  font-size: 16px;
-  line-height: 1.5em;
-} */
 
-a {
-  text-decoration: underline;
-}
 
 .bc-gov-alertbanner {
   border: 1px solid transparent;
@@ -19,7 +10,6 @@ a {
 
 .bc-gov-alertbanner:before {
   float: left;
-  font-family: 'Font Awesome 5 Free';
   font-size: larger;
   font-style: normal;
   line-height: 1;
