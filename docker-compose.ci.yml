@@ -80,7 +80,7 @@ services:
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - /usr/src/app/node_modules
       - ./backend:/usr/src/app
