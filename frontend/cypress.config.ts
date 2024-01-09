@@ -6,16 +6,16 @@ export default defineConfig({
     baseUrl: 'http://localhost:3000',
     setupNodeEvents(on, config) {
       // implement node event listeners here
-    }
+    },
   },
-  component:{
+  component: {
     devServer: {
       framework: 'react',
       bundler: 'vite',
       // optionally pass in vite config
       viteConfig: customViteConfig,
     },
-  }, 
+  },
   experimentalStudio: true,
   experimentalWebKitSupport: true,
 });
