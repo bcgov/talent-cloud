@@ -9,7 +9,7 @@
 			time_format iso8601
 			level_format color
 		}
-		level "info"
+		level {$LOG_LEVEL}
 	}
 	root * /srv
 	encode zstd gzip
