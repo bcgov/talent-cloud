@@ -9,8 +9,9 @@ import {
   faChevronUp,
   faChevronLeft,
   faChevronRight,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { Icon } from '../components/Icon';
+import { Icon } from './Icon';
 
 export const icons = {
   Search: <Icon icon={faSearch} />,
@@ -35,4 +36,5 @@ export const icons = {
       <Icon icon={faChevronRight} />
     </>
   ),
+  Profile: <Icon icon={faUser} />,
 };

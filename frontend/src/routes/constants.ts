@@ -3,8 +3,5 @@ export default Object.freeze({
   Login: '/login',
   Dashboard: '/dashboard',
   Profile: '/profile',
-  Keycloak: '/keycloak',
-  AppHealth: '/health',
-  LandingPage: '/',
   NotFound: '*',
 });

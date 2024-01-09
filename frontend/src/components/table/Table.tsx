@@ -1,7 +1,8 @@
+import React from 'react';
 import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
-import { Loading } from '../Loading';
+import { Loading } from '../ui/Loading';
 import { DashboardRow, SearchParams } from '../../common/interface';
 
 export const Table = ({
@@ -34,17 +35,15 @@ export const Table = ({
           </div>
 
           <table className="table-fixed">
-            <div className="overflow-x-auto">
-              <TableHeader columns={columns} />
-              <TableBody pageData={pageData} />
-            </div>
-            <TableFooter
-              searchParams={searchParams}
-              handleParamsChange={handleParamsChange}
-              pageRange={pageRange}
-              totalRows={totalRows}
-            />
+            <TableHeader columns={columns} />
+            <TableBody pageData={pageData} />
           </table>
+          <TableFooter
+            searchParams={searchParams}
+            handleParamsChange={handleParamsChange}
+            pageRange={pageRange}
+            totalRows={totalRows}
+          />
         </div>
       )}
     </>

@@ -1,10 +1,11 @@
-import { setTableDataStyle } from '../utils';
+import React from 'react';
+import { setTableDataStyle } from './utils';
 import { StatusName } from '../../common';
 import { DashboardRow } from '../../common/interface';
 
 export const TableBody = ({ pageData }: { pageData: DashboardRow[] }) => {
   return (
-    <tbody className="h-full">
+    <tbody className="h-full  overflow-x-auto">
       {pageData?.map((itm: DashboardRow, index: number) => (
         <tr
           key={`${itm.name + index.toString}`}
