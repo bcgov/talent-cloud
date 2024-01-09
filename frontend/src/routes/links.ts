@@ -1,4 +1,4 @@
-import type { LinkProps } from '../components';
+import type { LinkProps } from '@/common';
 
 export const footerLinks: LinkProps[] = [
   { href: './Home', label: 'Home' },

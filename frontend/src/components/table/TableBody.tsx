@@ -1,7 +1,6 @@
-import React from 'react';
 import { setTableDataStyle } from './utils';
-import { StatusName } from '../../common';
-import type { DashboardRow } from '../../common/interface';
+import { StatusName } from '@/common';
+import type { DashboardRow } from '@/common/interface';
 
 export const TableBody = ({ pageData }: { pageData: DashboardRow[] }) => {
   return (
