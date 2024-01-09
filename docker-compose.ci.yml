@@ -20,7 +20,7 @@ services:
       - tc
 
   frontend:
-    container_name:  ${PROJECT}-frontend-${ENV}
+    container_name:  ${PROJECT}-frontend-ci
     entrypoint: sh -c "npm run dev"
     build:
       context: ./frontend
@@ -40,7 +40,7 @@ services:
     depends_on:
       - backend
   caddy:
-    container_name:  ${PROJECT}-caddy-${ENV}
+    container_name:  ${PROJECT}-caddy-ci
     profiles: ["caddy"]
     build: ./frontend
     environment:
@@ -57,7 +57,7 @@ services:
     networks:
       - tc
   backend:
-    container_name: ${PROJECT}-backend-${ENV}
+    container_name: ${PROJECT}-backend-ci
     entrypoint: sh -c "npm i && npm run start:dev"  
     stdin_open: true
     image: node:20-bullseye
