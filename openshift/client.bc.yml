@@ -58,6 +58,9 @@ objects:
           kind: ImageStreamTag
           name: ${APP_NAME}-client:${IMAGE_TAG}
       resources:
-        limits:
+        requests:
           cpu: '500m'
           memory: 2Gi
+        limits:
+          cpu: '750m'
+          memory: 3Gi
