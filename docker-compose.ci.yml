@@ -1,0 +1,129 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ${PROJECT}-db-${ENV}
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - tc
+
+  frontend:
+    container_name:  ${PROJECT}-frontend-ci
+    entrypoint: sh -c "npm run dev"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.ci
+    environment:
+      NODE_ENV: ${ENV}
+      PORT: 3000
+      BACKEND_URL: http://backend:3000
+    ports: 
+      - "3000:3000"
+    volumes: ["./frontend:/app", "/app/node_modules"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    working_dir: "/app"
+    networks:
+      - tc
+    depends_on:
+      - backend
+  caddy:
+    container_name:  ${PROJECT}-caddy-ci
+    profiles: ["caddy"]
+    build: ./frontend
+    environment:
+      NODE_ENV: ${ENV}
+      PORT: 3000
+      BACKEND_URL: http://backend:3000
+      LOG_LEVEL: info
+    ports: ["3005:3000"]
+    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    depends_on:
+    - backend
+    networks:
+      - tc
+  backend:
+    container_name: ${PROJECT}-backend-ci
+    image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
+    build:
+      context: "./backend"
+      dockerfile: Dockerfile.ci
+    restart: always
+    stdin_open: true
+    command: "npm run start:dev"
+    env_file: .env
+    environment:
+      NODE_ENV: ${ENV}
+      PORT: ${API_PORT}
+      DB_PORT: ${DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      KEYCLOAK_REALM:  ${KEYCLOAK_REALM}
+      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_SERVER}
+      KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CHOKIDAR_USEPOLLING: "true"
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3001:3000"
+    volumes:
+      - /usr/src/app/node_modules
+      - ./backend:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - tc
+  keycloak:
+    container_name: ${PROJECT}-keycloak-${ENV}
+    build:
+      context: ./keycloak
+    command:
+      - start-dev
+      - --import-realm
+      - --hostname-strict=false
+      - --hostname-strict-https=false
+    platform: linux/arm64/v8
+    volumes:
+      - keycloak:/opt/keycloak/data
+      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
+    env_file: .env
+    environment:
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
+      DB_VENDOR: ${DB_TYPE}
+      DB_ADDR: db
+      DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+      HEALTH_ENABLED: "true"
+      HTTP_ENABLED: "true"
+      METRICS_ENABLED: "true"
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+      - "8787:8787" # debug port
+    networks:
+      - tc
+volumes:
+  pg_data: {}
+  keycloak: {}
+networks:
+  tc:
+    driver: bridge

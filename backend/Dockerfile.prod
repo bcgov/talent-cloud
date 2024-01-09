@@ -1,18 +1,35 @@
-FROM node:20.10.0-alpine
+###################
+# BUILD FOR PRODUCTION
+###################
+FROM node:20.10.0-alpine AS build
 
 WORKDIR /usr/src/app
 
-COPY ./*.json .
+COPY package*.json .
 
-RUN npm ci
+COPY . .
 
-COPY ./ .
+RUN npm pkg delete scripts.prepare
+
+RUN npm ci 
 
 RUN npm run build
 
+###################
+# PRODUCTION
+###################
+FROM node:20.10.0-alpine AS production
+
+# Copy the bundled code from the build stage to the production image
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+
+
 ENV NODE_ENV production
-ENV PORT 8080
+ENV PORT 3000
+ENV ENV prod
 
-EXPOSE 8080
+EXPOSE 3000
 
+# Start the server using the production build
 CMD [ "node", "dist/main.js" ]

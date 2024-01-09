@@ -20,76 +20,66 @@ services:
       - tc
 
   frontend:
-    image: ${PROJECT}-frontend:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-frontend-${ENV}
-    command: "npm run start:${ENV}"
-    build:
-      context: "./frontend"
-      dockerfile: "Dockerfile.${ENV}"
-    restart: always
-    stdin_open: true
-    env_file: .env
+    container_name:  ${PROJECT}-frontend-${ENV}
+    entrypoint: sh -c "npm ci && npm run dev"
     environment:
-      REACT_APP_SSO_REDIRECT_URI: ${KEYCLOAK_REDIRECT}
-      REACT_APP_SSO_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER}
-      REACT_APP_SSO_REALM: ${KEYCLOAK_REALM}
-      REACT_APP_SSO_CLIENT_ID: ${KEYCLOAK_CLIENT}
-      REACT_APP_PORT: ${REACT_APP_PORT}
-      CHOKIDAR_USEPOLLING: "true"
-      WATCHPACK_POLLING: "true"
-    ports:
-     - "3000:3000"
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app
+      NODE_ENV: ${ENV}
+      PORT: 3000
+      BACKEND_URL: http://backend:3000
+    image: node:20-bullseye
+    ports: 
+      - "3000:3000"
+    volumes: ["./frontend:/app", "/app/node_modules"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    working_dir: "/app"
+    networks:
+      - tc
     depends_on:
       - backend
-      - keycloak
+  caddy:
+    container_name:  ${PROJECT}-caddy-${ENV}
+    profiles: ["caddy"]
+    build: ./frontend
+    environment:
+      NODE_ENV: ${ENV}
+      PORT: 3000
+      BACKEND_URL: http://backend:3000
+      LOG_LEVEL: info
+    ports: ["3005:3000"]
+    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    depends_on:
+    - backend
     networks:
       - tc
   backend:
     container_name: ${PROJECT}-backend-${ENV}
-    image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
-    build:
-      context: "./backend"
-      target: dev
-    restart: always
+    entrypoint: sh -c "npm i && npm run start:dev"  
     stdin_open: true
-    command: "npm run start:dev"
-    env_file: .env
+    image: node:20-bullseye
+    ports: 
+    - "3001:3000"
+    volumes: 
+    - "./backend:/usr/src/app"
+    - "/usr/src/app/node_modules"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api"]
+    working_dir: "/usr/src/app"
     environment:
       NODE_ENV: ${ENV}
-      PORT: ${API_PORT}
+      PORT: 3000
       DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       KEYCLOAK_REALM:  ${KEYCLOAK_REALM}
-      KEYCLOAK_AUTH_SERVER: ${KEYCLOAK_AUTH_SERVER}
+      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       DB_PASSWORD: ${DB_PASSWORD}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
-    ports:
-      - "8081:8081"
-    volumes:
-      - /usr/src/app/node_modules
-      - ./backend:/usr/src/app
-    depends_on:
-      - db
-    networks:
-      - tc
-
-  nginx:
-    image: ${PROJECT}-nginx:${GIT_LOCAL_BRANCH}
-    container_name: ${PROJECT}-nginx-${ENV}
-    build:
-      context: "./nginx"
-    ports:
-      - "3050:80"
-    depends_on:
-      - backend
-      - frontend
     networks:
       - tc
   keycloak:

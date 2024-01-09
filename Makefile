@@ -31,8 +31,7 @@ export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
 	@$(shell echo ./scripts/setenv.sh local ci )
-	@$(shell echo ./scripts/setenv.sh prod ci )
-	@docker-compose up --force-recreate -d --build 
+	@docker-compose -f docker-compose.ci.yml up --force-recreate -d --build 
 
 test-backend-pipeline:
 	@docker exec tc-backend-ci npm run test:pipeline
@@ -46,14 +45,6 @@ run-db:
 build-local:
 	@echo "+\n++ Make: Run/Build locally ...\n+"
 	@$(shell echo ./scripts/setenv.sh ci local )
-	@$(shell echo ./scripts/setenv.sh prod local )
-	@docker-compose up --force-recreate -d --build 
-
-build-local-production:
-	@echo "+\n++ Make: Run/Build locally ...\n+"
-	@$(shell echo ./scripts/setenv.sh ci prod )
-	@$(shell echo ./scripts/setenv.sh local prod )
-	@cd frontend && npm run build	
 	@docker-compose up --force-recreate -d --build 
 
 run-local:

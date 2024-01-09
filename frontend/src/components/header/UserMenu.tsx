@@ -1,17 +1,21 @@
 import { Menu, Transition } from '@headlessui/react';
-import React from 'react';
 import { Fragment } from 'react';
-import userIcon from '../../assets/images/user.png';
-import { logout } from '../../services/keycloak';
+
+import { logout } from '@/utils/keycloak';
+import { Routes } from '@/routes';
+import { useKeycloak } from '@react-keycloak/web';
+import { UserIcon } from '../images';
 
 export const UserMenu = ({ username }: { username: string }) => {
+  const { keycloak } = useKeycloak();
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <div className="col-span-1 text-center flex flex-row items-center justify-center space-x-2">
           <h6>{username}</h6>
           <Menu.Button className="hover:bg-gray-50">
-            <img src={userIcon} alt="userIcon" />
+            <UserIcon />
           </Menu.Button>
         </div>
       </div>
@@ -28,7 +32,10 @@ export const UserMenu = ({ username }: { username: string }) => {
         <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
-              <button className="py-2 px-4 text-sm" onClick={logout}>
+              <button
+                className="py-2 px-4 text-sm"
+                onClick={() => logout(keycloak, Routes.Login)}
+              >
                 Logout
               </button>
             </Menu.Item>
