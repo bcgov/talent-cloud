@@ -35,17 +35,15 @@ export const Table = ({
           </div>
 
           <table className="table-fixed">
-            <div className="overflow-x-auto">
-              <TableHeader columns={columns} />
-              <TableBody pageData={pageData} />
-            </div>
-            <TableFooter
-              searchParams={searchParams}
-              handleParamsChange={handleParamsChange}
-              pageRange={pageRange}
-              totalRows={totalRows}
-            />
+            <TableHeader columns={columns} />
+            <TableBody pageData={pageData} />
           </table>
+          <TableFooter
+            searchParams={searchParams}
+            handleParamsChange={handleParamsChange}
+            pageRange={pageRange}
+            totalRows={totalRows}
+          />
         </div>
       )}
     </>

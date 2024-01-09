@@ -1,4 +1,3 @@
-import Routes from './constants';
 import { LinkProps } from '../common';
 
 export const footerLinks: LinkProps[] = [
@@ -9,11 +8,3 @@ export const footerLinks: LinkProps[] = [
   { href: './Copyright', label: 'Copyright' },
   { href: './Us', label: 'Us' },
 ];
-
-export const coordinatorNavLinks: LinkProps[] = [
-  { href: Routes.AppHealth, label: 'Home' },
-  { href: Routes.Dashboard, label: 'Dashboard' },
-  { href: Routes.Profile, label: 'Profile' },
-];
-
-export const navLinks: LinkProps[] = [{ href: Routes.LandingPage, label: 'Home' }];

@@ -5,7 +5,7 @@ import { DashboardRow } from '../../common/interface';
 
 export const TableBody = ({ pageData }: { pageData: DashboardRow[] }) => {
   return (
-    <tbody className="h-full">
+    <tbody className="h-full  overflow-x-auto">
       {pageData?.map((itm: DashboardRow, index: number) => (
         <tr
           key={`${itm.name + index.toString}`}

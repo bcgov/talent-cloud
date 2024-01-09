@@ -1,4 +1,5 @@
 import Keycloak from 'keycloak-js';
+import store from 'store';
 import { KeycloakVars } from '../common';
 
 const _kc = new Keycloak({
@@ -11,6 +12,7 @@ const _kc = new Keycloak({
 // one of valid post logout redirect uris in the client configuration
 
 const logout = () => {
+  store.remove('TOKEN');
   window.location.href = `https://logon7.gov.bc.ca/clp-cgi/logoff.cgi?retnow=1&returl=${encodeURIComponent(
     `${process.env.REACT_APP_SSO_AUTH_SERVER_URL}/realms/${process.env.REACT_APP_SSO_REALM}/protocol/openid-connect/logout?post_logout_redirect_uri=` +
       process.env.REACT_APP_SSO_REDIRECT_URI +

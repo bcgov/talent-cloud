@@ -5,10 +5,10 @@ import { Roles } from './roles.decorator';
 @Controller('auth')
 export class AuthController {
   @Roles(Role.COORDINATOR)
-  @Get('roles')
+  @Get('userInfo')
   async getRole(@Request() req) {
     try {
-      return { roles: req.roles };
+      return { roles: req.roles, username: req.username };
     } catch (e) {
       return { roles: [] };
     }

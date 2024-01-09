@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
+import React from 'react';
 import { SearchParams } from '../../common/interface';
-import { icons } from '../../styles';
+import { icons } from '../../components';
 
 export const TableFooter = ({
   searchParams,
