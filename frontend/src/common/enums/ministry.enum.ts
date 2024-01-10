@@ -1,4 +1,4 @@
-export enum MinistryAcronymName {
+export enum Ministry {
   AGRI = 'AGRI',
   AG = 'AG',
   MCF = 'MCF',

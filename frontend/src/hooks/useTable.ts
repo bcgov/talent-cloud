@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { DashboardRow, SearchParams } from '../common/interface';
 import { AxiosPrivate } from '../utils';
+import { dashboardColumns } from '@/components/table/columns';
+import { tableClass } from '@/components/table/utils';
+import { DashboardColumns, type TableData } from '@/components/table/interface';
+import { Status } from '../common';
+import { v4 as uuidv4 } from 'uuid';
 
 const useTable = () => {
   const [totalRows, setTotalRows] = useState<number>();
-  const [pageData, setPageData] = useState<DashboardRow[]>();
+  const [tableData, setTableData] = useState<TableData>();
   const [pageRange, setPageRange] = useState<number[]>([1]);
 
   const [searchParams, setSearchParams] = useSearchParams(
@@ -25,12 +30,36 @@ const useTable = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await AxiosPrivate.get(`/personnel?${searchParams}`);
-        setTotalRows(data.totalRows);
-        setPageRange(
-          calculatePages(data.totalRows, parseInt(searchParams.get('rows') ?? '1')),
-        );
-        setPageData(data.rows);
+        const {
+          data: { rows, totalRows },
+        } = await AxiosPrivate.get(`/personnel?${searchParams}`);
+        setTotalRows(totalRows);
+        totalRows &&
+          setPageRange(
+            calculatePages(totalRows, parseInt(searchParams.get('rows') ?? '1')),
+          );
+
+        rows &&
+          setTableData({
+            columns: dashboardColumns.map((itm: string) => ({
+              name: itm,
+              key: uuidv4(),
+            })),
+            rows: rows.map((itm: DashboardRow) => ({
+              key: uuidv4(),
+
+              active: itm.status === Status.Active,
+              cells: Object.entries(itm).map(
+                ([key, value]) =>
+                  key !== DashboardColumns.STATUS && {
+                    key: uuidv4(),
+                    columnName: key,
+                    value,
+                    className: tableClass(key, value),
+                  },
+              ),
+            })),
+          });
       } catch (e) {
         console.log(e);
       }
@@ -38,7 +67,6 @@ const useTable = () => {
   }, [searchParams]);
 
   const handleParamsChange = (params: SearchParams) => {
-    console.log(params);
     const url = encodeURI(
       `?page=${params.page}&rows=${params.rows}&search=${params.search}`,
     );
@@ -47,7 +75,7 @@ const useTable = () => {
 
   return {
     pageRange,
-    pageData,
+    tableData,
     totalRows,
     searchParams,
     handleParamsChange,

@@ -10,13 +10,14 @@ module.exports = {
         sans: ['"BCSans"'],
       },
       colors: {
+        transparent: 'transparent',
         primaryBlue: '#003366',
         primaryYellow: '#fcba19',
         inputGray: '#606060',
         disabledGray: '#CFCFCF',
         linkBlue: '#1a5a96',
         // semantic colours
-        error: '#d8292f',
+        error: '#A12622',
         success: '#2e8540',
         warning: '#EED202',
         info: '#1a5a96',
@@ -25,7 +26,7 @@ module.exports = {
         inactive: '#343633',
       },
       backgroundColor: {
-        
+        transparent: 'transparent',
         active: '#EFF7EB',
         inactive: '#D1D1D1',
         defaultGray: '#f2f2f2',
@@ -47,6 +48,7 @@ module.exports = {
         light: '#FFFFFF',
         black: '#000000',
         ministry: '#1A5A96',
+        error: '#A12622'
       },
     },
   },

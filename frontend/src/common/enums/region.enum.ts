@@ -1,4 +1,4 @@
-export enum RegionName {
+export enum Region {
   HQ = 'HQ',
   CTL = 'CTL',
   NEA = 'NEA',

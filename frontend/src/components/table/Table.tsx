@@ -2,29 +2,28 @@ import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
 import { Loading } from '../ui/Loading';
-import type { DashboardRow, SearchParams } from '../../common/interface';
+import type { SearchParams } from '@/common/interface';
+import type { TableData } from './interface';
 
 export const Table = ({
   pageRange,
-  pageData,
+  tableData,
   searchParams,
   totalRows,
   handleParamsChange,
-  columns,
 }: {
   pageRange: number[];
-  pageData: DashboardRow[];
+  tableData: TableData;
   searchParams: URLSearchParams;
   totalRows: number;
   handleParamsChange: (params: SearchParams) => void;
-  columns: string[];
 }) => {
   const title = 'Search Results';
   const subtitle = `${totalRows} found`;
 
   return (
     <>
-      {!pageData ? (
+      {!tableData ? (
         <Loading />
       ) : (
         <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white">
@@ -34,8 +33,8 @@ export const Table = ({
           </div>
 
           <table className="table-fixed">
-            <TableHeader columns={columns} />
-            <TableBody pageData={pageData} />
+            <TableHeader columns={tableData.columns} />
+            <TableBody rows={tableData.rows} />
           </table>
           <TableFooter
             searchParams={searchParams}

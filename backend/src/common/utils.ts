@@ -1,43 +1,45 @@
 import { faker } from '@faker-js/faker';
 import {
   ClassificationName,
-  ExperienceName,
   Region,
-  Status,
   Ministry,
   FunctionNameAbbrv,
   WorkLocationName,
+  AvailabilityTypeName,
+  Status,
 } from './enums';
 
 export interface DashboardRow {
   name: string;
-  status: Status;
   region: Region;
   location: WorkLocationName;
-  ministry: Ministry;
-  classification: ClassificationName;
   function: FunctionNameAbbrv;
-  experience: ExperienceName;
-  remote: string;
-  willingToTravel: string;
+  availability: AvailabilityTypeName;
+  travel: boolean;
+  remote: boolean;
+  classification: ClassificationName;
+  ministry: Ministry;
+  status: Status;
 }
 
 export const rowData = (): DashboardRow => {
   return {
     name: `${faker.person.lastName()}, ${faker.person.firstName()}`,
-    status: faker.helpers.arrayElement(Object.values(Status)),
     region: faker.helpers.arrayElement(Object.values(Region)),
     location: faker.helpers.arrayElement(Object.values(WorkLocationName)),
-    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
+    function: faker.helpers.arrayElement(Object.values(FunctionNameAbbrv)),
+    availability: faker.helpers.arrayElement(
+      Object.values(AvailabilityTypeName),
+    ),
+    travel: faker.datatype.boolean({ probability: 0.8 }),
+    remote: faker.datatype.boolean({ probability: 0.4 }),
     classification: faker.helpers.arrayElement(
       Object.values(ClassificationName),
     ),
-    function: faker.helpers.arrayElement(Object.values(FunctionNameAbbrv)),
-    experience: faker.helpers.arrayElement(Object.values(ExperienceName)),
-    remote: faker.datatype.boolean({ probability: 0.4 }) ? 'Yes' : 'No',
-    willingToTravel: faker.datatype.boolean({ probability: 0.8 })
-      ? 'Yes'
-      : 'No',
+    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
+    status: faker.datatype.boolean({ probability: 0.8 })
+      ? Status.Active
+      : Status.Inactive,
   };
 };
 

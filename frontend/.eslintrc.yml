@@ -12,6 +12,13 @@ extends:
 
 parser: '@typescript-eslint/parser'
 
+ignorePatterns:
+  - '.eslintrc.js'
+  - 'build'
+  - 'cypress'
+  - 'cypress.config.ts'
+  - 'node_modules'
+
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -25,6 +32,11 @@ plugins:
   - '@typescript-eslint'
   - 'prettier'
   - 'cypress'
+  - 'eslint-plugin-prettier'
+  - 'eslint-plugin-react'
+  - 'eslint-plugin-react-hooks'
+  - 'import'
+  - 'unused-imports'
 
 settings:
   react:
@@ -38,20 +50,7 @@ rules:
   'no-empty': ['error', { allowEmptyCatch: true }]
   'no-undef': 'off'
   'no-use-before-define': 'off'
-  'no-restricted-imports':
-    [
-      'error',
-      {
-        paths:
-          [
-            {
-              name: 'react',
-              importNames: ['default'],
-              message: "Please import from 'react/jsx-runtime' instead.",
-            },
-          ],
-      },
-    ]
+  'import/no-anonymous-default-export': 'off'
 
   # React rules
   'react/jsx-uses-react': 'off'
