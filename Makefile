@@ -58,10 +58,8 @@ local-frontend-logs:
 local-backend-logs:
 	@docker logs $(PROJECT)-backend --tail 25 --follow
 
-
 local-nginx-logs:
 	@docker logs $(PROJECT)-nginx --tail 25 --follow
-
 
 local-db-logs:
 	@docker logs  db --tail 25 --follow
@@ -91,7 +89,11 @@ push-prod:
 	@echo "+\n++ Make: Run/Push production ...\n+"
 	@docker push $(CONTAINER_REGISTRY)/frontend:latest
 	@docker push $(CONTAINER_REGISTRY)/backend:latest
-	
+
+open-db-tunnel:
+	@oc project $(TARGET_NAMESPACE)
+# Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
+	@oc port-forward $(APP_NAME)-patroni-1 5432
 
 ### Openshift Setup
 db-prep:
