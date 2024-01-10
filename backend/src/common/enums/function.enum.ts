@@ -18,7 +18,7 @@ export enum FunctionName {
   FIRST_NATIONS = 'First Nations',
   FINANCE = 'Finance',
   LIAISON = 'Liaison',
-  LOGISTICS = 'Logicistics',
+  LOGISTICS = 'Logistics',
   PLANS = 'Plans',
   ADVANCED_PLANNING_UNIT = 'Advanced Planning Unit',
   RECOVERY = 'Recovery',
@@ -27,12 +27,12 @@ export enum FunctionName {
 }
 
 export enum FunctionNameAbbrv {
-  OPERATIONS = 'Operations',
+  OPERATIONS = 'Ops',
   EMERGENCY_SUPPORT_SERVICES = 'ESS',
   FIRST_NATIONS = 'First Nations',
   FINANCE = 'Finance',
   LIAISON = 'Liaison',
-  LOGISTICS = 'Logicistics',
+  LOGISTICS = 'Logistics',
   PLANS = 'Plans',
   ADVANCED_PLANNING_UNIT = 'APU',
   RECOVERY = 'Recovery',
