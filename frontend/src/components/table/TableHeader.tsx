@@ -9,14 +9,7 @@ export const TableHeader = ({
     <thead className="bg-header border-b border-bgNav">
       <tr>
         {columns.map(({ name, key }: Column) => (
-          <th
-            key={key}
-            scope="col"
-            className="px-6 py-4 
-          
-          
-          text-dark text-left"
-          >
+          <th key={key} scope="col" className="px-6 py-4  text-dark text-left">
             {name}
           </th>
         ))}
