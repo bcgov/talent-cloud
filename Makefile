@@ -157,6 +157,17 @@ tag-test:
 	@git tag -fa test -m "Deploy $(git rev-parse --abbrev-ref HEAD) to TEST env"
 	@git push --force origin refs/tags/test:refs/tags/test
 
+
 #tag-prod:
 #	@git tag -fa test -m "Deploy $(git rev-parse --abbrev-ref HEAD) to TEST env"
 #	@git push --force origin refs/tags/test:refs/tags/test
+
+build-local-prod:
+	@docker-compose down
+	@docker build -f ./frontend/Dockerfile.prod ./frontend -t test-fe-prod:latest
+	@docker build -f ./backend/Dockerfile.prod ./backend -t test-be-prod:latest 
+
+run-local-prod:
+	@docker-compose down
+	@docker run -p3000:3000 test-fe-prod:latest 
+	@docker run -p3001:3000 test-be-prod:latest

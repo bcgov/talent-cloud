@@ -1,26 +1,25 @@
 import type {
+  AvailabilityTypeName,
   ClassificationName,
-  ExperienceName,
   FunctionName,
-  MinistryAcronymName,
-  RegionName,
-  StatusName,
+  Ministry,
+  Region,
+  Status,
   WorkLocationName,
 } from './enums';
 
 export interface DashboardRow {
   name: string;
-  status: StatusName;
-  region: RegionName;
+  region: Region;
   location: WorkLocationName;
-  ministry: MinistryAcronymName;
-  classification: ClassificationName;
   function: FunctionName;
-  experience: ExperienceName;
-  remote: string;
-  willingToTravel: string;
+  availability: AvailabilityTypeName;
+  travel: boolean;
+  remote: boolean;
+  classification: ClassificationName;
+  ministry: Ministry;
+  status: Status;
 }
-
 export interface SearchParams {
   rows: number;
   search: string;

@@ -1,11 +1,28 @@
-import { MinistryAcronymName, StatusName } from '../../common';
+import { AvailabilityTypeName, ClassificationName } from '@/common';
+import { tableClasses, tdClass } from './classes';
+import { DashboardColumns } from './interface';
 
-export const setTableDataStyle = (itm: string) => {
-  if (Object.keys(StatusName).includes(itm)) {
-    return '';
-  } else if (Object.keys(MinistryAcronymName).includes(itm)) {
-    return 'text-ministry px-6 py-4 whitespace-nowrap';
-  } else {
-    return 'text-dark px-6 py-4 whitespace-nowrap';
+export const booleanToString = (value: boolean): string => (value ? 'Yes' : 'No');
+
+export const tableClass = (key: string, value?: string) => {
+  switch (key) {
+    case DashboardColumns.MINISTRY:
+      return tableClasses.ministry;
+    case DashboardColumns.AVAILABILITY:
+      return value === AvailabilityTypeName.AVAILABLE
+        ? tableClasses.available
+        : tableClasses.unavailable;
+    case DashboardColumns.TRAVEL:
+      return tableClasses.travel;
+    case DashboardColumns.CLASSIFICATION:
+      return value === ClassificationName.EXCLUDED
+        ? tableClasses.excluded
+        : tableClasses.bcgeu;
+    default:
+      return tdClass;
   }
+};
+
+export const iconClass = (value: boolean) => {
+  return value ? tableClasses.checkIconClass : tableClasses.xIconClass;
 };
