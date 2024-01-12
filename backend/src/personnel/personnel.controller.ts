@@ -11,9 +11,12 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreatePersonnelDTO } from './personnel.dto';
+import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { PersonnelService } from './personnel.service';
-import { QueryTransformPipe, QueryDto } from '../query-validation.pipe';
+import { QueryTransformPipe } from '../query-validation.pipe';
+import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { Public } from 'src/auth/public.decorator';
+import { GetPersonnelRO } from './ro/get-personnel.ro';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -41,9 +44,21 @@ export class PersonnelController {
     summary: 'Get personnel',
     description: 'Returns the personnel data to the dashboard view',
   })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
   @Get()
+  @Public() // TODO: DO NOT PUSH
   @UsePipes(new QueryTransformPipe())
-  async getResources(@Query() query?: QueryDto) {
-    return this.personnelService.getPersonnel(query);
+  async getResources(@Query() query?: GetPersonnelDTO): Promise<GetPersonnelRO> {
+    const queryResponse = await this.personnelService.getPersonnel(query);
+    const personnel = queryResponse.personnel.map((personnelEntity) => personnelEntity.toResponseObject());
+    return {
+      personnel,
+      count: queryResponse.count,
+      rows: query.rows,
+      page: query.page,
+    };
   }
 }

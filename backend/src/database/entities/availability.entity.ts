@@ -8,7 +8,7 @@ import {
 import { PersonnelEntity } from './personnel.entity';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 
-@Entity('function')
+@Entity('availability')
 export class AvailabilityEntity {
   @PrimaryGeneratedColumn('increment')
   id: string;
