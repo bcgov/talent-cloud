@@ -1,3 +1,4 @@
+import { PersonnelRO } from 'src/personnel/ro/personnel.ro';
 import {
   Column,
   Entity,
@@ -7,14 +8,13 @@ import {
   JoinTable,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
+import { BaseEntity } from './base.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { WorkLocation } from '../../common/enums/work-location.enum';
-import { BaseEntity } from './base.entity';
-import { PersonnelRO } from 'src/personnel/ro/personnel.ro';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {

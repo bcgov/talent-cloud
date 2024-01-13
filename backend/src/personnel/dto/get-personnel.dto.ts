@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { QueryDTO } from '../../query-validation.pipe';
-import { Region, WorkLocation } from 'src/common/enums';
 import { Transform } from 'class-transformer';
 import { Length } from 'class-validator';
+import { Region, WorkLocation } from '../../common/enums';
+import { QueryDTO } from '../../query-validation.pipe';
 
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({

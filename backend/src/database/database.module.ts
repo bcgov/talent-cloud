@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
-import { APP_ENV } from '../common/const';
+// import { APP_ENV } from '../common/const';
 
-const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
+// const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
 
 @Module({
   imports: [

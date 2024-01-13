@@ -11,12 +11,12 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreatePersonnelDTO } from './dto/create-personnel.dto';
-import { PersonnelService } from './personnel.service';
-import { QueryTransformPipe } from '../query-validation.pipe';
-import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { Public } from 'src/auth/public.decorator';
+import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
+import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('personnel')
 @ApiTags('Personnel API')

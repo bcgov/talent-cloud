@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Brackets, Repository } from 'typeorm';
-import { DashboardRow, generateData } from '../common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { Brackets, Repository } from 'typeorm';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 
 @Injectable()
 export class PersonnelService {

@@ -1,7 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type, plainToInstance } from 'class-transformer';
-import { IsInt, IsString } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class QueryDTO {
   @Type(() => Number)

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Classification, Ministry, Region, WorkLocation } from "../../common/enums";
 import { ExperienceRO } from "./experience.ro";
+import { Classification, Ministry, Region, WorkLocation } from "../../common/enums";
 
 export class PersonnelRO {
   @ApiProperty({
