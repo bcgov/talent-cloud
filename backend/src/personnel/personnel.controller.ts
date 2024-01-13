@@ -11,7 +11,6 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from 'src/auth/public.decorator';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { PersonnelService } from './personnel.service';
@@ -49,7 +48,6 @@ export class PersonnelController {
     type: GetPersonnelRO,
   })
   @Get()
-  @Public() // TODO: DO NOT PUSH
   @UsePipes(new QueryTransformPipe())
   async getResources(@Query() query?: GetPersonnelDTO): Promise<GetPersonnelRO> {
     const queryResponse = await this.personnelService.getPersonnel(query);

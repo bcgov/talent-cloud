@@ -1,4 +1,4 @@
-import { PersonnelRO } from 'src/personnel/ro/personnel.ro';
+import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 import {
   Column,
   Entity,
