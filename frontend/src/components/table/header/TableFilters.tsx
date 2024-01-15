@@ -1,13 +1,19 @@
 import { ButtonTypes } from '@/common';
 import type { FieldInterface, GroupedSelectField, SelectField } from '@/components';
-import { SingleSelect, MultiSelectGroup, Button, FieldTypes, MultiSelect, Search } from '@/components';
-
+import {
+  SingleSelect,
+  MultiSelectGroup,
+  Button,
+  FieldTypes,
+  MultiSelect,
+  Search,
+} from '@/components';
 
 import useTable from '@/hooks/useTable';
-import { DashboardFilters } from '@/pages/dashboard/constants';
+import type { DashboardFilters } from '@/pages/dashboard/constants';
 import { formClass } from '@/styles/fieldStyles';
-import {  SingleValue, components } from 'react-select';
-
+import type { SingleValue } from 'react-select';
+import { components } from 'react-select';
 
 export const Option = ({ children, ...props }: any) => {
   return (
@@ -42,17 +48,18 @@ export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
     } else if (field.type === FieldTypes.SELECT) {
       return (field as SelectField).multi ? (
         <MultiSelect
-          options={(field as SelectField).options}
-          handleChange={handleMultiSelectChange}
-          value={dashboardFilters[field.name as keyof DashboardFilters]}
-          defaultValue={[]}
-          multipleSelect={true}
-          componentProps={{Option}}
+          field={field as SelectField}
+          filters={dashboardFilters}
+          onChange={handleMultiSelectChange}
         />
       ) : (
-        <SingleSelect field={field as SelectField} onChange={(newValue: SingleValue<any>)=> handleFilterChange(
-          { name: field.name, value: newValue?.value ?? '' })
-        } value={dashboardFilters[field.name as keyof DashboardFilters]}  />
+        <SingleSelect
+          field={field as SelectField}
+          onChange={(newValue: SingleValue<any>) =>
+            handleFilterChange({ name: field.name, value: newValue?.value ?? '' })
+          }
+          value={dashboardFilters[field.name as keyof DashboardFilters]}
+        />
       );
     } else return;
   };
