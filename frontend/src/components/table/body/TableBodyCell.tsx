@@ -1,9 +1,10 @@
+import type { Cell } from '@/components';
+import { booleanToString } from '@/components';
+import { DashboardColumns } from '@/pages/dashboard/constants';
+import { iconClass } from '@/styles/tableStyles';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import { booleanToString, iconClass } from './utils';
-import type { Cell } from './interface';
-import { DashboardColumns } from './interface';
 
-export const TableCell = ({ itm }: { itm: Cell }) => {
+export const TableBodyCell = ({ itm }: { itm: Cell }) => {
   if (itm.columnName === DashboardColumns.TRAVEL) {
     return (
       <td className={itm.className}>

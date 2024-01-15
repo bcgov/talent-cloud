@@ -1,4 +1,4 @@
-import Dashboard from '../../src/pages/Dashboard';
+import Dashboard from '../../src/pages/dashboard/Dashboard';
 
 describe('<Dashboard />', () => {
   it('renders', () => {

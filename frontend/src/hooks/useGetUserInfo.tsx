@@ -10,7 +10,6 @@ export const useGetUserInfo = () => {
         const {
           data: { username, roles },
         } = await getUserInfo();
-        console.log(username, roles);
         setUserName(username);
         setRoles(roles);
       } catch (e) {
