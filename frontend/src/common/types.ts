@@ -1,4 +1,4 @@
-import type { ButtonTypes } from './constants';
+import type { ButtonTypes } from './enums';
 
 export type LinkProps = {
   href: string;
