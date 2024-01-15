@@ -8,7 +8,7 @@ export const controlStyles =
 export const placeholderStyles = 'text-gray-500';
 
 export const inputStyles =
-  'bg-white text-left rounded-sm  py-2 text-gray-900 w-full border-1 border-gray-200';
+  'bg-white text-left rounded-sm  py-2 w-full border-gray-200';
 export const valueContainerStyles = 'px-4';
 export const singleValueStyles = '';
 export const multiValueStyles = '';

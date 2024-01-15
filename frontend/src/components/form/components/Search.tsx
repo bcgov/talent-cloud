@@ -11,18 +11,18 @@ export const Search = ({
 }) => {
   return (
     <>
-      <div className="relative">
-        <span className="absolute inset-y-5 right-2 flex items-center justify-end ">
-          <MagnifyingGlassIcon className="h-8 w-7 text-gray-500" />
-        </span>
-      </div>
+      <div className="relative border-gray-200">
+        <div className="absolute inset-y-0 right-2 border-l border-gray-300 my-1">
+          <MagnifyingGlassIcon className="h-8 w-8 text-dark pl-1 py-1" />
+        </div>
 
-      <input
-        name={field.name}
-        type={field.type}
-        className={inputStyles}
-        onChange={onChange}
-      />
+        <input
+          name={field.name}
+          type={field.type}
+          className={inputStyles + ' pr-12'}
+          onChange={onChange}
+        />
+      </div>
     </>
   );
 };
