@@ -1,21 +1,21 @@
 import { Loading } from '../ui';
 import type { FieldInterface } from '../form';
-import { Toggle } from '../form';
+import { Toggle } from '../form/components/Toggle';
 import type { Column } from '.';
 import { TableFooter, TableBody, TableHeader } from '.';
-import { TableFilters } from './header';
+// s
 import useTable from '@/hooks/useTable';
 
 export const Table = ({
   title,
   subtitle,
-  fields,
+  // fields,
   columns,
   toggle,
 }: {
   title: string;
   subtitle: string;
-  fields: FieldInterface[];
+  // fields: FieldInterface[];
   columns: Column[];
   toggle?: FieldInterface;
 }) => {
@@ -26,7 +26,7 @@ export const Table = ({
         <Loading />
       ) : (
         <>
-          <TableFilters fields={fields} />
+          {/* <TableFilters fields={fields} /> */}
           <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white border border-gray">
             <div className="flex flex-row items-center justify-between mx-8">
               <div className="flex flex-col py-6">
