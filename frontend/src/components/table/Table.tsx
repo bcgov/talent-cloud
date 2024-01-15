@@ -1,48 +1,52 @@
-import { TableBody } from './TableBody';
-import { TableFooter } from './TableFooter';
-import { TableHeader } from './TableHeader';
-import { Loading } from '../ui/Loading';
-import type { SearchParams } from '@/common/interface';
-import type { TableData } from './interface';
+import { Loading } from '../ui';
+import type { FieldInterface } from '../form';
+import { Toggle } from '../form';
+import type { Column } from '.';
+import { TableFooter, TableBody, TableHeader } from '.';
+import { TableFilters } from './header';
+import useTable from '@/hooks/useTable';
 
 export const Table = ({
-  pageRange,
-  tableData,
-  searchParams,
-  totalRows,
-  handleParamsChange,
+  title,
+  subtitle,
+  fields,
+  columns,
+  toggle,
 }: {
-  pageRange: number[];
-  tableData: TableData;
-  searchParams: URLSearchParams;
-  totalRows: number;
-  handleParamsChange: (params: SearchParams) => void;
+  title: string;
+  subtitle: string;
+  fields: FieldInterface[];
+  columns: Column[];
+  toggle?: FieldInterface;
 }) => {
-  const title = 'Search Results';
-  const subtitle = `${totalRows} found`;
-
+  const { pageParams, tableData, handlePageParams } = useTable();
   return (
     <>
       {!tableData ? (
         <Loading />
       ) : (
-        <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white">
-          <div className="flex flex-col space-y-4 p-6">
-            <h4 className="text-black">{title}</h4>
-            <p className="text-black">{subtitle}</p>
+        <>
+          <TableFilters fields={fields} />
+          <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white border border-gray">
+            <div className="flex flex-row items-center justify-between mx-8">
+              <div className="flex flex-col py-6">
+                <h4 className="text-black">{title}</h4>
+                <p className="text-black">{`${tableData.totalRows} ${subtitle}`}</p>
+              </div>
+              {toggle && <Toggle field={toggle} />}
+            </div>
+            {/* table-auto will auto resize columns - table fixed looks more consistent */}
+            <table className="table-auto w-full mx-auto border-disabledGray">
+              <TableHeader columns={columns} />
+              <TableBody rows={tableData.rows} />
+            </table>
+            <TableFooter
+              pageParams={pageParams}
+              tableData={tableData}
+              onChange={handlePageParams}
+            />
           </div>
-
-          <table className="table-fixed">
-            <TableHeader columns={tableData.columns} />
-            <TableBody rows={tableData.rows} />
-          </table>
-          <TableFooter
-            searchParams={searchParams}
-            handleParamsChange={handleParamsChange}
-            pageRange={pageRange}
-            totalRows={totalRows}
-          />
-        </div>
+        </>
       )}
     </>
   );
