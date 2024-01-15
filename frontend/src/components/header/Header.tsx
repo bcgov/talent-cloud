@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
-import { CloudIcon, Logo2 } from '../images';
+import { CloudIcon, EmcrLogoHorizontalDark } from '../images';
 
 export const Header = ({
   appName,
@@ -12,26 +12,24 @@ export const Header = ({
   authenticated: boolean | undefined;
 }) => {
   return (
-    <header>
-      <div className="grid grid-cols-1 md:grid-cols-3 mr-10 w-full bg-white">
-        <div className="hidden md:flex col-span-0 md:col-span-1">
+    <header className="relative w-full border-b ">
+      <div className="w-full flex justify-center lg:justify-between items-center fixed top-0 mt-0 bg-white h-20 border-b border-primaryYellow shadow-md">
+        <div className="hidden col-span-0 lg:col-span-1 lg:block lg:-mt-4">
           <a href="https://gov.bc.ca">
-            <Logo2 />
+            <EmcrLogoHorizontalDark />
           </a>
         </div>
 
+        <div className="col-span-1 text-center flex flex-row items-center justify-center space-x-2 px-8">
+          <CloudIcon />
+          <Link to="/dashboard" className="hover:underline">
+            <h4>{appName.toUpperCase()}</h4>
+          </Link>
+        </div>
         {authenticated && (
-          <>
-            <div className="col-span-1 text-center flex flex-row items-center justify-center space-x-2">
-              <CloudIcon />
-              <Link to="/dashboard" className="hover:text-black">
-                <h4>{appName.toUpperCase()}</h4>
-              </Link>
-            </div>
-            <div className="relative col-span-1 text-center flex flex-row items-center justify-center space-x-2">
-              <UserMenu username={username} />
-            </div>
-          </>
+          <div className="relative col-span-1 text-center flex flex-row items-center justify-end space-x-2 px-8">
+            <UserMenu username={username} />
+          </div>
         )}
       </div>
     </header>

@@ -6,7 +6,6 @@ import { Footer } from '.';
 
 export const Layout = ({
   children,
-
   authenticated,
   username,
 }: {
@@ -15,20 +14,20 @@ export const Layout = ({
   username?: string;
 }) => {
   return (
-    <div
-      className={[
-        authenticated ? 'bg-primary ' : 'bg-blue ',
-        ' flex flex-col justify-between pt-32 h-screen ',
-      ].join(',')}
-    >
+    <div className=" h-screen relative">
       <Header
         appName={APP_NAME}
         username={username ?? ''}
         authenticated={authenticated}
       />
-      <div className="w-full flex flex-col items-center justify-center">
+      <div
+        className={['w-full', authenticated ? 'bg-white' : 'bg-primaryBlue'].join(
+          ', ',
+        )}
+      >
         {children}
       </div>
+
       <Footer links={footerLinks} />
     </div>
   );
