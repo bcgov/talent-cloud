@@ -232,9 +232,9 @@ export interface DashboardRow {
 }
 
 export interface DashboardFilters {
-  search?: string;
-  region?: string[];
-  location?: string[];
-  function?: string[];
-  experience?: string;
+  name?: string | null;
+  region?: string[] | null;
+  location?: string[] | null;
+  function?: string | null;
+  experience?: string | null;
 }

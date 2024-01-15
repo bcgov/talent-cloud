@@ -1,7 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsOptional, Length } from 'class-validator';
-import { Region, WorkLocation } from '../../common/enums';
+import {
+  Experience,
+  FunctionName,
+  Region,
+  WorkLocation,
+} from '../../common/enums';
 import { QueryDTO } from '../../query-validation.pipe';
 
 export class GetPersonnelDTO extends QueryDTO {
@@ -19,7 +24,8 @@ export class GetPersonnelDTO extends QueryDTO {
   active: boolean;
 
   @ApiPropertyOptional({
-    description: 'TO BE IMPLEMENTED - Whether this personnel is currently available',
+    description:
+      'TO BE IMPLEMENTED - Whether this personnel is currently available',
     default: true,
   })
   available: boolean;
@@ -27,7 +33,7 @@ export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
     type: [Region],
-    example: [Region.NEA, Region.NEW]
+    example: [Region.NEA, Region.NEW],
   })
   @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   regions: Region[];
@@ -35,7 +41,21 @@ export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
     type: [WorkLocation],
-    example: [WorkLocation.ABBOTSFORD, WorkLocation.BRENTWOOD_BAY]
+    example: [WorkLocation.ABBOTSFORD, WorkLocation.BRENTWOOD_BAY],
   })
   locations: WorkLocation[];
+
+  @ApiPropertyOptional({
+    description: 'Function name to search personnel from',
+    type: FunctionName,
+    example: FunctionName.OPERATIONS,
+  })
+  function?: FunctionName;
+
+  @ApiPropertyOptional({
+    description: 'Experience level to search personnel from',
+    type: Experience,
+    example: Experience.INTERESTED,
+  })
+  experience?: Experience;
 }

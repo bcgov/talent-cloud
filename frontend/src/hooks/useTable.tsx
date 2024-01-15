@@ -12,14 +12,14 @@ import { tableClass } from '@/styles/tableStyles';
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
   const [filterValues, setFilterValues] = useState<DashboardFilters>({
-    search: '',
-    region: [],
-    location: [],
-    function: undefined,
-    experience: undefined,
+    name: null,
+    region: null,
+    location: null,
+    function: null,
+    experience: null,
   });
   const [searchParamsUrl, setSearchParamsUrl] = useSearchParams(
-    encodeURI('?page=1&rows=25&search='),
+    encodeURI('?page=1&rows=25'),
   );
 
   const [pageParams, setPageParams] = useState<PageParams>({
@@ -39,11 +39,18 @@ const useTable = () => {
     return range;
   };
 
+    // Search Params url should be encoded 
+    // WIP
   useEffect(() => {
-    const url = encodeURI(
-      `?page=${pageParams?.currentPage}&rows=${pageParams?.rowsPerPage}&search=${filterValues?.search}&region=${filterValues?.region}&location=${filterValues?.location}&function=${filterValues?.function}&experience=${filterValues?.experience}`,
-    );
-    setSearchParamsUrl(url);
+    
+    searchParamsUrl.set('page', pageParams?.currentPage.toString() ?? "1");
+    searchParamsUrl.set('rows', pageParams?.rowsPerPage.toString() ?? "25");
+    filterValues?.name && searchParamsUrl.set('name', filterValues?.name ?? "");
+    filterValues?.region && searchParamsUrl.set('region', filterValues.region.join(",") );
+    filterValues?.location && searchParamsUrl.set('location', filterValues.location.join(",") );
+    filterValues?.function && searchParamsUrl.set('function', filterValues.function );
+    filterValues?.experience && searchParamsUrl.set('experience', filterValues.experience);
+
 
     (async () => {
       try {
@@ -81,7 +88,7 @@ const useTable = () => {
     })();
   }, [pageParams]);
 
-  const handlePageParams = (change: Partial<PageParams>) => {
+  const handlePageParams =  (change: Partial<PageParams>) => {
     setPageParams({ ...pageParams, ...change });
   };
 
@@ -110,7 +117,7 @@ const useTable = () => {
     handleMultiSelectChange,
     handlePageParams,
     onSubmit,
-    onClear: () => setFilterValues({}),
+    onClear: () => setFilterValues({name: null, region: null, location: null, function: null, experience: null}),
     filterValues,
   };
 };
