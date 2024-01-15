@@ -1,3 +1,3 @@
 export * from './interface';
 export * from './constants';
-export * from './components';
+export * from './components'
