@@ -49,7 +49,7 @@ export class PersonnelController {
   })
   @Get()
   @UsePipes(new QueryTransformPipe())
-  async getResources(@Query() query?: GetPersonnelDTO): Promise<GetPersonnelRO> {
+  async getPersonnel(@Query() query?: GetPersonnelDTO): Promise<GetPersonnelRO> {
     const queryResponse = await this.personnelService.getPersonnel(query);
     const personnel = queryResponse.personnel.map((personnelEntity) => personnelEntity.toResponseObject());
     return {
