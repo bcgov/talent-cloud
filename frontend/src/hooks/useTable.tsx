@@ -103,7 +103,7 @@ const useTable = () => {
   const onSubmit = () => {
     handlePageParams({ ...pageParams, ...dashboardFilters });
   };
-  console.log(dashboardFilters);
+
   return {
     tableData,
     pageParams,
@@ -111,6 +111,7 @@ const useTable = () => {
     handleMultiSelectChange,
     handlePageParams,
     onSubmit,
+    onClear: () => setDashboardFilters({}),
     dashboardFilters,
   };
 };

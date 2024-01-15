@@ -31,8 +31,13 @@ export const Option = ({ children, ...props }: any) => {
   );
 };
 export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
-  const { handleMultiSelectChange, handleFilterChange, onSubmit, dashboardFilters } =
-    useTable();
+  const {
+    handleMultiSelectChange,
+    handleFilterChange,
+    onSubmit,
+    onClear,
+    dashboardFilters,
+  } = useTable();
 
   const renderField = (field: FieldInterface) => {
     if (field.type === FieldTypes.MULTI) {
@@ -79,11 +84,7 @@ export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
       ))}
 
       <div className="flex flex-row no-wrap space-x-8 items-center text-center">
-        <Button
-          type={ButtonTypes.SECONDARY}
-          text="Clear All"
-          onClick={() => console.log('clear')}
-        />
+        <Button type={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
         <Button type={ButtonTypes.PRIMARY} text="Submit" onClick={onSubmit} />
       </div>
     </div>
