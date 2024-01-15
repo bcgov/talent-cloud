@@ -15,7 +15,7 @@ export class PersonnelService {
    * Get Personnel
    * Given specific queries, get associated personnel and their function experiences
    * @param query Includes pagination query, ie. page and number of rows
-   * @returns {PersonnelRO[]} List of personnel
+   * @returns {PersonnelEntity[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
   async getPersonnel(query: GetPersonnelDTO): Promise<{ personnel: PersonnelEntity[], count: number }> {

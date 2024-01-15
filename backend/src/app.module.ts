@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './logger/logger.module';
+import { FunctionModule } from './function/function.module';
 import { PersonnelModule } from './personnel/personnel.module';
 
 @Module({
@@ -14,7 +15,8 @@ import { PersonnelModule } from './personnel/personnel.module';
     TerminusModule,
     HttpModule,
     AuthModule,
-    PersonnelModule
+    PersonnelModule,
+    FunctionModule,
   ],
   controllers: [AppController],
 })
