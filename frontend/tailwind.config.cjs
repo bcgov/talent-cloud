@@ -26,6 +26,8 @@ module.exports = {
         inactive: '#343633',
       },
       backgroundColor: {
+        backgroundBlue: '#003366',
+        grayBackground: '#F2F2F2',
         transparent: 'transparent',
         active: '#EFF7EB',
         inactive: '#D1D1D1',

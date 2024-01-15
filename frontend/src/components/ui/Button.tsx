@@ -1,5 +1,10 @@
-import type { ButtonProps } from '../../common';
-import { ButtonTypes } from '../../common';
+import type { ButtonProps } from '@/common';
+import { ButtonTypes } from '@/common';
+
+const secondaryButton =
+  'bg-transparent underline border-none text-center block font-bold text-md w-auto flex flex-row whitespace-nowrap';
+const primaryButton =
+  'bg-primaryBlue border-none text-center block font-bold text-md w-auto flex flex-row whitespace-nowrap text-white px-6 py-2 rounded-sm';
 
 export const Button = ({ type, text, onClick, disabled = false }: ButtonProps) => {
   return (
@@ -9,9 +14,7 @@ export const Button = ({ type, text, onClick, disabled = false }: ButtonProps) =
           onClick={onClick}
           disabled={disabled}
           aria-disabled={disabled}
-          className={
-            disabled ? 'BC-Gov-PrimaryButton-disabled' : 'BC-Gov-PrimaryButton'
-          }
+          className={disabled ? 'BC-Gov-PrimaryButton-disabled' : primaryButton}
         >
           {text}
         </button>
@@ -22,9 +25,7 @@ export const Button = ({ type, text, onClick, disabled = false }: ButtonProps) =
           onClick={onClick}
           disabled={disabled}
           aria-disabled={disabled}
-          className={
-            disabled ? 'BC-Gov-SecondaryButton-disabled' : 'BC-Gov-SecondaryButton'
-          }
+          className={disabled ? 'BC-Gov-SecondaryButton-disabled' : secondaryButton}
         >
           {text}
         </button>
