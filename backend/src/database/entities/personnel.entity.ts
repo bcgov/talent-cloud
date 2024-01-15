@@ -1,3 +1,4 @@
+import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 import {
   Column,
   Entity,
@@ -7,6 +8,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
+import { BaseEntity } from './base.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Classification } from '../../common/enums/classification.enum';
@@ -15,7 +17,7 @@ import { Region } from '../../common/enums/region.enum';
 import { WorkLocation } from '../../common/enums/work-location.enum';
 
 @Entity('personnel')
-export class PersonnelEntity {
+export class PersonnelEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -37,10 +39,10 @@ export class PersonnelEntity {
   @Column({ name: 'primary_phone', type: 'varchar', length: 15 })
   primaryPhone: string;
 
-  @Column({ name: 'secondary_phone', type: 'varchar', length: 15 })
-  secondaryPhone: string;
+  @Column({ name: 'secondary_phone', type: 'varchar', length: 15, nullable: true })
+  secondaryPhone?: string;
 
-  @Column({ name: 'other_phone', type: 'varchar', length: 15 })
+  @Column({ name: 'other_phone', type: 'varchar', length: 15, nullable: true })
   otherPhone: string;
 
   @Column({ name: 'email', type: 'varchar', length: 50 })
@@ -52,10 +54,10 @@ export class PersonnelEntity {
   @Column({ name: 'supervisor', type: 'varchar', length: 100 })
   supervisor: string;
 
-  @Column({ name: 'skills_abilities', type: 'varchar', length: 512 })
+  @Column({ name: 'skills_abilities', type: 'varchar', length: 512, nullable: true })
   skillsAbilities: string;
 
-  @Column({ name: 'notes', type: 'varchar', length: 512 })
+  @Column({ name: 'notes', type: 'varchar', length: 512, nullable: true })
   notes: string;
 
   @Column({ name: 'active', type: 'boolean', default: true })
@@ -79,4 +81,31 @@ export class PersonnelEntity {
   @ManyToMany(() => TrainingEntity)
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
+
+  toResponseObject(): PersonnelRO {
+    return {
+      id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      primaryPhone: this.primaryPhone,
+      secondaryPhone: this.secondaryPhone,
+      otherPhone: this.otherPhone,
+      region: this.region,
+      workLocation: this.workLocation,
+      ministry: this.ministry,
+      classification: this.classification,
+      applicationDate: this.applicationDate,
+      skillsAbilities: this.skillsAbilities,
+      notes: this.notes,
+      supervisor: this.supervisor,
+      active: this.active,
+      remoteOnly: this.remoteOnly,
+      willingToTravel: this.willingToTravel,
+      experiences: this.experiences?.map((experience) => experience.toResponseObject()) || [],
+      // trainings
+      // availability
+      // available
+    }
+  }
 }

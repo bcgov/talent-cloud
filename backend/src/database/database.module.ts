@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
-import { APP_ENV } from '../common/const';
+// import { APP_ENV } from '../common/const';
 
-const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
+// const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ const isLocal = process.env.NODE_ENV === APP_ENV.LOCAL;
         username: process.env.DB_USER ?? 'tc_user',
         password: process.env.DB_PASSWORD ?? 'tc_password',
         database: process.env.DB_NAME ?? 'tc',
-        synchronize: isLocal,
+        synchronize: true,
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       }),
       dataSourceFactory: async (options) => {

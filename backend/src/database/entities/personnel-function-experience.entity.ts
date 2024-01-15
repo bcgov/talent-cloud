@@ -9,6 +9,7 @@ import {
 import { FunctionEntity } from './function.entity';
 import { PersonnelEntity } from './personnel.entity';
 import { Experience } from '../../common/enums/experience.enum';
+import { ExperienceRO } from '../../personnel/ro/experience.ro';
 
 @Entity('personnel_function_experience')
 export class ExperienceEntity {
@@ -28,4 +29,12 @@ export class ExperienceEntity {
 
   @Column({ name: 'experience_type', type: 'enum', enum: Experience, enumName: 'experience' })
   experienceType: Experience;
+
+  toResponseObject(): ExperienceRO {
+    return {
+      functionName: this.function.name,
+      functionAbbrv: this.function.abbreviation,
+      experienceType: this.experienceType,
+    }
+  }
 }
