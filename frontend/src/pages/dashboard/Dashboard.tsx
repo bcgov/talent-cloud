@@ -1,5 +1,9 @@
 import { Table } from '@/components';
-import { dashboardFields, dashboardToggle, dashboardColumns } from './constants';
+import {
+  dashboardToggle,
+  dashboardColumns,
+  dashboardFilterFields,
+} from './constants';
 import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
@@ -16,8 +20,8 @@ const Dashboard = () => {
       <Table
         title={title}
         subtitle={subtitle}
+        fields={dashboardFilterFields}
         toggle={dashboardToggle}
-        fields={dashboardFields}
         columns={columns}
       />
     </div>

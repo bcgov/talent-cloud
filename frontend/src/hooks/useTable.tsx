@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
 import type { TableData, PageParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { Status } from '@/common';
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, DashboardRow } from '@/pages/dashboard/constants';
-import { DashboardColumns } from '@/pages/dashboard/constants';
+import type { DashboardFilters, DashboardRow } from '@/pages/dashboard';
+import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
-  const [dashboardFilters, setDashboardFilters] = useState<DashboardFilters>({
+  const [filterValues, setFilterValues] = useState<DashboardFilters>({
     search: '',
     region: [],
     location: [],
@@ -42,7 +41,7 @@ const useTable = () => {
 
   useEffect(() => {
     const url = encodeURI(
-      `?page=${pageParams?.currentPage}&rows=${pageParams?.rowsPerPage}&search=${dashboardFilters?.search}&region=${dashboardFilters?.region}&location=${dashboardFilters?.location}&function=${dashboardFilters?.function}&experience=${dashboardFilters?.experience}`,
+      `?page=${pageParams?.currentPage}&rows=${pageParams?.rowsPerPage}&search=${filterValues?.search}&region=${filterValues?.region}&location=${filterValues?.location}&function=${filterValues?.function}&experience=${filterValues?.experience}`,
     );
     setSearchParamsUrl(url);
 
@@ -87,7 +86,7 @@ const useTable = () => {
   };
 
   const handleFilterChange = ({ name, value }: { name: string; value: string }) => {
-    setDashboardFilters({ ...dashboardFilters, [name]: value });
+    setFilterValues({ ...filterValues, [name]: value });
   };
 
   const handleMultiSelectChange = ({
@@ -98,10 +97,10 @@ const useTable = () => {
     value: any[];
   }) => {
     console.log(name, value);
-    setDashboardFilters({ ...dashboardFilters, [name]: [...value] });
+    setFilterValues({ ...filterValues, [name]: [...value] });
   };
   const onSubmit = () => {
-    handlePageParams({ ...pageParams, ...dashboardFilters });
+    handlePageParams({ ...pageParams, ...filterValues });
   };
 
   return {
@@ -111,8 +110,8 @@ const useTable = () => {
     handleMultiSelectChange,
     handlePageParams,
     onSubmit,
-    onClear: () => setDashboardFilters({}),
-    dashboardFilters,
+    onClear: () => setFilterValues({}),
+    filterValues,
   };
 };
 

@@ -1,10 +1,9 @@
 import type { ActionMeta, MultiValue } from 'react-select';
-import Select, { components } from 'react-select';
-import type { SelectField } from '../interface';
+import Select from 'react-select';
+import type { FieldInterface, FieldOption } from '../interface';
 import {
   controlStyles,
   dropdownIndicatorStyles,
-  formClass,
   indicatorSeparatorStyles,
   indicatorsContainerStyles,
   inputStyles,
@@ -16,45 +15,26 @@ import {
   singleValueStyles,
   valueContainerStyles,
 } from '@/styles/fieldStyles';
-import type { DashboardFilters } from '@/pages/dashboard/constants';
 
-interface Option {
-  value: string;
-  label: string;
-}
-
-export const Option = ({ children, ...props }: any) => {
-  return (
-    <components.Option {...props}>
-      <input
-        type={'checkbox'}
-        checked={props.isSelected}
-        onChange={props.onChange}
-        className={formClass.checkbox}
-      />
-      {children}
-    </components.Option>
-  );
-};
+import { Option } from './MultiSelectOption';
 
 export const MultiSelect = ({
   field,
-  filters,
+  values,
   onChange,
 }: {
-  field: SelectField;
-  filters: DashboardFilters;
+  field: FieldInterface;
+  values: string[];
   onChange: (props: any) => void;
 }) => {
-  const values = (filters[field.name as keyof DashboardFilters] as string[]) ?? [];
-  const options: Option[] = field.options;
+  const options: FieldOption[] = field.options!;
 
   const handleChange = (
-    newValue: MultiValue<Option>,
-    actionMeta: ActionMeta<Option>,
+    newValue: MultiValue<FieldOption>,
+    actionMeta: ActionMeta<FieldOption>,
   ) => {
     if (actionMeta.action === 'select-option' && actionMeta.option === options[0]) {
-      onChange({ name: field.name, value: field.options.map((itm) => itm.value) });
+      onChange({ name: field.name, value: field.options!.map((itm) => itm.value) });
     } else if (
       actionMeta.action === 'deselect-option' &&
       actionMeta.option === options[0]

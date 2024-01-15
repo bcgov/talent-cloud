@@ -8,6 +8,7 @@ import type {
 } from '@/common';
 import { ExperienceName, FunctionName } from '@/common';
 
+import type { FieldInterface } from '@/components/form';
 import { FieldTypes } from '@/components/form';
 
 export enum DashboardFilterNames {
@@ -32,7 +33,7 @@ export enum DashboardColumns {
   FUNCTION = 'function',
 }
 
-export const dashboardFields = [
+export const dashboardFilterFields: FieldInterface[] = [
   {
     name: DashboardFilterNames.SEARCH,
     label: 'Search By Name',
@@ -100,7 +101,7 @@ export const dashboardFields = [
     name: DashboardFilterNames.LOCATION,
     label: 'Work Location',
     type: FieldTypes.MULTI,
-    options: [
+    groupedOptions: [
       {
         label: 'CTL',
 
@@ -232,8 +233,8 @@ export interface DashboardRow {
 
 export interface DashboardFilters {
   search?: string;
-  region?: Region[];
-  location?: WorkLocationName[];
-  function?: FunctionName;
-  experience?: ExperienceName;
+  region?: string[];
+  location?: string[];
+  function?: string[];
+  experience?: string;
 }

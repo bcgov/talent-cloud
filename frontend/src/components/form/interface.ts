@@ -4,7 +4,10 @@ export interface FieldInterface {
   name: string;
   label: string;
   type: FieldTypes;
+  multi?: boolean;
   placeholder?: string;
+  options?: FieldOption[];
+  groupedOptions?: FieldGroupedOption[];
 }
 
 export interface FieldGroupedOption {
@@ -16,14 +19,3 @@ export interface FieldOption {
   label: string;
   value: string;
 }
-
-export interface SelectField extends FieldInterface {
-  options: FieldOption[];
-  multi?: boolean;
-}
-export interface GroupedSelectField extends FieldInterface {
-  options: FieldGroupedOption[];
-  multi?: boolean;
-}
-
-export interface SearchField extends FieldInterface {}

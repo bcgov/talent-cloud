@@ -1,10 +1,9 @@
 import type { GroupBase, MultiValue } from 'react-select';
-import Select, { components } from 'react-select';
-import type { FieldGroupedOption, GroupedSelectField } from '../interface';
+import Select from 'react-select';
+import type { FieldGroupedOption, FieldInterface } from '../interface';
 import {
   controlStyles,
   dropdownIndicatorStyles,
-  formClass,
   indicatorSeparatorStyles,
   indicatorsContainerStyles,
   inputStyles,
@@ -16,29 +15,16 @@ import {
   singleValueStyles,
   valueContainerStyles,
 } from '@/styles/fieldStyles';
-import type { DashboardFilters } from '@/pages/dashboard/constants';
 
-export const Option = ({ children, ...props }: any) => {
-  return (
-    <components.Option {...props}>
-      <input
-        type={'checkbox'}
-        checked={props.isSelected}
-        onChange={props.onChange}
-        className={formClass.checkbox}
-      />
-      {children}
-    </components.Option>
-  );
-};
+import { Option } from './MultiSelectOption';
 
 export const MultiSelectGroup = ({
   field,
   onChange,
 }: {
-  field: GroupedSelectField;
+  field: FieldInterface;
   onChange: ({ name, value }: { name: string; value: any[] }) => void;
-  filters: DashboardFilters;
+  values: string[];
 }) => {
   const handleSelectChange = (newValue: MultiValue<FieldGroupedOption>) => {
     onChange({ name: field.name, value: [...newValue] });
@@ -77,7 +63,7 @@ export const MultiSelectGroup = ({
       closeMenuOnSelect={false}
       defaultValue={[]}
       onChange={handleSelectChange}
-      options={field.options}
+      options={field.groupedOptions}
     />
   );
 };
