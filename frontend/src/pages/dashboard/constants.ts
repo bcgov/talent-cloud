@@ -1,12 +1,4 @@
-import type {
-  AvailabilityTypeName,
-  ClassificationName,
-  Ministry,
-  Region,
-  Status,
-  WorkLocationName,
-} from '@/common';
-import { ExperienceName, FunctionName } from '@/common';
+import { AvailabilityTypeName, ClassificationName, ExperienceName, FunctionName, Ministry, Region, Status, WorkLocationName } from '@/common';
 
 import type { FieldInterface } from '@/components/form';
 import { FieldTypes } from '@/components/form';
@@ -14,7 +6,7 @@ import { FieldTypes } from '@/components/form';
 export enum DashboardFilterNames {
   REGION = 'region',
   LOCATION = 'location',
-  SEARCH = 'search',
+  NAME = 'name',
   SHOW_INACTIVE = 'showInactive',
   FUNCTION = 'function',
   EXPERIENCE = 'experience',
@@ -35,7 +27,7 @@ export enum DashboardColumns {
 
 export const dashboardFilterFields: FieldInterface[] = [
   {
-    name: DashboardFilterNames.SEARCH,
+    name: DashboardFilterNames.NAME,
     label: 'Search By Name',
     type: FieldTypes.SEARCH,
   },
@@ -101,6 +93,7 @@ export const dashboardFilterFields: FieldInterface[] = [
     name: DashboardFilterNames.LOCATION,
     label: 'Work Location',
     type: FieldTypes.MULTI,
+    multi: true,
     groupedOptions: [
       {
         label: 'CTL',
@@ -210,14 +203,26 @@ export const dashboardColumns = [
   'Name',
   'Region',
   'Work Location',
-  'Function',
-  'Availability',
   'Willingness To Travel',
-  'Remote?',
+  'Remote Only',
   'Classification',
   'Ministry',
 ];
 
+export interface Personnel {
+  id: string;
+  firstName: string;
+  lastName: string;
+  region: string;
+  workLocation: string;
+  availability: string;
+  active: string;
+  willingToTravel: string;
+  remoteOnly: string;
+  classification: string;
+  ministry: string;
+  
+}
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;
   [DashboardColumns.REGION]: Region;
@@ -230,7 +235,6 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
   [DashboardColumns.STATUS]: Status;
 }
-
 export interface DashboardFilters {
   name?: string | null;
   region?: string[] | null;

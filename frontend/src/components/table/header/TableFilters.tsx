@@ -10,28 +10,13 @@ import {
 } from '@/components';
 import useTable from '@/hooks/useTable';
 import type { DashboardFilters } from '@/pages/dashboard/constants';
-import { formClass } from '@/styles/fieldStyles';
-import { components } from 'react-select';
 
-export const Option = ({ children, ...props }: any) => {
-  return (
-    <components.Option {...props}>
-      {props.isMulti && (
-        <input
-          type={'checkbox'}
-          checked={props.isSelected}
-          onChange={props.onChange}
-          className={formClass.checkbox}
-        />
-      )}
-      {children}
-    </components.Option>
-  );
-};
+
 export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
   const {
     handleMultiSelectChange,
     handleFilterChange,
+    handleGroupedMultiSelectChange,
     onSubmit,
     onClear,
     filterValues,
@@ -42,7 +27,7 @@ export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
       return (
         <MultiSelectGroup
           field={field}
-          onChange={handleMultiSelectChange}
+          onChange={handleGroupedMultiSelectChange}
           values={
             (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
           }

@@ -35,21 +35,11 @@ export const MultiSelectGroup = ({
       isMulti
       hideSelectedOptions={false}
       formatGroupLabel={(data) => <div>{data.label}</div>}
-      unstyled
-      styles={{
-        clearIndicator: (base) => ({ ...base, display: 'none' }),
-        multiValueRemove: (base) => ({
-          ...base,
-          display: 'none',
-        }),
-      }}
       classNames={{
         input: () => inputStyles,
         control: () => controlStyles,
         placeholder: () => placeholderStyles,
         menu: () => menuStyles,
-        multiValueLabel: () => 'hidden',
-        multiValueRemove: () => 'hidden',
         multiValue: () => multiValueStyles,
         dropdownIndicator: () => dropdownIndicatorStyles,
         valueContainer: () => valueContainerStyles,

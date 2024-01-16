@@ -10,7 +10,7 @@ export class PersonnelService {
     @InjectRepository(PersonnelEntity)
     private personnelRepository: Repository<PersonnelEntity>,
   ) {}
-  
+
   /**
    * Get Personnel
    * Given specific queries, get associated personnel and their function experiences
@@ -18,26 +18,40 @@ export class PersonnelService {
    * @returns {PersonnelEntity[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
-  async getPersonnel(query: GetPersonnelDTO): Promise<{ personnel: PersonnelEntity[], count: number }> {
+  async getPersonnel(
+    query: GetPersonnelDTO,
+  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
     let qb = this.personnelRepository.createQueryBuilder('personnel');
     qb = qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb = qb.leftJoinAndSelect('experiences.function', 'function');
     if (query.name) {
-      qb = qb.andWhere(new Brackets((qb) => {
-        qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', { name: `%${query.name}%`})
-          .orWhere('LOWER(personnel.lastName) LIKE LOWER(:name)', { name: `%${query.name}%`})
-      }));
+      qb = qb.andWhere(
+        new Brackets((qb) => {
+          qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', {
+            name: `%${query.name}%`,
+          }).orWhere('LOWER(personnel.lastName) LIKE LOWER(:name)', {
+            name: `%${query.name}%`,
+          });
+        }),
+      );
     }
     qb = qb.andWhere('personnel.active = :active', { active: query.active });
     if (query.regions?.length) {
-      qb.andWhere('personnel.region IN (:...regions)', { regions: query.regions });
+      qb.andWhere('personnel.region IN (:...regions)', {
+        regions: query.regions,
+      });
     }
     if (query.locations?.length) {
-      qb.andWhere('personnel.workLocation IN (:regions)', { regions: query.locations });
+      qb.andWhere('personnel.workLocation IN (:regions)', {
+        regions: query.locations,
+      });
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
-    const [personnel, count] = await qb.getManyAndCount();
+    //TODO  revert - just for demo purposes!!
+    // const [personnel, count] = await qb.getManyAndCount();
+    const personnel = await this.personnelRepository.find();
+    const count = personnel.length;
     return { personnel, count };
   }
 }

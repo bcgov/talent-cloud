@@ -49,22 +49,11 @@ export const MultiSelect = ({
     <Select
       isMulti={true}
       hideSelectedOptions={false}
-      unstyled
-      styles={{
-        clearIndicator: (base) => ({ ...base, display: 'none' }),
-        multiValueRemove: (base) => ({
-          ...base,
-          display: 'none',
-        }),
-      }}
       classNames={{
         input: () => inputStyles,
         control: () => controlStyles,
         placeholder: () => placeholderStyles,
         menu: () => menuStyles,
-        multiValueLabel: () => 'hidden',
-        multiValueRemove: () => 'hidden',
-        multiValue: () => multiValueStyles,
         dropdownIndicator: () => dropdownIndicatorStyles,
         valueContainer: () => valueContainerStyles,
         indicatorsContainer: () => indicatorsContainerStyles,
