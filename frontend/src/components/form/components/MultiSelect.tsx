@@ -38,11 +38,11 @@ export const MultiSelect = ({
   onChange: (props: any) => void;
 }) => {
   
-console.log(values)
+
   const handleChange = (
     newValue: MultiValue<FieldOption>, actionMeta: ActionMeta<FieldOption>
   ) => {
-    console.log(newValue, actionMeta)
+
       if (actionMeta.action === 'select-option' && actionMeta?.option?.label === "Select All") {
         onChange({ name: field.name, value: actionMeta.option.value });
       } else if(actionMeta.action === "clear"){

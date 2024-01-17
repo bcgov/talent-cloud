@@ -86,7 +86,7 @@ const useTable = () => {
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
         const currentPage = pageParams?.currentPage ?? 1;
-console.log(personnel)
+
         personnel &&
           setTableData({
             totalPages,
