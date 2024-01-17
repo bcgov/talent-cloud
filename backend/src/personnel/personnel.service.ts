@@ -42,16 +42,23 @@ export class PersonnelService {
       });
     }
     if (query.locations?.length) {
-      qb.andWhere('personnel.workLocation IN (:regions)', {
-        regions: query.locations,
+      qb.andWhere('personnel.workLocation IN (:...workLocations)', {
+        workLocations: query.locations,
       });
+    }
+
+    if (query.function) {
+      if (query.experience) {
+        qb.andWhere('experiences.experienceType = :experienceType', {
+          experienceType: query.experience,
+        });
+      }
+      qb = qb.andWhere('function.abbreviation = :functionAbbrv', { functionAbbrv: query.function });
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
-    //TODO  revert - just for demo purposes!!
-    // const [personnel, count] = await qb.getManyAndCount();
-    const personnel = await this.personnelRepository.find();
-    const count = personnel.length;
+    qb = qb.orderBy('personnel.lastName', 'ASC');
+    const [personnel, count] = await qb.getManyAndCount();
     return { personnel, count };
   }
 }

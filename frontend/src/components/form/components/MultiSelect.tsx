@@ -8,7 +8,6 @@ import {
   indicatorsContainerStyles,
   inputStyles,
   menuStyles,
-  multiValueStyles,
   multiselectOptionStyles,
   multiselectOptionStylesSelected,
   placeholderStyles,

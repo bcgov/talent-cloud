@@ -64,7 +64,7 @@ export class PersonnelRO {
     required: true,
     example: WorkLocation.ABBOTSFORD,
   })
-  workLocation: WorkLocation;
+  workLocation: string;
 
   @ApiProperty({
     description: 'Personnel\'s ministry',

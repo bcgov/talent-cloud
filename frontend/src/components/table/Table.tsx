@@ -3,7 +3,6 @@ import type { FieldInterface } from '../form';
 import { Toggle } from '../form/components/Toggle';
 import type { Column } from '.';
 import { TableFilters, TableFooter, TableBody, TableHeader } from '.';
-// s
 import useTable from '@/hooks/useTable';
 
 export const Table = ({
@@ -19,14 +18,29 @@ export const Table = ({
   columns: Column[];
   toggle?: FieldInterface;
 }) => {
-  const { pageParams, tableData, handlePageParams } = useTable();
+  const {
+    filterValues,
+    pageParams,
+    tableData,
+    handleChange,
+    handlePageParams,
+    onSubmit,
+    onClear,
+  } = useTable();
+
   return (
     <>
       {!tableData ? (
         <Loading />
       ) : (
         <>
-          <TableFilters fields={fields} />
+          <TableFilters
+            fields={fields}
+            handleChange={handleChange}
+            onSubmit={onSubmit}
+            onClear={onClear}
+            filterValues={filterValues}
+          />
           <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white border border-gray">
             <div className="flex flex-row items-center justify-between mx-8">
               <div className="flex flex-col py-6">

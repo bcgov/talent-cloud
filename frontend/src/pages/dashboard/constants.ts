@@ -1,4 +1,12 @@
-import { AvailabilityTypeName, ClassificationName, ExperienceName, FunctionName, Ministry, Region, Status, WorkLocationName } from '@/common';
+import type {
+  AvailabilityTypeName,
+  ClassificationName,
+  Ministry,
+  Region,
+  Status,
+  WorkLocationName,
+} from '@/common';
+import { Experience, ExperienceName, FunctionName } from '@/common';
 
 import type { FieldInterface } from '@/components/form';
 import { FieldTypes } from '@/components/form';
@@ -60,15 +68,15 @@ export const dashboardFilterFields: FieldInterface[] = [
     label: 'Experience',
     type: FieldTypes.SELECT,
     options: [
-      { label: ExperienceName.INTERESTED, value: ExperienceName.INTERESTED },
-      { label: ExperienceName.EXPERIENCED, value: ExperienceName.EXPERIENCED },
+      { label: ExperienceName.INTERESTED, value: Experience.INTERESTED },
+      { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
       {
         label: ExperienceName.CHIEF_EXPERIENCED,
-        value: ExperienceName.CHIEF_EXPERIENCED,
+        value: Experience.CHIEF_EXPERIENCED,
       },
       {
         label: ExperienceName.OUTSIDE_EXPERIENCED,
-        value: ExperienceName.OUTSIDE_EXPERIENCED,
+        value: Experience.OUTSIDE_EXPERIENCED,
       },
     ],
   },
@@ -97,96 +105,89 @@ export const dashboardFilterFields: FieldInterface[] = [
     groupedOptions: [
       {
         label: 'CTL',
-
         options: [
-          { value: 'Enderby', label: 'Enderby' },
-          { value: 'Kamloops', label: 'Kamloops' },
-          { value: 'Kelowna', label: 'Kelowna' },
-          { value: 'Merritt', label: 'Merritt' },
-          { value: 'Salmon Arm', label: 'Salmon Arm' },
-          { value: 'Sorrento', label: 'Sorrento' },
-          { value: 'Vernon', label: 'Vernon' },
+          { value: 'ENDERBY', label: 'Enderby' },
+          { value: 'KAMLOOPS', label: 'Kamloops' },
+          { value: 'KELOWNA', label: 'Kelowna' },
+          { value: 'MERRITT', label: 'Merritt' },
+          { value: 'SALMON_ARM', label: 'Salmon Arm' },
+          { value: 'SORRENTO', label: 'Sorrento' },
+          { value: 'VERNON', label: 'Vernon' },
         ],
       },
-
       {
         label: 'HQ',
         options: [
-          { value: 'Brentwood', label: 'Brentwood' },
-          { value: 'Langford', label: 'Langford' },
-          { value: 'Esquimalt', label: 'Esquimalt' },
-          { value: 'Saanich', label: 'Saanich' },
-          { value: 'Saanichton', label: 'Saanichton' },
-          { value: 'Sidney', label: 'Sidney' },
-          { value: 'Victoria', label: 'Victoria' },
+          { value: 'BRENTWOOD_BAY', label: 'Brentwood' },
+          { value: 'LANGFORD', label: 'Langford' },
+          { value: 'ESQUIMALT', label: 'Esquimalt' },
+          { value: 'SAANICH', label: 'Saanich' },
+          { value: 'SAANICHTON', label: 'Saanichton' },
+          { value: 'SIDNEY', label: 'Sidney' },
+          { value: 'VICTORIA', label: 'Victoria' },
         ],
       },
-
       {
         label: 'NEA',
         options: [
-          { value: '100 Mile House', label: '100 Mile House' },
-          { value: '150 Mile House', label: '150 Mile House' },
-          { value: 'Dawson Creek', label: 'Dawson Creek' },
-          { value: 'Fort Nelson', label: 'Fort Nelson' },
-          { value: 'Fort St. John', label: 'Fort St. John' },
-          { value: 'Mackenzie', label: 'Mackenzie' },
-          { value: 'Prince George', label: 'Prince George' },
-          { value: 'Quesnel', label: 'Quesnel' },
-          { value: 'Williams Lake', label: 'Williams Lake' },
+          { value: 'HUNDRED_MILE_HOUSE', label: '100 Mile House' },
+          { value: 'HUNDRED_FIFTY_MILE_HOUSE', label: '150 Mile House' },
+          { value: 'DAWSON_CREEK', label: 'Dawson Creek' },
+          { value: 'FORT_NELSON', label: 'Fort Nelson' },
+          { value: 'FORT_ST_JOHN', label: 'Fort St. John' },
+          { value: 'MACKENZIE', label: 'Mackenzie' },
+          { value: 'PRINCE_GEORGE', label: 'Prince George' },
+          { value: 'QUENSEL', label: 'Quesnel' },
+          { value: 'WILLIAMS_LAKE', label: 'Williams Lake' },
         ],
       },
-
       {
         label: 'NWE',
         options: [
-          { value: 'Burns Lake', label: 'Burns Lake' },
-          { value: 'Smithers', label: 'Smithers' },
-          { value: 'Terrace', label: 'Terrace' },
+          { value: 'BURNES_LAKE', label: 'Burns Lake' },
+          { value: 'SMITHERS', label: 'Smithers' },
+          { value: 'TERRACE', label: 'Terrace' },
         ],
       },
-
       {
         label: 'SEA',
         options: [
-          { value: 'Castlegar', label: 'Castlegar' },
-          { value: 'Cranbrook', label: 'Cranbrook' },
-          { value: 'Elkford', label: 'Elkford' },
-          { value: 'Kimberley', label: 'Kimberley' },
-          { value: 'Nelson', label: 'Nelson' },
-          { value: 'Revelstoke', label: 'Revelstoke' },
+          { value: 'CASTLEGAR', label: 'Castlegar' },
+          { value: 'CRANBROOK', label: 'Cranbrook' },
+          { value: 'ELKFORD', label: 'Elkford' },
+          { value: 'KIMBERLEY', label: 'Kimberley' },
+          { value: 'NELSON', label: 'Nelson' },
+          { value: 'REVELSTOKE', label: 'Revelstoke' },
         ],
       },
-
       {
         label: 'SWE',
         options: [
-          { value: 'Abbotsford', label: 'Abbotsford' },
-          { value: 'Bonnington Falls', label: 'Bonnington Falls' },
-          { value: 'Burnaby', label: 'Burnaby' },
-          { value: 'Coquitlam', label: 'Coquitlam' },
-          { value: 'Langley', label: 'Langley' },
-          { value: 'Lillooet', label: 'Lillooet' },
-          { value: 'Maple Ridge', label: 'Maple Ridge' },
-          { value: 'New Westminster', label: 'New Westminster' },
-          { value: 'North Vancouver', label: 'North Vancouver' },
-          { value: 'Richmond', label: 'Richmond' },
-          { value: 'Surrey', label: 'Surrey' },
-          { value: 'Vancouver', label: 'Vancouver' },
-          { value: 'Whistler', label: 'Whistler' },
+          { value: 'ABBOTSFORD', label: 'Abbotsford' },
+          { value: 'BONNINGTON_FALLS', label: 'Bonnington Falls' },
+          { value: 'BURNABY', label: 'Burnaby' },
+          { value: 'COQUITLAM', label: 'Coquitlam' },
+          { value: 'LANGLEY', label: 'Langley' },
+          { value: 'LILLOOET', label: 'Lillooet' },
+          { value: 'MAPLE_RIDGE', label: 'Maple Ridge' },
+          { value: 'NEW_WESTMINSTER', label: 'New Westminster' },
+          { value: 'NORTH_VANCOUVER', label: 'North Vancouver' },
+          { value: 'RICHMOND', label: 'Richmond' },
+          { value: 'SURREY', label: 'Surrey' },
+          { value: 'VANCOUVER', label: 'Vancouver' },
+          { value: 'WHISTLER', label: 'Whistler' },
         ],
       },
-
       {
         label: 'VIC',
         options: [
-          { value: 'Campbell River', label: 'Campbell River' },
-          { value: 'Courtenay', label: 'Courtenay' },
-          { value: 'Cumberland', label: 'Cumberland' },
-          { value: 'Nanaimo', label: 'Nanaimo' },
-          { value: 'Port Alberni', label: 'Port Alberni' },
-          { value: 'Qualicum Beach', label: 'Qualicum Beach' },
-          { value: 'Ucluelet', label: 'Ucluelet' },
+          { value: 'CAMPBELL_RIVER', label: 'Campbell River' },
+          { value: 'COURTENAY', label: 'Courtenay' },
+          { value: 'CUMBERLAND', label: 'Cumberland' },
+          { value: 'NANAIMO', label: 'Nanaimo' },
+          { value: 'PORT_ALBERNI', label: 'Port Alberni' },
+          { value: 'QUALICUM_BEACH', label: 'Qualicum Beach' },
+          { value: 'UCLUELET', label: 'Ucluelet' },
         ],
       },
     ],
@@ -221,7 +222,6 @@ export interface Personnel {
   remoteOnly: string;
   classification: string;
   ministry: string;
-  
 }
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;

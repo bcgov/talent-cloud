@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsOptional, Length } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, Length } from 'class-validator';
 import {
   Experience,
-  FunctionName,
+  FunctionNameAbbrv,
   Region,
   WorkLocation,
 } from '../../common/enums';
@@ -32,30 +32,48 @@ export class GetPersonnelDTO extends QueryDTO {
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
-    type: [Region],
-    example: [Region.NEA, Region.NEW],
+    example: `${Region.NEA},${Region.NEW}`,
   })
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
-  regions: Region[];
+  @IsOptional()
+  @IsArray()
+  @IsEnum(Region, { each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value
+      .trim()
+      .split(',')
+      .map((type) => Region[type]),
+  )
+  regions: string;
 
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
-    type: [WorkLocation],
-    example: [WorkLocation.ABBOTSFORD, WorkLocation.BRENTWOOD_BAY],
+    example: `${WorkLocation.ABBOTSFORD},${WorkLocation.BRENTWOOD_BAY}`,
   })
-  locations: WorkLocation[];
+  @IsOptional()
+  @IsArray()
+  @IsEnum(WorkLocation, { each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value
+      .trim()
+      .split(',')
+      .map((type) => WorkLocation[type]),
+  )
+  locations: string;
 
   @ApiPropertyOptional({
     description: 'Function name to search personnel from',
-    type: FunctionName,
-    example: FunctionName.OPERATIONS,
+    type: FunctionNameAbbrv,
+    example: FunctionNameAbbrv.OPERATIONS,
   })
-  function?: FunctionName;
+  @IsOptional()
+  function: FunctionNameAbbrv;
 
   @ApiPropertyOptional({
     description: 'Experience level to search personnel from',
     type: Experience,
     example: Experience.INTERESTED,
   })
-  experience?: Experience;
+  @IsEnum(Experience)
+  @IsOptional()
+  experience: Experience;
 }
