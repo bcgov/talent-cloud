@@ -27,8 +27,8 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({ name: 'work_location', type: 'enum', enum: WorkLocation, enumName: 'work-location' })
-  workLocation: WorkLocation;
+  @Column({ name: 'work_location', type: 'varchar' })
+  workLocation: string;
 
   @Column({ name: 'region', type: 'enum', enum: Region, enumName: 'region' })
   region: Region;
