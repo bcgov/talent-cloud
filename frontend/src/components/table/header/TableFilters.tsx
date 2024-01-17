@@ -8,33 +8,34 @@ import {
   MultiSelect,
   Search,
 } from '@/components';
-import useTable from '@/hooks/useTable';
 import type { DashboardFilters } from '@/pages/dashboard/constants';
 
-
-export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
-  const {
-    handleMultiSelectChange,
-    handleFilterChange,
-    handleGroupedMultiSelectChange,
-    onSubmit,
-    onClear,
-    filterValues,
-  } = useTable();
-
+export const TableFilters = ({
+  fields,
+  handleChange,
+  onSubmit,
+  onClear,
+  filterValues,
+}: {
+  fields: FieldInterface[];
+  handleChange: ({ name, value }: { name: string; value: any | any[] }) => void;
+  onSubmit: () => void;
+  onClear: () => void;
+  filterValues: DashboardFilters;
+}) => {
   const renderField = (field: FieldInterface) => {
     if (field.type === FieldTypes.MULTI) {
       return (
         <MultiSelectGroup
           field={field}
-          onChange={handleGroupedMultiSelectChange}
+          onChange={handleChange}
           values={
             (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
           }
         />
       );
     } else if (field.type === FieldTypes.SEARCH) {
-      return <Search field={field} onChange={handleFilterChange} />;
+      return <Search field={field} onChange={handleChange} />;
     } else if (field.type === FieldTypes.SELECT) {
       return field.multi ? (
         <MultiSelect
@@ -42,12 +43,12 @@ export const TableFilters = ({ fields }: { fields: FieldInterface[] }) => {
           values={
             (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
           }
-          onChange={handleMultiSelectChange}
+          onChange={handleChange}
         />
       ) : (
         <SingleSelect
           field={field}
-          onChange={handleFilterChange}
+          onChange={handleChange}
           value={
             (filterValues[field.name as keyof DashboardFilters] as string) ?? ''
           }

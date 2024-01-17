@@ -20,7 +20,7 @@ export const Search = ({
           name={field.name}
           type={field.type}
           className={inputStyles + ' pr-12'}
-          onChange={onChange}
+          onChange={(e) => onChange({ name: e.target.name, value: e.target.value })}
         />
       </div>
     </>
