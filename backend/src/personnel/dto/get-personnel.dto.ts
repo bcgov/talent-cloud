@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsOptional, Length } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
 import {
   Experience,
   FunctionNameAbbrv,
@@ -21,6 +21,9 @@ export class GetPersonnelDTO extends QueryDTO {
     description: 'Find only active personnel. If false, this will find all',
     default: true,
   })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value} ) => value === 'true' || value === true)
   active: boolean;
 
   @ApiPropertyOptional({

@@ -39,7 +39,13 @@ const useTable = () => {
   useEffect(() => {
     searchParamsUrl.set('page', pageParams?.currentPage.toString() ?? '1');
     searchParamsUrl.set('rows', pageParams?.rowsPerPage.toString() ?? '25');
-    searchParamsUrl.set('active', 'true');
+
+    if (pageParams?.showInactive === true) {
+      searchParamsUrl.delete('active');
+    } else {
+      searchParamsUrl.set('active', 'true');
+    }
+
     if (filterValues?.name) {
       searchParamsUrl.set('name', filterValues?.name);
     } else {
