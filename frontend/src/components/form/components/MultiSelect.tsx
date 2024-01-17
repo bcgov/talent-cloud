@@ -52,7 +52,7 @@ export const MultiSelect = ({
       onChange({ name: field.name, value: actionMeta.option?.value });
     }
   };
-console.log(values)
+
   return (
     <Select
       isMulti={true}
