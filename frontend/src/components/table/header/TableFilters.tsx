@@ -2,7 +2,6 @@ import { ButtonTypes } from '@/common';
 import type { FieldInterface } from '@/components';
 import {
   SingleSelect,
-  MultiSelectGroup,
   Button,
   FieldTypes,
   MultiSelect,
@@ -26,7 +25,7 @@ export const TableFilters = ({
   const renderField = (field: FieldInterface) => {
     if (field.type === FieldTypes.MULTI) {
       return (
-        <MultiSelectGroup
+        <MultiSelect
           field={field}
           onChange={handleChange}
           values={

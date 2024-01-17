@@ -17,5 +17,5 @@ export interface FieldGroupedOption {
 
 export interface FieldOption {
   label: string;
-  value: string;
+  value: any;
 }

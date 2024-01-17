@@ -1,5 +1,5 @@
-import type { ActionMeta, MultiValue } from 'react-select';
-import Select from 'react-select';
+import type { ActionMeta, MenuListProps, MultiValue } from 'react-select';
+import Select, { components } from 'react-select';
 import type { FieldInterface, FieldOption } from '../interface';
 import {
   controlStyles,
@@ -16,7 +16,16 @@ import {
 } from '@/styles/fieldStyles';
 
 import { Option } from './MultiSelectOption';
-
+const MenuList = (
+  props: MenuListProps<FieldOption, true>
+) => {
+  
+  return (
+    <components.MenuList {...props}>
+      {props.children}
+    </components.MenuList>
+  );
+};
 export const MultiSelect = ({
   field,
   values,
@@ -29,25 +38,25 @@ export const MultiSelect = ({
   const options: FieldOption[] = field.options!;
 
   const handleChange = (
-    newValue: MultiValue<FieldOption>,
-    actionMeta: ActionMeta<FieldOption>,
+    newValue: MultiValue<FieldOption>, actionMeta: ActionMeta<FieldOption>
   ) => {
-    if (actionMeta.action === 'select-option' && actionMeta.option === options[0]) {
-      onChange({ name: field.name, value: field.options!.map((itm) => itm.value) });
-    } else if (
-      actionMeta.action === 'deselect-option' &&
-      actionMeta.option === options[0]
-    ) {
-      onChange({ name: field.name, value: [] });
-    } else {
-      onChange({ name: field.name, value: newValue.map((itm) => itm.value) });
+    console.log(newValue, actionMeta)
+      if (actionMeta.action === 'select-option' && actionMeta?.option?.label === "Select All") {
+        onChange({ name: field.name, value: actionMeta.option.value });
+      } else if(actionMeta.action === "clear"){
+        onChange({ name: field.name, value: [] });  
+      } else if (actionMeta.action === "remove-value"){
+        onChange({ name: field.name, value: values.filter((itm) => itm !== actionMeta.removedValue?.value) });
+      }
+      else {
+      onChange({ name: field.name, value: actionMeta.option?.value });
     }
   };
-
+console.log(values)
   return (
     <Select
       isMulti={true}
-      hideSelectedOptions={false}
+      hideSelectedOptions={true}
       classNames={{
         input: () => inputStyles,
         control: () => controlStyles,
@@ -61,12 +70,13 @@ export const MultiSelect = ({
         option: ({ isSelected }) =>
           isSelected ? multiselectOptionStylesSelected : multiselectOptionStyles,
       }}
-      components={{ Option }}
+      components={{ Option,  MenuList }}
+      isOptionSelected={(option) => values.includes(option.value)}
       closeMenuOnSelect={false}
       defaultValue={[]}
       name={field.name}
-      value={options.filter((itm) => values.includes(itm.value))}
-      options={options}
+      value={field?.groupedOptions ? field.groupedOptions.flatMap(itm => itm.options).filter(option => values.includes(option.value)) : options.filter((option) => values.includes(option.value))}
+      options={options ?? field.groupedOptions}
       onChange={handleChange}
     />
   );

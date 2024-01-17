@@ -32,7 +32,13 @@ export enum DashboardColumns {
   STATUS = 'status',
   FUNCTION = 'function',
 }
-
+const regionOptions =[{ value: 'VIC', label: 'VIC' },
+{ value: 'SWE', label: 'SWE' },
+{ value: 'SEA', label: 'SEA' },
+{ value: 'NWE', label: 'NWE' },
+{ value: 'NEA', label: 'NEA' },
+{ value: 'HQ', label: 'HQ' },
+{ value: 'CTL', label: 'CTL' }]
 export const dashboardFilterFields: FieldInterface[] = [
   {
     name: DashboardFilterNames.NAME,
@@ -87,14 +93,8 @@ export const dashboardFilterFields: FieldInterface[] = [
     multi: true,
     type: FieldTypes.SELECT,
     options: [
-      { value: '*', label: 'Select All' },
-      { value: 'VIC', label: 'VIC' },
-      { value: 'SWE', label: 'SWE' },
-      { value: 'SEA', label: 'SEA' },
-      { value: 'NWE', label: 'NWE' },
-      { value: 'NEA', label: 'NEA' },
-      { value: 'HQ', label: 'HQ' },
-      { value: 'CTL', label: 'CTL' },
+    {label: "Select All", value: regionOptions.map(itm => itm.value)}, ...regionOptions,
+      
     ],
   },
   {

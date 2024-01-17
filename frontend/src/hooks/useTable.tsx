@@ -182,7 +182,7 @@ const useTable = () => {
   const handleChange = ({ name, value }: { name: string; value: any | any[] }) => {
     if (Array.isArray(value) && value.every((v) => !!v.value)) {
       setFilterValues({ ...filterValues, [name]: value.map((itm) => itm.value) });
-    } else if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
+    } else if (Array.isArray(value) && value.every((v:string) => typeof v === 'object' || typeof v === 'string')) {
       setFilterValues({ ...filterValues, [name]: value });
     } else if (typeof value === 'string') {
       setFilterValues({ ...filterValues, [name]: value });
@@ -190,9 +190,7 @@ const useTable = () => {
       console.log('MISSING CASE');
     }
   };
-
-  //TODO
-  // WIP
+  
   const onSubmit = () => {
     handlePageParams({ ...pageParams, ...filterValues });
   };

@@ -35,16 +35,18 @@ export class GetPersonnelDTO extends QueryDTO {
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
-    example: `${Region.NEA},${Region.NEW}`,
+    example: `${Region.NEA},${Region.NWE}`,
   })
   @IsOptional()
   @IsArray()
   @IsEnum(Region, { each: true })
   @Transform(({ value }) =>
-    Array.isArray(value) ? value : value
-      .trim()
-      .split(',')
-      .map((type) => Region[type]),
+    Array.isArray(value)
+      ? value
+      : value
+          .trim()
+          .split(',')
+          .map((type) => Region[type]),
   )
   regions: string;
 
@@ -56,10 +58,12 @@ export class GetPersonnelDTO extends QueryDTO {
   @IsArray()
   @IsEnum(WorkLocation, { each: true })
   @Transform(({ value }) =>
-    Array.isArray(value) ? value : value
-      .trim()
-      .split(',')
-      .map((type) => WorkLocation[type]),
+    Array.isArray(value)
+      ? value
+      : value
+          .trim()
+          .split(',')
+          .map((type) => WorkLocation[type]),
   )
   locations: string;
 
