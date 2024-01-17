@@ -49,6 +49,7 @@ export enum WorkLocationName {
   TERRACE = 'Terrace',
   UCLUELET = 'Ucluelet',
   VANCOUVER = 'Vancouver',
+  VERNON ='Vernon',
   VICTORIA = 'Victoria',
   WHISTLER = 'Whistler',
   WILLIAMS_LAKE = 'Williams Lake',

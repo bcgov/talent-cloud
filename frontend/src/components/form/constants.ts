@@ -4,7 +4,8 @@ export enum FieldTypes {
   CHECKBOX = 'checkbox',
   TOGGLE = 'toggle',
   RADIO = 'radio',
-  MULTI = 'multi-select',
+  MULTISELECT = 'multi-select',
+  GROUPED_MULTISELECT = 'grouped-multi-select',
   SEARCH = 'search',
 }
 

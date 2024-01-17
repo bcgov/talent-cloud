@@ -33,12 +33,12 @@ export const MultiSelect = ({
   onChange,
 }: {
   field: FieldInterface;
-  values: string[];
-  options: FieldOption[]
+  values: FieldOption[];
+  options: any[]
   onChange: (props: any) => void;
 }) => {
   
-
+console.log(values)
   const handleChange = (
     newValue: MultiValue<FieldOption>, actionMeta: ActionMeta<FieldOption>
   ) => {
@@ -48,16 +48,17 @@ export const MultiSelect = ({
       } else if(actionMeta.action === "clear"){
         onChange({ name: field.name, value: [] });  
       } else if (actionMeta.action === "remove-value"){
-        onChange({ name: field.name, value: values.filter((itm) => itm !== actionMeta.removedValue?.value) });
+        onChange({ name: field.name, value: values.filter((itm) => itm !== actionMeta.removedValue) });
       }
       else {
-      onChange({ name: field.name, value: actionMeta.option?.value });
+      onChange({ name: field.name, value: newValue });
     }
   };
 
   return (
     <Select
       isMulti={true}
+      closeMenuOnSelect={false}
       hideSelectedOptions={true}
       classNames={{
         input: () => inputStyles,
@@ -72,12 +73,10 @@ export const MultiSelect = ({
         option: ({ isSelected }) =>
           isSelected ? multiselectOptionStylesSelected : multiselectOptionStyles,
       }}
-      components={{ Option,  MenuList }}
-      isOptionSelected={(option) => values.includes(option.value)}
-      closeMenuOnSelect={false}
+      components={{ Option }}
       defaultValue={[]}
       name={field.name}
-      value={options.filter(itm => values.includes(itm.value))}
+      value={values}
       options={options}
       onChange={handleChange}
     />

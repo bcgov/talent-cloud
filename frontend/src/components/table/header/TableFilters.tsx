@@ -1,12 +1,6 @@
 import { ButtonTypes } from '@/common';
 import type { FieldInterface } from '@/components';
-import {
-  SingleSelect,
-  Button,
-  FieldTypes,
-  MultiSelect,
-  Search,
-} from '@/components';
+import { SingleSelect, Button, FieldTypes, MultiSelect, Search } from '@/components';
 import type { DashboardFilters } from '@/pages/dashboard/constants';
 
 export const TableFilters = ({
@@ -23,30 +17,42 @@ export const TableFilters = ({
   filterValues: DashboardFilters;
 }) => {
   const renderField = (field: FieldInterface) => {
-    if (field.type === FieldTypes.MULTI) {
+    if (field.type === FieldTypes.SEARCH) {
+      return <Search field={field} onChange={handleChange} />;
+    } else if (field.type === FieldTypes.GROUPED_MULTISELECT) {
       return (
         <MultiSelect
           field={field}
           onChange={handleChange}
-          options={field.groupedOptions?.flatMap(itm => itm.options) ?? []}
+          options={field.groupedOptions ?? []}
           values={
-            (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
+            field?.groupedOptions
+              ?.flatMap((itm) => itm.options)
+              .filter((itm) =>
+                (
+                  filterValues[field.name as keyof DashboardFilters] as string
+                )?.includes(itm.value),
+              ) ?? []
           }
         />
       );
-    } else if (field.type === FieldTypes.SEARCH) {
-      return <Search field={field} onChange={handleChange} />;
-    } else if (field.type === FieldTypes.SELECT) {
-      return field.multi ? (
+    } else if (field.type === FieldTypes.MULTISELECT) {
+      return (
         <MultiSelect
           field={field}
+          onChange={handleChange}
           options={field.options ?? []}
           values={
-            (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
+            field?.options?.filter((itm) =>
+              (
+                filterValues[field.name as keyof DashboardFilters] as string
+              )?.includes(itm.value),
+            ) ?? []
           }
-          onChange={handleChange}
         />
-      ) : (
+      );
+    } else if (field.type === FieldTypes.SELECT) {
+      return (
         <SingleSelect
           field={field}
           onChange={handleChange}

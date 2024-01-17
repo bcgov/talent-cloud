@@ -58,7 +58,7 @@ const useTable = () => {
       searchParamsUrl.delete('regions');
     }
 
-    if (filterValues?.location?.length) {
+    if (filterValues?.location) {
       searchParamsUrl.set('locations', filterValues.location.join(','));
     } else {
       searchParamsUrl.delete('locations');

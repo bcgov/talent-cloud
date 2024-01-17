@@ -3,7 +3,6 @@ import type {
   ClassificationName,
   Ministry,
   Region,
-  Status,
   WorkLocationName,
 } from '@/common';
 import { Experience, ExperienceName, FunctionName } from '@/common';
@@ -91,7 +90,7 @@ export const dashboardFilterFields: FieldInterface[] = [
     name: DashboardFilterNames.REGION,
     label: 'Region',
     multi: true,
-    type: FieldTypes.SELECT,
+    type: FieldTypes.MULTISELECT,
     options: [
     {label: "Select All", value: regionOptions.map(itm => itm.value)}, ...regionOptions,
       
@@ -100,7 +99,7 @@ export const dashboardFilterFields: FieldInterface[] = [
   {
     name: DashboardFilterNames.LOCATION,
     label: 'Work Location',
-    type: FieldTypes.MULTI,
+    type: FieldTypes.GROUPED_MULTISELECT,
     multi: true,
     groupedOptions: [
       {
@@ -233,7 +232,6 @@ export interface DashboardRow {
   [DashboardColumns.REMOTE]: boolean;
   [DashboardColumns.CLASSIFICATION]: ClassificationName;
   [DashboardColumns.MINISTRY]: Ministry;
-  [DashboardColumns.STATUS]: Status;
 }
 export interface DashboardFilters {
   name?: string | null;
