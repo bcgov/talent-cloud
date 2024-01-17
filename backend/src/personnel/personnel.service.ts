@@ -57,6 +57,7 @@ export class PersonnelService {
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
+    qb = qb.orderBy('personnel.lastName', 'ASC');
     const [personnel, count] = await qb.getManyAndCount();
     return { personnel, count };
   }
