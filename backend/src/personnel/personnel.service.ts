@@ -35,7 +35,9 @@ export class PersonnelService {
         }),
       );
     }
-    qb = qb.andWhere('personnel.active = :active', { active: query.active });
+    if (query.active === true) {
+      qb = qb.andWhere('personnel.active = :active', { active: query.active });
+    }
     if (query.regions?.length) {
       qb.andWhere('personnel.region IN (:...regions)', {
         regions: query.regions,
