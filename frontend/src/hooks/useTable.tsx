@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { TableData, PageParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { Status } from '@/common';
+import { Status, WorkLocationName } from '@/common';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
@@ -120,7 +120,10 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: workLocation,
+                    value:
+                      WorkLocationName[
+                        workLocation as keyof typeof WorkLocationName
+                      ],
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
