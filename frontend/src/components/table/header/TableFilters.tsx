@@ -28,6 +28,7 @@ export const TableFilters = ({
         <MultiSelect
           field={field}
           onChange={handleChange}
+          options={field.groupedOptions?.flatMap(itm => itm.options) ?? []}
           values={
             (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
           }
@@ -39,6 +40,7 @@ export const TableFilters = ({
       return field.multi ? (
         <MultiSelect
           field={field}
+          options={field.options ?? []}
           values={
             (filterValues[field.name as keyof DashboardFilters] as string[]) ?? []
           }

@@ -29,13 +29,15 @@ const MenuList = (
 export const MultiSelect = ({
   field,
   values,
+  options,
   onChange,
 }: {
   field: FieldInterface;
   values: string[];
+  options: FieldOption[]
   onChange: (props: any) => void;
 }) => {
-  const options: FieldOption[] = field.options!;
+  
 
   const handleChange = (
     newValue: MultiValue<FieldOption>, actionMeta: ActionMeta<FieldOption>
@@ -75,8 +77,8 @@ export const MultiSelect = ({
       closeMenuOnSelect={false}
       defaultValue={[]}
       name={field.name}
-      value={field?.groupedOptions ? field.groupedOptions.flatMap(itm => itm.options).filter(option => values.includes(option.value)) : options.filter((option) => values.includes(option.value))}
-      options={options ?? field.groupedOptions}
+      value={options.filter(itm => values.includes(itm.value))}
+      options={options}
       onChange={handleChange}
     />
   );
