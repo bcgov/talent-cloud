@@ -47,7 +47,14 @@ export const Table = ({
                 <h4 className="text-black">{title}</h4>
                 <p className="text-black">{`${tableData.totalRows} ${subtitle}`}</p>
               </div>
-              {toggle && <Toggle field={toggle} />}
+              {toggle && (
+                <Toggle
+                  field={toggle}
+                  handleToggle={(val: boolean) =>
+                    handlePageParams({ showInactive: val })
+                  }
+                />
+              )}
             </div>
             {/* table-auto will auto resize columns - table fixed looks more consistent */}
             <table className="table-auto w-full mx-auto border-disabledGray">
