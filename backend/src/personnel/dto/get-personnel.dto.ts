@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsOptional, Length, Validate } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, Length } from 'class-validator';
 import {
   Experience,
   FunctionNameAbbrv,

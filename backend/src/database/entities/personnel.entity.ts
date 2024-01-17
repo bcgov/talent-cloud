@@ -1,4 +1,3 @@
-import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 import {
   Column,
   Entity,
@@ -14,7 +13,7 @@ import { TrainingEntity } from './training.entity';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
-import { WorkLocation } from '../../common/enums/work-location.enum';
+import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
