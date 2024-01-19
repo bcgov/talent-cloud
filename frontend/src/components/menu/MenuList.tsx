@@ -11,7 +11,6 @@ export const MenuItemList = ({
   values: any[];
   onChange: (name: string, value: any) => void;
 }) => {
-  console.log(field.name, values);
   return (
     <>
       {field.options?.map((option: any) => (

@@ -142,11 +142,9 @@ const useTable = () => {
   };
 
   const handleChange = (name: any, itm: any) => {
-    console.log(name, itm);
     setFilterValues((prev: any) => ({ ...prev, [name]: itm }));
   };
 
-  console.log(filterValues);
   return {
     tableData,
     pageParams,
