@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { TableData, PageParams } from '@/components';
+import { type TableData, type PageParams, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { Status, WorkLocationName } from '@/common';
+import { WorkLocationName } from '@/common';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
@@ -37,46 +37,8 @@ const useTable = () => {
   };
 
   useEffect(() => {
-    searchParamsUrl.set('page', pageParams?.currentPage.toString() ?? '1');
-    searchParamsUrl.set('rows', pageParams?.rowsPerPage.toString() ?? '25');
-
-    if (pageParams?.showInactive === true) {
-      searchParamsUrl.delete('active');
-    } else {
-      searchParamsUrl.set('active', 'true');
-    }
-
-    if (filterValues?.name) {
-      searchParamsUrl.set('name', filterValues?.name);
-    } else {
-      searchParamsUrl.delete('name');
-    }
-
-    if (filterValues?.region?.length) {
-      searchParamsUrl.set('regions', filterValues.region.join(','));
-    } else {
-      searchParamsUrl.delete('regions');
-    }
-
-    if (filterValues?.location) {
-      searchParamsUrl.set('locations', filterValues.location.join(','));
-    } else {
-      searchParamsUrl.delete('locations');
-    }
-
-    if (filterValues?.function) {
-      searchParamsUrl.set('function', filterValues.function);
-    } else {
-      searchParamsUrl.delete('function');
-    }
-
-    if (filterValues?.experience) {
-      searchParamsUrl.set('experience', filterValues.experience);
-    } else {
-      searchParamsUrl.delete('experience');
-    }
-
     (async () => {
+      handleSearchParams(searchParamsUrl, pageParams, filterValues);
       try {
         const {
           data: { personnel, count },
@@ -173,24 +135,16 @@ const useTable = () => {
         console.log(e);
       }
     })();
-  }, [pageParams]);
+  }, [pageParams, filterValues]);
 
   const handlePageParams = (change: Partial<PageParams>) => {
     setPageParams({ ...pageParams, ...change });
   };
 
-  const handleChange = ({ name, value }: { name: string; value: any | any[] }) => {
-    if (Array.isArray(value) && value.every((v) => !!v.value)) {
-      setFilterValues({ ...filterValues, [name]: value.map((itm) => itm.value) });
-    } else if (Array.isArray(value) && value.every((v:string) => typeof v === 'object' || typeof v === 'string')) {
-      setFilterValues({ ...filterValues, [name]: value });
-    } else if (typeof value === 'string') {
-      setFilterValues({ ...filterValues, [name]: value });
-    } else {
-      console.log('MISSING CASE');
-    }
+  const handleChange = (name: any, itm: any) => {
+    setFilterValues({ ...filterValues, [name]: itm });
   };
-  
+
   const onSubmit = () => {
     handlePageParams({ ...pageParams, ...filterValues });
   };

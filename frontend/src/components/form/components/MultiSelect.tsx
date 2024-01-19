@@ -1,84 +1,57 @@
-import type { ActionMeta, MenuListProps, MultiValue } from 'react-select';
-import Select, { components } from 'react-select';
-import type { FieldInterface, FieldOption } from '../interface';
-import {
-  controlStyles,
-  dropdownIndicatorStyles,
-  indicatorSeparatorStyles,
-  indicatorsContainerStyles,
-  inputStyles,
-  menuStyles,
-  multiselectOptionStyles,
-  multiselectOptionStylesSelected,
-  placeholderStyles,
-  singleValueStyles,
-  valueContainerStyles,
-} from '@/styles/fieldStyles';
+import { Fragment, useState } from 'react';
+import { classes } from './constants';
+import { OptionWithCheckbox } from './OptionCheckBox';
+import { DropdownMenu } from './DropdownMenu';
 
-import { Option } from './MultiSelectOption';
-const MenuList = (
-  props: MenuListProps<FieldOption, true>
-) => {
-  
-  return (
-    <components.MenuList {...props}>
-      {props.children}
-    </components.MenuList>
-  );
-};
 export const MultiSelect = ({
+  onChange,
   field,
   values,
-  options,
-  onChange,
 }: {
-  field: FieldInterface;
-  values: FieldOption[];
-  options: any[]
-  onChange: (props: any) => void;
+  onChange: (name: string, selected: any) => void;
+  field: any;
+  values: any[];
 }) => {
-  
+  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
 
-  const handleChange = (
-    newValue: MultiValue<FieldOption>, actionMeta: ActionMeta<FieldOption>
-  ) => {
-
-      if (actionMeta.action === 'select-option' && actionMeta?.option?.label === "Select All") {
-        onChange({ name: field.name, value: actionMeta.option.value });
-      } else if(actionMeta.action === "clear"){
-        onChange({ name: field.name, value: [] });  
-      } else if (actionMeta.action === "remove-value"){
-        onChange({ name: field.name, value: values.filter((itm) => itm !== actionMeta.removedValue) });
-      }
-      else {
-      onChange({ name: field.name, value: newValue });
+  const handleChange = (name: string, value: string) => {
+    const selectedOptionSet = new Set(selectedOptions);
+    if (selectedOptions.includes(value)) {
+      selectedOptionSet.delete(value);
+    } else {
+      selectedOptionSet.add(value);
     }
+
+    const newSelectedOptions = Array.from(selectedOptionSet);
+
+    setSelectedOptions(newSelectedOptions);
+    onChange(name, newSelectedOptions);
+  };
+
+  const handleClear = (name: string) => {
+    setSelectedOptions([]);
+    onChange(name, []);
   };
 
   return (
-    <Select
-      isMulti={true}
-      closeMenuOnSelect={false}
-      hideSelectedOptions={true}
-      classNames={{
-        input: () => inputStyles,
-        control: () => controlStyles,
-        placeholder: () => placeholderStyles,
-        menu: () => menuStyles,
-        dropdownIndicator: () => dropdownIndicatorStyles,
-        valueContainer: () => valueContainerStyles,
-        indicatorsContainer: () => indicatorsContainerStyles,
-        indicatorSeparator: () => indicatorSeparatorStyles,
-        singleValue: () => singleValueStyles,
-        option: ({ isSelected }) =>
-          isSelected ? multiselectOptionStylesSelected : multiselectOptionStyles,
-      }}
-      components={{ Option }}
-      defaultValue={[]}
-      name={field.name}
-      value={values}
-      options={options}
-      onChange={handleChange}
-    />
+    <DropdownMenu
+      fieldName={field.name}
+      values={values}
+      onClearItem={values?.length < 3 ? handleChange : handleClear}
+      dismiss={{ itemPress: false }}
+    >
+      {field.options?.map((option: any) => (
+        <Fragment key={option}>
+          <OptionWithCheckbox
+            key={option}
+            option={option}
+            classes={{ label: classes.optionLabel, menuItem: classes.menuItem }}
+            handleChange={() => handleChange(field.name, option)}
+            name={field.name}
+            checked={selectedOptions.includes(option)}
+          />
+        </Fragment>
+      ))}
+    </DropdownMenu>
   );
 };

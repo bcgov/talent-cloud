@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FunctionEntity } from '../database/entities/function.entity';
 import { FunctionController } from './function.controller';
 import { FunctionService } from './function.service';
+import { FunctionEntity } from '../database/entities/function.entity';
 import { LoggerModule } from '../logger/logger.module';
 
 @Module({

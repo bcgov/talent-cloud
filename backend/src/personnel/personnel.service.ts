@@ -38,14 +38,14 @@ export class PersonnelService {
     if (query.active === true) {
       qb = qb.andWhere('personnel.active = :active', { active: query.active });
     }
-    if (query.regions?.length) {
+    if (query.region?.length) {
       qb.andWhere('personnel.region IN (:...regions)', {
-        regions: query.regions,
+        regions: query.region,
       });
     }
-    if (query.locations?.length) {
+    if (query.location?.length) {
       qb.andWhere('personnel.workLocation IN (:...workLocations)', {
-        workLocations: query.locations,
+        workLocations: query.location,
       });
     }
 

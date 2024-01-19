@@ -1,13 +1,6 @@
-import type {
-  AvailabilityTypeName,
-  ClassificationName,
-  Ministry,
-  Region,
-  WorkLocationName,
-} from '@/common';
-import { Experience, ExperienceName, FunctionName } from '@/common';
-
-import type { FieldInterface } from '@/components/form';
+import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
+import { Region, WorkLocation } from '@/common';
+import { ExperienceName, FunctionName } from '@/common';
 import { FieldTypes } from '@/components/form';
 
 export enum DashboardFilterNames {
@@ -31,167 +24,136 @@ export enum DashboardColumns {
   STATUS = 'status',
   FUNCTION = 'function',
 }
-const regionOptions =[{ value: 'VIC', label: 'VIC' },
-{ value: 'SWE', label: 'SWE' },
-{ value: 'SEA', label: 'SEA' },
-{ value: 'NWE', label: 'NWE' },
-{ value: 'NEA', label: 'NEA' },
-{ value: 'HQ', label: 'HQ' },
-{ value: 'CTL', label: 'CTL' }]
-export const dashboardFilterFields: FieldInterface[] = [
-  {
-    name: DashboardFilterNames.NAME,
-    label: 'Search By Name',
-    type: FieldTypes.SEARCH,
-  },
-  {
-    name: DashboardFilterNames.FUNCTION,
-    label: 'Function',
-    type: FieldTypes.SELECT,
-    options: [
-      { label: FunctionName.OPERATIONS, value: FunctionName.OPERATIONS },
-      {
-        label: FunctionName.EMERGENCY_SUPPORT_SERVICES,
-        value: FunctionName.EMERGENCY_SUPPORT_SERVICES,
-      },
-      { label: FunctionName.FIRST_NATIONS, value: FunctionName.FIRST_NATIONS },
-      { label: FunctionName.FINANCE, value: FunctionName.FINANCE },
-      { label: FunctionName.LIAISON, value: FunctionName.LIAISON },
-      { label: FunctionName.LOGISTICS, value: FunctionName.LOGISTICS },
-      { label: FunctionName.PLANS, value: FunctionName.PLANS },
-      {
-        label: FunctionName.ADVANCED_PLANNING_UNIT,
-        value: FunctionName.ADVANCED_PLANNING_UNIT,
-      },
-      { label: FunctionName.RECOVERY, value: FunctionName.RECOVERY },
-      { label: FunctionName.DIRECTOR, value: FunctionName.DIRECTOR },
-      { label: FunctionName.GIS, value: FunctionName.GIS },
-    ],
-  },
-  {
-    name: DashboardFilterNames.EXPERIENCE,
-    label: 'Experience',
-    type: FieldTypes.SELECT,
-    options: [
-      { label: ExperienceName.INTERESTED, value: Experience.INTERESTED },
-      { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
-      {
-        label: ExperienceName.CHIEF_EXPERIENCED,
-        value: Experience.CHIEF_EXPERIENCED,
-      },
-      {
-        label: ExperienceName.OUTSIDE_EXPERIENCED,
-        value: Experience.OUTSIDE_EXPERIENCED,
-      },
-    ],
-  },
 
-  {
-    name: DashboardFilterNames.REGION,
-    label: 'Region',
-    multi: true,
-    type: FieldTypes.MULTISELECT,
-    options: [
-    {label: "Select All", value: regionOptions.map(itm => itm.value)}, ...regionOptions,
-      
-    ],
+export const dashboardFilterFields = {
+  name: {
+    name: DashboardFilterNames.NAME,
   },
-  {
+  region: {
+    name: DashboardFilterNames.REGION,
+
+    options: [Region.SWE, Region.SEA, Region.NWE, Region.NEA, Region.HQ, Region.CTL],
+  },
+  location: {
     name: DashboardFilterNames.LOCATION,
-    label: 'Work Location',
-    type: FieldTypes.GROUPED_MULTISELECT,
-    multi: true,
     groupedOptions: [
       {
-        label: 'CTL',
+        label: Region.CTL,
         options: [
-          { value: 'ENDERBY', label: 'Enderby' },
-          { value: 'KAMLOOPS', label: 'Kamloops' },
-          { value: 'KELOWNA', label: 'Kelowna' },
-          { value: 'MERRITT', label: 'Merritt' },
-          { value: 'SALMON_ARM', label: 'Salmon Arm' },
-          { value: 'SORRENTO', label: 'Sorrento' },
-          { value: 'VERNON', label: 'Vernon' },
+          WorkLocation.ENDERBY,
+          WorkLocation.KAMLOOPS,
+          WorkLocation.KELOWNA,
+          WorkLocation.MERRITT,
+          WorkLocation.SALMON_ARM,
+          WorkLocation.SORRENTO,
+          WorkLocation.VERNON,
         ],
       },
       {
-        label: 'HQ',
+        label: Region.HQ,
         options: [
-          { value: 'BRENTWOOD_BAY', label: 'Brentwood' },
-          { value: 'LANGFORD', label: 'Langford' },
-          { value: 'ESQUIMALT', label: 'Esquimalt' },
-          { value: 'SAANICH', label: 'Saanich' },
-          { value: 'SAANICHTON', label: 'Saanichton' },
-          { value: 'SIDNEY', label: 'Sidney' },
-          { value: 'VICTORIA', label: 'Victoria' },
+          WorkLocation.BRENTWOOD_BAY,
+          WorkLocation.LANGFORD,
+          WorkLocation.ESQUIMALT,
+          WorkLocation.SAANICH,
+          WorkLocation.SAANICHTON,
+          WorkLocation.SIDNEY,
+          WorkLocation.VICTORIA,
         ],
       },
       {
-        label: 'NEA',
+        label: Region.NEA,
         options: [
-          { value: 'HUNDRED_MILE_HOUSE', label: '100 Mile House' },
-          { value: 'HUNDRED_FIFTY_MILE_HOUSE', label: '150 Mile House' },
-          { value: 'DAWSON_CREEK', label: 'Dawson Creek' },
-          { value: 'FORT_NELSON', label: 'Fort Nelson' },
-          { value: 'FORT_ST_JOHN', label: 'Fort St. John' },
-          { value: 'MACKENZIE', label: 'Mackenzie' },
-          { value: 'PRINCE_GEORGE', label: 'Prince George' },
-          { value: 'QUENSEL', label: 'Quesnel' },
-          { value: 'WILLIAMS_LAKE', label: 'Williams Lake' },
+          WorkLocation.HUNDRED_MILE_HOUSE,
+          WorkLocation.HUNDRED_FIFTY_MILE_HOUSE,
+          WorkLocation.DAWSON_CREEK,
+          WorkLocation.FORT_NELSON,
+          WorkLocation.FORT_ST_JOHN,
+          WorkLocation.MACKENZIE,
+          WorkLocation.PRINCE_GEORGE,
+          WorkLocation.QUESNEL,
+          WorkLocation.WILLIAMS_LAKE,
         ],
       },
       {
-        label: 'NWE',
+        label: Region.NWE,
         options: [
-          { value: 'BURNES_LAKE', label: 'Burns Lake' },
-          { value: 'SMITHERS', label: 'Smithers' },
-          { value: 'TERRACE', label: 'Terrace' },
+          WorkLocation.BURNS_LAKE,
+          WorkLocation.SMITHERS,
+          WorkLocation.TERRACE,
         ],
       },
       {
-        label: 'SEA',
+        label: Region.SEA,
         options: [
-          { value: 'CASTLEGAR', label: 'Castlegar' },
-          { value: 'CRANBROOK', label: 'Cranbrook' },
-          { value: 'ELKFORD', label: 'Elkford' },
-          { value: 'KIMBERLEY', label: 'Kimberley' },
-          { value: 'NELSON', label: 'Nelson' },
-          { value: 'REVELSTOKE', label: 'Revelstoke' },
+          WorkLocation.CASTLEGAR,
+          WorkLocation.CRANBROOK,
+          WorkLocation.ELKFORD,
+          WorkLocation.KIMBERLY,
+          WorkLocation.NELSON,
+          WorkLocation.REVELSTOKE,
         ],
       },
       {
-        label: 'SWE',
+        label: Region.SWE,
         options: [
-          { value: 'ABBOTSFORD', label: 'Abbotsford' },
-          { value: 'BONNINGTON_FALLS', label: 'Bonnington Falls' },
-          { value: 'BURNABY', label: 'Burnaby' },
-          { value: 'COQUITLAM', label: 'Coquitlam' },
-          { value: 'LANGLEY', label: 'Langley' },
-          { value: 'LILLOOET', label: 'Lillooet' },
-          { value: 'MAPLE_RIDGE', label: 'Maple Ridge' },
-          { value: 'NEW_WESTMINSTER', label: 'New Westminster' },
-          { value: 'NORTH_VANCOUVER', label: 'North Vancouver' },
-          { value: 'RICHMOND', label: 'Richmond' },
-          { value: 'SURREY', label: 'Surrey' },
-          { value: 'VANCOUVER', label: 'Vancouver' },
-          { value: 'WHISTLER', label: 'Whistler' },
+          WorkLocation.ABBOTSFORD,
+          WorkLocation.BONNINGTON_FALLS,
+          WorkLocation.BURNABY,
+          WorkLocation.COQUITLAM,
+          WorkLocation.LANGLEY,
+          WorkLocation.LILLOOET,
+          WorkLocation.MAPLE_RIDGE,
+          WorkLocation.NEW_WESTMINSTER,
+          WorkLocation.NORTH_VANCOUVER,
+          WorkLocation.RICHMOND,
+          WorkLocation.SURREY,
+          WorkLocation.VANCOUVER,
+          WorkLocation.WHISTLER,
         ],
       },
       {
-        label: 'VIC',
+        label: Region.VIC,
         options: [
-          { value: 'CAMPBELL_RIVER', label: 'Campbell River' },
-          { value: 'COURTENAY', label: 'Courtenay' },
-          { value: 'CUMBERLAND', label: 'Cumberland' },
-          { value: 'NANAIMO', label: 'Nanaimo' },
-          { value: 'PORT_ALBERNI', label: 'Port Alberni' },
-          { value: 'QUALICUM_BEACH', label: 'Qualicum Beach' },
-          { value: 'UCLUELET', label: 'Ucluelet' },
+          WorkLocation.CAMPBELL_RIVER,
+          WorkLocation.COURTENAY,
+          WorkLocation.CUMBERLAND,
+          WorkLocation.NANAIMO,
+          WorkLocation.PORT_ALBERNI,
+          WorkLocation.QUALICUM_BEACH,
+          WorkLocation.UCLUELET,
         ],
       },
     ],
   },
-];
+  function: {
+    name: DashboardFilterNames.FUNCTION,
+
+    options: [
+      FunctionName.OPERATIONS,
+      FunctionName.EMERGENCY_SUPPORT_SERVICES,
+      FunctionName.FIRST_NATIONS,
+      FunctionName.FINANCE,
+      FunctionName.LIAISON,
+      FunctionName.LOGISTICS,
+      FunctionName.PLANS,
+      FunctionName.ADVANCED_PLANNING_UNIT,
+      FunctionName.RECOVERY,
+      FunctionName.DIRECTOR,
+      FunctionName.GIS,
+    ],
+  },
+  experience: {
+    name: DashboardFilterNames.EXPERIENCE,
+
+    options: [
+      ExperienceName.INTERESTED,
+      ExperienceName.EXPERIENCED,
+      ExperienceName.CHIEF_EXPERIENCED,
+      ExperienceName.OUTSIDE_EXPERIENCED,
+    ],
+  },
+};
 
 export const dashboardToggle = {
   name: DashboardFilterNames.SHOW_INACTIVE,
@@ -225,7 +187,7 @@ export interface Personnel {
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;
   [DashboardColumns.REGION]: Region;
-  [DashboardColumns.LOCATION]: WorkLocationName;
+  [DashboardColumns.LOCATION]: WorkLocation;
   [DashboardColumns.FUNCTION]: FunctionName;
   [DashboardColumns.AVAILABILITY]: AvailabilityTypeName;
   [DashboardColumns.TRAVEL]: boolean;
@@ -234,9 +196,9 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {
-  name?: string | null;
-  region?: string[] | null;
-  location?: string[] | null;
-  function?: string | null;
-  experience?: string | null;
+  name: string | null;
+  region: string[] | null;
+  location: string[] | null;
+  function: string | null;
+  experience: string | null;
 }

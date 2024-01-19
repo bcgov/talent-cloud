@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { ExperienceRO } from "./experience.ro";
-import { Classification, Ministry, Region, WorkLocation } from "../../common/enums";
+import { Classification, Ministry, Region, WorkLocationName } from "../../common/enums";
 
 export class PersonnelRO {
   @ApiProperty({
@@ -62,7 +62,7 @@ export class PersonnelRO {
   @ApiProperty({
     description: 'Personnel\'s work location',
     required: true,
-    example: WorkLocation.ABBOTSFORD,
+    example: WorkLocationName.ABBOTSFORD,
   })
   workLocation: string;
 

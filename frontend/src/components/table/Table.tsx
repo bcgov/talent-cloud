@@ -14,7 +14,7 @@ export const Table = ({
 }: {
   title: string;
   subtitle: string;
-  fields: FieldInterface[];
+  fields: { [key: string]: FieldInterface };
   columns: Column[];
   toggle?: FieldInterface;
 }) => {
@@ -57,7 +57,7 @@ export const Table = ({
               )}
             </div>
             {/* table-auto will auto resize columns - table fixed looks more consistent */}
-            <table className="table-auto mx-auto border-disabledGray">
+            <table className="table-fixed overflow-x-hidden mx-auto border-disabledGray">
               <TableHeader columns={columns} />
               <TableBody rows={tableData.rows} />
             </table>

@@ -1,13 +1,19 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  Length,
+} from 'class-validator';
 import {
   Experience,
   FunctionNameAbbrv,
   Region,
   WorkLocation,
 } from '../../common/enums';
-import { QueryDTO } from '../../query-validation.pipe';
+import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
@@ -23,7 +29,7 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value} ) => value === 'true' || value === true)
+  @Transform(({ value }) => value === 'true' || value === true)
   active: boolean;
 
   @ApiPropertyOptional({
@@ -45,10 +51,10 @@ export class GetPersonnelDTO extends QueryDTO {
       ? value
       : value
           .trim()
-          .split(',')
+          .split(', ')
           .map((type) => Region[type]),
   )
-  regions: string;
+  region: string;
 
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
@@ -62,10 +68,10 @@ export class GetPersonnelDTO extends QueryDTO {
       ? value
       : value
           .trim()
-          .split(',')
+          .split(', ')
           .map((type) => WorkLocation[type]),
   )
-  locations: string;
+  location: string;
 
   @ApiPropertyOptional({
     description: 'Function name to search personnel from',

@@ -4,8 +4,8 @@ import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
-import { LoggerModule } from './logger/logger.module';
 import { FunctionModule } from './function/function.module';
+import { LoggerModule } from './logger/logger.module';
 import { PersonnelModule } from './personnel/personnel.module';
 
 @Module({
