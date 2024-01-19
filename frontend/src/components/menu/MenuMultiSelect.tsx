@@ -31,30 +31,18 @@ export const MenuMultiSelect = ({
     onChange(name, newSelectedOptions);
   };
 
-  const handleSelectGroup = (
-    groupName: string,
-    groupValue: string,
-    name: string,
-    options: string[],
-  ) => {
+  const handleSelectGroup = (name: string, options: string[]) => {
     const selectedOptionSet = new Set(values);
-    const selectedGroupSet = new Set(groupValues);
 
-    if (groupValues?.includes(groupValue)) {
-      selectedGroupSet.delete(groupValue);
+    if (options.every((option: any) => values?.find((itm: any) => itm === option))) {
       options.forEach((option) => {
         selectedOptionSet.delete(option);
       });
     } else {
-      selectedGroupSet.add(groupValue);
       options.forEach((option) => {
         selectedOptionSet.add(option);
       });
     }
-
-    const newSelectedGroup = Array.from(selectedGroupSet);
-    onChange(groupName, newSelectedGroup);
-
     const newSelectedOptions = Array.from(selectedOptionSet);
     onChange(name, newSelectedOptions);
   };

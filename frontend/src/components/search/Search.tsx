@@ -17,14 +17,14 @@ export const Search = ({
     <label>
       Search By Name
       <div className="relative border-gray-200">
-        <div className="absolute inset-y-0 right-2 border-l border-gray-300 my-1">
-          <MagnifyingGlassIcon className="h-8 w-8 text-dark pl-1 py-1" />
+        <div className="absolute inset-y-1 right-2 border-l border-gray-300 my-1">
+          <MagnifyingGlassIcon className="h-8 w-8 text-gray-600 pl-1 py-1" />
         </div>
 
         <input
           name={field.name}
           type="text"
-          className={inputStyles + ' pr-12'}
+          className={inputStyles + ' h-12 pr-12'}
           onChange={handleChange}
         />
       </div>

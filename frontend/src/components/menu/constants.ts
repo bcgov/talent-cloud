@@ -4,7 +4,7 @@ export const classes = {
   menuHandler: 'flex flex-row items-center justify-end',
   optionLabel:
     'flex cursor-pointer items-center justify-start text-sm font-normal text-left',
-  menuItem: 'px-0',
+  menuItem: '',
   menuList: 'py-0 px-0 space-y-0',
   groupLabel:
     'flex cursor-pointer items-center justify-start text-sm font-bold text-left ',

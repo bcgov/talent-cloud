@@ -28,12 +28,12 @@ export const MenuSingleSelect = ({
           </div>
         </div>
       </MenuHandler>
-      <MenuList className={classes.menuList} placeholder={undefined}>
+      <MenuList className={'py-4'} placeholder={undefined}>
         {field.options?.map((option: any) => (
           <MenuItem
             key={option}
             placeholder={undefined}
-            className={classes.menuItem}
+            className={'px-4'}
             onClick={() => onChange(field.name, option)}
           >
             <label className={classes.optionLabel} htmlFor={option}>

@@ -77,13 +77,18 @@ export const Filters = ({
       </div>
 
       <div className="col-span-1">
-        <MenuSingleSelect
-          field={fields.function}
-          onChange={handleChange}
-          value={
-            filterValues[fields?.function?.name as keyof DashboardFilters] as string
-          }
-        />
+        <label>
+          Function
+          <MenuSingleSelect
+            field={fields.function}
+            onChange={handleChange}
+            value={
+              filterValues[
+                fields?.function?.name as keyof DashboardFilters
+              ] as string
+            }
+          />
+        </label>
       </div>
       <div className="col-span-3">
         <div className="flex flex-row no-wrap space-x-16 items-center text-center justify-end">

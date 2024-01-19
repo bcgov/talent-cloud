@@ -4,55 +4,58 @@ import {
   Region,
   Ministry,
   FunctionNameAbbrv,
-  WorkLocationName,
-  AvailabilityTypeName,
+  WorkLocation,
   Status,
+  Experience,
 } from './enums';
 
-export interface DashboardRow {
-  name: string;
-  region: Region;
-  location: WorkLocationName;
-  function: FunctionNameAbbrv;
-  availability: AvailabilityTypeName;
-  travel: boolean;
-  remote: boolean;
-  classification: ClassificationName;
-  ministry: Ministry;
-  status: Status;
-}
-
-export const rowData = (): DashboardRow => {
+export const rowData = () => {
   return {
-    name: `${faker.person.lastName()}, ${faker.person.firstName()}`,
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    email: faker.internet.email(),
+    primaryPhone: faker.phone.number(),
+    secondaryPhone: faker.phone.number(),
+    otherPhone: faker.phone.number(),
     region: faker.helpers.arrayElement(Object.values(Region)),
-    location: faker.helpers.arrayElement(Object.values(WorkLocationName)),
-    function: faker.helpers.arrayElement(Object.values(FunctionNameAbbrv)),
-    availability: faker.helpers.arrayElement(
-      Object.values(AvailabilityTypeName),
-    ),
-    travel: faker.datatype.boolean({ probability: 0.8 }),
-    remote: faker.datatype.boolean({ probability: 0.4 }),
+    workLocation: faker.helpers.arrayElement(Object.values(WorkLocation)),
+    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     classification: faker.helpers.arrayElement(
       Object.values(ClassificationName),
     ),
-    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
-    status: faker.datatype.boolean({ probability: 0.8 })
+    applicationDate: faker.date.past(),
+    skillsAbilities: faker.lorem.sentence(),
+    notes: faker.lorem.sentence(),
+    supervisor: faker.person.firstName(),
+    active: faker.datatype.boolean({ probability: 0.8 })
       ? Status.Active
       : Status.Inactive,
+    remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
+    willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
+    experiences: experiences(),
   };
 };
 
-export const generateData = (
-  numRows: number,
-  page: number,
-): { rows: DashboardRow[]; totalRows: number } => {
-  const rows: DashboardRow[] = [];
-  const totalRows = 500;
-
-  for (let i = 0; i < 500; i++) {
-    rows.push(rowData());
+const experiences = () => {
+  const num = Math.floor(Math.random() * 5);
+  const experiences = [];
+  for (let i = 0; i < num; i++) {
+    experiences.push({
+      function: faker.helpers.arrayElement(Object.values(FunctionNameAbbrv)),
+      experience: faker.helpers.arrayElement(Object.values(Experience)),
+    });
   }
-  const rangeRows = rows.slice((page - 1) * numRows, page * numRows);
-  return { rows: rangeRows, totalRows };
+  return experiences;
 };
+
+export const generateData = () => {
+  const people = [];
+
+  for (let i = 0; i < 100; i++) {
+    people.push(rowData());
+  }
+
+  return people;
+};
+
+console.log(generateData())
