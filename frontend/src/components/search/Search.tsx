@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import type { FieldInterface } from '../interface';
 import { inputStyles } from '@/styles/fieldStyles';
+import type { FieldInterface } from '..';
 
 export const Search = ({
   field,

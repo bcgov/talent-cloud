@@ -142,19 +142,16 @@ const useTable = () => {
   };
 
   const handleChange = (name: any, itm: any) => {
-    setFilterValues({ ...filterValues, [name]: itm });
+    console.log(name, itm);
+    setFilterValues((prev: any) => ({ ...prev, [name]: itm }));
   };
 
-  const onSubmit = () => {
-    handlePageParams({ ...pageParams, ...filterValues });
-  };
-
+  console.log(filterValues);
   return {
     tableData,
     pageParams,
     handleChange,
     handlePageParams,
-    onSubmit,
     onClear: () =>
       setFilterValues({
         name: null,

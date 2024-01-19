@@ -1,7 +1,6 @@
 import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
 import { Region, WorkLocation } from '@/common';
 import { ExperienceName, FunctionName } from '@/common';
-import { FieldTypes } from '@/components/form';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -158,7 +157,6 @@ export const dashboardFilterFields = {
 export const dashboardToggle = {
   name: DashboardFilterNames.SHOW_INACTIVE,
   label: 'Show Inactive',
-  type: FieldTypes.TOGGLE,
 };
 
 export const dashboardColumns = [

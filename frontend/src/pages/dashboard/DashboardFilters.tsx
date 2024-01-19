@@ -1,18 +1,22 @@
 import { ButtonTypes } from '@/common';
-import type { FieldInterface } from '@/components';
-import { Button, MultiSelect, Search, GroupedSelect, Select } from '@/components';
+import {
+  Search,
+  type FieldInterface,
+  Button,
+  MenuSingleSelect,
+  MenuMultiSelect,
+} from '@/components';
+
 import type { DashboardFilters } from '@/pages/dashboard/constants';
 
-export const TableFilters = ({
+export const Filters = ({
   fields,
   handleChange,
-  onSubmit,
   onClear,
   filterValues,
 }: {
   fields: { [key: string]: FieldInterface };
   handleChange: (name: string, value: any) => void;
-  onSubmit: () => void;
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
@@ -30,12 +34,12 @@ export const TableFilters = ({
           <div className="col-span-1">
             <label>
               Region
-              <MultiSelect
+              <MenuMultiSelect
                 onChange={handleChange}
                 field={fields.region}
                 values={
                   filterValues[
-                    fields.region.name as keyof DashboardFilters
+                    fields?.region?.name as keyof DashboardFilters
                   ] as string[]
                 }
               />
@@ -44,7 +48,13 @@ export const TableFilters = ({
           <div className="col-span-3">
             <label>
               Work Location
-              <GroupedSelect
+              <MenuMultiSelect
+                groupName={fields.region.name}
+                groupValues={
+                  filterValues[
+                    fields?.region?.name as keyof DashboardFilters
+                  ] as string[]
+                }
                 field={{
                   ...fields.location,
                   groupedOptions:
@@ -67,18 +77,17 @@ export const TableFilters = ({
       </div>
 
       <div className="col-span-1">
-        <Select
+        <MenuSingleSelect
           field={fields.function}
           onChange={handleChange}
           value={
-            filterValues[fields.function.name as keyof DashboardFilters] as string
+            filterValues[fields?.function?.name as keyof DashboardFilters] as string
           }
         />
       </div>
       <div className="col-span-3">
         <div className="flex flex-row no-wrap space-x-16 items-center text-center justify-end">
           <Button type={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
-          <Button type={ButtonTypes.PRIMARY} text="Submit" onClick={onSubmit} />
         </div>
       </div>
     </div>
