@@ -1,14 +1,24 @@
 import { Switch } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import type { FieldInterface } from '../interface';
+import { Fragment, useEffect, useState } from 'react';
+import type { FieldInterface } from '../table';
 
-export const Toggle = ({ field }: { field: FieldInterface }) => {
+export const Toggle = ({
+  field,
+  handleToggle,
+}: {
+  field: FieldInterface;
+  handleToggle: (val: boolean) => void;
+}) => {
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    handleToggle(checked);
+  }, [checked]);
 
   return (
     <div className="flex flex-row items-center mr-12">
       <label htmlFor="showInactive" className="px-4">
-        {field.label}
+        Show Inactive
       </label>
       <Switch
         checked={checked}

@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = { 
+const withMT = require("@material-tailwind/react/utils/withMT");
+ 
+module.exports = withMT({
+
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx,css}",
@@ -27,10 +30,10 @@ module.exports = {
       },
       backgroundColor: {
         backgroundBlue: '#003366',
-        grayBackground: '#F2F2F2',
+        grayBackground: '#F6F9FC',
         transparent: 'transparent',
         active: '#EFF7EB',
-        inactive: '#D1D1D1',
+        inactive: '#F4F4F4',
         defaultGray: '#f2f2f2',
         blue: '#38598A',
         white: '#FFFFFF',
@@ -55,4 +58,4 @@ module.exports = {
     },
   },
   plugins: [require('@tailwindcss/forms')],
-};
+});

@@ -1,32 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
-import type { TableData, PageParams } from '@/components';
+import { type TableData, type PageParams, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { Status } from '@/common';
+import { WorkLocation } from '@/common';
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, DashboardRow } from '@/pages/dashboard/constants';
-import { DashboardColumns } from '@/pages/dashboard/constants';
+import type { DashboardFilters, Personnel } from '@/pages/dashboard';
+import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
-  const [dashboardFilters, setDashboardFilters] = useState<DashboardFilters>({
-    search: '',
-    region: [],
-    location: [],
-    function: undefined,
-    experience: undefined,
+  const [filterValues, setFilterValues] = useState<DashboardFilters>({
+    name: null,
+    region: null,
+    location: null,
+    function: null,
+    experience: null,
   });
-  const [searchParamsUrl, setSearchParamsUrl] = useSearchParams(
-    encodeURI('?page=1&rows=25&search='),
-  );
+  const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
 
   const [pageParams, setPageParams] = useState<PageParams>({
     rowsPerPage: 25,
     currentPage: 1,
-
     showInactive: false,
   });
 
@@ -41,77 +37,125 @@ const useTable = () => {
   };
 
   useEffect(() => {
-    const url = encodeURI(
-      `?page=${pageParams?.currentPage}&rows=${pageParams?.rowsPerPage}&search=${dashboardFilters?.search}&region=${dashboardFilters?.region}&location=${dashboardFilters?.location}&function=${dashboardFilters?.function}&experience=${dashboardFilters?.experience}`,
-    );
-    setSearchParamsUrl(url);
-
     (async () => {
+      handleSearchParams(searchParamsUrl, pageParams, filterValues);
       try {
         const {
-          data: { rows, totalRows },
+          data: { personnel, count },
         } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
 
         const rowsPerPage = pageParams?.rowsPerPage ?? 25;
-        const totalPages = Math.ceil(totalRows / rowsPerPage);
+        const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
         const currentPage = pageParams?.currentPage ?? 1;
 
-        rows &&
+        personnel &&
           setTableData({
             totalPages,
             pageRange: truncatePageRange(totalPages, currentPage, pageRange),
-            totalRows,
-            rows: rows.map((itm: DashboardRow) => ({
-              key: uuidv4(),
-              active: itm.status === Status.Active,
-              cells: Object.entries(itm).map(
-                ([key, value]) =>
-                  key !== DashboardColumns.STATUS && {
+            totalRows: count,
+            rows: personnel.map(
+              ({
+                id,
+                active,
+                firstName,
+                lastName,
+                region,
+                workLocation,
+                willingToTravel,
+                remoteOnly,
+                classification,
+                ministry,
+              }: Personnel) => ({
+                key: id,
+                active,
+                cells: [
+                  {
                     key: uuidv4(),
-                    columnName: key,
-                    value,
-                    className: tableClass(key, value),
+                    columnName: DashboardColumns.NAME,
+                    value: `${lastName.toUpperCase()},  ${firstName}`,
+                    className: tableClass(DashboardColumns.NAME, ''),
                   },
-              ),
-            })),
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.REGION,
+                    value: region,
+                    className: tableClass(
+                      DashboardColumns.REGION,
+                      region?.toLowerCase(),
+                    ),
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.LOCATION,
+                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
+                    className: tableClass(
+                      DashboardColumns.LOCATION,
+                      workLocation?.toLowerCase(),
+                    ),
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.TRAVEL,
+                    value: willingToTravel,
+                    className: tableClass(DashboardColumns.TRAVEL, willingToTravel),
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.REMOTE,
+                    value: remoteOnly,
+                    className: tableClass(DashboardColumns.REMOTE, remoteOnly),
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.CLASSIFICATION,
+                    value: classification,
+                    className: tableClass(
+                      DashboardColumns.CLASSIFICATION,
+                      classification?.toLowerCase(),
+                    ),
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.MINISTRY,
+                    value: ministry,
+                    className: tableClass(
+                      DashboardColumns.MINISTRY,
+                      ministry?.toLowerCase(),
+                    ),
+                  },
+                ],
+              }),
+            ),
           });
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [pageParams]);
+  }, [pageParams, filterValues]);
 
   const handlePageParams = (change: Partial<PageParams>) => {
     setPageParams({ ...pageParams, ...change });
   };
 
-  const handleFilterChange = ({ name, value }: { name: string; value: string }) => {
-    setDashboardFilters({ ...dashboardFilters, [name]: value });
+  const handleChange = (name: any, itm: any) => {
+    setFilterValues((prev: any) => ({ ...prev, [name]: itm }));
   };
 
-  const handleMultiSelectChange = ({
-    name,
-    value,
-  }: {
-    name: string;
-    value: any[];
-  }) => {
-    console.log(name, value);
-    setDashboardFilters({ ...dashboardFilters, [name]: [...value] });
-  };
-  const onSubmit = () => {
-    handlePageParams({ ...pageParams, ...dashboardFilters });
-  };
-  console.log(dashboardFilters);
   return {
     tableData,
     pageParams,
-    handleFilterChange,
-    handleMultiSelectChange,
+    handleChange,
     handlePageParams,
-    onSubmit,
-    dashboardFilters,
+    onClear: () =>
+      setFilterValues({
+        name: null,
+        region: null,
+        location: null,
+        function: null,
+        experience: null,
+      }),
+    filterValues,
   };
 };
 

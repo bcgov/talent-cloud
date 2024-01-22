@@ -21,14 +21,14 @@ export const Layout = ({
         authenticated={authenticated}
       />
       <div
-        className={['w-full', authenticated ? 'bg-white' : 'bg-primaryBlue'].join(
-          ', ',
-        )}
+        className={[
+          'w-full h-screen',
+          authenticated ? ' bg-white' : ' bg-primaryBlue',
+        ].join(', ')}
       >
         {children}
+        <Footer links={footerLinks} />
       </div>
-
-      <Footer links={footerLinks} />
     </div>
   );
 };

@@ -1,8 +1,19 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsOptional, Length } from 'class-validator';
-import { Region, WorkLocation } from '../../common/enums';
-import { QueryDTO } from '../../query-validation.pipe';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  Length,
+} from 'class-validator';
+import {
+  Experience,
+  FunctionNameAbbrv,
+  Region,
+  WorkLocation,
+} from '../../common/enums';
+import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
@@ -16,26 +27,66 @@ export class GetPersonnelDTO extends QueryDTO {
     description: 'Find only active personnel. If false, this will find all',
     default: true,
   })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   active: boolean;
 
   @ApiPropertyOptional({
-    description: 'TO BE IMPLEMENTED - Whether this personnel is currently available',
+    description:
+      'TO BE IMPLEMENTED - Whether this personnel is currently available',
     default: true,
   })
   available: boolean;
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
-    type: [Region],
-    example: [Region.NEA, Region.NEW]
+    example: `${Region.NEA},${Region.NWE}`,
   })
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
-  regions: Region[];
+  @IsOptional()
+  @IsArray()
+  @IsEnum(Region, { each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value)
+      ? value
+      : value
+          .trim()
+          .split(', ')
+          .map((type) => Region[type]),
+  )
+  region: string;
 
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
-    type: [WorkLocation],
-    example: [WorkLocation.ABBOTSFORD, WorkLocation.BRENTWOOD_BAY]
+    example: `${WorkLocation.ABBOTSFORD},${WorkLocation.BRENTWOOD_BAY}`,
   })
-  locations: WorkLocation[];
+  @IsOptional()
+  @IsArray()
+  @IsEnum(WorkLocation, { each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value)
+      ? value
+      : value
+          .trim()
+          .split(', ')
+          .map((type) => WorkLocation[type]),
+  )
+  location: string;
+
+  @ApiPropertyOptional({
+    description: 'Function name to search personnel from',
+    type: FunctionNameAbbrv,
+    example: FunctionNameAbbrv.OPERATIONS,
+  })
+  @IsOptional()
+  function: FunctionNameAbbrv;
+
+  @ApiPropertyOptional({
+    description: 'Experience level to search personnel from',
+    type: Experience,
+    example: Experience.INTERESTED,
+  })
+  @IsEnum(Experience)
+  @IsOptional()
+  experience: Experience;
 }

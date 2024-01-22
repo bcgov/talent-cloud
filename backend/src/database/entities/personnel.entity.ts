@@ -1,4 +1,3 @@
-import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 import {
   Column,
   Entity,
@@ -14,7 +13,8 @@ import { TrainingEntity } from './training.entity';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
-import { WorkLocation } from '../../common/enums/work-location.enum';
+import { PersonnelRO } from '../../personnel/ro/personnel.ro';
+import { WorkLocation } from '../../common/enums';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -27,7 +27,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({ name: 'work_location', type: 'enum', enum: WorkLocation, enumName: 'work-location' })
+  @Column({ name: 'work_location', type: 'enum', enum: WorkLocation, enumName: 'work_location' })
   workLocation: WorkLocation;
 
   @Column({ name: 'region', type: 'enum', enum: Region, enumName: 'region' })
