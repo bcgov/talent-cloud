@@ -22,13 +22,6 @@ export const MenuMultiSelect = ({
   label: string;
 }) => {
   const dismiss = { outsidePress: true };
-  const getClass = (name: string) => {
-    if (name === 'region') {
-      return 'w-96 md:w-36 lg:w-52';
-    } else {
-      return 'p-4 lg:w-[875px] -ml-24';
-    }
-  };
   return (
     <>
       <label>{label}</label>
@@ -59,7 +52,9 @@ export const MenuMultiSelect = ({
                 )}
               </div>
             ) : (
-              <span className={classes.menu.placeholder}>Select {label}(s)</span>
+              <span className={classes.menu.placeholder}>
+                Select {field.name}...
+              </span>
             )}
 
             <div className={classes.menu.buttonContainer}>
@@ -68,7 +63,7 @@ export const MenuMultiSelect = ({
           </div>
         </MenuHandler>
 
-        <MenuList placeholder={undefined} className={getClass(field.name)}>
+        <MenuList placeholder={undefined}>
           {field.groupedOptions ? (
             <MenuItemGroupList field={field} values={values} onChange={onChange} />
           ) : (

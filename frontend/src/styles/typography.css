@@ -21,18 +21,15 @@ h4 {
 h5 {
 }
 h6 {
-  
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 35px;
-  letter-spacing: 0em;
-  text-align: left;
+  @apply font-bold;
 }
 
 .MuiInputBase-input {
   @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
 }
-
+input {
+  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
+}
 
 label {
   @apply text-dark;

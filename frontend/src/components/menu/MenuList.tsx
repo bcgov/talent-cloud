@@ -16,7 +16,11 @@ export const MenuItemList = ({
     <>
       {field.options?.map((option: any) => (
         <Fragment key={option}>
-          <MenuItem key={option} placeholder={undefined}>
+          <MenuItem
+            key={option}
+            placeholder={undefined}
+            className={classes.menu.menuItem}
+          >
             <label className={classes.menu.optionLabel} htmlFor={option}>
               <Checkbox
                 type="checkbox"

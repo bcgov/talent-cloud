@@ -7,18 +7,21 @@ import {
 } from '@material-tailwind/react';
 import { MenuButton } from './MenuButton';
 import { classes } from './constants';
-import { type ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 
 export const MenuSingleSelect = ({
   field,
   value,
   label,
   onChange,
+  handleClose,
 }: {
   field: any;
   value: string;
   label: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+
+  handleClose: (name: string, value: string) => void;
 }) => {
   const handleChange = (option: string) => {
     const event = {
@@ -27,7 +30,7 @@ export const MenuSingleSelect = ({
     onChange(event);
   };
   return (
-    <div className="grid grid-cols-1">
+    <>
       <label>{label}</label>
       <Menu dismiss={{ itemPress: true }}>
         <MenuHandler>
@@ -35,39 +38,33 @@ export const MenuSingleSelect = ({
             <div className={classes.menu.chipsContainer}>
               {value ? (
                 <Chip
+                  key={value}
                   value={value}
                   color="blue-gray"
                   variant="ghost"
                   className={classes.menu.chip}
-                  onClose={() => handleChange('')}
+                  onClose={() => handleClose(field.name, value)}
                 />
               ) : (
-                <span className={classes.menu.placeholder}>Select {label}(s)</span>
+                <span>Select {field.name}...</span>
               )}
             </div>
             <div className="flex flex-row items-center justify-end">
-              <MenuButton />
+              <MenuButton open={false} />
             </div>
           </div>
         </MenuHandler>
-        <MenuList
-          className="w-96 md:w-[700px] lg:w-72 xl:w-96"
-          placeholder={undefined}
-        >
+        <MenuList className={'py-4'} placeholder={undefined}>
           {field.options?.map((option: any) => (
-            <MenuItem
-              key={option}
-              placeholder={undefined}
-              onClick={() => handleChange(option)}
-            >
+            <MenuItem key={option} placeholder={undefined} className={'px-4'}>
               <label className={classes.menu.optionLabel} htmlFor={option}>
-                {/* <input name={field.name} className='hidden' value={selected} onChange={onChange} /> */}
+                <input name={option} value={value} onChange={onChange} />
                 {option}
               </label>
             </MenuItem>
           ))}
         </MenuList>
       </Menu>
-    </div>
+    </>
   );
 };

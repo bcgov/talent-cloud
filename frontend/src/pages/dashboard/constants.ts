@@ -216,9 +216,6 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {
-  rowsPerPage: number;
-  currentPage: number;
-  showInactive?: boolean;
   name: string;
   region: string[];
   location: string[];

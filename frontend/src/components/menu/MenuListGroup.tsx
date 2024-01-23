@@ -35,7 +35,7 @@ export const MenuItemGroupList = ({
         {field?.groupedOptions?.map((group: FieldGroupedOption) => (
           <div key={group.label} className="col-span-1">
             <MenuItem placeholder={undefined} className={classes.menu.menuItem}>
-              <label className={classes.menu.groupLabel} htmlFor={group.label}>
+              <label className={classes.menu.optionLabel} htmlFor={group.label}>
                 <Checkbox
                   type="checkbox"
                   onChange={onChangeGroup}
@@ -48,15 +48,13 @@ export const MenuItemGroupList = ({
                     values?.find((itm) => itm === option),
                   )}
                 />
-                <h6>
-                  {group.label} (
-                  {`${
-                    values?.filter((itm) =>
-                      group?.options?.find((option) => option === itm),
-                    ).length ?? 0
-                  }`}
-                  )
-                </h6>
+                {group.label} (
+                {`${
+                  values?.filter((itm) =>
+                    group?.options?.find((option) => option === itm),
+                  ).length ?? 0
+                }`}
+                )
               </label>
             </MenuItem>
             <MenuItemList

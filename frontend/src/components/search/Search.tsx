@@ -8,9 +8,11 @@ export const Search = ({
   value,
 }: {
   field: FieldInterface;
-  value: string;
-  handleSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target?.value.split('')?.length >= 3 && onChange(e);
+  };
   return (
     <div className="relative w-full">
       <label>
@@ -27,7 +29,15 @@ export const Search = ({
             onChange={handleSearchInput}
           />
         </div>
-      </label>
-    </div>
+
+        <input
+          name={field.name}
+          type="text"
+          placeholder="Search by name"
+          className={classes.menu.container}
+          onChange={handleChange}
+        />
+      </div>
+    </label>
   );
 };
