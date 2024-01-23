@@ -1,22 +1,23 @@
 import { ButtonTypes } from '@/common';
-import {
-  Search,
-  type FieldInterface,
-  Button,
-  MenuSingleSelect,
-  MenuMultiSelect,
-} from '@/components';
-
-import type { DashboardFilters } from '@/pages/dashboard/constants';
+import { Button, MenuMultiSelect, MenuSingleSelect, Search } from '@/components';
+import type { DashboardFields } from '@/pages/dashboard/constants';
+import { type DashboardFilters } from '@/pages/dashboard/constants';
+import type { ChangeEvent } from 'react';
 
 export const Filters = ({
   fields,
-  handleChange,
+  onChange,
+  handleClose,
+  handleCloseMultiple,
+
   onClear,
   filterValues,
 }: {
-  fields: { [key: string]: FieldInterface };
-  handleChange: (name: string, value: any) => void;
+  fields: DashboardFields;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+
+  handleClose: (name: string, value: string) => void;
+  handleCloseMultiple: (name: string) => void;
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
@@ -26,69 +27,50 @@ export const Filters = ({
     "
     >
       <div className="col-span-1">
-        <Search field={fields.name} onChange={handleChange} />
+        <Search field={fields.name} onChange={onChange} />
       </div>
 
       <div className="col-span-3">
         <div className="grid grid-cols-4">
           <div className="col-span-1">
-            <label>
-              Region
-              <MenuMultiSelect
-                onChange={handleChange}
-                field={fields.region}
-                values={
-                  filterValues[
-                    fields?.region?.name as keyof DashboardFilters
-                  ] as string[]
-                }
-              />
-            </label>
+            <MenuMultiSelect
+              field={fields.region}
+              values={filterValues.region}
+              label="Region"
+              onChange={onChange}
+              handleClose={handleClose}
+              handleCloseMultiple={handleCloseMultiple}
+            />
           </div>
           <div className="col-span-3">
-            <label>
-              Work Location
-              <MenuMultiSelect
-                groupName={fields.region.name}
-                groupValues={
-                  filterValues[
-                    fields?.region?.name as keyof DashboardFilters
-                  ] as string[]
-                }
-                field={{
-                  ...fields.location,
-                  groupedOptions:
-                    filterValues?.region && filterValues?.region?.length > 0
-                      ? fields.location?.groupedOptions?.filter(
-                          (itm) => filterValues?.region?.includes(itm.label),
-                        )
-                      : fields?.location?.groupedOptions,
-                }}
-                onChange={handleChange}
-                values={
-                  filterValues[
-                    fields.location.name as keyof DashboardFilters
-                  ] as string[]
-                }
-              />
-            </label>
+            <MenuMultiSelect
+              onChange={onChange}
+              field={{
+                ...fields.location,
+                groupedOptions:
+                  filterValues?.region && filterValues?.region?.length > 0
+                    ? fields.location?.groupedOptions?.filter((itm) =>
+                        filterValues?.region?.includes(itm.label),
+                      )
+                    : fields?.location?.groupedOptions,
+              }}
+              handleClose={handleClose}
+              handleCloseMultiple={handleCloseMultiple}
+              label="Work Location"
+              values={filterValues.location}
+            />
           </div>
         </div>
       </div>
 
       <div className="col-span-1">
-        <label>
-          Function
-          <MenuSingleSelect
-            field={fields.function}
-            onChange={handleChange}
-            value={
-              filterValues[
-                fields?.function?.name as keyof DashboardFilters
-              ] as string
-            }
-          />
-        </label>
+        <MenuSingleSelect
+          field={fields.function}
+          label="Function"
+          onChange={onChange}
+          handleClose={handleClose}
+          value={filterValues.function}
+        />
       </div>
       <div className="col-span-3">
         <div className="flex flex-row no-wrap space-x-16 items-center text-center justify-end">

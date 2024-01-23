@@ -1,17 +1,16 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { inputStyles } from '@/styles/fieldStyles';
 import type { FieldInterface } from '..';
+import { classes } from '../menu/constants';
 
 export const Search = ({
   field,
   onChange,
 }: {
   field: FieldInterface;
-  onChange: (name: string, value: any) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target?.value.split('')?.length === 0 && onChange(field.name, e.target.value);
-    e.target?.value.split('')?.length >= 3 && onChange(field.name, e.target.value);
+    e.target?.value.split('')?.length >= 3 && onChange(e);
   };
   return (
     <label>
@@ -24,7 +23,8 @@ export const Search = ({
         <input
           name={field.name}
           type="text"
-          className={inputStyles + ' h-12 pr-12'}
+          placeholder="Search by name"
+          className={classes.menu.container}
           onChange={handleChange}
         />
       </div>

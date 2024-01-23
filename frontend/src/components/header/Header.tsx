@@ -13,7 +13,7 @@ export const Header = ({
   authenticated: boolean | undefined;
 }) => {
   return (
-    <header className="relative w-full border-b ">
+    <header className="relative w-full border-b z-20">
       <div className="w-full flex justify-center lg:justify-between items-center fixed top-0 mt-0 bg-white h-20 border-b border-primaryYellow shadow-md">
         <div className="hidden col-span-0 lg:col-span-1 lg:block lg:-mt-4">
           <a href={LINKS.EMCR}>

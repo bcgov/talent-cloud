@@ -1,6 +1,5 @@
 import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
-import { Region, WorkLocation } from '@/common';
-import { ExperienceName, FunctionName } from '@/common';
+import { ExperienceName, FunctionName, Region, WorkLocation } from '@/common';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -24,13 +23,36 @@ export enum DashboardColumns {
   FUNCTION = 'function',
 }
 
-export const dashboardFilterFields = {
+export interface DashboardFields {
+  function: {
+    name: string;
+    options: FunctionName[];
+  };
+  location: {
+    name: string;
+    groupedOptions: {
+      label: string;
+      options: WorkLocation[];
+    }[];
+  };
+  name: {
+    name: string;
+  };
+  region: {
+    name: string;
+    options: Region[];
+  };
+  experience: {
+    name: string;
+    options: ExperienceName[];
+  };
+}
+export const dashboardFilterFields: DashboardFields = {
   name: {
     name: DashboardFilterNames.NAME,
   },
   region: {
     name: DashboardFilterNames.REGION,
-
     options: [Region.SWE, Region.SEA, Region.NWE, Region.NEA, Region.HQ, Region.CTL],
   },
   location: {
@@ -194,9 +216,9 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {
-  name: string | null;
-  region: string[] | null;
-  location: string[] | null;
-  function: string | null;
-  experience: string | null;
+  name: string;
+  region: string[];
+  location: string[];
+  function: string;
+  experience: string;
 }
