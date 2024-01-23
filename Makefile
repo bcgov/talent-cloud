@@ -19,7 +19,11 @@ export OS_NAMESPACE_PREFIX:=cd4869
 export OS_NAMESPACE_SUFFIX?=dev
 export TARGET_NAMESPACE=$(OS_NAMESPACE_PREFIX)-$(OS_NAMESPACE_SUFFIX)
 export TOOLS_NAMESPACE=$(OS_NAMESPACE_PREFIX)-tools
-export KEYCLOAK_AUTH=https://dev.loginproxy.gov.bc.ca/auth
+export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
+export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
+export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
+export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
+
 
 
 # Git
@@ -93,7 +97,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-1 5432
+	@oc port-forward $(APP_NAME)-patroni-0 5432
 
 ### Openshift Setup
 db-prep:
@@ -108,6 +112,9 @@ db-prep:
 db-create:
 	@oc process -f openshift/patroni.dc.yml -p APP_NAME=$(APP_NAME) | oc apply -n $(TARGET_NAMESPACE) -f -
 
+networking-prep:
+	@oc process -f openshift/networking.yml | oc apply -n $(TARGET_NAMESPACE) -f -
+
 deployment-prep:
 	@oc process -f openshift/server.prep.yml -p APP_NAME=$(APP_NAME) -p KEYCLOAK_AUTH_SERVER=$(KEYCLOAK_AUTH) -p KEYCLOAK_CLIENT=$(KEYCLOAK_CLIENT) -p APP_ENV=$(OS_NAMESPACE_SUFFIX) | oc create -n $(TARGET_NAMESPACE) -f -
 	@oc policy add-role-to-user system:image-puller system:serviceaccount:$(TARGET_NAMESPACE):default -n $(TOOLS_NAMESPACE)
@@ -116,14 +123,20 @@ server-create:
 	@oc process -f openshift/server.bc.yml -p APP_NAME=$(APP_NAME) | oc apply -n $(TOOLS_NAMESPACE) -f -
 	@oc process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) | oc apply -n $(TARGET_NAMESPACE) -f -
 
+server-config:
+	@oc -n $(TARGET_NAMESPACE) process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f -
+
 client-create:
 	@oc process -f openshift/client.bc.yml -p APP_NAME=$(APP_NAME) | oc apply -n $(TOOLS_NAMESPACE) -f -
 	@oc process -f openshift/client.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) | oc apply -n $(TARGET_NAMESPACE) -f -
 
+client-config:
+	@oc -n $(TARGET_NAMESPACE) process -f openshift/client.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f -
+
 ### Openshift CI
 deployment-dry-run:
-	@oc -n $(TARGET_NAMESPACE)  process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA)  | oc apply -n $(TARGET_NAMESPACE) -f - --dry-run=client
-	@oc -n $(TARGET_NAMESPACE)  process -f openshift/client.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA)  | oc apply -n $(TARGET_NAMESPACE) -f - --dry-run=client
+	@oc -n $(TARGET_NAMESPACE)  process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f - --dry-run=client
+	@oc -n $(TARGET_NAMESPACE)  process -f openshift/client.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f - --dry-run=client
 
 deployment-update:
 	@oc -n $(TARGET_NAMESPACE) process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f -

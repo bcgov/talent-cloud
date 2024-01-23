@@ -14,7 +14,7 @@ env:
   CLUSTER: https://api.gold.devops.gov.bc.ca:6443
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
-  PROJECT: talent-cloud
+  PROJECT: tcloud
 
 jobs:
   config:
