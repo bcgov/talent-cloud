@@ -26,12 +26,6 @@ const useTable = () => {
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
   const debouncedValue = useDebounce<string>(filterValues, 500)
 
-  
-  // Fetch API (optional)
-  useEffect(() => {
-    // Do fetch here...
-    // Triggers when "debouncedValue" changes
-  }, [debouncedValue])
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
