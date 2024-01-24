@@ -9,23 +9,26 @@ export const Filters = ({
   onChange,
   handleClose,
   handleCloseMultiple,
+  handleChange,
   onClear,
   filterValues,
 }: {
   fields: DashboardFields;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleClose: (name: string, value: string) => void;
   handleCloseMultiple: (name: string) => void;
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
   return (
-    <div
-      className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-4 gap-16
-    "
-    >
-      <div className="col-span-1">
-        <Search field={fields.name} onChange={onChange} />
+    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-6 gap-12">
+      <div className="col-span-1 lg:col-span-2">
+        <Search
+          field={fields.name}
+          handleSearchInput={handleChange}
+          value={filterValues.name}
+        />
       </div>
 
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-4">
@@ -40,7 +43,7 @@ export const Filters = ({
               handleCloseMultiple={handleCloseMultiple}
             />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-1 md:col-span-3">
             <MenuMultiSelect
               onChange={onChange}
               field={{
@@ -61,12 +64,11 @@ export const Filters = ({
         </div>
       </div>
 
-      <div className="col-span-1">
+      <div className="col-span-1 lg:col-span-2">
         <MenuSingleSelect
           field={fields.function}
           label="Function"
-          onChange={onChange}
-          handleClose={handleClose}
+          onChange={handleChange}
           value={filterValues.function}
         />
       </div>

@@ -27,7 +27,7 @@ export enum WorkLocation {
   LILLOOET = 'Lillooet',
   MACKENZIE = 'Mackenzie',
   MAPLE_RIDGE = 'Maple Ridge',
-  MERRITT = 'Merritt',
+  MERRIT = 'Merrit',
   MILL_BAY = 'Mill Bay',
   MISSION = 'Mission',
   NANAIMO = 'Nanaimo',

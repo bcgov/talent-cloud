@@ -11,7 +11,7 @@ export const TableHeader = ({
           <th
             key={key}
             scope="col"
-            className="px-6 py-4 text-dark text-left border-b border-borderBlue whitespace-nowrap w-auto"
+            className="px-6 py-4 text-dark text-left border-b border-borderBlue whitespace-nowrap"
           >
             {name}
           </th>

@@ -5,7 +5,7 @@ import { type TableData, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
-import type { Personnel } from '@/pages/dashboard';
+import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
 import { WorkLocation } from '@/common/enums/work-location.enum';
@@ -13,15 +13,6 @@ import { WorkLocation } from '@/common/enums/work-location.enum';
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
   const [filterValues, setFilterValues] = useState<any>({
-    name: '',
-    region: [],
-    location: [],
-    function: '',
-    experience: '',
-  });
-  const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-
-  const [pageParams, setPageParams] = useState<PageParams>({
     rowsPerPage: 25,
     currentPage: 1,
     showInactive: false,
@@ -95,7 +86,7 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
+                    value: workLocation,
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
@@ -146,7 +137,11 @@ const useTable = () => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setFilterValues((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [e.target.name]: e.target.value,
+    }));
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {
