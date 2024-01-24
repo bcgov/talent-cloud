@@ -86,7 +86,7 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: workLocation,
+                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
