@@ -8,6 +8,7 @@ import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
+import { WorkLocation } from '@/common/enums/work-location.enum';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
@@ -85,7 +86,7 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: workLocation,
+                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
