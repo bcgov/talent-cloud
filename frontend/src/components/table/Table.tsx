@@ -25,7 +25,7 @@ export const Table = ({
       <div className="flex flex-row items-center justify-between mx-8">
         <div className="flex flex-col py-6">
           <h4 className="text-black">{title}</h4>
-          <p className="text-black">{`${tableData.totalRows} ${subtitle}`}</p>
+          <span className="text-black">{`${tableData.totalRows} ${subtitle}`}</span>
         </div>
         {toggle && (
           <Toggle
@@ -35,7 +35,7 @@ export const Table = ({
         )}
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}
-      <table className="table-fixed overflow-x-hidden mx-auto border-disabledGray">
+      <table className="table-auto mx-auto border-disabledGray w-full">
         <TableHeader columns={columns} />
         <TableBody rows={tableData.rows} />
       </table>

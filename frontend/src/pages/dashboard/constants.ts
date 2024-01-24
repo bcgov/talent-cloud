@@ -59,12 +59,24 @@ export const dashboardFilterFields: DashboardFields = {
     name: DashboardFilterNames.LOCATION,
     groupedOptions: [
       {
+        label: Region.VIC,
+        options: [
+          WorkLocation.CAMPBELL_RIVER,
+          WorkLocation.COURTENAY,
+          WorkLocation.CUMBERLAND,
+          WorkLocation.NANAIMO,
+          WorkLocation.PORT_ALBERNI,
+          WorkLocation.QUALICUM_BEACH,
+          WorkLocation.UCLUELET,
+        ],
+      },
+      {
         label: Region.CTL,
         options: [
           WorkLocation.ENDERBY,
           WorkLocation.KAMLOOPS,
           WorkLocation.KELOWNA,
-          WorkLocation.MERRITT,
+          WorkLocation.MERRIT,
           WorkLocation.SALMON_ARM,
           WorkLocation.SORRENTO,
           WorkLocation.VERNON,
@@ -97,25 +109,6 @@ export const dashboardFilterFields: DashboardFields = {
         ],
       },
       {
-        label: Region.NWE,
-        options: [
-          WorkLocation.BURNS_LAKE,
-          WorkLocation.SMITHERS,
-          WorkLocation.TERRACE,
-        ],
-      },
-      {
-        label: Region.SEA,
-        options: [
-          WorkLocation.CASTLEGAR,
-          WorkLocation.CRANBROOK,
-          WorkLocation.ELKFORD,
-          WorkLocation.KIMBERLY,
-          WorkLocation.NELSON,
-          WorkLocation.REVELSTOKE,
-        ],
-      },
-      {
         label: Region.SWE,
         options: [
           WorkLocation.ABBOTSFORD,
@@ -134,15 +127,22 @@ export const dashboardFilterFields: DashboardFields = {
         ],
       },
       {
-        label: Region.VIC,
+        label: Region.NWE,
         options: [
-          WorkLocation.CAMPBELL_RIVER,
-          WorkLocation.COURTENAY,
-          WorkLocation.CUMBERLAND,
-          WorkLocation.NANAIMO,
-          WorkLocation.PORT_ALBERNI,
-          WorkLocation.QUALICUM_BEACH,
-          WorkLocation.UCLUELET,
+          WorkLocation.BURNS_LAKE,
+          WorkLocation.SMITHERS,
+          WorkLocation.TERRACE,
+        ],
+      },
+      {
+        label: Region.SEA,
+        options: [
+          WorkLocation.CASTLEGAR,
+          WorkLocation.CRANBROOK,
+          WorkLocation.ELKFORD,
+          WorkLocation.KIMBERLY,
+          WorkLocation.NELSON,
+          WorkLocation.REVELSTOKE,
         ],
       },
     ],
@@ -216,6 +216,9 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {
+  rowsPerPage: number;
+  currentPage: number;
+  showInactive?: boolean;
   name: string;
   region: string[];
   location: string[];

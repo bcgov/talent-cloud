@@ -17,10 +17,9 @@ const Dashboard = () => {
   }));
   const {
     filterValues,
-    pageParams,
     tableData,
     onChange,
-
+    handleChange,
     handleClose,
     handleCloseMultiple,
     handlePageParams,
@@ -32,6 +31,7 @@ const Dashboard = () => {
       <h2 className="text-left">Personnel</h2>
       <Filters
         fields={dashboardFilterFields}
+        handleChange={handleChange}
         onChange={onChange}
         handleClose={handleClose}
         handleCloseMultiple={handleCloseMultiple}
@@ -48,7 +48,7 @@ const Dashboard = () => {
           toggle={dashboardToggle}
           columns={columns}
           tableData={tableData}
-          pageParams={pageParams}
+          pageParams={filterValues}
           handlePageParams={handlePageParams}
         />
       )}

@@ -1,18 +1,20 @@
 import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { type TableData, type PageParams, handleSearchParams } from '@/components';
+import { type TableData, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { WorkLocation } from '@/common';
 import { truncatePageRange } from './utils';
-import type { Personnel } from '@/pages/dashboard';
+import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
   const [filterValues, setFilterValues] = useState<any>({
+    rowsPerPage: 25,
+    currentPage: 1,
+    showInactive: false,
     name: '',
     region: [],
     location: [],
@@ -20,12 +22,6 @@ const useTable = () => {
     experience: '',
   });
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-
-  const [pageParams, setPageParams] = useState<PageParams>({
-    rowsPerPage: 25,
-    currentPage: 1,
-    showInactive: false,
-  });
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -39,16 +35,16 @@ const useTable = () => {
 
   useEffect(() => {
     (async () => {
-      handleSearchParams(searchParamsUrl, pageParams, filterValues);
+      handleSearchParams(searchParamsUrl, filterValues);
       try {
         const {
           data: { personnel, count },
         } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
 
-        const rowsPerPage = pageParams?.rowsPerPage ?? 25;
+        const rowsPerPage = filterValues?.rowsPerPage ?? 25;
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
-        const currentPage = pageParams?.currentPage ?? 1;
+        const currentPage = filterValues?.currentPage ?? 1;
 
         personnel &&
           setTableData({
@@ -89,7 +85,7 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
+                    value: workLocation,
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
@@ -133,14 +129,18 @@ const useTable = () => {
         console.log(e);
       }
     })();
-  }, [pageParams, filterValues]);
+  }, [filterValues]);
 
-  const handlePageParams = (change: Partial<PageParams>) => {
-    setPageParams({ ...pageParams, ...change });
+  const handlePageParams = (change: Partial<DashboardFilters>) => {
+    setFilterValues({ ...filterValues, ...change });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setFilterValues((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [e.target.name]: e.target.value,
+    }));
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -189,7 +189,6 @@ const useTable = () => {
   };
   return {
     tableData,
-    pageParams,
     handleChange,
     onChange,
     handleClose,
@@ -197,11 +196,14 @@ const useTable = () => {
     handlePageParams,
     onClear: () =>
       setFilterValues({
-        name: null,
-        region: null,
-        location: null,
-        function: null,
-        experience: null,
+        rowsPerPage: 25,
+        currentPage: 1,
+        showInactive: false,
+        name: '',
+        region: [],
+        location: [],
+        function: '',
+        experience: '',
       }),
     filterValues,
   };
