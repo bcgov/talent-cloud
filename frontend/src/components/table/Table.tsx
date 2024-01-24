@@ -35,7 +35,7 @@ export const Table = ({
         )}
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}
-      <table className="table-auto mx-auto border-disabledGray w-full">
+      <table className="table-auto w-full mx-auto border-disabledGray overflow-x-auto">
         <TableHeader columns={columns} />
         <TableBody rows={tableData.rows} />
       </table>
