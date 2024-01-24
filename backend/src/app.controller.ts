@@ -22,4 +22,13 @@ export class AppController {
       db: await this.health.check([() => this.db.pingCheck('database')]),
     };
   }
+
+  @Get('/keycloak')
+  async getKeycloak() {
+    return {
+      authUrl: process.env.KEYCLOAK_AUTH_URL,
+      client: process.env.KEYCLOAK_CLIENT,
+      realm: process.env.KEYCLOAK_REALM,
+    }
+  }
 }

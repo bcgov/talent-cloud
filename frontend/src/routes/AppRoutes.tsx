@@ -1,6 +1,6 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import store from 'store';
@@ -9,17 +9,32 @@ import { Dashboard, Login, NotFound, Profile } from '../pages';
 import { Loading } from '@/components';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
+import { getKeycloakInfo } from '@/services';
 
 export default () => {
-  return (
-    <ReactKeycloakProvider
-      authClient={
-        new Keycloak({
-          realm: import.meta.env.VITE_KEYCLOAK_REALM,
-          url: import.meta.env.VITE_KEYCLOAK_AUTH_URL,
-          clientId: import.meta.env.VITE_KEYCLOAK_CLIENT,
-        })
+  const [keycloakInfo, setKeycloakInfo] = useState<Keycloak>();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await getKeycloakInfo();
+        setKeycloakInfo(
+          new Keycloak({
+            realm: data.realm,
+            url: data.authUrl,
+            clientId: data.client,
+          }),
+        );
+      } catch (e) {
+        console.log(e);
+        console.log('Error loading keycloak');
       }
+    })();
+  }, []);
+
+  return keycloakInfo ? (
+    <ReactKeycloakProvider
+      authClient={keycloakInfo}
       autoRefreshToken={true}
       initOptions={{ pkceMethod: 'S256', checkLoginIframe: false }}
       onTokens={(tokens) => store.set('TOKENS', tokens)}
@@ -40,5 +55,9 @@ export default () => {
         </Suspense>
       </BrowserRouter>
     </ReactKeycloakProvider>
+  ) : (
+    <>
+      <h1>Unable to access authentication server</h1>
+    </>
   );
 };
