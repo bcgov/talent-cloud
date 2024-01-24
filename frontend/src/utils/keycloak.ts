@@ -25,9 +25,7 @@ export const createCustomLoginUrl = (
 
 export const logout = (kc: Keycloak, route: string) => {
   window.location.href = `https://logon7.gov.bc.ca/clp-cgi/logoff.cgi?retnow=1&returl=${encodeURIComponent(
-    `${import.meta.env.VITE_KEYCLOAK_AUTH_URL}/realms/${
-      import.meta.env.VITE_KEYCLOAK_REALM
-    }/protocol/openid-connect/logout?post_logout_redirect_uri=` +
+    `${kc.authServerUrl}/realms/${kc.realm}/protocol/openid-connect/logout?post_logout_redirect_uri=` +
       `${window.location.origin}${route}` +
       '&id_token_hint=' +
       kc.idToken,

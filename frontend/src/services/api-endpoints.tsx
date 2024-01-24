@@ -1,6 +1,12 @@
 import type { AxiosResponse } from 'axios';
-import { AxiosPrivate } from '../utils';
+import { AxiosPrivate, AxiosPublic } from '../utils';
 
 export const getUserInfo = async (): Promise<AxiosResponse> => {
-  return await AxiosPrivate.get('/auth/userInfo');
+  return AxiosPrivate.get('/auth/userInfo');
+};
+
+export const getKeycloakInfo = async (): Promise<{
+  data: { authUrl: string; client: string; realm: string };
+}> => {
+  return AxiosPublic.get('/keycloak');
 };
