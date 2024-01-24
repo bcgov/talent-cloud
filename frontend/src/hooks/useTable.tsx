@@ -1,30 +1,28 @@
+import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { type TableData, type PageParams, handleSearchParams } from '@/components';
+import { type TableData, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { WorkLocation } from '@/common';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
+import { WorkLocation } from '@/common/enums/work-location.enum';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
-  const [filterValues, setFilterValues] = useState<DashboardFilters>({
-    name: null,
-    region: null,
-    location: null,
-    function: null,
-    experience: null,
-  });
-  const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-
-  const [pageParams, setPageParams] = useState<PageParams>({
+  const [filterValues, setFilterValues] = useState<any>({
     rowsPerPage: 25,
     currentPage: 1,
     showInactive: false,
+    name: '',
+    region: [],
+    location: [],
+    function: '',
+    experience: '',
   });
+  const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -38,16 +36,16 @@ const useTable = () => {
 
   useEffect(() => {
     (async () => {
-      handleSearchParams(searchParamsUrl, pageParams, filterValues);
+      handleSearchParams(searchParamsUrl, filterValues);
       try {
         const {
           data: { personnel, count },
         } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
 
-        const rowsPerPage = pageParams?.rowsPerPage ?? 25;
+        const rowsPerPage = filterValues?.rowsPerPage ?? 25;
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
-        const currentPage = pageParams?.currentPage ?? 1;
+        const currentPage = filterValues?.currentPage ?? 1;
 
         personnel &&
           setTableData({
@@ -132,28 +130,81 @@ const useTable = () => {
         console.log(e);
       }
     })();
-  }, [pageParams, filterValues]);
+  }, [filterValues]);
 
-  const handlePageParams = (change: Partial<PageParams>) => {
-    setPageParams({ ...pageParams, ...change });
+  const handlePageParams = (change: Partial<DashboardFilters>) => {
+    setFilterValues({ ...filterValues, ...change });
   };
 
-  const handleChange = (name: any, itm: any) => {
-    setFilterValues((prev: any) => ({ ...prev, [name]: itm }));
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [e.target.name]: e.target.value,
+    }));
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = event;
+
+    const valueSet = new Set(filterValues[name]);
+
+    if (Array.isArray(value)) {
+      value.forEach((itm: any) => {
+        if (valueSet.has(itm)) {
+          valueSet.delete(itm);
+        } else {
+          valueSet.add(itm);
+        }
+      });
+    } else if (!Array.isArray(value)) {
+      if (valueSet.has(value)) {
+        valueSet.delete(value);
+      } else {
+        valueSet.add(value);
+      }
+    }
+
+    setFilterValues((prev: any) => ({ ...prev, [name]: Array.from(valueSet) }));
   };
 
+  const handleClose = (name: string, value: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: value,
+      },
+    } as ChangeEvent<HTMLInputElement>;
+    onChange(event);
+  };
+
+  const handleCloseMultiple = (name: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: filterValues[name],
+      },
+    } as ChangeEvent<HTMLInputElement>;
+    onChange(event);
+  };
   return {
     tableData,
-    pageParams,
     handleChange,
+    onChange,
+    handleClose,
+    handleCloseMultiple,
     handlePageParams,
     onClear: () =>
       setFilterValues({
-        name: null,
-        region: null,
-        location: null,
-        function: null,
-        experience: null,
+        rowsPerPage: 25,
+        currentPage: 1,
+        showInactive: false,
+        name: '',
+        region: [],
+        location: [],
+        function: '',
+        experience: '',
       }),
     filterValues,
   };

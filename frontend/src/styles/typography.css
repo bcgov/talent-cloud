@@ -13,7 +13,7 @@ h3 {
 }
 h4 {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
@@ -21,43 +21,22 @@ h4 {
 h5 {
 }
 h6 {
-  @apply font-bold;
-}
-
-p {
+  
   font-size: 16px;
-  font-weight: 400;
-  line-height: 26px;
+  font-weight: 700;
+  line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
 }
 
-span {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 26px;
-  letter-spacing: 0em;
-  text-align: left;
+.MuiInputBase-input {
+  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
+}
 
-}
-#react-select-1-input {
-  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
-}
-#react-select-2-input {
-  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
-}
-#react-select-3-input {
-  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
-}
-#react-select-4-input {
-  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
-}
-#react-select-5-input {
-  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
-}
+
 label {
   @apply text-dark;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 26px;
   letter-spacing: 0em;

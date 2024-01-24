@@ -71,7 +71,7 @@ export class GetPersonnelDTO extends QueryDTO {
           .split(', ')
           .map((type) => WorkLocation[type]),
   )
-  location: string;
+  location: WorkLocation;
 
   @ApiPropertyOptional({
     description: 'Function name to search personnel from',

@@ -17,9 +17,11 @@ const Dashboard = () => {
   }));
   const {
     filterValues,
-    pageParams,
     tableData,
+    onChange,
     handleChange,
+    handleClose,
+    handleCloseMultiple,
     handlePageParams,
     onClear,
   } = useTable();
@@ -30,6 +32,9 @@ const Dashboard = () => {
       <Filters
         fields={dashboardFilterFields}
         handleChange={handleChange}
+        onChange={onChange}
+        handleClose={handleClose}
+        handleCloseMultiple={handleCloseMultiple}
         onClear={onClear}
         filterValues={filterValues}
       />
@@ -43,7 +48,7 @@ const Dashboard = () => {
           toggle={dashboardToggle}
           columns={columns}
           tableData={tableData}
-          pageParams={pageParams}
+          pageParams={filterValues}
           handlePageParams={handlePageParams}
         />
       )}

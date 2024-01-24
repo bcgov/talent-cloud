@@ -1,5 +1,6 @@
+import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
-import { Checkbox, MenuItem as MuiMenuItem } from '@material-tailwind/react';
+import { Checkbox, MenuItem } from '@material-tailwind/react';
 import { classes } from './constants';
 
 export const MenuItemList = ({
@@ -9,27 +10,25 @@ export const MenuItemList = ({
 }: {
   field: any;
   values: any[];
-  onChange: (name: string, value: any) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <>
       {field.options?.map((option: any) => (
         <Fragment key={option}>
-          <MuiMenuItem
-            key={option}
-            placeholder={undefined}
-            className={classes.menuItem}
-          >
-            <label className={classes.optionLabel} htmlFor={option}>
+          <MenuItem key={option} placeholder={undefined}>
+            <label className={classes.menu.optionLabel} htmlFor={option}>
               <Checkbox
                 type="checkbox"
-                onChange={() => onChange(field.name, option)}
+                onChange={onChange}
                 crossOrigin={undefined}
                 checked={values?.includes(option)}
+                name={field.name}
+                value={option}
               />
               {option}
             </label>
-          </MuiMenuItem>
+          </MenuItem>
         </Fragment>
       ))}
     </>

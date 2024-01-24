@@ -1,14 +1,24 @@
-import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import { fileURLToPath, URL } from 'node:url';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   esbuild: {
     jsxInject: `import React from 'react'`,
   },
-  assetsInclude: ['**/*.png','assets/images/*' ],
+  assetsInclude: ['assets/images/*'],
   plugins: [react()],
+  optimizeDeps: {
+    include: [
+      '@material-tailwind/react',
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-router',
+      'axios',
+    ],
+  },
   base: './',
   server: {
     port: parseInt(process.env.PORT ?? '3000'),
@@ -46,16 +56,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Split external library from transpiled code.
-          react: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-router',
-            
-          ],
-          axios: ['axios']
+
+          react: ['react', 'react-dom', 'react-router-dom', 'react-router'],
+          axios: ['axios'],
         },
       },
     },
   },
-})
+});

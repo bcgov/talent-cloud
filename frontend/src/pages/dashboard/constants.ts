@@ -1,6 +1,5 @@
 import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
-import { Region, WorkLocation } from '@/common';
-import { ExperienceName, FunctionName } from '@/common';
+import { ExperienceName, FunctionName, Region, WorkLocation } from '@/common';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -24,25 +23,60 @@ export enum DashboardColumns {
   FUNCTION = 'function',
 }
 
-export const dashboardFilterFields = {
+export interface DashboardFields {
+  function: {
+    name: string;
+    options: FunctionName[];
+  };
+  location: {
+    name: string;
+    groupedOptions: {
+      label: string;
+      options: WorkLocation[];
+    }[];
+  };
+  name: {
+    name: string;
+  };
+  region: {
+    name: string;
+    options: Region[];
+  };
+  experience: {
+    name: string;
+    options: ExperienceName[];
+  };
+}
+export const dashboardFilterFields: DashboardFields = {
   name: {
     name: DashboardFilterNames.NAME,
   },
   region: {
     name: DashboardFilterNames.REGION,
-
     options: [Region.SWE, Region.SEA, Region.NWE, Region.NEA, Region.HQ, Region.CTL],
   },
   location: {
     name: DashboardFilterNames.LOCATION,
     groupedOptions: [
       {
+        label: Region.VIC,
+        options: [
+          WorkLocation.CAMPBELL_RIVER,
+          WorkLocation.COURTENAY,
+          WorkLocation.CUMBERLAND,
+          WorkLocation.NANAIMO,
+          WorkLocation.PORT_ALBERNI,
+          WorkLocation.QUALICUM_BEACH,
+          WorkLocation.UCLUELET,
+        ],
+      },
+      {
         label: Region.CTL,
         options: [
           WorkLocation.ENDERBY,
           WorkLocation.KAMLOOPS,
           WorkLocation.KELOWNA,
-          WorkLocation.MERRITT,
+          WorkLocation.MERRIT,
           WorkLocation.SALMON_ARM,
           WorkLocation.SORRENTO,
           WorkLocation.VERNON,
@@ -75,25 +109,6 @@ export const dashboardFilterFields = {
         ],
       },
       {
-        label: Region.NWE,
-        options: [
-          WorkLocation.BURNS_LAKE,
-          WorkLocation.SMITHERS,
-          WorkLocation.TERRACE,
-        ],
-      },
-      {
-        label: Region.SEA,
-        options: [
-          WorkLocation.CASTLEGAR,
-          WorkLocation.CRANBROOK,
-          WorkLocation.ELKFORD,
-          WorkLocation.KIMBERLY,
-          WorkLocation.NELSON,
-          WorkLocation.REVELSTOKE,
-        ],
-      },
-      {
         label: Region.SWE,
         options: [
           WorkLocation.ABBOTSFORD,
@@ -112,15 +127,22 @@ export const dashboardFilterFields = {
         ],
       },
       {
-        label: Region.VIC,
+        label: Region.NWE,
         options: [
-          WorkLocation.CAMPBELL_RIVER,
-          WorkLocation.COURTENAY,
-          WorkLocation.CUMBERLAND,
-          WorkLocation.NANAIMO,
-          WorkLocation.PORT_ALBERNI,
-          WorkLocation.QUALICUM_BEACH,
-          WorkLocation.UCLUELET,
+          WorkLocation.BURNS_LAKE,
+          WorkLocation.SMITHERS,
+          WorkLocation.TERRACE,
+        ],
+      },
+      {
+        label: Region.SEA,
+        options: [
+          WorkLocation.CASTLEGAR,
+          WorkLocation.CRANBROOK,
+          WorkLocation.ELKFORD,
+          WorkLocation.KIMBERLY,
+          WorkLocation.NELSON,
+          WorkLocation.REVELSTOKE,
         ],
       },
     ],
@@ -194,9 +216,12 @@ export interface DashboardRow {
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {
-  name: string | null;
-  region: string[] | null;
-  location: string[] | null;
-  function: string | null;
-  experience: string | null;
+  rowsPerPage: number;
+  currentPage: number;
+  showInactive?: boolean;
+  name: string;
+  region: string[];
+  location: string[];
+  function: string;
+  experience: string;
 }
