@@ -9,6 +9,7 @@ import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
 import { WorkLocation } from '@/common/enums/work-location.enum';
+import { useDebounce } from './useDebounce';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
@@ -23,6 +24,8 @@ const useTable = () => {
     experience: '',
   });
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
+  const debouncedValue = useDebounce<string>(filterValues, 500)
+
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -130,7 +133,7 @@ const useTable = () => {
         console.log(e);
       }
     })();
-  }, [filterValues]);
+  }, [debouncedValue]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
     setFilterValues({ ...filterValues, ...change });
