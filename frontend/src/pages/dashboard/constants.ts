@@ -1,5 +1,11 @@
 import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
-import { ExperienceName, FunctionName, Region, WorkLocation } from '@/common';
+import {
+  ExperienceName,
+  FunctionName,
+  Region,
+  WorkLocation,
+  Experience,
+} from '@/common';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -11,16 +17,16 @@ export enum DashboardFilterNames {
 }
 
 export enum DashboardColumns {
-  AVAILABILITY = 'availability',
-  REMOTE = 'remote',
-  CLASSIFICATION = 'classification',
-  REGION = 'region',
-  LOCATION = 'location',
-  TRAVEL = 'travel',
-  MINISTRY = 'ministry',
-  NAME = 'name',
-  STATUS = 'status',
-  FUNCTION = 'function',
+  FUNCTION = 'Function/Experience',
+  AVAILABILITY = 'Availability',
+  REMOTE = 'Remote Only',
+  CLASSIFICATION = 'Classification',
+  REGION = 'Region',
+  LOCATION = 'Work Location',
+  TRAVEL = 'Willing To Travel',
+  MINISTRY = 'Ministry',
+  NAME = 'Name',
+  STATUS = 'Status',
 }
 
 export interface DashboardFields {
@@ -44,7 +50,7 @@ export interface DashboardFields {
   };
   experience: {
     name: string;
-    options: ExperienceName[];
+    options: { label: ExperienceName; value: Experience }[];
   };
 }
 export const dashboardFilterFields: DashboardFields = {
@@ -76,7 +82,7 @@ export const dashboardFilterFields: DashboardFields = {
           WorkLocation.ENDERBY,
           WorkLocation.KAMLOOPS,
           WorkLocation.KELOWNA,
-          WorkLocation.MERRIT,
+          WorkLocation.MERRITT,
           WorkLocation.SALMON_ARM,
           WorkLocation.SORRENTO,
           WorkLocation.VERNON,
@@ -166,12 +172,20 @@ export const dashboardFilterFields: DashboardFields = {
   },
   experience: {
     name: DashboardFilterNames.EXPERIENCE,
-
     options: [
-      ExperienceName.INTERESTED,
-      ExperienceName.EXPERIENCED,
-      ExperienceName.CHIEF_EXPERIENCED,
-      ExperienceName.OUTSIDE_EXPERIENCED,
+      {
+        label: ExperienceName.INTERESTED,
+        value: Experience.INTERESTED,
+      },
+      { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
+      {
+        label: ExperienceName.CHIEF_EXPERIENCED,
+        value: Experience.CHIEF_EXPERIENCED,
+      },
+      {
+        label: ExperienceName.OUTSIDE_EXPERIENCED,
+        value: Experience.OUTSIDE_EXPERIENCED,
+      },
     ],
   },
 };
@@ -181,15 +195,10 @@ export const dashboardToggle = {
   label: 'Show Inactive',
 };
 
-export const dashboardColumns = [
-  'Name',
-  'Region',
-  'Work Location',
-  'Willingness To Travel',
-  'Remote Only',
-  'Classification',
-  'Ministry',
-];
+interface ExperienceInterface {
+  experienceType: Experience;
+  functionName: FunctionName;
+}
 
 export interface Personnel {
   id: string;
@@ -197,6 +206,7 @@ export interface Personnel {
   lastName: string;
   region: string;
   workLocation: string;
+  experiences: ExperienceInterface[];
   availability: string;
   active: string;
   willingToTravel: string;
@@ -220,8 +230,8 @@ export interface DashboardFilters {
   currentPage: number;
   showInactive?: boolean;
   name: string;
-  region: string[];
+  region: Region[];
   location: string[];
-  function: string;
-  experience: string;
+  function: FunctionName;
+  experience: ExperienceName;
 }

@@ -8,8 +8,8 @@ import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/styles/tableStyles';
-import { WorkLocation } from '@/common/enums/work-location.enum';
 import { useDebounce } from './useDebounce';
+import { ExperienceName } from '@/common';
 
 const useTable = () => {
   const [tableData, setTableData] = useState<TableData>();
@@ -23,9 +23,18 @@ const useTable = () => {
     function: '',
     experience: '',
   });
+  const [dashboardColumns, setDashboardColumns] = useState([
+    { key: uuidv4(), name: DashboardColumns.NAME },
+    { key: uuidv4(), name: DashboardColumns.REGION },
+    { key: uuidv4(), name: DashboardColumns.LOCATION },
+    { key: uuidv4(), name: DashboardColumns.TRAVEL },
+    { key: uuidv4(), name: DashboardColumns.REMOTE },
+    { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+    { key: uuidv4(), name: DashboardColumns.MINISTRY },
+  ]);
+  const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-  const debouncedValue = useDebounce<string>(filterValues, 500)
-
+  const debouncedValue = useDebounce<string>(filterValues, defaultDebounceValue);
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -49,7 +58,17 @@ const useTable = () => {
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
         const currentPage = filterValues?.currentPage ?? 1;
-
+        filterValues.function &&
+          setDashboardColumns([
+            { key: uuidv4(), name: DashboardColumns.NAME },
+            { key: uuidv4(), name: DashboardColumns.FUNCTION },
+            { key: uuidv4(), name: DashboardColumns.REGION },
+            { key: uuidv4(), name: DashboardColumns.LOCATION },
+            { key: uuidv4(), name: DashboardColumns.TRAVEL },
+            { key: uuidv4(), name: DashboardColumns.REMOTE },
+            { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+            { key: uuidv4(), name: DashboardColumns.MINISTRY },
+          ]);
         personnel &&
           setTableData({
             totalPages,
@@ -61,6 +80,7 @@ const useTable = () => {
                 active,
                 firstName,
                 lastName,
+                experiences,
                 region,
                 workLocation,
                 willingToTravel,
@@ -79,6 +99,16 @@ const useTable = () => {
                   },
                   {
                     key: uuidv4(),
+                    columnName: DashboardColumns.FUNCTION,
+                    value: `${experiences.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
+                    className: experiences.find(
+                      (itm: any) => itm.functionName === filterValues.function,
+                    )
+                      ? tableClass(DashboardColumns.FUNCTION, '')
+                      : 'hidden',
+                  },
+                  {
+                    key: uuidv4(),
                     columnName: DashboardColumns.REGION,
                     value: region,
                     className: tableClass(
@@ -89,7 +119,7 @@ const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.LOCATION,
-                    value: WorkLocation[workLocation as keyof typeof WorkLocation],
+                    value: workLocation,
                     className: tableClass(
                       DashboardColumns.LOCATION,
                       workLocation?.toLowerCase(),
@@ -139,14 +169,25 @@ const useTable = () => {
     setFilterValues({ ...filterValues, ...change });
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFilterValues((prev: any) => ({
       ...prev,
       currentPage: 1,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setDefaultDebounceValue(1000);
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDefaultDebounceValue(100);
     const {
       target: { name, value },
     } = event;
@@ -171,7 +212,6 @@ const useTable = () => {
 
     setFilterValues((prev: any) => ({ ...prev, [name]: Array.from(valueSet) }));
   };
-
   const handleClose = (name: string, value: string) => {
     const event = {
       target: {
@@ -194,6 +234,7 @@ const useTable = () => {
   return {
     tableData,
     handleChange,
+    handleSearch,
     onChange,
     handleClose,
     handleCloseMultiple,
@@ -210,6 +251,7 @@ const useTable = () => {
         experience: '',
       }),
     filterValues,
+    dashboardColumns,
   };
 };
 

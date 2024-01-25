@@ -1,5 +1,6 @@
-import { ButtonTypes } from '@/common';
-import { Button, MenuMultiSelect, MenuSingleSelect, Search } from '@/components';
+import { ButtonTypes, Region } from '@/common';
+import { Button, MenuMultiSelect, Search } from '@/components';
+import { CascadingMenu } from '@/components/menu/CascadingMenu';
 import type { DashboardFields } from '@/pages/dashboard/constants';
 import { type DashboardFilters } from '@/pages/dashboard/constants';
 import type { ChangeEvent } from 'react';
@@ -10,12 +11,14 @@ export const Filters = ({
   handleClose,
   handleCloseMultiple,
   handleChange,
+  handleSearch,
   onClear,
   filterValues,
 }: {
   fields: DashboardFields;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   handleClose: (name: string, value: string) => void;
   handleCloseMultiple: (name: string) => void;
   onClear: () => void;
@@ -26,7 +29,7 @@ export const Filters = ({
       <div className="col-span-1 lg:col-span-2">
         <Search
           field={fields.name}
-          handleSearchInput={handleChange}
+          handleSearchInput={handleSearch}
           value={filterValues.name}
         />
       </div>
@@ -51,7 +54,9 @@ export const Filters = ({
                 groupedOptions:
                   filterValues?.region && filterValues?.region?.length > 0
                     ? fields.location?.groupedOptions?.filter((itm) =>
-                        filterValues?.region?.includes(itm.label),
+                        filterValues?.region?.includes(
+                          Region[itm.label as keyof typeof Region],
+                        ),
                       )
                     : fields?.location?.groupedOptions,
               }}
@@ -65,8 +70,10 @@ export const Filters = ({
       </div>
 
       <div className="col-span-1 lg:col-span-2">
-        <MenuSingleSelect
+        <CascadingMenu
           field={fields.function}
+          nestedField={fields.experience}
+          nestedValue={filterValues.experience}
           label="Function"
           onChange={handleChange}
           value={filterValues.function}

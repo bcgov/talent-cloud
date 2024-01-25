@@ -3,7 +3,7 @@ import {
   ClassificationName,
   Region,
   Ministry,
-  FunctionNameAbbrv,
+  FunctionName,
   WorkLocation,
   Status,
   Experience,
@@ -41,7 +41,7 @@ const experiences = () => {
   const experiences = [];
   for (let i = 0; i < num; i++) {
     experiences.push({
-      function: faker.helpers.arrayElement(Object.values(FunctionNameAbbrv)),
+      function: faker.helpers.arrayElement(Object.values(FunctionName)),
       experience: faker.helpers.arrayElement(Object.values(Experience)),
     });
   }
@@ -58,4 +58,4 @@ export const generateData = () => {
   return people;
 };
 
-console.log(generateData())
+console.log(generateData());
