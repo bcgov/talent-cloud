@@ -21,7 +21,7 @@ const useTable = () => {
     region: [],
     location: [],
     function: '',
-    experience: ''
+    experience: '',
   });
   const [dashboardColumns, setDashboardColumns] = useState([
     { key: uuidv4(), name: DashboardColumns.NAME },

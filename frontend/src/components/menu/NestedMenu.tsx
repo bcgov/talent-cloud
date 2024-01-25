@@ -1,4 +1,3 @@
-import type { Experience, ExperienceName } from '@/common';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { useState } from 'react';
@@ -42,16 +41,16 @@ export const NestedMenu = ({
         </MenuItem>
       </MenuHandler>
       <MenuList placeholder={undefined}>
-        {nestedField.options.map(({label, value}: {label: ExperienceName, value: Experience}) => (
+        {nestedField.options.map((itm: any) => (
           <MenuItem
-            key={value}
+            key={itm.value}
             placeholder={undefined}
             onClick={() => {
               handleChange(field.name, option);
-              handleChange(nestedField.name, value);
+              handleChange(nestedField.name, itm.value);
             }}
           >
-            <span className={classes.menu.optionLabel}>{label}</span>
+            <span className={classes.menu.optionLabel}>{itm.label}</span>
           </MenuItem>
         ))}
       </MenuList>

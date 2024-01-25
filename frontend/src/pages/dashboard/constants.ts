@@ -1,5 +1,11 @@
-
-import { AvailabilityTypeName, ClassificationName, Ministry, ExperienceName, FunctionName, Region, WorkLocation, Experience } from '@/common';
+import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
+import {
+  ExperienceName,
+  FunctionName,
+  Region,
+  WorkLocation,
+  Experience,
+} from '@/common';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -44,7 +50,7 @@ export interface DashboardFields {
   };
   experience: {
     name: string;
-    options: {label: ExperienceName, value: Experience}[];
+    options: { label: ExperienceName; value: Experience }[];
   };
 }
 export const dashboardFilterFields: DashboardFields = {
@@ -166,12 +172,21 @@ export const dashboardFilterFields: DashboardFields = {
   },
   experience: {
     name: DashboardFilterNames.EXPERIENCE,
-    options: [{
-      label: ExperienceName.INTERESTED, value: Experience.INTERESTED},
-      {label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED},
-      {label: ExperienceName.CHIEF_EXPERIENCED, value: Experience.CHIEF_EXPERIENCED},
-      {label: ExperienceName.OUTSIDE_EXPERIENCED, value: Experience.OUTSIDE_EXPERIENCED,
-    }],
+    options: [
+      {
+        label: ExperienceName.INTERESTED,
+        value: Experience.INTERESTED,
+      },
+      { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
+      {
+        label: ExperienceName.CHIEF_EXPERIENCED,
+        value: Experience.CHIEF_EXPERIENCED,
+      },
+      {
+        label: ExperienceName.OUTSIDE_EXPERIENCED,
+        value: Experience.OUTSIDE_EXPERIENCED,
+      },
+    ],
   },
 };
 
@@ -181,10 +196,8 @@ export const dashboardToggle = {
 };
 
 interface ExperienceInterface {
-  
   experienceType: Experience;
   functionName: FunctionName;
-  
 }
 
 export interface Personnel {

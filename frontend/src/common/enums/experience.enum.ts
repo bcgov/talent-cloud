@@ -1,6 +1,3 @@
-
-
-
 export enum Experience {
   INTERESTED = 'INTERESTED',
   EXPERIENCED = 'EXPERIENCED',

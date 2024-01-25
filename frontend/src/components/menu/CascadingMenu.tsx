@@ -35,7 +35,11 @@ export const CascadingMenu = ({
           <div className={classes.menu.chipsContainer}>
             {value ? (
               <Chip
-                value={nestedValue ? `${value}:${ExperienceName[nestedValue as keyof  typeof ExperienceName]}` : value}
+                value={
+                  nestedValue
+                    ? `${value}:${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
+                    : value
+                }
                 color="blue-gray"
                 variant="ghost"
                 className={classes.menu.chip}
