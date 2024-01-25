@@ -55,7 +55,9 @@ export class PersonnelService {
           experienceType: query.experience,
         });
       }
-      qb = qb.andWhere('function.abbreviation = :functionAbbrv', { functionAbbrv: query.function });
+      qb = qb.andWhere('function.name = :function', {
+        function: query.function,
+      });
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);

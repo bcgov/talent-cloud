@@ -14,7 +14,6 @@ import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { WorkLocation } from '../../common/enums';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -27,19 +26,33 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({ name: 'work_location', type: 'enum', enum: WorkLocation, enumName: 'work_location' })
-  workLocation: WorkLocation;
+  @Column({
+    name: 'work_location',
+    type: 'varchar',
+    length: 100,
+  })
+  workLocation: string;
 
   @Column({ name: 'region', type: 'enum', enum: Region, enumName: 'region' })
   region: Region;
 
-  @Column({ name: 'ministry', type: 'enum', enum: Ministry, enumName: 'ministry' })
+  @Column({
+    name: 'ministry',
+    type: 'enum',
+    enum: Ministry,
+    enumName: 'ministry',
+  })
   ministry: Ministry;
 
   @Column({ name: 'primary_phone', type: 'varchar', length: 15 })
   primaryPhone: string;
 
-  @Column({ name: 'secondary_phone', type: 'varchar', length: 15, nullable: true })
+  @Column({
+    name: 'secondary_phone',
+    type: 'varchar',
+    length: 15,
+    nullable: true,
+  })
   secondaryPhone?: string;
 
   @Column({ name: 'other_phone', type: 'varchar', length: 15, nullable: true })
@@ -54,7 +67,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'supervisor', type: 'varchar', length: 100 })
   supervisor: string;
 
-  @Column({ name: 'skills_abilities', type: 'varchar', length: 512, nullable: true })
+  @Column({
+    name: 'skills_abilities',
+    type: 'varchar',
+    length: 512,
+    nullable: true,
+  })
   skillsAbilities: string;
 
   @Column({ name: 'notes', type: 'varchar', length: 512, nullable: true })
@@ -63,7 +81,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'active', type: 'boolean', default: true })
   active: boolean;
 
-  @Column({ name: 'classification', type: 'enum', enum: Classification, enumName: 'classification' })
+  @Column({
+    name: 'classification',
+    type: 'enum',
+    enum: Classification,
+    enumName: 'classification',
+  })
   classification: Classification;
 
   @Column({ name: 'remote_only', type: 'boolean', default: false })
@@ -102,10 +125,12 @@ export class PersonnelEntity extends BaseEntity {
       active: this.active,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
-      experiences: this.experiences?.map((experience) => experience.toResponseObject()) || [],
+      experiences:
+        this.experiences?.map((experience) => experience.toResponseObject()) ||
+        [],
       // trainings
       // availability
       // available
-    }
+    };
   }
 }

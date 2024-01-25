@@ -1,11 +1,5 @@
 // Join Table between Personnel and Functions
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { FunctionEntity } from './function.entity';
 import { PersonnelEntity } from './personnel.entity';
 import { Experience } from '../../common/enums/experience.enum';
@@ -24,10 +18,15 @@ export class ExperienceEntity {
   @JoinColumn({ name: 'function_id' })
   function: FunctionEntity;
 
-  @PrimaryColumn({  name: 'function_id' })
+  @PrimaryColumn({ name: 'function_id' })
   functionId: number;
 
-  @Column({ name: 'experience_type', type: 'enum', enum: Experience, enumName: 'experience' })
+  @Column({
+    name: 'experience_type',
+    type: 'enum',
+    enum: Experience,
+    enumName: 'experience',
+  })
   experienceType: Experience;
 
   toResponseObject(): ExperienceRO {
@@ -35,6 +34,6 @@ export class ExperienceEntity {
       functionName: this.function.name,
       functionAbbrv: this.function.abbreviation,
       experienceType: this.experienceType,
-    }
+    };
   }
 }

@@ -5,14 +5,10 @@ import {
   IsBoolean,
   IsEnum,
   IsOptional,
+  IsString,
   Length,
 } from 'class-validator';
-import {
-  Experience,
-  FunctionNameAbbrv,
-  Region,
-  WorkLocation,
-} from '../../common/enums';
+import { Experience, FunctionName, Region } from '../../common/enums';
 import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
@@ -54,32 +50,32 @@ export class GetPersonnelDTO extends QueryDTO {
           .split(', ')
           .map((type) => Region[type]),
   )
-  region: string;
+  region: Region;
 
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
-    example: `${WorkLocation.ABBOTSFORD},${WorkLocation.BRENTWOOD_BAY}`,
+    example: `Abbotsford, Victoria`,
   })
   @IsOptional()
   @IsArray()
-  @IsEnum(WorkLocation, { each: true })
+  @IsString({ each: true })
   @Transform(({ value }) =>
     Array.isArray(value)
       ? value
       : value
           .trim()
           .split(', ')
-          .map((type) => WorkLocation[type]),
+          .map((type) => type),
   )
-  location: WorkLocation;
+  location: string;
 
   @ApiPropertyOptional({
     description: 'Function name to search personnel from',
-    type: FunctionNameAbbrv,
-    example: FunctionNameAbbrv.OPERATIONS,
+    type: FunctionName,
+    example: FunctionName.OPERATIONS,
   })
   @IsOptional()
-  function: FunctionNameAbbrv;
+  function: FunctionName;
 
   @ApiPropertyOptional({
     description: 'Experience level to search personnel from',

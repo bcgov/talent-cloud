@@ -1,6 +1,7 @@
 export * from './availability-type.enum';
 export * from './classification.enum';
 export * from './experience.enum';
+export * from './experience-name.enum';
 export * from './function.enum';
 export * from './ministry.enum';
 export * from './region.enum';

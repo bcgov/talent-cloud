@@ -1,20 +1,12 @@
 import { Loading, Table } from '@/components';
-import {
-  dashboardToggle,
-  dashboardColumns,
-  dashboardFilterFields,
-} from './constants';
-import { v4 as uuidv4 } from 'uuid';
+import { dashboardToggle, dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
 import useTable from '@/hooks/useTable';
 
 const Dashboard = () => {
   const title = 'Search Results';
   const subtitle = 'Results Found';
-  const columns = dashboardColumns.map((itm: string) => ({
-    name: itm,
-    key: uuidv4(),
-  }));
+
   const {
     filterValues,
     tableData,
@@ -24,6 +16,8 @@ const Dashboard = () => {
     handleCloseMultiple,
     handlePageParams,
     onClear,
+    dashboardColumns,
+    handleSearch,
   } = useTable();
 
   return (
@@ -37,6 +31,7 @@ const Dashboard = () => {
         handleCloseMultiple={handleCloseMultiple}
         onClear={onClear}
         filterValues={filterValues}
+        handleSearch={handleSearch}
       />
 
       {!tableData ? (
@@ -46,7 +41,7 @@ const Dashboard = () => {
           title={title}
           subtitle={subtitle}
           toggle={dashboardToggle}
-          columns={columns}
+          columns={dashboardColumns}
           tableData={tableData}
           pageParams={filterValues}
           handlePageParams={handlePageParams}
