@@ -1,8 +1,13 @@
 import { ButtonTypes, Region } from '@/common';
-import { MultiSelectGroup, Button,  CascadingMenu,  MultiSelect, Search } from '@/components';
-import { DashboardFields, DashboardFilters } from './constants';
-import { ChangeEvent } from 'react';
-
+import {
+  MultiSelectGroup,
+  Button,
+  CascadingMenu,
+  MultiSelect,
+  Search,
+} from '@/components';
+import type { DashboardFields, DashboardFilters } from './constants';
+import type { ChangeEvent } from 'react';
 
 export const Filters = ({
   fields,

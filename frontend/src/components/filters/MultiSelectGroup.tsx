@@ -1,8 +1,15 @@
 import type { FieldGroupedOption } from '../table';
 import { classes } from './classes';
 import type { ChangeEvent } from 'react';
-import { MenuItem, Checkbox, Menu, MenuButton,  MenuChips,  MenuHandler,  MenuList } from '../ui';
-
+import {
+  MenuItem,
+  Checkbox,
+  Menu,
+  MenuButton,
+  MenuChips,
+  MenuHandler,
+  MenuList,
+} from '../ui';
 
 export const MultiSelectGroup = ({
   field,
@@ -49,16 +56,16 @@ export const MultiSelectGroup = ({
     <>
       <label>{label}</label>
       <Menu dismiss={{ itemPress: false }}>
-          <MenuHandler>
+        <MenuHandler>
           <MenuChips
             values={values}
             label={label}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
-          /> 
+          />
           <MenuButton />
-        </MenuHandler> 
+        </MenuHandler>
 
         <MenuList className={field.name}>
           <div className="flex flex-col p-4">
@@ -90,7 +97,7 @@ export const MultiSelectGroup = ({
                     </label>
                   </MenuItem>
                   {group.options?.map((option: any) => (
-                    <MenuItem key={option} >
+                    <MenuItem key={option}>
                       <label className={classes.menu.listItem} htmlFor={option}>
                         <Checkbox
                           onChange={onChange}

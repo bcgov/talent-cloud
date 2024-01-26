@@ -1,7 +1,14 @@
 import { classes } from './classes';
 import type { ChangeEvent } from 'react';
-import { MenuItem, Checkbox,  Menu,  MenuList, MenuButton, MenuHandler, MenuChips } from '../ui';
-
+import {
+  MenuItem,
+  Checkbox,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuHandler,
+  MenuChips,
+} from '../ui';
 
 export const MultiSelect = ({
   field,
@@ -34,20 +41,20 @@ export const MultiSelect = ({
     <>
       <label>{label}</label>
       <Menu dismiss={dismiss}>
-        <MenuHandler >
+        <MenuHandler>
           <MenuChips
             values={values}
             label={field.name}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
-          /> 
+          />
           <MenuButton />
         </MenuHandler>
 
         <MenuList className={field.name}>
           {field.options?.map((option: any) => (
-            <MenuItem  key={option}>
+            <MenuItem key={option}>
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <Checkbox
                   onChange={onChange}

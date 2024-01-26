@@ -4,7 +4,6 @@ import { MenuButton, Chip, Menu, MenuList, MenuHandler } from '../ui';
 import { ExperienceName } from '@/common';
 import { classes } from './classes';
 
-
 export const CascadingMenu = ({
   value,
   onChange,
@@ -21,13 +20,12 @@ export const CascadingMenu = ({
   nestedValue: string;
 }) => {
   const handleChange = (name: string, value: string) => {
-    
     const event = {
       target: { name: name, value: value },
     } as unknown as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
-  
+
   return (
     <Menu dismiss={{ itemPress: false }}>
       <MenuHandler>
@@ -43,7 +41,7 @@ export const CascadingMenu = ({
           <span className={classes.menu.placeholder}>Select {label}(s)</span>
         )}
         <MenuButton />
-      </MenuHandler> 
+      </MenuHandler>
       <MenuList className={field.name}>
         {field.options?.map((option: any) => (
           <NestedMenu

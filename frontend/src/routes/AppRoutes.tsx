@@ -12,7 +12,7 @@ import { getKeycloakInfo } from '@/services';
 
 export default () => {
   const [keycloakInfo, setKeycloakInfo] = useState<Keycloak>();
-  
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
@@ -32,7 +32,7 @@ export default () => {
       }
     })();
   }, []);
-  
+
   if (loading) return <Loading />;
   return keycloakInfo ? (
     <ReactKeycloakProvider
