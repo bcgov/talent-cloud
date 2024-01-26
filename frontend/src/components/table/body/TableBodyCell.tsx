@@ -1,7 +1,7 @@
 import type { Cell } from '@/components';
 import { booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
-import { iconClass } from '@/styles/tableStyles';
+import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 export const TableBodyCell = ({ itm }: { itm: Cell }) => {

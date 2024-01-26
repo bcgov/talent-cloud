@@ -1,0 +1,43 @@
+.MuiInputBase-input {
+  @apply focus:ring-0 focus:ring-offset-0 after:ring-transparent focus:ring-transparent after:ring-0 ring-0 ring-transparent after:ring-offset-0; 
+}
+
+
+@layer utilities {
+  .text-list-header {
+
+font-size: 16px;
+font-weight: 700;
+line-height: 26px;
+letter-spacing: 0em;
+text-align: left;
+color: #3A3A3A;
+}
+.label {
+  color: #323232;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.text-list-item {
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #3A3A3A; 
+}
+
+  .checkboxContainer {
+    @apply rounded-sm  flex items-center justify-center h-4 w-4 px-4;
+    
+  }
+  .checkbox{
+    @apply rounded-sm bg-white h-4 w-4 border border-[#606060] 
+  }
+}
+
+

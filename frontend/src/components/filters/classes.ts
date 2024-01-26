@@ -8,17 +8,19 @@ export const classes = {
 
     checkboxLabel:
       'flex cursor-pointer items-center justify-start text-sm font-normal text-left',
-    optionLabel:
-      'flex cursor-pointer items-center justify-start text-sm font-normal text-left',
+    listLabel: 'flex cursor-pointer items-center justify-start text-list-header',
+    listItem: 'flex cursor-pointer items-center justify-start text-list-item',
     menuList: 'py-0 px-0 space-y-0',
     groupLabel:
       'flex cursor-pointer items-center justify-start text-md font-bold text-left ',
     optionButton:
       'flex flex-row items-center justify-start text-sm font-normal text-left bg-transparent shadow-none text-dark text-left font-normal',
     chipsContainer: 'flex flex-row items-center justify-start',
-    menuItem: '',
+    menuItem: 'flex flex-row items-start justify-start',
     chip: 'rounded-full px-4 text-sm font-bold mx-2 text-info bg-infoBannerLight',
     placeholder: 'text-gray-500',
+    checkbox: 'checkbox',
+    checkboxContainer: 'checkboxContainer',
   },
 
   group: {

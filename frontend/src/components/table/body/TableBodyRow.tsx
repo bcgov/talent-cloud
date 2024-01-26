@@ -1,6 +1,6 @@
 import type { Cell, Row } from '@/components';
 import { TableBodyCell } from './TableBodyCell';
-import { rowClass } from '@/styles/tableStyles';
+import { rowClass } from '@/components/table/classes';
 
 export const TableBodyRow = ({ row }: { row: Row }) => {
   return (

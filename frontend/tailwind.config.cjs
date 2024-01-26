@@ -7,7 +7,17 @@ module.exports = withMT({
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx,css}",
   ],
+  
   theme: {
+    // overridden here as mui tailwind uses these color values for some of the psuedo classes
+      colors: {
+        blue: {
+          600: "#4e7192",
+        },
+        gray: {
+          900: "#1A5A96",
+        },
+      },
     extend: {
       fontFamily: {
         sans: ['"BCSans"'],
@@ -47,9 +57,11 @@ module.exports = withMT({
         infoBannerLight: '#D9EAF7',
       },
       textColor: {
+        info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
         dark: '#313132',
+        darkGrey: "#3A3A3A", 
         light: '#FFFFFF',
         black: '#000000',
         ministry: '#1A5A96',

@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import type { FieldInterface } from '..';
-import { classes } from '../menu/constants';
+import { classes } from '../filters/classes';
 
 export const Search = ({
   field,

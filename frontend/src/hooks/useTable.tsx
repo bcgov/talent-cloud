@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
-import { tableClass } from '@/styles/tableStyles';
+import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
 
