@@ -4,16 +4,16 @@ import { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import store from 'store';
-
 import { Dashboard, Login, NotFound, Profile } from '../pages';
-import { Loading } from '@/components';
+import { Layout, Loading } from '@/components';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
 import { getKeycloakInfo } from '@/services';
 
 export default () => {
   const [keycloakInfo, setKeycloakInfo] = useState<Keycloak>();
-
+  
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
       try {
@@ -27,11 +27,13 @@ export default () => {
         );
       } catch (e) {
         console.log(e);
-        console.log('Error loading keycloak');
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
-
+  
+  if (loading) return <Loading />;
   return keycloakInfo ? (
     <ReactKeycloakProvider
       authClient={keycloakInfo}
@@ -56,8 +58,8 @@ export default () => {
       </BrowserRouter>
     </ReactKeycloakProvider>
   ) : (
-    <>
+    <Layout>
       <h1>Unable to access authentication server</h1>
-    </>
+    </Layout>
   );
 };

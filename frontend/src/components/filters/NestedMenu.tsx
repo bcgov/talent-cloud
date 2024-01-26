@@ -1,8 +1,8 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { classes } from './classes';
-import { Menu,  MenuList } from '../ui';
-import { MenuHandler, MenuItem } from '@material-tailwind/react';
+import { Menu   } from '../ui';
+import { MenuHandler, MenuList, MenuItem   } from '@material-tailwind/react';
 
 export const NestedMenu = ({
   field,

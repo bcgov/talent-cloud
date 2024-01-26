@@ -21,13 +21,13 @@ export const CascadingMenu = ({
   nestedValue: string;
 }) => {
   const handleChange = (name: string, value: string) => {
-    console.log(name, value);
+    
     const event = {
       target: { name: name, value: value },
     } as unknown as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
-  console.log(value, nestedValue);
+  
   return (
     <Menu dismiss={{ itemPress: false }}>
       <MenuHandler>

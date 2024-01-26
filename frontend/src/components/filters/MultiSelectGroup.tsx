@@ -38,7 +38,7 @@ export const MultiSelectGroup = ({
     const event = {
       target: {
         name: field.name,
-        value: [],
+        value: values,
       },
     } as unknown as ChangeEvent<HTMLInputElement>;
 

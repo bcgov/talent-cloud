@@ -34,7 +34,7 @@ export const MultiSelect = ({
     <>
       <label>{label}</label>
       <Menu dismiss={dismiss}>
-        <MenuHandler placeholder={undefined}>
+        <MenuHandler >
           <MenuChips
             values={values}
             label={field.name}
@@ -47,7 +47,7 @@ export const MultiSelect = ({
 
         <MenuList className={field.name}>
           {field.options?.map((option: any) => (
-            <MenuItem placeholder={option} key={option}>
+            <MenuItem  key={option}>
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <Checkbox
                   onChange={onChange}

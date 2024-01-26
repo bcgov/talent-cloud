@@ -2,12 +2,13 @@ import type { MenuListProps } from '@material-tailwind/react';
 import { MenuList as MuiMenuList } from '@material-tailwind/react';
 
 const getClass = (name?: string) => {
+  
   if (name === 'region') {
     return 'w-96 md:w-36 lg:w-52';
   } else if (name === 'function') {
-    return 'w-96 md:w-[700px] lg:w-72 xl:w-96';
+    return 'w-96 sm:w-[550px] md:w-[650px] lg:w-[450px] xl:w-[625px]';
   } else if (name === 'location') {
-    return 'p-4 lg:w-[875px] -ml-24';
+    return 'p-4';
   } else {
     return;
   }
