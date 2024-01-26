@@ -45,9 +45,8 @@ export const rowData = () => {
 };
 
 const experiences = () => {
-  const num = Math.floor(Math.random() * 9);
   const experiences = [];
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < 5; i++) {
     const functionEntity: { id: number; name: string; abbreviation: string } =
       faker.helpers.arrayElement(functions);
 
