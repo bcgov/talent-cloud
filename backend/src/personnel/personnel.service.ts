@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
+import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 
@@ -11,6 +12,19 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
   ) {}
 
+  async createPersonnel(personnel: CreatePersonnelDTO[]) {
+    try {
+      return await Promise.all(
+        personnel.map((person: CreatePersonnelDTO) =>
+          this.personnelRepository.save(
+            this.personnelRepository.create(new PersonnelEntity(person)),
+          ),
+        ),
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
   /**
    * Get Personnel
    * Given specific queries, get associated personnel and their function experiences

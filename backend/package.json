@@ -24,7 +24,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:pipeline": "NODE_ENV=ci RUNTIME_ENV=ci jest  --config ./test/jest.json --runInBand --detectOpenHandles --verbose",
     "prepare": "cd ../ && husky install ./backend/.husky",
-    "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/"
+    "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "migration:run": "npm run typeorm migration:run -- -d ./src/database/datasource.ts",
+    "migration:generate": "npm run typeorm -- -d ./src/database/datasource.ts migration:generate ./src/database/migrations/migration",
+    "migration:create": "npm run typeorm -- migration:create ./src/database/migrations/migration",
+    "migration:revert": "npm run typeorm -- -d ./src/database/datasource.ts migration:revert"
+    
   },
   "dependencies": {
     "@nestjs/axios": "3.0.1",
@@ -48,7 +54,8 @@
     "pg": "8.11.3",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.1",
-    "typeorm": "0.3.17"
+    "typeorm": "0.3.17",
+    "ts-node": "10.9.1"
   },
   "devDependencies": {
     "@faker-js/faker": "8.3.1",
@@ -76,7 +83,7 @@
     "supertest": "6.3.3",
     "ts-jest": "29.1.0",
     "ts-loader": "9.4.3",
-    "ts-node": "10.9.1",
+    
     "tsconfig-paths": "4.2.0",
     "typescript": "5.1.3"
   },

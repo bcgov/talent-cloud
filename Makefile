@@ -184,3 +184,26 @@ run-local-prod:
 	@docker-compose down
 	@docker run -p3000:3000 test-fe-prod:latest 
 	@docker run -p3001:3000 test-be-prod:latest
+
+# ===================================
+# Migrations
+# ===================================
+
+migration-create:
+	@docker exec tc-backend-${ENV} npm run migration:create
+
+migration-generate:	  
+	@docker exec tc-backend-${ENV} npm run migration:generate
+
+migration-revert: 
+	@docker exec tc-backend-${ENV} npm run migration:revert
+
+migration-run:
+	@docker exec tc-backend-${ENV} npm run migration:run
+	
+seed-data:
+	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
+
+delete-db:
+	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
+	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"

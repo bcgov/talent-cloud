@@ -18,10 +18,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return health information', async () => {
+    it('should return a string', async () => {
       const res = await appController.checkApp();
-      console.log(res);
-
       expect(res).toStrictEqual({
         api: {
           details: {},
