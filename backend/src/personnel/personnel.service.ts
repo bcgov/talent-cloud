@@ -12,6 +12,13 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
   ) {}
 
+  async updatePersonnel(personnel: Partial<PersonnelEntity>) {
+    try {
+      return await this.personnelRepository.update(personnel.id, personnel);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   async createPersonnel(personnel: CreatePersonnelDTO[]) {
     try {
       return await Promise.all(

@@ -201,7 +201,8 @@ migration-revert:
 migration-run:
 	@docker exec tc-backend-${ENV} npm run migration:run
 	
-seed-data:
+seed-data: 
+	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
 
 delete-db:

@@ -101,7 +101,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
   willingToTravel: boolean;
 
-  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel)
+  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
   experiences: ExperienceEntity[];
 
   @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel)
