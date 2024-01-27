@@ -35,8 +35,8 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Post()
-  async createPersonnel(@Body() personnel: CreatePersonnelDTO) {
-    return personnel;
+  async createPersonnel(@Body() personnel: CreatePersonnelDTO[]) {
+    return await this.personnelService.createPersonnel(personnel);
   }
 
   @ApiOperation({
@@ -49,9 +49,13 @@ export class PersonnelController {
   })
   @Get()
   @UsePipes(new QueryTransformPipe())
-  async getPersonnel(@Query() query?: GetPersonnelDTO): Promise<GetPersonnelRO> {
+  async getPersonnel(
+    @Query() query?: GetPersonnelDTO,
+  ): Promise<GetPersonnelRO> {
     const queryResponse = await this.personnelService.getPersonnel(query);
-    const personnel = queryResponse.personnel.map((personnelEntity) => personnelEntity.toResponseObject());
+    const personnel = queryResponse.personnel.map((personnelEntity) =>
+      personnelEntity.toResponseObject(),
+    );
     return {
       personnel,
       count: queryResponse.count,

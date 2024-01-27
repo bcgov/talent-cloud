@@ -13,6 +13,7 @@ import { TrainingEntity } from './training.entity';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
+import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 
 @Entity('personnel')
@@ -44,18 +45,23 @@ export class PersonnelEntity extends BaseEntity {
   })
   ministry: Ministry;
 
-  @Column({ name: 'primary_phone', type: 'varchar', length: 15 })
+  @Column({
+    name: 'primary_phone',
+    type: 'varchar',
+    length: 25,
+    nullable: true,
+  })
   primaryPhone: string;
 
   @Column({
     name: 'secondary_phone',
     type: 'varchar',
-    length: 15,
+    length: 25,
     nullable: true,
   })
   secondaryPhone?: string;
 
-  @Column({ name: 'other_phone', type: 'varchar', length: 15, nullable: true })
+  @Column({ name: 'other_phone', type: 'varchar', length: 25, nullable: true })
   otherPhone: string;
 
   @Column({ name: 'email', type: 'varchar', length: 50 })
@@ -95,7 +101,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
   willingToTravel: boolean;
 
-  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel)
+  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
   experiences: ExperienceEntity[];
 
   @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel)
@@ -132,5 +138,10 @@ export class PersonnelEntity extends BaseEntity {
       // availability
       // available
     };
+  }
+
+  constructor(data: CreatePersonnelDTO) {
+    super();
+    Object.assign(this, data);
   }
 }
