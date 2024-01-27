@@ -1,4 +1,5 @@
 import { Chip as MuiChip, Typography } from '@material-tailwind/react';
+import { classes } from '../filters/classes';
 
 export const Chip = ({
   value,
@@ -18,7 +19,7 @@ export const Chip = ({
       </Typography>
     }
     variant="ghost"
-    className="rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none"
+    className={classes.menu.chip}
     onClose={handleClose}
   />
 );

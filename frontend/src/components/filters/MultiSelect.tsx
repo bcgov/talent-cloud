@@ -18,15 +18,13 @@ export const MultiSelect = ({
   handleClose,
 }: {
   field: any;
-
   values: any;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-
   handleClose: (name: string, value?: string) => void;
-
   label: string;
 }) => {
-  const dismiss = { outsidePress: true };
+
+  
 
   const handleCloseMany = () => {
     const event = {
@@ -37,10 +35,11 @@ export const MultiSelect = ({
     } as unknown as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
+
   return (
     <>
       <label>{label}</label>
-      <Menu dismiss={dismiss}>
+      <Menu dismiss={{outsidePress: true, itemPress: false}}>
         <MenuHandler>
           <MenuChips
             values={values}
@@ -51,7 +50,6 @@ export const MultiSelect = ({
           />
           <MenuButton />
         </MenuHandler>
-
         <MenuList className={field.name}>
           {field.options?.map((option: any) => (
             <MenuItem key={option}>

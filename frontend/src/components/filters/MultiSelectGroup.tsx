@@ -1,7 +1,6 @@
-import type { FieldGroupedOption } from '../table';
-import { classes } from './classes';
 import type { ChangeEvent } from 'react';
 import {
+  FieldGroupedOption,
   MenuItem,
   Checkbox,
   Menu,
@@ -9,7 +8,8 @@ import {
   MenuChips,
   MenuHandler,
   MenuList,
-} from '../ui';
+} from '@/components';
+import { classes } from './classes';
 
 export const MultiSelectGroup = ({
   field,
@@ -19,16 +19,15 @@ export const MultiSelectGroup = ({
   label,
 }: {
   field: any;
-
   values: any;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleClose: (name: string, value?: string) => void;
-
   label: string;
 }) => {
+  
   const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
+  
     const value = e.target.value.split(',');
-
     const valueSet = value.filter((itm) => !values.includes(itm));
 
     const event = {
@@ -55,7 +54,7 @@ export const MultiSelectGroup = ({
   return (
     <>
       <label>{label}</label>
-      <Menu dismiss={{ itemPress: false }}>
+      <Menu dismiss={{ outsidePress:true, itemPress: false }}>
         <MenuHandler>
           <MenuChips
             values={values}
@@ -66,7 +65,6 @@ export const MultiSelectGroup = ({
           />
           <MenuButton />
         </MenuHandler>
-
         <MenuList className={field.name}>
           <div className="flex flex-col p-4">
             <span className="label pl-4 pb-4">{`Select ${field.name}(s):`}</span>

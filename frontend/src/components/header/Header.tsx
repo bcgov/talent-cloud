@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
 import { CloudIcon, EmcrLogoHorizontalDark } from '../images';
 import { LINKS } from '@/common';
+import { Routes } from '@/routes';
 
 export const Header = ({
   appName,
@@ -23,7 +24,7 @@ export const Header = ({
 
         <div className="col-span-1 text-center flex flex-row items-center justify-center space-x-2 px-8">
           <CloudIcon />
-          <Link to="/" className="hover:underline">
+          <Link to={Routes.Dashboard} className="hover:underline">
             <h4>{appName.toUpperCase()}</h4>
           </Link>
         </div>

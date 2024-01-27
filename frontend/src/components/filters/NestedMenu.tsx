@@ -15,6 +15,7 @@ export const NestedMenu = ({
   nestedField: any;
   handleChange: (nestedField: any, nestedValue: any) => void;
 }) => {
+
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
@@ -40,7 +41,7 @@ export const NestedMenu = ({
           </div>
         </MenuItem>
       </MenuHandler>
-      <MenuList>
+      <MenuList placeholder={option}>
         {nestedField.options.map((itm: any) => (
           <MenuItem
             placeholder={itm.label}
