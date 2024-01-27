@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
-import { tableClass } from '@/styles/tableStyles';
+import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
 
@@ -49,6 +49,7 @@ const useTable = () => {
   useEffect(() => {
     (async () => {
       handleSearchParams(searchParamsUrl, filterValues);
+
       try {
         const {
           data: { personnel, count },
@@ -58,17 +59,26 @@ const useTable = () => {
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = calculatePages(Math.ceil(totalPages));
         const currentPage = filterValues?.currentPage ?? 1;
-        filterValues.function &&
-          setDashboardColumns([
-            { key: uuidv4(), name: DashboardColumns.NAME },
-            { key: uuidv4(), name: DashboardColumns.FUNCTION },
-            { key: uuidv4(), name: DashboardColumns.REGION },
-            { key: uuidv4(), name: DashboardColumns.LOCATION },
-            { key: uuidv4(), name: DashboardColumns.TRAVEL },
-            { key: uuidv4(), name: DashboardColumns.REMOTE },
-            { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
-            { key: uuidv4(), name: DashboardColumns.MINISTRY },
-          ]);
+        filterValues.function
+          ? setDashboardColumns([
+              { key: uuidv4(), name: DashboardColumns.NAME },
+              { key: uuidv4(), name: DashboardColumns.FUNCTION },
+              { key: uuidv4(), name: DashboardColumns.REGION },
+              { key: uuidv4(), name: DashboardColumns.LOCATION },
+              { key: uuidv4(), name: DashboardColumns.TRAVEL },
+              { key: uuidv4(), name: DashboardColumns.REMOTE },
+              { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+              { key: uuidv4(), name: DashboardColumns.MINISTRY },
+            ])
+          : setDashboardColumns([
+              { key: uuidv4(), name: DashboardColumns.NAME },
+              { key: uuidv4(), name: DashboardColumns.REGION },
+              { key: uuidv4(), name: DashboardColumns.LOCATION },
+              { key: uuidv4(), name: DashboardColumns.TRAVEL },
+              { key: uuidv4(), name: DashboardColumns.REMOTE },
+              { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+              { key: uuidv4(), name: DashboardColumns.MINISTRY },
+            ]);
         personnel &&
           setTableData({
             totalPages,
@@ -247,7 +257,7 @@ const useTable = () => {
         name: '',
         region: [],
         location: [],
-        function: '',
+        function: null,
         experience: '',
       }),
     filterValues,

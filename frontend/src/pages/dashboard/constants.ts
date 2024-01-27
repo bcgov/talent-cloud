@@ -46,112 +46,120 @@ export interface DashboardFields {
   };
   region: {
     name: string;
-    options: Region[];
+    options: { label: Region; value: WorkLocation[] }[];
   };
   experience: {
     name: string;
-    options: { label: ExperienceName; value: Experience }[];
+    options: { label: ExperienceName; value: Experience | Experience[] | '' }[];
   };
 }
+
+const regionsAndLocations = [
+  {
+    region: Region.VIC,
+    locations: [
+      WorkLocation.CAMPBELL_RIVER,
+      WorkLocation.COURTENAY,
+      WorkLocation.CUMBERLAND,
+      WorkLocation.NANAIMO,
+      WorkLocation.PORT_ALBERNI,
+      WorkLocation.QUALICUM_BEACH,
+      WorkLocation.UCLUELET,
+    ],
+  },
+  {
+    region: Region.CTL,
+    locations: [
+      WorkLocation.ENDERBY,
+      WorkLocation.KAMLOOPS,
+      WorkLocation.KELOWNA,
+      WorkLocation.MERRITT,
+      WorkLocation.SALMON_ARM,
+      WorkLocation.SORRENTO,
+      WorkLocation.VERNON,
+    ],
+  },
+  {
+    region: Region.HQ,
+    locations: [
+      WorkLocation.BRENTWOOD_BAY,
+      WorkLocation.LANGFORD,
+      WorkLocation.ESQUIMALT,
+      WorkLocation.SAANICH,
+      WorkLocation.SAANICHTON,
+      WorkLocation.SIDNEY,
+      WorkLocation.VICTORIA,
+    ],
+  },
+  {
+    region: Region.NEA,
+    locations: [
+      WorkLocation.HUNDRED_MILE_HOUSE,
+      WorkLocation.HUNDRED_FIFTY_MILE_HOUSE,
+      WorkLocation.DAWSON_CREEK,
+      WorkLocation.FORT_NELSON,
+      WorkLocation.FORT_ST_JOHN,
+      WorkLocation.MACKENZIE,
+      WorkLocation.PRINCE_GEORGE,
+      WorkLocation.QUESNEL,
+      WorkLocation.WILLIAMS_LAKE,
+    ],
+  },
+  {
+    region: Region.SWE,
+    locations: [
+      WorkLocation.ABBOTSFORD,
+      WorkLocation.BONNINGTON_FALLS,
+      WorkLocation.BURNABY,
+      WorkLocation.COQUITLAM,
+      WorkLocation.LANGLEY,
+      WorkLocation.LILLOOET,
+      WorkLocation.MAPLE_RIDGE,
+      WorkLocation.NEW_WESTMINSTER,
+      WorkLocation.NORTH_VANCOUVER,
+      WorkLocation.RICHMOND,
+      WorkLocation.SURREY,
+      WorkLocation.VANCOUVER,
+      WorkLocation.WHISTLER,
+    ],
+  },
+  {
+    region: Region.NWE,
+    locations: [
+      WorkLocation.BURNS_LAKE,
+      WorkLocation.SMITHERS,
+      WorkLocation.TERRACE,
+    ],
+  },
+  {
+    region: Region.SEA,
+    locations: [
+      WorkLocation.CASTLEGAR,
+      WorkLocation.CRANBROOK,
+      WorkLocation.ELKFORD,
+      WorkLocation.KIMBERLY,
+      WorkLocation.NELSON,
+      WorkLocation.REVELSTOKE,
+    ],
+  },
+];
 export const dashboardFilterFields: DashboardFields = {
   name: {
     name: DashboardFilterNames.NAME,
   },
   region: {
     name: DashboardFilterNames.REGION,
-    options: [Region.SWE, Region.SEA, Region.NWE, Region.NEA, Region.HQ, Region.CTL],
+    options: regionsAndLocations.map((itm) => ({
+      label: itm.region,
+      value: itm.locations,
+    })),
   },
   location: {
     name: DashboardFilterNames.LOCATION,
-    groupedOptions: [
-      {
-        label: Region.VIC,
-        options: [
-          WorkLocation.CAMPBELL_RIVER,
-          WorkLocation.COURTENAY,
-          WorkLocation.CUMBERLAND,
-          WorkLocation.NANAIMO,
-          WorkLocation.PORT_ALBERNI,
-          WorkLocation.QUALICUM_BEACH,
-          WorkLocation.UCLUELET,
-        ],
-      },
-      {
-        label: Region.CTL,
-        options: [
-          WorkLocation.ENDERBY,
-          WorkLocation.KAMLOOPS,
-          WorkLocation.KELOWNA,
-          WorkLocation.MERRITT,
-          WorkLocation.SALMON_ARM,
-          WorkLocation.SORRENTO,
-          WorkLocation.VERNON,
-        ],
-      },
-      {
-        label: Region.HQ,
-        options: [
-          WorkLocation.BRENTWOOD_BAY,
-          WorkLocation.LANGFORD,
-          WorkLocation.ESQUIMALT,
-          WorkLocation.SAANICH,
-          WorkLocation.SAANICHTON,
-          WorkLocation.SIDNEY,
-          WorkLocation.VICTORIA,
-        ],
-      },
-      {
-        label: Region.NEA,
-        options: [
-          WorkLocation.HUNDRED_MILE_HOUSE,
-          WorkLocation.HUNDRED_FIFTY_MILE_HOUSE,
-          WorkLocation.DAWSON_CREEK,
-          WorkLocation.FORT_NELSON,
-          WorkLocation.FORT_ST_JOHN,
-          WorkLocation.MACKENZIE,
-          WorkLocation.PRINCE_GEORGE,
-          WorkLocation.QUESNEL,
-          WorkLocation.WILLIAMS_LAKE,
-        ],
-      },
-      {
-        label: Region.SWE,
-        options: [
-          WorkLocation.ABBOTSFORD,
-          WorkLocation.BONNINGTON_FALLS,
-          WorkLocation.BURNABY,
-          WorkLocation.COQUITLAM,
-          WorkLocation.LANGLEY,
-          WorkLocation.LILLOOET,
-          WorkLocation.MAPLE_RIDGE,
-          WorkLocation.NEW_WESTMINSTER,
-          WorkLocation.NORTH_VANCOUVER,
-          WorkLocation.RICHMOND,
-          WorkLocation.SURREY,
-          WorkLocation.VANCOUVER,
-          WorkLocation.WHISTLER,
-        ],
-      },
-      {
-        label: Region.NWE,
-        options: [
-          WorkLocation.BURNS_LAKE,
-          WorkLocation.SMITHERS,
-          WorkLocation.TERRACE,
-        ],
-      },
-      {
-        label: Region.SEA,
-        options: [
-          WorkLocation.CASTLEGAR,
-          WorkLocation.CRANBROOK,
-          WorkLocation.ELKFORD,
-          WorkLocation.KIMBERLY,
-          WorkLocation.NELSON,
-          WorkLocation.REVELSTOKE,
-        ],
-      },
-    ],
+    groupedOptions: regionsAndLocations.map((itm) => ({
+      label: itm.region,
+      options: itm.locations,
+    })),
   },
   function: {
     name: DashboardFilterNames.FUNCTION,
@@ -173,6 +181,10 @@ export const dashboardFilterFields: DashboardFields = {
   experience: {
     name: DashboardFilterNames.EXPERIENCE,
     options: [
+      {
+        label: ExperienceName.ALL,
+        value: '',
+      },
       {
         label: ExperienceName.INTERESTED,
         value: Experience.INTERESTED,

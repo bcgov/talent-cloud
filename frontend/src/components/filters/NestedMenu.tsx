@@ -1,7 +1,8 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { useState } from 'react';
-import { classes } from './constants';
+import { classes } from './classes';
+import { Menu } from '../ui';
+import { MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
 
 export const NestedMenu = ({
   field,
@@ -14,6 +15,7 @@ export const NestedMenu = ({
   nestedField: any;
   handleChange: (nestedField: any, nestedValue: any) => void;
 }) => {
+
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
@@ -26,31 +28,30 @@ export const NestedMenu = ({
       offset={15}
       dismiss={{ itemPress: false }}
     >
-      <MenuHandler className="flex items-center justify-between">
-        <MenuItem
-          placeholder={undefined}
-          onClick={() => handleChange(field.name, option)}
-        >
-          <span className={classes.menu.optionLabel}>{option}</span>
-          <ChevronRightIcon
-            strokeWidth={2.5}
-            className={`h-3.5 w-3.5 transition-transform ${
-              openMenu ? 'rotate-90' : ''
-            }`}
-          />
+      <MenuHandler>
+        <MenuItem placeholder={option}>
+          <div className="flex items-center justify-between">
+            <span className={classes.menu.listItem}>{option}</span>
+            <ChevronRightIcon
+              strokeWidth={2.5}
+              className={`h-3.5 w-3.5 transition-transform ${
+                openMenu ? 'rotate-90' : ''
+              }`}
+            />
+          </div>
         </MenuItem>
       </MenuHandler>
-      <MenuList placeholder={undefined}>
+      <MenuList placeholder={option}>
         {nestedField.options.map((itm: any) => (
           <MenuItem
+            placeholder={itm.label}
             key={itm.value}
-            placeholder={undefined}
             onClick={() => {
               handleChange(field.name, option);
               handleChange(nestedField.name, itm.value);
             }}
           >
-            <span className={classes.menu.optionLabel}>{itm.label}</span>
+            <span className={classes.menu.listItem}>{itm.label}</span>
           </MenuItem>
         ))}
       </MenuList>

@@ -9,7 +9,6 @@ export const classificationClass =
   'block  font-bold border border-gray rounded-md mt-4 mx-8 text-center whitespace-nowrap';
 
 export const tableClasses = {
-  generic: [tdClass, 'text-dark px-6 py-4 whitespace-nowrap'].join(', '),
   ministry: [tdClass, 'text-info'].join(', '),
   available: [tdClass, 'text-success'].join(', '),
   unavailable: [tdClass, 'text-error'].join(', '),
