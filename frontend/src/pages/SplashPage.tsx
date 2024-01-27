@@ -10,6 +10,7 @@ const { keycloak } = useKeycloak();
     window.location.replace(Routes.Dashboard);
     }
     else {
+      //TODO remove this once we have a splash page
       window.location.replace(Routes.Login);
     }
   }, [])    
