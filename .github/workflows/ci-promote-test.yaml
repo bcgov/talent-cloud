@@ -17,6 +17,7 @@ env:
 jobs:
   config:
     name: Deploy Config (Test)
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
