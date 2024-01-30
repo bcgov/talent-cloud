@@ -12,12 +12,10 @@ export const UserMenu = ({ username }: { username: string }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <div className="col-span-1 text-center flex flex-row items-center justify-center space-x-2">
+        <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
           <h6>{username}</h6>
-          <Menu.Button className="hover:bg-gray-50">
             <UserIcon />
-          </Menu.Button>
-        </div>
+        </Menu.Button>
       </div>
 
       <Transition

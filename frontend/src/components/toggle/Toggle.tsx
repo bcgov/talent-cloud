@@ -16,7 +16,7 @@ export const Toggle = ({
   }, [checked]);
 
   return (
-    <div className="flex flex-row items-center mr-12">
+    <div className="flex flex-row justify-start md:items-center md:mr-12">
       <label htmlFor="showInactive" className="px-4">
         Show Inactive
       </label>

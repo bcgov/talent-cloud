@@ -20,8 +20,7 @@ export const MenuChips = ({
         {(name === 'region' && values?.length > 2) || values?.length > 3 ? (
           <Chip
             value={`${values?.length} selected`}
-            handleClose={() => handleCloseMany()}
-          />
+            handleClose={handleCloseMany} />
         ) : (
           values?.map((value: any) => (
             <Chip
