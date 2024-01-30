@@ -86,4 +86,15 @@ export class PersonnelService {
     const [personnel, count] = await qb.getManyAndCount();
     return { personnel, count };
   }
+
+  /**
+   * Get Personnel
+   * Given specific queries, get associated personnel and their function experiences
+   * @param query Includes pagination query, ie. page and number of rows
+   * @returns {PersonnelEntity[]} List of personnel
+   * @returns {number} Count of total personnel search applies to
+   */
+  async getPersonnelById(id: string): Promise<PersonnelEntity> {
+    return await this.personnelRepository.findOneBy({ id });
+  }
 }
