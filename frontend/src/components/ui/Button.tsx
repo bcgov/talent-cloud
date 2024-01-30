@@ -2,7 +2,7 @@ import type { ButtonProps } from '@/common';
 import { ButtonTypes } from '@/common';
 
 const secondaryButton =
-  'bg-transparent underline border-none text-center block font-bold text-md w-auto flex flex-row whitespace-nowrap';
+  'bg-transparent underline border border-2 rounded-md  px-6 py-2 border-primaryBlue text-center block font-bold text-decoration-none';
 const primaryButton =
   'bg-primaryBlue border-none text-center block font-bold text-md w-auto flex flex-row whitespace-nowrap text-white px-6 py-2 rounded-sm';
 

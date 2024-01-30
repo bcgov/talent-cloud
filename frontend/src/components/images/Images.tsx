@@ -6,8 +6,7 @@ export const EmcrLogoHorizontalLight = () => (
 );
 export const EmcrLogoHorizontalDark = () => (
   <img
-    width="250"
-    src={new URL('/assets/images/emcr_dark_horizontal.svg', import.meta.url).href}
+    src={new URL('/assets/images/emcr_logo_2.svg', import.meta.url).href}
     alt="emcr logo horizontal dark"
   />
 );

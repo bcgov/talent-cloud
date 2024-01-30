@@ -10,11 +10,11 @@ export const MenuButton = () => {
     <div className={classes.menu.buttonContainer}>
       {open ? (
         <button className={classes.menu.button}>
-          <ChevronUpIcon className="h-5 w-5 text-dark" />
+          <ChevronUpIcon className="h-8 w-5 fill-[#606060]" />
         </button>
       ) : (
         <button className={classes.menu.button}>
-          <ChevronDownIcon className="h-5 w-5 text-dark" />
+          <ChevronDownIcon className="h-8 w-5 fill-[#606060]"/>
         </button>
       )}
     </div>

@@ -23,7 +23,7 @@ export enum DashboardColumns {
   CLASSIFICATION = 'Classification',
   REGION = 'Region',
   LOCATION = 'Work Location',
-  TRAVEL = 'Willing To Travel',
+  TRAVEL = 'Willingness To Travel',
   MINISTRY = 'Ministry',
   NAME = 'Name',
   STATUS = 'Status',
@@ -207,7 +207,7 @@ export const dashboardToggle = {
   label: 'Show Inactive',
 };
 
-interface ExperienceInterface {
+export interface ExperienceInterface {
   experienceType: Experience;
   functionName: FunctionName;
 }
@@ -242,8 +242,8 @@ export interface DashboardFilters {
   currentPage: number;
   showInactive?: boolean;
   name: string;
-  region: Region[];
+  region: string[];
   location: string[];
-  function: FunctionName;
-  experience: ExperienceName;
+  function?: string;
+  experience?: string;
 }

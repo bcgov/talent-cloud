@@ -14,7 +14,7 @@ export const Layout = ({
   username?: string;
 }) => {
   return (
-    <div className=" h-screen relative">
+    <div className="min-h-screen flex flex-col">
       <Header
         appName={APP_NAME}
         username={username ?? ''}
@@ -22,13 +22,13 @@ export const Layout = ({
       />
       <div
         className={[
-          'w-full h-screen',
+          'w-full  mt-12 ',
           authenticated ? ' bg-white' : ' bg-primaryBlue',
         ].join(', ')}
       >
-        {children}
-        <Footer links={footerLinks} />
+          {children}  
       </div>
-    </div>
+      <Footer links={footerLinks} />  
+      </div>
   );
 };
