@@ -68,16 +68,15 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get personnel',
-    description: 'Returns the personnel data to the dashboard view',
+    summary: 'Get personnel By Id',
+    description: 'Returns the personnel data to the profile view',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Get()
-  @UsePipes(new QueryTransformPipe())
-  async getPersonnelById(@Param() id?: string): Promise<PersonnelRO> {
+  @Get(':id')
+  async getPersonnelById(@Param('id') id: string): Promise<PersonnelRO> {
     const personnelRO: PersonnelEntity =
       await this.personnelService.getPersonnelById(id);
     return personnelRO.toResponseObject();

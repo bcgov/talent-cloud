@@ -3,8 +3,9 @@ import { booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
-export const TableBodyCell = ({ cell }: { cell: Cell }) => {
+export const TableBodyCell = ({ cell, id }: { cell: Cell, id:string }) => {
   switch (cell.columnName) {
     case DashboardColumns.TRAVEL:
       return (
@@ -15,6 +16,12 @@ export const TableBodyCell = ({ cell }: { cell: Cell }) => {
             <XCircleIcon className={iconClass(cell.value)} />
           )}
           {booleanToString(cell.value).toUpperCase()}
+        </td>
+      );
+      case DashboardColumns.NAME:
+      return (
+        <td className={cell.className}>
+          <Link to={`/profile/${id}`} className="hover:underline">{cell.value}</Link>
         </td>
       );
     case DashboardColumns.REMOTE:
