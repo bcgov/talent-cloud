@@ -28,8 +28,8 @@ h4 {
   line-height: 34.6px;
 }
 
-h6 {
-  
+p {
+  @apply text-dark;
   font-size: 16px;
   font-weight: 400;
   line-height: 25.6px;
