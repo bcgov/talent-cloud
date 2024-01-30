@@ -1,3 +1,4 @@
+import { DashboardColumns } from '@/pages/dashboard';
 import type { Column, FieldInterface, PageParams, TableData } from '.';
 import { TableFooter, TableBody, TableHeader } from '.';
 import { Toggle } from '../toggle/Toggle';
@@ -10,6 +11,7 @@ export const Table = ({
   tableData,
   pageParams,
   handlePageParams,
+  showFunctionColumn,
 }: {
   title: string;
   subtitle: string;
@@ -19,13 +21,14 @@ export const Table = ({
   tableData: TableData;
   pageParams: PageParams;
   handlePageParams: (params: Partial<PageParams>) => void;
+  showFunctionColumn: boolean;
 }) => {
   return (
-    <div className="shadow-lg rounded-md mx-auto my-12 w-auto bg-white border border-gray">
-      <div className="flex flex-row items-center justify-between mx-8">
+    <div className="shadow-lg rounded-md w-full bg-white border border-gray  overflow-x-scroll">
+      <div className="flex flex-col md:flex-row items-center justify-between mx-8">
         <div className="flex flex-col py-6">
-          <h4 className="text-black">{title}</h4>
-          <span className="text-black">{`${tableData.totalRows} ${subtitle}`}</span>
+          <h4 className="text-black font-bold">{title}</h4>
+          <p>{`${tableData.totalRows} ${subtitle}`}</p>
         </div>
         {toggle && (
           <Toggle
@@ -35,9 +38,26 @@ export const Table = ({
         )}
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}
-      <table className="table-auto w-full mx-auto border-disabledGray overflow-x-hidden">
-        <TableHeader columns={columns} />
-        <TableBody rows={tableData.rows} />
+      <table className="table-auto w-full">
+        <TableHeader
+          columns={
+            showFunctionColumn
+              ? columns
+              : columns.filter((itm) => itm.name !== DashboardColumns.FUNCTION)
+          }
+        />
+        <TableBody
+          rows={
+            showFunctionColumn
+              ? tableData.rows
+              : tableData.rows.map((itm) => ({
+                  ...itm,
+                  cells: itm.cells.filter(
+                    (cell) => cell.columnName !== DashboardColumns.FUNCTION,
+                  ),
+                }))
+          }
+        />
       </table>
       <TableFooter
         pageParams={pageParams}

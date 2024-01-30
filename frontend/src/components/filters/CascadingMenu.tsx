@@ -12,12 +12,12 @@ export const CascadingMenu = ({
   nestedField,
   nestedValue,
 }: {
-  value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => any;
   label: string;
   field: any;
   nestedField: any;
-  nestedValue: string;
+  value?: string;
+  nestedValue?: string;
 }) => {
   const handleChange = (name: string, value: string) => {
     const event = {
@@ -27,8 +27,10 @@ export const CascadingMenu = ({
   };
 
   return (
+    <>
+    <label>{label}</label>
     <Menu dismiss={{ itemPress: false }}>
-      <MenuHandler>
+      <MenuHandler field={field}>
         {value ? (
           <Chip
             value={
@@ -38,7 +40,7 @@ export const CascadingMenu = ({
             }
           />
         ) : (
-          <span className={classes.menu.placeholder}>Select {label}(s)</span>
+          <span className={classes.menu.placeholder}>Select {label.toLowerCase()}(s)</span>
         )}
         <MenuButton />
       </MenuHandler>
@@ -54,5 +56,6 @@ export const CascadingMenu = ({
         ))}
       </MenuList>
     </Menu>
+    </>
   );
 };

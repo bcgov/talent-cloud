@@ -23,15 +23,7 @@ const useTable = () => {
     function: '',
     experience: '',
   });
-  const [dashboardColumns, setDashboardColumns] = useState([
-    { key: uuidv4(), name: DashboardColumns.NAME },
-    { key: uuidv4(), name: DashboardColumns.REGION },
-    { key: uuidv4(), name: DashboardColumns.LOCATION },
-    { key: uuidv4(), name: DashboardColumns.TRAVEL },
-    { key: uuidv4(), name: DashboardColumns.REMOTE },
-    { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
-    { key: uuidv4(), name: DashboardColumns.MINISTRY },
-  ]);
+  const [showFunctionColumn, setShowFunctionColumn] = useState<boolean>(false);
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
   const debouncedValue = useDebounce<string>(filterValues, defaultDebounceValue);
@@ -60,25 +52,9 @@ const useTable = () => {
         const pageRange = calculatePages(Math.ceil(totalPages));
         const currentPage = filterValues?.currentPage ?? 1;
         filterValues.function
-          ? setDashboardColumns([
-              { key: uuidv4(), name: DashboardColumns.NAME },
-              { key: uuidv4(), name: DashboardColumns.FUNCTION },
-              { key: uuidv4(), name: DashboardColumns.REGION },
-              { key: uuidv4(), name: DashboardColumns.LOCATION },
-              { key: uuidv4(), name: DashboardColumns.TRAVEL },
-              { key: uuidv4(), name: DashboardColumns.REMOTE },
-              { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
-              { key: uuidv4(), name: DashboardColumns.MINISTRY },
-            ])
-          : setDashboardColumns([
-              { key: uuidv4(), name: DashboardColumns.NAME },
-              { key: uuidv4(), name: DashboardColumns.REGION },
-              { key: uuidv4(), name: DashboardColumns.LOCATION },
-              { key: uuidv4(), name: DashboardColumns.TRAVEL },
-              { key: uuidv4(), name: DashboardColumns.REMOTE },
-              { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
-              { key: uuidv4(), name: DashboardColumns.MINISTRY },
-            ]);
+          ? setShowFunctionColumn(true)
+          : setShowFunctionColumn(false);
+
         personnel &&
           setTableData({
             totalPages,
@@ -107,16 +83,7 @@ const useTable = () => {
                     value: `${lastName.toUpperCase()},  ${firstName}`,
                     className: tableClass(DashboardColumns.NAME, ''),
                   },
-                  {
-                    key: uuidv4(),
-                    columnName: DashboardColumns.FUNCTION,
-                    value: `${experiences.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
-                    className: experiences.find(
-                      (itm: any) => itm.functionName === filterValues.function,
-                    )
-                      ? tableClass(DashboardColumns.FUNCTION, '')
-                      : 'hidden',
-                  },
+
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.REGION,
@@ -137,9 +104,22 @@ const useTable = () => {
                   },
                   {
                     key: uuidv4(),
+                    columnName: DashboardColumns.FUNCTION,
+                    value: `${experiences.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
+                    className: experiences.find(
+                      (itm: any) => itm.functionName === filterValues.function,
+                    )
+                      ? tableClass(DashboardColumns.FUNCTION, '')
+                      : 'hidden',
+                  },
+                  {
+                    key: uuidv4(),
                     columnName: DashboardColumns.TRAVEL,
                     value: willingToTravel,
-                    className: tableClass(DashboardColumns.TRAVEL, willingToTravel),
+                    className: tableClass(
+                      DashboardColumns.TRAVEL,
+                      willingToTravel ? 'yes' : 'no',
+                    ),
                   },
                   {
                     key: uuidv4(),
@@ -179,7 +159,7 @@ const useTable = () => {
     setFilterValues({ ...filterValues, ...change });
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSingleSelect = (e: ChangeEvent<HTMLInputElement>) => {
     setFilterValues((prev: any) => ({
       ...prev,
       currentPage: 1,
@@ -196,7 +176,7 @@ const useTable = () => {
     }));
   };
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMultiSelect = (event: ChangeEvent<HTMLInputElement>) => {
     setDefaultDebounceValue(100);
     const {
       target: { name, value },
@@ -222,33 +202,16 @@ const useTable = () => {
 
     setFilterValues((prev: any) => ({ ...prev, [name]: Array.from(valueSet) }));
   };
-  const handleClose = (name: string, value: string) => {
-    const event = {
-      target: {
-        name: name,
-        value: value,
-      },
-    } as ChangeEvent<HTMLInputElement>;
-    onChange(event);
-  };
 
-  const handleCloseMultiple = (name: string) => {
-    const event = {
-      target: {
-        name: name,
-        value: filterValues[name],
-      },
-    } as ChangeEvent<HTMLInputElement>;
-    onChange(event);
-  };
+  
   return {
     tableData,
-    handleChange,
-    handleSearch,
-    onChange,
-    handleClose,
-    handleCloseMultiple,
     handlePageParams,
+    handleMultiSelect,
+    handleSingleSelect,
+    handleSearch,
+    showFunctionColumn,
+    filterValues,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,
@@ -260,8 +223,16 @@ const useTable = () => {
         function: null,
         experience: '',
       }),
-    filterValues,
-    dashboardColumns,
+    dashboardColumns: [
+      { key: uuidv4(), name: DashboardColumns.NAME },
+      { key: uuidv4(), name: DashboardColumns.REGION },
+      { key: uuidv4(), name: DashboardColumns.LOCATION },
+      { key: uuidv4(), name: DashboardColumns.FUNCTION },
+      { key: uuidv4(), name: DashboardColumns.TRAVEL },
+      { key: uuidv4(), name: DashboardColumns.REMOTE },
+      { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+      { key: uuidv4(), name: DashboardColumns.MINISTRY },
+    ],
   };
 };
 

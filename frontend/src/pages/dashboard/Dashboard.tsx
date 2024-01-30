@@ -10,14 +10,13 @@ const Dashboard = () => {
   const {
     filterValues,
     tableData,
-    onChange,
-    handleChange,
-    handleClose,
-    handleCloseMultiple,
+    handleMultiSelect,
+    handleSingleSelect,
+    handleSearch,
     handlePageParams,
     onClear,
     dashboardColumns,
-    handleSearch,
+    showFunctionColumn,
   } = useTable();
 
   return (
@@ -25,10 +24,8 @@ const Dashboard = () => {
       <h2 className="text-left">Personnel</h2>
       <Filters
         fields={dashboardFilterFields}
-        handleChange={handleChange}
-        onChange={onChange}
-        handleClose={handleClose}
-        handleCloseMultiple={handleCloseMultiple}
+        handleMultiSelect={handleMultiSelect}
+        handleSingleSelect={handleSingleSelect}
         onClear={onClear}
         filterValues={filterValues}
         handleSearch={handleSearch}
@@ -45,6 +42,7 @@ const Dashboard = () => {
           tableData={tableData}
           pageParams={filterValues}
           handlePageParams={handlePageParams}
+          showFunctionColumn={showFunctionColumn}
         />
       )}
     </div>

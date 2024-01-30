@@ -16,13 +16,11 @@ export const MultiSelectGroup = ({
   field,
   values,
   onChange,
-  handleClose,
   label,
 }: {
   field: any;
   values: any;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleClose: (name: string, value?: string) => void;
   label: string;
 }) => {
   const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +47,20 @@ export const MultiSelectGroup = ({
 
     onChange(event);
   };
-
+  const handleClose = (name: string, value: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: value,
+    },
+    } as ChangeEvent<HTMLInputElement>;
+    onChange(event);
+  };
   return (
     <>
       <label>{label}</label>
       <Menu dismiss={{ outsidePress: true, itemPress: false }}>
-        <MenuHandler>
+        <MenuHandler field={field}>
           <MenuChips
             values={values}
             label={label}
