@@ -11,18 +11,17 @@ import type { ChangeEvent } from 'react';
 
 export const Filters = ({
   fields,
-  onChange,
-  handleClose,
-  handleChange,
+  handleMultiSelect,
+  handleSingleSelect,
   handleSearch,
   onClear,
   filterValues,
 }: {
   fields: DashboardFields;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleClose: (name: string, value?: string) => void;
+  
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
@@ -43,13 +42,13 @@ export const Filters = ({
               field={{ name: 'region', options: Object.values(Region) }}
               values={filterValues.region}
               label="Region"
-              onChange={onChange}
-              handleClose={handleClose}
+              onChange={handleMultiSelect}
+              
             />
           </div>
           <div className="col-span-1 md:col-span-3">
             <MultiSelectGroup
-              onChange={onChange}
+              onChange={handleMultiSelect}
               field={{
                 ...fields.location,
                 groupedOptions:
@@ -61,7 +60,7 @@ export const Filters = ({
                       )
                     : fields?.location?.groupedOptions,
               }}
-              handleClose={handleClose}
+              
               label="Work Location"
               values={filterValues.location}
             />
@@ -75,7 +74,7 @@ export const Filters = ({
           nestedField={fields.experience}
           nestedValue={filterValues.experience}
           label="Function"
-          onChange={handleChange}
+          onChange={handleSingleSelect}
           value={filterValues.function}
         />
       </div>
