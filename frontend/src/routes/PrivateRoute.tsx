@@ -21,7 +21,7 @@ export const PrivateRoute = () => {
   if (!keycloak.authenticated) {
     return <Navigate to={Routes.Login} />;
   }
-  //TODO - something better
+
   if (keycloak.authenticated && !roles.includes('coordinator')) {
     return (
       <Layout authenticated={authenticated} username={username}>
