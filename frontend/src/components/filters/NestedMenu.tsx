@@ -15,7 +15,6 @@ export const NestedMenu = ({
   nestedField: any;
   handleChange: (nestedField: any, nestedValue: any) => void;
 }) => {
-
   const [openMenu, setOpenMenu] = useState(false);
 
   return (

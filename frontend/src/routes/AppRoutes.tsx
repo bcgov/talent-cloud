@@ -4,12 +4,11 @@ import { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import store from 'store';
-import { Dashboard, Login, NotFound, Profile, SplashPage  } from '../pages';
+import { Dashboard, Login, NotFound, Profile, SplashPage } from '../pages';
 import { Layout, Loading } from '@/components';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
 import { getKeycloakInfo } from '@/services';
-
 
 export default () => {
   const [keycloakInfo, setKeycloakInfo] = useState<Keycloak>();
@@ -47,7 +46,7 @@ export default () => {
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<PublicRoute />}>
-              <Route path={AppRoutes.Home} element={<SplashPage/>}/>
+              <Route path={AppRoutes.Home} element={<SplashPage />} />
               <Route path={AppRoutes.Login} element={<Login />} />
               <Route path={AppRoutes.NotFound} element={<NotFound />} />
             </Route>
