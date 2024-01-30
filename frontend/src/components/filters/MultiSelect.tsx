@@ -23,9 +23,6 @@ export const MultiSelect = ({
   handleClose: (name: string, value?: string) => void;
   label: string;
 }) => {
-
-  
-
   const handleCloseMany = () => {
     const event = {
       target: {
@@ -39,7 +36,7 @@ export const MultiSelect = ({
   return (
     <>
       <label>{label}</label>
-      <Menu dismiss={{outsidePress: true, itemPress: false}}>
+      <Menu dismiss={{ outsidePress: true, itemPress: false }}>
         <MenuHandler>
           <MenuChips
             values={values}

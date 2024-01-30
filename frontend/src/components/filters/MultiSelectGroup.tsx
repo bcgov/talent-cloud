@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
+import type {
+  FieldGroupedOption} from '@/components';
 import {
-  FieldGroupedOption,
   MenuItem,
   Checkbox,
   Menu,
@@ -24,9 +25,7 @@ export const MultiSelectGroup = ({
   handleClose: (name: string, value?: string) => void;
   label: string;
 }) => {
-  
   const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
-  
     const value = e.target.value.split(',');
     const valueSet = value.filter((itm) => !values.includes(itm));
 
@@ -54,7 +53,7 @@ export const MultiSelectGroup = ({
   return (
     <>
       <label>{label}</label>
-      <Menu dismiss={{ outsidePress:true, itemPress: false }}>
+      <Menu dismiss={{ outsidePress: true, itemPress: false }}>
         <MenuHandler>
           <MenuChips
             values={values}

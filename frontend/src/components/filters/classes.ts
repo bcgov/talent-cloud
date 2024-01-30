@@ -8,9 +8,9 @@ export const classes = {
     listLabel: 'flex cursor-pointer items-center justify-start text-list-header',
     listItem: 'flex cursor-pointer items-center justify-start text-list-item',
     chipsContainer: 'flex flex-row items-center justify-start',
-    chip: "rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none", 
+    chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none',
     placeholder: 'text-gray-500',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
-  }
+  },
 };
