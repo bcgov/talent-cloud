@@ -20,6 +20,7 @@ h3 {
   font-weight: 400;
   line-height: 41.5px;
 }
+
 h4 {
   @apply text-dark;
   font-size: 21.6px;
@@ -27,8 +28,8 @@ h4 {
   line-height: 34.6px;
 }
 
-p {
-  @apply text-dark;
+h6 {
+  
   font-size: 16px;
   font-weight: 400;
   line-height: 25.6px;

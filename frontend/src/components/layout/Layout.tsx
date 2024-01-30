@@ -10,8 +10,8 @@ export const Layout = ({
   username,
 }: {
   children: ReactElement;
-  authenticated?: boolean | undefined;
   username?: string;
+  authenticated?: boolean;
 }) => {
   return (
     <div className=" h-screen relative">
