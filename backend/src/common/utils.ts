@@ -21,16 +21,109 @@ const functions = [
   { id: 8, name: 'Advanced Planning Unit', abbreviation: 'APU' },
   { id: 9, name: 'Recovery', abbreviation: 'Recovery' },
 ];
+
+const regionsAndLocations = [
+  {
+    region: Region.VIC,
+    locations: [
+      WorkLocation.CAMPBELL_RIVER,
+      WorkLocation.COURTENAY,
+      WorkLocation.CUMBERLAND,
+      WorkLocation.NANAIMO,
+      WorkLocation.PORT_ALBERNI,
+      WorkLocation.QUALICUM_BEACH,
+      WorkLocation.UCLUELET,
+    ],
+  },
+  {
+    region: Region.CTL,
+    locations: [
+      WorkLocation.ENDERBY,
+      WorkLocation.KAMLOOPS,
+      WorkLocation.KELOWNA,
+      WorkLocation.MERRITT,
+      WorkLocation.SALMON_ARM,
+      WorkLocation.SORRENTO,
+      WorkLocation.VERNON,
+    ],
+  },
+  {
+    region: Region.HQ,
+    locations: [
+      WorkLocation.BRENTWOOD_BAY,
+      WorkLocation.LANGFORD,
+      WorkLocation.ESQUIMALT,
+      WorkLocation.SAANICH,
+      WorkLocation.SAANICHTON,
+      WorkLocation.SIDNEY,
+      WorkLocation.VICTORIA,
+    ],
+  },
+  {
+    region: Region.NEA,
+    locations: [
+      WorkLocation.HUNDRED_MILE_HOUSE,
+      WorkLocation.HUNDRED_FIFTY_MILE_HOUSE,
+      WorkLocation.DAWSON_CREEK,
+      WorkLocation.FORT_NELSON,
+      WorkLocation.FORT_ST_JOHN,
+      WorkLocation.MACKENZIE,
+      WorkLocation.PRINCE_GEORGE,
+      WorkLocation.QUESNEL,
+      WorkLocation.WILLIAMS_LAKE,
+    ],
+  },
+  {
+    region: Region.SWE,
+    locations: [
+      WorkLocation.ABBOTSFORD,
+      WorkLocation.BONNINGTON_FALLS,
+      WorkLocation.BURNABY,
+      WorkLocation.COQUITLAM,
+      WorkLocation.LANGLEY,
+      WorkLocation.LILLOOET,
+      WorkLocation.MAPLE_RIDGE,
+      WorkLocation.NEW_WESTMINSTER,
+      WorkLocation.NORTH_VANCOUVER,
+      WorkLocation.RICHMOND,
+      WorkLocation.SURREY,
+      WorkLocation.VANCOUVER,
+      WorkLocation.WHISTLER,
+    ],
+  },
+  {
+    region: Region.NWE,
+    locations: [
+      WorkLocation.BURNS_LAKE,
+      WorkLocation.SMITHERS,
+      WorkLocation.TERRACE,
+    ],
+  },
+  {
+    region: Region.SEA,
+    locations: [
+      WorkLocation.CASTLEGAR,
+      WorkLocation.CRANBROOK,
+      WorkLocation.ELKFORD,
+      WorkLocation.KIMBERLY,
+      WorkLocation.NELSON,
+      WorkLocation.REVELSTOKE,
+    ],
+  },
+];
+
 export const rowData = () => {
+  const regionAndLocation = faker.helpers.arrayElement(regionsAndLocations);
+
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
-    primaryPhone: faker.phone.number('###-###-###'),
-    secondaryPhone: faker.phone.number('###-###-###'),
-    otherPhone: faker.phone.number('###-###-###'),
-    region: faker.helpers.arrayElement(Object.values(Region)),
-    workLocation: faker.helpers.arrayElement(Object.values(WorkLocation)),
+    primaryPhone: faker.string.numeric('###-###-###'),
+    secondaryPhone: faker.string.numeric('###-###-###'),
+    otherPhone: faker.string.numeric('###-###-###'),
+    region: regionAndLocation.region,
+    workLocation: faker.helpers.arrayElement(regionAndLocation.locations),
     ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     classification: faker.helpers.arrayElement(Object.values(Classification)),
     applicationDate: faker.date.past(),
@@ -66,7 +159,7 @@ const experiences = () => {
 
 export const generateData = () => {
   const people = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 500; i++) {
     people.push(rowData());
   }
   return people;

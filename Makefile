@@ -23,7 +23,7 @@ export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
-
+export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server)
 
 
 # Git
@@ -201,10 +201,15 @@ migration-revert:
 migration-run:
 	@docker exec tc-backend-${ENV} npm run migration:run
 	
-seed-data: 
+seed-function:
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
+
+seed-data: 
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
 
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
+
+seed-data-oc: 
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
