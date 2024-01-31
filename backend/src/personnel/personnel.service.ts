@@ -49,9 +49,9 @@ export class PersonnelService {
       qb = qb.andWhere(
         new Brackets((qb) => {
           qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', {
-            name: `%${query.name}%`,
+            name: `${query.name}%`,
           }).orWhere('LOWER(personnel.lastName) LIKE LOWER(:name)', {
-            name: `%${query.name}%`,
+            name: `${query.name}%`,
           });
         }),
       );
