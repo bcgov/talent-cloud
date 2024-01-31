@@ -9,12 +9,15 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   Inject,
+  Param,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { PersonnelEntity } from 'src/database/entities/personnel.entity';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
+import { PersonnelRO } from './ro/personnel.ro';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('personnel')
@@ -62,5 +65,20 @@ export class PersonnelController {
       rows: query.rows,
       page: query.page,
     };
+  }
+
+  @ApiOperation({
+    summary: 'Get personnel By Id',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Get(':id')
+  async getPersonnelById(@Param('id') id: string): Promise<PersonnelRO> {
+    const personnelRO: PersonnelEntity =
+      await this.personnelService.getPersonnelById(id);
+    return personnelRO.toResponseObject();
   }
 }

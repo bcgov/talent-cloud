@@ -86,4 +86,12 @@ export class PersonnelService {
     const [personnel, count] = await qb.getManyAndCount();
     return { personnel, count };
   }
+
+  /**
+   * Get Personnel By ID
+   * @returns {PersonnelEntity} Single personnel
+   */
+  async getPersonnelById(id: string): Promise<PersonnelEntity> {
+    return await this.personnelRepository.findOneBy({ id: id });
+  }
 }
