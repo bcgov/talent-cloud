@@ -200,10 +200,13 @@ const useTable = () => {
       }
     }
 
-    setFilterValues((prev: any) => ({ ...prev, [name]: Array.from(valueSet) }));
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [name]: Array.from(valueSet),
+    }));
   };
 
-  
   return {
     tableData,
     handlePageParams,
