@@ -2,7 +2,7 @@
 # BUILD FOR CI TESTS
 ###################
 
-FROM cypress/base
+FROM cypress/base:20.10.0
 
 WORKDIR /app
 

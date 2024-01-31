@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getUserInfo } from '../services/api-endpoints';
 
 export const useGetUserInfo = () => {
-  const [username, setUserName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [roles, setRoles] = useState<string[]>([]);
   useEffect(() => {
     (async () => {
@@ -10,7 +10,7 @@ export const useGetUserInfo = () => {
         const {
           data: { username, roles },
         } = await getUserInfo();
-        setUserName(username);
+        setUsername(username);
         setRoles(roles);
       } catch (e) {
         console.log(e);
