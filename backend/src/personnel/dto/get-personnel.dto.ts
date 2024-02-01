@@ -16,7 +16,7 @@ export class GetPersonnelDTO extends QueryDTO {
     description: 'Name of personnel - can be a substring of first or last name',
   })
   @IsOptional()
-  @Length(3)
+  @Length(1)
   name: string;
 
   @ApiPropertyOptional({

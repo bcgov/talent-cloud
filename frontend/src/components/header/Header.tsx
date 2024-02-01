@@ -15,7 +15,7 @@ export const Header = ({
 }) => {
   return (
     <header className="relative w-full border-b z-20">
-      <div className="w-full flex justify-center lg:justify-between items-center fixed top-0 mt-0 bg-white h-20 border-b border-[#D9D9D9]shadow-md lg:px-24 ">
+      <div className="w-full flex justify-center lg:justify-between items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 ">
         <div className="hidden lg:flex">
           <a href={LINKS.EMCR}>
             <EmcrLogoHorizontalDark />
