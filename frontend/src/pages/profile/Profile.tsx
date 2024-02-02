@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Breadcrumbs } from '@material-tailwind/react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { AxiosPrivate } from '../../utils';
 import MemberDetails from './MemberDetails';
 
 function HorizontalLine() {
@@ -17,7 +19,15 @@ function HorizontalLine() {
 }
 
 const Profile = () => {
-  // const { personnelId } = useParams();
+  const { personnelId } = useParams();
+
+  useEffect(() => {
+    (async () => {
+      const data = await AxiosPrivate.get(`/personnel/${personnelId}`);
+      console.log(data);
+    })();
+  }, []);
+
   return (
     <div className="h-screen pt-12 pb-24 bg-grayBackground">
       <div>
