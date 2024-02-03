@@ -12,6 +12,9 @@ export const TableHeader = ({
     if (name === DashboardColumns.REMOTE) {
       return <span>{name.split(' ')[0]}<br/>{name.split(' ')[1]}</span>
     }
+    if(name === DashboardColumns.UNION_MEMBERSHIP){
+      return <span>{name.split(' ')[0]}<br/>{name.split(' ')[1]}</span>
+    }
     else return name
   }
       

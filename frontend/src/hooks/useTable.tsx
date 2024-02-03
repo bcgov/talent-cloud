@@ -129,11 +129,11 @@ const useTable = () => {
                   },
                   {
                     key: uuidv4(),
-                    columnName: DashboardColumns.CLASSIFICATION,
+                    columnName: DashboardColumns.UNION_MEMBERSHIP,
                     value: classification,
                     className: tableClass(
-                      DashboardColumns.CLASSIFICATION,
-                      classification?.toLowerCase(),
+                      DashboardColumns.UNION_MEMBERSHIP,
+                      classification,
                     ),
                   },
                   {
@@ -233,7 +233,7 @@ const useTable = () => {
       { key: uuidv4(), name: DashboardColumns.FUNCTION },
       { key: uuidv4(), name: DashboardColumns.TRAVEL },
       { key: uuidv4(), name: DashboardColumns.REMOTE },
-      { key: uuidv4(), name: DashboardColumns.CLASSIFICATION },
+      { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
       { key: uuidv4(), name: DashboardColumns.MINISTRY },
     ],
   };

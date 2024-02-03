@@ -1,9 +1,6 @@
 export enum Classification {
   BCGEU = 'BCGEU',
   EXCLUDED = 'EXCLUDED',
+  BCNU = 'BCNU',
+  PEA = 'PEA',
 }
-
-export enum ClassificationName {
-  BCGEU = 'BCGEU',
-  EXCLUDED = 'Excluded',
-};

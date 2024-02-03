@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
-      <h2 className="text-left">Personnel</h2>
+      <h2 className="text-left font-bold">Personnel</h2>
       <Filters
         fields={dashboardFilterFields}
         handleMultiSelect={handleMultiSelect}
