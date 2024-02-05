@@ -77,6 +77,6 @@ jobs:
       - name: Promote
         run: |
           cd "$GITHUB_WORKSPACE"
-          oc login --token="$AUTH_TOKEN" --server="$CLUSTER"
+          oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
           make deployment-tag-to-deploy
