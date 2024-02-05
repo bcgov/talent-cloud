@@ -1,6 +1,6 @@
 import Detail from './Detail';
 
-const MemberDetailsSection = ({
+const DetailsSection = ({
   numColumns,
   title,
   columns,
@@ -23,4 +23,4 @@ const MemberDetailsSection = ({
   );
 };
 
-export default MemberDetailsSection;
+export default DetailsSection;

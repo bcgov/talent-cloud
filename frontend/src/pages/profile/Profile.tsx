@@ -2,7 +2,7 @@ import { Breadcrumbs } from '@material-tailwind/react';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
-import MemberDetails from './MemberDetails';
+import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
 
 const Profile = () => {
@@ -39,7 +39,7 @@ const Profile = () => {
             </div>
             <div>
               <ProfileHeader personnel={personnel} />
-              <MemberDetails personnel={personnel} />
+              <ProfileDetails personnel={personnel} />
             </div>
           </div>
         </div>

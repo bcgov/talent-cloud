@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
-import MemberDetailsSection from './MemberDetailsSection';
+import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
 import dayjs from 'dayjs';
 
-const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
+const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
   const [open, setOpen] = useState(1);
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -71,21 +71,17 @@ const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
           </AccordionHeader>
           <AccordionBody className="px-8 grid grid-cols-5">
             <div className="col-span-3">
-              <MemberDetailsSection
+              <DetailsSection
                 numColumns={3}
                 title={'General Information'}
                 columns={generalInformation}
               />
             </div>
             <div className="col-span-2">
-              <MemberDetailsSection
-                numColumns={2}
-                title={'Contact'}
-                columns={contact}
-              />
+              <DetailsSection numColumns={2} title={'Contact'} columns={contact} />
             </div>
             <div className="col-span-3">
-              <MemberDetailsSection
+              <DetailsSection
                 numColumns={3}
                 title={'Organizational Information'}
                 columns={organizational}
@@ -98,4 +94,4 @@ const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
   );
 };
 
-export default MemberDetails;
+export default ProfileDetails;
