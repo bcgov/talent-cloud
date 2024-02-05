@@ -220,11 +220,16 @@ export interface Personnel {
   workLocation: string;
   experiences: ExperienceInterface[];
   availability: string;
-  active: string;
-  willingToTravel: string;
-  remoteOnly: string;
+  active: boolean;
+  willingToTravel: boolean;
+  remoteOnly: boolean;
   classification: string;
   ministry: string;
+  applicationDate: Date;
+  primaryPhone: string;
+  secondaryPhone: string;
+  email: string;
+  supervisor: string;
 }
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;

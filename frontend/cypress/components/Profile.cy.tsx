@@ -1,4 +1,4 @@
-import Profile from '../../src/pages/Profile';
+import Profile from '../../src/pages/profile/Profile';
 
 describe('<Profile />', () => {
   it('renders', () => {

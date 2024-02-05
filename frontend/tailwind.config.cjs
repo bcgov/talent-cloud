@@ -26,8 +26,10 @@ module.exports = withMT({
         transparent: 'transparent',
         primaryBlue: '#003366',
         primaryYellow: '#fcba19',
+        activeGreen: '#d6ebd0',
         inputGray: '#606060',
         disabledGray: '#CFCFCF',
+        textGray: '#696a6a',
         linkBlue: '#1a5a96',
         // semantic colours
         error: '#A12622',

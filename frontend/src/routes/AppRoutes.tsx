@@ -52,7 +52,9 @@ export default () => {
             </Route>
             <Route element={<PrivateRoute />}>
               <Route path={AppRoutes.Dashboard} element={<Dashboard />} />
-              <Route path={AppRoutes.Profile} element={<Profile />} />
+              <Route path={AppRoutes.Profile}>
+                <Route path=":personnelId" element={<Profile />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>
