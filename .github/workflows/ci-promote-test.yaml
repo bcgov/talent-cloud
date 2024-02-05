@@ -43,12 +43,11 @@ jobs:
     name: OpenShift Promotion
     environment: test
     runs-on: ubuntu-latest
-    env:
-      AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     concurrency: ci-promote-test
     timeout-minutes: 6
     env:
       OS_NAMESPACE_SUFFIX: test
+      AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
