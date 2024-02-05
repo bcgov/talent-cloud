@@ -1,26 +1,30 @@
-const Detail = () => {
+const Detail = ({ title, content }: { title: string; content: string }) => {
   return (
     <div className="py-2">
-      <h5>Date Joined</h5>
-      <h4>June 17, 2020</h4>
+      <h5>{title}</h5>
+      <h4>{content}</h4>
     </div>
   );
 };
 
-const MemberDetailsSection = () => {
+const MemberDetailsSection = ({
+  numColumns,
+  title,
+  columns,
+}: {
+  numColumns: number;
+  title: string;
+  columns: { title: string; content: string }[];
+}) => {
   return (
-    <div className="py-7">
-      <h4 className="font-bold text-info">General Information</h4>
-      <div className="flex flex-row">
-        <div className="basis-1/3">
-          <Detail />
-        </div>
-        <div className="basis-1/3">
-          <Detail />
-        </div>
-        <div className="basis-1/3">
-          <Detail />
-        </div>
+    <div className="py-5">
+      <h4 className="font-bold text-info">{title}</h4>
+      <div className={`grid grid-cols-${numColumns} pt-4`}>
+        {columns.map((column, i) => (
+          <div key={i}>
+            <Detail title={column.title} content={column.content} />
+          </div>
+        ))}
       </div>
     </div>
   );
