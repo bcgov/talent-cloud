@@ -1,4 +1,5 @@
 import { Breadcrumbs, Button } from '@material-tailwind/react';
+import { ChevronLeftIcon, HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
 import MemberDetails from './MemberDetails';
@@ -17,38 +18,19 @@ function HorizontalLine() {
   );
 }
 
-function BackIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={6}
-      stroke="currentColor"
-      className={'h-5 w-5 rotate-90'}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
-    </svg>
-  );
-}
-
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
   const { personnel } = usePersonnel({ personnelId });
 
   return (
-    <div className="h-screen pt-12 pb-24 bg-grayBackground">
+    <div className="h-full pt-12 pb-24 bg-grayBackground">
       {personnel && (
         <div>
           <Breadcrumbs placeholder={''} className="px-12">
             <a href="/dashboard" className="text-linkBlue">
               <div className="flex flex-row items-center">
-                <BackIcon />
-                <span className="pl-4 underline decoration-solid">
+                <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />
+                <span className="pl-2 underline decoration-solid">
                   Personnel (Dashboard)
                 </span>
               </div>
@@ -83,13 +65,30 @@ const Profile = () => {
                 <div>
                   <HorizontalLine />
                 </div>
-                <div className="pl-16 grow">
-                  <p className="text-textGray">Work Location</p>
-                  <p>
-                    {personnel.workLocation}, {personnel.region}
-                  </p>
+                <div className="pl-16">
+                  <div className="flex flex-row">
+                    <MapPinIcon className="h-7 w-7" />
+                    <div className="pl-2">
+                      <p className="text-textGray">Work Location</p>
+                      <p>
+                        {personnel.workLocation}, {personnel.region}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="float-right">
+                <div className="pl-12 grow">
+                  <div className="flex flex-row">
+                    <HomeIcon className="h-7 w-7" />
+                    <div className="pl-2">
+                      <p className="text-textGray">Home Location</p>
+                      <p>
+                        {personnel.workLocation}
+                        {/* TODO: When Home Location is made on backend, use this */}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
                   <Button
                     placeholder="Edit Info"
                     className="bg-blue font-thin capitalize text-base"

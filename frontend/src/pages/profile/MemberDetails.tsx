@@ -1,32 +1,14 @@
 import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import MemberDetailsSection from './MemberDetailsSection';
 import type { Personnel } from '../dashboard';
 import dayjs from 'dayjs';
 
-function ArrowIcon({ id, open }: { id: number; open: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={6}
-      stroke="currentColor"
-      className={`${id === open ? 'rotate-180' : ''} h-5 w-5 transition-transform`}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
-    </svg>
-  );
-}
-
 const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
   const [open, setOpen] = useState(1);
 
-  const handleOpen = (value: any) => setOpen(open === value ? 0 : value);
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const generalInformation = [
     {
@@ -53,6 +35,7 @@ const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
     { title: 'Primary Number', content: personnel.primaryPhone || 'Not Listed' },
     { title: 'Secondary Number', content: personnel.secondaryPhone || 'Not Listed' },
     { title: 'Email Address', content: personnel.email },
+    { title: 'Mailing Address', content: 'Unknown' },
   ];
 
   const organizational = [
@@ -71,7 +54,13 @@ const MemberDetails = ({ personnel }: { personnel: Personnel }) => {
           className="border-2 border-slate-950"
           placeholder={'Member Details'}
           open={open === 1}
-          icon={<ArrowIcon id={1} open={open} />}
+          icon={
+            open ? (
+              <ChevronUpIcon className="h-8 w-5 fill-[#606060]" />
+            ) : (
+              <ChevronDownIcon className="h-8 w-5 fill-[#606060]" />
+            )
+          }
         >
           <AccordionHeader
             placeholder={'Member Details'}
