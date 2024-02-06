@@ -58,7 +58,7 @@ const ProfileHeader = ({ personnel }: { personnel: Personnel }) => {
       <div>
         <Button
           placeholder="Edit Info"
-          className="bg-blue font-thin capitalize text-base"
+          className="bg-primaryBlue font-thin capitalize text-base"
         >
           Edit Info
         </Button>

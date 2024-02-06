@@ -35,13 +35,13 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
     { title: 'Primary Number', content: personnel.primaryPhone || 'Not Listed' },
     { title: 'Secondary Number', content: personnel.secondaryPhone || 'Not Listed' },
     { title: 'Email Address', content: personnel.email },
-    { title: 'Mailing Address', content: 'Unknown' },
+    { title: 'Mailing Address', content: '' },
   ];
 
   const organizational = [
     { title: 'Supervisor Name', content: personnel.supervisor },
     { title: 'Ministry', content: personnel.ministry },
-    { title: 'Classification', content: personnel.classification },
+    { title: 'Union Membership', content: personnel.classification },
   ];
 
   return (
