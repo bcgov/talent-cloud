@@ -12,7 +12,9 @@ const DetailsSection = ({
   return (
     <div className="py-5">
       <h4 className="font-bold text-info">{title}</h4>
-      <div className={`grid grid-cols-${numColumns} pt-4`}>
+      <div
+        className={`grid ${numColumns === 2 ? 'grid-cols-2' : 'grid-cols-3'} pt-4`}
+      >
         {columns.map((column) => (
           <div key={column.title}>
             <Detail title={column.title} content={column.content} />
