@@ -10,10 +10,13 @@ const Profile = () => {
   const { personnel } = usePersonnel({ personnelId });
 
   return (
-    <div className="h-full pt-12 pb-24 bg-grayBackground">
+    <div className="min-h-screen pt-12 pb-24 bg-grayBackground">
       {personnel && (
         <div>
-          <Breadcrumbs placeholder={''} className="px-12">
+          <Breadcrumbs
+            placeholder={'Breadcrumbs'}
+            className="px-12 bg-grayBackground"
+          >
             <a href="/dashboard" className="text-linkBlue">
               <div className="flex flex-row items-center">
                 <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />

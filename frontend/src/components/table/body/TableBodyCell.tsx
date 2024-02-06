@@ -5,7 +5,7 @@ import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
-export const TableBodyCell = ({ cell, id }: { cell: Cell, id:string }) => {
+export const TableBodyCell = ({ cell, id }: { cell: Cell; id: string }) => {
   switch (cell.columnName) {
     case DashboardColumns.TRAVEL:
       return (
@@ -18,10 +18,12 @@ export const TableBodyCell = ({ cell, id }: { cell: Cell, id:string }) => {
           {booleanToString(cell.value).toUpperCase()}
         </td>
       );
-      case DashboardColumns.NAME:
+    case DashboardColumns.NAME:
       return (
         <td className={cell.className}>
-          <Link to={`/profile/${id}`} className="hover:underline">{cell.value}</Link>
+          <Link to={`/profile/${id}`} target="_href" className="hover:underline">
+            {cell.value}
+          </Link>
         </td>
       );
     case DashboardColumns.REMOTE:
