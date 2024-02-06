@@ -63,7 +63,7 @@ export const MultiSelectGroup = ({
         <MenuHandler field={field}>
           <MenuChips
             values={values}
-            label={label}
+            label={label.toLowerCase()}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
@@ -72,7 +72,7 @@ export const MultiSelectGroup = ({
         </MenuHandler>
         <MenuList className={field.name}>
           <div className="flex flex-col p-4">
-            <span className="label pl-4 pb-4">{`Select ${field.name}(s):`}</span>
+          <span className="label pl-4 pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
             <div className="grid grid-cols-4 gap-y-4 gap-x-2">
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div key={group.label} className="col-span-1">

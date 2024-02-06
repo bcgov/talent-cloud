@@ -1,4 +1,4 @@
-import { AvailabilityTypeName, ClassificationName } from '@/common';
+import { AvailabilityTypeName, Classification } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
@@ -42,10 +42,10 @@ export const tableClass = (key: string, value?: string) => {
         : tableClasses.unavailable;
     case DashboardColumns.TRAVEL:
       return value === 'yes' ?  tableClasses.travelYes : tableClasses.travelNo;
-    case DashboardColumns.CLASSIFICATION:
-      return value === ClassificationName.EXCLUDED
+    case DashboardColumns.UNION_MEMBERSHIP:
+      return value === Classification.EXCLUDED
         ? tableClasses.excluded
-        : tableClasses.bcgeu;
+        : value === Classification.BCGEU ? tableClasses.bcgeu : tdClass;
     default:
       return tdClass;
   }

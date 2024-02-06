@@ -1,4 +1,4 @@
-import type { AvailabilityTypeName, ClassificationName, Ministry } from '@/common';
+import type { AvailabilityTypeName, Classification, Ministry } from '@/common';
 import {
   ExperienceName,
   FunctionName,
@@ -20,7 +20,7 @@ export enum DashboardColumns {
   FUNCTION = 'Function/Experience',
   AVAILABILITY = 'Availability',
   REMOTE = 'Remote Only',
-  CLASSIFICATION = 'Classification',
+  UNION_MEMBERSHIP = 'Union Membership',
   REGION = 'Region',
   LOCATION = 'Work Location',
   TRAVEL = 'Willingness To Travel',
@@ -239,7 +239,7 @@ export interface DashboardRow {
   [DashboardColumns.AVAILABILITY]: AvailabilityTypeName;
   [DashboardColumns.TRAVEL]: boolean;
   [DashboardColumns.REMOTE]: boolean;
-  [DashboardColumns.CLASSIFICATION]: ClassificationName;
+  [DashboardColumns.UNION_MEMBERSHIP]: Classification;
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {

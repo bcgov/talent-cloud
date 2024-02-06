@@ -20,8 +20,7 @@ export const Filters = ({
   fields: DashboardFields;
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  
+  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;  
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
@@ -73,7 +72,7 @@ export const Filters = ({
           field={fields.function}
           nestedField={fields.experience}
           nestedValue={filterValues.experience}
-          label="Function"
+          label="Function & Experience Level"
           onChange={handleSingleSelect}
           value={filterValues.function}
         />

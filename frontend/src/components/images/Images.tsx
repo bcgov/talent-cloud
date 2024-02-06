@@ -1,52 +1,23 @@
-export const EmcrLogoHorizontalLight = () => (
+export const EmcrLogo = () => (
   <img
-    src={new URL('/assets/images/emcr_light_horizontal.svg', import.meta.url).href}
+    width={300}
+    src={new URL('/assets/images/emcr_logo.svg', import.meta.url).href}
     alt="emcr logo horizontal light"
-  />
-);
-export const EmcrLogoHorizontalDark = () => (
-  <img
-    src={new URL('/assets/images/emcr_logo_2.svg', import.meta.url).href}
-    alt="emcr logo horizontal dark"
+    className="-my-2"
   />
 );
 
-export const EmcrLogoDark = () => (
+export const EmcrLogoVertical = () => (
   <img
-    src={new URL('/assets/images/emcr_dark.svg', import.meta.url).href}
-    alt="emcr logo dark"
-  />
-);
-export const EmcrLogoLight = () => (
-  <img
-    src={new URL('/assets/images/emcr_light.svg', import.meta.url).href}
-    alt="emcr logo light"
-  />
-);
-
-export const BcGovLogoLight = () => (
-  <img
-    src={new URL('/assets/images/bcgov_vert.svg', import.meta.url).href}
+    src={new URL('/assets/images/bcgov_logo.svg', import.meta.url).href}
     alt="logo"
-  />
-);
-export const BcGovLogoHorizontalLight = () => (
-  <img
-    src={new URL('/assets/images/bcgov_dark.svg', import.meta.url).href}
-    alt="bc governemnt logo horizontal light"
-  />
-);
-
-export const BcGovLogoHorizontalDark = () => (
-  <img
-    src={new URL('/assets/images/bcgov_dark.svg', import.meta.url).href}
-    alt="bc governemnt logo horizontal dark"
   />
 );
 
 export const UserIcon = () => (
-  <img src={new URL('/assets/images/user.png', import.meta.url).href} alt="logo" />
+  <img src={new URL('/assets/images/profile-icon.svg', import.meta.url).href} alt="logo" />
 );
+
 export const CloudIcon = () => (
   <img
     src={new URL('/assets/images/cloud-icon.svg', import.meta.url).href}

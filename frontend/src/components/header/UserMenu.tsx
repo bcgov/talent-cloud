@@ -13,7 +13,7 @@ export const UserMenu = ({ username }: { username: string }) => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
-          <h6>{username}</h6>
+          <h6 className='font-bold'>{username}</h6>
             <UserIcon />
         </Menu.Button>
       </div>
