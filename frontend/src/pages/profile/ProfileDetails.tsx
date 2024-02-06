@@ -35,7 +35,7 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
     { title: 'Primary Number', content: personnel.primaryPhone || 'Not Listed' },
     { title: 'Secondary Number', content: personnel.secondaryPhone || 'Not Listed' },
     { title: 'Email Address', content: personnel.email },
-    { title: 'Mailing Address', content: 'Unknown' },
+    { title: 'Mailing Address', content: '' },
   ];
 
   const organizational = [

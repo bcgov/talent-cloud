@@ -21,7 +21,11 @@ export const TableBodyCell = ({ cell, id }: { cell: Cell; id: string }) => {
     case DashboardColumns.NAME:
       return (
         <td className={cell.className}>
-          <Link to={`/profile/${id}`} target="_href" className="hover:underline">
+          <Link
+            to={`/profile/${id}`}
+            target="_href"
+            className="hover:underline hover:text-blue-900"
+          >
             {cell.value}
           </Link>
         </td>

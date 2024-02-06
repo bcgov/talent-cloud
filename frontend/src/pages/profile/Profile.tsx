@@ -25,7 +25,7 @@ const Profile = () => {
                 </span>
               </div>
             </a>
-            <span className="font-bold">
+            <span className="font-bold text-black">
               {personnel.firstName} {personnel.lastName}
             </span>
           </Breadcrumbs>
