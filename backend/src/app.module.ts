@@ -1,5 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
-
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -22,7 +20,6 @@ import { PersonnelModule } from './personnel/personnel.module';
     DatabaseModule,
     LoggerModule,
     TerminusModule,
-    HttpModule,
     AuthModule,
     PersonnelModule,
     FunctionModule,
