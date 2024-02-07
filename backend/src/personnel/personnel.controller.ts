@@ -12,12 +12,12 @@ import {
   Param,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('personnel')

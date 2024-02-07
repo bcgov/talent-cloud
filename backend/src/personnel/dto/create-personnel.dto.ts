@@ -18,11 +18,11 @@ export class CreatePersonnelDTO {
   lastName: string;
 
   @ApiProperty({
-    description: 'Personnel\'s work location',
+    description: "Personnel's work location",
     enum: WorkLocation,
     example: WorkLocation.VICTORIA,
   })
-  workLocation: WorkLocation;
+  workLocation: string;
 
   @ApiProperty({
     description: 'Region personnel works in',
@@ -57,13 +57,14 @@ export class CreatePersonnelDTO {
   otherPhone: string;
 
   @ApiProperty({
-    description: 'Email address with which to contact participant - possibly the one attached to their IDIR',
+    description:
+      'Email address with which to contact participant - possibly the one attached to their IDIR',
     example: 'janedoe123@gov.bc.ca',
   })
   email: string;
 
   @ApiProperty({
-    description: 'Name of personnel\'s supervisor',
+    description: "Name of personnel's supervisor",
     example: 'River Cartwright',
   })
   supervisor: string;
@@ -110,7 +111,7 @@ export class CreatePersonnelDTO {
     example: [
       {
         function: 'OPS',
-        experience: 'CHIEF'
+        experience: 'CHIEF',
       },
       {
         function: 'LOGS',
@@ -119,8 +120,8 @@ export class CreatePersonnelDTO {
       {
         function: 'PLANS',
         experience: 'INTERESTED',
-      }
-    ]
+      },
+    ],
   })
-  experiences: { function: string, experience: string }[];
+  experiences: { function: string; experience: string }[];
 }

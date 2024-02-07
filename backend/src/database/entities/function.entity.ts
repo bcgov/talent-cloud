@@ -1,9 +1,5 @@
-import { FunctionRO } from 'src/function/ro/function.ro';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { FunctionRO } from '../../function/ro/function.ro';
 
 @Entity('function')
 export class FunctionEntity {
@@ -20,7 +16,7 @@ export class FunctionEntity {
     return {
       id: this.id,
       name: this.name,
-      abbreviation: this.abbreviation
-    }
+      abbreviation: this.abbreviation,
+    };
   }
 }
