@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
-import { FormSubmissionDataDTO, SubmissionDTO } from './intake-form.dto';
 import { FormSubmissionEventPayload } from './interface';
+import axios from 'axios';
+import { FormSubmissionDataDTO, SubmissionDTO } from './form.dto';
+
 
 @Injectable()
 export class FormService {
-  constructor() {}
 
   public async processEventPayload(eventPayload: FormSubmissionEventPayload) {
     const { submissionId, formId } = eventPayload;
