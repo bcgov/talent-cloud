@@ -17,7 +17,7 @@ export const Toggle = ({
 
   return (
     <div className="flex flex-row justify-start md:items-center md:mr-12">
-      <label htmlFor="showInactive" className="px-4">
+      <label htmlFor={field.name} className="px-4">
         Show Inactive
       </label>
       <Switch
