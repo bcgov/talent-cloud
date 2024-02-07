@@ -24,6 +24,7 @@ export const TableBodyCell = ({ cell, id }: { cell: Cell; id: string }) => {
           <Link
             to={`/profile/${id}`}
             target="_blank"
+            rel="noopener noreferrer"
             className="hover:underline text-blue-900"
           >
             {cell.value}
