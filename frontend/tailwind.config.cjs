@@ -39,6 +39,9 @@ module.exports = withMT({
         focus: '#3B99FC',
         active: '#2D4821',
         inactive: '#343633',
+        warningDark: '#6C4A00',
+        successDark: '#2D4821',
+        infoDark: '#1A5A96',
       },
       backgroundColor: {
         backgroundBlue: '#003366',
@@ -55,6 +58,7 @@ module.exports = withMT({
         successBannerLight: '#DFF0D8',
         warningBannerDark: '#6C4A00',
         warningBannerLight: '#F9F1C6',
+        
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#D9EAF7',
       },
@@ -67,7 +71,8 @@ module.exports = withMT({
         light: '#FFFFFF',
         black: '#000000',
         ministry: '#1A5A96',
-        error: '#A12622'
+        error: '#A12622', 
+        warning: '#6C4A00'
       },
     },
   },
