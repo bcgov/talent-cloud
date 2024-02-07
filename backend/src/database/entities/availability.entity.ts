@@ -6,7 +6,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import {
+  AvailabilityType,
+  AvailabilityTypeName,
+} from '../../common/enums/availability-type.enum';
 
 @Entity('availability')
 export class AvailabilityEntity {
@@ -19,7 +22,7 @@ export class AvailabilityEntity {
   @Column({
     name: 'availability_type',
     type: 'enum',
-    enum: AvailabilityType,
+    enum: AvailabilityTypeName,
     enumName: 'availability-type',
   })
   availabilityType: AvailabilityType;
@@ -27,4 +30,7 @@ export class AvailabilityEntity {
   @ManyToOne(() => PersonnelEntity, (pe) => pe.availability)
   @JoinColumn({ name: 'personnel_id' })
   personnel: PersonnelEntity;
+
+  @Column({ name: 'deployment_code', type: 'varchar' })
+  deploymentCode: string;
 }

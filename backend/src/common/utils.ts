@@ -6,6 +6,7 @@ import {
   WorkLocation,
   Experience,
   Classification,
+  AvailabilityTypeName,
 } from './enums';
 import { AppModule } from '../app.module';
 import { PersonnelService } from '../personnel/personnel.service';
@@ -134,7 +135,41 @@ export const rowData = () => {
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     experiences: experiences(),
+    availability: availability(),
   };
+};
+const threeMonthsArray = () => {
+  const today = new Date();
+  const threeMonthsFromNow = new Date(
+    today.getFullYear(),
+    today.getMonth() + 3,
+    today.getDate(),
+  );
+  const dates = [];
+  for (let i = today; i < threeMonthsFromNow; i.setDate(i.getDate() + 1)) {
+    dates.push(new Date(i));
+  }
+  return dates;
+};
+
+const availability = () => {
+  const availabilities = [];
+  const dates = threeMonthsArray();
+  dates.forEach((date, index) => {
+    const spliceOfTime = dates.splice(index, Math.floor(Math.random() * 10));
+    const availabilityType = faker.helpers.arrayElement(
+      Object.values(AvailabilityTypeName),
+    );
+    spliceOfTime.forEach((date) => {
+      availabilities.push({
+        date,
+        availabilityType,
+        deploymentCode: faker.string.alphanumeric(6),
+      });
+    });
+  });
+
+  return availabilities;
 };
 
 const experiences = () => {
