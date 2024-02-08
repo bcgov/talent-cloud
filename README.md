@@ -6,6 +6,7 @@
 ## Documentation
 
 - [Developer Setup](DEV.md)
+- [CHEFS Integration](CHEFS.md)
 
 ## How to Contribute
 
