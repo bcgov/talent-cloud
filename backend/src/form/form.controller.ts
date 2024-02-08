@@ -5,6 +5,7 @@ import {
   UseInterceptors,
   Req,
   UseGuards,
+  RawBodyRequest,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FormService } from './form.service';
@@ -20,7 +21,7 @@ export class FormSubmissionController {
   @Post()
   @Public()
   @UseGuards(TokenGuard)
-  async handleIncomingEvents(@Req() req: any) {
+  async handleIncomingEvents(@Req() req: RawBodyRequest<Request>) {
     const rawBody = JSON.parse(req.rawBody.toString());
     await this.formService.processEventPayload(rawBody);
   }

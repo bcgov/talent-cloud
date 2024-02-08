@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { FormSubmissionEventPayload } from './interface';
-import axios from 'axios';
-import { FormSubmissionDataDTO, SubmissionDTO } from './form.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Form } from './form.entity';
+import axios from 'axios';
 import { Repository } from 'typeorm';
-
+import { FormSubmissionDataDTO, SubmissionDTO } from './form.dto';
+import { Form } from './form.entity';
+import { FormSubmissionEventPayload } from './interface';
 
 @Injectable()
 export class FormService {
-constructor(@InjectRepository(Form) private formRepo: Repository<Form>) {}
+  constructor(@InjectRepository(Form) private formRepo: Repository<Form>) {}
   public async processEventPayload(eventPayload: FormSubmissionEventPayload) {
     const { submissionId, formId } = eventPayload;
 
