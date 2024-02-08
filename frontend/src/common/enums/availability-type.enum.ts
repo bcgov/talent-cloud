@@ -1,5 +1,5 @@
-export enum AvailabilityTypeName {
-  UNAVAILABLE = 'Unavailable',
-  DEPLOYED = 'Deployed',
-  AVAILABLE = 'Available',
+export enum AvailabilityType {
+  UNAVAILABLE='UNAVAILABLE',
+  DEPLOYED='DEPLOYED',
+  AVAILABLE='AVAILABLE'
 }

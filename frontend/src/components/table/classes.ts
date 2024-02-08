@@ -1,4 +1,4 @@
-import { AvailabilityTypeName, Classification } from '@/common';
+import { AvailabilityType, Classification } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
@@ -57,7 +57,7 @@ export const tableClass = (key: string, value?: string) => {
     case DashboardColumns.REMOTE:
       return tableClasses.remote;
     case DashboardColumns.AVAILABILITY:
-      return value === AvailabilityTypeName.AVAILABLE
+      return value === AvailabilityType.AVAILABLE
         ? tableClasses.available
         : tableClasses.unavailable;
     case DashboardColumns.TRAVEL:

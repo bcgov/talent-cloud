@@ -1,4 +1,4 @@
-import type { AvailabilityTypeName, Classification, Ministry } from '@/common';
+import type { AvailabilityType, Classification, Ministry } from '@/common';
 import {
   ExperienceName,
   FunctionName,
@@ -236,7 +236,7 @@ export interface DashboardRow {
   [DashboardColumns.REGION]: Region;
   [DashboardColumns.LOCATION]: WorkLocation;
   [DashboardColumns.FUNCTION]: FunctionName;
-  [DashboardColumns.AVAILABILITY]: AvailabilityTypeName;
+  [DashboardColumns.AVAILABILITY]: AvailabilityType;
   [DashboardColumns.TRAVEL]: boolean;
   [DashboardColumns.REMOTE]: boolean;
   [DashboardColumns.UNION_MEMBERSHIP]: Classification;

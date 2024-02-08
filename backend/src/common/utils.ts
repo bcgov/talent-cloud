@@ -6,7 +6,7 @@ import {
   WorkLocation,
   Experience,
   Classification,
-  AvailabilityTypeName,
+  AvailabilityType,
 } from './enums';
 import { AppModule } from '../app.module';
 import { PersonnelService } from '../personnel/personnel.service';
@@ -158,7 +158,7 @@ const availability = () => {
   dates.forEach((date, index) => {
     const spliceOfTime = dates.splice(index, Math.floor(Math.random() * 10));
     const availabilityType = faker.helpers.arrayElement(
-      Object.values(AvailabilityTypeName),
+      Object.values(AvailabilityType),
     );
     spliceOfTime.forEach((date) => {
       availabilities.push({

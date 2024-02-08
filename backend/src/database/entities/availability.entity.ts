@@ -6,10 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
-import {
-  AvailabilityType,
-  AvailabilityTypeName,
-} from '../../common/enums/availability-type.enum';
+import { AvailabilityType } from '../../common/enums/availability-type.enum';
 
 @Entity('availability')
 export class AvailabilityEntity {
@@ -22,7 +19,7 @@ export class AvailabilityEntity {
   @Column({
     name: 'availability_type',
     type: 'enum',
-    enum: AvailabilityTypeName,
+    enum: AvailabilityType,
     enumName: 'availability-type',
   })
   availabilityType: AvailabilityType;
