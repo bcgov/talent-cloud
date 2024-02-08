@@ -8,7 +8,7 @@ export class Form {
     id: string;
     
     @Column({ type: 'jsonb' })
-    data: any;
+    data: JSON;
     
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
