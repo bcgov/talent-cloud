@@ -17,7 +17,7 @@ export enum DashboardFilterNames {
 }
 
 export enum DashboardColumns {
-  FUNCTION = 'Function/ Experience',
+  FUNCTION = 'Function / Experience',
   AVAILABILITY = 'Availability',
   REMOTE = 'Remote Only',
   UNION_MEMBERSHIP = 'Union Membership',
