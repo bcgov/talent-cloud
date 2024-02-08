@@ -8,7 +8,10 @@ import { RolesGuard } from './auth/roles.guard';
 import { Documentation } from './swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
+
   const port = parseInt(process.env.PORT ?? '3000');
   const logger = new Logger('NestApplication');
 
