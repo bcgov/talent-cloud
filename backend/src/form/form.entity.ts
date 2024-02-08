@@ -1,15 +1,20 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-//TODO: Remove this entity and include with personell once we have final data model for form 
+//TODO: Remove this entity and include with personell once we have final data model for form
 
 @Entity('form')
 export class Form {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-    
-    @Column({ type: 'jsonb' })
-    data: JSON;
-    
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ type: 'jsonb' })
+  data: unknown;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 }

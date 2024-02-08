@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
-import { FormSubmissionDataDTO, SubmissionDTO } from './form.dto';
 import { Form } from './form.entity';
 import { FormSubmissionEventPayload } from './interface';
 
@@ -22,13 +21,14 @@ export class FormService {
       },
     );
 
-    const submissionData: SubmissionDTO =
+    const submissionData: Partial<Form> =
       requestFormData.data.submission.submission;
     requestFormData && this.processFormData(submissionData);
   }
 
-  async processFormData(submission: SubmissionDTO) {
-    const data: FormSubmissionDataDTO = submission.data;
-    return await this.formRepo.save(this.formRepo.create({ data }));
+  async processFormData(submission: Partial<Form>) {
+    return await this.formRepo.save(
+      this.formRepo.create({ data: submission.data }),
+    );
   }
 }
