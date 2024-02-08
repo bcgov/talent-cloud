@@ -27,4 +27,7 @@ export class AvailabilityEntity {
   @ManyToOne(() => PersonnelEntity, (pe) => pe.availability)
   @JoinColumn({ name: 'personnel_id' })
   personnel: PersonnelEntity;
+
+  @Column({ name: 'deployment_code', type: 'varchar' })
+  deploymentCode: string;
 }

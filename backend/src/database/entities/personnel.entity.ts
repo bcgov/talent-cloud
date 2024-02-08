@@ -104,7 +104,7 @@ export class PersonnelEntity extends BaseEntity {
   @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
   experiences: ExperienceEntity[];
 
-  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel)
+  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
   availability: AvailabilityEntity[];
 
   @ManyToMany(() => TrainingEntity)
