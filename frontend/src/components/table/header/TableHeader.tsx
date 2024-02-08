@@ -7,13 +7,16 @@ export const TableHeader = ({
 }) => {
   const renderName = (name:string) => {
     if(name === DashboardColumns.TRAVEL){
-      return <span>{name.split(' ')[0]} {name.split(' ')[1]}<br/>{name.split(' ')[2]}</span>
+      return <><span className="flex flex-row flex-nowrap">{name.split(' ')[0]} {name.split(' ')[1]}</span><span>{name.split(' ')[2]}</span></>
     } 
     if (name === DashboardColumns.REMOTE) {
       return <span>{name.split(' ')[0]}<br/>{name.split(' ')[1]}</span>
     }
     if(name === DashboardColumns.UNION_MEMBERSHIP){
       return <span>{name.split(' ')[0]}<br/>{name.split(' ')[1]}</span>
+    }
+    if(name===DashboardColumns.FUNCTION){
+      return <div className="flex flex-col"><span className="block">{name.split(' ')[0]}</span><span className="block">{name.split(' ')[1]}</span></div>
     }
     else return name
   }
