@@ -22,17 +22,11 @@ export const PrivateRoute = () => {
     return <Navigate to={Routes.Login} />;
   }
 
-  if (keycloak.authenticated && !roles.includes('coordinator')) {
-    return (
-      <Layout authenticated={authenticated} username={username}>
-        <div>Restricted Page</div>
-      </Layout>
-    );
-  } else {
+  
     return (
       <Layout authenticated={authenticated} username={username}>
         <Outlet />
       </Layout>
     );
-  }
+  
 };

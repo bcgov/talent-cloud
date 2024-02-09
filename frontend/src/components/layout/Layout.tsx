@@ -15,11 +15,11 @@ export const Layout = ({
 }) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header
+       <Header
         appName={APP_NAME}
         username={username ?? ''}
         authenticated={authenticated}
-      />
+      /> 
       <div
         className={[
           'w-full  mt-12 ',
