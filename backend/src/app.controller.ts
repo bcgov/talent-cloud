@@ -7,9 +7,9 @@ import {
 } from '@nestjs/terminus';
 import { Public } from './auth/public.decorator';
 
-@Public()
 @ApiTags('Application API')
 @Controller()
+@Public()
 export class AppController {
   constructor(
     private health: HealthCheckService,

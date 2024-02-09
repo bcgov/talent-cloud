@@ -10,8 +10,8 @@ export const Header = ({
   authenticated,
 }: {
   appName: string;
-  username: string;
-  authenticated: boolean | undefined;
+  username?: string;
+  authenticated?: boolean;
 }) => {
   return (
     <header className="relative w-full border-b z-20 py-0">
@@ -30,7 +30,7 @@ export const Header = ({
         </div>
         {authenticated && (
           <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
-            <UserMenu username={username} />
+            {username && <UserMenu username={username} />}
           </div>
         )}
       </div>
