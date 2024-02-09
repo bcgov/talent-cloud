@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheckService,
   HealthCheck,
@@ -7,6 +8,7 @@ import {
 import { Public } from './auth/public.decorator';
 
 @Public()
+@ApiTags('Application API')
 @Controller()
 export class AppController {
   constructor(
@@ -14,6 +16,21 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
   ) {}
 
+  @ApiOperation({
+    summary: 'Application Health',
+    description: 'Health Check Endpoint',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User Info',
+    schema: {
+      type: 'object',
+      properties: {
+        api: {},
+        db: {},
+      },
+    },
+  })
   @Get('/health')
   @HealthCheck()
   async checkApp() {
@@ -29,6 +46,6 @@ export class AppController {
       authUrl: process.env.KEYCLOAK_AUTH_URL,
       client: process.env.KEYCLOAK_CLIENT,
       realm: process.env.KEYCLOAK_REALM,
-    }
+    };
   }
 }
