@@ -4,27 +4,13 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-
 import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
 import { Token } from './interface';
-import { Metadata } from './metadata';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-
   canActivate(context: ExecutionContext): boolean {
-    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
-      Metadata.PUBLIC_ENDPOINT,
-      [context.getHandler(), context.getClass()],
-    );
-
-    if (PublicEndpoint) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest();
 
     const authHeader = request.headers.authorization;
@@ -97,7 +83,7 @@ export class AuthGuard implements CanActivate {
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
-      request['username'] = "";
+      request['username'] = '';
     }
   }
 }
