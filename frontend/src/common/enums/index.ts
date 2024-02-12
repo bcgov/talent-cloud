@@ -8,4 +8,4 @@ export * from './region.enum';
 export * from './work-location.enum';
 export * from './status.enum';
 export * from './button-type.enum';
-export * from './role.enum'
+export * from './role.enum';

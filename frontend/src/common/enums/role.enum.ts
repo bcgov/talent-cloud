@@ -1,5 +1,4 @@
-
 export enum Role {
-    COORDINATOR = 'coordinator',
-    LOGISTICS = 'logistics',
-  }
+  COORDINATOR = 'coordinator',
+  LOGISTICS = 'logistics',
+}

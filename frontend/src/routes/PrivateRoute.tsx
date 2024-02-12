@@ -7,7 +7,7 @@ import { Layout } from '../components';
 import { useGetUserInfo } from '../hooks';
 
 export const PrivateRoute = () => {
-  const { username, roles } = useGetUserInfo();
+  const { username } = useGetUserInfo();
 
   const { keycloak } = useKeycloak();
   const authenticated = keycloak.authenticated;
@@ -22,11 +22,9 @@ export const PrivateRoute = () => {
     return <Navigate to={Routes.Login} />;
   }
 
-  
-    return (
-      <Layout authenticated={authenticated} username={username}>
-        <Outlet />
-      </Layout>
-    );
-  
+  return (
+    <Layout authenticated={authenticated} username={username}>
+      <Outlet />
+    </Layout>
+  );
 };
