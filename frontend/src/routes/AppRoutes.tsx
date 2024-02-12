@@ -4,12 +4,7 @@ import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
-import {
-  AuthProvider,
-  
-  ErrorProvider,
-  RoleProvider,
-} from '@/providers';
+import { AuthProvider, ErrorProvider, RoleProvider } from '@/providers';
 
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const Login = lazy(() => import('../pages/Login'));

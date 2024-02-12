@@ -1,22 +1,27 @@
-import { AxiosError } from 'axios';
-import { ReactElement, createContext, useEffect, useMemo, useState } from 'react';
+import type { AxiosError } from 'axios';
+import type { ReactElement } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import { ErrorComponent } from '@/components/ui/Error';
 
-export const ErrorContext = createContext<{
-  error: Error | null | undefined;
-  handleError: (e: unknown) => void;
-}>({ error: null, handleError: (e: unknown) => {} });
+export const ErrorContext = createContext<
+  | {
+      error: Error | null;
+      handleError: (e: unknown) => void;
+    }
+  | null
+  | undefined
+>(null);
 
 export const ErrorProvider = ({ children }: { children: ReactElement }) => {
-  const [error, setError] = useState<Error | AxiosError | null>();
+  const [error, setError] = useState<Error | AxiosError | null>(null);
 
   useEffect(() => {
     window.addEventListener('error', (e) => setError(e.error as Error));
     return () => {
-      window.removeEventListener('error', (e) => setError(null));
+      window.removeEventListener('error', () => setError(null));
     };
   }, [error]);
-  
+
   const value = useMemo(
     () => ({
       error,

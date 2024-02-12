@@ -1,9 +1,9 @@
 import { useError } from '@/hooks';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 export const ErrorComponent = () => {
-    const {error}  = useError()
-    
+  const { error } = useError();
+
   return (
     <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
       <div className="max-w-xl mx-auto sm:px-6 lg:px-8 flex flex-col items-center space-y-8 text-center justify-center">

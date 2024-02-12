@@ -1,9 +1,10 @@
-import {  Loading } from '@/components';
+import { Loading } from '@/components';
 import { useError } from '@/hooks';
 import { getKeycloakInfo } from '@/services';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
-import { ReactElement, createContext, useEffect, useState } from 'react';
+import type { ReactElement } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import store from 'store';
 
 export const AuthContext = createContext<unknown>({});

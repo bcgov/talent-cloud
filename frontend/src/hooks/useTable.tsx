@@ -12,7 +12,7 @@ import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
 import { useError } from './useError';
 
-export const useTable = () => {  
+export const useTable = () => {
   const { handleError } = useError();
 
   const [tableData, setTableData] = useState<TableData>({
@@ -48,7 +48,6 @@ export const useTable = () => {
 
   useEffect(() => {
     (async () => {
-      
       handleSearchParams(searchParamsUrl, filterValues);
 
       try {
@@ -163,7 +162,7 @@ export const useTable = () => {
             ),
           });
       } catch (e) {
-        handleError(e)
+        handleError(e);
       }
     })();
   }, [debouncedValue]);
