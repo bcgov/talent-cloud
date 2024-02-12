@@ -1,4 +1,3 @@
-import { instanceToPlain } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -11,12 +10,13 @@ import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
-import { Role } from '../../auth/interface';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
+import { Role } from '../../auth/interface';
+import { instanceToPlain } from 'class-transformer';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {

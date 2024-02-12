@@ -84,7 +84,6 @@ export class PersonnelService {
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
-
     qb = qb.orderBy('personnel.lastName', 'ASC');
     if (query.showInactive) {
       qb = qb.addOrderBy('personnel.active', 'ASC');
@@ -92,7 +91,8 @@ export class PersonnelService {
     }
 
     const [personnel, count] = await qb.getManyAndCount();
-    return { personnel, count };
+    return { personnel, count };  
+    
   }
 
   /**
