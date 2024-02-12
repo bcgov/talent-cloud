@@ -13,12 +13,14 @@ export const tableClasses = {
   available: [tdClass, 'text-success'].join(', '),
   unavailable: [tdClass, 'text-error'].join(', '),
   remote: [tdClass].join(', '),
-  travelYes: [tdClass, 'flex flex-row items-center justify-start text-sm text-success'].join(
-    ', ',
-  ),
-  travelNo: [tdClass, 'flex flex-row items-center justify-start text-sm text-error'].join(
-    ', ',
-  ),
+  travelYes: [
+    tdClass,
+    'flex flex-row items-center justify-start text-sm text-success',
+  ].join(', '),
+  travelNo: [
+    tdClass,
+    'flex flex-row items-center justify-start text-sm text-error',
+  ].join(', '),
   excluded: [
     classificationClass,
     ' text-error bg-errorBannerLight border-error',
@@ -26,17 +28,19 @@ export const tableClasses = {
   bcgeu: [classificationClass, ' text-info bg-infoBannerLight border-infoDark'].join(
     ', ',
   ),
-  bcnu: [classificationClass, ' text-warning bg-warningBannerLight border-warningDark'].join(
-    ', ',
-  ),
-  pea: [classificationClass, ' text-successDark bg-successBannerLight border-successDark'].join(
-    ', ',
-  ),
+  bcnu: [
+    classificationClass,
+    ' text-warning bg-warningBannerLight border-warningDark',
+  ].join(', '),
+  pea: [
+    classificationClass,
+    ' text-successDark bg-successBannerLight border-successDark',
+  ].join(', '),
   checkIconClass: 'h-6 w-6 text-success mr-2',
   xIconClass: 'h-6 w-6 text-error mr-2',
 };
 const getUnionMembershipClass = (value: string) => {
-  switch(value){
+  switch (value) {
     case Classification.BCGEU:
       return tableClasses.bcgeu;
     case Classification.EXCLUDED:
@@ -48,8 +52,7 @@ const getUnionMembershipClass = (value: string) => {
     default:
       return tdClass;
   }
-  
-}
+};
 export const tableClass = (key: string, value?: string) => {
   switch (key) {
     case DashboardColumns.MINISTRY:
@@ -61,7 +64,7 @@ export const tableClass = (key: string, value?: string) => {
         ? tableClasses.available
         : tableClasses.unavailable;
     case DashboardColumns.TRAVEL:
-      return value === 'yes' ?  tableClasses.travelYes : tableClasses.travelNo;
+      return value === 'yes' ? tableClasses.travelYes : tableClasses.travelNo;
     case DashboardColumns.UNION_MEMBERSHIP:
       return getUnionMembershipClass(value);
     default:

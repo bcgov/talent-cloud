@@ -15,7 +15,10 @@ export const EmcrLogoVertical = () => (
 );
 
 export const UserIcon = () => (
-  <img src={new URL('/assets/images/profile-icon.svg', import.meta.url).href} alt="logo" />
+  <img
+    src={new URL('/assets/images/profile-icon.svg', import.meta.url).href}
+    alt="logo"
+  />
 );
 
 export const CloudIcon = () => (

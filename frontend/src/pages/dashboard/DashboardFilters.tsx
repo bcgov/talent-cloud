@@ -20,7 +20,7 @@ export const Filters = ({
   fields: DashboardFields;
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;  
+  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
   filterValues: DashboardFilters;
 }) => {
@@ -42,7 +42,6 @@ export const Filters = ({
               values={filterValues.region}
               label="Region"
               onChange={handleMultiSelect}
-              
             />
           </div>
           <div className="col-span-1 md:col-span-3">
@@ -59,7 +58,6 @@ export const Filters = ({
                       )
                     : fields?.location?.groupedOptions,
               }}
-              
               label="Work Location"
               values={filterValues.location}
             />

@@ -23,7 +23,7 @@ export const Search = ({
             name={field.name}
             value={value}
             type="text"
-            placeholder={"Search for a member by name"}
+            placeholder={'Search for a member by name'}
             onChange={handleSearchInput}
           />
         </div>

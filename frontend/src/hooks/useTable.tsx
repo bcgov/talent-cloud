@@ -125,7 +125,10 @@ const useTable = () => {
                     key: uuidv4(),
                     columnName: DashboardColumns.REMOTE,
                     value: remoteOnly,
-                    className: tableClass(DashboardColumns.REMOTE, remoteOnly ? 'yes' : 'no'),
+                    className: tableClass(
+                      DashboardColumns.REMOTE,
+                      remoteOnly ? 'yes' : 'no',
+                    ),
                   },
                   {
                     key: uuidv4(),

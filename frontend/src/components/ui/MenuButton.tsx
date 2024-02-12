@@ -14,7 +14,7 @@ export const MenuButton = () => {
         </button>
       ) : (
         <button className={classes.menu.button}>
-          <ChevronDownIcon className="h-8 w-5 fill-[#606060]"/>
+          <ChevronDownIcon className="h-8 w-5 fill-[#606060]" />
         </button>
       )}
     </div>
