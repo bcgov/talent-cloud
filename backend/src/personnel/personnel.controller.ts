@@ -22,11 +22,11 @@ import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
 
+import { Endpoint } from '../common/enums/endpoint.enum';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 
-import { QueryTransformPipe } from '../query-validation.pipe';
 import { AppLogger } from '../logger/logger.service';
-import { Endpoint } from '../common/enums/endpoint.enum';
+import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
