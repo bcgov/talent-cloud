@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
-import { Form } from './form.entity';
+import { Form } from '../database/entities/form.entity';
 import { FormSubmissionEventPayload } from './interface';
 
 @Injectable()

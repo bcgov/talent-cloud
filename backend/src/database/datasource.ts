@@ -1,6 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
-import { Form } from '../form/form.entity';
 
 export const config = {
   type: 'postgres',
@@ -11,7 +10,7 @@ export const config = {
   database: process.env.DB_NAME ?? 'tc',
   // TODO change this to false in production
   synchronize: true,
-  entities: [Form, join(__dirname, '**', '*.entity.{ts,js}')],
+  entities: [join(__dirname, '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
 };
 
