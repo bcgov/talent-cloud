@@ -15,5 +15,5 @@ export class UserInfoRO {
     isArray: true,
     type: () => Role,
   })
-  roles: Role[];
+  role: Role;
 }

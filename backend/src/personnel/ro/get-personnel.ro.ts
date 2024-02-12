@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { PersonnelRO } from "./personnel.ro";
+import { ApiProperty } from '@nestjs/swagger';
+import { PersonnelRO } from './personnel.ro';
 
 export class GetPersonnelRO {
   @ApiProperty({
@@ -11,7 +11,8 @@ export class GetPersonnelRO {
 
   @ApiProperty({
     name: 'page',
-    description: 'Page number given the number of rows (should be same as query parameter)',
+    description:
+      'Page number given the number of rows (should be same as query parameter)',
     example: 1,
   })
   page: number;
@@ -29,5 +30,5 @@ export class GetPersonnelRO {
     isArray: true,
     type: () => PersonnelRO,
   })
-  personnel: PersonnelRO[];
+  personnel: Record<'Personnel', PersonnelRO>[];
 }

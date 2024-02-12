@@ -25,8 +25,8 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value }) => value === 'true' || value === true)
-  active: boolean;
+  @Transform(({ value }) => value === 'false' || value === false)
+  showInactive: boolean;
 
   @ApiPropertyOptional({
     description:

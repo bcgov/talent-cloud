@@ -1,4 +1,4 @@
-import { Request, Controller, Get } from '@nestjs/common';
+import { Request, Controller, Get, NotFoundException } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestWithRoles, Role } from './interface';
 import { UserInfoRO } from './ro/user-info.ro';
@@ -33,9 +33,12 @@ export class AuthController {
   @Get('userInfo')
   async getRole(@Request() req: RequestWithRoles): Promise<UserInfoRO> {
     try {
-      return { roles: req.roles, username: req.username };
+      return { role: req.role, username: req.username };
     } catch (e) {
-      return { username: '', roles: [] };
+      throw new NotFoundException({
+        ...e,
+        message: 'No user found with the given username and role',
+      });
     }
   }
 }
