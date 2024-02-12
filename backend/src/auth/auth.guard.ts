@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
-import { Token } from './interface';
+import { Role, Token } from './interface';
 import { Metadata } from './metadata';
 
 @Injectable()
@@ -84,20 +84,47 @@ export class AuthGuard implements CanActivate {
   }
 
   setRequestUserInfo(payload: JwtPayload, request: Request): void {
-    if (payload.client_roles) {
-      request['roles'] = payload.client_roles;
-    } else if (
-      process.env.NODE_ENV !== 'production' &&
-      payload.resource_access?.[AUTH_CLIENT]
-    ) {
-      request['roles'] = payload.resource_access?.[AUTH_CLIENT].roles;
+    // the local keycloak instance includes the key "resource_access" instead of  the key "client roles" so we need to check for both in order to use this locally.
+    // sometimes on local we use the actual keycloak instance instead of containerized local keycloak instance so we need to check for client roles on local as well.
+    const useDevRoles =
+      process.env.NODE_ENV !== 'production' && !payload.client_roles;
+    if (useDevRoles) {
+      this.setDevRoles(payload, request);
     } else {
-      request['roles'] = [];
+      this.setProdRoles(payload, request);
     }
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
       request['username'] = '';
+    }
+  }
+
+  setDevRoles(payload: JwtPayload, request: Request): void {
+    // only include a single role in the request object.
+    // include the role with the highest permissions level.
+    if (
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.COORDINATOR)
+    ) {
+      request['role'] = Role.COORDINATOR;
+    } else if (
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.LOGISTICS)
+    ) {
+      request['role'] = Role.LOGISTICS;
+    } else {
+      request['role'] = '';
+    }
+  }
+
+  setProdRoles(payload: JwtPayload, request: Request): void {
+    // only include a single role in the request object.
+    // include the role with the highest permissions level.
+    if (payload.client_roles.includes(Role.COORDINATOR)) {
+      request['role'] = Role.COORDINATOR;
+    } else if (payload.client_roles.includes(Role.LOGISTICS)) {
+      request['role'] = Role.LOGISTICS;
+    } else {
+      request['role'] = '';
     }
   }
 }

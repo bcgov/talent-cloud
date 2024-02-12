@@ -56,8 +56,10 @@ export class PersonnelService {
         }),
       );
     }
-    if (query.active === true) {
-      qb = qb.andWhere('personnel.active = :active', { active: query.active });
+    if (query.showInactive) {
+      qb = qb.andWhere('personnel.active = :active', { active: false });
+    } else {
+      qb = qb.andWhere('personnel.active = :active', { active: true });
     }
     if (query.region?.length) {
       qb.andWhere('personnel.region IN (:...regions)', {
@@ -82,7 +84,13 @@ export class PersonnelService {
     }
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
+
     qb = qb.orderBy('personnel.lastName', 'ASC');
+    if (query.showInactive) {
+      qb = qb.addOrderBy('personnel.active', 'ASC');
+      qb = qb.addOrderBy('personnel.applicantReviewed', 'ASC');
+    }
+
     const [personnel, count] = await qb.getManyAndCount();
     return { personnel, count };
   }

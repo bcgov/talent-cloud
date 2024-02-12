@@ -4,6 +4,7 @@ import { JwtPayload } from 'jsonwebtoken';
 export enum Role {
   COORDINATOR = 'coordinator',
   LOGISTICS = 'logistics',
+  PUBLIC = 'public',
 }
 
 export interface Token extends JwtPayload {
@@ -41,6 +42,6 @@ interface ResourceAccess {
 }
 
 export interface RequestWithRoles extends Request {
-  roles: Role[];
+  role: Role;
   username: string;
 }

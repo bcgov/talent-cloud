@@ -10,6 +10,8 @@ import {
   UseInterceptors,
   Inject,
   Param,
+  Req,
+  Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
@@ -17,9 +19,11 @@ import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { Role } from '../auth/interface';
+import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
+import { Endpoint } from '../common/enums/endpoint.enum';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('personnel')
@@ -29,7 +33,10 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
-  ) {}
+    private logger: AppLogger,
+  ) {
+    this.logger.setContext(PersonnelController.name);
+  }
 
   @ApiOperation({
     summary: 'Add personnel',
@@ -40,7 +47,13 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Post()
-  async createPersonnel(@Body() personnel: CreatePersonnelDTO[]) {
+  async createPersonnel(
+    @Body() personnel: CreatePersonnelDTO[],
+    @Request() req: RequestWithRoles,
+  ) {
+    this.logger.log(
+      `${Endpoint.CREATE_PERSONNEL}, ${req.username}, ${req.role}`,
+    );
     return await this.personnelService.createPersonnel(personnel);
   }
 
@@ -56,12 +69,17 @@ export class PersonnelController {
   @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @UsePipes(new QueryTransformPipe())
   async getPersonnel(
+    @Request() req: RequestWithRoles,
     @Query() query?: GetPersonnelDTO,
   ): Promise<GetPersonnelRO> {
+    this.logger.log(`${Endpoint.GET_PERSONNEL}, ${req.username}, ${req.role}`);
+
     const queryResponse = await this.personnelService.getPersonnel(query);
+
     const personnel = queryResponse.personnel.map((personnelEntity) =>
-      personnelEntity.toResponseObject(),
+      personnelEntity.toResponseObject(req.role),
     );
+
     return {
       personnel,
       count: queryResponse.count,
@@ -80,9 +98,15 @@ export class PersonnelController {
   })
   @Get(':id')
   @Roles(Role.COORDINATOR, Role.LOGISTICS)
-  async getPersonnelById(@Param('id') id: string): Promise<PersonnelRO> {
+  async getPersonnelById(
+    @Param('id') id: string,
+    @Req() req: RequestWithRoles,
+  ): Promise<Record<'Personnel', PersonnelRO>> {
+    this.logger.log(
+      `${Endpoint.GET_PERSONNEL_BY_ID}, ${req.username}, ${req.role}`,
+    );
     const personnelRO: PersonnelEntity =
       await this.personnelService.getPersonnelById(id);
-    return personnelRO.toResponseObject();
+    return personnelRO.toResponseObject(req.role);
   }
 }

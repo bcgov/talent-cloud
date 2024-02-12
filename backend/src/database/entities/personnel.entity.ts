@@ -1,3 +1,4 @@
+import { instanceToPlain } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -10,6 +11,7 @@ import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
+import { Role } from '../../auth/interface';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
@@ -81,10 +83,23 @@ export class PersonnelEntity extends BaseEntity {
   })
   skillsAbilities: string;
 
-  @Column({ name: 'notes', type: 'varchar', length: 512, nullable: true })
-  notes: string;
+  @Column({
+    name: 'coordinatorNotes',
+    type: 'varchar',
+    length: 512,
+    nullable: true,
+  })
+  coordinatorNotes: string;
 
-  @Column({ name: 'active', type: 'boolean', default: true })
+  @Column({
+    name: 'logisticsNotes',
+    type: 'varchar',
+    length: 512,
+    nullable: true,
+  })
+  logisticsNotes: string;
+
+  @Column({ name: 'active', type: 'boolean', default: false })
   active: boolean;
 
   @Column({
@@ -111,8 +126,13 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
-  toResponseObject(): PersonnelRO {
-    return {
+  @Column({ name: 'application_approved', type: 'boolean', default: false })
+  applicantReviewed: boolean;
+
+  toResponseObject(role: Role): Record<string, PersonnelRO> {
+    const response = new PersonnelRO();
+
+    const data = {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
@@ -126,9 +146,11 @@ export class PersonnelEntity extends BaseEntity {
       classification: this.classification,
       applicationDate: this.applicationDate,
       skillsAbilities: this.skillsAbilities,
-      notes: this.notes,
+      coordinatorNotes: this.coordinatorNotes,
+      logisticsNotes: this.logisticsNotes,
       supervisor: this.supervisor,
       active: this.active,
+      applicantReviewed: this.applicantReviewed,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
       experiences:
@@ -138,6 +160,9 @@ export class PersonnelEntity extends BaseEntity {
       // availability
       // available
     };
+    // this is required in order to conditionally omit certain fields from the response based on the user role
+    Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
+    return instanceToPlain(response, { groups: [role] });
   }
 
   constructor(data: CreatePersonnelDTO) {

@@ -35,16 +35,11 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     // get the current logged in users roles (attached to the request during authentication)
-    const currentUserRoles = request?.roles;
+    const currentUserRole = request?.role;
 
     try {
       // if the current user roles match the required roles for the route allow access
-      if (
-        allowedRoles.some((requiredRole) =>
-          currentUserRoles.find((currentRole) => currentRole === requiredRole),
-        )
-      ) {
-        console.log('ALLOWED');
+      if (allowedRoles.includes(currentUserRole)) {
         return true;
       }
     } catch {
