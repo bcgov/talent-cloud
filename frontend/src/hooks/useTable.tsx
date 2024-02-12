@@ -10,8 +10,11 @@ import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
+import { useError } from './useError';
 
-export const useTable = () => {
+export const useTable = () => {  
+  const { handleError } = useError();
+
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
     pageRange: [],
@@ -45,6 +48,7 @@ export const useTable = () => {
 
   useEffect(() => {
     (async () => {
+      
       handleSearchParams(searchParamsUrl, filterValues);
 
       try {
@@ -159,7 +163,7 @@ export const useTable = () => {
             ),
           });
       } catch (e) {
-        console.log(e);
+        handleError(e)
       }
     })();
   }, [debouncedValue]);
