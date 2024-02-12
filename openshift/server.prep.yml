@@ -30,6 +30,14 @@ objects:
       realm: ${KEYCLOAK_REALM}
       auth-url: ${KEYCLOAK_AUTH_SERVER}
       client: ${KEYCLOAK_CLIENT}
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-chefs
+    stringData:
+      base_url: ${CHEFS_API}
+      api_key: ${CHEFS_API_KEY}
+      token: ${CHEFS_WS_TOKEN}
   - kind: ConfigMap
     apiVersion: v1
     metadata:
