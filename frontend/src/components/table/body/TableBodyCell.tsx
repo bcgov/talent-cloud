@@ -1,11 +1,11 @@
 import type { Cell } from '@/components';
-import { booleanToString } from '@/components';
+import { PersonnelStatus, booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
-export const TableBodyCell = ({ cell, id }: { cell: Cell; id: string }) => {
+export const TableBodyCell = ({ cell, id, flag }: { cell: Cell; id: string, flag?: boolean }) => {
   switch (cell.columnName) {
     case DashboardColumns.TRAVEL:
       return (
@@ -21,6 +21,7 @@ export const TableBodyCell = ({ cell, id }: { cell: Cell; id: string }) => {
     case DashboardColumns.NAME:
       return (
         <td className={cell.className}>
+          {flag && <PersonnelStatus active={false} reviewed={!flag} />}
           <Link
             to={`/profile/${id}`}
             target="_blank"

@@ -9,6 +9,7 @@ export interface Row {
   key: string;
   cells: Cell[];
   active: boolean;
+  applicantReviewed?: boolean;
 }
 export interface Column {
   name: string;

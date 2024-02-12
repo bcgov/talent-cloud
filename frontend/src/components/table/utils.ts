@@ -8,10 +8,10 @@ export const handleSearchParams = (
   searchParamsUrl.set('page', filterValues?.currentPage.toString() ?? '1');
   searchParamsUrl.set('rows', filterValues?.rowsPerPage.toString() ?? '25');
 
-  if (filterValues?.showInactive === true) {
-    searchParamsUrl.delete('active');
+  if (filterValues?.showInactive === false) {
+    searchParamsUrl.delete('showInactive');
   } else {
-    searchParamsUrl.set('active', 'true');
+    searchParamsUrl.set('showInactive', 'true');
   }
   if (filterValues?.name) {
     searchParamsUrl.set('name', filterValues?.name);

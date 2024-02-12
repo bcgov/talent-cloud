@@ -11,8 +11,13 @@ import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
 
-const useTable = () => {
-  const [tableData, setTableData] = useState<TableData>();
+export const useTable = () => {  
+  const [tableData, setTableData] = useState<TableData>({
+    rows: [],
+    pageRange: [],
+    totalRows: 0,
+    totalPages: 1,
+  });
   const [filterValues, setFilterValues] = useState<any>({
     rowsPerPage: 25,
     currentPage: 1,
@@ -64,6 +69,7 @@ const useTable = () => {
               ({
                 id,
                 active,
+                applicantReviewed,
                 firstName,
                 lastName,
                 experiences,
@@ -75,7 +81,8 @@ const useTable = () => {
                 ministry,
               }: Personnel) => ({
                 key: id,
-                active,
+                active: active ?? true,
+                applicantReviewed: applicantReviewed ?? true,
                 cells: [
                   {
                     key: uuidv4(),
@@ -153,7 +160,7 @@ const useTable = () => {
             ),
           });
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
     })();
   }, [debouncedValue]);
@@ -241,5 +248,3 @@ const useTable = () => {
     ],
   };
 };
-
-export default useTable;

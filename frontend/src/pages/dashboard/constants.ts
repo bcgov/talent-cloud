@@ -221,6 +221,7 @@ export interface Personnel {
   experiences: ExperienceInterface[];
   availability: string;
   active: boolean;
+  applicantReviewed: boolean;
   willingToTravel: boolean;
   remoteOnly: boolean;
   classification: string;
@@ -230,7 +231,11 @@ export interface Personnel {
   secondaryPhone: string;
   email: string;
   supervisor: string;
+  reviewed: boolean;
+  coordinatorNotes?: string;
+  logisticsNotes?: string;
 }
+
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;
   [DashboardColumns.REGION]: Region;

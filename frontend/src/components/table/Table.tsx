@@ -1,5 +1,5 @@
-import { DashboardColumns } from '@/pages/dashboard';
-import type { Column, FieldInterface, PageParams, TableData } from '.';
+import { DashboardColumns, dashboardToggle } from '@/pages/dashboard';
+import type { Column, PageParams, TableData } from '.';
 import { TableFooter, TableBody, TableHeader } from '.';
 import { Toggle } from '../toggle/Toggle';
 
@@ -7,7 +7,7 @@ export const Table = ({
   title,
   subtitle,
   columns,
-  toggle,
+  showToggle,
   tableData,
   pageParams,
   handlePageParams,
@@ -15,14 +15,14 @@ export const Table = ({
 }: {
   title: string;
   subtitle: string;
-
   columns: Column[];
-  toggle?: FieldInterface;
+  showToggle: boolean;
   tableData: TableData;
   pageParams: PageParams;
   handlePageParams: (params: Partial<PageParams>) => void;
   showFunctionColumn: boolean;
 }) => {
+
   return (
     <div className="shadow-lg rounded-md w-full bg-white border border-gray  overflow-x-scroll">
       <div className="flex flex-col md:flex-row items-center justify-between mx-8">
@@ -30,9 +30,10 @@ export const Table = ({
           <h4 className="text-black font-bold">{title}</h4>
           <p>{`${tableData.totalRows} ${subtitle}`}</p>
         </div>
-        {toggle && (
+
+        {showToggle && (
           <Toggle
-            field={toggle}
+            field={dashboardToggle}
             handleToggle={(val: boolean) => handlePageParams({ showInactive: val })}
           />
         )}
