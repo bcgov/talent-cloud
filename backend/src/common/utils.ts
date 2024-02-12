@@ -115,6 +115,29 @@ const regionsAndLocations = [
 
 export const rowData = () => {
   const regionAndLocation = faker.helpers.arrayElement(regionsAndLocations);
+  const getStatus = () => {
+    const isNew = faker.datatype.boolean({ probability: 0.3 });
+    if (isNew) {
+      return {
+        applicantReviewed: false,
+        active: false,
+      };
+    }
+    const isBanned = faker.datatype.boolean({ probability: 0.2 });
+    if (isBanned) {
+      return {
+        applicantReviewed: true,
+        active: false,
+      };
+    } else {
+      return {
+        applicantReviewed: true,
+        active: true,
+      };
+    }
+  };
+
+  const { applicantReviewed, active } = getStatus();
 
   return {
     firstName: faker.person.firstName(),
@@ -131,11 +154,13 @@ export const rowData = () => {
     skillsAbilities: faker.lorem.sentence(),
     notes: faker.lorem.sentence(),
     supervisor: faker.person.firstName(),
-    active: faker.datatype.boolean({ probability: 0.8 }),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    experiences: experiences(),
+
+    active: active,
+    applicationReviewed: applicantReviewed,
     availability: availability(),
+    experiences: experiences(),
   };
 };
 const threeMonthsArray = () => {
