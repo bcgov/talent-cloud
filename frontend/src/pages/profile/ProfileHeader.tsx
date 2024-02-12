@@ -32,9 +32,12 @@ const ProfileHeader = ({
           {personnel.firstName} {personnel.lastName}
         </h2>
         {role === Role.COORDINATOR && (
-        <div className="pl-4">
-          <PersonnelStatus active={personnel.active} reviewed={personnel.applicantReviewed} />
-        </div>
+          <div className="pl-4">
+            <PersonnelStatus
+              active={personnel.active}
+              reviewed={personnel.applicantReviewed}
+            />
+          </div>
         )}
       </div>
       <div>
@@ -76,4 +79,3 @@ const ProfileHeader = ({
 };
 
 export default ProfileHeader;
-

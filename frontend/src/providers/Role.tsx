@@ -1,23 +1,22 @@
-import { Role } from '@/common';
+import type { Role } from '@/common';
 import { getUserInfo } from '@/services';
 import { useKeycloak } from '@react-keycloak/web';
 
-import { ReactElement, createContext, useEffect, useMemo, useState } from 'react';
+import type { ReactElement } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
 export const RoleContext = createContext<{
-  role: Role;
+  role?: Role;
   username: string;
-}>({role: Role.IDIR, username: ''});
+}>({ role: undefined, username: '' });
 
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
-  const [role, setRole] = useState<Role>(Role.IDIR);
+  const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
-  
+
   const { keycloak } = useKeycloak();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    
     (async () => {
       try {
         const {
@@ -27,8 +26,6 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
         setRole(role as Role);
       } catch (e: unknown) {
         console.log(e);
-      }finally{
-        setLoading(false)
       }
     })();
   }, [keycloak.authenticated]);
@@ -37,7 +34,6 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     () => ({
       role,
       username,
-
     }),
     [role],
   );

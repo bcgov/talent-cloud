@@ -9,7 +9,12 @@ export const TableBodyRow = ({ row }: { row: Row }) => {
       className={row.active ? rowClass + ' bg-white' : rowClass + ' bg-inactive'}
     >
       {row.cells.map((itm: Cell) => (
-        <TableBodyCell key={itm.key} cell={itm} id={row.key} flag={row.applicantReviewed===false}/>
+        <TableBodyCell
+          key={itm.key}
+          cell={itm}
+          id={row.key}
+          flag={row.applicantReviewed === false}
+        />
       ))}
     </tr>
   );

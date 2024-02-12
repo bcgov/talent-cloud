@@ -22,7 +22,6 @@ export const Table = ({
   handlePageParams: (params: Partial<PageParams>) => void;
   showFunctionColumn: boolean;
 }) => {
-
   return (
     <div className="shadow-lg rounded-md w-full bg-white border border-gray  overflow-x-scroll">
       <div className="flex flex-col md:flex-row items-center justify-between mx-8">

@@ -11,7 +11,7 @@ import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
 
-export const useTable = () => {  
+export const useTable = () => {
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
     pageRange: [],
@@ -160,7 +160,7 @@ export const useTable = () => {
             ),
           });
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     })();
   }, [debouncedValue]);

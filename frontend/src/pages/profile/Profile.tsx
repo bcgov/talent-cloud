@@ -9,8 +9,8 @@ import { useRole } from '@/hooks';
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
   const { personnel } = usePersonnel({ personnelId });
-  const {role}=useRole()
-  
+  const { role } = useRole();
+
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground">
       {personnel && (
@@ -43,7 +43,7 @@ const Profile = () => {
               </div>
             </div>
             <div>
-              <ProfileHeader personnel={personnel} role={role}/>
+              <ProfileHeader personnel={personnel} role={role} />
               <ProfileDetails personnel={personnel} />
             </div>
           </div>

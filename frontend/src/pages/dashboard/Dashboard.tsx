@@ -36,7 +36,7 @@ const Dashboard = () => {
       <Table
         title={title}
         subtitle={subtitle}
-        showToggle={role===Role.COORDINATOR}
+        showToggle={role === Role.COORDINATOR}
         columns={dashboardColumns}
         tableData={tableData}
         pageParams={filterValues}

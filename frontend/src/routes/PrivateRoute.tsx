@@ -6,7 +6,6 @@ import Routes from './constants';
 import { Layout } from '../components';
 import { useRole } from '@/hooks';
 
-
 export const PrivateRoute = () => {
   const { username } = useRole();
 
