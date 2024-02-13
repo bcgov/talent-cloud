@@ -4,7 +4,6 @@ import { JwtPayload } from 'jsonwebtoken';
 export enum Role {
   COORDINATOR = 'coordinator',
   LOGISTICS = 'logistics',
-  PUBLIC = 'public',
 }
 
 export interface Token extends JwtPayload {

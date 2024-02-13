@@ -101,7 +101,7 @@ export class PersonnelEntity extends BaseEntity {
   logisticsNotes: string;
 
   @Column({ name: 'status', type: 'enum', enum: Status, default: Status.NEW })
-  status: boolean;
+  status: Status;
 
   @Column({
     name: 'classification',
