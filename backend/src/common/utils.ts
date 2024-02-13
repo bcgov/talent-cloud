@@ -142,6 +142,8 @@ export const rowData = () => {
     ]),
     availability: availability(),
     experiences: experiences(),
+    logisticsNotes: faker.lorem.sentence(),
+    coordinatorNotes: faker.lorem.sentence(),
   };
 };
 const threeMonthsArray = () => {
