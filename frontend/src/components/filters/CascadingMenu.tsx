@@ -28,34 +28,36 @@ export const CascadingMenu = ({
 
   return (
     <>
-    <label>{label}</label>
-    <Menu dismiss={{ itemPress: false }}>
-      <MenuHandler field={field}>
-        {value ? (
-          <Chip
-            value={
-              nestedValue
-                ? `${value}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
-                : `${value}: All`
-            }
-          />
-        ) : (
-          <span className={classes.menu.placeholder}>Select {label.toLowerCase()}(s)</span>
-        )}
-        <MenuButton />
-      </MenuHandler>
-      <MenuList className={field.name}>
-        {field.options?.map((option: any) => (
-          <NestedMenu
-            field={field}
-            handleChange={handleChange}
-            nestedField={nestedField}
-            option={option}
-            key={option}
-          />
-        ))}
-      </MenuList>
-    </Menu>
+      <label>{label}</label>
+      <Menu dismiss={{ itemPress: false }}>
+        <MenuHandler field={field}>
+          {value ? (
+            <Chip
+              value={
+                nestedValue
+                  ? `${value}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
+                  : `${value}: All`
+              }
+            />
+          ) : (
+            <span className={classes.menu.placeholder}>
+              Select {label.toLowerCase()}(s)
+            </span>
+          )}
+          <MenuButton />
+        </MenuHandler>
+        <MenuList className={field.name}>
+          {field.options?.map((option: any) => (
+            <NestedMenu
+              field={field}
+              handleChange={handleChange}
+              nestedField={nestedField}
+              option={option}
+              key={option}
+            />
+          ))}
+        </MenuList>
+      </Menu>
     </>
   );
 };

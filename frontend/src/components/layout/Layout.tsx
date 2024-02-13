@@ -26,9 +26,9 @@ export const Layout = ({
           authenticated ? ' bg-white' : ' bg-primaryBlue',
         ].join(', ')}
       >
-          {children}  
+        {children}
       </div>
-      <Footer links={footerLinks} />  
-      </div>
+      <Footer links={footerLinks} />
+    </div>
   );
 };

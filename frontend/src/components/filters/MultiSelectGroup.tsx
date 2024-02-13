@@ -1,6 +1,5 @@
 import type { ChangeEvent } from 'react';
-import type {
-  FieldGroupedOption} from '@/components';
+import type { FieldGroupedOption } from '@/components';
 import {
   MenuItem,
   Checkbox,
@@ -52,7 +51,7 @@ export const MultiSelectGroup = ({
       target: {
         name: name,
         value: value,
-    },
+      },
     } as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
@@ -72,7 +71,7 @@ export const MultiSelectGroup = ({
         </MenuHandler>
         <MenuList className={field.name}>
           <div className="flex flex-col p-4">
-          <span className="label pl-4 pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
+            <span className="label pl-4 pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
             <div className="grid grid-cols-4 gap-y-4 gap-x-2">
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div key={group.label} className="col-span-1">

@@ -44,7 +44,7 @@ export const MultiSelect = ({
     <>
       <label>{label}</label>
       <Menu dismiss={{ outsidePress: true, itemPress: false }}>
-      <MenuHandler field={field}>
+        <MenuHandler field={field}>
           <MenuChips
             values={values}
             label={field.name}
