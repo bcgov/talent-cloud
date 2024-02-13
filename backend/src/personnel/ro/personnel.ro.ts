@@ -122,7 +122,6 @@ export class PersonnelRO {
     required: true,
     example: true,
   })
-  @Expose({ groups: ['coordinator'] })
   status: Status;
 
   @ApiProperty({
