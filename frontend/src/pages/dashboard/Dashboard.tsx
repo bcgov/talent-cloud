@@ -1,7 +1,8 @@
-import { Loading, Table } from '@/components';
+import {  Table } from '@/components';
 import { dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
-import useTable from '@/hooks/useTable';
+import { Role } from '@/common';
+import { useRole, useTable } from '@/hooks';
 
 const Dashboard = () => {
   const title = 'Search Results';
@@ -18,6 +19,7 @@ const Dashboard = () => {
     dashboardColumns,
     showFunctionColumn,
   } = useTable();
+  const { role } = useRole();
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
@@ -31,19 +33,16 @@ const Dashboard = () => {
         handleSearch={handleSearch}
       />
 
-      {!tableData ? (
-        <Loading />
-      ) : (
-        <Table
-          title={title}
-          subtitle={subtitle}
-          columns={dashboardColumns}
-          tableData={tableData}
-          pageParams={filterValues}
-          handlePageParams={handlePageParams}
-          showFunctionColumn={showFunctionColumn}
-        />
-      )}
+      <Table
+        title={title}
+        subtitle={subtitle}
+        showToggle={role === Role.COORDINATOR}
+        columns={dashboardColumns}
+        tableData={tableData}
+        pageParams={filterValues}
+        handlePageParams={handlePageParams}
+        showFunctionColumn={showFunctionColumn}
+      />
     </div>
   );
 };

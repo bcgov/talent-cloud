@@ -4,10 +4,12 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
 import dayjs from 'dayjs';
+import { Role, Status } from '@/common';
+import { useRole } from '@/hooks';
 
 const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
   const [open, setOpen] = useState(1);
-
+  const { role } = useRole();
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
   const generalInformation = [
@@ -43,6 +45,27 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
     { title: 'Ministry', content: personnel.ministry },
     { title: 'Union Membership', content: personnel.classification },
   ];
+
+  const status = [
+    {
+      title: 'Applicant Reviewed',
+      content: personnel.status === Status.NEW ? 'No' : 'Yes',
+      role: Role.COORDINATOR,
+    },
+    {
+      title: 'Active',
+      content: personnel.status === Status.ACTIVE ? 'Yes' : 'No',
+      role: Role.COORDINATOR,
+    },
+  ];
+
+  const notes = {
+    coordinator: [
+      { title: 'Coordinator Notes', content: personnel.coordinatorNotes! },
+      { title: 'Logistics Notes', content: personnel.logisticsNotes! },
+    ],
+    logistics: [{ title: 'Logistics Notes', content: personnel.logisticsNotes! }],
+  };
 
   return (
     <section className="bg-white">
@@ -85,6 +108,21 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
                 numColumns={3}
                 title={'Organizational Information'}
                 columns={organizational}
+              />
+            </div>
+            <div className="col-span-2">
+              {role === Role.COORDINATOR && (
+                <DetailsSection numColumns={2} title={'Status'} columns={status} />
+              )}
+            </div>
+
+            <div className="col-span-2">
+              <DetailsSection
+                numColumns={2}
+                title={'Notes'}
+                columns={
+                  role === Role.COORDINATOR ? notes.coordinator : notes.logistics
+                }
               />
             </div>
           </AccordionBody>
