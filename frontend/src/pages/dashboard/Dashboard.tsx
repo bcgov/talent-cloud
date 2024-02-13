@@ -1,5 +1,5 @@
 import { Loading, Table } from '@/components';
-import {  dashboardFilterFields } from './constants';
+import { dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
 import useTable from '@/hooks/useTable';
 

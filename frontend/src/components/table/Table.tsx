@@ -1,5 +1,5 @@
 import { DashboardColumns } from '@/pages/dashboard';
-import type { Column, FieldInterface, PageParams, TableData } from '.';
+import type { Column, PageParams, TableData } from '.';
 import { TableFooter, TableBody, TableHeader } from '.';
 import { Toggle } from '../toggle/Toggle';
 
@@ -27,12 +27,13 @@ export const Table = ({
           <h4 className="text-black font-bold">{title}</h4>
           <p>{`${tableData.totalRows} ${subtitle}`}</p>
         </div>
-        
-          <Toggle
-            value={pageParams.showInactive}
-            handleToggle={(checked: boolean)=> handlePageParams({ showInactive: checked })}
-          />
-        
+
+        <Toggle
+          value={pageParams.showInactive}
+          handleToggle={(checked: boolean) =>
+            handlePageParams({ showInactive: checked })
+          }
+        />
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}
       <table className="table-auto w-full">

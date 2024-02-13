@@ -8,16 +8,15 @@ export const Toggle = ({
   value: boolean;
   handleToggle: (checked: boolean) => void;
 }) => {
-
   return (
     <div className="flex flex-row justify-start md:items-center md:mr-12">
-      <label htmlFor={"showInactive"} className="px-4">
+      <label htmlFor={'showInactive'} className="px-4">
         Show Inactive
       </label>
       <Switch
         checked={value}
         onChange={handleToggle}
-        name={"showInactive"}
+        name={'showInactive'}
         defaultChecked={false}
         as={Fragment}
       >
@@ -27,7 +26,7 @@ export const Toggle = ({
               checked ? 'bg-backgroundBlue' : 'bg-gray-200'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
-            <span className="sr-only">{"showInactive"}</span>
+            <span className="sr-only">{'showInactive'}</span>
             <span
               className={`${
                 checked ? 'translate-x-6' : 'translate-x-1'
