@@ -25,8 +25,7 @@ export interface TableData {
 export interface PageParams {
   rowsPerPage: number;
   currentPage: number;
-
-  showInactive?: boolean;
+  showInactive: boolean;
 }
 export interface FieldInterface {
   name: string;

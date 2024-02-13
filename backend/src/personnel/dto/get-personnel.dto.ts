@@ -21,7 +21,7 @@ export class GetPersonnelDTO extends QueryDTO {
 
   @ApiPropertyOptional({
     description: 'Find only active personnel. If false, this will find all',
-    default: true,
+    default: false,
   })
   @IsOptional()
   @IsBoolean()

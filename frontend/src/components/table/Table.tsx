@@ -7,7 +7,6 @@ export const Table = ({
   title,
   subtitle,
   columns,
-  toggle,
   tableData,
   pageParams,
   handlePageParams,
@@ -15,9 +14,7 @@ export const Table = ({
 }: {
   title: string;
   subtitle: string;
-
   columns: Column[];
-  toggle?: FieldInterface;
   tableData: TableData;
   pageParams: PageParams;
   handlePageParams: (params: Partial<PageParams>) => void;
@@ -30,12 +27,12 @@ export const Table = ({
           <h4 className="text-black font-bold">{title}</h4>
           <p>{`${tableData.totalRows} ${subtitle}`}</p>
         </div>
-        {toggle && (
+        
           <Toggle
-            field={toggle}
-            handleToggle={(val: boolean) => handlePageParams({ showInactive: val })}
+            value={pageParams.showInactive}
+            handleToggle={(checked: boolean)=> handlePageParams({ showInactive: checked })}
           />
-        )}
+        
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}
       <table className="table-auto w-full">

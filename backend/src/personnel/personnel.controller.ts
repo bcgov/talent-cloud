@@ -21,7 +21,6 @@ import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
-import { Endpoint } from '../common/enums/endpoint.enum';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
@@ -52,7 +51,7 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
   ) {
     this.logger.log(
-      `${Endpoint.CREATE_PERSONNEL}, ${req.username}, ${req.role}`,
+      `${this.createPersonnel.name}, ${req.username}, ${req.role}`,
     );
     return await this.personnelService.createPersonnel(personnel);
   }
@@ -72,7 +71,7 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
     @Query() query?: GetPersonnelDTO,
   ): Promise<GetPersonnelRO> {
-    this.logger.log(`${Endpoint.GET_PERSONNEL}, ${req.username}, ${req.role}`);
+    this.logger.log(`${this.getPersonnel.name}, ${req.username}, ${req.role}`);
 
     const queryResponse = await this.personnelService.getPersonnel(query);
 
@@ -103,7 +102,7 @@ export class PersonnelController {
     @Req() req: RequestWithRoles,
   ): Promise<Record<'Personnel', PersonnelRO>> {
     this.logger.log(
-      `${Endpoint.GET_PERSONNEL_BY_ID}, ${req.username}, ${req.role}`,
+      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
     );
     const personnelRO: PersonnelEntity =
       await this.personnelService.getPersonnelById(id);

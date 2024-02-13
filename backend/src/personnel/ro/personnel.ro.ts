@@ -100,7 +100,7 @@ export class PersonnelRO {
     required: false,
     example: 'MOTI Area Roads Mgr R24',
   })
-  @Expose({ groups: ['logistics'] })
+  @Expose({ groups: ['coordinator'] })
   coordinatorNotes: string;
 
   @ApiProperty({

@@ -82,7 +82,14 @@ export class AuthGuard implements CanActivate {
 
     return payload;
   }
-
+  /**
+   * Set the usersname and the role to the request object
+   * The Coordinator role has the highest permissions level, so if the user has the Coordinator role, the role will be set to Coordinator.
+   * The logistics role has the second highest permissions level, so if the user has the logistics role, the role will be set to logistics.
+   * If a user has both roles the role will be set to Coordinator.
+   * @param payload
+   * @param request
+   */
   setRequestUserInfo(payload: JwtPayload, request: Request): void {
     // the local keycloak instance includes the key "resource_access" instead of  the key "client roles" so we need to check for both in order to use this locally.
     // sometimes on local we use the actual keycloak instance instead of containerized local keycloak instance so we need to check for client roles on local as well.

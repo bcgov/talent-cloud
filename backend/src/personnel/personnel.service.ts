@@ -59,7 +59,7 @@ export class PersonnelService {
     }
     if (query.showInactive) {
       qb = qb.andWhere('personnel.status In (:...status)', {
-        status: [Status.NEW, Status.INACTIVE],
+        status: [Status.NEW, Status.INACTIVE, Status.ACTIVE],
       });
     } else {
       qb = qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });

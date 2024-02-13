@@ -1,5 +1,5 @@
 import { Loading, Table } from '@/components';
-import { dashboardToggle, dashboardFilterFields } from './constants';
+import {  dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
 import useTable from '@/hooks/useTable';
 
@@ -37,7 +37,6 @@ const Dashboard = () => {
         <Table
           title={title}
           subtitle={subtitle}
-          toggle={dashboardToggle}
           columns={dashboardColumns}
           tableData={tableData}
           pageParams={filterValues}
