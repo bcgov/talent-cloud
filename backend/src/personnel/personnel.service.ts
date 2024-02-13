@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { Status } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 
 @Injectable()
@@ -57,9 +58,11 @@ export class PersonnelService {
       );
     }
     if (query.showInactive) {
-      qb = qb.andWhere('personnel.active = :active', { active: false });
+      qb = qb.andWhere('personnel.status In (:...status)', {
+        status: [Status.NEW, Status.INACTIVE],
+      });
     } else {
-      qb = qb.andWhere('personnel.active = :active', { active: true });
+      qb = qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
     }
     if (query.region?.length) {
       qb.andWhere('personnel.region IN (:...regions)', {
@@ -85,10 +88,13 @@ export class PersonnelService {
     qb = qb.take(query.rows);
     qb = qb.skip((query.page - 1) * query.rows);
 
-    qb = qb.orderBy('personnel.lastName', 'ASC');
     if (query.showInactive) {
-      qb = qb.addOrderBy('personnel.active', 'ASC');
-      qb = qb.addOrderBy('personnel.applicantReviewed', 'ASC');
+      qb = qb.orderBy('personnel.status', 'DESC');
+      qb = qb.addOrderBy('personnel.lastName', 'ASC');
+      qb.addOrderBy('personnel.firstName', 'ASC');
+    } else {
+      qb = qb.orderBy('personnel.lastName', 'ASC');
+      qb.addOrderBy('personnel.firstName', 'ASC');
     }
 
     const [personnel, count] = await qb.getManyAndCount();

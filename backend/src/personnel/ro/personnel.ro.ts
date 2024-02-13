@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { ExperienceRO } from './experience.ro';
-import { Classification, Ministry, Region } from '../../common/enums';
+import { Classification, Ministry, Region, Status } from '../../common/enums';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -123,15 +123,7 @@ export class PersonnelRO {
     example: true,
   })
   @Expose({ groups: ['coordinator'] })
-  active: boolean;
-
-  @ApiProperty({
-    description: 'Has personnel application form been reviewed by coordinator',
-    required: true,
-    example: true,
-  })
-  @Expose({ groups: ['coordinator'] })
-  applicantReviewed: boolean;
+  status: Status;
 
   @ApiProperty({
     description: 'Is Personnel remote only',

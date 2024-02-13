@@ -12,6 +12,7 @@ import { BaseEntity } from './base.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Role } from '../../auth/interface';
+import { Status } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
@@ -99,8 +100,8 @@ export class PersonnelEntity extends BaseEntity {
   })
   logisticsNotes: string;
 
-  @Column({ name: 'active', type: 'boolean', default: false })
-  active: boolean;
+  @Column({ name: 'status', type: 'enum', enum: Status, default: Status.NEW })
+  status: boolean;
 
   @Column({
     name: 'classification',
@@ -126,9 +127,6 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
-  @Column({ name: 'application_approved', type: 'boolean', default: false })
-  applicantReviewed: boolean;
-
   toResponseObject(role: Role): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
 
@@ -149,8 +147,7 @@ export class PersonnelEntity extends BaseEntity {
       coordinatorNotes: this.coordinatorNotes,
       logisticsNotes: this.logisticsNotes,
       supervisor: this.supervisor,
-      active: this.active,
-      applicantReviewed: this.applicantReviewed,
+      status: this.status,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
       experiences:
