@@ -7,7 +7,7 @@ import { Layout } from '../components';
 import { useGetUserInfo } from '../hooks';
 
 export const PrivateRoute = () => {
-  const { username, roles } = useGetUserInfo();
+  const { username } = useGetUserInfo();
 
   const { keycloak } = useKeycloak();
   const authenticated = keycloak.authenticated;
@@ -22,17 +22,9 @@ export const PrivateRoute = () => {
     return <Navigate to={Routes.Login} />;
   }
 
-  if (keycloak.authenticated && !roles.includes('coordinator')) {
-    return (
-      <Layout authenticated={authenticated} username={username}>
-        <div>Restricted Page</div>
-      </Layout>
-    );
-  } else {
-    return (
-      <Layout authenticated={authenticated} username={username}>
-        <Outlet />
-      </Layout>
-    );
-  }
+  return (
+    <Layout authenticated={authenticated} username={username}>
+      <Outlet />
+    </Layout>
+  );
 };

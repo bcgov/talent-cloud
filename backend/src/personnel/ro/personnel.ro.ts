@@ -1,10 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { ExperienceRO } from './experience.ro';
-import {
-  Classification,
-  Ministry,
-  Region,
-} from '../../common/enums';
+import { Classification, Ministry, Region, Status } from '../../common/enums';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -99,11 +96,19 @@ export class PersonnelRO {
   skillsAbilities: string;
 
   @ApiProperty({
+    description: 'Notes about Personnel - Only vieweable by coordinators',
+    required: false,
+    example: 'MOTI Area Roads Mgr R24',
+  })
+  @Expose({ groups: ['coordinator'] })
+  coordinatorNotes: string;
+
+  @ApiProperty({
     description: 'Notes about Personnel',
     required: false,
     example: 'MOTI Area Roads Mgr R24',
   })
-  notes: string;
+  logisticsNotes: string;
 
   @ApiProperty({
     description: 'Supervisor of Personnel',
@@ -117,7 +122,8 @@ export class PersonnelRO {
     required: true,
     example: true,
   })
-  active: boolean;
+  @Expose({ groups: ['coordinator'] })
+  status: Status;
 
   @ApiProperty({
     description: 'Is Personnel remote only',

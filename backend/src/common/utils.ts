@@ -7,6 +7,7 @@ import {
   Experience,
   Classification,
   AvailabilityType,
+  Status,
 } from './enums';
 import { AppModule } from '../app.module';
 import { PersonnelService } from '../personnel/personnel.service';
@@ -134,8 +135,15 @@ export const rowData = () => {
     active: faker.datatype.boolean({ probability: 0.8 }),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    experiences: experiences(),
+    status: faker.helpers.arrayElement([
+      Status.ACTIVE,
+      Status.INACTIVE,
+      Status.NEW,
+    ]),
     availability: availability(),
+    experiences: experiences(),
+    logisticsNotes: faker.lorem.sentence(),
+    coordinatorNotes: faker.lorem.sentence(),
   };
 };
 const threeMonthsArray = () => {

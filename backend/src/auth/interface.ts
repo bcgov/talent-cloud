@@ -1,7 +1,9 @@
+import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
 export enum Role {
   COORDINATOR = 'coordinator',
+  LOGISTICS = 'logistics',
 }
 
 export interface Token extends JwtPayload {
@@ -36,4 +38,9 @@ export interface Token extends JwtPayload {
 interface ResourceAccess {
   account: { roles: Role[] };
   [key: string]: { roles: Role[] };
+}
+
+export interface RequestWithRoles extends Request {
+  role: Role;
+  username: string;
 }
