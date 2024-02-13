@@ -1,4 +1,4 @@
-import type { AvailabilityType, Classification, Ministry } from '@/common';
+import type { AvailabilityType, Classification, Ministry, Status } from '@/common';
 import {
   ExperienceName,
   FunctionName,
@@ -220,7 +220,7 @@ export interface Personnel {
   workLocation: string;
   experiences: ExperienceInterface[];
   availability: string;
-  active: boolean;
+  status: Status;
   willingToTravel: boolean;
   remoteOnly: boolean;
   classification: string;
@@ -230,7 +230,11 @@ export interface Personnel {
   secondaryPhone: string;
   email: string;
   supervisor: string;
+  reviewed: boolean;
+  coordinatorNotes?: string;
+  logisticsNotes?: string;
 }
+
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;
   [DashboardColumns.REGION]: Region;

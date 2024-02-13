@@ -1,6 +1,8 @@
 import { Button } from '@material-tailwind/react';
 import { HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
+import { Role } from '@/common';
+import { PersonnelStatus } from '@/components';
 
 function HorizontalLine() {
   return (
@@ -16,18 +18,25 @@ function HorizontalLine() {
   );
 }
 
-const ProfileHeader = ({ personnel }: { personnel: Personnel }) => {
+const ProfileHeader = ({
+  personnel,
+  role,
+}: {
+  personnel: Personnel;
+  role: Role;
+}) => {
   return (
     <div className="flex items-center flex-row pb-2 pr-12">
       <div className="flex items-center pr-12">
         <h2 className="font-semibold">
           {personnel.firstName} {personnel.lastName}
         </h2>
-        <div className="pl-4">
-          <span className="bg-activeGreen px-2 rounded-full">
-            {personnel.active === true ? 'Active' : 'Inactive'}
-          </span>
-        </div>
+        {role === Role.COORDINATOR && (
+          <div className="pl-4">
+            <PersonnelStatus status={personnel.status}
+            />
+          </div>
+        )}
       </div>
       <div>
         <HorizontalLine />

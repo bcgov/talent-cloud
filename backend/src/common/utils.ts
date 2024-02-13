@@ -132,7 +132,6 @@ export const rowData = () => {
     skillsAbilities: faker.lorem.sentence(),
     notes: faker.lorem.sentence(),
     supervisor: faker.person.firstName(),
-    active: faker.datatype.boolean({ probability: 0.8 }),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     status: faker.helpers.arrayElement([

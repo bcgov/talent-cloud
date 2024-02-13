@@ -1,3 +1,3 @@
-export * from './useGetUserInfo';
 export * from './useTable';
 export * from './usePersonnel';
+export * from './useRole';
