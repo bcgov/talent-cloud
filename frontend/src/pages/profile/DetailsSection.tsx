@@ -7,7 +7,7 @@ const DetailsSection = ({
 }: {
   numColumns: number;
   title: string;
-  columns: { title: string; content: string }[];
+  columns: { title: string; content: string }[] | undefined;
 }) => {
   return (
     <div className="py-5">
@@ -15,7 +15,7 @@ const DetailsSection = ({
       <div
         className={`grid ${numColumns === 2 ? 'grid-cols-2' : 'grid-cols-3'} pt-4`}
       >
-        {columns.map((column) => (
+        {columns?.map((column) => (
           <div key={column.title}>
             <Detail title={column.title} content={column.content} />
           </div>

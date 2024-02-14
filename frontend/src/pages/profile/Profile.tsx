@@ -4,10 +4,12 @@ import { useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
+import { useRole } from '@/hooks';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
   const { personnel } = usePersonnel({ personnelId });
+  const { role } = useRole();
 
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground">
@@ -41,7 +43,7 @@ const Profile = () => {
               </div>
             </div>
             <div>
-              <ProfileHeader personnel={personnel} />
+              <ProfileHeader personnel={personnel} role={role} />
               <ProfileDetails personnel={personnel} />
             </div>
           </div>

@@ -4,10 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import store from 'store';
 import Routes from './constants';
 import { Layout } from '../components';
-import { useGetUserInfo } from '../hooks';
+import { useRole } from '@/hooks';
 
 export const PrivateRoute = () => {
-  const { username } = useGetUserInfo();
+  const { username } = useRole();
 
   const { keycloak } = useKeycloak();
   const authenticated = keycloak.authenticated;

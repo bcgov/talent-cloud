@@ -1,3 +1,5 @@
+import { Status } from "@/common";
+
 export interface Cell {
   key: string;
   columnName: string;
@@ -8,7 +10,7 @@ export interface Cell {
 export interface Row {
   key: string;
   cells: Cell[];
-  active: boolean;
+  status: Status;
 }
 export interface Column {
   name: string;

@@ -10,9 +10,17 @@ import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { ExperienceName } from '@/common';
+import { useError } from './useError';
 
-const useTable = () => {
-  const [tableData, setTableData] = useState<TableData>();
+export const useTable = () => {
+  const { handleError } = useError();
+
+  const [tableData, setTableData] = useState<TableData>({
+    rows: [],
+    pageRange: [],
+    totalRows: 0,
+    totalPages: 1,
+  });
   const [filterValues, setFilterValues] = useState<any>({
     rowsPerPage: 25,
     currentPage: 1,
@@ -63,7 +71,7 @@ const useTable = () => {
             rows: personnel.map(
               ({
                 id,
-                active,
+                status,
                 firstName,
                 lastName,
                 experiences,
@@ -75,7 +83,8 @@ const useTable = () => {
                 ministry,
               }: Personnel) => ({
                 key: id,
-                active,
+                status: status,
+                
                 cells: [
                   {
                     key: uuidv4(),
@@ -153,7 +162,7 @@ const useTable = () => {
             ),
           });
       } catch (e) {
-        console.log(e);
+        handleError(e);
       }
     })();
   }, [debouncedValue]);
@@ -241,5 +250,3 @@ const useTable = () => {
     ],
   };
 };
-
-export default useTable;
