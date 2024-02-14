@@ -1,2 +1,2 @@
-export * from './SplashPage'
-export * from './constants'
+export * from './SplashPage';
+export * from './constants';

@@ -23,16 +23,16 @@ export const Header = ({
         </div>
         {authenticated && (
           <>
-        <div className="text-center flex flex-row items-center justify-center space-x-2">
-          <CloudIcon />
-          <Link to={Routes.Dashboard} className="hover:underline">
-            <h4>{appName.toUpperCase()}</h4>
-          </Link>
-        </div>
-        
-          <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
-            {username && <UserMenu username={username} />}
-          </div>
+            <div className="text-center flex flex-row items-center justify-center space-x-2">
+              <CloudIcon />
+              <Link to={Routes.Dashboard} className="hover:underline">
+                <h4>{appName.toUpperCase()}</h4>
+              </Link>
+            </div>
+
+            <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
+              {username && <UserMenu username={username} />}
+            </div>
           </>
         )}
       </div>

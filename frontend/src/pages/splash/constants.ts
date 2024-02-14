@@ -1,7 +1,7 @@
 export const main = {
   title: 'Welcome to Talent Cloud',
   banner: 'TEAMS applications are now open for 2024. Access intake form ',
-  bannerLink: {name: 'here ', url: ""},
+  bannerLink: { name: 'here ', url: '' },
   subtitle: 'Temporary Emergency Assignment Management System',
   linksHeader: 'Learn more about:',
   links: [
