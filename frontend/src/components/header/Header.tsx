@@ -15,8 +15,8 @@ export const Header = ({
 }) => {
   return (
     <header className="relative w-full border-b z-20 py-0">
-      <div className="w-full flex justify-center lg:justify-between items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
-        <div className="hidden lg:flex">
+      <div className="w-full flex justify-start lg:justify-between items-start lg:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
+        <div className="lg:flex">
           <a href={LINKS.EMCR} className="py-0 my-0">
             <EmcrLogo />
           </a>
