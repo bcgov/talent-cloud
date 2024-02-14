@@ -211,5 +211,6 @@ delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
 
+# if this doesn't run, try to run the SERVER pod cmd and copy the first pod name into this command
 seed-data-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
