@@ -20,7 +20,7 @@ export const Header = ({
           <a href={LINKS.EMCR} className="py-0 my-0">
             <EmcrLogo />
           </a>
-        
+        </div>
         {authenticated && (
           <>
         <div className="text-center flex flex-row items-center justify-center space-x-2">
