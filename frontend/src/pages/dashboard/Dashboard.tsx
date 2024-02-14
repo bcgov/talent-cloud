@@ -6,7 +6,7 @@ import { useRole, useTable } from '@/hooks';
 
 const Dashboard = () => {
   const title = 'Search Results';
-  const subtitle = 'Results Found';
+  const subtitle = 'members found';
 
   const {
     filterValues,
