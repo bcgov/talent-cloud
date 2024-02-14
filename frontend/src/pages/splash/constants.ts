@@ -1,7 +1,7 @@
 export const main = {
   title: 'Welcome to Talent Cloud',
   banner: 'TEAMS applications are now open for 2024. Access intake form ',
-  bannerLink: 'here ',
+  bannerLink: {name: 'here ', url: ""},
   subtitle: 'Temporary Emergency Assignment Management System',
   linksHeader: 'Learn more about:',
   links: [
@@ -29,15 +29,15 @@ export const landAck =
 
 export const footer = {
   contactLink: {
-    name: 'Call, email, or text us',
+    name: 'Call, email, or text us, ',
     url: 'https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services',
   },
-  serviceCenterLink: {
-    name: 'find a service centre',
+  serviceCentreLink: {
+    name: ' find a service centre',
     url: 'https://www2.gov.bc.ca/gov/content/home/services-a-z',
   },
   tdMessage:
-    'We can help in over 120 languages and through Telephone Device For The Deaf (TDD). Call, email or text us or find a service centre',
+    'We can help in over 120 languages and through Telephone Device For The Deaf (TDD). ',
   links: [
     { name: 'Home', url: 'https://www2.gov.bc.ca/gov/content/home' },
     {

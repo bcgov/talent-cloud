@@ -15,11 +15,10 @@ const SplashPage = () => {
   }, []);
 
   return (
-    <div className=" bg-white h-screen">
+    <div className="bg-white h-screen pt-2">
       <SplashMain content={main} />
       <SplashBanner content={landAck} />
       <SplashFooter content={footer} />
-      
     </div>
   );
 };
