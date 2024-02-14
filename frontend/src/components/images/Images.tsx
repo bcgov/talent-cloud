@@ -27,3 +27,11 @@ export const CloudIcon = () => (
     alt="logo"
   />
 );
+
+
+export const SplashImage = () => (
+  <img
+    src={new URL('/assets/images/splash.png', import.meta.url).href}
+    alt="EMCR Splash Image"
+  />
+)

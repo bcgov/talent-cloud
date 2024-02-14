@@ -20,18 +20,20 @@ export const Header = ({
           <a href={LINKS.EMCR} className="py-0 my-0">
             <EmcrLogo />
           </a>
-        </div>
-
+        
+        {authenticated && (
+          <>
         <div className="text-center flex flex-row items-center justify-center space-x-2">
           <CloudIcon />
           <Link to={Routes.Dashboard} className="hover:underline">
             <h4>{appName.toUpperCase()}</h4>
           </Link>
         </div>
-        {authenticated && (
+        
           <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
             {username && <UserMenu username={username} />}
           </div>
+          </>
         )}
       </div>
     </header>
