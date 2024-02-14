@@ -32,10 +32,10 @@ export const Table = ({
 
         {showToggle && (
           <Toggle
-          value={pageParams.showInactive}
-          handleToggle={(checked: boolean) =>
-            handlePageParams({ showInactive: checked })
-          }
+            value={pageParams.showInactive}
+            handleToggle={(checked: boolean) =>
+              handlePageParams({ showInactive: checked })
+            }
           />
         )}
       </div>

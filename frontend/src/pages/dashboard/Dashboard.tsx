@@ -1,4 +1,4 @@
-import {  Table } from '@/components';
+import { Table } from '@/components';
 import { dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
 import { Role } from '@/common';

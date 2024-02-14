@@ -33,8 +33,7 @@ const ProfileHeader = ({
         </h2>
         {role === Role.COORDINATOR && (
           <div className="pl-4">
-            <PersonnelStatus status={personnel.status}
-            />
+            <PersonnelStatus status={personnel.status} />
           </div>
         )}
       </div>
