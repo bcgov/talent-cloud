@@ -12,10 +12,12 @@ import {
   Param,
   Req,
   Request,
+  Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
@@ -54,6 +56,26 @@ export class PersonnelController {
       `${this.createPersonnel.name}, ${req.username}, ${req.role}`,
     );
     return await this.personnelService.createPersonnel(personnel);
+  }
+
+  @ApiOperation({
+    summary: 'Update personnel',
+    description: 'Update existing personnel data.',
+  })
+  @ApiResponse({
+    status: HttpStatus.ACCEPTED,
+  })
+  @Patch(':id')
+  @Roles(Role.COORDINATOR)
+  async updatePersonnel(
+    @Body() personnel: UpdatePersonnelDTO,
+    @Request() req: RequestWithRoles,
+    @Param('id') id: string,
+  ) {
+    this.logger.log(
+      `${this.updatePersonnel.name} ${req.username}, ${req.role}`,
+    );
+    return await this.personnelService.updatePersonnel(id, personnel);
   }
 
   @ApiOperation({

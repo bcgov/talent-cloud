@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { Status } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 
@@ -12,14 +13,30 @@ export class PersonnelService {
     @InjectRepository(PersonnelEntity)
     private personnelRepository: Repository<PersonnelEntity>,
   ) {}
+  /**
+   * Update a personnel entity
+   * @param id
+   * @param personnel
+   * @returns
+   */
+  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO) {
+    const person = await this.personnelRepository.findOne({ where: { id } });
 
-  async updatePersonnel(personnel: Partial<PersonnelEntity>) {
+    Object.keys(personnel).forEach((key) => {
+      person[key] = personnel[key];
+    });
+
     try {
-      return await this.personnelRepository.update(personnel.id, personnel);
+      return await this.personnelRepository.update(id, { ...person });
     } catch (e) {
       console.log(e);
     }
   }
+  /**
+   * create a personnel entity
+   * @param personnel
+   * @returns
+   */
   async createPersonnel(personnel: CreatePersonnelDTO[]) {
     try {
       return await Promise.all(
