@@ -15,7 +15,6 @@ export const ErrorComponent = () => {
             {(error as AxiosError)?.request?.statusText ?? (error as Error)?.message}
           </div>
         </div>
-        {/* <button  className="ml-16 text-indigo-500 font-bold flex flex-row items-center space-x-2" onClick={() => logout(keycloak, Routes.Login)}><p className="text-indigo-500 font-bold ">Return To Login</p></button>  */}
       </div>
     </div>
   );

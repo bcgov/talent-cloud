@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios';
 import type { ReactElement } from 'react';
 import { createContext, useEffect, useMemo, useState } from 'react';
-import { ErrorComponent } from '@/components/ui/Error';
+import { ErrorComponent } from '@/components/ui/ErrorComponent';
 
 export const ErrorContext = createContext<
   | {
