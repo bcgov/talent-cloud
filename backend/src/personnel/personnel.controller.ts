@@ -26,7 +26,6 @@ import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
-import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
@@ -37,7 +36,7 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
-    private logger: AppLogger,
+    private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);
   }
@@ -98,14 +97,13 @@ export class PersonnelController {
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${this.getPersonnel.name}, ${req.username}, ${req.role}`);
 
-    const queryResponse = await this.personnelService.getPersonnel(query);
-
-    const personnel = queryResponse.personnel.map((personnelEntity) =>
-      personnelEntity.toResponseObject(req.role),
-    );
+    const queryResponse: {
+      personnel: Record<'Personnel', PersonnelRO>[];
+      count: number;
+    } = await this.personnelService.getPersonnel(query, req.role);
 
     return {
-      personnel,
+      personnel: queryResponse.personnel,
       count: queryResponse.count,
       rows: query.rows,
       page: query.page,
@@ -129,10 +127,10 @@ export class PersonnelController {
     this.logger.log(
       `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
     );
-    const personnelRO: PersonnelEntity =
-      await this.personnelService.getPersonnelById(id);
+    const personnelRO: Record<'Personnel', PersonnelRO> =
+      await this.personnelService.getPersonnelById(req.role, id);
 
-    return personnelRO.toResponseObject(req.role);
+    return personnelRO;
   }
 
   @ApiOperation({

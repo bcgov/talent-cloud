@@ -22,6 +22,7 @@ export class AvailabilityEntity {
     type: 'enum',
     enum: AvailabilityType,
     enumName: 'availability-type',
+    default: AvailabilityType.AVAILABLE,
   })
   availabilityType: AvailabilityType;
 

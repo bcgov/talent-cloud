@@ -149,7 +149,6 @@ export class PersonnelRO {
 
   @ApiProperty({
     description: 'Availability',
-    required: true,
     isArray: true,
     type: () => AvailabilityRO,
   })

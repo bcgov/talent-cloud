@@ -127,7 +127,10 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
-  toResponseObject(role: Role): Record<string, PersonnelRO> {
+  toResponseObject(
+    role: Role,
+    availability: AvailabilityEntity[],
+  ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
 
     const data = {
@@ -155,7 +158,7 @@ export class PersonnelEntity extends BaseEntity {
         [],
       // trainings
       availability:
-        this.availability?.map((avail) => avail.toResponseObject()) || [],
+        availability?.map((avail) => avail.toResponseObject()) || [],
       // available
     };
     // this is required in order to conditionally omit certain fields from the response based on the user role

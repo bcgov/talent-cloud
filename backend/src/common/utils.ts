@@ -148,13 +148,18 @@ export const rowData = () => {
 };
 const threeMonthsArray = () => {
   const today = new Date();
+  const startDate = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - 3,
+  );
   const threeMonthsFromNow = new Date(
     today.getFullYear(),
     today.getMonth() + 3,
     today.getDate(),
   );
   const dates = [];
-  for (let i = today; i < threeMonthsFromNow; i.setDate(i.getDate() + 1)) {
+  for (let i = startDate; i < threeMonthsFromNow; i.setDate(i.getDate() + 1)) {
     dates.push(new Date(i));
   }
   return dates;

@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, parse } from 'date-fns';
+import { Role } from 'src/auth/interface';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
+import { PersonnelRO } from './ro/personnel.ro';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
@@ -64,7 +66,8 @@ export class PersonnelService {
    */
   async getPersonnel(
     query: GetPersonnelDTO,
-  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+    role: Role,
+  ): Promise<{ personnel: Record<string, PersonnelRO>[]; count: number }> {
     let qb = this.personnelRepository.createQueryBuilder('personnel');
     qb = qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb = qb.leftJoinAndSelect('experiences.function', 'function');
@@ -120,18 +123,19 @@ export class PersonnelService {
     }
 
     const [personnel, count] = await qb.getManyAndCount();
-    const personnelWithAvailability: PersonnelEntity[] = await Promise.all(
-      personnel.map(
-        async (person) =>
-          ({
-            ...person,
-            availability: await this.getAvailability(person.id, {
-              start: new Date(Date.now()),
-              end: new Date(Date.now()),
-            }),
-          }) as PersonnelEntity,
-      ),
-    );
+
+    const personnelWithAvailability: Record<string, PersonnelRO>[] =
+      await Promise.all(
+        personnel.map(async (person) => {
+          const availability = await this.availabilityRepository.find({
+            where: {
+              personnel: { id: person.id },
+              date: format(new Date(), 'yyyy-MM-dd'),
+            },
+          });
+          return person.toResponseObject(role, availability);
+        }),
+      );
 
     return { personnel: personnelWithAvailability, count };
   }
@@ -141,7 +145,10 @@ export class PersonnelService {
    * Returns a default availability range of 31 days for a single personnel
    * @returns {PersonnelEntity} Single personnel
    */
-  async getPersonnelById(id: string): Promise<PersonnelEntity> {
+  async getPersonnelById(
+    role: Role,
+    id: string,
+  ): Promise<Record<string, PersonnelRO>> {
     const defaultStartDate = new Date(Date.now());
 
     const defaultEndDate = new Date(
@@ -152,12 +159,12 @@ export class PersonnelService {
 
     const person = await this.personnelRepository.findOneBy({ id: id });
 
-    person.availability = await this.getAvailability(id, {
+    const availability = await this.getAvailability(id, {
       start: defaultStartDate,
       end: defaultEndDate,
     });
 
-    return person;
+    return person.toResponseObject(role, availability);
   }
   /**
    * Get the availability of a personnel for a specific date range
