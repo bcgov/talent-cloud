@@ -1,3 +1,4 @@
+import { AvailabilityRO } from 'src/personnel/ro/availability.ro';
 import {
   Column,
   Entity,
@@ -13,8 +14,8 @@ export class AvailabilityEntity {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
-  @Column({ name: 'date', type: 'timestamp' })
-  date: Date;
+  @Column({ name: 'date', type: 'date' })
+  date: string;
 
   @Column({
     name: 'availability_type',
@@ -28,6 +29,14 @@ export class AvailabilityEntity {
   @JoinColumn({ name: 'personnel_id' })
   personnel: PersonnelEntity;
 
-  @Column({ name: 'deployment_code', type: 'varchar' })
-  deploymentCode: string;
+  @Column({ name: 'deployment_code', type: 'varchar', nullable: true })
+  deploymentCode?: string;
+
+  toResponseObject(): AvailabilityRO {
+    return {
+      date: this.date,
+      availabilityType: this.availabilityType,
+      deploymentCode: this.deploymentCode,
+    };
+  }
 }

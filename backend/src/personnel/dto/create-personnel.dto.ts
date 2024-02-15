@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AvailabilityType } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
@@ -18,7 +19,7 @@ export class CreatePersonnelDTO {
   lastName: string;
 
   @ApiProperty({
-    description: 'Personnel\'s work location',
+    description: "Personnel's work location",
     enum: WorkLocation,
     example: WorkLocation.VICTORIA,
   })
@@ -57,13 +58,14 @@ export class CreatePersonnelDTO {
   otherPhone: string;
 
   @ApiProperty({
-    description: 'Email address with which to contact participant - possibly the one attached to their IDIR',
+    description:
+      'Email address with which to contact participant - possibly the one attached to their IDIR',
     example: 'janedoe123@gov.bc.ca',
   })
   email: string;
 
   @ApiProperty({
-    description: 'Name of personnel\'s supervisor',
+    description: "Name of personnel's supervisor",
     example: 'River Cartwright',
   })
   supervisor: string;
@@ -110,7 +112,7 @@ export class CreatePersonnelDTO {
     example: [
       {
         function: 'OPS',
-        experience: 'CHIEF'
+        experience: 'CHIEF',
       },
       {
         function: 'LOGS',
@@ -119,8 +121,28 @@ export class CreatePersonnelDTO {
       {
         function: 'PLANS',
         experience: 'INTERESTED',
-      }
-    ]
+      },
+    ],
   })
-  experiences: { function: string, experience: string }[];
+  experiences: { function: string; experience: string }[];
+
+  @ApiProperty({
+    description: 'An array of availability for this personnel',
+    example: [
+      {
+        date: '2021-03-01',
+        availabilityType: AvailabilityType.AVAILABLE,
+      },
+      {
+        date: '2021-03-02',
+        availabilityType: AvailabilityType.DEPLOYED,
+        deploymentCode: '123456',
+      },
+    ],
+  })
+  availability: {
+    date: string;
+    availabilityType: AvailabilityType;
+    deploymentCode?: string;
+  }[];
 }

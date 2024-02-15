@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { NestFactory } from '@nestjs/core';
+import { format } from 'date-fns';
 import {
   Region,
   Ministry,
@@ -162,16 +163,26 @@ const threeMonthsArray = () => {
 const availability = () => {
   const availabilities = [];
   const dates = threeMonthsArray();
+
   dates.forEach((date, index) => {
-    const spliceOfTime = dates.splice(index, Math.floor(Math.random() * 10));
+    const randomInterval = Math.floor(Math.random() * 10);
+
+    const sliceOfTime = dates.splice(index, randomInterval + index - 1);
+
     const availabilityType = faker.helpers.arrayElement(
       Object.values(AvailabilityType),
     );
-    spliceOfTime.forEach((date) => {
+
+    const deploymentCode =
+      availabilityType === AvailabilityType.DEPLOYED
+        ? faker.string.alphanumeric(6)
+        : '';
+
+    sliceOfTime.forEach((date) => {
       availabilities.push({
-        date,
+        date: format(date, 'yyyy-MM-dd'),
         availabilityType,
-        deploymentCode: faker.string.alphanumeric(6),
+        deploymentCode,
       });
     });
   });

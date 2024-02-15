@@ -15,8 +15,11 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AvailabilityEntity } from 'src/database/entities/availability.entity';
+import { UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
@@ -128,6 +131,29 @@ export class PersonnelController {
     );
     const personnelRO: PersonnelEntity =
       await this.personnelService.getPersonnelById(id);
+
     return personnelRO.toResponseObject(req.role);
+  }
+
+  @ApiOperation({
+    summary: 'Get personnel By Id',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Patch(':id/availability')
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
+  async updatePersonnelAvailability(
+    @Param('id') id: string,
+    @Body() personnel: UpdateAvailabilityDTO,
+    @Req() req: RequestWithRoles,
+  ): Promise<(UpdateResult | AvailabilityEntity)[]> {
+    this.logger.log(
+      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+    );
+
+    return await this.personnelService.updateAvailability(id, personnel);
   }
 }
