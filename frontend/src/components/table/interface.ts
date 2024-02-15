@@ -1,4 +1,4 @@
-import { Status } from "@/common";
+import type { Status } from '@/common';
 
 export interface Cell {
   key: string;

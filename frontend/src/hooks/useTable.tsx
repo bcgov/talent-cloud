@@ -84,7 +84,7 @@ export const useTable = () => {
               }: Personnel) => ({
                 key: id,
                 status: status,
-                
+
                 cells: [
                   {
                     key: uuidv4(),
