@@ -2,7 +2,7 @@ import { BcGovLogo } from '@/components/images';
 
 export const SplashFooter = ({ content }: { content: any }) => {
   return (
-    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 pl-6 lg:pt-16 sm:pt-8 sm:px-6 lg:px-32 xl:px-64">
+    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 pl-6 lg:pt-16 sm:pt-8 sm:px-6  md:px-16 lg:px-32 xl:px-64">
       {/* column 1 start */}
       <div className="col-span-1 md:col-span-2 flex flex-col items-start justify-start pt-4">
         <BcGovLogo />

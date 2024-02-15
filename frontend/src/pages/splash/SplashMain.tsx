@@ -11,7 +11,7 @@ export const SplashMain = ({ content }: { content: any }) => {
   const nav = useNavigate();
 
   return (
-    <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:px-0 lg:grid-cols-2 xl:grid-cols-3 2xl:px-64">
+    <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 lg:px-0 xl:px-32 2xl:px-64">
       <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start md:px-12 space-y-16  xl:px-32 lg:pt-12 text-left">
         <Banner
           type={BannerType.INFO}
