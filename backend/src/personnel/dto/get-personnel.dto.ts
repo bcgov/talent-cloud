@@ -11,6 +11,11 @@ import {
 import { Experience, FunctionName, Region } from '../../common/enums';
 import { QueryDTO } from '../../common/query.dto';
 
+class AvailabilityQueryDTO {
+  start: Date;
+  end: Date;
+}
+
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
     description: 'Name of personnel - can be a substring of first or last name',
@@ -33,7 +38,7 @@ export class GetPersonnelDTO extends QueryDTO {
       'TO BE IMPLEMENTED - Whether this personnel is currently available',
     default: true,
   })
-  available: boolean;
+  available: AvailabilityQueryDTO;
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',

@@ -127,13 +127,21 @@ export class PersonnelService {
     const personnelWithAvailability: Record<string, PersonnelRO>[] =
       await Promise.all(
         personnel.map(async (person) => {
-          const availability = await this.availabilityRepository.find({
-            where: {
-              personnel: { id: person.id },
-              date: format(new Date(), 'yyyy-MM-dd'),
-            },
-          });
-          return person.toResponseObject(role, availability);
+          if (!query.available) {
+            const availability = await this.availabilityRepository.find({
+              where: {
+                personnel: { id: person.id },
+                date: format(new Date(), 'yyyy-MM-dd'),
+              },
+            });
+            return person.toResponseObject(role, availability);
+          } else {
+            const availability = await this.getAvailability(person.id, {
+              start: query.available.start,
+              end: query.available.end,
+            });
+            return person.toResponseObject(role, availability);
+          }
         }),
       );
 

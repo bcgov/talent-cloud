@@ -3,3 +3,10 @@ export enum AvailabilityType {
   DEPLOYED = 'DEPLOYED',
   AVAILABLE = 'AVAILABLE',
 }
+
+export enum AvailabilityTypeName {
+  UNAVAILABLE = 'Unavailable',
+  DEPLOYED = 'Deployed',
+  AVAILABLE = 'Available',
+  PARTIAL = 'Partial',
+}

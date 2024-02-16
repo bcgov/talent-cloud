@@ -9,7 +9,7 @@ import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
-import { ExperienceName } from '@/common';
+import { AvailabilityType, AvailabilityTypeName, ExperienceName } from '@/common';
 import { useError } from './useError';
 
 export const useTable = () => {
@@ -72,6 +72,7 @@ export const useTable = () => {
               ({
                 id,
                 status,
+                availability,
                 firstName,
                 lastName,
                 experiences,
@@ -120,6 +121,20 @@ export const useTable = () => {
                     )
                       ? tableClass(DashboardColumns.FUNCTION, '')
                       : 'hidden',
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.AVAILABILITY,
+                    value:
+                      AvailabilityTypeName[availability[0]?.availabilityType] ??
+                      AvailabilityType.AVAILABLE,
+                    className: tableClass(
+                      DashboardColumns.AVAILABILITY,
+                      AvailabilityType[
+                        availability[0]
+                          ?.availabilityType as keyof typeof AvailabilityType
+                      ] ?? AvailabilityType.AVAILABLE,
+                    ),
                   },
                   {
                     key: uuidv4(),
@@ -243,6 +258,7 @@ export const useTable = () => {
       { key: uuidv4(), name: DashboardColumns.REGION },
       { key: uuidv4(), name: DashboardColumns.LOCATION },
       { key: uuidv4(), name: DashboardColumns.FUNCTION },
+      { key: uuidv4(), name: DashboardColumns.AVAILABILITY },
       { key: uuidv4(), name: DashboardColumns.TRAVEL },
       { key: uuidv4(), name: DashboardColumns.REMOTE },
       { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },

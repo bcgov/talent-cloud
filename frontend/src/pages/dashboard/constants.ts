@@ -211,6 +211,11 @@ export interface ExperienceInterface {
   experienceType: Experience;
   functionName: FunctionName;
 }
+export interface AvailabilityInterface {
+  availabilityType: AvailabilityType;
+  startDate: Date;
+  endDate: Date;
+}
 
 export interface Personnel {
   id: string;
@@ -219,7 +224,7 @@ export interface Personnel {
   region: string;
   workLocation: string;
   experiences: ExperienceInterface[];
-  availability: string;
+  availability: AvailabilityInterface[];
   status: Status;
   willingToTravel: boolean;
   remoteOnly: boolean;
