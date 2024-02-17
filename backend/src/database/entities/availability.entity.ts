@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { AvailabilityRO } from 'src/personnel/ro/availability.ro';
 import {
   Column,
@@ -14,7 +15,11 @@ export class AvailabilityEntity {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
-  @Column({ name: 'date', type: 'date' })
+  @Column({
+    name: 'date',
+    type: 'date',
+    default: format(new Date(), 'yyyy-MM-dd'),
+  })
   date: string;
 
   @Column({
@@ -22,12 +27,12 @@ export class AvailabilityEntity {
     type: 'enum',
     enum: AvailabilityType,
     enumName: 'availability-type',
-    default: AvailabilityType.AVAILABLE,
+    default: AvailabilityType.NOT_INDICATED,
   })
   availabilityType: AvailabilityType;
 
-  @ManyToOne(() => PersonnelEntity, (pe) => pe.availability)
-  @JoinColumn({ name: 'personnel_id' })
+  @ManyToOne(() => PersonnelEntity, (pe) => pe.id)
+  @JoinColumn({ name: 'personnel', referencedColumnName: 'id' })
   personnel: PersonnelEntity;
 
   @Column({ name: 'deployment_code', type: 'varchar', nullable: true })

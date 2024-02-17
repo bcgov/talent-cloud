@@ -23,7 +23,7 @@ const ProfileHeader = ({
   role,
 }: {
   personnel: Personnel;
-  role: Role;
+  role?: Role;
 }) => {
   return (
     <div className="flex items-center flex-row pb-2 pr-12">

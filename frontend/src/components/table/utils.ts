@@ -1,9 +1,10 @@
 import type { DashboardFilters } from '@/pages/dashboard';
 
+
 export const booleanToString = (value: boolean): string => (value ? 'Yes' : 'No');
 export const handleSearchParams = (
   searchParamsUrl: URLSearchParams,
-  filterValues: DashboardFilters,
+  filterValues: {[key:string]: unknown},
 ) => {
   searchParamsUrl.set('page', filterValues?.currentPage.toString() ?? '1');
   searchParamsUrl.set('rows', filterValues?.rowsPerPage.toString() ?? '25');
@@ -18,7 +19,11 @@ export const handleSearchParams = (
   } else {
     searchParamsUrl.delete('name');
   }
-
+  if (filterValues?.availabilityStatus) {
+    searchParamsUrl.set('availabilityStatus', filterValues.availabilityStatus);
+  } else {
+    searchParamsUrl.delete('availabilityStatus');
+  }
   if (filterValues?.region?.length) {
     searchParamsUrl.set('region', filterValues?.region?.join(', '));
   } else {

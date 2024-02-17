@@ -8,6 +8,7 @@ import {
 } from '@/components';
 import type { DashboardFields, DashboardFilters } from './constants';
 import type { ChangeEvent } from 'react';
+import { SingleSelect } from '@/components/filters/SingleSelect';
 
 export const Filters = ({
   fields,
@@ -16,6 +17,8 @@ export const Filters = ({
   handleSearch,
   onClear,
   filterValues,
+  handleClose,
+  handleCloseMany,
 }: {
   fields: DashboardFields;
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +26,8 @@ export const Filters = ({
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
   filterValues: DashboardFilters;
+  handleClose: (name: string, value: string) => void;
+  handleCloseMany: (name: string) => void;
 }) => {
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-6 gap-12">
@@ -30,7 +35,7 @@ export const Filters = ({
         <Search
           field={fields.name}
           handleSearchInput={handleSearch}
-          value={filterValues.name}
+          value={filterValues.name ?? ''}
         />
       </div>
 
@@ -42,17 +47,21 @@ export const Filters = ({
               values={filterValues.region}
               label="Region"
               onChange={handleMultiSelect}
+              handleClose={handleClose}
+              handleCloseMany={handleCloseMany}
             />
           </div>
           <div className="col-span-1 md:col-span-3">
             <MultiSelectGroup
               onChange={handleMultiSelect}
+              handleClose={handleClose}
+              handleCloseMany={handleCloseMany}
               field={{
                 ...fields.location,
                 groupedOptions:
                   filterValues.region && filterValues.region.length > 0
                     ? fields.location?.groupedOptions?.filter((itm) =>
-                        filterValues.region.includes(
+                        filterValues?.region?.includes(
                           Region[itm.label as keyof typeof Region],
                         ),
                       )
@@ -65,7 +74,7 @@ export const Filters = ({
         </div>
       </div>
 
-      <div className="col-span-1 lg:col-span-3">
+      <div className="col-span-1 lg:col-span-2">
         <CascadingMenu
           field={fields.function}
           nestedField={fields.experience}
@@ -75,7 +84,16 @@ export const Filters = ({
           value={filterValues.function}
         />
       </div>
-      <div className="col-span-1 lg:col-span-3">
+      <div className="col-span-1 lg:col-span-2">
+        <SingleSelect
+          field={fields.availabilityStatus}
+          label="Availability Status"
+          value={filterValues.availabilityStatus}
+          onChange={handleSingleSelect}
+          handleClose={handleClose}
+        />
+      </div>
+      <div className="col-span-1 lg:col-span-1">
         <div className="flex flex-row no-wrap items-center justify-end text-center h-full">
           <Button type={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
         </div>

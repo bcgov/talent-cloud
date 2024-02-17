@@ -1,4 +1,4 @@
-import type { AvailabilityType, Classification, Ministry, Status } from '@/common';
+import { AvailabilityType, AvailabilityTypeName, Classification, Ministry, Status } from '@/common';
 import {
   ExperienceName,
   FunctionName,
@@ -14,6 +14,7 @@ export enum DashboardFilterNames {
   SHOW_INACTIVE = 'showInactive',
   FUNCTION = 'function',
   EXPERIENCE = 'experience',
+  AVAILABILITY_STATUS = 'availabilityStatus',
 }
 
 export enum DashboardColumns {
@@ -30,6 +31,10 @@ export enum DashboardColumns {
 }
 
 export interface DashboardFields {
+  availabilityStatus: {
+name: string;
+options: { label: AvailabilityTypeName; value: AvailabilityType }[];
+  }
   function: {
     name: string;
     options: FunctionName[];
@@ -147,6 +152,23 @@ export const dashboardFilterFields: DashboardFields = {
   name: {
     name: DashboardFilterNames.NAME,
   },
+  availabilityStatus: {
+    name: DashboardFilterNames.AVAILABILITY_STATUS,
+    options: [
+      {
+        label: AvailabilityTypeName.AVAILABLE,
+        value: AvailabilityType.AVAILABLE,
+      },
+      {
+        label: AvailabilityTypeName.UNAVAILABLE,
+        value: AvailabilityType.UNAVAILABLE,
+      },
+      {
+        label: AvailabilityTypeName.DEPLOYED,
+        value: AvailabilityType.DEPLOYED,
+      },
+    ],
+  }, 
   region: {
     name: DashboardFilterNames.REGION,
     options: regionsAndLocations.map((itm) => ({
@@ -255,9 +277,12 @@ export interface DashboardFilters {
   rowsPerPage: number;
   currentPage: number;
   showInactive?: boolean;
-  name: string;
-  region: string[];
-  location: string[];
-  function?: string;
-  experience?: string;
+  name?: string;
+  region?: Region[];
+  location?: WorkLocation[];
+  function?: FunctionName;
+  experience?: Experience;
+  availabilityStatus?: string;
+  availabilityStartDate?: string;
+  availabilityEndDate?: string;
 }

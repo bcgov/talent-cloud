@@ -66,13 +66,14 @@ export class PersonnelService {
    */
   async getPersonnel(
     query: GetPersonnelDTO,
-    role: Role,
-  ): Promise<{ personnel: Record<string, PersonnelRO>[]; count: number }> {
-    let qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb = qb.leftJoinAndSelect('personnel.experiences', 'experiences');
-    qb = qb.leftJoinAndSelect('experiences.function', 'function');
+  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    qb.leftJoinAndSelect('personnel.experiences', 'experiences');
+    qb.leftJoinAndSelect('experiences.function', 'function');
+    qb.leftJoinAndSelect('personnel.availability', 'availability');
+
     if (query.name) {
-      qb = qb.andWhere(
+      qb.andWhere(
         new Brackets((qb) => {
           qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', {
             name: `${query.name}%`,
@@ -83,11 +84,11 @@ export class PersonnelService {
       );
     }
     if (query.showInactive) {
-      qb = qb.andWhere('personnel.status In (:...status)', {
+      qb.andWhere('personnel.status In (:...status)', {
         status: [Status.NEW, Status.INACTIVE, Status.ACTIVE],
       });
     } else {
-      qb = qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
+      qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
     }
     if (query.region?.length) {
       qb.andWhere('personnel.region IN (:...regions)', {
@@ -106,46 +107,63 @@ export class PersonnelService {
           experienceType: query.experience,
         });
       }
-      qb = qb.andWhere('function.name = :function', {
+      qb.andWhere('function.name = :function', {
         function: query.function,
       });
     }
-    qb = qb.take(query.rows);
-    qb = qb.skip((query.page - 1) * query.rows);
+    /**
+     * If availabilityStatus is defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with the availabilityStatus
+     */
+    if (query.availabilityStatus) {
+      if (!query.availabilityStartDate && !query.availabilityEndDate) {
+        qb.andWhere('availability.date =:date', {
+          date: format(new Date(), 'yyyy-MM-dd'),
+        });
+        qb.andWhere('availability.availabilityType = :availabilityType', {
+          availabilityType: query.availabilityStatus,
+        });
+      } else {
+        qb.andWhere('availability.availabilityType = :availabilityType', {
+          availabilityType: query.availabilityStatus,
+        });
+        qb.andWhere('availability.date BETWEEN :start AND :end', {
+          start: query.availabilityStartDate,
+          end: query.availabilityEndDate,
+        });
+      }
+    }
+    /**
+     * If availabilityStatus is not defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with all availabilityStatus.
+     */
+    if (!query.availabilityStatus) {
+      // This is the default view on pageload - all personnel and all status on today's date (if not indicated then the defualt status of not indicated is returned)
+      if (!query.availabilityStartDate && !query.availabilityEndDate) {
+        qb.andWhere('availability.date =:date', {
+          date: format(new Date(), 'yyyy-MM-dd'),
+        });
+      } else {
+        // This query is not very meaningful without a status - returns all personnel with any status within the date range - we shoudl enforce a status to be selecred if searching by date range
+        qb.andWhere('availability.date BETWEEN :start AND :end', {
+          start: query.availabilityStartDate,
+          end: query.availabilityEndDate,
+        });
+      }
+    }
 
     if (query.showInactive) {
-      qb = qb.orderBy('personnel.status', 'DESC');
-      qb = qb.addOrderBy('personnel.lastName', 'ASC');
+      qb.orderBy('personnel.status', 'DESC');
+      qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     } else {
-      qb = qb.orderBy('personnel.lastName', 'ASC');
+      qb.orderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     }
 
+    qb.take(query.rows);
+    qb.skip((query.page - 1) * query.rows);
+
     const [personnel, count] = await qb.getManyAndCount();
-
-    const personnelWithAvailability: Record<string, PersonnelRO>[] =
-      await Promise.all(
-        personnel.map(async (person) => {
-          if (!query.available) {
-            const availability = await this.availabilityRepository.find({
-              where: {
-                personnel: { id: person.id },
-                date: format(new Date(), 'yyyy-MM-dd'),
-              },
-            });
-            return person.toResponseObject(role, availability);
-          } else {
-            const availability = await this.getAvailability(person.id, {
-              start: query.available.start,
-              end: query.available.end,
-            });
-            return person.toResponseObject(role, availability);
-          }
-        }),
-      );
-
-    return { personnel: personnelWithAvailability, count };
+    return { personnel, count };
   }
 
   /**
@@ -157,48 +175,47 @@ export class PersonnelService {
     role: Role,
     id: string,
   ): Promise<Record<string, PersonnelRO>> {
-    const defaultStartDate = new Date(Date.now());
-
-    const defaultEndDate = new Date(
-      defaultStartDate.getFullYear(),
-      defaultStartDate.getMonth(),
-      defaultStartDate.getDate() + 31,
-    );
-
     const person = await this.personnelRepository.findOneBy({ id: id });
 
-    const availability = await this.getAvailability(id, {
-      start: defaultStartDate,
-      end: defaultEndDate,
-    });
-
-    return person.toResponseObject(role, availability);
+    return person.toResponseObject(role);
   }
-  /**
-   * Get the availability of a personnel for a specific date range
-   * @param id
-   * @param dateRange
-   * @returns
-   */
-  async getAvailability(id: string, dateRange: { start: Date; end: Date }) {
-    const start = new Date(
-      dateRange.start.getFullYear(),
-      dateRange.start.getMonth(),
-      dateRange.start.getDate() - 1,
-    );
+  // /**
+  //  * Get the availability of a personnel for a specific date range
+  //  * @param id
+  //  * @param dateRange
+  //  * @returns
+  //  */
+  // async getAvailability(
+  //   id: string,
+  //   query: GetAvailabilityDTO
 
-    const end = new Date(
-      dateRange.end.getFullYear(),
-      dateRange.end.getMonth(),
-      dateRange.end.getDate() + 1,
-    );
+  // ) {
 
-    const qb = this.availabilityRepository.createQueryBuilder('availability');
+  //   const startDate = parse(query.start, 'yyyy-MM-dd', new Date());
+  //   const endDate = parse(query.end, 'yyyy-MM-dd', new Date());
 
-    qb.where('availability.personnel = :id', { id });
-    qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
-    return await qb.getMany();
-  }
+  //   const start = new Date(
+  //     startDate.getFullYear(),
+  //     startDate.getMonth(),
+  //     startDate.getDate() - 1,
+  //   );
+
+  //   const end = new Date(
+  //     endDate.getFullYear(),
+  //     endDate.getMonth(),
+  //     endDate.getDate() + 1,
+  //   );
+
+  //   const qb = this.availabilityRepository.createQueryBuilder('availability');
+
+  //   qb.where('availability.personnel = :id', { id });
+  //   qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
+  //   qb.andWhere('availability.availabilityType = :availabilityType', {
+  //     availabilityType: query.availabilityStatus,
+  //   });
+
+  //   return await qb.getMany();
+  // }
   /**
    * Update the availability of a personnel for a specific date range for a specific avaiilability type
    * @param id

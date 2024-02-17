@@ -10,4 +10,5 @@ export enum AvailabilityTypeName {
   DEPLOYED = 'Deployed',
   AVAILABLE = 'Available',
   PARTIAL = 'Partial',
+  NOT_INDICATED = 'Not Indicated',
 }

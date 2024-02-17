@@ -26,6 +26,7 @@ import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
@@ -98,12 +99,14 @@ export class PersonnelController {
     this.logger.log(`${this.getPersonnel.name}, ${req.username}, ${req.role}`);
 
     const queryResponse: {
-      personnel: Record<'Personnel', PersonnelRO>[];
+      personnel: PersonnelEntity[];
       count: number;
-    } = await this.personnelService.getPersonnel(query, req.role);
+    } = await this.personnelService.getPersonnel(query);
 
     return {
-      personnel: queryResponse.personnel,
+      personnel: queryResponse.personnel.map((itm) =>
+        itm.toResponseObject(req.role),
+      ),
       count: queryResponse.count,
       rows: query.rows,
       page: query.page,

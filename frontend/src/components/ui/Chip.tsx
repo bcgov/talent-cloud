@@ -3,10 +3,13 @@ import { classes } from '../filters/classes';
 
 export const Chip = ({
   value,
+  name,
   handleClose,
+
 }: {
   value: string;
-  handleClose?: () => any;
+  name: string;
+  handleClose: (name:string, value:string) => any;
 }) => (
   <MuiChip
     value={
@@ -20,6 +23,6 @@ export const Chip = ({
     }
     variant="ghost"
     className={classes.menu.chip}
-    onClose={handleClose}
+    onClose={()=> handleClose(name, value)}
   />
 );

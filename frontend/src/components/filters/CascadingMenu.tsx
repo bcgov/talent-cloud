@@ -33,6 +33,8 @@ export const CascadingMenu = ({
         <MenuHandler field={field}>
           {value ? (
             <Chip
+              name={field.name}
+              handleClose={() => handleChange(field.name, '')}
               value={
                 nestedValue
                   ? `${value}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`

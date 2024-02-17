@@ -5,12 +5,13 @@ import { type TableData, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, Personnel } from '@/pages/dashboard';
+import type { DashboardFilterNames, DashboardFilters, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
 import { AvailabilityType, AvailabilityTypeName, ExperienceName } from '@/common';
 import { useError } from './useError';
+import {format} from 'date-fns';
 
 export const useTable = () => {
   const { handleError } = useError();
@@ -28,13 +29,16 @@ export const useTable = () => {
     name: '',
     region: [],
     location: [],
-    function: '',
-    experience: '',
+    function: undefined,
+    experience: undefined,
+    availabilityStatus: '',
+    availabilityStartDate:format( new Date(), 'yyyy-MM-dd'),
+    availabilityEndDate: format(new Date(), 'yyyy-MM-dd'),
   });
   const [showFunctionColumn, setShowFunctionColumn] = useState<boolean>(false);
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-  const debouncedValue = useDebounce<string>(filterValues, defaultDebounceValue);
+  const debouncedValue = useDebounce<{[key:string]: unknown}>(filterValues, defaultDebounceValue);
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -127,13 +131,13 @@ export const useTable = () => {
                     columnName: DashboardColumns.AVAILABILITY,
                     value:
                       AvailabilityTypeName[availability[0]?.availabilityType] ??
-                      AvailabilityType.AVAILABLE,
+                      AvailabilityTypeName.NOT_INDICATED,
                     className: tableClass(
                       DashboardColumns.AVAILABILITY,
                       AvailabilityType[
                         availability[0]
                           ?.availabilityType as keyof typeof AvailabilityType
-                      ] ?? AvailabilityType.AVAILABLE,
+                      ] ?? AvailabilityType.NOT_INDICATED,
                     ),
                   },
                   {
@@ -233,7 +237,25 @@ export const useTable = () => {
       [name]: Array.from(valueSet),
     }));
   };
-
+  const handleClose = (name: string, value: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: value,
+      },
+    } as ChangeEvent<HTMLInputElement>;
+    
+    handleMultiSelect(event);
+  };
+  const handleCloseMany = (name:string) => {
+    const event = {
+      target: {
+        name: name,
+        value: [],
+      },
+    } as unknown as ChangeEvent<HTMLInputElement>;
+    handleMultiSelect(event);
+  };
   return {
     tableData,
     handlePageParams,
@@ -242,6 +264,8 @@ export const useTable = () => {
     handleSearch,
     showFunctionColumn,
     filterValues,
+    handleClose,
+    handleCloseMany,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,
