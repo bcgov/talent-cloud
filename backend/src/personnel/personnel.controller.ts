@@ -15,8 +15,12 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AvailabilityEntity } from 'src/database/entities/availability.entity';
+import { UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
@@ -34,7 +38,7 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
-    private logger: AppLogger,
+    private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);
   }
@@ -95,14 +99,15 @@ export class PersonnelController {
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${this.getPersonnel.name}, ${req.username}, ${req.role}`);
 
-    const queryResponse = await this.personnelService.getPersonnel(query);
-
-    const personnel = queryResponse.personnel.map((personnelEntity) =>
-      personnelEntity.toResponseObject(req.role),
-    );
+    const queryResponse: {
+      personnel: PersonnelEntity[];
+      count: number;
+    } = await this.personnelService.getPersonnel(query);
 
     return {
-      personnel,
+      personnel: queryResponse.personnel.map((itm) =>
+        itm.toResponseObject(req.role),
+      ),
       count: queryResponse.count,
       rows: query.rows,
       page: query.page,
@@ -126,8 +131,57 @@ export class PersonnelController {
     this.logger.log(
       `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
     );
-    const personnelRO: PersonnelEntity =
-      await this.personnelService.getPersonnelById(id);
-    return personnelRO.toResponseObject(req.role);
+    const personnelRO: Record<'Personnel', PersonnelRO> =
+      await this.personnelService.getPersonnelById(req.role, id);
+
+    return personnelRO;
+  }
+
+  @ApiOperation({
+    summary: 'Get personnel By Id',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Patch(':id/availability')
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
+  async updatePersonnelAvailability(
+    @Param('id') id: string,
+    @Body() personnel: UpdateAvailabilityDTO,
+    @Req() req: RequestWithRoles,
+  ): Promise<(UpdateResult | AvailabilityEntity)[]> {
+    this.logger.log(
+      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+    );
+
+    return await this.personnelService.updateAvailability(id, personnel);
+  }
+
+  @ApiOperation({
+    summary: 'Get personnel availability By Id',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @Get(':id/availability/:numberOfMonths')
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
+  async getPersonnelAvailability(
+    @Param('id') id: string,
+    @Param('numberOfMonths') numberOfMonths: number,
+    @Req() req: RequestWithRoles,
+    @Query() query?: GetAvailabilityDTO,
+  ) {
+    this.logger.log(
+      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+    );
+    console.log('getPersonnelAvailability', id, query);
+    return await this.personnelService.getAvailability(
+      id,
+      numberOfMonths,
+      query,
+    );
   }
 }
