@@ -8,7 +8,13 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { Experience, FunctionName, Region } from '../../common/enums';
+import { format } from 'date-fns';
+import {
+  AvailabilityType,
+  Experience,
+  FunctionName,
+  Region,
+} from '../../common/enums';
 import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
@@ -30,10 +36,26 @@ export class GetPersonnelDTO extends QueryDTO {
 
   @ApiPropertyOptional({
     description:
-      'TO BE IMPLEMENTED - Whether this personnel is currently available',
-    default: true,
+      'Availability status of personnel. If undefined, this will find all',
+    default: '*',
   })
-  available: boolean;
+  @IsEnum(AvailabilityType)
+  @IsOptional()
+  availabilityStatus: AvailabilityType;
+
+  @ApiPropertyOptional({
+    description: 'Start date-string for a range of availability',
+    default: format(new Date(), 'yyyy-MM-dd'),
+  })
+  @IsOptional()
+  availabilityStartDate: string;
+
+  @ApiPropertyOptional({
+    description: 'End date-string for a range of availability',
+    default: format(new Date(), 'yyyy-MM-dd'),
+  })
+  @IsOptional()
+  availabilityEndDate: string;
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
