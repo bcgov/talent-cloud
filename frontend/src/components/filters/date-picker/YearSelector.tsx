@@ -23,8 +23,8 @@ export const YearSelector = (props: SelectorProps) => (
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <Menu.Items className="absolute ml-16 px-8 z-10 mt-2  text-left  bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-        <div className="py-4 w-full">
+      <Menu.Items className="absolute ml-16 z-10 mt-2  text-left  bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="flex flex-col py-4">
           {years().map((itm) => (
             <Menu.Item key={itm.value}>
               <button
@@ -33,7 +33,7 @@ export const YearSelector = (props: SelectorProps) => (
                     new Date(itm.value, props.displayMonth.getMonth(), 1),
                   )
                 }
-                className="py-1 text-sm w-full cursor-pointer px-2 rounded-sm hover:bg-gray-100> font-bold"
+                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
               >
                 {props.displayMonth.getFullYear() === itm.value ? (
                   <span className="font-bold">{itm.label}</span>
