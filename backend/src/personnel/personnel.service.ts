@@ -191,7 +191,7 @@ export class PersonnelService {
     id: string,
     numberOfMonths: number,
     query?: GetAvailabilityDTO,
-  ): Promise<AvailabilityRO[]> {
+  ): Promise<AvailabilityEntity[]> {
     const currentDate = new Date();
 
     const qb = this.availabilityRepository.createQueryBuilder('availability');

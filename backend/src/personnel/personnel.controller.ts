@@ -173,11 +173,10 @@ export class PersonnelController {
     @Param('numberOfMonths') numberOfMonths: number,
     @Req() req: RequestWithRoles,
     @Query() query?: GetAvailabilityDTO,
-  ) {
+  ): Promise<AvailabilityEntity[]> {
     this.logger.log(
       `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
     );
-    console.log('getPersonnelAvailability', id, query);
     return await this.personnelService.getAvailability(
       id,
       numberOfMonths,
