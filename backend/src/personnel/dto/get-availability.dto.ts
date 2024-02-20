@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
 import { format } from 'date-fns';
-import { AvailabilityType } from 'src/common/enums';
+import { AvailabilityType } from '../../common/enums';
 
 export class GetAvailabilityDTO {
   @ApiPropertyOptional({

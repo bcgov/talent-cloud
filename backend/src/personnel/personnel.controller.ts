@@ -15,7 +15,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AvailabilityEntity } from 'src/database/entities/availability.entity';
+import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';

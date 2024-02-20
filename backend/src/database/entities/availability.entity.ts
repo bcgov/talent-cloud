@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { AvailabilityRO } from 'src/personnel/ro/availability.ro';
+import { AvailabilityRO } from '../../personnel/ro/availability.ro';
 import {
   Column,
   Entity,
