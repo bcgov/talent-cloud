@@ -166,20 +166,18 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.OK,
   })
-  @Get(':id/availability/:numberOfMonths')
+  @Get(':id/availability')
   @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async getPersonnelAvailability(
     @Param('id') id: string,
-    @Param('numberOfMonths') numberOfMonths: number,
     @Req() req: RequestWithRoles,
-    @Query() query?: GetAvailabilityDTO,
+    @Query() query: GetAvailabilityDTO,
   ): Promise<AvailabilityEntity[]> {
     this.logger.log(
       `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
     );
     return await this.personnelService.getAvailability(
       id,
-      numberOfMonths,
       query,
     );
   }

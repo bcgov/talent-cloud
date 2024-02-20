@@ -189,24 +189,16 @@ export class PersonnelService {
    */
   async getAvailability(
     id: string,
-    numberOfMonths: number,
-    query?: GetAvailabilityDTO,
+    query: GetAvailabilityDTO,
   ): Promise<AvailabilityEntity[]> {
-    const currentDate = new Date();
+
 
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
-    const start = query.from
-      ? parse(query.from, 'yyyy-MM-dd', new Date())
-      : new Date();
+    const start = parse(query.from, 'yyyy-MM-dd', new Date())
 
-    const end = query.to
-      ? parse(query.to, 'yyyy-MM-dd', new Date())
-      : new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth() + numberOfMonths,
-          currentDate.getDate(),
-        );
+    const end = parse(query.to, 'yyyy-MM-dd', new Date())
+
     // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
     start.setDate(1);
     end.setMonth(end.getMonth() + 1);
@@ -218,9 +210,11 @@ export class PersonnelService {
     const availability = await qb.getMany();
 
     const dates = [];
+
     for (let i = start; i < end; i.setDate(i.getDate() + 1)) {
       dates.push(new Date(i));
     }
+    
     const availableDates: AvailabilityEntity[] = dates.map(
       (date) =>
         availability.find((itm) => itm.date === format(date, 'yyyy-MM-dd')) ??
