@@ -1,4 +1,5 @@
-import type { AvailabilityType, Classification, Ministry, Status } from '@/common';
+import type { Classification, Ministry, Status } from '@/common';
+import { AvailabilityType, AvailabilityTypeName } from '@/common';
 import {
   ExperienceName,
   FunctionName,
@@ -6,6 +7,7 @@ import {
   WorkLocation,
   Experience,
 } from '@/common';
+import type { DateRange } from 'react-day-picker';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -14,6 +16,7 @@ export enum DashboardFilterNames {
   SHOW_INACTIVE = 'showInactive',
   FUNCTION = 'function',
   EXPERIENCE = 'experience',
+  AVAILABILITY_TYPE = 'availabilityType',
 }
 
 export enum DashboardColumns {
@@ -30,6 +33,15 @@ export enum DashboardColumns {
 }
 
 export interface DashboardFields {
+  availabilityType: {
+    name: string;
+    options: { label: AvailabilityTypeName; value: AvailabilityType }[];
+  };
+  availabilityDates: {
+    name: string;
+    label: string;
+    value: DateRange;
+  };
   function: {
     name: string;
     options: FunctionName[];
@@ -147,6 +159,23 @@ export const dashboardFilterFields: DashboardFields = {
   name: {
     name: DashboardFilterNames.NAME,
   },
+  availabilityType: {
+    name: DashboardFilterNames.AVAILABILITY_TYPE,
+    options: [
+      {
+        label: AvailabilityTypeName.AVAILABLE,
+        value: AvailabilityType.AVAILABLE,
+      },
+      {
+        label: AvailabilityTypeName.UNAVAILABLE,
+        value: AvailabilityType.UNAVAILABLE,
+      },
+      {
+        label: AvailabilityTypeName.DEPLOYED,
+        value: AvailabilityType.DEPLOYED,
+      },
+    ],
+  },
   region: {
     name: DashboardFilterNames.REGION,
     options: regionsAndLocations.map((itm) => ({
@@ -200,6 +229,11 @@ export const dashboardFilterFields: DashboardFields = {
       },
     ],
   },
+  availabilityDates: {
+    name: 'availabilityDates',
+    label: 'Availability Date Range',
+    value: { from: new Date(), to: new Date() },
+  },
 };
 
 export const dashboardToggle = {
@@ -211,6 +245,11 @@ export interface ExperienceInterface {
   experienceType: Experience;
   functionName: FunctionName;
 }
+export interface AvailabilityInterface {
+  availabilityType: AvailabilityType;
+  date: string;
+  deploymentCode?: string;
+}
 
 export interface Personnel {
   id: string;
@@ -219,7 +258,7 @@ export interface Personnel {
   region: string;
   workLocation: string;
   experiences: ExperienceInterface[];
-  availability: string;
+  availability: AvailabilityInterface[];
   status: Status;
   willingToTravel: boolean;
   remoteOnly: boolean;
@@ -263,9 +302,11 @@ export interface DashboardFilters {
   rowsPerPage: number;
   currentPage: number;
   showInactive?: boolean;
-  name: string;
-  region: string[];
-  location: string[];
-  function?: string;
-  experience?: string;
+  name?: string;
+  region?: Region[];
+  location?: WorkLocation[];
+  function?: FunctionName;
+  experience?: Experience;
+  availabilityType?: string;
+  availabilityDates: DateRange;
 }

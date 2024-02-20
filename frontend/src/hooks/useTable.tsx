@@ -5,12 +5,18 @@ import { type TableData, handleSearchParams } from '@/components';
 import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, Personnel } from '@/pages/dashboard';
+import type {
+  AvailabilityInterface,
+  DashboardFilters,
+  Personnel,
+} from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { tableClass } from '@/components/table/classes';
 import { useDebounce } from './useDebounce';
-import { ExperienceName } from '@/common';
+import { AvailabilityType, AvailabilityTypeName, ExperienceName } from '@/common';
 import { useError } from './useError';
+import { differenceInDays } from 'date-fns';
+import type { DateRange } from 'react-day-picker';
 
 export const useTable = () => {
   const { handleError } = useError();
@@ -30,6 +36,11 @@ export const useTable = () => {
     location: [],
     function: undefined,
     experience: undefined,
+    availabilityType: '',
+    availabilityDates: {
+      from: undefined,
+      to: undefined,
+    },
   });
   const [showFunctionColumn, setShowFunctionColumn] = useState<boolean>(false);
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
@@ -47,6 +58,40 @@ export const useTable = () => {
       range.push(i);
     }
     return range;
+  };
+  /**
+   * If availability  status is set, then calculate the partial or full availability
+   * @param availability
+   * @returns
+   */
+  const getAvailabilityValue = (availability: AvailabilityInterface[]) => {
+    const totalAvailableDays = availability.filter(
+      (itm) =>
+        itm.availabilityType ===
+        AvailabilityType[
+          filterValues?.availabilityType as keyof typeof AvailabilityType
+        ],
+    ).length;
+
+    const totalDaysSearched =
+      differenceInDays(
+        filterValues.availabilityDates.to ?? new Date(),
+        filterValues.availabilityDates.from ?? new Date(),
+      ) + 1;
+
+    if (totalDaysSearched === 1 || totalDaysSearched === totalAvailableDays) {
+      return AvailabilityTypeName[
+        filterValues?.availabilityType as keyof typeof AvailabilityType
+      ];
+    }
+
+    if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
+      return AvailabilityTypeName.PARTIAL;
+    }
+
+    return AvailabilityTypeName[
+      filterValues?.availabilityType as keyof typeof AvailabilityType
+    ];
   };
   useEffect(() => {
     (async () => {
@@ -74,6 +119,7 @@ export const useTable = () => {
               ({
                 id,
                 status,
+                availability,
                 firstName,
                 lastName,
                 experiences,
@@ -122,6 +168,23 @@ export const useTable = () => {
                     )
                       ? tableClass(DashboardColumns.FUNCTION, '')
                       : 'hidden',
+                  },
+                  {
+                    key: uuidv4(),
+                    columnName: DashboardColumns.AVAILABILITY,
+                    value: filterValues.availabilityType
+                      ? getAvailabilityValue(availability)
+                      : AvailabilityTypeName[
+                          availability[0]
+                            ?.availabilityType as keyof typeof AvailabilityType
+                        ] ?? AvailabilityTypeName.NOT_INDICATED,
+                    className: tableClass(
+                      DashboardColumns.AVAILABILITY,
+                      AvailabilityType[
+                        availability[0]
+                          ?.availabilityType as keyof typeof AvailabilityType
+                      ] ?? AvailabilityType.NOT_INDICATED,
+                    ),
                   },
                   {
                     key: uuidv4(),
@@ -241,6 +304,23 @@ export const useTable = () => {
     handleMultiSelect(event);
   };
 
+  const handleSetDates = (range: DateRange | undefined) => {
+    if (range?.from && range?.to && range.from > range.to) {
+      setFilterValues((prev: any) => ({
+        ...prev,
+        currentPage: 1,
+        availabilityDates: {
+          from: range.to,
+          to: range.from,
+        },
+      }));
+    }
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      availabilityDates: range,
+    }));
+  };
   return {
     tableData,
     handlePageParams,
@@ -251,6 +331,7 @@ export const useTable = () => {
     filterValues,
     handleClose,
     handleCloseMany,
+    handleSetDates,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,
@@ -261,12 +342,18 @@ export const useTable = () => {
         location: [],
         function: null,
         experience: '',
+        availabilityType: '',
+        availabilityDates: {
+          from: undefined,
+          to: undefined,
+        },
       }),
     dashboardColumns: [
       { key: uuidv4(), name: DashboardColumns.NAME },
       { key: uuidv4(), name: DashboardColumns.REGION },
       { key: uuidv4(), name: DashboardColumns.LOCATION },
       { key: uuidv4(), name: DashboardColumns.FUNCTION },
+      { key: uuidv4(), name: DashboardColumns.AVAILABILITY },
       { key: uuidv4(), name: DashboardColumns.TRAVEL },
       { key: uuidv4(), name: DashboardColumns.REMOTE },
       { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },

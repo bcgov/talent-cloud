@@ -20,6 +20,7 @@ const Dashboard = () => {
     showFunctionColumn,
     handleClose,
     handleCloseMany,
+    handleSetDates,
   } = useTable();
   const { role } = useRole();
 
@@ -27,6 +28,7 @@ const Dashboard = () => {
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
       <h2 className="text-left font-bold">Personnel</h2>
       <Filters
+        handleSetDates={handleSetDates}
         fields={dashboardFilterFields}
         handleMultiSelect={handleMultiSelect}
         handleSingleSelect={handleSingleSelect}
