@@ -11,19 +11,21 @@ export class GetAvailabilityDTO {
   })
   @IsEnum(AvailabilityType)
   @IsOptional()
-  availabilityStatus: AvailabilityType;
+  type: AvailabilityType;
 
   @ApiPropertyOptional({
     description: 'Start date-string for a range of availability',
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityStartDate: string;
+  from: string;
 
   @ApiPropertyOptional({
     description: 'End date-string for a range of availability',
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityEndDate: string;
+  to: string;
+
+  
 }

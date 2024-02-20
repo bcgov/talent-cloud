@@ -195,35 +195,28 @@ export class PersonnelService {
 
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
-    if (!query.availabilityStartDate || !query.availabilityEndDate) {
-      const start = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1,
-      );
-      const end = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + numberOfMonths,
-        0,
-      );
+    const start = query.from ? parse(  query.from,
+      'yyyy-MM-dd',
+      new Date(),
+    ) : new Date();
 
+    const end = query.to ? parse( query.to,
+  'yyyy-MM-dd',
+  new Date()) : new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + numberOfMonths,
+    currentDate.getDate(),
+  )
+  // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
+   start.setDate(1)
+   end.setMonth(end.getMonth() + 1)
+   end.setDate(0)
+    
+  
+    
       qb.where('availability.personnel = :id', { id });
       qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
-    } else {
-      const startDate = parse(
-        query?.availabilityStartDate ?? '',
-        'yyyy-MM-dd',
-        new Date(),
-      );
-      const endDate = parse(
-        query?.availabilityEndDate ?? '',
-        'yyyy-MM-dd',
-        new Date(),
-      );
-      console.log(startDate, endDate);
-      //TODO start/end date (will these just be months since we are always starting at the first of the month?)
-    }
-
+    
     return await qb.getMany();
   }
   /**
