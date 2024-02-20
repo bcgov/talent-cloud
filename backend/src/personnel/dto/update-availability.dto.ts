@@ -7,21 +7,21 @@ export class UpdateAvailabilityDTO {
     required: true,
     example: '2023-01-01',
   })
-  start: string;
+  from: string;
 
   @ApiProperty({
     description: 'End date-string of availability',
     required: true,
     example: '2023-01-01',
   })
-  end: string;
+  to: string;
 
   @ApiProperty({
     description: 'Availability type',
     required: true,
     example: AvailabilityType.AVAILABLE,
   })
-  availabilityType: AvailabilityType;
+  type: AvailabilityType;
 
   @ApiProperty({
     description: 'Deployment code',

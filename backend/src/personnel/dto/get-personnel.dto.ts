@@ -41,21 +41,21 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsEnum(AvailabilityType)
   @IsOptional()
-  availabilityStatus: AvailabilityType;
+  availabilityType: AvailabilityType;
 
   @ApiPropertyOptional({
     description: 'Start date-string for a range of availability',
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityStartDate: string;
+  availabilityFrom: string;
 
   @ApiPropertyOptional({
     description: 'End date-string for a range of availability',
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityEndDate: string;
+  availabilityTo: string;
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',

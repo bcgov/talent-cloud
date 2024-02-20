@@ -115,38 +115,38 @@ export class PersonnelService {
     /**
      * If availabilityStatus is defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with the availabilityStatus
      */
-    if (query.availabilityStatus) {
-      if (!query.availabilityStartDate && !query.availabilityEndDate) {
+    if (query.availabilityType ) {
+      if (!query.availabilityFrom && !query.availabilityTo) {
         qb.andWhere('availability.date =:date', {
           date: format(new Date(), 'yyyy-MM-dd'),
         });
         qb.andWhere('availability.availabilityType = :availabilityType', {
-          availabilityType: query.availabilityStatus,
+          availabilityType: query.availabilityType,
         });
       } else {
         qb.andWhere('availability.availabilityType = :availabilityType', {
-          availabilityType: query.availabilityStatus,
+          availabilityType: query.availabilityType,
         });
-        qb.andWhere('availability.date BETWEEN :start AND :end', {
-          start: query.availabilityStartDate,
-          end: query.availabilityEndDate,
+        qb.andWhere('availability.date BETWEEN :from AND :to', {
+          from: query.availabilityFrom,
+          to: query.availabilityTo,
         });
       }
     }
     /**
      * If availabilityStatus is not defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with all availabilityStatus.
      */
-    if (!query.availabilityStatus) {
+    if (!query.availabilityType) {
       // This is the default view on pageload - all personnel and all status on today's date (if not indicated then the defualt status of not indicated is returned)
-      if (!query.availabilityStartDate && !query.availabilityEndDate) {
+      if (!query.availabilityFrom || !query.availabilityTo) {
         qb.andWhere('availability.date =:date', {
           date: format(new Date(), 'yyyy-MM-dd'),
         });
       } else {
         // This query is not very meaningful without a status - returns all personnel with any status within the date range - we shoudl enforce a status to be selecred if searching by date range
-        qb.andWhere('availability.date BETWEEN :start AND :end', {
-          start: query.availabilityStartDate,
-          end: query.availabilityEndDate,
+        qb.andWhere('availability.date BETWEEN :from AND :to', {
+          from: query.availabilityFrom,
+          to: query.availabilityTo,
         });
       }
     }
@@ -195,28 +195,25 @@ export class PersonnelService {
 
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
-    const start = query.from ? parse(  query.from,
-      'yyyy-MM-dd',
-      new Date(),
-    ) : new Date();
+    const start = query.from
+      ? parse(query.from, 'yyyy-MM-dd', new Date())
+      : new Date();
 
-    const end = query.to ? parse( query.to,
-  'yyyy-MM-dd',
-  new Date()) : new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + numberOfMonths,
-    currentDate.getDate(),
-  )
-  // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
-   start.setDate(1)
-   end.setMonth(end.getMonth() + 1)
-   end.setDate(0)
-    
-  
-    
-      qb.where('availability.personnel = :id', { id });
-      qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
-    
+    const end = query.to
+      ? parse(query.to, 'yyyy-MM-dd', new Date())
+      : new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + numberOfMonths,
+          currentDate.getDate(),
+        );
+    // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
+    start.setDate(1);
+    end.setMonth(end.getMonth() + 1);
+    end.setDate(0);
+
+    qb.where('availability.personnel = :id', { id });
+    qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
+
     return await qb.getMany();
   }
   /**
@@ -226,10 +223,10 @@ export class PersonnelService {
    * @returns
    */
   async updateAvailability(id: string, availability: UpdateAvailabilityDTO) {
-    const { start, end, availabilityType, deploymentCode } = availability;
+    const { from, to, type, deploymentCode } = availability;
 
-    const startDate = parse(start, 'yyyy-MM-dd', new Date());
-    const endDate = parse(end, 'yyyy-MM-dd', new Date());
+    const startDate = parse(from, 'yyyy-MM-dd', new Date());
+    const endDate = parse(to, 'yyyy-MM-dd', new Date());
 
     const dates = [];
 
@@ -249,7 +246,7 @@ export class PersonnelService {
               { id: avail.id },
               {
                 date,
-                availabilityType: AvailabilityType[availabilityType],
+                availabilityType: AvailabilityType[type],
                 deploymentCode,
               },
             );
@@ -257,7 +254,7 @@ export class PersonnelService {
             return await this.availabilityRepository.save(
               this.availabilityRepository.create({
                 date,
-                availabilityType: AvailabilityType[availabilityType],
+                availabilityType: AvailabilityType[type],
                 deploymentCode,
                 personnel: { id },
               }),
