@@ -48,14 +48,14 @@ export class GetPersonnelDTO extends QueryDTO {
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityFrom: string;
+  availabilityFromDate: string;
 
   @ApiPropertyOptional({
     description: 'End date-string for a range of availability',
     default: format(new Date(), 'yyyy-MM-dd'),
   })
   @IsOptional()
-  availabilityTo: string;
+  availabilityToDate: string;
 
   @ApiPropertyOptional({
     description: 'Regions to search personnel from',
