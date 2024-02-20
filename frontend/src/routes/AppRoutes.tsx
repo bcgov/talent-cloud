@@ -10,7 +10,7 @@ const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const Login = lazy(() => import('../pages/Login'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
-const SplashPage = lazy(() => import('../pages/SplashPage'));
+const SplashPage = lazy(() => import('../pages/splash/SplashPage'));
 
 export default () => {
   return (

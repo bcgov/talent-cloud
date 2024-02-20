@@ -19,7 +19,7 @@ export const PrivateRoute = () => {
   }, [keycloak.authenticated, keycloak.token]);
 
   if (!keycloak.authenticated) {
-    return <Navigate to={Routes.Login} />;
+    return <Navigate to={Routes.Home} />;
   }
 
   return (

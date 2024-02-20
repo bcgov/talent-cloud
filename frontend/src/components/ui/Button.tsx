@@ -2,9 +2,9 @@ import type { ButtonProps } from '@/common';
 import { ButtonTypes } from '@/common';
 
 const secondaryButton =
-  'bg-transparent underline border border-2 rounded-md  px-6 py-2 border-primaryBlue text-center block font-bold text-decoration-none';
+  'bg-transparent underline border border-2 rounded-md f px-6 py-2 border-primaryBlue text-center block font-bold text-decoration-none';
 const primaryButton =
-  'bg-primaryBlue border-none text-center block font-bold text-md w-auto flex flex-row whitespace-nowrap text-white px-6 py-2 rounded-sm';
+  'bg-transparent  border-2 border-white text-white rounded-sm opacity-100  px-6 py-2 text-center block font-bold text-decoration-none text-transform-none whitespace-nowrap w-auto flex flex-row justify-center items-center no-underline';
 
 export const Button = ({ type, text, onClick, disabled = false }: ButtonProps) => {
   return (

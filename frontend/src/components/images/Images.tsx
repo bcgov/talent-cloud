@@ -7,7 +7,7 @@ export const EmcrLogo = () => (
   />
 );
 
-export const EmcrLogoVertical = () => (
+export const BcGovLogo = () => (
   <img
     src={new URL('/assets/images/bcgov_logo.svg', import.meta.url).href}
     alt="logo"
@@ -25,5 +25,13 @@ export const CloudIcon = () => (
   <img
     src={new URL('/assets/images/cloud-icon.svg', import.meta.url).href}
     alt="logo"
+  />
+);
+
+export const SplashImage = () => (
+  <img
+    className="w-full h-auto"
+    src={new URL('/assets/images/splash.png', import.meta.url).href}
+    alt="EMCR Splash"
   />
 );

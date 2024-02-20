@@ -28,7 +28,7 @@ export const Layout = ({
       >
         {children}
       </div>
-      <Footer links={footerLinks} />
+      {authenticated && <Footer links={footerLinks} />}
     </div>
   );
 };

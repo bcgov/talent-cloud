@@ -9,6 +9,13 @@ module.exports = withMT({
   ],
   
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px', 
+      'xl': '1440px',
+      '2xl': '2500px',
+    },
     // overridden here as mui tailwind uses these color values for some of the psuedo classes
       colors: {
         blue: {
@@ -42,6 +49,7 @@ module.exports = withMT({
         warningDark: '#6C4A00',
         successDark: '#2D4821',
         infoDark: '#1A5A96',
+        white: '#FFFFFF',
       },
       backgroundColor: {
         backgroundBlue: '#003366',
