@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, parse } from 'date-fns';
-import { Role } from '../auth/interface';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -9,6 +8,7 @@ import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelRO } from './ro/personnel.ro';
+import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';

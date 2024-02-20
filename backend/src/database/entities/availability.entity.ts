@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { AvailabilityRO } from '../../personnel/ro/availability.ro';
 import {
   Column,
   Entity,
@@ -9,6 +8,7 @@ import {
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { AvailabilityRO } from '../../personnel/ro/availability.ro';
 
 @Entity('availability')
 export class AvailabilityEntity {
