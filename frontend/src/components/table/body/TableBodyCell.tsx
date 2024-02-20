@@ -35,7 +35,7 @@ export const TableBodyCell = ({
             to={`/profile/${id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline text-blue-900"
+            className="cursor-pointer hover:underline text-blue-900 "
           >
             {cell.value}
           </Link>

@@ -12,6 +12,7 @@ export const tableClasses = {
   ministry: [tdClass, 'text-info'].join(', '),
   available: [tdClass, 'text-success'].join(', '),
   unavailable: [tdClass, 'text-error'].join(', '),
+  deployed: [tdClass, 'text-warning'].join(', '),
   remote: [tdClass].join(', '),
   travelYes: [
     tdClass,
@@ -39,7 +40,7 @@ export const tableClasses = {
   checkIconClass: 'h-6 w-6 text-success mr-2',
   xIconClass: 'h-6 w-6 text-error mr-2',
 };
-const getUnionMembershipClass = (value: string) => {
+const getUnionMembershipClass = (value?: string) => {
   switch (value) {
     case Classification.BCGEU:
       return tableClasses.bcgeu;
@@ -53,6 +54,18 @@ const getUnionMembershipClass = (value: string) => {
       return tdClass;
   }
 };
+export const getAvailabilityClass = (value?: string) => {
+  switch (value) {
+    case AvailabilityType.AVAILABLE:
+      return tableClasses.available;
+    case AvailabilityType.UNAVAILABLE:
+      return tableClasses.unavailable;
+    case AvailabilityType.DEPLOYED:
+      return tableClasses.deployed;
+    default:
+      return tdClass;
+  }
+};
 export const tableClass = (key: string, value?: string) => {
   switch (key) {
     case DashboardColumns.MINISTRY:
@@ -60,9 +73,7 @@ export const tableClass = (key: string, value?: string) => {
     case DashboardColumns.REMOTE:
       return tableClasses.remote;
     case DashboardColumns.AVAILABILITY:
-      return value === AvailabilityType.AVAILABLE
-        ? tableClasses.available
-        : tableClasses.unavailable;
+      return getAvailabilityClass(value);
     case DashboardColumns.TRAVEL:
       return value === 'yes' ? tableClasses.travelYes : tableClasses.travelNo;
     case DashboardColumns.UNION_MEMBERSHIP:

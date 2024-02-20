@@ -9,7 +9,7 @@ export const classes = {
     listLabel: 'flex cursor-pointer items-center justify-start text-list-header',
     listItem: 'flex cursor-pointer items-center justify-start text-list-item',
     chipsContainer: 'flex flex-row items-center justify-start',
-    chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none',
+    chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none z-40',
     placeholder: 'text-[#828282]',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
@@ -22,4 +22,8 @@ export const menuItemClass: { [key: string]: string } = {
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   function: classes.menu.container,
   name: classes.menu.container,
+  availabilityDates:
+    classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
+  availabilityType:
+    classes.menu.container + ' md:rounded-tr-none md:rounded-br-none',
 };
