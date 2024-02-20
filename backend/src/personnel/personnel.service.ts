@@ -12,6 +12,7 @@ import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { AvailabilityRO } from './ro/availability.ro';
 
 @Injectable()
 export class PersonnelService {
@@ -115,7 +116,7 @@ export class PersonnelService {
     /**
      * If availabilityStatus is defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with the availabilityStatus
      */
-    if (query.availabilityType ) {
+    if (query.availabilityType) {
       if (!query.availabilityFrom && !query.availabilityTo) {
         qb.andWhere('availability.date =:date', {
           date: format(new Date(), 'yyyy-MM-dd'),
@@ -190,7 +191,7 @@ export class PersonnelService {
     id: string,
     numberOfMonths: number,
     query?: GetAvailabilityDTO,
-  ) {
+  ): Promise<AvailabilityRO[]> {
     const currentDate = new Date();
 
     const qb = this.availabilityRepository.createQueryBuilder('availability');
@@ -214,7 +215,23 @@ export class PersonnelService {
     qb.where('availability.personnel = :id', { id });
     qb.andWhere('availability.date BETWEEN :start AND :end', { start, end });
 
-    return await qb.getMany();
+    const availability = await qb.getMany();
+
+    const dates = [];
+    for (let i = start; i < end; i.setDate(i.getDate() + 1)) {
+      dates.push(new Date(i));
+    }
+    const availableDates: AvailabilityEntity[] = dates.map(
+      (date) =>
+        availability.find((itm) => itm.date === format(date, 'yyyy-MM-dd')) ??
+        new AvailabilityEntity({
+          date: format(date, 'yyyy-MM-dd'),
+          availabilityType: AvailabilityType.NOT_INDICATED,
+          deploymentCode: '',
+        }),
+    );
+
+    return availableDates;
   }
   /**
    * Update the availability of a personnel for a specific date range for a specific avaiilability type

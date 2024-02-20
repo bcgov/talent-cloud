@@ -150,13 +150,13 @@ const threeMonthsArray = () => {
   const today = new Date();
   const startDate = new Date(
     today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - 3,
+    today.getMonth() -3,
+    1
   );
   const threeMonthsFromNow = new Date(
     today.getFullYear(),
-    today.getMonth() + 3,
-    today.getDate(),
+    today.getMonth() + 7,
+    0,
   );
   const dates = [];
   for (let i = startDate; i < threeMonthsFromNow; i.setDate(i.getDate() + 1)) {

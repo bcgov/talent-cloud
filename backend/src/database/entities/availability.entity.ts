@@ -45,4 +45,7 @@ export class AvailabilityEntity {
       deploymentCode: this.deploymentCode,
     };
   }
+  constructor(data?: Partial<AvailabilityEntity>){
+    Object.assign(this, data);
+  }
 }
