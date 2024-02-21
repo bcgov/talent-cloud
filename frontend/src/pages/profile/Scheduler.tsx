@@ -5,7 +5,7 @@ import SchedulerHeader from './SchedulerHeader';
 import SchedulerRow from './SchedulerRow';
 import SchedulerControl from './SchedulerControl';
 
-const Scheduler = () => {
+const Scheduler = ({ setAvailabilityQuery }: { setAvailabilityQuery: (from: string, to: string ) => void }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
@@ -147,7 +147,7 @@ const Scheduler = () => {
           Schedule
         </AccordionHeader>
         <AccordionBody className="px-8">
-          <SchedulerControl />
+          <SchedulerControl setAvailabilityQuery={setAvailabilityQuery} />
           <SchedulerHeader />
           <SchedulerRow month="Mar" />
         </AccordionBody>
