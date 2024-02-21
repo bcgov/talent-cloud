@@ -201,7 +201,6 @@ export class PersonnelService {
 
     // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
     start.setDate(1);
-
     const endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0);
     
 
