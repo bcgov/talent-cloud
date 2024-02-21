@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { Header } from '../header';
 import { APP_NAME } from '../../common';
-import { footerLinks } from '../../routes/links';
+
 import { Footer } from '.';
 
 export const Layout = ({
@@ -28,7 +28,7 @@ export const Layout = ({
       >
         {children}
       </div>
-      {authenticated && <Footer links={footerLinks} />}
+      {authenticated && <Footer />}
     </div>
   );
 };
