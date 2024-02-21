@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { Button } from "@material-tailwind/react";
 
-const MonthPicker = ({ onSelect }: { onSelect: ({ month, year }: { month: number, year: number }) => void }) => {
-  const [year, setYear] = useState<number>(new Date().getFullYear());
+const MonthPicker = ({ startYear, onSelect }: { startYear: number, onSelect: ({ month, year }: { month: number, year: number }) => void }) => {
+  const [year, setYear] = useState<number>(startYear);
   const onClickMonth = (month: number) => {
     onSelect({ month, year });
   }

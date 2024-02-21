@@ -1,128 +1,92 @@
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import SchedulerHeader from './SchedulerHeader';
 import SchedulerRow from './SchedulerRow';
 import SchedulerControl from './SchedulerControl';
+import { Availability } from '../dashboard';
+import dayjs from 'dayjs';
+import { SchedulerRowItem } from '../dashboard';
+import { AvailabilityType } from '@/common';
 
-const Scheduler = ({ setAvailabilityQuery }: { setAvailabilityQuery: (from: string, to: string ) => void }) => {
+const Scheduler = (
+  { name, availability, onChangeAvailabilityDates }: {
+    name: string, availability?: Availability[],
+    onChangeAvailabilityDates: (from: string, to: string ) => void,
+  }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  const [schedulerRows, setSchedulerRows] = useState<{[key: string]: SchedulerRowItem[]}>();
 
-  const data = [
-    {
-      date: '2024-02-01',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-02',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-03',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-04',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-05',
-      status: 'Available',
-    },
-    {
-      date: '2024-02-06',
-      status: 'Available',
-    },
-    {
-      date: '2024-02-07',
-      status: 'Available',
-    },
-    {
-      date: '2024-02-08',
-      status: 'Unavailable',
-    },
-    {
-      date: '2024-02-09',
-      status: 'Unavailable',
-    },
-    {
-      date: '2024-02-10',
-      status: 'Unavailable',
-    },
-    {
-      date: '2024-02-11',
-      status: 'Available',
-    },
-    {
-      date: '2024-02-12',
-      status: 'Available',
-    },
-    {
-      date: '2024-02-13',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-14',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-15',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-16',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-17',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-18',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-19',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-20',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-21',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-22',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-23',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-24',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-25',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-26',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-27',
-      status: 'Deployed',
-    },
-    {
-      date: '2024-02-28',
-      status: 'Deployed',
-    },
-  ]
+  useEffect(() => {
+    if (availability) {
+      // Rough code to parse backend response into cell items
+      const months: { [key: string]: SchedulerRowItem[] } = {};
+      // Dates where a new status starts
+      const startDates: { [key: string]: { status: AvailabilityType, numDays: number } } = {};
+      let count = 0;
+      let lastStatus = '';
+      let startDay = '';
+
+      availability.forEach((availDay) => {
+        const day = dayjs(availDay.date);
+        const month = day.format('MMM');
+        if (availDay.availabilityType === lastStatus && availDay.availabilityType !== AvailabilityType.NOT_INDICATED) {
+          count++;
+        } else if (availDay.availabilityType === AvailabilityType.NOT_INDICATED) {
+          // This is a break in the group of days with one status, so we set numDays and reset
+          if (startDates[startDay]) {
+            startDates[startDay].numDays = count;
+          }
+          count = 0;
+          lastStatus = '';
+          startDay = '';
+        } else {
+          // For a new status, we close out the last one, and start anew
+          if (startDates[startDay]) {
+            startDates[startDay].numDays = count;
+          }
+          startDates[availDay.date] = { status: availDay.availabilityType, numDays: 1 };
+          count = 1;
+          lastStatus = availDay.availabilityType;
+          startDay = availDay.date;
+        }
+
+        if (months[month]) {
+          months[month].push({
+            dayOfMonth: parseInt(day.format('D')),
+            status: availDay.availabilityType,
+          });
+        } else {
+          months[month] = [{
+            dayOfMonth: parseInt(day.format('D')),
+            status: availDay.availabilityType,
+          }]
+        }
+      });
+      if (startDates[startDay]) {
+        // To close out, we pretend that the last day ends the status
+        // We may not want this, as a status may extend past this selected month
+        startDates[startDay].numDays = count;
+      }
+
+      // For each start date, tell our `months` object which days are starters and how many days
+      // This allows us to render the border and the text
+      Object.keys(startDates).forEach(startDate => {
+        const date = dayjs(startDate);
+        const month = date.format('MMM');
+        const schedulerItems = months[month];
+        const dayOfMonth = parseInt(date.format('D'));
+        const index = schedulerItems.findIndex(i => i.dayOfMonth === dayOfMonth);
+        schedulerItems[index] = {
+          ...schedulerItems[index],
+          start: true,
+          numDays: startDates[startDate].numDays,
+        }
+      });
+      setSchedulerRows(months);
+    }
+  }, [availability]);
 
   return (
     <section className="bg-white">
@@ -144,12 +108,14 @@ const Scheduler = ({ setAvailabilityQuery }: { setAvailabilityQuery: (from: stri
           onClick={() => handleOpen(1)}
           className="bg-grayBackground px-8"
         >
-          Schedule
+          {name}'s Schedule
         </AccordionHeader>
         <AccordionBody className="px-8">
-          <SchedulerControl setAvailabilityQuery={setAvailabilityQuery} />
+          <SchedulerControl onChangeAvailabilityDates={onChangeAvailabilityDates} />
           <SchedulerHeader />
-          <SchedulerRow month="Mar" />
+          {schedulerRows && Object.keys(schedulerRows).map(month => (
+            <SchedulerRow key={month} month={month} data={schedulerRows[month]} />
+          ))}
         </AccordionBody>
       </Accordion>
       </div>

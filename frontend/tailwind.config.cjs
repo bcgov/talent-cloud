@@ -55,10 +55,13 @@ module.exports = withMT({
         white: '#FFFFFF',
         calGreen: '#eef7eb',
         calGreenTwo: '#84967d',
+        calGreenHover: '#dff0d9',
         calRed: '#f9eeef',
         calRedTwo: '#a6312c',
+        calRedHover: '#f2dbdd',
         calBlue: '#ecf5fa',
         calBlueTwo: '#1a5b97',
+        calBlueHover: '#d8eaf5',
       },
       backgroundColor: {
         backgroundBlue: '#003366',
@@ -78,9 +81,6 @@ module.exports = withMT({
         
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#D9EAF7',
-        calGreen: '#eef7eb',
-        calRed: '#f9eeef',
-        calBlue: '#ecf5fa',
       },
       textColor: {
         info: '#1a5a96',

@@ -13,7 +13,7 @@ import { ArrowRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import MonthPicker from '@/components/ui/MonthPicker';
  
 
-const SchedulerControl = ({ setAvailabilityQuery }: { setAvailabilityQuery: (from: string, to: string ) => void }) => {
+const SchedulerControl = ({ onChangeAvailabilityDates }: { onChangeAvailabilityDates: (from: string, to: string ) => void }) => {
   const numMonthsItems = [1, 3, 6, 12];
 
   const [fromMonth, setFromMonth] = useState<number>(new Date().getMonth() + 1);
@@ -22,16 +22,24 @@ const SchedulerControl = ({ setAvailabilityQuery }: { setAvailabilityQuery: (fro
   const [toYear, setToYear] = useState<number>(new Date().getFullYear());
   const [numMonths, setNumMonths] = useState<number>(1);
 
+  // When values change, then we send a reuqest
   useEffect(() => {
     const fromString = `${fromYear}-${fromMonth}-01`;
     const toString = dayjs(`${toYear}/${toMonth}/01`).endOf('month').format('YYYY-MM-DD');
-    setAvailabilityQuery(fromString, toString);
+    onChangeAvailabilityDates(fromString, toString);
   }, [fromMonth, fromYear, toMonth, toYear, numMonths]);
   
   return (
     <div className="flex flex-row">
-      <div className="w-40">
-        <Button variant="text" size="sm" placeholder={''}>Jump to Today</Button>
+      <div className="w-40 pt-1">
+        <Button variant="text" size="sm" className="bg-calBlue normal-case" placeholder={''} onClick={() => {
+          const fromDate = dayjs(new Date());
+          const toDate = fromDate.add(numMonths - 1, 'months');
+          setFromMonth(fromDate.month() + 1);
+          setFromYear(fromDate.year());
+          setToMonth(toDate.month() + 1);
+          setToYear(toDate.year());
+        }}>Jump to Today</Button>
       </div>
       <div className="w-32">
         <Popover placement="bottom">
@@ -43,14 +51,14 @@ const SchedulerControl = ({ setAvailabilityQuery }: { setAvailabilityQuery: (fro
             }} value={dayjs(`${fromYear}/${fromMonth}/1`).format('MMM YYYY')} />
           </PopoverHandler>
           <PopoverContent placeholder={''} className="z-50">
-            <MonthPicker onSelect={({ month, year }) => {
+            <MonthPicker startYear={fromYear} onSelect={({ month, year }) => {
+              // FROM was changed, so we set TO according to numMonths
               setFromMonth(month);
               setFromYear(year);
               const fromDate = dayjs(`${year}/${month}/01`);
               const toDate = fromDate.add(numMonths - 1, 'months');
               setToMonth(toDate.month() + 1);
               setToYear(toDate.year());
-              // TRIGGER SEARCH
             }} />
           </PopoverContent>
         </Popover>
@@ -66,14 +74,14 @@ const SchedulerControl = ({ setAvailabilityQuery }: { setAvailabilityQuery: (fro
             }} value={dayjs(`${toYear}/${toMonth}/1`).format('MMM YYYY')} />
           </PopoverHandler>
           <PopoverContent placeholder={''} className="z-50">
-            <MonthPicker onSelect={({ month, year }) => {
+            <MonthPicker startYear={toYear} onSelect={({ month, year }) => {
+              // TO was changed, so we set FROM according to numMonths
               setToMonth(month);
               setToYear(year);
               const toDate = dayjs(`${year}/${month}/01`);
               const fromDate = toDate.subtract(numMonths - 1, 'months');
               setFromMonth(fromDate.month() + 1);
               setFromYear(fromDate.year());
-              // TRIGGER SEARCH
             }} />
           </PopoverContent>
         </Popover>
@@ -82,6 +90,7 @@ const SchedulerControl = ({ setAvailabilityQuery }: { setAvailabilityQuery: (fro
       <div className="w-32">
         <Select value={`${numMonths}`} placeholder={''} className='border-none' labelProps={{ className: "hidden" }} containerProps={{ className: "min-w-px" }} onChange={(num) => {
           if (num) {
+            // numMonths was changed, so we set TO to numMonths after FROM
             const monthsToAdd = parseInt(num, 10);
             setNumMonths(monthsToAdd);
             const fromDate = dayjs(`${fromYear}/${fromMonth}/01`);

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { AxiosPrivate } from '../utils';
-import type { Personnel } from '@/pages/dashboard';
+import type { Availability, Personnel } from '@/pages/dashboard';
 
 const usePersonnel = ({
   personnelId,
 }: {
   personnelId: string;
-}): { personnel: Personnel | undefined, availability: any, getAvailability: (from: string, to: string) => void } => {
+}): { personnel: Personnel | undefined, availability: Availability[], getAvailability: (from: string, to: string) => void } => {
   const [personnel, setPersonnel] = useState<Personnel>();
-  const [availability, setAvailability] = useState<any>();
+  const [availability, setAvailability] = useState<Availability[]>([]);
 
   useEffect(() => {
     (async () => {

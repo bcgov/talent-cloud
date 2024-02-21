@@ -20,11 +20,12 @@ const Profile = () => {
 
   useEffect(() => {
     (async() => {
+      // Backend request to get availability
       getAvailability(availabilityQuery.from, availabilityQuery.to);
     })();
   }, [availabilityQuery]);
 
-  const onChangeAvailabilityQuery = (from: string, to: string) => {
+  const onChangeAvailabilityDates = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
   }
 
@@ -62,7 +63,7 @@ const Profile = () => {
             <div>
               <ProfileHeader personnel={personnel} role={role} />
               <ProfileDetails personnel={personnel} />
-              <Scheduler setAvailabilityQuery={onChangeAvailabilityQuery} />
+              <Scheduler name={personnel.firstName} availability={availability} onChangeAvailabilityDates={onChangeAvailabilityDates} />
             </div>
           </div>
           <div>

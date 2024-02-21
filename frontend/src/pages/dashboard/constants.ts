@@ -235,6 +235,19 @@ export interface Personnel {
   logisticsNotes?: string;
 }
 
+export interface Availability {
+  date: string;
+  availabilityType: AvailabilityType;
+  deploymentCode?: string;
+}
+
+export interface SchedulerRowItem {
+  dayOfMonth: number;
+  status: AvailabilityType;
+  start?: boolean;
+  numDays?: number;
+}
+
 export interface DashboardRow {
   [DashboardColumns.NAME]: string;
   [DashboardColumns.REGION]: Region;
