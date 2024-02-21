@@ -13,13 +13,16 @@ const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
   const { personnel, availability, getAvailability } = usePersonnel({ personnelId });
   const { role } = useRole();
-  const [availabilityQuery, setAvailabilityQuery] = useState<{from: string, to: string}>({
+  const [availabilityQuery, setAvailabilityQuery] = useState<{
+    from: string;
+    to: string;
+  }>({
     from: dayjs().startOf('month').format('YYYY-MM-DD'),
     to: dayjs().endOf('month').format('YYYY-MM-DD'),
   });
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       // Backend request to get availability
       getAvailability(availabilityQuery.from, availabilityQuery.to);
     })();
@@ -27,7 +30,7 @@ const Profile = () => {
 
   const onChangeAvailabilityDates = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
-  }
+  };
 
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground">
@@ -63,11 +66,14 @@ const Profile = () => {
             <div>
               <ProfileHeader personnel={personnel} role={role} />
               <ProfileDetails personnel={personnel} />
-              <Scheduler name={personnel.firstName} availability={availability} onChangeAvailabilityDates={onChangeAvailabilityDates} />
+              <Scheduler
+                name={personnel.firstName}
+                availability={availability}
+                onChangeAvailabilityDates={onChangeAvailabilityDates}
+              />
             </div>
           </div>
-          <div>
-          </div>
+          <div></div>
         </div>
       )}
     </div>

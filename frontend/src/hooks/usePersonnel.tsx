@@ -6,7 +6,11 @@ const usePersonnel = ({
   personnelId,
 }: {
   personnelId: string;
-}): { personnel: Personnel | undefined, availability: Availability[], getAvailability: (from: string, to: string) => void } => {
+}): {
+  personnel: Personnel | undefined;
+  availability: Availability[];
+  getAvailability: (from: string, to: string) => void;
+} => {
   const [personnel, setPersonnel] = useState<Personnel>();
   const [availability, setAvailability] = useState<Availability[]>([]);
 
@@ -18,9 +22,11 @@ const usePersonnel = ({
   }, [personnelId]);
 
   const getAvailability = async (from: string, to: string) => {
-    const response = await AxiosPrivate.get(`/personnel/${personnelId}/availability?from=${from}&to=${to}`);
+    const response = await AxiosPrivate.get(
+      `/personnel/${personnelId}/availability?from=${from}&to=${to}`,
+    );
     setAvailability(response.data);
-  }
+  };
 
   return {
     personnel,
