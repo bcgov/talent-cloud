@@ -24,7 +24,7 @@ export const main = {
   },
 };
 
-export const landAck =
+export const landAcknowledgement =
   'The B.C. Public Service acknowledges the territories of First Nations around B.C. and is grateful to carry out our work on these lands. We acknowledge the rights, interests, priorities, and concerns of all Indigenous Peoples - First Nations, Métis, and Inuit - respecting and acknowledging their distinct cultures, histories, rights, laws, and governments.';
 
 export const footer = {
@@ -38,25 +38,4 @@ export const footer = {
   },
   tdMessage:
     'We can help in over 120 languages and through Telephone Device For The Deaf (TDD). ',
-  links: [
-    { name: 'Home', url: 'https://www2.gov.bc.ca/gov/content/home' },
-    {
-      name: 'About gov.bc.ca',
-      url: 'https://www2.gov.bc.ca/gov/content/about-gov-bc-ca',
-    },
-    {
-      name: 'Disclaimer',
-      url: 'https://www2.gov.bc.ca/gov/content/home/disclaimer',
-    },
-    {
-      name: 'Accessibility',
-      url: 'https://www2.gov.bc.ca/gov/content/home/accessible-government',
-    },
-    { name: 'Copyright', url: 'https://www2.gov.bc.ca/gov/content/home/copyright' },
-    { name: 'Privacy', url: 'https://www2.gov.bc.ca/gov/content/home/privacy' },
-    {
-      name: 'Contact us',
-      url: 'https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services',
-    },
-  ],
 };
