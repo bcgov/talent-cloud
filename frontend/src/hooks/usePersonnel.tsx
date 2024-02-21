@@ -9,7 +9,7 @@ const usePersonnel = ({
 }): {
   personnel: Personnel | undefined;
   availability: Availability[];
-  getAvailability: (from: string, to: string) => void;
+  getAvailability: (from: string, to: string) => Promise<void>;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
   const [availability, setAvailability] = useState<Availability[]>([]);

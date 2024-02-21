@@ -4,9 +4,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import SchedulerHeader from './SchedulerHeader';
 import SchedulerRow from './SchedulerRow';
 import SchedulerControl from './SchedulerControl';
-import type { Availability } from '../dashboard';
+import type { Availability, SchedulerRowItem } from '../dashboard';
 import dayjs from 'dayjs';
-import type { SchedulerRowItem } from '../dashboard';
 import { AvailabilityType } from '@/common';
 
 const Scheduler = ({
