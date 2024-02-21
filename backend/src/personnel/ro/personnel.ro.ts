@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { AvailabilityRO } from './availability.ro';
 import { ExperienceRO } from './experience.ro';
 import { Classification, Ministry, Region, Status } from '../../common/enums';
 
@@ -145,4 +146,11 @@ export class PersonnelRO {
     type: () => ExperienceRO,
   })
   experiences: ExperienceRO[];
+
+  @ApiProperty({
+    description: 'Availability',
+    isArray: true,
+    type: () => AvailabilityRO,
+  })
+  availability: AvailabilityRO[];
 }

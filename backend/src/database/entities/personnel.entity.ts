@@ -154,8 +154,8 @@ export class PersonnelEntity extends BaseEntity {
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],
       // trainings
-      // availability
-      // available
+      availability:
+        this.availability?.map((avail) => avail.toResponseObject()) || [],
     };
     // this is required in order to conditionally omit certain fields from the response based on the user role
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
