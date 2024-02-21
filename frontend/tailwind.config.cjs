@@ -26,6 +26,9 @@ module.exports = withMT({
         },
       },
     extend: {
+      gridTemplateColumns: {
+        '32': 'repeat(32, minmax(0, 1fr))',
+      },
       fontFamily: {
         sans: ['"BCSans"'],
       },
@@ -50,6 +53,12 @@ module.exports = withMT({
         successDark: '#2D4821',
         infoDark: '#1A5A96',
         white: '#FFFFFF',
+        calGreen: '#eef7eb',
+        calGreenTwo: '#84967d',
+        calRed: '#f9eeef',
+        calRedTwo: '#a6312c',
+        calBlue: '#ecf5fa',
+        calBlueTwo: '#1a5b97',
       },
       backgroundColor: {
         backgroundBlue: '#003366',
@@ -69,6 +78,9 @@ module.exports = withMT({
         
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#D9EAF7',
+        calGreen: '#eef7eb',
+        calRed: '#f9eeef',
+        calBlue: '#ecf5fa',
       },
       textColor: {
         info: '#1a5a96',

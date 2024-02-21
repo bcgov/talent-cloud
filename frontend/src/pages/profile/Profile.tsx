@@ -5,6 +5,7 @@ import usePersonnel from '@/hooks/usePersonnel';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
+import Scheduler from './Scheduler';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -45,7 +46,10 @@ const Profile = () => {
             <div>
               <ProfileHeader personnel={personnel} role={role} />
               <ProfileDetails personnel={personnel} />
+              <Scheduler />
             </div>
+          </div>
+          <div>
           </div>
         </div>
       )}
