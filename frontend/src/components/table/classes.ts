@@ -12,6 +12,7 @@ export const tableClasses = {
   ministry: [tdClass, 'text-info'].join(', '),
   available: [tdClass, 'text-success'].join(', '),
   unavailable: [tdClass, 'text-error'].join(', '),
+  deployed: [tdClass, 'text-warning'].join(', '),
   remote: [tdClass].join(', '),
   travelYes: [
     tdClass,
@@ -39,7 +40,7 @@ export const tableClasses = {
   checkIconClass: 'h-6 w-6 text-success mr-2',
   xIconClass: 'h-6 w-6 text-error mr-2',
 };
-const getUnionMembershipClass = (value: string) => {
+const getUnionMembershipClass = (value?: string) => {
   switch (value) {
     case Classification.BCGEU:
       return tableClasses.bcgeu;
@@ -53,6 +54,7 @@ const getUnionMembershipClass = (value: string) => {
       return tdClass;
   }
 };
+
 export const tableClass = (key: string, value?: string) => {
   switch (key) {
     case DashboardColumns.MINISTRY:
