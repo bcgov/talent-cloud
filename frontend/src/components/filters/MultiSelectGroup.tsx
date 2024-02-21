@@ -16,11 +16,15 @@ export const MultiSelectGroup = ({
   values,
   onChange,
   label,
+  handleClose,
+  handleCloseMany,
 }: {
   field: any;
   values: any;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
+  handleClose: (name: string, value: string) => void;
+  handleCloseMany: (name: string) => void;
 }) => {
   const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.split(',');
@@ -36,25 +40,6 @@ export const MultiSelectGroup = ({
     onChange(event);
   };
 
-  const handleCloseMany = () => {
-    const event = {
-      target: {
-        name: field.name,
-        value: values,
-      },
-    } as unknown as ChangeEvent<HTMLInputElement>;
-
-    onChange(event);
-  };
-  const handleClose = (name: string, value: string) => {
-    const event = {
-      target: {
-        name: name,
-        value: value,
-      },
-    } as ChangeEvent<HTMLInputElement>;
-    onChange(event);
-  };
   return (
     <>
       <label>{label}</label>

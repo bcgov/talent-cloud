@@ -28,13 +28,16 @@ export const useTable = () => {
     name: '',
     region: [],
     location: [],
-    function: '',
-    experience: '',
+    function: undefined,
+    experience: undefined,
   });
   const [showFunctionColumn, setShowFunctionColumn] = useState<boolean>(false);
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-  const debouncedValue = useDebounce<string>(filterValues, defaultDebounceValue);
+  const debouncedValue = useDebounce<{ [key: string]: unknown }>(
+    filterValues,
+    defaultDebounceValue,
+  );
 
   const calculatePages = (totalPages: number): number[] => {
     const range = [];
@@ -45,7 +48,6 @@ export const useTable = () => {
     }
     return range;
   };
-
   useEffect(() => {
     (async () => {
       handleSearchParams(searchParamsUrl, filterValues);
@@ -218,6 +220,26 @@ export const useTable = () => {
       [name]: Array.from(valueSet),
     }));
   };
+  const handleClose = (name: string, value: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: value,
+      },
+    } as ChangeEvent<HTMLInputElement>;
+
+    handleMultiSelect(event);
+  };
+  const handleCloseMany = (name: string) => {
+    const event = {
+      target: {
+        name: name,
+        value: [],
+      },
+    } as unknown as ChangeEvent<HTMLInputElement>;
+
+    handleMultiSelect(event);
+  };
 
   return {
     tableData,
@@ -227,6 +249,8 @@ export const useTable = () => {
     handleSearch,
     showFunctionColumn,
     filterValues,
+    handleClose,
+    handleCloseMany,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,

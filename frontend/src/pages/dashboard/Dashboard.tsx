@@ -18,6 +18,8 @@ const Dashboard = () => {
     onClear,
     dashboardColumns,
     showFunctionColumn,
+    handleClose,
+    handleCloseMany,
   } = useTable();
   const { role } = useRole();
 
@@ -31,6 +33,8 @@ const Dashboard = () => {
         onClear={onClear}
         filterValues={filterValues}
         handleSearch={handleSearch}
+        handleClose={handleClose}
+        handleCloseMany={handleCloseMany}
       />
 
       <Table

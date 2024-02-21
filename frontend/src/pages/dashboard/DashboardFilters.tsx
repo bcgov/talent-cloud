@@ -16,6 +16,8 @@ export const Filters = ({
   handleSearch,
   onClear,
   filterValues,
+  handleClose,
+  handleCloseMany,
 }: {
   fields: DashboardFields;
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -23,18 +25,20 @@ export const Filters = ({
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
   filterValues: DashboardFilters;
+  handleClose: (name: string, value: string) => void;
+  handleCloseMany: (name: string) => void;
 }) => {
   return (
-    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-6 gap-12">
+    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       <div className="col-span-1 lg:col-span-2">
         <Search
           field={fields.name}
           handleSearchInput={handleSearch}
-          value={filterValues.name}
+          value={filterValues.name ?? ''}
         />
       </div>
 
-      <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-4">
+      <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
@@ -42,17 +46,21 @@ export const Filters = ({
               values={filterValues.region}
               label="Region"
               onChange={handleMultiSelect}
+              handleClose={handleClose}
+              handleCloseMany={handleCloseMany}
             />
           </div>
           <div className="col-span-1 md:col-span-3">
             <MultiSelectGroup
               onChange={handleMultiSelect}
+              handleClose={handleClose}
+              handleCloseMany={handleCloseMany}
               field={{
                 ...fields.location,
                 groupedOptions:
                   filterValues.region && filterValues.region.length > 0
                     ? fields.location?.groupedOptions?.filter((itm) =>
-                        filterValues.region.includes(
+                        filterValues?.region?.includes(
                           Region[itm.label as keyof typeof Region],
                         ),
                       )
