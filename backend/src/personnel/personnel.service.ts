@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { differenceInCalendarDays, eachDayOfInterval, format, parse } from 'date-fns';
+import {  eachDayOfInterval, format, parse } from 'date-fns';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -201,6 +201,7 @@ export class PersonnelService {
 
     // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
     start.setDate(1);
+
     const endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0);
     
 
@@ -209,7 +210,7 @@ export class PersonnelService {
 
     const availability = await qb.getMany();
 
-    const dates = eachDayOfInterval({ start, end });  
+    const dates = eachDayOfInterval({ start, end: endDate });  
 
     
     const availableDates: AvailabilityEntity[] = dates.map(
