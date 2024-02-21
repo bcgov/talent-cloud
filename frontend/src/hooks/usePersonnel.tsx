@@ -23,7 +23,7 @@ const usePersonnel = ({
 
   const getAvailability = async (from: string, to: string) => {
     const response = await AxiosPrivate.get(
-      `/personnel/${personnelId}/availability?from=${from}&to=${to}`,
+      encodeURI(`/personnel/${personnelId}/availability?from=${from}&to=${to}`),
     );
     setAvailability(response.data);
   };

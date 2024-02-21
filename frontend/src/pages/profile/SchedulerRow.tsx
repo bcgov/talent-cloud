@@ -1,6 +1,19 @@
 import dayjs from 'dayjs';
 import type { SchedulerRowItem } from '../dashboard';
 import { AvailabilityType } from '@/common';
+import {
+  SCHEDULER_AVAILABLE_CLASS,
+  SCHEDULER_AVAILABLE_START_CLASS,
+  SCHEDULER_AVAILABLE_TEXT_CLASS,
+  SCHEDULER_DEPLOYED_CLASS,
+  SCHEDULER_DEPLOYED_START_CLASS,
+  SCHEDULER_DEPLOYED_TEXT_CLASS,
+  SCHEDULER_NOT_INDICATED_CLASS,
+  SCHEDULER_NO_DATE_CLASS,
+  SCHEDULER_UNAVAILABLE_CLASS,
+  SCHEDULER_UNAVAILABLE_START_CLASS,
+  SCHEDULER_UNAVAILABLE_TEXT_CLASS,
+} from '@/utils';
 
 const Cell = ({
   dayOfMonthStatus,
@@ -80,25 +93,6 @@ const SchedulerRow = ({
   data: SchedulerRowItem[];
 }) => {
   // Because setting variable classes doesn't tend to work, we define all classes ahead of time
-  const availableStartClass =
-    'h-20 border-l-4 border-calGreenTwo bg-calGreen hover:bg-calGreenHover cursor-pointer text-sm z-10 pl-2 pt-10';
-  const availableClass =
-    'h-20 border-l border-cyan-950 bg-calGreen hover:bg-calGreenHover cursor-pointer';
-  const availableTextClass = `text-nowrap font-bold text-calGreenTwo text-xs`;
-  const deployedStartClass =
-    'h-20 border-l-4 border-calBlueTwo bg-calBlue hover:bg-calBlueHover cursor-pointer text-sm z-10 pl-2 pt-10';
-  const deployedClass =
-    'h-20 border-l border-cyan-950 bg-calBlue hover:bg-calBlueHover cursor-pointer';
-  const deployedTextClass = `text-nowrap font-bold text-calBlueTwo text-xs`;
-  const unavailableStartClass =
-    'h-20 border-l-4 border-calRedTwo bg-calRed hover:bg-calRedHover cursor-pointer text-sm z-10 pl-2 pt-10';
-  const unavailableClass =
-    'h-20 border-l border-cyan-950 bg-calRed hover:bg-calRedHover cursor-pointer';
-  const unavailableTextClass = `text-nowrap font-bold text-calRedTwo text-xs`;
-  const notIndicatedClass =
-    'h-20 border-l border-cyan-950 bg-white hover:bg-gray-200 cursor-pointer';
-  const noDateClass = 'h-20 border-l border-cyan-950 bg-disabledGray';
-
   return (
     <div className="grid grid-cols-32 border border-cyan-950">
       <div className="h-20 border-l border-cyan-950 bg-white text-xs font-bold pl-1 pt-2">
@@ -108,16 +102,16 @@ const SchedulerRow = ({
         const dayOfMonthStatus = data.find((d) => d.dayOfMonth === dayOfMonth);
         // Assumes all days in a month is part of the data
         if (!dayOfMonthStatus) {
-          return <Cell cellClass={noDateClass} key={dayOfMonth} />;
+          return <Cell cellClass={SCHEDULER_NO_DATE_CLASS} key={dayOfMonth} />;
         }
         switch (dayOfMonthStatus.status) {
           case AvailabilityType.DEPLOYED:
             return (
               <Cell
                 dayOfMonthStatus={dayOfMonthStatus}
-                cellClass={deployedClass}
-                startClass={deployedStartClass}
-                textClass={deployedTextClass}
+                cellClass={SCHEDULER_DEPLOYED_CLASS}
+                startClass={SCHEDULER_DEPLOYED_START_CLASS}
+                textClass={SCHEDULER_DEPLOYED_TEXT_CLASS}
                 month={month}
                 key={dayOfMonth}
               />
@@ -126,9 +120,9 @@ const SchedulerRow = ({
             return (
               <Cell
                 dayOfMonthStatus={dayOfMonthStatus}
-                cellClass={availableClass}
-                startClass={availableStartClass}
-                textClass={availableTextClass}
+                cellClass={SCHEDULER_AVAILABLE_CLASS}
+                startClass={SCHEDULER_AVAILABLE_START_CLASS}
+                textClass={SCHEDULER_AVAILABLE_TEXT_CLASS}
                 month={month}
                 key={dayOfMonth}
               />
@@ -137,15 +131,15 @@ const SchedulerRow = ({
             return (
               <Cell
                 dayOfMonthStatus={dayOfMonthStatus}
-                cellClass={unavailableClass}
-                startClass={unavailableStartClass}
-                textClass={unavailableTextClass}
+                cellClass={SCHEDULER_UNAVAILABLE_CLASS}
+                startClass={SCHEDULER_UNAVAILABLE_START_CLASS}
+                textClass={SCHEDULER_UNAVAILABLE_TEXT_CLASS}
                 month={month}
                 key={dayOfMonth}
               />
             );
           default:
-            return <Cell cellClass={notIndicatedClass} key={dayOfMonth} />;
+            return <Cell cellClass={SCHEDULER_NOT_INDICATED_CLASS} key={dayOfMonth} />;
         }
       })}
     </div>

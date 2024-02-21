@@ -14,7 +14,7 @@ const Scheduler = ({
   onChangeAvailabilityDates,
 }: {
   name: string;
-  availability?: Availability[];
+  availability: Availability[];
   onChangeAvailabilityDates: (from: string, to: string) => void;
 }) => {
   const [open, setOpen] = useState(1);
@@ -24,83 +24,81 @@ const Scheduler = ({
   }>();
 
   useEffect(() => {
-    if (availability) {
-      // Rough code to parse backend response into cell items
-      const months: { [key: string]: SchedulerRowItem[] } = {};
-      // Dates where a new status starts
-      const startDates: {
-        [key: string]: { status: AvailabilityType; numDays: number };
-      } = {};
-      let count = 0;
-      let lastStatus = '';
-      let startDay = '';
+    // Rough code to parse backend response into cell items
+    const months: { [key: string]: SchedulerRowItem[] } = {};
+    // Dates where a new status starts
+    const startDates: {
+      [key: string]: { status: AvailabilityType; numDays: number };
+    } = {};
+    let count = 0;
+    let lastStatus = '';
+    let startDay = '';
 
-      availability.forEach((availDay) => {
-        const day = dayjs(availDay.date);
-        const month = day.format('MMM');
-        if (
-          availDay.availabilityType === lastStatus &&
-          availDay.availabilityType !== AvailabilityType.NOT_INDICATED
-        ) {
-          count++;
-        } else if (availDay.availabilityType === AvailabilityType.NOT_INDICATED) {
-          // This is a break in the group of days with one status, so we set numDays and reset
-          if (startDates[startDay]) {
-            startDates[startDay].numDays = count;
-          }
-          count = 0;
-          lastStatus = '';
-          startDay = '';
-        } else {
-          // For a new status, we close out the last one, and start anew
-          if (startDates[startDay]) {
-            startDates[startDay].numDays = count;
-          }
-          startDates[availDay.date] = {
-            status: availDay.availabilityType,
-            numDays: 1,
-          };
-          count = 1;
-          lastStatus = availDay.availabilityType;
-          startDay = availDay.date;
+    availability.forEach((availDay) => {
+      const day = dayjs(availDay.date);
+      const month = day.format('MMM');
+      if (
+        availDay.availabilityType === lastStatus &&
+        availDay.availabilityType !== AvailabilityType.NOT_INDICATED
+      ) {
+        count++;
+      } else if (availDay.availabilityType === AvailabilityType.NOT_INDICATED) {
+        // This is a break in the group of days with one status, so we set numDays and reset
+        if (startDates[startDay]) {
+          startDates[startDay].numDays = count;
         }
-
-        if (months[month]) {
-          months[month].push({
-            dayOfMonth: parseInt(day.format('D')),
-            status: availDay.availabilityType,
-          });
-        } else {
-          months[month] = [
-            {
-              dayOfMonth: parseInt(day.format('D')),
-              status: availDay.availabilityType,
-            },
-          ];
+        count = 0;
+        lastStatus = '';
+        startDay = '';
+      } else {
+        // For a new status, we close out the last one, and start anew
+        if (startDates[startDay]) {
+          startDates[startDay].numDays = count;
         }
-      });
-      if (startDates[startDay]) {
-        // To close out, we pretend that the last day ends the status
-        // We may not want this, as a status may extend past this selected month
-        startDates[startDay].numDays = count;
+        startDates[availDay.date] = {
+          status: availDay.availabilityType,
+          numDays: 1,
+        };
+        count = 1;
+        lastStatus = availDay.availabilityType;
+        startDay = availDay.date;
       }
 
-      // For each start date, tell our `months` object which days are starters and how many days
-      // This allows us to render the border and the text
-      Object.keys(startDates).forEach((startDate) => {
-        const date = dayjs(startDate);
-        const month = date.format('MMM');
-        const schedulerItems = months[month];
-        const dayOfMonth = parseInt(date.format('D'));
-        const index = schedulerItems.findIndex((i) => i.dayOfMonth === dayOfMonth);
-        schedulerItems[index] = {
-          ...schedulerItems[index],
-          start: true,
-          numDays: startDates[startDate].numDays,
-        };
-      });
-      setSchedulerRows(months);
+      if (months[month]) {
+        months[month].push({
+          dayOfMonth: parseInt(day.format('D')),
+          status: availDay.availabilityType,
+        });
+      } else {
+        months[month] = [
+          {
+            dayOfMonth: parseInt(day.format('D')),
+            status: availDay.availabilityType,
+          },
+        ];
+      }
+    });
+    if (startDates[startDay]) {
+      // To close out, we pretend that the last day ends the status
+      // We may not want this, as a status may extend past this selected month
+      startDates[startDay].numDays = count;
     }
+
+    // For each start date, tell our `months` object which days are starters and how many days
+    // This allows us to render the border and the text
+    Object.keys(startDates).forEach((startDate) => {
+      const date = dayjs(startDate);
+      const month = date.format('MMM');
+      const schedulerItems = months[month];
+      const dayOfMonth = parseInt(date.format('D'));
+      const index = schedulerItems.findIndex((i) => i.dayOfMonth === dayOfMonth);
+      schedulerItems[index] = {
+        ...schedulerItems[index],
+        start: true,
+        numDays: startDates[startDate].numDays,
+      };
+    });
+    setSchedulerRows(months);
   }, [availability]);
 
   return (
