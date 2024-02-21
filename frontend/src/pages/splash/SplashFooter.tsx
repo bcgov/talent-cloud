@@ -1,3 +1,4 @@
+import { footerLinks } from '@/common/links';
 import { BcGovLogo } from '@/components/images';
 
 export const SplashFooter = ({ content }: { content: any }) => {
@@ -8,11 +9,21 @@ export const SplashFooter = ({ content }: { content: any }) => {
         <BcGovLogo />
         <p className="lg:w-2/3 pb-8 pt-8 md:pr-24 lg:pr-8">
           {content.tdMessage}
-          <a className="underline" href={content.contactLink.url}>
+          <a
+            className="underline"
+            href={content.contactLink.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {content.contactLink.name}
           </a>
           or
-          <a className="underline" href={content.serviceCentreLink.url}>
+          <a
+            className="underline"
+            href={content.serviceCentreLink.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {content.serviceCentreLink.name}
           </a>
         </p>
@@ -23,28 +34,32 @@ export const SplashFooter = ({ content }: { content: any }) => {
         <p className="uppercase font-bold tracking-wide pb-4">More Info</p>
         <div className="grid grid-cols-2 w-full gap-16 sm:gap-8">
           <div className="col-span-1 flex flex-col">
-            {content.links
-              .slice(0, content.links.length / 2 + 1)
+            {footerLinks
+              .slice(0, footerLinks.length / 2 + 1)
               .map((link: any, i: number) => (
                 <a
                   key={i.toString() + link.name}
                   className="py-2 underline"
-                  href={link.url}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {link.name}
+                  {link.label}
                 </a>
               ))}
           </div>
           <div className="col-span-1 flex flex-col">
-            {content.links
-              .slice(content.links.length / 2 + 1, content.links.length)
+            {footerLinks
+              .slice(footerLinks.length / 2 + 1, footerLinks.length)
               .map((link: any, i: number) => (
                 <a
                   key={i.toString() + link.name}
                   className="py-2 underline"
-                  href={link.url}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {link.name}
+                  {link.label}
                 </a>
               ))}
           </div>
