@@ -153,13 +153,13 @@ const threeMonthsArray = () => {
     today.getMonth() -3,
     1
   );
-  const threeMonthsFromNow = new Date(
+  const sevenMonthsFromNow = new Date(
     today.getFullYear(),
     today.getMonth() + 7,
     0,
   );
   const dates = [];
-  for (let i = startDate; i < threeMonthsFromNow; i.setDate(i.getDate() + 1)) {
+  for (let i = startDate; i < sevenMonthsFromNow; i.setDate(i.getDate() + 1)) {
     dates.push(new Date(i));
   }
   return dates;

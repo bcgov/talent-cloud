@@ -22,4 +22,8 @@ export const menuItemClass: { [key: string]: string } = {
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   function: classes.menu.container,
   name: classes.menu.container,
+  availabilityDates:
+    classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
+  availabilityType:
+    classes.menu.container + ' md:rounded-tr-none md:rounded-br-none',
 };
