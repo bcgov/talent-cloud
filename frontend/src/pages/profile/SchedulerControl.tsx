@@ -21,9 +21,9 @@ const SchedulerControl = ({
 
   const [fromMonth, setFromMonth] = useState<number>(new Date().getMonth() + 1);
   const [fromYear, setFromYear] = useState<number>(new Date().getFullYear());
-  const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 1);
+  const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 2);
   const [toYear, setToYear] = useState<number>(new Date().getFullYear());
-  const [numMonths, setNumMonths] = useState<number>(1);
+  const [numMonths, setNumMonths] = useState<number>(3);
 
   // When values change, then we send a reuqest
   useEffect(() => {
