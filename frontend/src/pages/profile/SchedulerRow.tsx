@@ -108,7 +108,7 @@ const SchedulerRow = ({
         const dayOfMonthStatus = data.find((d) => d.dayOfMonth === dayOfMonth);
         // Assumes all days in a month is part of the data
         if (!dayOfMonthStatus) {
-          return <Cell cellClass={noDateClass} />;
+          return <Cell cellClass={noDateClass} key={dayOfMonth} />;
         }
         switch (dayOfMonthStatus.status) {
           case AvailabilityType.DEPLOYED:
@@ -119,6 +119,7 @@ const SchedulerRow = ({
                 startClass={deployedStartClass}
                 textClass={deployedTextClass}
                 month={month}
+                key={dayOfMonth}
               />
             );
           case AvailabilityType.AVAILABLE:
@@ -129,6 +130,7 @@ const SchedulerRow = ({
                 startClass={availableStartClass}
                 textClass={availableTextClass}
                 month={month}
+                key={dayOfMonth}
               />
             );
           case AvailabilityType.UNAVAILABLE:
@@ -139,10 +141,11 @@ const SchedulerRow = ({
                 startClass={unavailableStartClass}
                 textClass={unavailableTextClass}
                 month={month}
+                key={dayOfMonth}
               />
             );
           default:
-            return <Cell cellClass={notIndicatedClass} />;
+            return <Cell cellClass={notIndicatedClass} key={dayOfMonth} />;
         }
       })}
     </div>

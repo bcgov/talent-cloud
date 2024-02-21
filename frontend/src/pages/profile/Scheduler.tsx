@@ -124,7 +124,7 @@ const Scheduler = ({
             onClick={() => handleOpen(1)}
             className="bg-grayBackground px-8"
           >
-            {name}'s Schedule
+            {`${name}'s Schedule`}
           </AccordionHeader>
           <AccordionBody className="px-8">
             <SchedulerControl
