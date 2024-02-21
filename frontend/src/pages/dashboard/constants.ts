@@ -307,6 +307,6 @@ export interface DashboardFilters {
   location?: WorkLocation[];
   function?: FunctionName;
   experience?: Experience;
-  availabilityType?: string;
+  availabilityType?: AvailabilityTypeName;
   availabilityDates: DateRange;
 }

@@ -9,7 +9,7 @@ export const classificationClass =
   'block  font-bold border border-gray rounded-md mt-4 mx-8 text-center ';
 
 export const tableClasses = {
-  ministry: [tdClass, 'text-info'].join(', '),
+  ministry: tdClass,
   available: [tdClass, 'text-success'].join(', '),
   unavailable: [tdClass, 'text-error'].join(', '),
   deployed: [tdClass, 'text-warning'].join(', '),

@@ -95,7 +95,7 @@ export const Filters = ({
           <div className="col-span-1">
             <SingleSelect
               field={fields.availabilityType}
-              label="Availability Status"
+              label="Availability"
               value={filterValues.availabilityType}
               onChange={handleSingleSelect}
               handleClose={handleClose}
