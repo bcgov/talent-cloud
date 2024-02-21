@@ -29,7 +29,7 @@ export const Filters = ({
   handleCloseMany: (name: string) => void;
 }) => {
   return (
-    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-6 gap-12">
+    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       <div className="col-span-1 lg:col-span-2">
         <Search
           field={fields.name}
