@@ -45,12 +45,6 @@ const Profile = () => {
     setSchedulerDialogOpen(false);
     getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
-  //TODO: next PR
-  // const [showEditForm, setShowEditForm] = useState(false);
-
-  // const enableEdit = (open: boolean) => {
-  //   setShowEditForm(!open);
-  // };
 
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground w-full overflow-x-hidden">
