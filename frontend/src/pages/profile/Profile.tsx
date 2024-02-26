@@ -31,49 +31,48 @@ const Profile = () => {
   const onChangeAvailabilityDates = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
   };
+  //TODO: next PR
+  // const [showEditForm, setShowEditForm] = useState(false);
+
+  // const enableEdit = (open: boolean) => {
+  //   setShowEditForm(!open);
+  // };
 
   return (
-    <div className="min-h-screen pt-12 pb-24 bg-grayBackground">
-      {personnel && (
-        <div>
-          <Breadcrumbs
-            placeholder={'Breadcrumbs'}
-            className="px-12 bg-grayBackground"
-          >
-            <a href="/dashboard" className="text-linkBlue">
-              <div className="flex flex-row items-center">
-                <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />
-                <span className="pl-2 underline decoration-solid">
-                  Personnel (Dashboard)
-                </span>
-              </div>
-            </a>
-            <span className="font-bold text-black">
-              {personnel.firstName} {personnel.lastName}
+    <div className="min-h-screen pt-12 pb-24 bg-grayBackground w-full overflow-x-hidden">
+      <Breadcrumbs
+        placeholder={'Breadcrumbs'}
+        className="px-12 bg-grayBackground max-w-full"
+      >
+        <a href="/dashboard" className="text-linkBlue">
+          <div className="flex flex-row items-center">
+            <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />
+            <span className="pl-2 underline decoration-solid">
+              Personnel (Dashboard)
             </span>
-          </Breadcrumbs>
-          <div className="pt-12">
-            <div className="px-10 float-left">
-              <div className="w-32 h-32 grid rounded-full bg-blue justify-center content-center">
-                <div>
-                  <h1 className="text-white font-bold text-5xl">
-                    {personnel.firstName?.charAt(0)}
-                    {personnel.lastName?.charAt(0)}
-                  </h1>
-                </div>
-              </div>
-            </div>
-            <div>
-              <ProfileHeader personnel={personnel} role={role} />
-              <ProfileDetails personnel={personnel} />
-              <Scheduler
-                name={personnel.firstName}
-                availability={availability}
-                onChangeAvailabilityDates={onChangeAvailabilityDates}
-              />
-            </div>
           </div>
-          <div></div>
+        </a>
+        {personnel && (
+          <span className="font-bold text-black">
+            {personnel.firstName} {personnel.lastName}
+          </span>
+        )}
+      </Breadcrumbs>
+
+      {personnel && (
+        <div className="pt-12">
+          <ProfileHeader personnel={personnel} role={role} />
+
+          <ProfileDetails
+            personnel={personnel}
+            enableEdit={() => console.log('TODO!')}
+          />
+          {/* <ProfileEditPopup open={showEditForm} handleOpen={()=> enableEdit(showEditForm)} personnel={personnel}/> */}
+          <Scheduler
+            name={personnel.firstName}
+            availability={availability}
+            onChangeAvailabilityDates={onChangeAvailabilityDates}
+          />
         </div>
       )}
     </div>

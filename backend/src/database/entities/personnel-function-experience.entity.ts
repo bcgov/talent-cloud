@@ -7,8 +7,8 @@ import { ExperienceRO } from '../../personnel/ro/experience.ro';
 
 @Entity('personnel_function_experience')
 export class ExperienceEntity {
-  @ManyToOne(() => PersonnelEntity)
-  @JoinColumn({ name: 'personnel_id' })
+  @ManyToOne(() => PersonnelEntity, (pe) => pe.id)
+  @JoinColumn({ name: 'personnel_id', referencedColumnName: 'id' })
   personnel: PersonnelEntity;
 
   @PrimaryColumn({ name: 'personnel_id' })

@@ -6,14 +6,14 @@ import { Routes } from '@/routes';
 import { useKeycloak } from '@react-keycloak/web';
 import { UserIcon } from '../images';
 
-export const UserMenu = ({ username }: { username: string }) => {
+export const UserMenu = ({ username }: { username?: string }) => {
   const { keycloak } = useKeycloak();
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
-          <h6 className="font-bold">{username}</h6>
+          {username && <h6 className="font-bold">{username}</h6>}
           <UserIcon />
         </Menu.Button>
       </div>
@@ -32,7 +32,7 @@ export const UserMenu = ({ username }: { username: string }) => {
             <Menu.Item>
               <button
                 className="py-2 px-4 text-sm"
-                onClick={() => logout(keycloak, Routes.Login)}
+                onClick={() => logout(keycloak, Routes.Home)}
               >
                 Logout
               </button>
