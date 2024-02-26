@@ -12,6 +12,8 @@ import {
 } from './enums';
 import { AppModule } from '../app.module';
 import { PersonnelService } from '../personnel/personnel.service';
+import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 
 const functions = [
   { id: 1, name: 'Operations', abbreviation: 'Ops' },
@@ -120,30 +122,36 @@ export const rowData = () => {
 
   return {
     firstName: faker.person.firstName(),
+    middleName: faker.person.middleName(),  
+    homeLocation: faker.location.city(),
+    mailingAddress: faker.location.streetAddress(),
+    city: faker.location.city(),
+    postalCode: faker.location.zipCode(),
+    dateJoined: faker.date.past(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
-    primaryPhone: faker.string.numeric('###-###-###'),
-    secondaryPhone: faker.string.numeric('###-###-###'),
-    otherPhone: faker.string.numeric('###-###-###'),
-    region: regionAndLocation.region,
+    primaryPhone: faker.string.numeric('##########'),
+    secondaryPhone: faker.string.numeric('##########'),
+    otherPhone: faker.string.numeric('##########'),
+    region: Region[regionAndLocation.region],
     workLocation: faker.helpers.arrayElement(regionAndLocation.locations),
-    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
-    classification: faker.helpers.arrayElement(Object.values(Classification)),
+    ministry: Ministry[faker.helpers.arrayElement(Object.values(Ministry))],
+    classification: Classification[faker.helpers.arrayElement(Object.values(Classification))],
     applicationDate: faker.date.past(),
-    skillsAbilities: faker.lorem.sentence(),
-    notes: faker.lorem.sentence(),
+    skillsAbilities: faker.lorem.paragraph(),
+    logisticsNotes: faker.lorem.paragraph(),
+    coordinatorNotes: faker.lorem.sentence(),
     supervisor: faker.person.firstName(),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    status: faker.helpers.arrayElement([
+    status: Status[faker.helpers.arrayElement([
       Status.ACTIVE,
       Status.INACTIVE,
       Status.NEW,
-    ]),
-    availability: availability(),
-    experiences: experiences(),
-    logisticsNotes: faker.lorem.sentence(),
-    coordinatorNotes: faker.lorem.sentence(),
+    ])],
+    availability: availability() as AvailabilityEntity[],
+    experiences: experiences() as ExperienceEntity[],
+    
   };
 };
 const threeMonthsArray = () => {
