@@ -10,15 +10,14 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
 const ProfileDetails = ({
   personnel,
-  enableEdit,
+  openEditPopUp,
 }: {
   personnel: Personnel;
-  enableEdit: () => void;
+  openEditPopUp: () => void;
 }) => {
   const [open, setOpen] = useState(1);
   const { role } = useRole();
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
   const generalInformation = [
     {
       title: 'Work Location, Region',
@@ -86,7 +85,7 @@ const ProfileDetails = ({
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>
               <button
-                onClick={enableEdit}
+                onClick={openEditPopUp}
                 className="z-40 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />

@@ -17,13 +17,17 @@ import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange } from '../dashboard';
+import { ProfileEditPopup } from './ProfileEditPopup';
+
+
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel } = usePersonnel({ personnelId });
+  const { personnel, updatePersonnel } = usePersonnel({ personnelId });
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
+  
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -44,6 +48,11 @@ const Profile = () => {
     await saveAvailability(dates);
     setSchedulerDialogOpen(false);
     getAvailability(availabilityQuery.from, availabilityQuery.to);
+  };
+  const [openEditPopUp, setOpenEditPopUp] = useState(false);
+
+  const handleOpenEditPopUp = () => {
+    setOpenEditPopUp(!openEditPopUp);
   };
 
   return (
@@ -73,9 +82,15 @@ const Profile = () => {
             <ProfileHeader personnel={personnel} role={role} />
 
             <ProfileDetails
-              personnel={personnel}
-              enableEdit={() => console.log('TODO!')}
-            />
+            openEditPopUp={handleOpenEditPopUp}
+            personnel={personnel}
+          />
+          <ProfileEditPopup
+            personnel={personnel}
+            open={openEditPopUp}
+            handleOpenEditPopUp={handleOpenEditPopUp}
+            updatePersonnel={updatePersonnel}
+          />
             <Scheduler
               name={personnel.firstName}
               availability={availability}
@@ -107,6 +122,8 @@ const Profile = () => {
               <SchedulerPopUp onSave={saveAvailabilityDates} />
             </DialogBody>
           </Dialog>
+          
+          
         </div>
       )}
     </div>

@@ -4,15 +4,20 @@ import { Fragment } from 'react';
 export const Toggle = ({
   value,
   handleToggle,
+  label,
 }: {
   value: boolean;
   handleToggle: (checked: boolean) => void;
+  label?: string;
+  disabled?: boolean;
 }) => {
   return (
-    <div className="flex flex-row justify-start md:items-center md:mr-12">
-      <label htmlFor={'showInactive'} className="px-4">
-        Show Inactive
-      </label>
+    <>
+      {label && (
+        <label htmlFor={'showInactive'} className="px-4">
+          {label}
+        </label>
+      )}
       <Switch
         checked={value}
         onChange={handleToggle}
@@ -35,6 +40,6 @@ export const Toggle = ({
           </button>
         )}
       </Switch>
-    </div>
+    </>
   );
 };
