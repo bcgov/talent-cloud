@@ -9,7 +9,6 @@ export const Toggle = ({
   value: boolean;
   handleToggle: (checked: boolean) => void;
   label?: string;
-  disabled?: boolean;
 }) => {
   return (
     <>
