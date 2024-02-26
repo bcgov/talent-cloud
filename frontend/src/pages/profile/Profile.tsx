@@ -31,12 +31,6 @@ const Profile = () => {
   const onChangeAvailabilityDates = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
   };
-  //TODO: next PR
-  // const [showEditForm, setShowEditForm] = useState(false);
-
-  // const enableEdit = (open: boolean) => {
-  //   setShowEditForm(!open);
-  // };
 
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground w-full overflow-x-hidden">
@@ -67,7 +61,6 @@ const Profile = () => {
             personnel={personnel}
             enableEdit={() => console.log('TODO!')}
           />
-          {/* <ProfileEditPopup open={showEditForm} handleOpen={()=> enableEdit(showEditForm)} personnel={personnel}/> */}
           <Scheduler
             name={personnel.firstName}
             availability={availability}

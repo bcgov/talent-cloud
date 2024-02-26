@@ -7,7 +7,6 @@ export const Search = ({
   handleSearchInput,
 }: {
   field: FieldInterface;
-  value: string;
   handleSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
