@@ -42,3 +42,10 @@ label {
   letter-spacing: 0em;
   text-align: left;
 }
+
+.subtext {
+  @apply text-textGray;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.07px; 
+}

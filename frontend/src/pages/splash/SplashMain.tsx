@@ -39,7 +39,7 @@ export const SplashMain = ({ content }: { content: any }) => {
               Use your IDIR to access the TEAMS member database.
             </p>
             <Button
-              type={ButtonTypes.PRIMARY}
+              variant={ButtonTypes.PRIMARY}
               text={'Log In'}
               onClick={() => nav(Routes.Login)}
             />
@@ -74,7 +74,7 @@ export const SplashMain = ({ content }: { content: any }) => {
             Use your IDIR to access the TEAMS member database.
           </p>
           <Button
-            type={ButtonTypes.PRIMARY}
+            variant={ButtonTypes.PRIMARY}
             text={'Log In'}
             onClick={() => nav(Routes.Login)}
           />

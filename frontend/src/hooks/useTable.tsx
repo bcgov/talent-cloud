@@ -119,7 +119,6 @@ export const useTable = () => {
               ({
                 id,
                 status,
-                availability,
                 firstName,
                 lastName,
                 experiences,
@@ -162,8 +161,8 @@ export const useTable = () => {
                   {
                     key: uuidv4(),
                     columnName: DashboardColumns.FUNCTION,
-                    value: `${experiences.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
-                    className: experiences.find(
+                    value: `${experiences?.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences?.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
+                    className: experiences?.find(
                       (itm: any) => itm.functionName === filterValues.function,
                     )
                       ? tableClass(DashboardColumns.FUNCTION, '')
@@ -173,17 +172,12 @@ export const useTable = () => {
                     key: uuidv4(),
                     columnName: DashboardColumns.AVAILABILITY,
                     value: filterValues.availabilityType
-                      ? getAvailabilityValue(availability)
-                      : AvailabilityTypeName[
-                          availability[0]
-                            ?.availabilityType as keyof typeof AvailabilityType
-                        ] ?? AvailabilityTypeName.NOT_INDICATED,
+                      ? getAvailabilityValue(filterValues.availabilityType)
+                      : AvailabilityTypeName.NOT_INDICATED,
                     className: tableClass(
                       DashboardColumns.AVAILABILITY,
-                      AvailabilityType[
-                        availability[0]
-                          ?.availabilityType as keyof typeof AvailabilityType
-                      ] ?? AvailabilityType.NOT_INDICATED,
+                      filterValues.availabilityType ??
+                        AvailabilityType.NOT_INDICATED,
                     ),
                   },
                   {
