@@ -10,15 +10,6 @@ import { differenceInDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { v4 as uuidv4 } from 'uuid';
 
-export const calculatePages = (totalPages: number): number[] => {
-  const range = [];
-
-  // create the pages array for the footer
-  for (let i = 1; i <= totalPages; i++) {
-    range.push(i);
-  }
-  return range;
-};
 /**
  * If availability  status is set, then calculate the partial or full availability
  * @param availability

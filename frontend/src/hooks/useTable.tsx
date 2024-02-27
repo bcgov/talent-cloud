@@ -10,7 +10,7 @@ import { DashboardColumns } from '@/pages/dashboard';
 import { useDebounce } from './useDebounce';
 import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
-import { calculatePages, renderCells } from './helpers';
+import { renderCells } from './helpers';
 
 export const useTable = () => {
   const { handleError } = useError();
@@ -55,7 +55,7 @@ export const useTable = () => {
 
         const rowsPerPage = filterValues?.rowsPerPage ?? 25;
         const totalPages = Math.ceil(count / rowsPerPage);
-        const pageRange = calculatePages(Math.ceil(totalPages));
+        const pageRange = [...Array(totalPages).keys()];
         const currentPage = filterValues?.currentPage ?? 1;
 
         setTableData({
