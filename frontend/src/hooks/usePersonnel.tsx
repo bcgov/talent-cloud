@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AxiosPrivate } from '../utils';
 import type { Availability, AvailabilityRange, Personnel } from '@/pages/dashboard';
-import { DateRange } from 'react-day-picker';
 import dayjs from 'dayjs';
 
 const usePersonnel = ({
@@ -25,17 +24,6 @@ const usePersonnel = ({
     to: dayjs().format('YYYY-MM-DD'),
   });
 
-  useEffect(() => {
-    getAvailability();
-  }, [currentAvailabilityRange]);
-
-  useEffect(() => {
-    (async () => {
-      const response = await AxiosPrivate.get(`/personnel/${personnelId}`);
-      setPersonnel(response.data);
-    })();
-  }, [personnelId]);
-
   const setCurrentAvailability = (from: string, to: string) => {
     setCurrentAvailabilityRange({ from, to });
   };
@@ -56,6 +44,17 @@ const usePersonnel = ({
     );
     getAvailability();
   };
+  
+  useEffect(() => {
+    getAvailability();
+  }, [currentAvailabilityRange]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await AxiosPrivate.get(`/personnel/${personnelId}`);
+      setPersonnel(response.data);
+    })();
+  }, [personnelId]);
 
   return {
     personnel,
