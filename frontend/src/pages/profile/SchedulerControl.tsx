@@ -14,8 +14,10 @@ import MonthPicker from '@/components/ui/MonthPicker';
 
 const SchedulerControl = ({
   onChangeAvailabilityDates,
+  addEventClicked,
 }: {
   onChangeAvailabilityDates: (from: string, to: string) => void;
+  addEventClicked: () => void;
 }) => {
   const numMonthsItems = [1, 3, 6, 12];
 
@@ -147,6 +149,17 @@ const SchedulerControl = ({
             </Option>
           ))}
         </Select>
+      </div>
+      <div className="pt-2">
+        <Button
+          variant="text"
+          size="sm"
+          className="bg-calBlueTwo text-white normal-case"
+          placeholder={''}
+          onClick={addEventClicked}
+        >
+          Add Event
+        </Button>
       </div>
     </div>
   );

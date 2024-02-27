@@ -12,10 +12,12 @@ const Scheduler = ({
   name,
   availability,
   onChangeAvailabilityDates,
+  openSchedulerDialog,
 }: {
   name: string;
   availability: Availability[];
   onChangeAvailabilityDates: (from: string, to: string) => void;
+  openSchedulerDialog: () => void;
 }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -126,6 +128,7 @@ const Scheduler = ({
           <AccordionBody className="px-8">
             <SchedulerControl
               onChangeAvailabilityDates={onChangeAvailabilityDates}
+              addEventClicked={openSchedulerDialog}
             />
             <SchedulerHeader />
             {schedulerRows &&
