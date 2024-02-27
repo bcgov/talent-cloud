@@ -45,13 +45,11 @@ export const calendarClass: { [key: string]: string } = {
   day_range_middle: 'bg-infoBannerLight',
   dropdown_year: 'text-sm',
   day_selected: 'bg-infoBannerLight rounded-none',
-  day_range_end:
-    'aria-selected:bg-infoBannerLight aria-selected:rounded-r-full',
-  day_range_start:
-    'aria-selected:bg-infoBannerLight aria-selected:rounded-l-full',
+  day_range_end: 'aria-selected:bg-infoBannerLight aria-selected:rounded-r-full',
+  day_range_start: 'aria-selected:bg-infoBannerLight aria-selected:rounded-l-full',
   day_today: ' rounded-full bg-gray-200 text-gray-900 ',
   day_outside:
     'day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10',
   day_disabled: 'text-gray-500 opacity-50',
   day_hidden: 'invisible',
-}
+};

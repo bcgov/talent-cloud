@@ -139,7 +139,9 @@ const SchedulerRow = ({
               />
             );
           default:
-            return <Cell cellClass={SCHEDULER_NOT_INDICATED_CLASS} key={dayOfMonth} />;
+            return (
+              <Cell cellClass={SCHEDULER_NOT_INDICATED_CLASS} key={dayOfMonth} />
+            );
         }
       })}
     </div>

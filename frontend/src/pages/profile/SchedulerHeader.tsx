@@ -10,7 +10,9 @@ const SchedulerHeader = () => {
         <div className="bg-white text-xs text-linkBlue">Month</div>
         {[...Array(32).keys()].slice(1).map((dayOfMonth) => {
           return (
-            <div className="bg-white text-xs text-linkBlue pl-2" key={dayOfMonth}>{dayOfMonth}</div>
+            <div className="bg-white text-xs text-linkBlue pl-2" key={dayOfMonth}>
+              {dayOfMonth}
+            </div>
           );
         })}
       </div>

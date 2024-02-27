@@ -14,11 +14,12 @@ import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
-import { AvailabilityRange } from '../dashboard';
+import type { AvailabilityRange } from '../dashboard';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel, availability, setCurrentAvailability, saveAvailability } = usePersonnel({ personnelId });
+  const { personnel, availability, setCurrentAvailability, saveAvailability } =
+    usePersonnel({ personnelId });
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -43,7 +44,7 @@ const Profile = () => {
   const saveAvailabilityDates = (dates: AvailabilityRange) => {
     saveAvailability(dates);
     setSchedulerDialogOpen(false);
-  }
+  };
 
   return (
     <div className="min-h-screen pt-12 pb-24 bg-grayBackground w-full overflow-x-hidden">
@@ -82,10 +83,23 @@ const Profile = () => {
               openSchedulerDialog={handleSchedulerOpen}
             />
           </div>
-          <Dialog open={schedulerDialogOpen} handler={handleSchedulerOpen} placeholder={''} size="md">
-            <DialogHeader placeholder={''} className="flex flex-row align-middle bg-calBlue">
-                <h4 className="grow font-bold">New Event</h4>
-                <span className="text-sm cursor-pointer" onClick={() => setSchedulerDialogOpen(false)}>Cancel</span>
+          <Dialog
+            open={schedulerDialogOpen}
+            handler={handleSchedulerOpen}
+            placeholder={''}
+            size="md"
+          >
+            <DialogHeader
+              placeholder={''}
+              className="flex flex-row align-middle bg-calBlue"
+            >
+              <h4 className="grow font-bold">New Event</h4>
+              <span
+                className="text-sm cursor-pointer"
+                onClick={() => setSchedulerDialogOpen(false)}
+              >
+                Cancel
+              </span>
             </DialogHeader>
             <DialogBody placeholder={''}>
               <SchedulerPopUp onSave={saveAvailabilityDates} />

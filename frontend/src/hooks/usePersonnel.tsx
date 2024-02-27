@@ -17,7 +17,10 @@ const usePersonnel = ({
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
   const [availability, setAvailability] = useState<Availability[]>([]);
-  const [currentAvailabilityRange, setCurrentAvailabilityRange] = useState<{ from: string, to: string }>({
+  const [currentAvailabilityRange, setCurrentAvailabilityRange] = useState<{
+    from: string;
+    to: string;
+  }>({
     from: dayjs().format('YYYY-MM-DD'),
     to: dayjs().format('YYYY-MM-DD'),
   });
@@ -35,11 +38,13 @@ const usePersonnel = ({
 
   const setCurrentAvailability = (from: string, to: string) => {
     setCurrentAvailabilityRange({ from, to });
-  }
+  };
 
   const getAvailability = async () => {
     const response = await AxiosPrivate.get(
-      encodeURI(`/personnel/${personnelId}/availability?from=${currentAvailabilityRange.from}&to=${currentAvailabilityRange.to}`),
+      encodeURI(
+        `/personnel/${personnelId}/availability?from=${currentAvailabilityRange.from}&to=${currentAvailabilityRange.to}`,
+      ),
     );
     setAvailability(response.data);
   };
@@ -47,10 +52,10 @@ const usePersonnel = ({
   const saveAvailability = async (dates: AvailabilityRange) => {
     await AxiosPrivate.patch(
       encodeURI(`/personnel/${personnelId}/availability`),
-      dates
+      dates,
     );
     getAvailability();
-  }
+  };
 
   return {
     personnel,
