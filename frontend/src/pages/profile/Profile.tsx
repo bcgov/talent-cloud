@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import {
   Breadcrumbs,
+  Button,
   Dialog,
   DialogHeader,
   DialogBody,
@@ -9,6 +10,7 @@ import {
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
+import useAvailability from '@/hooks/useAvailability';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
@@ -18,8 +20,9 @@ import type { AvailabilityRange } from '../dashboard';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel, availability, setCurrentAvailability, saveAvailability } =
+  const { personnel } =
     usePersonnel({ personnelId });
+  const { availability, getAvailability, saveAvailability } = useAvailability({ personnelId });
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -29,21 +32,17 @@ const Profile = () => {
     to: dayjs().endOf('month').format('YYYY-MM-DD'),
   });
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
-  const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);
-
-  useEffect(() => {
-    (async () => {
-      setCurrentAvailability(availabilityQuery.from, availabilityQuery.to);
-    })();
-  }, [availabilityQuery]);
+  const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);;
 
   const onChangeAvailabilityQuery = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
+    getAvailability(from, to);
   };
 
-  const saveAvailabilityDates = (dates: AvailabilityRange) => {
-    saveAvailability(dates);
+  const saveAvailabilityDates = async (dates: AvailabilityRange) => {
+    await saveAvailability(dates);
     setSchedulerDialogOpen(false);
+    getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
   return (
@@ -94,12 +93,14 @@ const Profile = () => {
               className="flex flex-row align-middle bg-calBlue"
             >
               <h4 className="grow font-bold">New Event</h4>
-              <span
-                className="text-sm cursor-pointer"
+              <Button
+                placeholder={''}
+                variant="text"
+                className="text-sm"
                 onClick={() => setSchedulerDialogOpen(false)}
               >
                 Cancel
-              </span>
+              </Button>
             </DialogHeader>
             <DialogBody placeholder={''}>
               <SchedulerPopUp onSave={saveAvailabilityDates} />
