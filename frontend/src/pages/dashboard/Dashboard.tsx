@@ -1,5 +1,4 @@
 import { Table } from '@/components';
-import { dashboardFilterFields } from './constants';
 import { Filters } from './DashboardFilters';
 import { Role } from '@/common';
 import { useRole, useTable } from '@/hooks';
@@ -29,7 +28,6 @@ const Dashboard = () => {
       <h2 className="text-left font-bold">Personnel</h2>
       <Filters
         handleSetDates={handleSetDates}
-        fields={dashboardFilterFields}
         handleMultiSelect={handleMultiSelect}
         handleSingleSelect={handleSingleSelect}
         onClear={onClear}

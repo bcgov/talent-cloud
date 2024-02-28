@@ -5,11 +5,11 @@ export enum Function {
   FINANCE,
   LIAISON,
   LOGISTICS,
-  PLANS,
+  PLANNING,
   ADVANCED_PLANNING_UNIT,
   RECOVERY,
-  DIRECTOR,
-  GIS,
+  DEPUTY_DIRECTOR
+  
 }
 
 export enum FunctionName {
@@ -19,11 +19,11 @@ export enum FunctionName {
   FINANCE = 'Finance',
   LIAISON = 'Liaison',
   LOGISTICS = 'Logistics',
-  PLANS = 'Plans',
+  PLANNING = 'Planning',
   ADVANCED_PLANNING_UNIT = 'Advanced Planning Unit',
   RECOVERY = 'Recovery',
-  DIRECTOR = 'Director',
-  GIS = 'GIS',
+  DEPUTY_DIRECTOR = 'Director',
+  
 }
 
 export enum FunctionNameAbbrv {
@@ -33,9 +33,8 @@ export enum FunctionNameAbbrv {
   FINANCE = 'Finance',
   LIAISON = 'Liaison',
   LOGISTICS = 'Logistics',
-  PLANS = 'Plans',
+  PLANNING = 'Plans',
   ADVANCED_PLANNING_UNIT = 'APU',
   RECOVERY = 'Recovery',
-  DIRECTOR = 'Director',
-  GIS = 'GIS',
+  DEPUTY_DIRECTOR = 'Director',
 }

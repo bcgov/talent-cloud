@@ -8,6 +8,9 @@ import { WorkLocation } from '../../common/enums/work-location.enum';
 import { TrainingEntity } from '../../database/entities/training.entity';
 import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
+import { LocationEntity } from '../../database/entities/location.entity';
+
+
 
 export class CreatePersonnelDTO {
   @ApiProperty({
@@ -38,29 +41,16 @@ export class CreatePersonnelDTO {
 
   @ApiProperty({
     description: "Personnel's work location",
-    enum: WorkLocation,
-    example: WorkLocation.VICTORIA,
+    example: {
+      id: '1',
+      locationName: 'Victoria',
+      region: Region.SWE
+    
+    },
   })
-  @IsEnum(WorkLocation)
-  workLocation: WorkLocation;
+  workLocation: LocationEntity;
 
-  @ApiProperty({
-    description: "Personnel's home location",
-    example: "Surrey, BC"
-  })
-  @IsOptional()  
-  @IsString()
-  @Length(2, 50)
-  @ValidateIf((o) => o.homeLocation !== '') 
-  homeLocation: string;
-
-  @ApiProperty({
-    description: 'Region personnel works in',
-    enum: Region,
-    example: Region.VIC,
-  })
-  @IsEnum(Region)
-  region: Region;
+  
 
   @ApiProperty({
     description: 'Ministry personnel works in',

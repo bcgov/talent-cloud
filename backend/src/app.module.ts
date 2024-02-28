@@ -8,6 +8,8 @@ import { FormModule } from './form/form.module';
 import { FunctionModule } from './function/function.module';
 import { LoggerModule } from './logger/logger.module';
 import { PersonnelModule } from './personnel/personnel.module';
+import { RegionsAndLocationsModule } from './region-location/region-location.module';
+
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { PersonnelModule } from './personnel/personnel.module';
     PersonnelModule,
     FunctionModule,
     FormModule,
+    RegionsAndLocationsModule,
   ],
   controllers: [AppController],
 })

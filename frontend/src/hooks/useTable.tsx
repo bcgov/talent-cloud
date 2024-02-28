@@ -12,6 +12,7 @@ import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 
+
 export const useTable = () => {
   const { handleError } = useError();
 
@@ -139,14 +140,11 @@ export const useTable = () => {
     handleMultiSelect(event);
   };
   const handleCloseMany = (name: string) => {
-    const event = {
-      target: {
-        name: name,
-        value: [],
-      },
-    } as unknown as ChangeEvent<HTMLInputElement>;
-
-    handleMultiSelect(event);
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      [name]: [],
+    }));
   };
 
   const handleSetDates = (range: DateRange | undefined) => {
