@@ -10,7 +10,7 @@ import { EditProfileValidationSchema, fields, sections } from './constants';
 import { Divider } from '@/components/ui/Divider';
 import type { FormikHelpers, FormikProps, FormikState } from 'formik';
 import { Field, Form, Formik } from 'formik';
-import { Button, SectionHeader, Select, TextArea, TextInput } from '@/components';
+import { Button, SectionHeader, Select, TextInput } from '@/components';
 import { AxiosPrivate } from '@/utils';
 import { format } from 'date-fns';
 
@@ -87,7 +87,7 @@ export const ProfileEditPopup = ({
               placeholder={undefined}
               className="bg-grayBackground flex flex-row w-full justify-between"
             >
-              <span>Edit/Review Member Details</span>
+              <span>Edit Member Details</span>
               <button
                 className="text-sm text-primaryBlue underline font-normal"
                 onClick={handleOpenEditPopUp}
@@ -111,26 +111,6 @@ export const ProfileEditPopup = ({
                   <div className="flex min-h-full items-center justify-center p-4">
                     <div className="flex flex-col w-full items-start justify-start space-y-8">
                       <SectionHeader section={sections.general.header} />
-                      {/* TODO Add toggle component to new location in UI */}
-                      {/* <div className="flex flex-row items-center justify-start ">
-                        <Toggle
-                          value={values.status === Status.ACTIVE}
-                          handleToggle={(checked: boolean) => {
-                            props.handleChange({
-                              target: {
-                                name: 'status',
-                                value: checked ? Status.ACTIVE : Status.INACTIVE,
-                              },
-                            });
-                          }}
-                          disabled={props.values.status === Status.NEW}
-                        />
-                        <span className="pl-2 inline">
-                          {props.values.status === Status.INACTIVE
-                            ? 'Set member as Active'
-                            : 'Set member as Inactive'}
-                        </span>
-                      </div> */}
                       <div className="w-1/3">
                         <Field
                           props={props}
@@ -256,23 +236,6 @@ export const ProfileEditPopup = ({
                         />
                       </div>
                       <Divider />
-                      <SectionHeader section={sections.notes.header} />
-                      <div className="w-full grid grid-cols-1 gap-6">
-                        <div className="col-span-1">
-                          <Field
-                            props={props}
-                            field={fields.coordinatorNotes}
-                            component={TextArea}
-                          />
-                        </div>
-                        <div className="col-span-1">
-                          <Field
-                            props={props}
-                            field={fields.logisticsNotes}
-                            component={TextArea}
-                          />
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div className="w-full border border-t-1 mx-0 px-0 shadow-md mt-16"></div>

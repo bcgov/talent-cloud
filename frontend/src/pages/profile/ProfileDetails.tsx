@@ -89,9 +89,7 @@ const ProfileDetails = ({
                 className="z-40 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />
-                <span className="pl-2 font-normal underline text-sm">
-                  Edit/Review
-                </span>
+                <span className="pl-2 font-normal underline text-sm">Edit</span>
               </button>
             </div>
           </AccordionHeader>

@@ -37,11 +37,7 @@ export const Filters = ({
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
       <div className="col-span-1 lg:col-span-2">
-        <Search
-          field={fields.name}
-          handleSearchInput={handleSearch}
-          value={filterValues.name ?? ''}
-        />
+        <Search field={fields.name} handleSearchInput={handleSearch} />
       </div>
 
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
