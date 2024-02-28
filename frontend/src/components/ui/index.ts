@@ -11,3 +11,4 @@ export * from './MenuItem';
 export * from './Status';
 export * from './Loading';
 export * from './ErrorComponent';
+export * from './SectionHeader';

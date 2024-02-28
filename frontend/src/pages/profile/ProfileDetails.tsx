@@ -4,10 +4,17 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
 import dayjs from 'dayjs';
-import { Role, Status } from '@/common';
+import { Role } from '@/common';
 import { useRole } from '@/hooks';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
-const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
+const ProfileDetails = ({
+  personnel,
+  enableEdit,
+}: {
+  personnel: Personnel;
+  enableEdit: () => void;
+}) => {
   const [open, setOpen] = useState(1);
   const { role } = useRole();
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -46,33 +53,19 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
     { title: 'Union Membership', content: personnel.classification },
   ];
 
-  const status = [
-    {
-      title: 'Applicant Reviewed',
-      content: personnel.status === Status.NEW ? 'No' : 'Yes',
-      role: Role.COORDINATOR,
-    },
-    {
-      title: 'Active',
-      content: personnel.status === Status.ACTIVE ? 'Yes' : 'No',
-      role: Role.COORDINATOR,
-    },
-  ];
-
   const notes = {
     coordinator: [
-      { title: 'Coordinator Notes', content: personnel.coordinatorNotes! },
-      { title: 'Logistics Notes', content: personnel.logisticsNotes! },
+      { title: 'Logistics Notes', content: personnel.logisticsNotes ?? '' },
+      { title: 'Coordinator Notes', content: personnel.coordinatorNotes ?? '' },
     ],
-    logistics: [{ title: 'Logistics Notes', content: personnel.logisticsNotes! }],
+    logistics: [
+      { title: 'Logistics Notes', content: personnel.logisticsNotes ?? '' },
+    ],
   };
 
   return (
     <section className="bg-white">
-      <div className="pb-12">
-        <p>Last deployed 28 days ago</p>
-      </div>
-      <div className="pt-6 px-10">
+      <div className="pt-6 lg:px-10">
         <Accordion
           className="border-2 border-slate-950"
           placeholder={'Member Details'}
@@ -90,40 +83,52 @@ const ProfileDetails = ({ personnel }: { personnel: Personnel }) => {
             onClick={() => handleOpen(1)}
             className="bg-grayBackground px-8"
           >
-            Member Details
+            <div className=" w-full justify-between items-center flex lg:flex-row">
+              <span>Member Details</span>
+              <button
+                onClick={enableEdit}
+                className="z-40 flex text-primaryBlue flex-row items-center"
+              >
+                <PencilSquareIcon className="h-6 w-6" />
+                <span className="pl-2 font-normal underline text-sm">
+                  Edit/Review
+                </span>
+              </button>
+            </div>
           </AccordionHeader>
-          <AccordionBody className="px-8 grid grid-cols-5">
-            <div className="col-span-3">
-              <DetailsSection
-                numColumns={3}
-                title={'General Information'}
-                columns={generalInformation}
-              />
-            </div>
-            <div className="col-span-2">
-              <DetailsSection numColumns={2} title={'Contact'} columns={contact} />
-            </div>
-            <div className="col-span-3">
-              <DetailsSection
-                numColumns={3}
-                title={'Organizational Information'}
-                columns={organizational}
-              />
-            </div>
-            <div className="col-span-2">
-              {role === Role.COORDINATOR && (
-                <DetailsSection numColumns={2} title={'Status'} columns={status} />
-              )}
-            </div>
 
-            <div className="col-span-2">
-              <DetailsSection
-                numColumns={2}
-                title={'Notes'}
-                columns={
-                  role === Role.COORDINATOR ? notes.coordinator : notes.logistics
-                }
-              />
+          <AccordionBody>
+            <div className="px-8 grid grid-cols-1 lg:grid-cols-5">
+              <div className="col-span-1 lg:col-span-3">
+                <DetailsSection
+                  numColumns={3}
+                  title={'General Information'}
+                  columns={generalInformation}
+                />
+              </div>
+              <div className="col-span-1 lg:col-span-2">
+                <DetailsSection numColumns={2} title={'Contact'} columns={contact} />
+              </div>
+              <div className="border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
+
+              <div className="col-span-1 lg:col-span-3">
+                <DetailsSection
+                  numColumns={3}
+                  title={'Organizational Information'}
+                  columns={organizational}
+                />
+              </div>
+              <div className="border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
+
+              <div className="col-span-1 lg:col-span-5">
+                <DetailsSection
+                  numColumns={2}
+                  title={'Notes'}
+                  columns={
+                    role === Role.COORDINATOR ? notes.coordinator : notes.logistics
+                  }
+                />
+              </div>
             </div>
           </AccordionBody>
         </Accordion>

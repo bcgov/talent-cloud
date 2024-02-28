@@ -11,10 +11,11 @@ export type FooterProps = {
 };
 
 export type ButtonProps = {
-  type: ButtonTypes;
+  variant: ButtonTypes;
   text: string;
-  onClick: () => any;
+  onClick?: () => any;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 export type NavProps = {

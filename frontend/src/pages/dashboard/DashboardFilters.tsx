@@ -112,7 +112,7 @@ export const Filters = ({
         </div>
       </div>
       <div className="text-center  md:col-span-1 flex  flex-nowrap self-end pb-1">
-        <Button type={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
+        <Button variant={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
       </div>
     </div>
   );

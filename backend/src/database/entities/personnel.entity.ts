@@ -27,8 +27,14 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'first_name', type: 'varchar', length: '50' })
   firstName: string;
 
+  @Column({ name: 'middle_name', type: 'varchar', length: '50', nullable: true })
+  middleName?: string;
+
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
+  
+  @Column({type: 'date', name: 'date_joined'})
+  dateJoined: Date;
 
   @Column({
     name: 'work_location',
@@ -66,6 +72,18 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({ name: 'other_phone', type: 'varchar', length: 25, nullable: true })
   otherPhone: string;
+
+  @Column({name:'mailing_address', type:'varchar', length: 100, nullable: true})
+  mailingAddress?: string;
+
+  @Column({name:'postal_code', type:'varchar', length: 10, nullable: true})
+  postalCode?: string;
+
+  @Column({name:'city', type:'varchar', length: 100, nullable: true})
+  city?: string;
+
+  @Column({name:'home_location', type:'varchar', length: 100, nullable: true})
+  homeLocation?: string;
 
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
@@ -117,10 +135,10 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
   willingToTravel: boolean;
 
-  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
+  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, {cascade: true} )
   experiences: ExperienceEntity[];
 
-  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
+  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, {cascade: true})
   availability: AvailabilityEntity[];
 
   @ManyToMany(() => TrainingEntity)
@@ -134,10 +152,15 @@ export class PersonnelEntity extends BaseEntity {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
+      middleName: this.middleName, 
       email: this.email,
       primaryPhone: this.primaryPhone,
       secondaryPhone: this.secondaryPhone,
       otherPhone: this.otherPhone,
+      mailingAddress: this.mailingAddress,
+      city: this.city,
+      postalCode: this.postalCode,
+      homeLocation: this.homeLocation, 
       region: this.region,
       workLocation: this.workLocation,
       ministry: this.ministry,
@@ -148,12 +171,13 @@ export class PersonnelEntity extends BaseEntity {
       logisticsNotes: this.logisticsNotes,
       supervisor: this.supervisor,
       status: this.status,
+      dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],
-      // trainings
+      // // trainings
       availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],
     };

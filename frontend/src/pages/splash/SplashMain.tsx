@@ -32,6 +32,26 @@ export const SplashMain = ({ content }: { content: any }) => {
             {content.description.pt3}
           </p>
         </div>
+        <div className="flex lg:hidden">
+          <div className="bg-[#013366]  rounded-md border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 ">
+            <h3 className="text-white">Login</h3>
+            <p className="text-white">
+              Use your IDIR to access the TEAMS member database.
+            </p>
+            <Button
+              variant={ButtonTypes.PRIMARY}
+              text={'Log In'}
+              onClick={() => nav(Routes.Login)}
+            />
+            <a className="text-white flex flex-row nowrap" href="/">
+              Don’t have an IDIR{' '}
+              <span>
+                <ChevronRightIcon className="h-6 w-6" />
+              </span>
+            </a>
+          </div>
+        </div>
+
         <div className="text-left flex flex-col py-12 lg:py-0">
           <p className="font-bold pb-2">{content.linksHeader}</p>
           {content.links.map((link: any, i: number) => (
@@ -54,7 +74,7 @@ export const SplashMain = ({ content }: { content: any }) => {
             Use your IDIR to access the TEAMS member database.
           </p>
           <Button
-            type={ButtonTypes.PRIMARY}
+            variant={ButtonTypes.PRIMARY}
             text={'Log In'}
             onClick={() => nav(Routes.Login)}
           />

@@ -35,7 +35,8 @@ export class PersonnelService {
     });
 
     try {
-      return await this.personnelRepository.update(id, { ...person });
+      await this.personnelRepository.update(id, { ...person });
+      return await this.personnelRepository.findOne({ where: { id } });
     } catch (e) {
       console.log(e);
     }
