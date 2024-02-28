@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import {
   Breadcrumbs,
@@ -20,9 +20,10 @@ import type { AvailabilityRange } from '../dashboard';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel } =
-    usePersonnel({ personnelId });
-  const { availability, getAvailability, saveAvailability } = useAvailability({ personnelId });
+  const { personnel } = usePersonnel({ personnelId });
+  const { availability, getAvailability, saveAvailability } = useAvailability({
+    personnelId,
+  });
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -32,7 +33,7 @@ const Profile = () => {
     to: dayjs().endOf('month').format('YYYY-MM-DD'),
   });
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
-  const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);;
+  const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);
 
   const onChangeAvailabilityQuery = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });

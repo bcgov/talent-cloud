@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { AxiosPrivate } from '../utils';
-import type { Availability, AvailabilityRange, Personnel } from '@/pages/dashboard';
+import type { Availability, AvailabilityRange } from '@/pages/dashboard';
 
 const useAvailability = ({
   personnelId,
 }: {
-  personnelId: string
+  personnelId: string;
 }): {
   availability: Availability[];
   getAvailability: (from: string, to: string) => Promise<void>;
@@ -15,9 +15,7 @@ const useAvailability = ({
 
   const getAvailability = async (from: string, to: string) => {
     const response = await AxiosPrivate.get(
-      encodeURI(
-        `/personnel/${personnelId}/availability?from=${from}&to=${to}`,
-      ),
+      encodeURI(`/personnel/${personnelId}/availability?from=${from}&to=${to}`),
     );
     setAvailability(response.data);
   };
@@ -34,6 +32,6 @@ const useAvailability = ({
     getAvailability,
     saveAvailability,
   };
-}
+};
 
 export default useAvailability;

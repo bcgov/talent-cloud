@@ -29,8 +29,7 @@ const SchedulerControl = ({
 
   // When values change, then we send a reuqest
   useEffect(() => {
-    const fromString = dayjs(`${fromYear}/${fromMonth}/01`)
-      .format('YYYY-MM-DD');
+    const fromString = dayjs(`${fromYear}/${fromMonth}/01`).format('YYYY-MM-DD');
     const toString = dayjs(`${toYear}/${toMonth}/01`)
       .endOf('month')
       .format('YYYY-MM-DD');
