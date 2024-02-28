@@ -57,7 +57,7 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
   ) {
     this.logger.log(
-      `${this.createPersonnel.name}, ${req.username}, ${req.role}`,
+      `${req.method}: ${req.url} - ${req.username}`,
     );
     return await this.personnelService.createPersonnel(personnel);
   }
@@ -77,8 +77,9 @@ export class PersonnelController {
     @Param('id') id: string,
   ) {
     this.logger.log(
-      `${this.updatePersonnel.name} ${req.username}, ${req.role}`,
+      `${req.method}: ${req.url} - ${req.username}`,
     );
+
     return await this.personnelService.updatePersonnel(id, personnel);
   }
 
@@ -97,7 +98,9 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
     @Query() query?: GetPersonnelDTO,
   ): Promise<GetPersonnelRO> {
-    this.logger.log(`${this.getPersonnel.name}, ${req.username}, ${req.role}`);
+    this.logger.log(
+      `${req.method}: ${req.url} - ${req.username}`,
+    );
 
     const queryResponse: {
       personnel: PersonnelEntity[];
@@ -129,8 +132,9 @@ export class PersonnelController {
     @Req() req: RequestWithRoles,
   ): Promise<Record<'Personnel', PersonnelRO>> {
     this.logger.log(
-      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+      `${req.method}: ${req.url} - ${req.username}`,
     );
+
     const personnelRO: Record<'Personnel', PersonnelRO> =
       await this.personnelService.getPersonnelById(req.role, id);
 
@@ -153,7 +157,7 @@ export class PersonnelController {
     @Req() req: RequestWithRoles,
   ): Promise<(UpdateResult | AvailabilityEntity)[]> {
     this.logger.log(
-      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+      `${req.method}: ${req.url} - ${req.username}`,
     );
 
     return await this.personnelService.updateAvailability(id, personnel);
@@ -174,7 +178,7 @@ export class PersonnelController {
     @Query() query: GetAvailabilityDTO,
   ): Promise<AvailabilityEntity[]> {
     this.logger.log(
-      `${this.getPersonnelById.name}, ${req.username}, ${req.role}`,
+      `${req.method}: ${req.url} - ${req.username}`,
     );
     return await this.personnelService.getAvailability(
       id,

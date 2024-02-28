@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  eachDayOfInterval, format, parse } from 'date-fns';
+import { eachDayOfInterval, format, parse } from 'date-fns';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -12,7 +12,6 @@ import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
-
 
 @Injectable()
 export class PersonnelService {
@@ -36,7 +35,8 @@ export class PersonnelService {
     });
 
     try {
-      return await this.personnelRepository.update(id, { ...person });
+      await this.personnelRepository.update(id, { ...person });
+      return await this.personnelRepository.findOne({ where: { id } });
     } catch (e) {
       console.log(e);
     }
@@ -114,42 +114,48 @@ export class PersonnelService {
       });
     }
     /**
-     * If availabilityStatus is defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with the availabilityStatus
+     * If we have an availability type, but no date range, we will default to the current date
      */
-    if (query.availabilityType) {
-      if (!query.availabilityFromDate || !query.availabilityToDate) {
-        qb.andWhere('availability.date =:date', {
-          date: format(new Date(), 'yyyy-MM-dd'),
-        });
-        qb.andWhere('availability.availabilityType = :availabilityType', {
-          availabilityType: query.availabilityType,
-        });
-      } else {
-        qb.andWhere('availability.availabilityType = :availabilityType', {
-          availabilityType: query.availabilityType,
-        });
-        qb.andWhere('availability.date BETWEEN :from AND :to', {
-          from: query.availabilityFromDate,
-          to: query.availabilityToDate,
-        });
-      }
+    if (
+      query.availabilityType &&
+      (!query.availabilityFromDate || !query.availabilityToDate)
+    ) {
+      qb.andWhere('availability.date =:date', {
+        date: format(new Date(), 'yyyy-MM-dd'),
+      });
+      qb.andWhere('availability.availabilityType = :availabilityType', {
+        availabilityType: query.availabilityType,
+      });
     }
     /**
-     * If availabilityStatus is not defined, check if availabilityStartDate and availabilityEndDate are defined - if not then, default to today's date, and return all peronnel with all availabilityStatus.
+     * If we have an availability type and a date range, we will use the date range + type
      */
-    if (!query.availabilityType) {
-      // This is the default view on pageload - all personnel and all status on today's date (if not indicated then the defualt status of not indicated is returned)
-      if (!query.availabilityFromDate || !query.availabilityToDate) {
-        qb.andWhere('availability.date =:date', {
-          date: format(new Date(), 'yyyy-MM-dd'),
-        });
-      } else {
-        // This query is not very meaningful without a status - returns all personnel with any status within the date range - we shoudl enforce a status to be selecred if searching by date range
-        qb.andWhere('availability.date BETWEEN :from AND :to', {
-          from: query.availabilityFromDate,
-          to: query.availabilityToDate,
-        });
-      }
+    if (
+      query.availabilityType &&
+      query.availabilityFromDate &&
+      query.availabilityToDate
+    ) {
+      qb.andWhere('availability.availabilityType = :availabilityType', {
+        availabilityType: query.availabilityType,
+      });
+      qb.andWhere('availability.date BETWEEN :from AND :to', {
+        from: query.availabilityFromDate,
+        to: query.availabilityToDate,
+      });
+    }
+    /**
+     * If we have a date range, but no availability type, we will search for any availability type within the specified date range
+     * TODO - pending criteria for handling this - should we disable search by date range without an availability type?
+     */
+    if (
+      !query.availabilityType &&
+      query.availabilityFromDate &&
+      query.availabilityToDate
+    ) {
+      qb.andWhere('availability.date BETWEEN :from AND :to', {
+        from: query.availabilityFromDate,
+        to: query.availabilityToDate,
+      });
     }
 
     if (query.showInactive) {
@@ -191,28 +197,27 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityEntity[]> {
-
-
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
-    const start = parse(query.from, 'yyyy-MM-dd', new Date())
+    const start = parse(query.from, 'yyyy-MM-dd', new Date());
 
-    const end = parse(query.to, 'yyyy-MM-dd', new Date())
+    const end = parse(query.to, 'yyyy-MM-dd', new Date());
 
     // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
     start.setDate(1);
 
     const endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0);
-    
 
     qb.where('availability.personnel = :id', { id });
-    qb.andWhere('availability.date >= :start AND availability.date <= :endDate', { start, endDate });
+    qb.andWhere(
+      'availability.date >= :start AND availability.date <= :endDate',
+      { start, endDate },
+    );
 
     const availability = await qb.getMany();
 
-    const dates = eachDayOfInterval({ start, end: endDate });  
+    const dates = eachDayOfInterval({ start, end: endDate });
 
-    
     const availableDates: AvailabilityEntity[] = dates.map(
       (date) =>
         availability.find((itm) => itm.date === format(date, 'yyyy-MM-dd')) ??
