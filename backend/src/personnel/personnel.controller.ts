@@ -153,14 +153,14 @@ export class PersonnelController {
   @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async updatePersonnelAvailability(
     @Param('id') id: string,
-    @Body() personnel: UpdateAvailabilityDTO,
+    @Body() availability: UpdateAvailabilityDTO,
     @Req() req: RequestWithRoles,
   ): Promise<(UpdateResult | AvailabilityEntity)[]> {
     this.logger.log(
       `${req.method}: ${req.url} - ${req.username}`,
     );
 
-    return await this.personnelService.updateAvailability(id, personnel);
+    return await this.personnelService.updateAvailability(id, availability);
   }
 
   @ApiOperation({
@@ -180,9 +180,6 @@ export class PersonnelController {
     this.logger.log(
       `${req.method}: ${req.url} - ${req.username}`,
     );
-    return await this.personnelService.getAvailability(
-      id,
-      query,
-    );
+    return await this.personnelService.getAvailability(id, query);
   }
 }

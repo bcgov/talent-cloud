@@ -14,8 +14,10 @@ import MonthPicker from '@/components/ui/MonthPicker';
 
 const SchedulerControl = ({
   onChangeAvailabilityDates,
+  addEventClicked,
 }: {
   onChangeAvailabilityDates: (from: string, to: string) => void;
+  addEventClicked: () => void;
 }) => {
   const numMonthsItems = [1, 3, 6, 12];
 
@@ -27,7 +29,7 @@ const SchedulerControl = ({
 
   // When values change, then we send a reuqest
   useEffect(() => {
-    const fromString = `${fromYear}-${fromMonth}-01`;
+    const fromString = dayjs(`${fromYear}/${fromMonth}/01`).format('YYYY-MM-DD');
     const toString = dayjs(`${toYear}/${toMonth}/01`)
       .endOf('month')
       .format('YYYY-MM-DD');
@@ -147,6 +149,17 @@ const SchedulerControl = ({
             </Option>
           ))}
         </Select>
+      </div>
+      <div className="pt-2">
+        <Button
+          variant="text"
+          size="sm"
+          className="bg-calBlueTwo text-white normal-case"
+          placeholder={''}
+          onClick={addEventClicked}
+        >
+          Add Event
+        </Button>
       </div>
     </div>
   );

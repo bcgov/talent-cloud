@@ -244,7 +244,7 @@ export class PersonnelService {
 
     const dates = [];
 
-    for (let i = startDate; i < endDate; i.setDate(i.getDate() + 1)) {
+    for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
       dates.push(format(i, 'yyyy-MM-dd'));
     }
 

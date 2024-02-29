@@ -278,6 +278,14 @@ export interface Availability {
   date: string;
   availabilityType: AvailabilityType;
   deploymentCode?: string;
+  id?: string;
+}
+
+export interface AvailabilityRange {
+  from: string;
+  to: string;
+  type: AvailabilityType;
+  deploymentCode?: string;
 }
 
 export interface SchedulerRowItem {

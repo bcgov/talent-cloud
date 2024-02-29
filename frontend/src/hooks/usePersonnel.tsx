@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AxiosPrivate } from '../utils';
-import type { Availability, Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/pages/dashboard';
 
 const usePersonnel = ({
   personnelId,
@@ -8,11 +8,8 @@ const usePersonnel = ({
   personnelId: string;
 }): {
   personnel: Personnel | undefined;
-  availability: Availability[];
-  getAvailability: (from: string, to: string) => Promise<void>;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
-  const [availability, setAvailability] = useState<Availability[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -21,17 +18,8 @@ const usePersonnel = ({
     })();
   }, [personnelId]);
 
-  const getAvailability = async (from: string, to: string) => {
-    const response = await AxiosPrivate.get(
-      encodeURI(`/personnel/${personnelId}/availability?from=${from}&to=${to}`),
-    );
-    setAvailability(response.data);
-  };
-
   return {
     personnel,
-    availability,
-    getAvailability,
   };
 };
 
