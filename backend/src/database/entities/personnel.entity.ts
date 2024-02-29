@@ -174,6 +174,7 @@ export class PersonnelEntity extends BaseEntity {
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
+      lastDeployed: '',
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],

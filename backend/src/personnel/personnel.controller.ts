@@ -38,6 +38,7 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(AppLogger)
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);

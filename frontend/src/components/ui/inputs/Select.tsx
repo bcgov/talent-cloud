@@ -17,13 +17,11 @@ export const Select = ({
       className={field?.disabled ? classes.menu.disabled : classes.menu.container}
       {...field}
     >
-      {field?.options?.map(
-        (itm: { label: string; value: boolean | string | number }) => (
-          <option key={itm.value.toString()} value={itm.value.toString()}>
-            {itm.label}
-          </option>
-        ),
-      )}
+      {field?.options?.map((itm) => (
+        <option key={itm.value.toString()} value={itm.value}>
+          {itm.label}
+        </option>
+      ))}
     </Field>
     <ErrorMessage name={field.name}>
       {(msg) => <div className="font-bold text-error">{msg}</div>}

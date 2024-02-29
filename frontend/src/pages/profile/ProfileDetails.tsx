@@ -72,16 +72,21 @@ const ProfileDetails = ({
           open={open === 1}
           icon={
             open ? (
-              <ChevronUpIcon className="h-8 w-5 fill-[#606060]" />
+              <ChevronUpIcon
+                className="cursor-pointer  h-8 w-5 fill-[#606060]"
+                onClick={() => handleOpen(1)}
+              />
             ) : (
-              <ChevronDownIcon className="h-8 w-5 fill-[#606060]" />
+              <ChevronDownIcon
+                className="cursor-pointer h-8 w-5 fill-[#606060]"
+                onClick={() => handleOpen(1)}
+              />
             )
           }
         >
           <AccordionHeader
             placeholder={'Member Details'}
-            onClick={() => handleOpen(1)}
-            className="bg-grayBackground px-8"
+            className="bg-grayBackground px-8 cursor-default"
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>

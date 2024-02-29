@@ -1,6 +1,6 @@
 export type Option = {
   label: string;
-  value: string | boolean | number;
+  value: any;
 };
 
 export type CustomFormProps = {

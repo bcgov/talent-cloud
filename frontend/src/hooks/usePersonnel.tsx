@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AxiosPrivate } from '../utils';
 import type { Personnel } from '@/pages/dashboard';
+import type { FormikValues } from 'formik';
 
 const usePersonnel = ({
   personnelId,
@@ -8,20 +9,32 @@ const usePersonnel = ({
   personnelId: string;
 }): {
   personnel: Personnel | undefined;
-  updatePersonnel: (person: Personnel) => void;
+  updatePersonnel: (person: FormikValues) => Promise<void>;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
 
-  const updatePersonnel = (person: Personnel) => {
-    setPersonnel(person);
-  };
-
   useEffect(() => {
     (async () => {
-      const response = await AxiosPrivate.get(`/personnel/${personnelId}`);
-      updatePersonnel(response.data);
+      try {
+        const response = await AxiosPrivate.get(`/personnel/${personnelId}`);
+        setPersonnel(response.data);
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }, [personnelId]);
+
+  const updatePersonnel = async (personnel: FormikValues) => {
+    try {
+      const res = await AxiosPrivate.patch(
+        encodeURI(`/personnel/${personnelId}`),
+        personnel,
+      );
+      setPersonnel(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return {
     personnel,
