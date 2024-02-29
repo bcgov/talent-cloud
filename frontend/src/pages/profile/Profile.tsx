@@ -49,7 +49,11 @@ const Profile = () => {
   };
   const [openEditPopUp, setOpenEditPopUp] = useState(false);
 
-  const handleOpenEditPopUp = () => {
+  const handleOpenEditPopUp = (e: Event) => {
+    if (openEditPopUp === false) {
+      e.stopPropagation();
+    }
+
     setOpenEditPopUp(!openEditPopUp);
   };
 
