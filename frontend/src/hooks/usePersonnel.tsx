@@ -8,6 +8,7 @@ const usePersonnel = ({
   personnelId: string;
 }): {
   personnel: Personnel | undefined;
+  updatePersonnel: (person: Personnel) => void;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
 
@@ -24,6 +25,7 @@ const usePersonnel = ({
 
   return {
     personnel,
+    updatePersonnel,
   };
 };
 
