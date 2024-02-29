@@ -55,6 +55,7 @@ const ProfileDetails = ({
   const notes = {
     coordinator: [
       { title: 'Logistics Notes', content: personnel.logisticsNotes ?? '' },
+      { title: '', content: '' },
       { title: 'Coordinator Notes', content: personnel.coordinatorNotes ?? '' },
     ],
     logistics: [
@@ -86,7 +87,7 @@ const ProfileDetails = ({
               <span>Member Details</span>
               <button
                 onClick={openEditPopUp}
-                className="z-40 flex text-primaryBlue flex-row items-center"
+                className="z-20 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />
                 <span className="pl-2 font-normal underline text-sm">Edit</span>
@@ -96,14 +97,14 @@ const ProfileDetails = ({
 
           <AccordionBody>
             <div className="px-8 grid grid-cols-1 lg:grid-cols-5">
-              <div className="col-span-1 lg:col-span-3">
+              <div className="col-span-1 lg:col-span-5 xl:col-span-3">
                 <DetailsSection
                   numColumns={3}
                   title={'General Information'}
                   columns={generalInformation}
                 />
               </div>
-              <div className="col-span-1 lg:col-span-2">
+              <div className="col-span-1 lg:col-span-3 xl:col-span-2">
                 <DetailsSection numColumns={2} title={'Contact'} columns={contact} />
               </div>
               <div className="border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
@@ -119,7 +120,7 @@ const ProfileDetails = ({
 
               <div className="col-span-1 lg:col-span-5">
                 <DetailsSection
-                  numColumns={2}
+                  numColumns={4}
                   title={'Notes'}
                   columns={
                     role === Role.COORDINATOR ? notes.coordinator : notes.logistics
