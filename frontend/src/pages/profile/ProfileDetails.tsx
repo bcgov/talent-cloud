@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
@@ -13,7 +14,7 @@ const ProfileDetails = ({
   openEditPopUp,
 }: {
   personnel: Personnel;
-  openEditPopUp: () => void;
+  openEditPopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
   const { role } = useRole();
@@ -40,8 +41,18 @@ const ProfileDetails = ({
   ];
 
   const contact = [
-    { title: 'Primary Number', content: personnel.primaryPhone || 'Not Listed' },
-    { title: 'Secondary Number', content: personnel.secondaryPhone || 'Not Listed' },
+    {
+      title: 'Primary Number',
+      content:
+        personnel.primaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ||
+        'Not Listed',
+    },
+    {
+      title: 'Secondary Number',
+      content:
+        personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ||
+        'Not Listed',
+    },
     { title: 'Email Address', content: personnel.email },
     { title: 'Mailing Address', content: '' },
   ];
@@ -80,7 +91,7 @@ const ProfileDetails = ({
         >
           <AccordionHeader
             placeholder={'Member Details'}
-            className="bg-grayBackground px-8 cursor-default"
+            className="bg-grayBackground px-8"
             onClick={() => handleOpen(1)}
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">

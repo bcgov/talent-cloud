@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import { Dialog } from '@headlessui/react';
 import type { Personnel } from '../dashboard';
 import { ButtonTypes } from '@/common';
@@ -15,7 +16,7 @@ export const ProfileEditForm = ({
   updatePersonnel,
 }: {
   open: boolean;
-  handleOpenEditPopUp: () => void;
+  handleOpenEditPopUp: (e: MouseEvent<HTMLElement>) => void;
   personnel: Personnel;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
 }) => {
@@ -27,6 +28,7 @@ export const ProfileEditForm = ({
   const handleSubmit = async (
     values: FormikValues,
     helpers: FormikHelpers<Personnel>,
+    ...props: any
   ) => {
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
@@ -47,11 +49,16 @@ export const ProfileEditForm = ({
 
     helpers.setSubmitting(false);
     await updatePersonnel(values);
-    handleOpenEditPopUp();
+
+    handleOpenEditPopUp(props.event);
   };
 
   return (
-    <Dialog open={open} onClose={handleOpenEditPopUp} className="relative z-50">
+    <Dialog
+      open={open}
+      onClose={(...props: any) => handleOpenEditPopUp(props.event)}
+      className="relative z-50"
+    >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
@@ -60,7 +67,7 @@ export const ProfileEditForm = ({
         {/* Container to center the panel */}
         <div className="flex min-h-full items-center justify-center p-4">
           {/* The actual dialog panel  */}
-          <Dialog.Panel className="mx-auto rounded bg-white  lg:w-5/12 xl:w-1/2">
+          <Dialog.Panel className="mx-auto rounded bg-white  lg:w-2/3 xl:w-1/2">
             <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-4">
               <h4 className="font-bold">Edit Member Details</h4>
               <button
@@ -100,7 +107,7 @@ export const ProfileEditForm = ({
                         />
                       </div>
 
-                      <div className="w-full grid grid-cols-3 gap-6">
+                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <Field
                           props={props}
                           {...props}
@@ -154,7 +161,7 @@ export const ProfileEditForm = ({
                       </div>
                       <Divider />
                       <SectionHeader section={sections.contact.header} />
-                      <div className="w-full grid grid-cols-3 gap-6">
+                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <Field
                           props={props}
                           field={fields.primaryPhone}
@@ -171,7 +178,7 @@ export const ProfileEditForm = ({
                           component={TextInput}
                         />
                       </div>
-                      <div className="w-full grid grid-cols-3 gap-6">
+                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <Field
                           props={props}
                           field={fields.mailingAddress}

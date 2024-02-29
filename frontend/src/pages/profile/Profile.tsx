@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import {
@@ -49,7 +50,7 @@ const Profile = () => {
   };
   const [openEditPopUp, setOpenEditPopUp] = useState(false);
 
-  const handleOpenEditPopUp = (e: Event) => {
+  const handleOpenEditPopUp = (e: MouseEvent<HTMLElement>) => {
     if (openEditPopUp === false) {
       e.stopPropagation();
     }
