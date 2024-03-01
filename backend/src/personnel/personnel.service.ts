@@ -116,50 +116,37 @@ export class PersonnelService {
     /**
      * If we have an availability type, but no date range, we will default to the current date
      */
-    if (
-      query.availabilityType &&
-      (!query.availabilityFromDate || !query.availabilityToDate)
-    ) {
-      qb.andWhere('availability.date =:date', {
-        date: format(new Date(), 'yyyy-MM-dd'),
-      });
-      qb.andWhere('availability.availabilityType = :availabilityType', {
-        availabilityType: query.availabilityType,
-      });
-    }
-    /**
-     * If we have an availability type and a date range, we will use the date range + type
-     */
-    if (
-      query.availabilityType &&
-      query.availabilityFromDate &&
-      query.availabilityToDate
-    ) {
-      qb.andWhere('availability.availabilityType = :availabilityType', {
-        availabilityType: query.availabilityType,
-      });
-      qb.andWhere('availability.date BETWEEN :from AND :to', {
-        from: query.availabilityFromDate,
-        to: query.availabilityToDate,
-      });
-    }
-    /**
-     * If we have a date range, but no availability type, we will search for any availability type within the specified date range
-     * TODO - pending criteria for handling this - should we disable search by date range without an availability type?
-     */
-    if (
-      !query.availabilityType &&
-      query.availabilityFromDate &&
-      query.availabilityToDate
-    ) {
-      qb.andWhere('availability.date BETWEEN :from AND :to', {
-        from: query.availabilityFromDate,
-        to: query.availabilityToDate,
-      });
-    }
+    if (!query.availabilityType) {
+      if (!query.availabilityFromDate || !query.availabilityToDate) {
+        qb.andWhere('availability.date =:date', {
+          date: format(new Date(), 'yyyy-MM-dd'),
+        });
+      }
+      if (query.availabilityFromDate || query.availabilityToDate) {
+        qb.andWhere('availability.date BETWEEN :from AND :to', {
+          from: query.availabilityFromDate,
+          to: query.availabilityToDate,
+        });
+      }
+    } else {
+      /**
+       * If we have an availability type and a date range, we will use the date range + type
+       */
 
-    if(!query.availabilityFromDate || !query.availabilityToDate) {
-      qb.andWhere('availability.date = :date', { date: format(new Date(), 'yyyy-MM-dd') });
+      if (query.availabilityFromDate && query.availabilityToDate) {
+        qb.andWhere('availability.availabilityType = :availabilityType', {
+          availabilityType: query.availabilityType,
+        });
+        qb.andWhere('availability.date BETWEEN :from AND :to', {
+          from: query.availabilityFromDate,
+          to: query.availabilityToDate,
+        });
+      }
+      if (!query.availabilityFromDate || !query.availabilityToDate) {
+        qb.andWhere('availability.date =:date', {
+          date: format(new Date(), 'yyyy-MM-dd'),
+        });
+      }
     }
 
     if (query.showInactive) {
