@@ -1,19 +1,19 @@
 import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
-import { ErrorMessage, Field } from 'formik';
-import type { CustomFormProps } from './types';
+import { ErrorMessage, useField } from 'formik';
+import type { InputProps } from './types';
 
-export const TextArea = ({
-  field,
-}: {
-  field: FieldInputProps<string> & CustomFormProps;
-}) => (
-  <label htmlFor={field.name}>
-    {field?.label}
-    {field?.required && <span className="text-error">*</span>}
-    <Field component={'textarea'} {...field} className={classes.menu.textArea} />
-    <ErrorMessage name={field.name}>
-      {(msg) => <div className="font-bold text-error">{msg}</div>}
-    </ErrorMessage>
-  </label>
-);
+export const TextArea = ({ label, required, ...props }: InputProps) => {
+  const [field] = useField(props as any as FieldInputProps<string>);
+
+  return (
+    <label htmlFor={field.name}>
+      {label}
+      {required && <span className="text-error">*</span>}
+      <textarea {...field} className={classes.menu.textArea} />
+      <ErrorMessage name={field.name}>
+        {(msg) => <div className="font-bold text-error">{msg}</div>}
+      </ErrorMessage>
+    </label>
+  );
+};

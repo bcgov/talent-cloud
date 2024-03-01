@@ -1,11 +1,13 @@
-export type Option = {
+export type InputProps = {
   label: string;
-  value: any;
+  type?: string;
+  disabled?: boolean;
+  required?: boolean;
 };
 
-export type CustomFormProps = {
-  disabled?: boolean;
-  label: string;
-  required?: boolean;
-  options?: Option[];
+export type SelectProps = InputProps & {
+  options?: {
+    label: string;
+    value: string | number | readonly string[] | undefined;
+  }[];
 };

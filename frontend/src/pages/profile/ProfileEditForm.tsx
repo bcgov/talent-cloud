@@ -5,9 +5,8 @@ import { ButtonTypes } from '@/common';
 import { EditProfileValidationSchema, fields, sections } from './constants';
 import { Divider } from '@/components/ui/Divider';
 import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'formik';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { Button, SectionHeader, Select, TextInput } from '@/components';
-import { format } from 'date-fns';
 
 export const ProfileEditForm = ({
   open,
@@ -20,7 +19,14 @@ export const ProfileEditForm = ({
   personnel: Personnel;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
 }) => {
-  const initialValues: Personnel = { ...personnel };
+  const initialValues: Personnel = {
+    ...personnel,
+    primaryPhone:
+      personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+    secondaryPhone: personnel.secondaryPhone
+      ? personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
+      : '',
+  };
 
   delete initialValues?.availability;
   delete initialValues?.experiences;
@@ -30,6 +36,10 @@ export const ProfileEditForm = ({
     helpers: FormikHelpers<Personnel>,
     ...props: any
   ) => {
+    // trim all the formatted characters out of the phone numbers
+    values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
+
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
       if (values[key as keyof Personnel] === personnel[key as keyof Personnel]) {
@@ -38,15 +48,19 @@ export const ProfileEditForm = ({
     });
     if (values.remoteOnly === 'true') {
       values.remoteOnly = true;
-    } else {
+    }
+    if (values.remoteOnly === 'false') {
       values.remoteOnly = false;
     }
+
     if (values.willingToTravel === 'true') {
       values.willingToTravel = true;
-    } else {
+    }
+    if (values.willingToTravel === 'false') {
       values.willingToTravel = false;
     }
 
+    // TODO success toast?
     helpers.setSubmitting(false);
     await updatePersonnel(values);
 
@@ -86,7 +100,6 @@ export const ProfileEditForm = ({
               {({
                 isSubmitting,
                 errors,
-                values,
                 ...props
               }: FormikState<Personnel> & FormikProps<Personnel>) => (
                 <Form>
@@ -94,128 +107,50 @@ export const ProfileEditForm = ({
                     <div className="flex flex-col w-full items-start justify-start space-y-8">
                       <SectionHeader section={sections.general.header} />
                       <div className="w-1/3">
-                        <Field
-                          props={props}
-                          field={{
-                            ...fields.dateJoined,
-                            value: format(
-                              values.dateJoined ?? new Date(),
-                              'yyyy-MM-dd',
-                            ),
-                          }}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.dateJoined} />
                       </div>
 
                       <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <Field
-                          props={props}
-                          {...props}
-                          field={fields.firstName}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.middleName}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.lastName}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.firstName} />
+
+                        <TextInput {...props} {...fields.middleName} />
+                        <TextInput {...props} {...fields.lastName} />
                       </div>
 
                       <div className="w-full grid grid-cols-1 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.region}
-                          component={Select}
-                        />
+                        <Select {...props} {...fields.region} />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.workLocation}
-                          component={Select}
-                        />
+                        <Select {...props} {...fields.workLocation} />
 
-                        <Field
-                          props={props}
-                          field={fields.homeLocation}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.homeLocation} />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.remoteOnly}
-                          component={Select}
-                        />
+                        <Select {...props} {...fields.remoteOnly} />
 
-                        <Field
-                          props={props}
-                          field={fields.willingToTravel}
-                          component={Select}
-                        />
+                        <Select {...props} {...fields.willingToTravel} />
                       </div>
                       <Divider />
                       <SectionHeader section={sections.contact.header} />
                       <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.primaryPhone}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.secondaryPhone}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.email}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.primaryPhone} />
+                        <TextInput {...props} {...fields.secondaryPhone} />
+                        <TextInput {...props} {...fields.email} />
                       </div>
                       <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.mailingAddress}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.city}
-                          component={TextInput}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.postalCode}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.mailingAddress} />
+                        <TextInput {...props} {...fields.city} />
+                        <TextInput {...props} {...fields.postalCode} />
                       </div>
 
                       <Divider />
                       <SectionHeader section={sections.organization.header} />
                       <div className="w-full grid grid-cols-1">
-                        <Field
-                          props={props}
-                          field={fields.supervisor}
-                          component={TextInput}
-                        />
+                        <TextInput {...props} {...fields.supervisor} />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
-                        <Field
-                          props={props}
-                          field={fields.ministry}
-                          component={Select}
-                        />
-                        <Field
-                          props={props}
-                          field={fields.classification}
-                          component={Select}
-                        />
+                        <TextInput {...props} {...fields.ministry} />
+                        <TextInput {...props} {...fields.classification} />
                       </div>
                     </div>
                   </div>
@@ -233,23 +168,19 @@ export const ProfileEditForm = ({
                       variant={ButtonTypes.TERTIARY}
                       text="Update"
                       type="submit"
-                      disabled={isSubmitting ?? Object.values(errors).length > 0}
+                      disabled={isSubmitting || !props.isValid}
                     />
                   </div>
                   <div className="w-full flex flex-row justify-end">
                     {Object.values(errors).length > 0 && (
                       <div className="text-error font-bold">
-                        Please resolve errors:{' '}
-                        {Object.values(errors).map((itm: any) => (
-                          <div key={itm}>{itm}</div>
-                        ))}
+                        Please resolve form errors
                       </div>
                     )}
                   </div>
                 </Form>
               )}
             </Formik>
-            {/* </DialogBody> */}
           </Dialog.Panel>
         </div>
       </div>

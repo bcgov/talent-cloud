@@ -35,14 +35,21 @@ export const EditProfileValidationSchema = Yup.object().shape(
     remoteOnly: Yup.boolean().required('Remote Only is required'),
     willingToTravel: Yup.boolean().required('Willingness to travel is required'),
     primaryPhone: Yup.string()
-      .length(10, 'Primary phone must be ten digits')
+      .min(10, 'Please enter a ten digit phone number')
+      .max(14, 'Please enter a ten digit phone number')
+      .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid')
       .required('Primary number is required'),
+
     secondaryPhone: Yup.string()
       .nullable()
       .default('')
       .when('secondaryPhone', (val, schema) => {
         return val
-          ? schema.length(10, 'Secondary Phone must be ten digits')
+          ? schema
+              .min(10, 'Please enter a ten digit phone number')
+              .max(14, 'Please enter a ten digit phone number')
+              .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid')
+              .required('Secondary number is required')
           : schema;
       }),
 
@@ -79,7 +86,19 @@ export const EditProfileValidationSchema = Yup.object().shape(
   ],
 );
 
-export const fields = {
+export const fields: {
+  [key: string]: {
+    name: string;
+    label: string;
+    type?: string;
+    disabled?: boolean;
+    required?: boolean;
+    options?: {
+      label: string;
+      value: string | number | readonly string[] | undefined;
+    }[];
+  };
+} = {
   dateJoined: {
     name: 'dateJoined',
     label: 'Date Joined',
@@ -146,8 +165,8 @@ export const fields = {
     type: 'select',
     disabled: false,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false },
+      { label: 'Yes', value: 'true' },
+      { label: 'No', value: 'false' },
     ],
   },
   willingToTravel: {
@@ -157,22 +176,22 @@ export const fields = {
     type: 'select',
     disabled: false,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false },
+      { label: 'Yes', value: 'true' },
+      { label: 'No', value: 'false' },
     ],
   },
   primaryPhone: {
     name: 'primaryPhone',
     label: 'Primary Number',
     required: true,
-    type: 'text',
+    type: 'phone',
     disabled: false,
   },
   secondaryPhone: {
     name: 'secondaryPhone',
     label: 'Secondary Number',
     required: false,
-    type: 'text',
+    type: 'phone',
     disabled: false,
   },
   email: {
