@@ -4,7 +4,6 @@ import { AvailabilityType } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
-import { WorkLocation } from '../../common/enums/work-location.enum';
 import { TrainingEntity } from '../../database/entities/training.entity';
 import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
@@ -42,7 +41,7 @@ export class CreatePersonnelDTO {
   @ApiProperty({
     description: "Personnel's work location",
     example: {
-      id: '1',
+      id: 1,
       locationName: 'Victoria',
       region: Region.SWE
     

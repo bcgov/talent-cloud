@@ -59,7 +59,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'primary_phone',
     type: 'varchar',
-    length: 25,
+    length: 10,
     nullable: true,
   })
   primaryPhone: string;
@@ -67,12 +67,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'secondary_phone',
     type: 'varchar',
-    length: 25,
+    length: 10,
     nullable: true,
   })
   secondaryPhone?: string;
 
-  @Column({ name: 'other_phone', type: 'varchar', length: 25, nullable: true })
+  @Column({ name: 'other_phone', type: 'varchar', length: 10, nullable: true })
   otherPhone: string;
 
   @Column({name:'mailing_address', type:'varchar', length: 100, nullable: true})
