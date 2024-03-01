@@ -149,7 +149,7 @@ export const ProfileEditForm = ({
                         <TextInput {...props} {...fields.supervisor} />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
-                        <TextInput {...props} {...fields.ministry} />
+                        <Select {...props} {...fields.ministry} />
                         <Select {...props} {...fields.classification} />
                       </div>
                     </div>
