@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react';
+
 import type { ButtonTypes } from './enums';
 
 export type LinkProps = {
@@ -13,7 +15,7 @@ export type FooterProps = {
 export type ButtonProps = {
   variant: ButtonTypes;
   text: string;
-  onClick?: () => any;
+  onClick?: (e: MouseEvent<HTMLElement>) => any;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
 };

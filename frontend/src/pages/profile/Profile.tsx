@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import {
@@ -17,13 +18,15 @@ import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange } from '../dashboard';
+import { ProfileEditForm } from './ProfileEditForm';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel } = usePersonnel({ personnelId });
+  const { personnel, updatePersonnel } = usePersonnel({ personnelId });
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
+
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -44,6 +47,15 @@ const Profile = () => {
     await saveAvailability(dates);
     setSchedulerDialogOpen(false);
     getAvailability(availabilityQuery.from, availabilityQuery.to);
+  };
+  const [openEditPopUp, setOpenEditPopUp] = useState(false);
+
+  const handleOpenEditPopUp = (e: MouseEvent<HTMLElement>) => {
+    if (openEditPopUp === false) {
+      e.stopPropagation();
+    }
+
+    setOpenEditPopUp(!openEditPopUp);
   };
 
   return (
@@ -73,8 +85,14 @@ const Profile = () => {
             <ProfileHeader personnel={personnel} role={role} />
 
             <ProfileDetails
+              openEditPopUp={handleOpenEditPopUp}
               personnel={personnel}
-              enableEdit={() => console.log('TODO!')}
+            />
+            <ProfileEditForm
+              personnel={personnel}
+              open={openEditPopUp}
+              handleOpenEditPopUp={handleOpenEditPopUp}
+              updatePersonnel={updatePersonnel}
             />
             <Scheduler
               name={personnel.firstName}

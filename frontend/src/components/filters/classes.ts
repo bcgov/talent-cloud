@@ -1,7 +1,9 @@
 export const classes = {
   menu: {
     container:
-      'bg-white rounded-md  shadow-sm w-full font-normal h-12 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#828282] border border-[#606060] color-[#828282]',
+      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#606060] border border-[#606060] color-[#828282] ',
+    textArea:
+      'textarea resize flex flex-row  p-2.5 w-1/2 text-sm min-h-[200px] w-2/3 font-normal bg-white rounded-sm text-[#828282] border border-[#606060] color-[#828282] outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 ',
 
     buttonContainer: 'flex flex-row items-center justify-end',
     button:
@@ -13,6 +15,8 @@ export const classes = {
     placeholder: 'text-[#828282]',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
+    disabled:
+      'rounded-sm  shadow-md bg-gray-200  border-0  w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#828282] border border-[#606060] color-[#828282] ',
   },
 };
 

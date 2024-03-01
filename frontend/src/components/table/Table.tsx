@@ -31,12 +31,15 @@ export const Table = ({
         </div>
 
         {showToggle && (
-          <Toggle
-            value={pageParams.showInactive}
-            handleToggle={(checked: boolean) =>
-              handlePageParams({ showInactive: checked })
-            }
-          />
+          <div className="flex flex-row justify-start md:items-center md:mr-12">
+            <Toggle
+              value={pageParams.showInactive}
+              handleToggle={(checked: boolean) =>
+                handlePageParams({ showInactive: checked })
+              }
+              label="Show Inactive"
+            />
+          </div>
         )}
       </div>
       {/* table-auto will auto resize columns - table fixed looks more consistent */}

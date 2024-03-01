@@ -1,6 +1,8 @@
 import type { Classification, Ministry, Status } from '@/common';
-import { AvailabilityType, AvailabilityTypeName } from '@/common';
+
 import {
+  AvailabilityType,
+  AvailabilityTypeName,
   ExperienceName,
   FunctionName,
   Region,
@@ -257,14 +259,14 @@ export interface Personnel {
   lastName: string;
   region: string;
   workLocation: string;
-  experiences: ExperienceInterface[];
-  availability: AvailabilityInterface[];
+  experiences?: ExperienceInterface[];
+  availability?: AvailabilityInterface[];
   status: Status;
   willingToTravel: boolean;
   remoteOnly: boolean;
   classification: string;
   ministry: string;
-  applicationDate: Date;
+  applicationDate?: Date;
   primaryPhone: string;
   secondaryPhone: string;
   email: string;
@@ -272,6 +274,12 @@ export interface Personnel {
   reviewed: boolean;
   coordinatorNotes?: string;
   logisticsNotes?: string;
+  homeLocation?: string;
+  middleName?: string;
+  mailingAddress?: string;
+  city?: string;
+  postalCode?: string;
+  dateJoined: Date;
 }
 
 export interface Availability {
