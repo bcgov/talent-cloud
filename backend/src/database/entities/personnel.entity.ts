@@ -40,7 +40,7 @@ export class PersonnelEntity extends BaseEntity {
 
   @JoinColumn([
     {
-      name: 'workLocation',
+      name: 'work_location',
       referencedColumnName: 'locationName',
     },
     { name: 'region', referencedColumnName: 'region' },
