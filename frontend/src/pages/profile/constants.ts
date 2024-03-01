@@ -2,36 +2,26 @@ import { Region, WorkLocation, Ministry, Classification } from '@/common';
 import * as Yup from 'yup';
 export const EditProfileValidationSchema = Yup.object().shape(
   {
-    email: Yup.string().email('Invalid email').required('Required'),
+    email: Yup.string().email('Invalid email').required('Email is Required'),
     firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Email is required'),
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters')
+      .required('First name is required'),
     lastName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters')
       .required('Last name is required'),
     dateJoined: Yup.date(),
     middleName: Yup.string()
-      .nullable()
-      .default('')
-      .when('middleName', (val, schema) => {
-        return val ? schema.min(2, 'Too Short!').max(50, 'Too Long!') : schema;
-      }),
+      .optional()
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters'),
     region: Yup.string().required('Work region is required'),
     workLocation: Yup.string().required('Work location is required'),
     homeLocation: Yup.string()
-      .nullable()
-      .default('')
-      .when('homeLocation', (val, schema) => {
-        return val
-          ? schema
-              .min(2, 'Too Short!')
-              .max(50, 'Too Long!')
-              .required('Home location is invalid')
-          : schema;
-      }),
-
+      .optional()
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters'),
     remoteOnly: Yup.boolean().required('Remote Only is required'),
     willingToTravel: Yup.boolean().required('Willingness to travel is required'),
     primaryPhone: Yup.string()
@@ -39,40 +29,29 @@ export const EditProfileValidationSchema = Yup.object().shape(
       .max(14, 'Please enter a ten digit phone number')
       .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid')
       .required('Primary number is required'),
-
     secondaryPhone: Yup.string()
-      .nullable()
-      .default('')
-      .when('secondaryPhone', (val, schema) => {
-        return val
-          ? schema
-              .min(10, 'Please enter a ten digit phone number')
-              .max(14, 'Please enter a ten digit phone number')
-              .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid')
-              .required('Secondary number is required')
-          : schema;
-      }),
-
+      .optional()
+      .min(10, 'Please enter a ten digit phone number')
+      .max(14, 'Please enter a ten digit phone number')
+      .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid'),
     mailingAddress: Yup.string()
-      .nullable()
-      .default('')
-      .when('mailingAddress', (val, schema) => {
-        return val ? schema.min(2, 'Too Short!').max(50, 'Too Long!') : schema;
-      }),
+      .optional()
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters'),
     city: Yup.string()
-      .nullable()
-      .default('')
-      .when('city', (val, schema) => {
-        return val ? schema.min(2, 'Too Short!').max(50, 'Too Long!') : schema;
-      }),
-    postalCode: Yup.string().nullable().default(''),
-
+      .optional()
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters'),
+    postalCode: Yup.string()
+      .optional()
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters'),
     supervisor: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
+      .min(2, 'Min length 2 characters')
+      .max(50, 'Max length 50 characters')
       .required('Supervisor is required'),
     ministry: Yup.string().required('Ministry is required'),
-    classification: Yup.string().required('Classification is required'),
+    classification: Yup.string().required('Union membership is required'),
     logisticsNotes: Yup.string().notRequired().nullable(),
     coordinatorNotes: Yup.string().notRequired().nullable(),
   },

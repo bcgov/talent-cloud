@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsOptional, IsString, Length, ValidateIf } from 'class-validator';
 import { AvailabilityType } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
@@ -33,6 +33,7 @@ export class CreatePersonnelDTO {
   @IsString()
   @Length(2, 50)
   @IsOptional()
+  @ValidateIf((o) => o.middleName !== '') 
   middleName?: string;
 
   @ApiProperty({
@@ -50,6 +51,7 @@ export class CreatePersonnelDTO {
   @IsOptional()  
   @IsString()
   @Length(2, 50)
+  @ValidateIf((o) => o.homeLocation !== '') 
   homeLocation: string;
 
   @ApiProperty({
@@ -83,6 +85,7 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @Length(10, 10)
   @IsOptional()
+  @ValidateIf((o) => o.secondaryPhone !== '') 
   secondaryPhone?: string;
 
   @ApiProperty({
@@ -92,6 +95,7 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @IsOptional()
   @Length(10, 10)
+  @ValidateIf((o) => o.otherPhone !== '') 
   otherPhone?: string;
 
 
@@ -102,6 +106,7 @@ export class CreatePersonnelDTO {
   @IsOptional()  
   @IsString()
   @Length(2, 50)
+  @ValidateIf((o) => o.mailingAddress !== '') 
   mailingAddress?: string;
 
 
@@ -112,6 +117,7 @@ export class CreatePersonnelDTO {
   @IsString()
   @Length(2, 50)
   @IsOptional()
+  @ValidateIf((o) => o.city !== '') 
   city?: string;
 
 
@@ -120,6 +126,7 @@ export class CreatePersonnelDTO {
     example: 'V081V0',
   })
   @IsOptional()
+  @ValidateIf((o) => o.postalCode !== '') 
   postalCode?: string;
 
   @ApiProperty({
@@ -154,6 +161,7 @@ export class CreatePersonnelDTO {
   @IsString()
   @Length(2, 50)
   @IsOptional()
+  @ValidateIf((o) => o.notes !== '') 
   notes: string;
 
   @ApiProperty({

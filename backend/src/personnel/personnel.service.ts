@@ -158,6 +158,10 @@ export class PersonnelService {
       });
     }
 
+    if(!query.availabilityFromDate || !query.availabilityToDate) {
+      qb.andWhere('availability.date = :date', { date: format(new Date(), 'yyyy-MM-dd') });
+    }
+
     if (query.showInactive) {
       qb.orderBy('personnel.status', 'DESC');
       qb.addOrderBy('personnel.lastName', 'ASC');
