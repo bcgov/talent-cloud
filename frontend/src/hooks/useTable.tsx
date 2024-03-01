@@ -56,6 +56,9 @@ export const useTable = () => {
         const rowsPerPage = filterValues?.rowsPerPage ?? 25;
         const totalPages = Math.ceil(count / rowsPerPage);
         const pageRange = [...Array(totalPages).keys()];
+
+        pageRange.splice(0, 1);
+
         const currentPage = filterValues?.currentPage ?? 1;
 
         setTableData({

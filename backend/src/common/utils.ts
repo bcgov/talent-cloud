@@ -225,7 +225,7 @@ const experiences = () => {
 
 export const generateData = () => {
   const people = [];
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 200; i++) {
     people.push(rowData());
   }
   return people;

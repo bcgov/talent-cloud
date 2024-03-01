@@ -1,7 +1,7 @@
 import type { LinkProps } from '@/common';
 
 export const footerLinks: LinkProps[] = [
-  { href: 'https://www2.gov.bc.ca/gov/content/home', label: 'Home' },
+  { href: '/', label: 'Home' },
   {
     href: 'https://www2.gov.bc.ca/gov/content/home/disclaimer',
     label: 'Disclaimer',
