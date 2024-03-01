@@ -70,20 +70,28 @@ const Scheduler = ({
         months[month].push({
           dayOfMonth: parseInt(day.format('D')),
           status: availDay.availabilityType,
+          actualStart: availDay.actualStartDate,
+          actualEnd: availDay.actualEndDate,
         });
       } else {
         months[month] = [
           {
             dayOfMonth: parseInt(day.format('D')),
             status: availDay.availabilityType,
+            actualStart: availDay.actualStartDate,
+            actualEnd: availDay.actualEndDate,
           },
         ];
       }
     });
     if (startDates[startDay]) {
-      // To close out, we pretend that the last day ends the status
-      // We may not want this, as a status may extend past this selected month
-      startDates[startDay].numDays = count;
+      const lastDay = availability[availability.length - 1];
+      if (lastDay.actualEndDate) {
+        const difference = dayjs(lastDay.actualEndDate).diff(startDay, 'days');
+        startDates[startDay].numDays = difference + 1;
+      } else {
+        startDates[startDay].numDays = count;
+      }
     }
 
     // For each start date, tell our `months` object which days are starters and how many days

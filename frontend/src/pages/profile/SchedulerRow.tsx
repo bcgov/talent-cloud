@@ -27,6 +27,8 @@ const Cell = ({
     status: string;
     start?: boolean;
     numDays?: number;
+    actualStart?: string;
+    actualEnd?: string;
   };
   cellClass: string;
   startClass?: string;
@@ -38,12 +40,13 @@ const Cell = ({
       ? `${month} ${dayOfMonthStatus.dayOfMonth} ${new Date().getFullYear()}`
       : '';
   const dateString = () => {
-    const startDate = dayjs(startDateString);
+    const startDate = dayOfMonthStatus?.actualStart
+      ? dayjs(dayOfMonthStatus.actualStart)
+      : dayjs(startDateString);
     if (dayOfMonthStatus?.numDays) {
-      const endDate = dayjs(startDateString).add(
-        dayOfMonthStatus?.numDays - 1,
-        'days',
-      );
+      const endDate = dayOfMonthStatus?.actualEnd
+        ? dayjs(dayOfMonthStatus.actualEnd)
+        : dayjs(startDateString).add(dayOfMonthStatus?.numDays - 1, 'days');
       const endDateString =
         startDate.month() === endDate.month()
           ? endDate.format('D')

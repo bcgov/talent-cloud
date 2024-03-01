@@ -30,6 +30,7 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { AvailabilityRO } from './ro/availability.ro';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -166,8 +167,30 @@ export class PersonnelController {
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
     @Query() query: GetAvailabilityDTO,
-  ): Promise<AvailabilityEntity[]> {
-    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    return await this.personnelService.getAvailability(id, query);
+  ): Promise<AvailabilityRO[]> {
+    this.logger.log(
+      `${req.method}: ${req.url} - ${req.username}`,
+    );
+    const dates = await this.personnelService.getAvailability(
+      id,
+      query,
+    );
+
+    const dateROs = dates.map((d) => d.toResponseObject());
+
+    const firstDate = dates[0];
+    if (firstDate.availabilityType !== 'NOT_INDICATED') {
+      console.log('???');
+      const actualStart = await this.personnelService.getEventStartDate(id, firstDate);
+      dateROs[0].actualStartDate = actualStart;
+    }
+
+    const lastDate = dates[dates.length-1];
+    if (lastDate.availabilityType !== 'NOT_INDICATED') {
+      const actualEnd = await this.personnelService.getEventEndDate(id, lastDate);
+      dateROs[dateROs.length-1].actualEndDate = actualEnd;
+    }
+
+    return dateROs;
   }
 }

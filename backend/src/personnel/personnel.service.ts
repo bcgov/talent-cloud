@@ -232,6 +232,17 @@ export class PersonnelService {
 
     return availableDates;
   }
+
+  async getEventStartDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
+    const start = await this.availabilityRepository.query('SELECT get_last_status_date_prior($1, $2, $3) as start_date', [personnelId, date.date, date.availabilityType]);
+    return format(start[0].start_date, 'yyyy-MM-dd');
+  }
+
+  async getEventEndDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
+    const end = await this.availabilityRepository.query('SELECT get_last_status_date_after($1, $2, $3) as end_date', [personnelId, date.date, date.availabilityType]);
+    return format(end[0].end_date, 'yyyy-MM-dd');
+  }
+
   /**
    * Update the availability of a personnel for a specific date range for a specific avaiilability type
    * @param id
