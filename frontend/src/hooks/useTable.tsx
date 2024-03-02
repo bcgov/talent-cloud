@@ -69,7 +69,7 @@ export const useTable = () => {
           rows: personnel.map(({ id, status, ...personnel }: Personnel) => ({
             key: id,
             status: status,
-            cells: renderCells(personnel, filterValues),
+            cells: renderCells({ id, status, ...personnel }, filterValues),
           })),
         });
       } catch (e) {

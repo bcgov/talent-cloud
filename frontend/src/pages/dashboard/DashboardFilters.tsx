@@ -32,20 +32,20 @@ export const Filters = ({
   handleCloseMany: (name: string) => void;
   handleSetDates: (range: DateRange | undefined) => void;
 }) => {
-  const fields = useGetFilters();
+  const {filters} = useGetFilters();
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
       <div className="col-span-1 lg:col-span-2">
-        <Search field={fields.name} handleSearchInput={handleSearch} />
+        <Search field={filters.name} handleSearchInput={handleSearch} />
       </div>
 
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
-              field={fields.region}
+              field={filters.region}
               values={filterValues.region}
               label="Region"
               onChange={handleMultiSelect}
@@ -59,13 +59,13 @@ export const Filters = ({
               handleClose={handleClose}
               handleCloseMany={handleCloseMany}
               field={{
-                ...fields.location,
+                ...filters.location,
                 groupedOptions:
                   filterValues.region && filterValues.region.length > 0
-                    ? fields.location?.groupedOptions?.filter((itm) =>
+                    ? filters.location?.groupedOptions?.filter((itm) =>
                         filterValues?.region?.includes(itm.label),
                       )
-                    : fields?.location?.groupedOptions,
+                    : filters?.location?.groupedOptions,
               }}
               label="Work Location"
               values={filterValues.location}
@@ -77,8 +77,8 @@ export const Filters = ({
       {/** lg - column 2 start */}
       <div className="col-span-1 lg:col-span-2">
         <CascadingMenu
-          field={fields.function}
-          nestedField={fields.experience}
+          field={filters.function}
+          nestedField={filters.experience}
           nestedValue={filterValues.experience}
           label="Function & Experience Level"
           onChange={handleSingleSelect}
@@ -89,7 +89,7 @@ export const Filters = ({
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3">
           <div className="col-span-1">
             <SingleSelect
-              field={fields.availabilityType}
+              field={filters.availabilityType}
               label="Availability"
               value={filterValues.availabilityType}
               onChange={handleSingleSelect}
@@ -98,7 +98,7 @@ export const Filters = ({
           </div>
           <div className="col-span-1 md:col-span-2">
             <DatePicker
-              field={fields.availabilityDates}
+              field={filters.availabilityDates}
               label="Availability Date Range"
               value={filterValues.availabilityDates}
               onChange={handleSetDates}

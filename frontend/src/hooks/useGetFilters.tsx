@@ -5,36 +5,33 @@ import {
   ExperienceName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
-import type { FunctionType, WorkLocationInterface } from '@/pages/dashboard';
+import type { FunctionType, LocationInterface } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
 
 import { AxiosPrivate } from '@/utils';
 import { useEffect, useState } from 'react';
 
 export const useGetFilters = () => {
-  const [locations, setLocations] = useState<WorkLocationInterface[]>([]);
+  const [locations, setLocations] = useState<LocationInterface[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
 
   useEffect(() => {
     (async () => {
       const {
-        data: { locations },
-      } = await AxiosPrivate.get('/regions-locations');
+        data: { functions, locations },
+      } = await AxiosPrivate.get('/filters');
       setLocations(locations);
       setRegions(
         Array.from(
-          new Set(locations.map((itm: WorkLocationInterface) => itm.region)),
+          new Set(locations.map((itm: LocationInterface) => itm.region)),
         ),
       );
-
-      const { data } = await AxiosPrivate.get('/function');
-      console.log(data);
-      setFunctions(data);
+      setFunctions(functions);
     })();
   }, []);
 
-  return {
+  const filters = {
     name: {
       name: DashboardFilterNames.NAME,
     },
@@ -64,7 +61,7 @@ export const useGetFilters = () => {
       groupedOptions: regions.map((itm: Region) => ({
         label: itm,
         options: locations
-          .filter((loc: WorkLocationInterface) => {
+          .filter((loc: LocationInterface) => {
             return loc.region === itm;
           })
           .flatMap((itm) => itm.locationName),
@@ -97,5 +94,11 @@ export const useGetFilters = () => {
       label: 'Availability Date Range',
       value: { from: new Date(), to: new Date() },
     },
+  };
+  return {
+    filters,
+    locations,
+    regions,
+    functions,
   };
 };
