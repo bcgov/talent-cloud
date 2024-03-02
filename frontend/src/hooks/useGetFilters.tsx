@@ -5,13 +5,14 @@ import {
   ExperienceName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
+import type { FunctionType, WorkLocationInterface } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
-import type { FunctionType, WorkLocation } from '@/pages/dashboard/interface';
+
 import { AxiosPrivate } from '@/utils';
 import { useEffect, useState } from 'react';
 
 export const useGetFilters = () => {
-  const [locations, setLocations] = useState<WorkLocation[]>([]);
+  const [locations, setLocations] = useState<WorkLocationInterface[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
 
@@ -22,11 +23,13 @@ export const useGetFilters = () => {
       } = await AxiosPrivate.get('/regions-locations');
       setLocations(locations);
       setRegions(
-        Array.from(new Set(locations.map((itm: WorkLocation) => itm.region))),
+        Array.from(
+          new Set(locations.map((itm: WorkLocationInterface) => itm.region)),
+        ),
       );
 
       const { data } = await AxiosPrivate.get('/function');
-
+      console.log(data);
       setFunctions(data);
     })();
   }, []);
@@ -61,7 +64,7 @@ export const useGetFilters = () => {
       groupedOptions: regions.map((itm: Region) => ({
         label: itm,
         options: locations
-          .filter((loc: WorkLocation) => {
+          .filter((loc: WorkLocationInterface) => {
             return loc.region === itm;
           })
           .flatMap((itm) => itm.locationName),
