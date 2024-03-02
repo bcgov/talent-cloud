@@ -98,10 +98,22 @@ export const renderCells = (
             filterValues.availabilityDates,
             availability ?? [],
           )
-        : AvailabilityTypeName.NOT_INDICATED,
+        : AvailabilityTypeName[
+            availability?.[0]?.availabilityType as keyof typeof AvailabilityType
+          ],
       className: tableClass(
         DashboardColumns.AVAILABILITY,
-        filterValues.availabilityType ?? AvailabilityType.NOT_INDICATED,
+        filterValues.availabilityType
+          ? getAvailabilityValue(
+              AvailabilityType[
+                filterValues.availabilityType as unknown as keyof typeof AvailabilityType
+              ],
+              filterValues.availabilityDates,
+              availability ?? [],
+            )
+          : AvailabilityTypeName[
+              availability?.[0]?.availabilityType as keyof typeof AvailabilityType
+            ],
       ),
     },
     {

@@ -1,4 +1,4 @@
-import { AvailabilityType, Classification } from '@/common';
+import { AvailabilityTypeName, Classification } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
@@ -57,11 +57,11 @@ const getUnionMembershipClass = (value?: string) => {
 
 export const getAvailabilityClass = (value?: string) => {
   switch (value) {
-    case AvailabilityType.AVAILABLE:
+    case AvailabilityTypeName.AVAILABLE:
       return tableClasses.available;
-    case AvailabilityType.UNAVAILABLE:
+    case AvailabilityTypeName.UNAVAILABLE:
       return tableClasses.unavailable;
-    case AvailabilityType.DEPLOYED:
+    case AvailabilityTypeName.DEPLOYED:
       return tableClasses.deployed;
     default:
       return tdClass;
