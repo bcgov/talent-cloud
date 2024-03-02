@@ -1,4 +1,4 @@
-import { ButtonTypes, Region } from '@/common';
+import { ButtonTypes } from '@/common';
 import {
   MultiSelectGroup,
   Button,
@@ -7,13 +7,13 @@ import {
   Search,
   DatePicker,
 } from '@/components';
-import type { DashboardFields, DashboardFilters } from './constants';
 import type { ChangeEvent } from 'react';
 import { SingleSelect } from '@/components/filters/SingleSelect';
 import type { DateRange } from 'react-day-picker';
+import { useGetFilters } from '@/hooks/useGetFilters';
+import type { DashboardFilters } from './constants';
 
 export const Filters = ({
-  fields,
   handleMultiSelect,
   handleSingleSelect,
   handleSearch,
@@ -23,7 +23,6 @@ export const Filters = ({
   handleCloseMany,
   handleSetDates,
 }: {
-  fields: DashboardFields;
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -33,6 +32,8 @@ export const Filters = ({
   handleCloseMany: (name: string) => void;
   handleSetDates: (range: DateRange | undefined) => void;
 }) => {
+  const fields = useGetFilters();
+
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
@@ -44,7 +45,7 @@ export const Filters = ({
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
-              field={{ name: 'region', options: Object.values(Region) }}
+              field={fields.region}
               values={filterValues.region}
               label="Region"
               onChange={handleMultiSelect}
@@ -62,9 +63,7 @@ export const Filters = ({
                 groupedOptions:
                   filterValues.region && filterValues.region.length > 0
                     ? fields.location?.groupedOptions?.filter((itm) =>
-                        filterValues?.region?.includes(
-                          Region[itm.label as keyof typeof Region],
-                        ),
+                        filterValues?.region?.includes(itm.label),
                       )
                     : fields?.location?.groupedOptions,
               }}

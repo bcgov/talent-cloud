@@ -27,7 +27,7 @@ export class PersonnelService {
    * @param personnel
    * @returns
    */
-  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO) {
+  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO, role: Role) {
     const person = await this.personnelRepository.findOne({ where: { id } });
 
     Object.keys(personnel).forEach((key) => {
@@ -36,7 +36,7 @@ export class PersonnelService {
 
     try {
       await this.personnelRepository.update(id, { ...person });
-      return await this.personnelRepository.findOne({ where: { id } });
+      return (await this.personnelRepository.findOne({ where: { id } })).toResponseObject(role);
     } catch (e) {
       console.log(e);
     }
@@ -73,6 +73,7 @@ export class PersonnelService {
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.availability', 'availability');
+    qb.leftJoinAndSelect('personnel.workLocation', 'location');
 
     if (query.name) {
       qb.andWhere(
@@ -93,12 +94,12 @@ export class PersonnelService {
       qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
     }
     if (query.region?.length) {
-      qb.andWhere('personnel.region IN (:...regions)', {
+      qb.andWhere('location.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
-      qb.andWhere('personnel.workLocation IN (:...workLocations)', {
+      qb.andWhere('location.locationName IN (:...workLocations)', {
         workLocations: query.location,
       });
     }

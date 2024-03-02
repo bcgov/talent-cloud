@@ -81,7 +81,7 @@ export class PersonnelController {
       `${req.method}: ${req.url} - ${req.username}`,
     );
 
-    return await this.personnelService.updatePersonnel(id, personnel);
+    return await this.personnelService.updatePersonnel(id, personnel, req.role);
   }
 
   @ApiOperation({

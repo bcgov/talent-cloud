@@ -6,6 +6,8 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
@@ -15,9 +17,9 @@ import { Role } from '../../auth/interface';
 import { Status } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
-import { Region } from '../../common/enums/region.enum';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
+import { LocationEntity } from './location.entity';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -36,15 +38,15 @@ export class PersonnelEntity extends BaseEntity {
   @Column({type: 'date', name: 'date_joined'})
   dateJoined: Date;
 
-  @Column({
-    name: 'work_location',
-    type: 'varchar',
-    length: 100,
-  })
-  workLocation: string;
-
-  @Column({ name: 'region', type: 'enum', enum: Region, enumName: 'region' })
-  region: Region;
+  @JoinColumn([
+    {
+      name: 'work_location',
+      referencedColumnName: 'locationName',
+    },
+    { name: 'region', referencedColumnName: 'region' },
+  ])
+  @ManyToOne(() => LocationEntity, { eager: true })
+  workLocation: LocationEntity;
 
   @Column({
     name: 'ministry',
@@ -57,7 +59,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'primary_phone',
     type: 'varchar',
-    length: 25,
+    length: 10,
     nullable: true,
   })
   primaryPhone: string;
@@ -65,12 +67,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'secondary_phone',
     type: 'varchar',
-    length: 25,
+    length: 10,
     nullable: true,
   })
   secondaryPhone?: string;
 
-  @Column({ name: 'other_phone', type: 'varchar', length: 25, nullable: true })
+  @Column({ name: 'other_phone', type: 'varchar', length: 10, nullable: true })
   otherPhone: string;
 
   @Column({name:'mailing_address', type:'varchar', length: 100, nullable: true})
@@ -161,8 +163,8 @@ export class PersonnelEntity extends BaseEntity {
       city: this.city,
       postalCode: this.postalCode,
       homeLocation: this.homeLocation, 
-      region: this.region,
-      workLocation: this.workLocation,
+      workLocation: this.workLocation?.toResponseObject().locationName,
+      region: this.workLocation?.toResponseObject().region,
       ministry: this.ministry,
       classification: this.classification,
       applicationDate: this.applicationDate,
