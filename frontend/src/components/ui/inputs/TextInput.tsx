@@ -4,12 +4,11 @@ import { ErrorMessage, useField } from 'formik';
 import { formatPhone } from './helpers';
 import type { InputProps } from './types';
 
-export const TextInput = ({ label, required, disabled, ...props }: InputProps) => {
+export const TextInput = ({ type, label, required, disabled, ...props }: InputProps) => {
   const [field, meta] = useField(props as any as FieldInputProps<string>);
 
   if (
-    field.name === 'primaryPhone' ||
-    (field.name === 'secondaryPhone' && meta?.value?.length > 0)
+    type === 'phone' 
   ) {
     field.value = formatPhone(field.value);
     meta.value = formatPhone(meta.value);
@@ -21,6 +20,7 @@ export const TextInput = ({ label, required, disabled, ...props }: InputProps) =
       {required && <span className="text-error">*</span>}
       <input
         {...field}
+        disabled={disabled}
         className={disabled ? classes.menu.disabled : classes.menu.container}
       />
       <ErrorMessage name={field.name}>

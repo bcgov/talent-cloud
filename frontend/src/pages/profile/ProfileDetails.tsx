@@ -22,14 +22,13 @@ const ProfileDetails = ({
   const generalInformation = [
     {
       title: 'Work Location, Region',
-      content: `${personnel.workLocation}, ${personnel.region}`,
+      content: `${personnel.workLocation.locationName}, ${personnel.workLocation.region}`,
     },
     {
       title: 'Remote Only',
       content: `${personnel.remoteOnly === true ? 'Yes' : 'No'}`,
     },
-    { title: 'Onboarding Status', content: 'Complete' }, //TODO: How do we determine this
-    { title: 'Home Location', content: personnel.workLocation }, // TODO: Do we have this data
+    { title: 'Home Location, Region',   content: `${personnel.homeLocation.locationName}, ${personnel.homeLocation.region}`, }, 
     {
       title: 'Willingness to Travel',
       content: `${personnel.willingToTravel === true ? 'Yes' : 'No'}`,
@@ -44,17 +43,19 @@ const ProfileDetails = ({
     {
       title: 'Primary Number',
       content:
-        personnel.primaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ||
+        personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
         'Not Listed',
     },
     {
       title: 'Secondary Number',
       content:
-        personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ||
+        personnel?.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
         'Not Listed',
     },
+    { title: 'Work Phone', content: personnel?.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
+    'Not Listed', },
     { title: 'Email Address', content: personnel.email },
-    { title: 'Mailing Address', content: '' },
+    
   ];
 
   const organizational = [

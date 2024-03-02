@@ -8,6 +8,7 @@ export const Select = ({
   required,
   disabled,
   options,
+  onChange, 
   ...props
 }: SelectProps) => {
   const [field] = useField(props as any as FieldInputProps<string>);
@@ -17,6 +18,8 @@ export const Select = ({
       {required && <span className="text-error">*</span>}
       <select
         {...field}
+        disabled={disabled}
+        onChange={onChange ?? field.onChange}
         className={disabled ? classes.menu.disabled : classes.menu.container}
       >
         {options?.map((itm, index) => (

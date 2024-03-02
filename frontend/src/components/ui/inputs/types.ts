@@ -6,6 +6,7 @@ export type InputProps = {
 };
 
 export type SelectProps = InputProps & {
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options?: {
     label: string;
     value: string | number | readonly string[] | undefined;

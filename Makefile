@@ -25,7 +25,6 @@ export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server)
 
-
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-color --format="%h, %cn, %f, %D" | sed 's/->/:/')
@@ -201,9 +200,11 @@ migration-revert:
 migration-run:
 	@docker exec tc-backend-${ENV} npm run migration:run
 
-seed-data: 
+seed-functions-locations:
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
+	
+seed-data: 
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
 
 delete-db:
@@ -213,3 +214,11 @@ delete-db:
 # if this doesn't run, try to run the SERVER pod cmd and copy the first pod name into this command
 seed-data-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
+
+seed-functions-oc: 
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
+
+
+seed-locations-oc: 
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
+

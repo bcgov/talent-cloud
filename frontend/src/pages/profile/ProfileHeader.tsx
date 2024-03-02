@@ -58,7 +58,7 @@ const ProfileHeader = ({
             <div className="pl-2">
               <p className="subtext">Work Location</p>
               <p>
-                {personnel.workLocation}, {personnel.region}
+                {personnel.workLocation.locationName}, {personnel.workLocation.region}
               </p>
             </div>
           </div>
@@ -67,7 +67,7 @@ const ProfileHeader = ({
             <HomeIcon className="h-7 w-7 text-textGray" />
             <div className="pl-2">
               <p className="subtext">Home Location</p>
-              <p>{personnel.workLocation}</p>
+              <p>{personnel.homeLocation.locationName}, {personnel.workLocation.region}</p>
             </div>
           </div>
 

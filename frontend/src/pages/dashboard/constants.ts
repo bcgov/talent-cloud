@@ -43,7 +43,7 @@ export const dashboardToggle = {
   label: 'Show Inactive',
 };
 export interface Location {
-  id: string;
+  id: number;
   locationName: string;
   region: Region;
 }
@@ -62,8 +62,8 @@ export interface Personnel {
   id: string;
   firstName: string;
   lastName: string;
-  region: string;
-  workLocation: string;
+  workLocation: Location;
+  homeLocation: Location;
   experiences?: ExperienceInterface[];
   availability?: AvailabilityInterface[];
   status: Status;
@@ -74,16 +74,12 @@ export interface Personnel {
   applicationDate?: Date;
   primaryPhone: string;
   secondaryPhone: string;
+  workPhone: string;
   email: string;
   supervisor: string;
   reviewed: boolean;
   coordinatorNotes?: string;
   logisticsNotes?: string;
-  homeLocation?: string;
-  middleName?: string;
-  mailingAddress?: string;
-  city?: string;
-  postalCode?: string;
   dateJoined: Date;
 }
 

@@ -36,7 +36,9 @@ export class PersonnelService {
 
     try {
       await this.personnelRepository.update(id, { ...person });
-      return (await this.personnelRepository.findOne({ where: { id } })).toResponseObject(role);
+      return (
+        await this.personnelRepository.findOne({ where: { id } })
+      ).toResponseObject(role);
     } catch (e) {
       console.log(e);
     }
@@ -94,14 +96,17 @@ export class PersonnelService {
       qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
     }
     if (query.region?.length) {
-      qb.andWhere('location.region IN (:...regions)', {
+      qb.andWhere('personnel.workLocation.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
-      qb.andWhere('location.locationName IN (:...workLocations)', {
-        workLocations: query.location,
-      });
+      qb.andWhere(
+        'personnel.workLocation.locationName IN (:...workLocations)',
+        {
+          workLocations: query.location,
+        },
+      );
     }
 
     if (query.function) {

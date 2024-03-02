@@ -2,7 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { AvailabilityRO } from './availability.ro';
 import { ExperienceRO } from './experience.ro';
-import { Classification, Ministry, Region, Status } from '../../common/enums';
+import { Classification, Ministry, Status } from '../../common/enums';
+import { LocationRO } from '../../region-location/region-location.ro';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -55,18 +56,26 @@ export class PersonnelRO {
   otherPhone: string;
 
   @ApiProperty({
-    description: "Personnel's region",
+    description: "Personnel's work region and location",
     required: true,
-    example: Region.SWE,
+    example: {
+      id: 1,
+      locationName: 'Victoria',
+      region: 'SWE',
+    },
   })
-  region: Region;
+  workLocation: LocationRO;
 
   @ApiProperty({
-    description: "Personnel's work location",
-    required: true,
-    example: 'Abbotsford',
+    description: "Personnel's home region and location",
+    required: false,
+    example: {
+      id: 1,
+      locationName: 'Victoria',
+      regionName: 'SWE',
+    },
   })
-  workLocation: string;
+  homeLocation: LocationRO;
 
   @ApiProperty({
     description: "Personnel's ministry",

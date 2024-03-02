@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { WorkLocationRO } from './region-location.ro';
+import { LocationRO } from './region-location.ro';
 import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class RegionsAndLocationsService {
    * No query parameters for now
    * @returns {LocationsEntity[]} List of location + regions
    */
-  async getRegionsAndLocations(): Promise<WorkLocationRO[]> {
+  async getRegionsAndLocations(): Promise<LocationRO[]> {
     const locations = await this.locationRepository.find({
       order: { region: 'ASC', locationName: 'ASC' },
     });
