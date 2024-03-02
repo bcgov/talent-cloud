@@ -27,7 +27,7 @@ export class PersonnelService {
    * @param personnel
    * @returns
    */
-  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO) {
+  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO, role: Role) {
     const person = await this.personnelRepository.findOne({ where: { id } });
 
     Object.keys(personnel).forEach((key) => {
@@ -36,7 +36,7 @@ export class PersonnelService {
 
     try {
       await this.personnelRepository.update(id, { ...person });
-      return await this.personnelRepository.findOne({ where: { id } });
+      return (await this.personnelRepository.findOne({ where: { id } })).toResponseObject(role);
     } catch (e) {
       console.log(e);
     }

@@ -1,4 +1,4 @@
-import { Region, WorkLocation, Ministry, Classification } from '@/common';
+import { Region, Ministry, Classification, WorkLocation } from '@/common';
 import * as Yup from 'yup';
 export const EditProfileValidationSchema = Yup.object().shape(
   {
@@ -27,13 +27,11 @@ export const EditProfileValidationSchema = Yup.object().shape(
     primaryPhone: Yup.string()
       .min(10, 'Please enter a ten digit phone number')
       .max(14, 'Please enter a ten digit phone number')
-      .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid')
       .required('Primary number is required'),
     secondaryPhone: Yup.string()
       .optional()
       .min(10, 'Please enter a ten digit phone number')
-      .max(14, 'Please enter a ten digit phone number')
-      .matches(/[(]\d{3}[)]\s\d{3}-\d{4}/, 'Invalid'),
+      .max(14, 'Please enter a ten digit phone number'),
     mailingAddress: Yup.string()
       .optional()
       .min(2, 'Min length 2 characters')

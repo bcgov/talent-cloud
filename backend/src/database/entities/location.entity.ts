@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 import { Region } from '../../common/enums';
-import { WorkLocationRO } from 'src/region-location/region-location.ro';
+import { WorkLocationRO } from '../../region-location/region-location.ro';
 
 @Entity('location')
 @Unique('UQ_location', ['locationName', 'region'])

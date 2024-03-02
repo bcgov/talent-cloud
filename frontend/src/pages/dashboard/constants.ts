@@ -1,6 +1,12 @@
-
-
-import { AvailabilityType, AvailabilityTypeName, Classification, Experience, Ministry, Region } from '@/common';
+import type {
+  AvailabilityType,
+  AvailabilityTypeName,
+  Classification,
+  Experience,
+  Ministry,
+  Region,
+  Status,
+} from '@/common';
 import type { DateRange } from 'react-day-picker';
 
 export enum DashboardFilterNames {
