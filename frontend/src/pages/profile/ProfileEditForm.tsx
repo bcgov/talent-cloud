@@ -1,7 +1,7 @@
-import {  type ChangeEvent, type MouseEvent } from 'react';
+import { type ChangeEvent, type MouseEvent } from 'react';
 import { Dialog } from '@headlessui/react';
-import type {  Personnel } from '../dashboard';
-import { ButtonTypes, Region } from '@/common';
+import type { Personnel } from '../dashboard';
+import { ButtonTypes } from '@/common';
 import { EditProfileValidationSchema, fields, sections } from './constants';
 import { Divider } from '@/components/ui/Divider';
 import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'formik';
@@ -25,8 +25,10 @@ export const ProfileEditForm = ({
     ...personnel,
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
-    secondaryPhone: personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '', 
-    workPhone: personnel.workPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+    secondaryPhone:
+      personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+    workPhone:
+      personnel.workPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
   };
 
   delete initialValues?.availability;
@@ -39,7 +41,7 @@ export const ProfileEditForm = ({
     const location = locations.find((itm) => itm.locationName === e.target.value);
 
     const fieldName = e.target.name.split('.')[0];
-    
+
     props.setValues({
       ...props.values,
       [fieldName]: {
@@ -49,8 +51,6 @@ export const ProfileEditForm = ({
       },
     });
   };
-
-  
 
   const handleSubmit = async (
     values: FormikValues,
@@ -138,8 +138,8 @@ export const ProfileEditForm = ({
 
                       <div className="w-full grid grid-cols-2 gap-6">
                         <Select
-                        {...props}
-                          {...fields.workLocation.locationName}  
+                          {...props}
+                          {...fields.workLocation.locationName}
                           onChange={(e) =>
                             handleChangeLocation(e, {
                               isSubmitting,
@@ -147,7 +147,10 @@ export const ProfileEditForm = ({
                               ...props,
                             })
                           }
-                          options={locations.map(itm => ({label:itm.locationName, value:itm.locationName}))}
+                          options={locations.map((itm) => ({
+                            label: itm.locationName,
+                            value: itm.locationName,
+                          }))}
                         />
                         <Select
                           {...props}
@@ -161,25 +164,28 @@ export const ProfileEditForm = ({
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
                         <Select
-                        {...props} 
-                        {...fields.homeLocation.locationName} 
-                        onChange={(e) =>
-                          handleChangeLocation(e, {
-                            isSubmitting,
-                            errors,
-                            ...props,
-                          })
-                        }
-                        options={locations.map(itm => ({label:itm.locationName, value:itm.locationName}))}
+                          {...props}
+                          {...fields.homeLocation.locationName}
+                          onChange={(e) =>
+                            handleChangeLocation(e, {
+                              isSubmitting,
+                              errors,
+                              ...props,
+                            })
+                          }
+                          options={locations.map((itm) => ({
+                            label: itm.locationName,
+                            value: itm.locationName,
+                          }))}
                         />
-                        <Select 
-                        {...props} 
-                        {...fields.homeLocation.region} 
-                        disabled={true}
-                        options={regions.map((itm) => ({
-                          label: itm,
-                          value: itm,
-                        }))}
+                        <Select
+                          {...props}
+                          {...fields.homeLocation.region}
+                          disabled={true}
+                          options={regions.map((itm) => ({
+                            label: itm,
+                            value: itm,
+                          }))}
                         />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
@@ -225,9 +231,9 @@ export const ProfileEditForm = ({
                   </div>
                   <div className="w-full flex flex-row justify-end">
                     {Object.values(errors).length > 0 && (
-                        <div className="text-error font-bold">
-                          Please resolve form errors
-                        </div>  
+                      <div className="text-error font-bold">
+                        Please resolve form errors
+                      </div>
                     )}
                   </div>
                 </Form>

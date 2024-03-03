@@ -4,12 +4,16 @@ import { ErrorMessage, useField } from 'formik';
 import { formatPhone } from './helpers';
 import type { InputProps } from './types';
 
-export const TextInput = ({ type, label, required, disabled, ...props }: InputProps) => {
+export const TextInput = ({
+  type,
+  label,
+  required,
+  disabled,
+  ...props
+}: InputProps) => {
   const [field, meta] = useField(props as any as FieldInputProps<string>);
 
-  if (
-    type === 'phone' 
-  ) {
+  if (type === 'phone') {
     field.value = formatPhone(field.value);
     meta.value = formatPhone(meta.value);
   }

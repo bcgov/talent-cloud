@@ -8,7 +8,7 @@ export const Select = ({
   required,
   disabled,
   options,
-  onChange, 
+  onChange,
   ...props
 }: SelectProps) => {
   const [field] = useField(props as any as FieldInputProps<string>);

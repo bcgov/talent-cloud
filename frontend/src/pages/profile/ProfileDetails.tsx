@@ -28,7 +28,10 @@ const ProfileDetails = ({
       title: 'Remote Only',
       content: `${personnel.remoteOnly === true ? 'Yes' : 'No'}`,
     },
-    { title: 'Home Location, Region',   content: `${personnel.homeLocation.locationName}, ${personnel.homeLocation.region}`, }, 
+    {
+      title: 'Home Location, Region',
+      content: `${personnel.homeLocation.locationName}, ${personnel.homeLocation.region}`,
+    },
     {
       title: 'Willingness to Travel',
       content: `${personnel.willingToTravel === true ? 'Yes' : 'No'}`,
@@ -52,10 +55,13 @@ const ProfileDetails = ({
         personnel?.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
         'Not Listed',
     },
-    { title: 'Work Phone', content: personnel?.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
-    'Not Listed', },
+    {
+      title: 'Work Phone',
+      content:
+        personnel?.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
+        'Not Listed',
+    },
     { title: 'Email Address', content: personnel.email },
-    
   ];
 
   const organizational = [

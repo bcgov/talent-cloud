@@ -68,13 +68,19 @@ export const renderCells = (
       key: uuidv4(),
       columnName: DashboardColumns.REGION,
       value: workLocation.region,
-      className: tableClass(DashboardColumns.REGION, workLocation?.region.toLowerCase()),
+      className: tableClass(
+        DashboardColumns.REGION,
+        workLocation?.region.toLowerCase(),
+      ),
     },
     {
       key: uuidv4(),
       columnName: DashboardColumns.LOCATION,
       value: workLocation.locationName,
-      className: tableClass(DashboardColumns.LOCATION, workLocation?.locationName.toLowerCase()),
+      className: tableClass(
+        DashboardColumns.LOCATION,
+        workLocation?.locationName.toLowerCase(),
+      ),
     },
     {
       key: uuidv4(),
