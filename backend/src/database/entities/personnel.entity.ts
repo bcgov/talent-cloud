@@ -82,20 +82,6 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'other_phone', type: 'varchar', length: 10, nullable: true })
   workPhone: string;
 
-  @Column({
-    name: 'mailing_address',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  mailingAddress?: string;
-
-  @Column({ name: 'postal_code', type: 'varchar', length: 10, nullable: true })
-  postalCode?: string;
-
-  @Column({ name: 'city', type: 'varchar', length: 100, nullable: true })
-  city?: string;
-
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
 
@@ -167,9 +153,6 @@ export class PersonnelEntity extends BaseEntity {
       primaryPhone: this.primaryPhone,
       secondaryPhone: this.secondaryPhone,
       workPhone: this.workPhone,
-      mailingAddress: this.mailingAddress,
-      city: this.city,
-      postalCode: this.postalCode,
       homeLocation: this?.homeLocation?.toResponseObject() ?? {},
       workLocation: this?.workLocation?.toResponseObject() ?? {},
       ministry: this.ministry,
@@ -183,7 +166,6 @@ export class PersonnelEntity extends BaseEntity {
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
-      lastDeployed: '',
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],

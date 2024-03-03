@@ -49,11 +49,11 @@ export class PersonnelRO {
   secondaryPhone: string;
 
   @ApiProperty({
-    description: 'Other phone number of personnel',
+    description: 'Work phone number of personnel',
     required: false,
     example: '(250)882-5656',
   })
-  otherPhone: string;
+  workPhone: string;
 
   @ApiProperty({
     description: "Personnel's work region and location",
