@@ -100,7 +100,7 @@ export class CreatePersonnelDTO {
   @IsOptional()
   @Length(10, 10)
   @ValidateIf((o) => o.otherPhone !== '')
-  otherPhone?: string;
+  workPhone?: string;
 
   @ApiProperty({
     description:
@@ -128,14 +128,24 @@ export class CreatePersonnelDTO {
   skillsAbilities: string;
 
   @ApiProperty({
-    description: 'Any other notes for this personnel',
-    example: 'BCGEU',
+    description: 'Any coordinator notes for this personnel',
+    example: 'A Paragraph of notes',
   })
   @IsString()
-  @Length(2, 50)
+  @Length(2, 250)
   @IsOptional()
-  @ValidateIf((o) => o.notes !== '')
-  notes: string;
+  @ValidateIf((o) => o.coordinatorNotes !== '')
+  coordinatorNotes: string;
+
+  @ApiProperty({
+    description: 'Any other notes for this personnel',
+    example: 'A Paragraph of notes',
+  })
+  @IsString()
+  @Length(2, 250)
+  @IsOptional()
+  @ValidateIf((o) => o.logisticsNotes !== '')
+  logisticsNotes: string;
 
   @ApiProperty({
     description: 'Classification of personnel',
