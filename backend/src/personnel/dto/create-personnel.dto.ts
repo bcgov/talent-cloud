@@ -1,21 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsOptional, IsString, Length, ValidateIf } from 'class-validator';
+import {
+  IsAlphanumeric,
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Length,
+  ValidateIf,
+} from 'class-validator';
 import { AvailabilityType } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
-import { TrainingEntity } from '../../database/entities/training.entity';
-import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { LocationEntity } from '../../database/entities/location.entity';
-
-
+import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
+import { TrainingEntity } from '../../database/entities/training.entity';
 
 export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'First Name of Personnel - Possibly taken from IDIR',
     example: 'Jane',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   firstName: string;
@@ -31,11 +38,11 @@ export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'Middle Name of Personnel - Possibly taken from IDIR',
     example: 'William',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   @IsOptional()
-  @ValidateIf((o) => o.middleName !== '') 
+  @ValidateIf((o) => o.middleName !== '')
   middleName?: string;
 
   @ApiProperty({
@@ -43,13 +50,10 @@ export class CreatePersonnelDTO {
     example: {
       id: 1,
       locationName: 'Victoria',
-      region: Region.SWE
-    
+      region: Region.SWE,
     },
   })
   workLocation: LocationEntity;
-
-  
 
   @ApiProperty({
     description: 'Ministry personnel works in',
@@ -74,7 +78,7 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @Length(10, 10)
   @IsOptional()
-  @ValidateIf((o) => o.secondaryPhone !== '') 
+  @ValidateIf((o) => o.secondaryPhone !== '')
   secondaryPhone?: string;
 
   @ApiProperty({
@@ -84,38 +88,35 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @IsOptional()
   @Length(10, 10)
-  @ValidateIf((o) => o.otherPhone !== '') 
+  @ValidateIf((o) => o.otherPhone !== '')
   otherPhone?: string;
-
 
   @ApiProperty({
     description: 'mailing address',
     example: '123 example steret',
   })
-  @IsOptional()  
+  @IsOptional()
   @IsString()
   @Length(2, 50)
-  @ValidateIf((o) => o.mailingAddress !== '') 
+  @ValidateIf((o) => o.mailingAddress !== '')
   mailingAddress?: string;
-
 
   @ApiProperty({
     description: 'City',
     example: 'Victoria',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   @IsOptional()
-  @ValidateIf((o) => o.city !== '') 
+  @ValidateIf((o) => o.city !== '')
   city?: string;
-
 
   @ApiProperty({
     description: 'postal code',
     example: 'V081V0',
   })
   @IsOptional()
-  @ValidateIf((o) => o.postalCode !== '') 
+  @ValidateIf((o) => o.postalCode !== '')
   postalCode?: string;
 
   @ApiProperty({
@@ -129,7 +130,7 @@ export class CreatePersonnelDTO {
   @ApiProperty({
     description: "Name of personnel's supervisor",
     example: 'River Cartwright',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   supervisor: string;
@@ -137,7 +138,7 @@ export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'Any notable skills and abilities this personnel might have',
     example: 'Indigenous Relations trained, Swift Water Training',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   @IsOptional()
@@ -146,11 +147,11 @@ export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'Any other notes for this personnel',
     example: 'BCGEU',
-  })  
+  })
   @IsString()
   @Length(2, 50)
   @IsOptional()
-  @ValidateIf((o) => o.notes !== '') 
+  @ValidateIf((o) => o.notes !== '')
   notes: string;
 
   @ApiProperty({
@@ -219,6 +220,4 @@ export class CreatePersonnelDTO {
   })
   @IsOptional()
   availability?: AvailabilityEntity[];
-
-  
 }

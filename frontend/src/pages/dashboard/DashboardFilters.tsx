@@ -32,7 +32,7 @@ export const Filters = ({
   handleCloseMany: (name: string) => void;
   handleSetDates: (range: DateRange | undefined) => void;
 }) => {
-  const {filters} = useGetFilters();
+  const { filters } = useGetFilters();
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">

@@ -23,9 +23,7 @@ export const useGetFilters = () => {
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
       setRegions(
-        Array.from(
-          new Set(locations.map((itm: LocationInterface) => itm.region)),
-        ),
+        Array.from(new Set(locations.map((itm: LocationInterface) => itm.region))),
       );
       setFunctions(functions);
     })();

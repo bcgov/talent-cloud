@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
+import { LocationEntity } from './location.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Role } from '../../auth/interface';
@@ -19,7 +20,6 @@ import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { LocationEntity } from './location.entity';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -29,13 +29,18 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'first_name', type: 'varchar', length: '50' })
   firstName: string;
 
-  @Column({ name: 'middle_name', type: 'varchar', length: '50', nullable: true })
+  @Column({
+    name: 'middle_name',
+    type: 'varchar',
+    length: '50',
+    nullable: true,
+  })
   middleName?: string;
 
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
-  
-  @Column({type: 'date', name: 'date_joined'})
+
+  @Column({ type: 'date', name: 'date_joined' })
   dateJoined: Date;
 
   @JoinColumn([
@@ -75,16 +80,26 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'other_phone', type: 'varchar', length: 10, nullable: true })
   otherPhone: string;
 
-  @Column({name:'mailing_address', type:'varchar', length: 100, nullable: true})
+  @Column({
+    name: 'mailing_address',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   mailingAddress?: string;
 
-  @Column({name:'postal_code', type:'varchar', length: 10, nullable: true})
+  @Column({ name: 'postal_code', type: 'varchar', length: 10, nullable: true })
   postalCode?: string;
 
-  @Column({name:'city', type:'varchar', length: 100, nullable: true})
+  @Column({ name: 'city', type: 'varchar', length: 100, nullable: true })
   city?: string;
 
-  @Column({name:'home_location', type:'varchar', length: 100, nullable: true})
+  @Column({
+    name: 'home_location',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   homeLocation?: string;
 
   @Column({ name: 'email', type: 'varchar', length: 50 })
@@ -137,10 +152,10 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
   willingToTravel: boolean;
 
-  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, {cascade: true} )
+  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
   experiences: ExperienceEntity[];
 
-  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, {cascade: true})
+  @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
   availability: AvailabilityEntity[];
 
   @ManyToMany(() => TrainingEntity)
@@ -154,7 +169,7 @@ export class PersonnelEntity extends BaseEntity {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
-      middleName: this.middleName, 
+      middleName: this.middleName,
       email: this.email,
       primaryPhone: this.primaryPhone,
       secondaryPhone: this.secondaryPhone,
@@ -162,7 +177,7 @@ export class PersonnelEntity extends BaseEntity {
       mailingAddress: this.mailingAddress,
       city: this.city,
       postalCode: this.postalCode,
-      homeLocation: this.homeLocation, 
+      homeLocation: this.homeLocation,
       workLocation: this.workLocation?.toResponseObject().locationName,
       region: this.workLocation?.toResponseObject().region,
       ministry: this.ministry,
@@ -181,7 +196,7 @@ export class PersonnelEntity extends BaseEntity {
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],
       // // trainings
-      availability: 
+      availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],
     };
     // this is required in order to conditionally omit certain fields from the response based on the user role

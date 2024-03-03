@@ -2,18 +2,16 @@ import { faker } from '@faker-js/faker';
 import { NestFactory } from '@nestjs/core';
 import { format } from 'date-fns';
 import {
-  Region,
   Ministry,
-  WorkLocation,
   Experience,
   Classification,
   AvailabilityType,
   Status,
 } from './enums';
 import { AppModule } from '../app.module';
-import { PersonnelService } from '../personnel/personnel.service';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
+import { PersonnelService } from '../personnel/personnel.service';
 
 const functions = [
   { id: 1, name: 'Operations', abbreviation: 'Ops' },
@@ -28,67 +26,65 @@ const functions = [
   { id: 10, name: 'Deputy Director', abbreviation: 'Deputy Director' },
 ];
 
-const regionsAndLocations =
-[{id: 0, locationName: '100 Mile House', region: 'NEA'} ,
-{id: 1, locationName: '150 Mile House', region: 'NEA'} ,
-{id: 2, locationName: 'Abbotsford', region: 'SWE'} ,
-{id: 3, locationName: 'Brentwood Bay', region: 'HQ'} ,
-{id: 4, locationName: 'Burnaby', region: 'SWE'} ,
-{id: 5, locationName: 'Burns Lake', region: 'NWE'} ,
-{id: 6, locationName: 'Bonnington Falls', region: 'SWE'} ,
-{id: 7, locationName: 'Campbell River', region: 'VIC'} ,
-{id: 8, locationName: 'Castlegar', region: 'SEA'} ,
-{id: 9, locationName: 'Cumberland', region: 'VIC'} ,
-{id: 10, locationName: 'Coquitlam', region: 'SWE'} ,
-{id: 11, locationName: 'Courtenay', region: 'VIC'} ,
-{id: 12, locationName: 'Cranbrook', region: 'SEA'} ,
-{id: 13, locationName: 'Dawson Creek', region: 'NEA'} ,
-{id: 14, locationName: 'Elkford', region: 'SEA'} ,
-{id: 15, locationName: 'Enderby', region: 'CTL'} ,
-{id: 16, locationName: 'Esquimalt', region: 'HQ'} ,
-{id: 17, locationName: 'Fort St. John', region: 'NEA'} ,
-{id: 18, locationName: 'Fort Nelson', region: 'NEA'} ,
-{id: 19, locationName: 'Kamloops', region: 'CTL'} ,
-{id: 20, locationName: 'Kelowna', region: 'CTL'} ,
-{id: 21, locationName: 'Kimberly', region: 'SEA'} ,
-{id: 22, locationName: 'Langford', region: 'HQ'} ,
-{id: 23, locationName: 'Langley', region: 'SWE'} ,
-{id: 24, locationName: 'Lillooet', region: 'SWE'} ,
-{id: 25, locationName: 'Mackenzie', region: 'NEA'} ,
-{id: 26, locationName: 'Maple Ridge', region: 'SWE'} ,
-{id: 27, locationName: 'Merritt', region: 'CTL'} ,
-{id: 28, locationName: 'Nanaimo', region: 'VIC'} ,
-{id: 29, locationName: 'Nelson', region: 'SEA'} ,
-{id: 30, locationName: 'New Westminster', region: 'SWE'} ,
-{id: 31, locationName: 'North Vancouver', region: 'SWE'} ,
-{id: 32, locationName: 'Port Alberni', region: 'VIC'} ,
-{id: 33, locationName: 'Prince George', region: 'NEA'} ,
-{id: 34, locationName: 'Qualicum Beach', region: 'VIC'} ,
-{id: 35, locationName: 'Quesnel', region: 'NEA'} ,
-{id: 36, locationName: 'Revelstoke', region: 'SEA'} ,
-{id: 37, locationName: 'Richmond', region: 'SWE'} ,
-{id: 38, locationName: 'Saanich', region: 'HQ'} ,
-{id: 39, locationName: 'Saanichton', region: 'HQ'} ,
-{id: 40, locationName: 'Salmon Arm', region: 'CTL'} ,
-{id: 41, locationName: 'Sidney', region: 'HQ'} ,
-{id: 42, locationName: 'Smithers', region: 'NWE'} ,
-{id: 43, locationName: 'Sorrento', region: 'CTL'} ,
-{id: 44, locationName: 'Surrey', region: 'SWE'} ,
-{id: 45, locationName: 'Terrace', region: 'NWE'} ,
-{id: 46, locationName: 'Ucluelet', region: 'VIC'} ,
-{id: 47, locationName: 'Vancouver', region: 'SWE'} ,
-{id: 48, locationName: 'Victoria', region: 'HQ'} ,
-{id: 49, locationName: 'Vernon', region: 'CTL'} ,
-{id: 50, locationName: 'Whistler', region: 'SWE'} ,
-{id: 51, locationName: 'Williams Lake', region: 'NEA'}]
+const regionsAndLocations = [
+  { id: 0, locationName: '100 Mile House', region: 'NEA' },
+  { id: 1, locationName: '150 Mile House', region: 'NEA' },
+  { id: 2, locationName: 'Abbotsford', region: 'SWE' },
+  { id: 3, locationName: 'Brentwood Bay', region: 'HQ' },
+  { id: 4, locationName: 'Burnaby', region: 'SWE' },
+  { id: 5, locationName: 'Burns Lake', region: 'NWE' },
+  { id: 6, locationName: 'Bonnington Falls', region: 'SWE' },
+  { id: 7, locationName: 'Campbell River', region: 'VIC' },
+  { id: 8, locationName: 'Castlegar', region: 'SEA' },
+  { id: 9, locationName: 'Cumberland', region: 'VIC' },
+  { id: 10, locationName: 'Coquitlam', region: 'SWE' },
+  { id: 11, locationName: 'Courtenay', region: 'VIC' },
+  { id: 12, locationName: 'Cranbrook', region: 'SEA' },
+  { id: 13, locationName: 'Dawson Creek', region: 'NEA' },
+  { id: 14, locationName: 'Elkford', region: 'SEA' },
+  { id: 15, locationName: 'Enderby', region: 'CTL' },
+  { id: 16, locationName: 'Esquimalt', region: 'HQ' },
+  { id: 17, locationName: 'Fort St. John', region: 'NEA' },
+  { id: 18, locationName: 'Fort Nelson', region: 'NEA' },
+  { id: 19, locationName: 'Kamloops', region: 'CTL' },
+  { id: 20, locationName: 'Kelowna', region: 'CTL' },
+  { id: 21, locationName: 'Kimberly', region: 'SEA' },
+  { id: 22, locationName: 'Langford', region: 'HQ' },
+  { id: 23, locationName: 'Langley', region: 'SWE' },
+  { id: 24, locationName: 'Lillooet', region: 'SWE' },
+  { id: 25, locationName: 'Mackenzie', region: 'NEA' },
+  { id: 26, locationName: 'Maple Ridge', region: 'SWE' },
+  { id: 27, locationName: 'Merritt', region: 'CTL' },
+  { id: 28, locationName: 'Nanaimo', region: 'VIC' },
+  { id: 29, locationName: 'Nelson', region: 'SEA' },
+  { id: 30, locationName: 'New Westminster', region: 'SWE' },
+  { id: 31, locationName: 'North Vancouver', region: 'SWE' },
+  { id: 32, locationName: 'Port Alberni', region: 'VIC' },
+  { id: 33, locationName: 'Prince George', region: 'NEA' },
+  { id: 34, locationName: 'Qualicum Beach', region: 'VIC' },
+  { id: 35, locationName: 'Quesnel', region: 'NEA' },
+  { id: 36, locationName: 'Revelstoke', region: 'SEA' },
+  { id: 37, locationName: 'Richmond', region: 'SWE' },
+  { id: 38, locationName: 'Saanich', region: 'HQ' },
+  { id: 39, locationName: 'Saanichton', region: 'HQ' },
+  { id: 40, locationName: 'Salmon Arm', region: 'CTL' },
+  { id: 41, locationName: 'Sidney', region: 'HQ' },
+  { id: 42, locationName: 'Smithers', region: 'NWE' },
+  { id: 43, locationName: 'Sorrento', region: 'CTL' },
+  { id: 44, locationName: 'Surrey', region: 'SWE' },
+  { id: 45, locationName: 'Terrace', region: 'NWE' },
+  { id: 46, locationName: 'Ucluelet', region: 'VIC' },
+  { id: 47, locationName: 'Vancouver', region: 'SWE' },
+  { id: 48, locationName: 'Victoria', region: 'HQ' },
+  { id: 49, locationName: 'Vernon', region: 'CTL' },
+  { id: 50, locationName: 'Whistler', region: 'SWE' },
+  { id: 51, locationName: 'Williams Lake', region: 'NEA' },
+];
 
 export const rowData = () => {
-  
-
-  
   return {
     firstName: faker.person.firstName(),
-    middleName: faker.person.middleName(),  
+    middleName: faker.person.middleName(),
     homeLocation: faker.location.city(),
     mailingAddress: faker.location.streetAddress(),
     city: faker.location.city(),
@@ -99,7 +95,7 @@ export const rowData = () => {
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
     otherPhone: faker.string.numeric('##########'),
-    workLocation: faker.helpers.arrayElement(regionsAndLocations), 
+    workLocation: faker.helpers.arrayElement(regionsAndLocations),
     ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     classification: faker.helpers.arrayElement(Object.values(Classification)),
     applicationDate: faker.date.past(),
@@ -109,23 +105,17 @@ export const rowData = () => {
     supervisor: faker.person.firstName(),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    status: Status[faker.helpers.arrayElement([
-      Status.ACTIVE,
-      Status.INACTIVE,
-      Status.NEW,
-    ])],
+    status:
+      Status[
+        faker.helpers.arrayElement([Status.ACTIVE, Status.INACTIVE, Status.NEW])
+      ],
     availability: availability() as AvailabilityEntity[],
     experiences: experiences() as ExperienceEntity[],
-    
   };
 };
 const threeMonthsArray = () => {
   const today = new Date();
-  const startDate = new Date(
-    today.getFullYear(),
-    today.getMonth() -3,
-    1
-  );
+  const startDate = new Date(today.getFullYear(), today.getMonth() - 3, 1);
   const sevenMonthsFromNow = new Date(
     today.getFullYear(),
     today.getMonth() + 7,

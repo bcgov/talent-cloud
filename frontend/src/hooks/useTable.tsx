@@ -12,7 +12,6 @@ import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 
-
 export const useTable = () => {
   const { handleError } = useError();
 
