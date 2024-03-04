@@ -1,54 +1,46 @@
-import { format } from 'date-fns';
 import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { menuItemClass, calendarClass } from '../classes';
-
 import { Menu, Transition } from '@headlessui/react';
 import { DatePickerHeader } from './DatePickerHeader';
+import { Tooltip } from '@/components/ui';
+import { CalendarDaysIcon } from '@heroicons/react/24/solid';
+import { getDateDisplay } from './helpers';
 
 export const DatePicker = ({
   value,
   onChange,
   label,
   field,
+  disabled,
 }: {
   onChange: (range: DateRange | undefined) => void;
   label: string;
   field: any;
-  value?: DateRange;
+  value: DateRange;
+  disabled?: boolean;
 }) => {
-  const dateDisplay =
-    value?.to === value?.from
-      ? `${format(value?.from ?? new Date(), 'yyyy-MM-dd')}`
-      : `${format(value?.from ?? new Date(), 'yyyy-MM-dd')} - ${format(value?.to ?? new Date(), 'yyyy-MM-dd')}`;
-
   return (
     <>
       <label>{label}</label>
       <Menu as="div" className="relative inline-block text-center w-full">
         {({ open }) => (
           <>
-            <Menu.Button className={menuItemClass[field.name]}>
-              {value?.from || value?.to ? (
-                <span>{dateDisplay}</span>
-              ) : (
-                <span>Select Date(s)</span>
-              )}
-              {open ? (
-                <ChevronUpIcon
-                  className="-mr-1 h-5 w-5 text-gray-900"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="-mr-1 h-5 w-5 text-gray-900"
-                  aria-hidden="true"
-                />
-              )}
-            </Menu.Button>
+            <Tooltip
+              content={'Please select availability type first'}
+              placement={'bottom-start'}
+              disabled={!disabled}
+            >
+              <Menu.Button
+                disabled={disabled}
+                className={menuItemClass[disabled ? 'disabled' : field.name]}
+              >
+                <span>{getDateDisplay(value)} </span>
 
+                <CalendarDaysIcon className="h-6 w-6 text-textGray" />
+              </Menu.Button>
+            </Tooltip>
             <Transition
               as={Fragment}
               enter="transition ease-out duration-100"

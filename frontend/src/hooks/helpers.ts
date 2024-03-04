@@ -35,7 +35,7 @@ export const getAvailabilityValue = (
   }
 
   if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
-    return AvailabilityTypeName.PARTIAL;
+    return `${AvailabilityTypeName[availabilityType]} ${totalAvailableDays} of ${totalDaysSearched}`;
   }
 
   return AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType];

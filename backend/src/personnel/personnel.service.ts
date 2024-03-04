@@ -32,6 +32,7 @@ export class PersonnelService {
    * @returns
    */
   async updatePersonnel(id: string, personnel: UpdatePersonnelDTO, role: Role) {
+    this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelRepository.findOne({ where: { id } });
 
     Object.keys(personnel).forEach((key) => {
@@ -75,6 +76,7 @@ export class PersonnelService {
   async getPersonnel(
     query: GetPersonnelDTO,
   ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+    this.logger.log(`Getting personnel with query: ${JSON.stringify(query)}`);
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     this.logger.log(`Query: ${JSON.stringify(query)}`);
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
@@ -125,20 +127,19 @@ export class PersonnelService {
       });
     }
     /**
-     * If we have an availability type, but no date range, we will default to the current date
+     * If no availability type is provided, we will default to today's date and return all statuses
      */
     if (!query.availabilityType) {
-      if (!query.availabilityFromDate || !query.availabilityToDate) {
-        qb.andWhere('availability.date =:date', {
-          date: format(new Date(), 'yyyy-MM-dd'),
-        });
-      }
-      if (query.availabilityFromDate || query.availabilityToDate) {
-        qb.andWhere('availability.date BETWEEN :from AND :to', {
-          from: query.availabilityFromDate,
-          to: query.availabilityToDate,
-        });
-      }
+      qb.andWhere(
+        new Brackets((qb) => {
+          qb.where('availability.date = :date', {
+            date: new Date(),
+          }).orWhere(
+            'personnel.id not in (select p.id from availability a join personnel p on p.id=a.personnel where date=:date)',
+            { date: new Date() },
+          );
+        }),
+      );
     } else {
       /**
        * If we have an availability type and a date range, we will use the date range + type

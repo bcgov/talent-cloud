@@ -102,6 +102,7 @@ export const Filters = ({
               label="Availability Date Range"
               value={filterValues.availabilityDates}
               onChange={handleSetDates}
+              disabled={!filterValues.availabilityType}
             />
           </div>
         </div>
