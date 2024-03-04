@@ -15,7 +15,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
@@ -148,8 +148,10 @@ export class PersonnelController {
     @Param('id') id: string,
     @Body() availability: UpdateAvailabilityDTO,
     @Req() req: RequestWithRoles,
-  ): Promise<(UpdateResult | AvailabilityEntity)[]> {
-    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+  ): Promise<{ updates: (UpdateResult | AvailabilityEntity)[], deleted?: DeleteResult }> {
+    this.logger.log(
+      `${req.method}: ${req.url} - ${req.username}`,
+    );
 
     return await this.personnelService.updateAvailability(id, availability);
   }
@@ -180,7 +182,6 @@ export class PersonnelController {
 
     const firstDate = dates[0];
     if (firstDate.availabilityType !== 'NOT_INDICATED') {
-      console.log('???');
       const actualStart = await this.personnelService.getEventStartDate(id, firstDate);
       dateROs[0].actualStartDate = actualStart;
     }
