@@ -13,4 +13,4 @@ export * from './Loading';
 export * from './ErrorComponent';
 export * from './SectionHeader';
 export * from './inputs';
-export * from './Tooltip'
+export * from './Tooltip';

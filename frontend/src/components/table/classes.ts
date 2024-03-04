@@ -50,7 +50,6 @@ const getUnionMembershipClass = (value?: string) => {
 };
 
 export const getAvailabilityClass = (value?: string) => {
-
   switch (value) {
     case AvailabilityTypeName.AVAILABLE:
       return tableClasses.available;

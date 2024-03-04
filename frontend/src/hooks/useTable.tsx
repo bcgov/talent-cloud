@@ -12,7 +12,6 @@ import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 
-
 export const useTable = () => {
   const { handleError } = useError();
 
@@ -33,8 +32,8 @@ export const useTable = () => {
     experience: undefined,
     availabilityType: '',
     availabilityDates: {
-      from: "",
-      to: "",
+      from: '',
+      to: '',
     },
   });
 
@@ -153,8 +152,8 @@ export const useTable = () => {
         ...prev,
         currentPage: 1,
         availabilityDates: {
-          from: "",
-          to: "",
+          from: '',
+          to: '',
         },
       }));
       return;
@@ -188,8 +187,8 @@ export const useTable = () => {
         experience: '',
         availabilityType: '',
         availabilityDates: {
-          from: "",
-          to: "",
+          from: '',
+          to: '',
         },
       }),
     dashboardColumns: [

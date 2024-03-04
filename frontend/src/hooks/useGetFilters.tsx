@@ -21,9 +21,7 @@ export const useGetFilters = () => {
         data: { functions, locations },
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
-      setRegions(
-        Array.from(new Set(locations.map((itm: Location) => itm.region))),
-      );
+      setRegions(Array.from(new Set(locations.map((itm: Location) => itm.region))));
       setFunctions(functions);
     })();
   }, []);
@@ -32,7 +30,7 @@ export const useGetFilters = () => {
     name: {
       name: DashboardFilterNames.NAME,
     },
-    
+
     region: {
       name: DashboardFilterNames.REGION,
       options: regions,
@@ -90,7 +88,7 @@ export const useGetFilters = () => {
     availabilityDates: {
       name: 'availabilityDates',
       label: 'Availability Date Range',
-      value: { from: "", to: "" },
+      value: { from: '', to: '' },
     },
   };
   return {

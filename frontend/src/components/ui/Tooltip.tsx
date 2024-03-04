@@ -1,5 +1,5 @@
 import { Tooltip as MuiTooltip } from '@material-tailwind/react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export const Tooltip = ({
   children,
