@@ -29,10 +29,6 @@ export const tableClasses = {
   bcgeu: [classificationClass, ' text-info bg-infoBannerLight border-infoDark'].join(
     ', ',
   ),
-  bcnu: [
-    classificationClass,
-    ' text-warning bg-warningBannerLight border-warningDark',
-  ].join(', '),
   pea: [
     classificationClass,
     ' text-successDark bg-successBannerLight border-successDark',
@@ -48,8 +44,6 @@ const getUnionMembershipClass = (value?: string) => {
       return tableClasses.excluded;
     case Classification.PEA:
       return tableClasses.pea;
-    case Classification.BCNU:
-      return tableClasses.bcnu;
     default:
       return tdClass;
   }
