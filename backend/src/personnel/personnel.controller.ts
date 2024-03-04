@@ -38,7 +38,6 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
-    @Inject(AppLogger)
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);
@@ -57,9 +56,7 @@ export class PersonnelController {
     @Body() personnel: CreatePersonnelDTO[],
     @Request() req: RequestWithRoles,
   ) {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     return await this.personnelService.createPersonnel(personnel);
   }
 
@@ -77,9 +74,7 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ) {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.personnelService.updatePersonnel(id, personnel, req.role);
   }
@@ -99,9 +94,7 @@ export class PersonnelController {
     @Request() req: RequestWithRoles,
     @Query() query?: GetPersonnelDTO,
   ): Promise<GetPersonnelRO> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const queryResponse: {
       personnel: PersonnelEntity[];
@@ -132,9 +125,7 @@ export class PersonnelController {
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
   ): Promise<Record<'Personnel', PersonnelRO>> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const personnelRO: Record<'Personnel', PersonnelRO> =
       await this.personnelService.getPersonnelById(req.role, id);
@@ -157,9 +148,7 @@ export class PersonnelController {
     @Body() availability: UpdateAvailabilityDTO,
     @Req() req: RequestWithRoles,
   ): Promise<(UpdateResult | AvailabilityEntity)[]> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.personnelService.updateAvailability(id, availability);
   }
@@ -178,9 +167,7 @@ export class PersonnelController {
     @Req() req: RequestWithRoles,
     @Query() query: GetAvailabilityDTO,
   ): Promise<AvailabilityEntity[]> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     return await this.personnelService.getAvailability(id, query);
   }
 }

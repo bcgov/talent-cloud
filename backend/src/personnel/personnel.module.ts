@@ -4,15 +4,12 @@ import { PersonnelController } from './personnel.controller';
 import { PersonnelService } from './personnel.service';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
-import { LoggerModule } from '../logger/logger.module';
+import { AppLogger } from '../logger/logger.service';
 
 @Module({
-  imports: [
-    LoggerModule,
-    TypeOrmModule.forFeature([PersonnelEntity, AvailabilityEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([PersonnelEntity, AvailabilityEntity])],
   controllers: [PersonnelController],
-  providers: [PersonnelService],
+  providers: [PersonnelService, AppLogger],
   exports: [TypeOrmModule],
 })
 export class PersonnelModule {}

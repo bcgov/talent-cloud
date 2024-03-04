@@ -5,15 +5,18 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './auth/roles.guard';
+import { AppLogger } from './logger/logger.service';
 import { Documentation } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
+    bufferLogs: true,
   });
 
+  app.useLogger(new AppLogger());
+
   const port = parseInt(process.env.PORT ?? '3000');
-  const logger = new Logger('NestApplication');
 
   app.use(helmet());
   app.enableCors();
@@ -35,7 +38,7 @@ async function bootstrap() {
   Documentation(app);
 
   await app.listen(port);
-  logger.log(`listening on port ${port}`);
+  Logger.log(`Server running on http://localhost:${port}`, 'Bootstrap');
 }
 
 bootstrap();
