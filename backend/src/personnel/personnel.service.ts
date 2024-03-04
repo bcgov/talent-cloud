@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { eachDayOfInterval, format, parse } from 'date-fns';
+import { AppLogger } from 'src/logger/logger.service';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -20,7 +21,10 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(PersonnelService.name);
+  }
   /**
    * Update a personnel entity
    * @param id
@@ -36,7 +40,9 @@ export class PersonnelService {
 
     try {
       await this.personnelRepository.update(id, { ...person });
-      return (await this.personnelRepository.findOne({ where: { id } })).toResponseObject(role);
+      return (
+        await this.personnelRepository.findOne({ where: { id } })
+      ).toResponseObject(role);
     } catch (e) {
       console.log(e);
     }
@@ -70,6 +76,7 @@ export class PersonnelService {
     query: GetPersonnelDTO,
   ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
+    this.logger.log(`Query: ${JSON.stringify(query)}`);
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.availability', 'availability');
