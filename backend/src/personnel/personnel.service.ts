@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { eachDayOfInterval, format, parse } from 'date-fns';
-import { AppLogger } from 'src/logger/logger.service';
 import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -13,6 +12,7 @@ import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class PersonnelService {
