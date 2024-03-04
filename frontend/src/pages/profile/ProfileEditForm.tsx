@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import { type ChangeEvent, type MouseEvent } from 'react';
 import { Dialog } from '@headlessui/react';
 import type { Personnel } from '../dashboard';
 import { ButtonTypes } from '@/common';
@@ -7,6 +7,7 @@ import { Divider } from '@/components/ui/Divider';
 import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'formik';
 import { Form, Formik } from 'formik';
 import { Button, SectionHeader, Select, TextInput } from '@/components';
+import { useGetFilters } from '@/hooks/useGetFilters';
 
 export const ProfileEditForm = ({
   open,
@@ -19,17 +20,37 @@ export const ProfileEditForm = ({
   personnel: Personnel;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
 }) => {
+  const { locations, regions } = useGetFilters();
   const initialValues: Personnel = {
     ...personnel,
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
-    secondaryPhone: personnel.secondaryPhone
-      ? personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
-      : '',
+    secondaryPhone:
+      personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+    workPhone:
+      personnel.workPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
   };
 
   delete initialValues?.availability;
   delete initialValues?.experiences;
+
+  const handleChangeLocation = (
+    e: ChangeEvent<HTMLSelectElement>,
+    props: FormikState<Personnel> & FormikProps<Personnel>,
+  ) => {
+    const location = locations.find((itm) => itm.locationName === e.target.value);
+
+    const fieldName = e.target.name.split('.')[0];
+
+    props.setValues({
+      ...props.values,
+      [fieldName]: {
+        id: location?.id,
+        locationName: location?.locationName,
+        region: location?.region,
+      },
+    });
+  };
 
   const handleSubmit = async (
     values: FormikValues,
@@ -39,6 +60,7 @@ export const ProfileEditForm = ({
     // trim all the formatted characters out of the phone numbers
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
+    values.workPhone = values?.workPhone.replace(/[(]|-|[)]|\s/gi, '');
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
@@ -59,7 +81,6 @@ export const ProfileEditForm = ({
     if (values.willingToTravel === 'false') {
       values.willingToTravel = false;
     }
-
     // TODO success toast?
     helpers.setSubmitting(false);
     await updatePersonnel(values);
@@ -103,31 +124,72 @@ export const ProfileEditForm = ({
                 ...props
               }: FormikState<Personnel> & FormikProps<Personnel>) => (
                 <Form>
-                  <div className="flex min-h-full px-8 items-center justify-center">
+                  <div className="flex min-h-full px-8 pt-8 items-center justify-center">
                     <div className="flex flex-col w-full items-start justify-start space-y-8">
                       <SectionHeader section={sections.general.header} />
                       <div className="w-1/3">
                         <TextInput {...props} {...fields.dateJoined} />
                       </div>
 
-                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <div className="w-full grid grid-cols-2  gap-6">
                         <TextInput {...props} {...fields.firstName} />
-
-                        <TextInput {...props} {...fields.middleName} />
                         <TextInput {...props} {...fields.lastName} />
                       </div>
 
-                      <div className="w-full grid grid-cols-1 gap-6">
-                        <Select {...props} {...fields.region} />
+                      <div className="w-full grid grid-cols-2 gap-6">
+                        <Select
+                          {...props}
+                          {...fields.workLocation.locationName}
+                          onChange={(e) =>
+                            handleChangeLocation(e, {
+                              isSubmitting,
+                              errors,
+                              ...props,
+                            })
+                          }
+                          options={locations.map((itm) => ({
+                            label: itm.locationName,
+                            value: itm.locationName,
+                          }))}
+                        />
+                        <Select
+                          {...props}
+                          {...fields.workLocation.region}
+                          disabled={true}
+                          options={regions.map((itm) => ({
+                            label: itm,
+                            value: itm,
+                          }))}
+                        />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
-                        <Select {...props} {...fields.workLocation} />
-
-                        <TextInput {...props} {...fields.homeLocation} />
+                        <Select
+                          {...props}
+                          {...fields.homeLocation.locationName}
+                          onChange={(e) =>
+                            handleChangeLocation(e, {
+                              isSubmitting,
+                              errors,
+                              ...props,
+                            })
+                          }
+                          options={locations.map((itm) => ({
+                            label: itm.locationName,
+                            value: itm.locationName,
+                          }))}
+                        />
+                        <Select
+                          {...props}
+                          {...fields.homeLocation.region}
+                          disabled={true}
+                          options={regions.map((itm) => ({
+                            label: itm,
+                            value: itm,
+                          }))}
+                        />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
                         <Select {...props} {...fields.remoteOnly} />
-
                         <Select {...props} {...fields.willingToTravel} />
                       </div>
                       <Divider />
@@ -137,16 +199,12 @@ export const ProfileEditForm = ({
                         <TextInput {...props} {...fields.secondaryPhone} />
                         <TextInput {...props} {...fields.email} />
                       </div>
-                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <TextInput {...props} {...fields.mailingAddress} />
-                        <TextInput {...props} {...fields.city} />
-                        <TextInput {...props} {...fields.postalCode} />
-                      </div>
 
                       <Divider />
                       <SectionHeader section={sections.organization.header} />
-                      <div className="w-full grid grid-cols-1">
+                      <div className="w-full grid grid-cols-2 gap-6">
                         <TextInput {...props} {...fields.supervisor} />
+                        <TextInput {...props} {...fields.workPhone} />
                       </div>
                       <div className="w-full grid grid-cols-2 gap-6">
                         <Select {...props} {...fields.ministry} />

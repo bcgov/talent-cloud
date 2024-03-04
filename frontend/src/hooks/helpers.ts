@@ -42,13 +42,12 @@ export const getAvailabilityValue = (
 };
 
 export const renderCells = (
-  personnel: Partial<Personnel>,
+  personnel: Personnel,
   filterValues: DashboardFilters,
 ) => {
   const {
     lastName,
     firstName,
-    region,
     workLocation,
     experiences,
     willingToTravel,
@@ -68,14 +67,20 @@ export const renderCells = (
     {
       key: uuidv4(),
       columnName: DashboardColumns.REGION,
-      value: region,
-      className: tableClass(DashboardColumns.REGION, region?.toLowerCase()),
+      value: workLocation.region,
+      className: tableClass(
+        DashboardColumns.REGION,
+        workLocation?.region.toLowerCase(),
+      ),
     },
     {
       key: uuidv4(),
       columnName: DashboardColumns.LOCATION,
-      value: workLocation,
-      className: tableClass(DashboardColumns.LOCATION, workLocation?.toLowerCase()),
+      value: workLocation.locationName,
+      className: tableClass(
+        DashboardColumns.LOCATION,
+        workLocation?.locationName.toLowerCase(),
+      ),
     },
     {
       key: uuidv4(),

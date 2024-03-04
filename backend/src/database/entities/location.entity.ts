@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 import { Region } from '../../common/enums';
-import { WorkLocationRO } from '../../region-location/region-location.ro';
+import { LocationRO } from '../../region-location/region-location.ro';
 
 @Entity('location')
 @Unique('UQ_location', ['locationName', 'region'])
@@ -20,7 +20,7 @@ export class LocationEntity {
   @Column({ name: 'region', enum: Region, enumName: 'region', type: 'enum' })
   region: Region;
 
-  toResponseObject(): WorkLocationRO {
+  toResponseObject(): LocationRO {
     return {
       id: this.id,
       locationName: this.locationName,

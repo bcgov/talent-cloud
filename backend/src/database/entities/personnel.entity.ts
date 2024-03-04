@@ -29,14 +29,6 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'first_name', type: 'varchar', length: '50' })
   firstName: string;
 
-  @Column({
-    name: 'middle_name',
-    type: 'varchar',
-    length: '50',
-    nullable: true,
-  })
-  middleName?: string;
-
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
@@ -48,10 +40,20 @@ export class PersonnelEntity extends BaseEntity {
       name: 'work_location',
       referencedColumnName: 'locationName',
     },
-    { name: 'region', referencedColumnName: 'region' },
+    { name: 'work_region', referencedColumnName: 'region' },
   ])
   @ManyToOne(() => LocationEntity, { eager: true })
   workLocation: LocationEntity;
+
+  @JoinColumn([
+    {
+      name: 'home_location',
+      referencedColumnName: 'locationName',
+    },
+    { name: 'home_region', referencedColumnName: 'region' },
+  ])
+  @ManyToOne(() => LocationEntity, { eager: true })
+  homeLocation: LocationEntity;
 
   @Column({
     name: 'ministry',
@@ -78,29 +80,7 @@ export class PersonnelEntity extends BaseEntity {
   secondaryPhone?: string;
 
   @Column({ name: 'other_phone', type: 'varchar', length: 10, nullable: true })
-  otherPhone: string;
-
-  @Column({
-    name: 'mailing_address',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  mailingAddress?: string;
-
-  @Column({ name: 'postal_code', type: 'varchar', length: 10, nullable: true })
-  postalCode?: string;
-
-  @Column({ name: 'city', type: 'varchar', length: 100, nullable: true })
-  city?: string;
-
-  @Column({
-    name: 'home_location',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  homeLocation?: string;
+  workPhone: string;
 
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
@@ -169,17 +149,12 @@ export class PersonnelEntity extends BaseEntity {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
-      middleName: this.middleName,
       email: this.email,
       primaryPhone: this.primaryPhone,
       secondaryPhone: this.secondaryPhone,
-      otherPhone: this.otherPhone,
-      mailingAddress: this.mailingAddress,
-      city: this.city,
-      postalCode: this.postalCode,
-      homeLocation: this.homeLocation,
-      workLocation: this.workLocation?.toResponseObject().locationName,
-      region: this.workLocation?.toResponseObject().region,
+      workPhone: this.workPhone,
+      homeLocation: this?.homeLocation?.toResponseObject() ?? {},
+      workLocation: this?.workLocation?.toResponseObject() ?? {},
       ministry: this.ministry,
       classification: this.classification,
       applicationDate: this.applicationDate,
@@ -191,7 +166,6 @@ export class PersonnelEntity extends BaseEntity {
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
-      lastDeployed: '',
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],

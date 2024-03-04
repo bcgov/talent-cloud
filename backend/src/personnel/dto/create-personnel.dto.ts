@@ -14,9 +14,21 @@ import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
-import { LocationEntity } from '../../database/entities/location.entity';
 import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
 import { TrainingEntity } from '../../database/entities/training.entity';
+
+class PersonnelLocationDTO {
+  @IsString()
+  locationName: string;
+
+  @ApiProperty({
+    description: 'Ministry personnel works in',
+    enum: Region,
+    example: Region.SWE,
+  })
+  @IsEnum(Region)
+  region: Region;
+}
 
 export class CreatePersonnelDTO {
   @ApiProperty({
@@ -36,24 +48,23 @@ export class CreatePersonnelDTO {
   lastName: string;
 
   @ApiProperty({
-    description: 'Middle Name of Personnel - Possibly taken from IDIR',
-    example: 'William',
-  })
-  @IsString()
-  @Length(2, 50)
-  @IsOptional()
-  @ValidateIf((o) => o.middleName !== '')
-  middleName?: string;
-
-  @ApiProperty({
     description: "Personnel's work location",
     example: {
-      id: 1,
       locationName: 'Victoria',
       region: Region.SWE,
     },
   })
-  workLocation: LocationEntity;
+  workLocation: PersonnelLocationDTO;
+
+  @ApiProperty({
+    description: "Personnel's home location",
+    example: {
+      locationName: 'Victoria',
+      region: Region.SWE,
+    },
+  })
+  @IsOptional()
+  homeLocation: PersonnelLocationDTO;
 
   @ApiProperty({
     description: 'Ministry personnel works in',
@@ -89,35 +100,7 @@ export class CreatePersonnelDTO {
   @IsOptional()
   @Length(10, 10)
   @ValidateIf((o) => o.otherPhone !== '')
-  otherPhone?: string;
-
-  @ApiProperty({
-    description: 'mailing address',
-    example: '123 example steret',
-  })
-  @IsOptional()
-  @IsString()
-  @Length(2, 50)
-  @ValidateIf((o) => o.mailingAddress !== '')
-  mailingAddress?: string;
-
-  @ApiProperty({
-    description: 'City',
-    example: 'Victoria',
-  })
-  @IsString()
-  @Length(2, 50)
-  @IsOptional()
-  @ValidateIf((o) => o.city !== '')
-  city?: string;
-
-  @ApiProperty({
-    description: 'postal code',
-    example: 'V081V0',
-  })
-  @IsOptional()
-  @ValidateIf((o) => o.postalCode !== '')
-  postalCode?: string;
+  workPhone?: string;
 
   @ApiProperty({
     description:
@@ -145,14 +128,24 @@ export class CreatePersonnelDTO {
   skillsAbilities: string;
 
   @ApiProperty({
-    description: 'Any other notes for this personnel',
-    example: 'BCGEU',
+    description: 'Any coordinator notes for this personnel',
+    example: 'A Paragraph of notes',
   })
   @IsString()
-  @Length(2, 50)
+  @Length(2, 250)
   @IsOptional()
-  @ValidateIf((o) => o.notes !== '')
-  notes: string;
+  @ValidateIf((o) => o.coordinatorNotes !== '')
+  coordinatorNotes: string;
+
+  @ApiProperty({
+    description: 'Any other notes for this personnel',
+    example: 'A Paragraph of notes',
+  })
+  @IsString()
+  @Length(2, 250)
+  @IsOptional()
+  @ValidateIf((o) => o.logisticsNotes !== '')
+  logisticsNotes: string;
 
   @ApiProperty({
     description: 'Classification of personnel',
