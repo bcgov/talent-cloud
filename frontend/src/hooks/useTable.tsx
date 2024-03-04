@@ -12,7 +12,6 @@ import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 
-
 export const useTable = () => {
   const { handleError } = useError();
 
@@ -69,7 +68,7 @@ export const useTable = () => {
           rows: personnel.map(({ id, status, ...personnel }: Personnel) => ({
             key: id,
             status: status,
-            cells: renderCells(personnel, filterValues),
+            cells: renderCells({ id, status, ...personnel }, filterValues),
           })),
         });
       } catch (e) {

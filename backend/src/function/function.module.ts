@@ -9,6 +9,6 @@ import { LoggerModule } from '../logger/logger.module';
   imports: [LoggerModule, TypeOrmModule.forFeature([FunctionEntity])],
   controllers: [FunctionController],
   providers: [FunctionService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, FunctionService],
 })
 export class FunctionModule {}

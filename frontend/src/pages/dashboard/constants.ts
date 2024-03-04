@@ -42,7 +42,7 @@ export const dashboardToggle = {
   name: DashboardFilterNames.SHOW_INACTIVE,
   label: 'Show Inactive',
 };
-export interface WorkLocation {
+export interface Location {
   id: string;
   locationName: string;
   region: Region;
