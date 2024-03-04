@@ -17,27 +17,31 @@ import {
 
 const Cell = ({
   dayOfMonthStatus,
+  dayOfMonth,
   cellClass,
   startClass,
   textClass,
   month,
+  cellClick,
 }: {
   dayOfMonthStatus?: {
-    dayOfMonth: number;
+    date: string;
     status: string;
     start?: boolean;
     numDays?: number;
     actualStart?: string;
     actualEnd?: string;
   };
+  dayOfMonth: number;
   cellClass: string;
   startClass?: string;
   textClass?: string;
   month?: string;
+  cellClick?: (date: string) => void;
 }) => {
   const startDateString =
     dayOfMonthStatus?.start && !!month
-      ? `${month} ${dayOfMonthStatus.dayOfMonth} ${new Date().getFullYear()}`
+      ? `${month} ${dayOfMonth} ${new Date().getFullYear()}`
       : '';
   const dateString = () => {
     const startDate = dayOfMonthStatus?.actualStart
@@ -60,12 +64,9 @@ const Cell = ({
   let dates = '';
 
   const daysInMonth = dayjs(startDateString).daysInMonth();
-  if (dayOfMonthStatus?.dayOfMonth && status) {
+  if (dayOfMonth && status) {
     dates = dateString();
-    if (
-      dayOfMonthStatus?.numDays === 1 ||
-      daysInMonth - dayOfMonthStatus?.dayOfMonth < 1
-    ) {
+    if (dayOfMonthStatus?.numDays === 1 || daysInMonth - dayOfMonth < 1) {
       status = status.charAt(0);
       dates = '';
     }
@@ -74,6 +75,9 @@ const Cell = ({
   return (
     <div
       className={dayOfMonthStatus?.start && !!startClass ? startClass : cellClass}
+      onClick={() =>
+        dayOfMonthStatus && cellClick && cellClick(dayOfMonthStatus.date)
+      }
     >
       {dayOfMonthStatus?.start &&
         dayOfMonthStatus?.numDays &&
@@ -89,11 +93,15 @@ const Cell = ({
 };
 
 const SchedulerRow = ({
+  year,
   month,
   data,
+  cellClick,
 }: {
+  year: string;
   month: string;
   data: SchedulerRowItem[];
+  cellClick: (dayOfMonth: string) => void;
 }) => {
   // Because setting variable classes doesn't tend to work, we define all classes ahead of time
   return (
@@ -102,10 +110,18 @@ const SchedulerRow = ({
         {month}
       </div>
       {[...Array(32).keys()].slice(1).map((dayOfMonth) => {
-        const dayOfMonthStatus = data.find((d) => d.dayOfMonth === dayOfMonth);
+        const dayOfMonthStatus = data.find(
+          (d) => parseInt(dayjs(d.date).format('D')) === dayOfMonth,
+        );
         // Assumes all days in a month is part of the data
         if (!dayOfMonthStatus) {
-          return <Cell cellClass={SCHEDULER_NO_DATE_CLASS} key={dayOfMonth} />;
+          return (
+            <Cell
+              cellClass={SCHEDULER_NO_DATE_CLASS}
+              dayOfMonth={dayOfMonth}
+              key={dayOfMonth}
+            />
+          );
         }
         switch (dayOfMonthStatus.status) {
           case AvailabilityType.DEPLOYED:
@@ -116,7 +132,9 @@ const SchedulerRow = ({
                 startClass={SCHEDULER_DEPLOYED_START_CLASS}
                 textClass={SCHEDULER_DEPLOYED_TEXT_CLASS}
                 month={month}
+                dayOfMonth={dayOfMonth}
                 key={dayOfMonth}
+                cellClick={cellClick}
               />
             );
           case AvailabilityType.AVAILABLE:
@@ -127,7 +145,9 @@ const SchedulerRow = ({
                 startClass={SCHEDULER_AVAILABLE_START_CLASS}
                 textClass={SCHEDULER_AVAILABLE_TEXT_CLASS}
                 month={month}
+                dayOfMonth={dayOfMonth}
                 key={dayOfMonth}
+                cellClick={cellClick}
               />
             );
           case AvailabilityType.UNAVAILABLE:
@@ -138,12 +158,25 @@ const SchedulerRow = ({
                 startClass={SCHEDULER_UNAVAILABLE_START_CLASS}
                 textClass={SCHEDULER_UNAVAILABLE_TEXT_CLASS}
                 month={month}
+                dayOfMonth={dayOfMonth}
                 key={dayOfMonth}
+                cellClick={cellClick}
               />
             );
           default:
             return (
-              <Cell cellClass={SCHEDULER_NOT_INDICATED_CLASS} key={dayOfMonth} />
+              <Cell
+                cellClass={SCHEDULER_NOT_INDICATED_CLASS}
+                key={dayOfMonth}
+                dayOfMonth={dayOfMonth}
+                dayOfMonthStatus={{
+                  date: dayjs(`${month} ${dayOfMonth}, ${year}`).format(
+                    'YYYY-MM-DD',
+                  ),
+                  status: AvailabilityType.NOT_INDICATED,
+                }}
+                cellClick={cellClick}
+              />
             );
         }
       })}

@@ -97,10 +97,12 @@ export interface AvailabilityRange {
   to: string;
   type: AvailabilityType;
   deploymentCode?: string;
+  removeFrom?: string;
+  removeTo?: string;
 }
 
 export interface SchedulerRowItem {
-  dayOfMonth: number;
+  date: string;
   status: AvailabilityType;
   start?: boolean;
   numDays?: number;

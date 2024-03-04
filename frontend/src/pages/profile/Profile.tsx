@@ -19,6 +19,7 @@ import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
+import type { AvailabilityType } from '@/common';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -37,6 +38,12 @@ const Profile = () => {
   });
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
   const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);
+  const [editCell, setEditCell] = useState<{
+    from?: string;
+    to?: string;
+    availabilityType?: AvailabilityType;
+    deploymentCode?: string;
+  }>();
 
   const onChangeAvailabilityQuery = (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
@@ -54,8 +61,22 @@ const Profile = () => {
     if (openEditPopUp === false) {
       e.stopPropagation();
     }
-
     setOpenEditPopUp(!openEditPopUp);
+  };
+
+  const openSchedulerDialog = (
+    from?: string,
+    to?: string,
+    availabilityType?: AvailabilityType,
+    deploymentCode?: string,
+  ) => {
+    if (!schedulerDialogOpen) {
+      // Account for parameters
+      setEditCell({ from, to, availabilityType, deploymentCode });
+    } else {
+      setEditCell(undefined);
+    }
+    setSchedulerDialogOpen(!schedulerDialogOpen);
   };
 
   return (
@@ -98,7 +119,7 @@ const Profile = () => {
               name={personnel.firstName}
               availability={availability}
               onChangeAvailabilityDates={onChangeAvailabilityQuery}
-              openSchedulerDialog={handleSchedulerOpen}
+              openSchedulerDialog={openSchedulerDialog}
             />
           </div>
           <Dialog
@@ -122,7 +143,13 @@ const Profile = () => {
               </Button>
             </DialogHeader>
             <DialogBody placeholder={''}>
-              <SchedulerPopUp onSave={saveAvailabilityDates} />
+              <SchedulerPopUp
+                editedFrom={editCell?.from}
+                editedTo={editCell?.to}
+                editedAvailabilityType={editCell?.availabilityType}
+                editedDeploymentCode={editCell?.deploymentCode}
+                onSave={saveAvailabilityDates}
+              />
             </DialogBody>
           </Dialog>
         </div>
