@@ -5,14 +5,14 @@ import {
   ExperienceName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
-import type { FunctionType, LocationInterface } from '@/pages/dashboard';
+import type { FunctionType, Location } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
 
 import { AxiosPrivate } from '@/utils';
 import { useEffect, useState } from 'react';
 
 export const useGetFilters = () => {
-  const [locations, setLocations] = useState<LocationInterface[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
 
@@ -23,7 +23,7 @@ export const useGetFilters = () => {
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
       setRegions(
-        Array.from(new Set(locations.map((itm: LocationInterface) => itm.region))),
+        Array.from(new Set(locations.map((itm: Location) => itm.region))),
       );
       setFunctions(functions);
     })();
@@ -59,7 +59,7 @@ export const useGetFilters = () => {
       groupedOptions: regions.map((itm: Region) => ({
         label: itm,
         options: locations
-          .filter((loc: LocationInterface) => {
+          .filter((loc: Location) => {
             return loc.region === itm;
           })
           .flatMap((itm) => itm.locationName),
