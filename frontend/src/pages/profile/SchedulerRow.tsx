@@ -79,6 +79,11 @@ const Cell = ({
         dayOfMonthStatus && cellClick && cellClick(dayOfMonthStatus.date)
       }
     >
+      {dayjs().isSame(dayOfMonthStatus?.date, 'date') && (
+        <div className="text-center">
+          <span className="font-bold text-xs">Today</span>
+        </div>
+      )}
       {dayOfMonthStatus?.start &&
         dayOfMonthStatus?.numDays &&
         status &&
