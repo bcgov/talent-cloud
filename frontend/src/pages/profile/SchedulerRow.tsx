@@ -78,6 +78,8 @@ const Cell = ({
       onClick={() =>
         dayOfMonthStatus && cellClick && cellClick(dayOfMonthStatus.date)
       }
+      onKeyDown={() => {}}
+      role="button"
     >
       {dayjs().isSame(dayOfMonthStatus?.date, 'date') && (
         <div className="text-center">
