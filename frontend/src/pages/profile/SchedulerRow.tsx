@@ -81,20 +81,23 @@ const Cell = ({
       onKeyDown={() => {}}
       role="button"
     >
-      {dayjs().isSame(dayOfMonthStatus?.date, 'date') && (
-        <div className="text-center">
-          <span className="font-bold text-xs">Today</span>
+      <div className="flex flex-col h-full">
+        <div className="flex-grow">
+          {dayOfMonthStatus?.date &&
+            dayjs().isSame(dayOfMonthStatus?.date, 'day') && (
+              <span className="font-bold text-xs">Today</span>
+            )}
         </div>
-      )}
-      {dayOfMonthStatus?.start &&
-        dayOfMonthStatus?.numDays &&
-        status &&
-        textClass && (
-          <div className="flex flex-col">
-            <span className={`${textClass} font-bold`}>{status}</span>
-            <span className={textClass}>{dates}</span>
-          </div>
-        )}
+        {dayOfMonthStatus?.start &&
+          dayOfMonthStatus?.numDays &&
+          status &&
+          textClass && (
+            <>
+              <span className={`${textClass} font-bold`}>{status}</span>
+              <span className={textClass}>{dates}</span>
+            </>
+          )}
+      </div>
     </div>
   );
 };
