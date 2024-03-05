@@ -22,6 +22,7 @@ import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
+import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
@@ -30,7 +31,6 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { AvailabilityRO } from './ro/availability.ro';
 
 @Controller('personnel')
 @ApiTags('Personnel API')

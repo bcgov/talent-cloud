@@ -17,7 +17,7 @@ export class UpdateAvailabilityDTO {
   from: string;
 
   @ApiProperty({
-    description: 'Date to remove from',
+    description: 'Date to remove to',
     required: false,
     example: '2023-01-05',
   })
