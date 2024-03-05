@@ -32,8 +32,8 @@ export const useTable = () => {
     experience: undefined,
     availabilityType: '',
     availabilityDates: {
-      from: undefined,
-      to: undefined,
+      from: '',
+      to: '',
     },
   });
 
@@ -147,15 +147,16 @@ export const useTable = () => {
   };
 
   const handleSetDates = (range: DateRange | undefined) => {
-    if (range?.from && range?.to && range.from > range.to) {
+    if (!range) {
       setFilterValues((prev: any) => ({
         ...prev,
         currentPage: 1,
         availabilityDates: {
-          from: range.to,
-          to: range.from,
+          from: '',
+          to: '',
         },
       }));
+      return;
     }
     setFilterValues((prev: any) => ({
       ...prev,
@@ -186,8 +187,8 @@ export const useTable = () => {
         experience: '',
         availabilityType: '',
         availabilityDates: {
-          from: undefined,
-          to: undefined,
+          from: '',
+          to: '',
         },
       }),
     dashboardColumns: [

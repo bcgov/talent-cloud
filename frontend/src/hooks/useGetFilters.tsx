@@ -7,7 +7,6 @@ import {
 import type { Region } from '@/common/enums/region.enum';
 import type { FunctionType, Location } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
-
 import { AxiosPrivate } from '@/utils';
 import { useEffect, useState } from 'react';
 
@@ -22,9 +21,7 @@ export const useGetFilters = () => {
         data: { functions, locations },
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
-      setRegions(
-        Array.from(new Set(locations.map((itm: Location) => itm.region))),
-      );
+      setRegions(Array.from(new Set(locations.map((itm: Location) => itm.region))));
       setFunctions(functions);
     })();
   }, []);
@@ -33,23 +30,7 @@ export const useGetFilters = () => {
     name: {
       name: DashboardFilterNames.NAME,
     },
-    availabilityType: {
-      name: DashboardFilterNames.AVAILABILITY_TYPE,
-      options: [
-        {
-          label: AvailabilityTypeName.AVAILABLE,
-          value: AvailabilityType.AVAILABLE,
-        },
-        {
-          label: AvailabilityTypeName.UNAVAILABLE,
-          value: AvailabilityType.UNAVAILABLE,
-        },
-        {
-          label: AvailabilityTypeName.DEPLOYED,
-          value: AvailabilityType.DEPLOYED,
-        },
-      ],
-    },
+
     region: {
       name: DashboardFilterNames.REGION,
       options: regions,
@@ -87,10 +68,27 @@ export const useGetFilters = () => {
         },
       ],
     },
+    availabilityType: {
+      name: DashboardFilterNames.AVAILABILITY_TYPE,
+      options: [
+        {
+          label: AvailabilityTypeName.AVAILABLE,
+          value: AvailabilityType.AVAILABLE,
+        },
+        {
+          label: AvailabilityTypeName.UNAVAILABLE,
+          value: AvailabilityType.UNAVAILABLE,
+        },
+        {
+          label: AvailabilityTypeName.DEPLOYED,
+          value: AvailabilityType.DEPLOYED,
+        },
+      ],
+    },
     availabilityDates: {
       name: 'availabilityDates',
       label: 'Availability Date Range',
-      value: { from: new Date(), to: new Date() },
+      value: { from: '', to: '' },
     },
   };
   return {

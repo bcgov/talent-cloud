@@ -31,14 +31,14 @@ export const getAvailabilityValue = (
     ) + 1;
 
   if (totalDaysSearched === 1 || totalDaysSearched === totalAvailableDays) {
-    return AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType];
+    return {availability: AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType]};
   }
 
   if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
-    return AvailabilityTypeName.PARTIAL;
+    return {availability: AvailabilityTypeName[availabilityType], days:  `${totalAvailableDays} of ${totalDaysSearched} days`};
   }
 
-  return AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType];
+  return {availability: AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType]};
 };
 
 export const renderCells = (
@@ -95,6 +95,7 @@ export const renderCells = (
     {
       key: uuidv4(),
       columnName: DashboardColumns.AVAILABILITY,
+      // value will be the status type and/or the number of days available
       value: filterValues.availabilityType
         ? getAvailabilityValue(
             AvailabilityType[
@@ -103,9 +104,9 @@ export const renderCells = (
             filterValues.availabilityDates,
             availability ?? [],
           )
-        : AvailabilityTypeName[
+        : {availability: AvailabilityTypeName[
             availability?.[0]?.availabilityType as keyof typeof AvailabilityType
-          ],
+          ]},
       className: tableClass(
         DashboardColumns.AVAILABILITY,
         filterValues.availabilityType
@@ -115,7 +116,7 @@ export const renderCells = (
               ],
               filterValues.availabilityDates,
               availability ?? [],
-            )
+            ).availability
           : AvailabilityTypeName[
               availability?.[0]?.availabilityType as keyof typeof AvailabilityType
             ],

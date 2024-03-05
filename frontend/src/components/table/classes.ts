@@ -68,7 +68,7 @@ export const tableClass = (key: string, value?: string) => {
     case DashboardColumns.REMOTE:
       return tableClasses.remote;
     case DashboardColumns.AVAILABILITY:
-      return getAvailabilityClass(value);
+      return getAvailabilityClass(value?.split(' ')[0]);
     case DashboardColumns.TRAVEL:
       return value === 'yes' ? tableClasses.travelYes : tableClasses.travelNo;
     case DashboardColumns.UNION_MEMBERSHIP:

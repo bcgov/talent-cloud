@@ -54,6 +54,12 @@ export const TableBodyCell = ({
           }
         </td>
       );
+      case DashboardColumns.AVAILABILITY:
+        
+        return (
+          <td  className={cell.className}>{cell.value.availability}{" "}<span className="text-textGray">{cell.value.days ?? ''}</span></td>
+          
+        );
     default:
       return <td className={cell.className}>{cell.value}</td>;
   }
