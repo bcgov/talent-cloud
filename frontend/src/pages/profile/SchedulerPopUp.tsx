@@ -28,9 +28,9 @@ const SchedulerPopUp = ({
     to: editedTo ? offsetTimezoneDate(editedTo) : new Date(),
   });
   const [selectedStatus, setSelectedStatus] = useState<AvailabilityType>(
-    editedAvailabilityType || AvailabilityType.AVAILABLE,
+    editedAvailabilityType ?? AvailabilityType.AVAILABLE,
   );
-  const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode || '');
+  const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode ?? '');
   const [fromError, setFromError] = useState(false);
   const [toError, setToError] = useState(false);
 

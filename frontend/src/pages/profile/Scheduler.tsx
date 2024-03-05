@@ -143,8 +143,8 @@ const Scheduler = ({
         // Use actualStartDate / actualEndDate if it exists
         const availabilityType = status.availabilityType;
         const deploymentCode = status.deploymentCode;
-        const firstDate = firstDateStatus.actualStartDate || firstDateStatus.date;
-        const lastDate = firstDateStatus.actualEndDate || lastDateStatus.date;
+        const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
+        const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
         openSchedulerDialog(firstDate, lastDate, availabilityType, deploymentCode);
       }
     }
