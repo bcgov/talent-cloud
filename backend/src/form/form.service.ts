@@ -11,7 +11,9 @@ export class FormService {
   constructor(
     @InjectRepository(Form) private formRepo: Repository<Form>,
     private readonly logger: AppLogger,
-  ) {}
+  ) {
+    this.logger.setContext(FormService.name);
+  }
 
   /**
    * process form submission event payload

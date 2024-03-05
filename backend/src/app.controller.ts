@@ -22,7 +22,7 @@ export class AppController {
     @Inject(FunctionService) private functionService: FunctionService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
-    @Inject(AppLogger) private readonly logger: AppLogger,
+    private readonly logger: AppLogger,
   ) {
     this.logger.setContext(AppController.name);
   }

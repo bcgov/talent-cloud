@@ -12,6 +12,7 @@ import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class PersonnelService {
@@ -20,7 +21,10 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(PersonnelService.name);
+  }
   /**
    * Update a personnel entity
    * @param id
@@ -72,6 +76,7 @@ export class PersonnelService {
     query: GetPersonnelDTO,
   ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
+    this.logger.log(`Query: ${JSON.stringify(query)}`);
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.availability', 'availability');
