@@ -95,6 +95,7 @@ export const renderCells = (
     {
       key: uuidv4(),
       columnName: DashboardColumns.AVAILABILITY,
+      // value will be the status type and/or the number of days available
       value: filterValues.availabilityType
         ? getAvailabilityValue(
             AvailabilityType[
