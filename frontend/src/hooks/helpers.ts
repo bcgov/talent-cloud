@@ -31,14 +31,14 @@ export const getAvailabilityValue = (
     ) + 1;
 
   if (totalDaysSearched === 1 || totalDaysSearched === totalAvailableDays) {
-    return AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType];
+    return {availability: AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType]};
   }
 
   if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
-    return `${AvailabilityTypeName[availabilityType]} ${totalAvailableDays} of ${totalDaysSearched}`;
+    return {availability: AvailabilityTypeName[availabilityType], days:  `${totalAvailableDays} of ${totalDaysSearched} days`};
   }
 
-  return AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType];
+  return {availability: AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType]};
 };
 
 export const renderCells = (
@@ -103,9 +103,9 @@ export const renderCells = (
             filterValues.availabilityDates,
             availability ?? [],
           )
-        : AvailabilityTypeName[
+        : {availability: AvailabilityTypeName[
             availability?.[0]?.availabilityType as keyof typeof AvailabilityType
-          ],
+          ]},
       className: tableClass(
         DashboardColumns.AVAILABILITY,
         filterValues.availabilityType
@@ -115,7 +115,7 @@ export const renderCells = (
               ],
               filterValues.availabilityDates,
               availability ?? [],
-            )
+            ).availability
           : AvailabilityTypeName[
               availability?.[0]?.availabilityType as keyof typeof AvailabilityType
             ],
