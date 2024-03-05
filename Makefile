@@ -207,6 +207,9 @@ seed-functions-locations:
 seed-data: 
 	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
 
+create-availability-functions:
+	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
+
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
@@ -218,7 +221,8 @@ seed-data-oc:
 seed-functions-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 
-
 seed-locations-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
 
+create-availability-functions-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
