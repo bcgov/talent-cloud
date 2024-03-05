@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { eachDayOfInterval, format, parse } from 'date-fns';
-import { Brackets, Repository, UpdateResult } from 'typeorm';
+import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
@@ -232,53 +232,82 @@ export class PersonnelService {
 
     return availableDates;
   }
+
+  async getEventStartDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
+    const start = await this.availabilityRepository.query('SELECT get_last_status_date_prior($1, $2, $3) as start_date', [personnelId, date.date, date.availabilityType]);
+    return format(start[0].start_date, 'yyyy-MM-dd');
+  }
+
+  async getEventEndDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
+    const end = await this.availabilityRepository.query('SELECT get_last_status_date_after($1, $2, $3) as end_date', [personnelId, date.date, date.availabilityType]);
+    return format(end[0].end_date, 'yyyy-MM-dd');
+  }
+
   /**
    * Update the availability of a personnel for a specific date range for a specific avaiilability type
    * @param id
    * @param availability
    * @returns
    */
-  async updateAvailability(id: string, availability: UpdateAvailabilityDTO) {
-    const { from, to, type, deploymentCode } = availability;
+  async updateAvailability(id: string, availability: UpdateAvailabilityDTO):
+    Promise<{ updates: (UpdateResult | AvailabilityEntity)[], deleted?: DeleteResult }>
+  {
+    const { from, to, type, deploymentCode, removeFrom, removeTo } = availability;
 
     const startDate = parse(from, 'yyyy-MM-dd', new Date());
     const endDate = parse(to, 'yyyy-MM-dd', new Date());
 
-    const dates = [];
+
+    const getQb =
+      this.availabilityRepository.createQueryBuilder('availability')
+        .andWhere('date >= :startDate', { startDate: from })
+        .andWhere('date <= :endDate', { endDate: to })
+        .andWhere('personnel = :id', { id })
+        .addOrderBy('availability.date', 'ASC');
+    const existingAvailability = await getQb.getMany();
+
+    const availabilityDates: Partial<AvailabilityEntity>[] = [];
 
     for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
-      dates.push(format(i, 'yyyy-MM-dd'));
+      const date = format(i, 'yyyy-MM-dd');
+      const fromExisting = existingAvailability.find((a) => a.date === date);
+      if (fromExisting) {
+        availabilityDates.push({
+          ...fromExisting,
+          availabilityType: AvailabilityType[type],
+          deploymentCode: deploymentCode || null,
+        });
+      } else {
+        availabilityDates.push(
+          this.availabilityRepository.create({
+            date,
+            availabilityType: AvailabilityType[type],
+            deploymentCode: deploymentCode || null,
+            personnel: { id },
+          })
+        );
+      }
     }
 
-    const updatedAvail: (UpdateResult | AvailabilityEntity)[] =
-      await Promise.all(
-        dates.map(async (date) => {
-          const avail: AvailabilityEntity =
-            await this.availabilityRepository.findOne({
-              where: { date, personnel: { id } },
-            });
-          if (avail) {
-            return await this.availabilityRepository.update(
-              { id: avail.id },
-              {
-                date,
-                availabilityType: AvailabilityType[type],
-                deploymentCode,
-              },
-            );
-          } else {
-            return await this.availabilityRepository.save(
-              this.availabilityRepository.create({
-                date,
-                availabilityType: AvailabilityType[type],
-                deploymentCode,
-                personnel: { id },
-              }),
-            );
-          }
-        }),
-      );
+    const updatedAvail = await this.availabilityRepository.save(availabilityDates);
+    let deleted: DeleteResult;
 
-    return updatedAvail;
+    if (removeFrom || removeTo) {
+      let deleteQb = this.availabilityRepository.createQueryBuilder();
+        deleteQb = deleteQb.andWhere('personnel = :id', { id });
+        deleteQb.andWhere(
+          new Brackets((qb) => {
+            qb.
+              where('date < :from AND date >= :removeFrom', { from, removeFrom: removeFrom || from })
+              .orWhere('date > :to AND date <= :removeTo', { to, removeTo: removeTo || to });
+          })
+        );
+      deleted = await deleteQb.delete().execute();
+    }
+
+    return {
+      updates: updatedAvail,
+      deleted,
+    };
   }
 }

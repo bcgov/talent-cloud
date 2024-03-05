@@ -8,20 +8,31 @@ import { calendarClass } from '@/components/filters/classes';
 import { DatePickerHeader } from '@/components/filters/date-picker/DatePickerHeader';
 import type { AvailabilityRange } from '../dashboard';
 import { AvailabilityType } from '@/common';
+import { offsetTimezoneDate } from '@/utils';
 
 const SchedulerPopUp = ({
+  editedFrom,
+  editedTo,
+  editedAvailabilityType,
+  editedDeploymentCode,
   onSave,
 }: {
+  editedFrom?: string;
+  editedTo?: string;
+  editedAvailabilityType?: AvailabilityType;
+  editedDeploymentCode?: string;
   onSave: (dates: AvailabilityRange) => void;
 }) => {
   const [range, setRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
+    from: editedFrom ? offsetTimezoneDate(editedFrom) : new Date(),
+    to: editedTo ? offsetTimezoneDate(editedTo) : new Date(),
   });
   const [selectedStatus, setSelectedStatus] = useState<AvailabilityType>(
-    AvailabilityType.AVAILABLE,
+    editedAvailabilityType ?? AvailabilityType.AVAILABLE,
   );
-  const [deploymentCode, setDeploymentCode] = useState('');
+  const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode ?? '');
+  const [fromError, setFromError] = useState(false);
+  const [toError, setToError] = useState(false);
 
   const BUTTON_GROUP_SELECTED_CLASS = 'bg-blue text-white capitalize hover:bg-blue';
   const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
@@ -34,10 +45,40 @@ const SchedulerPopUp = ({
       to: toDay.format('YYYY-MM-DD'),
       type: selectedStatus,
     };
-    if (deploymentCode.length && selectedStatus === AvailabilityType.DEPLOYED) {
+    if (deploymentCode.length) {
       availabilityRange.deploymentCode = deploymentCode;
     }
+    if (dayjs(editedFrom).isBefore(fromDay, 'date')) {
+      availabilityRange.removeFrom = editedFrom;
+    }
+    if (dayjs(editedTo).isAfter(toDay, 'date')) {
+      availabilityRange.removeTo = editedTo;
+    }
     onSave(availabilityRange);
+  };
+
+  // Setting the errors in from / to values when needed
+  const fromToOnBlur = (value: string, key: string) => {
+    const day = dayjs(value);
+    if (!day.isValid()) {
+      key === 'from' ? setFromError(true) : setToError(true);
+    } else {
+      key === 'from' ? setFromError(false) : setToError(false);
+      const date = day.format('YYYY-MM-DD');
+      key === 'from'
+        ? setRange({ from: offsetTimezoneDate(date), to: range?.to })
+        : setRange({ from: range?.from, to: offsetTimezoneDate(date) });
+    }
+    if (range?.from && range?.to) {
+      if (range.from > range.to) {
+        setFromError(true);
+        setToError(true);
+      }
+    } else if (!range?.from) {
+      setFromError(true);
+    } else if (!range?.to) {
+      setToError(true);
+    }
   };
 
   return (
@@ -53,6 +94,7 @@ const SchedulerPopUp = ({
             labelProps={{
               className: 'hidden',
             }}
+            defaultValue={deploymentCode}
             onBlur={(codeInput) => setDeploymentCode(codeInput.target.value)}
           />
         </div>
@@ -61,8 +103,10 @@ const SchedulerPopUp = ({
             <span className="text-sm text-black font-bold">Start Date</span>
             <Input
               variant="static"
-              value={dayjs(range?.from).format('YYYY-MM-DD')}
+              defaultValue={dayjs(range?.from).format('YYYY-MM-DD')}
+              onBlur={(e) => fromToOnBlur(e.target.value, 'from')}
               crossOrigin={''}
+              error={fromError}
               containerProps={{
                 className: 'min-w-px',
               }}
@@ -72,7 +116,9 @@ const SchedulerPopUp = ({
             <span className="text-sm text-black font-bold">End Date</span>
             <Input
               variant="static"
-              value={dayjs(range?.to).format('YYYY-MM-DD')}
+              defaultValue={dayjs(range?.to).format('YYYY-MM-DD')}
+              onBlur={(e) => fromToOnBlur(e.target.value, 'to')}
+              error={toError}
               crossOrigin={''}
               containerProps={{
                 className: 'min-w-px',
@@ -133,6 +179,7 @@ const SchedulerPopUp = ({
             onClick={() => {
               saveDates();
             }}
+            disabled={fromError || toError}
           >
             Save
           </Button>
@@ -151,6 +198,9 @@ const SchedulerPopUp = ({
             Caption: (props: CaptionProps) => (
               <DatePickerHeader
                 {...props}
+                startingDate={
+                  editedFrom ? offsetTimezoneDate(editedFrom) : undefined
+                }
                 hideResetButton={true}
                 onChange={setRange}
               />

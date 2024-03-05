@@ -88,6 +88,8 @@ export interface Availability {
   availabilityType: AvailabilityType;
   deploymentCode?: string;
   id?: string;
+  actualStartDate?: string;
+  actualEndDate?: string;
 }
 
 export interface AvailabilityRange {
@@ -95,13 +97,17 @@ export interface AvailabilityRange {
   to: string;
   type: AvailabilityType;
   deploymentCode?: string;
+  removeFrom?: string;
+  removeTo?: string;
 }
 
 export interface SchedulerRowItem {
-  dayOfMonth: number;
+  date: string;
   status: AvailabilityType;
   start?: boolean;
   numDays?: number;
+  actualStart?: string;
+  actualEnd?: string;
 }
 
 export interface DashboardRow {

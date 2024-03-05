@@ -15,13 +15,14 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
+import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
@@ -147,8 +148,10 @@ export class PersonnelController {
     @Param('id') id: string,
     @Body() availability: UpdateAvailabilityDTO,
     @Req() req: RequestWithRoles,
-  ): Promise<(UpdateResult | AvailabilityEntity)[]> {
-    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+  ): Promise<{ updates: (UpdateResult | AvailabilityEntity)[], deleted?: DeleteResult }> {
+    this.logger.log(
+      `${req.method}: ${req.url} - ${req.username}`,
+    );
 
     return await this.personnelService.updateAvailability(id, availability);
   }
@@ -166,8 +169,29 @@ export class PersonnelController {
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
     @Query() query: GetAvailabilityDTO,
-  ): Promise<AvailabilityEntity[]> {
-    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    return await this.personnelService.getAvailability(id, query);
+  ): Promise<AvailabilityRO[]> {
+    this.logger.log(
+      `${req.method}: ${req.url} - ${req.username}`,
+    );
+    const dates = await this.personnelService.getAvailability(
+      id,
+      query,
+    );
+
+    const dateROs = dates.map((d) => d.toResponseObject());
+
+    const firstDate = dates[0];
+    if (firstDate.availabilityType !== 'NOT_INDICATED') {
+      const actualStart = await this.personnelService.getEventStartDate(id, firstDate);
+      dateROs[0].actualStartDate = actualStart;
+    }
+
+    const lastDate = dates[dates.length-1];
+    if (lastDate.availabilityType !== 'NOT_INDICATED') {
+      const actualEnd = await this.personnelService.getEventEndDate(id, lastDate);
+      dateROs[dateROs.length-1].actualEndDate = actualEnd;
+    }
+
+    return dateROs;
   }
 }

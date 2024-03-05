@@ -17,13 +17,18 @@ const Scheduler = ({
   name: string;
   availability: Availability[];
   onChangeAvailabilityDates: (from: string, to: string) => void;
-  openSchedulerDialog: () => void;
+  openSchedulerDialog: (
+    from?: string,
+    to?: string,
+    availabilityType?: AvailabilityType,
+    deploymentCode?: string,
+  ) => void;
 }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const [schedulerRows, setSchedulerRows] = useState<{
     [key: string]: SchedulerRowItem[];
-  }>();
+  }>({});
 
   useEffect(() => {
     // Rough code to parse backend response into cell items
@@ -68,22 +73,30 @@ const Scheduler = ({
 
       if (months[month]) {
         months[month].push({
-          dayOfMonth: parseInt(day.format('D')),
+          date: availDay.date,
           status: availDay.availabilityType,
+          actualStart: availDay.actualStartDate,
+          actualEnd: availDay.actualEndDate,
         });
       } else {
         months[month] = [
           {
-            dayOfMonth: parseInt(day.format('D')),
+            date: availDay.date,
             status: availDay.availabilityType,
+            actualStart: availDay.actualStartDate,
+            actualEnd: availDay.actualEndDate,
           },
         ];
       }
     });
     if (startDates[startDay]) {
-      // To close out, we pretend that the last day ends the status
-      // We may not want this, as a status may extend past this selected month
-      startDates[startDay].numDays = count;
+      const lastDay = availability[availability.length - 1];
+      if (lastDay.actualEndDate) {
+        const difference = dayjs(lastDay.actualEndDate).diff(startDay, 'days');
+        startDates[startDay].numDays = difference + 1;
+      } else {
+        startDates[startDay].numDays = count;
+      }
     }
 
     // For each start date, tell our `months` object which days are starters and how many days
@@ -92,8 +105,9 @@ const Scheduler = ({
       const date = dayjs(startDate);
       const month = date.format('MMM');
       const schedulerItems = months[month];
-      const dayOfMonth = parseInt(date.format('D'));
-      const index = schedulerItems.findIndex((i) => i.dayOfMonth === dayOfMonth);
+      const index = schedulerItems.findIndex(
+        (i) => dayjs(i.date).format('D') === date.format('D'),
+      );
       schedulerItems[index] = {
         ...schedulerItems[index],
         start: true,
@@ -102,6 +116,39 @@ const Scheduler = ({
     });
     setSchedulerRows(months);
   }, [availability]);
+
+  const cellClick = (date: string) => {
+    const statusIndex = availability.findIndex((s) => s.date === date);
+    if (statusIndex > -1) {
+      const status = availability[statusIndex];
+      if (status.availabilityType === AvailabilityType.NOT_INDICATED) {
+        openSchedulerDialog(status.date, status.date);
+      } else {
+        // For all elements before (including this one), find the first break in availability type
+        const elementsBefore = availability.slice(0, statusIndex + 1).reverse();
+        const lastBreakIndex = elementsBefore.findIndex(
+          (s) => s.availabilityType !== status.availabilityType,
+        );
+        const firstDateStatus =
+          lastBreakIndex > -1 ? elementsBefore[lastBreakIndex - 1] : status;
+
+        // For all elements after (including this one), find the next break in availability type
+        const elementsAfter = availability.slice(statusIndex);
+        const nextBreakIndex = elementsAfter.findIndex(
+          (s) => s.availabilityType !== status.availabilityType,
+        );
+        const lastDateStatus =
+          nextBreakIndex > -1 ? elementsAfter[nextBreakIndex - 1] : status;
+
+        // Use actualStartDate / actualEndDate if it exists
+        const availabilityType = status.availabilityType;
+        const deploymentCode = status.deploymentCode;
+        const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
+        const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
+        openSchedulerDialog(firstDate, lastDate, availabilityType, deploymentCode);
+      }
+    }
+  };
 
   return (
     <section className="bg-white">
@@ -128,15 +175,17 @@ const Scheduler = ({
           <AccordionBody className="px-8">
             <SchedulerControl
               onChangeAvailabilityDates={onChangeAvailabilityDates}
-              addEventClicked={openSchedulerDialog}
+              addEventClicked={() => openSchedulerDialog()}
             />
             <SchedulerHeader />
             {schedulerRows &&
               Object.keys(schedulerRows).map((month) => (
                 <SchedulerRow
                   key={month}
+                  year={dayjs(schedulerRows[month][0].date).format('YYYY')}
                   month={month}
                   data={schedulerRows[month]}
+                  cellClick={cellClick}
                 />
               ))}
           </AccordionBody>
