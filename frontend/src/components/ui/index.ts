@@ -10,7 +10,7 @@ export * from './MenuHandler';
 export * from './MenuItem';
 export * from './Status';
 export * from './Loading';
-export * from './ErrorComponent';
 export * from './SectionHeader';
 export * from './inputs';
+export * from './Dialog';
 export * from './Tooltip';

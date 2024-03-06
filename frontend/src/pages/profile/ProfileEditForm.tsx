@@ -1,5 +1,4 @@
 import { type ChangeEvent, type MouseEvent } from 'react';
-import { Dialog } from '@headlessui/react';
 import type { Personnel } from '../dashboard';
 import { ButtonTypes } from '@/common';
 import { EditProfileValidationSchema, fields, sections } from './constants';
@@ -10,7 +9,6 @@ import { Button, SectionHeader, Select, TextInput } from '@/components';
 import { useGetFilters } from '@/hooks/useGetFilters';
 
 export const ProfileEditForm = ({
-  open,
   handleOpenEditPopUp,
   personnel,
   updatePersonnel,
@@ -89,159 +87,129 @@ export const ProfileEditForm = ({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={(...props: any) => handleOpenEditPopUp(props.event)}
-      className="relative z-50"
+    <Formik
+      validationSchema={EditProfileValidationSchema}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
     >
-      {/* The backdrop, rendered as a fixed sibling to the panel container */}
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      {({
+        isSubmitting,
+        errors,
+        ...props
+      }: FormikState<Personnel> & FormikProps<Personnel>) => (
+        <Form>
+          <div className="flex min-h-full px-8 pt-8 items-center justify-center">
+            <div className="flex flex-col w-full items-start justify-start space-y-8">
+              <SectionHeader section={sections.general.header} />
+              <div className="w-1/3">
+                <TextInput {...props} {...fields.dateJoined} />
+              </div>
 
-      {/* Full-screen scrollable container */}
-      <div className="fixed inset-0 w-screen overflow-y-auto">
-        {/* Container to center the panel */}
-        <div className="flex min-h-full items-center justify-center p-4">
-          {/* The actual dialog panel  */}
-          <Dialog.Panel className="mx-auto rounded bg-white  lg:w-2/3 xl:w-1/2">
-            <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-4">
-              <h4 className="font-bold">Edit Member Details</h4>
-              <button
-                className="text-sm text-primaryBlue underline font-normal"
-                onClick={handleOpenEditPopUp}
-              >
-                Close
-              </button>
-            </Dialog.Title>
+              <div className="w-full grid grid-cols-2  gap-6">
+                <TextInput {...props} {...fields.firstName} />
+                <TextInput {...props} {...fields.lastName} />
+              </div>
 
-            <Formik
-              validationSchema={EditProfileValidationSchema}
-              initialValues={initialValues}
-              onSubmit={handleSubmit}
-            >
-              {({
-                isSubmitting,
-                errors,
-                ...props
-              }: FormikState<Personnel> & FormikProps<Personnel>) => (
-                <Form>
-                  <div className="flex min-h-full px-8 pt-8 items-center justify-center">
-                    <div className="flex flex-col w-full items-start justify-start space-y-8">
-                      <SectionHeader section={sections.general.header} />
-                      <div className="w-1/3">
-                        <TextInput {...props} {...fields.dateJoined} />
-                      </div>
+              <div className="w-full grid grid-cols-2 gap-6">
+                <Select
+                  {...props}
+                  {...fields.workLocation.locationName}
+                  onChange={(e) =>
+                    handleChangeLocation(e, {
+                      isSubmitting,
+                      errors,
+                      ...props,
+                    })
+                  }
+                  options={locations.map((itm) => ({
+                    label: itm.locationName,
+                    value: itm.locationName,
+                  }))}
+                />
+                <Select
+                  {...props}
+                  {...fields.workLocation.region}
+                  disabled={true}
+                  options={regions.map((itm) => ({
+                    label: itm,
+                    value: itm,
+                  }))}
+                />
+              </div>
+              <div className="w-full grid grid-cols-2 gap-6">
+                <Select
+                  {...props}
+                  {...fields.homeLocation.locationName}
+                  onChange={(e) =>
+                    handleChangeLocation(e, {
+                      isSubmitting,
+                      errors,
+                      ...props,
+                    })
+                  }
+                  options={locations.map((itm) => ({
+                    label: itm.locationName,
+                    value: itm.locationName,
+                  }))}
+                />
+                <Select
+                  {...props}
+                  {...fields.homeLocation.region}
+                  disabled={true}
+                  options={regions.map((itm) => ({
+                    label: itm,
+                    value: itm,
+                  }))}
+                />
+              </div>
+              <div className="w-full grid grid-cols-2 gap-6">
+                <Select {...props} {...fields.remoteOnly} />
+                <Select {...props} {...fields.willingToTravel} />
+              </div>
+              <Divider />
+              <SectionHeader section={sections.contact.header} />
+              <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <TextInput {...props} {...fields.primaryPhone} />
+                <TextInput {...props} {...fields.secondaryPhone} />
+                <TextInput {...props} {...fields.email} />
+              </div>
 
-                      <div className="w-full grid grid-cols-2  gap-6">
-                        <TextInput {...props} {...fields.firstName} />
-                        <TextInput {...props} {...fields.lastName} />
-                      </div>
+              <Divider />
+              <SectionHeader section={sections.organization.header} />
+              <div className="w-full grid grid-cols-2 gap-6">
+                <TextInput {...props} {...fields.supervisor} />
+                <TextInput {...props} {...fields.workPhone} />
+              </div>
+              <div className="w-full grid grid-cols-2 gap-6">
+                <Select {...props} {...fields.ministry} />
+                <Select {...props} {...fields.classification} />
+              </div>
+            </div>
+          </div>
+          <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
 
-                      <div className="w-full grid grid-cols-2 gap-6">
-                        <Select
-                          {...props}
-                          {...fields.workLocation.locationName}
-                          onChange={(e) =>
-                            handleChangeLocation(e, {
-                              isSubmitting,
-                              errors,
-                              ...props,
-                            })
-                          }
-                          options={locations.map((itm) => ({
-                            label: itm.locationName,
-                            value: itm.locationName,
-                          }))}
-                        />
-                        <Select
-                          {...props}
-                          {...fields.workLocation.region}
-                          disabled={true}
-                          options={regions.map((itm) => ({
-                            label: itm,
-                            value: itm,
-                          }))}
-                        />
-                      </div>
-                      <div className="w-full grid grid-cols-2 gap-6">
-                        <Select
-                          {...props}
-                          {...fields.homeLocation.locationName}
-                          onChange={(e) =>
-                            handleChangeLocation(e, {
-                              isSubmitting,
-                              errors,
-                              ...props,
-                            })
-                          }
-                          options={locations.map((itm) => ({
-                            label: itm.locationName,
-                            value: itm.locationName,
-                          }))}
-                        />
-                        <Select
-                          {...props}
-                          {...fields.homeLocation.region}
-                          disabled={true}
-                          options={regions.map((itm) => ({
-                            label: itm,
-                            value: itm,
-                          }))}
-                        />
-                      </div>
-                      <div className="w-full grid grid-cols-2 gap-6">
-                        <Select {...props} {...fields.remoteOnly} />
-                        <Select {...props} {...fields.willingToTravel} />
-                      </div>
-                      <Divider />
-                      <SectionHeader section={sections.contact.header} />
-                      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <TextInput {...props} {...fields.primaryPhone} />
-                        <TextInput {...props} {...fields.secondaryPhone} />
-                        <TextInput {...props} {...fields.email} />
-                      </div>
+          <div className="flex flex-row space-x-6 py-4 justify-end px-8">
+            <Button
+              variant={ButtonTypes.SECONDARY}
+              type="button"
+              onClick={handleOpenEditPopUp}
+              text="Cancel"
+            />
 
-                      <Divider />
-                      <SectionHeader section={sections.organization.header} />
-                      <div className="w-full grid grid-cols-2 gap-6">
-                        <TextInput {...props} {...fields.supervisor} />
-                        <TextInput {...props} {...fields.workPhone} />
-                      </div>
-                      <div className="w-full grid grid-cols-2 gap-6">
-                        <Select {...props} {...fields.ministry} />
-                        <Select {...props} {...fields.classification} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
-
-                  <div className="flex flex-row space-x-6 py-4 justify-end px-8">
-                    <Button
-                      variant={ButtonTypes.SECONDARY}
-                      type="button"
-                      onClick={handleOpenEditPopUp}
-                      text="Cancel"
-                    />
-
-                    <Button
-                      variant={ButtonTypes.TERTIARY}
-                      text="Update"
-                      type="submit"
-                      disabled={isSubmitting || !props.isValid}
-                    />
-                  </div>
-                  <div className="w-full flex flex-row justify-end">
-                    {Object.values(errors).length > 0 && (
-                      <div className="text-error font-bold">
-                        Please resolve form errors
-                      </div>
-                    )}
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </Dialog.Panel>
-        </div>
-      </div>
-    </Dialog>
+            <Button
+              variant={ButtonTypes.TERTIARY}
+              text="Save"
+              type="submit"
+              disabled={isSubmitting || !props.isValid}
+            />
+          </div>
+          <div className="w-full flex flex-row justify-end">
+            {Object.values(errors).length > 0 && (
+              <div className="text-error font-bold">Please resolve form errors</div>
+            )}
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 };

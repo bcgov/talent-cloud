@@ -79,8 +79,8 @@ export interface Personnel {
   email: string;
   supervisor: string;
   reviewed: boolean;
-  coordinatorNotes?: string;
-  logisticsNotes?: string;
+  coordinatorNotes: string;
+  logisticsNotes: string;
   dateJoined: Date;
 }
 
