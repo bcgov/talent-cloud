@@ -3,14 +3,14 @@ import type { ReactElement } from 'react';
 import { createContext, useEffect, useMemo, useState } from 'react';
 import { ErrorComponent } from '@/components/ui/ErrorComponent';
 
-export const ErrorContext = createContext<
-  | {
-      error: Error | null;
-      handleError: (e: unknown) => void;
-    }
-  | null
-  | undefined
->(null);
+export const ErrorContext = createContext<{
+  error?: Error | null;
+  handleError: (e: unknown) => void;
+}>({
+  handleError: (e: unknown) => {
+    console.log(e);
+  },
+});
 
 export const ErrorProvider = ({ children }: { children: ReactElement }) => {
   const [error, setError] = useState<Error | AxiosError | null>(null);
