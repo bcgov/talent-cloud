@@ -132,7 +132,9 @@ const Profile = () => {
               placeholder={''}
               className="flex flex-row align-middle bg-calBlue"
             >
-              <h4 className="grow font-bold">New Event</h4>
+              <h4 className="grow font-bold">
+                {editCell?.availabilityType ? 'Edit Event' : 'New Event'}
+              </h4>
               <Button
                 placeholder={''}
                 variant="text"
@@ -148,6 +150,7 @@ const Profile = () => {
                 editedTo={editCell?.to}
                 editedAvailabilityType={editCell?.availabilityType}
                 editedDeploymentCode={editCell?.deploymentCode}
+                editMode={!!editCell?.availabilityType}
                 onSave={saveAvailabilityDates}
               />
             </DialogBody>
