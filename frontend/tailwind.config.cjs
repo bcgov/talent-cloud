@@ -62,6 +62,8 @@ module.exports = withMT({
         calBlue: '#ecf5fa',
         calBlueTwo: '#1a5b97',
         calBlueHover: '#d8eaf5',
+        darkPurple: '#6f2fa2',
+        darkYellow: '#826521',
       },
       backgroundColor: {
         backgroundBlue: '#003366',
@@ -78,9 +80,10 @@ module.exports = withMT({
         successBannerLight: '#DFF0D8',
         warningBannerDark: '#6C4A00',
         warningBannerLight: '#F9F1C6',
-        
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#D9EAF7',
+        purple: '#e8d9f7',
+        yellow: '#f9f2c6',
       },
       textColor: {
         info: '#1a5a96',
@@ -92,7 +95,9 @@ module.exports = withMT({
         black: '#000000',
         ministry: '#1A5A96',
         error: '#A12622', 
-        warning: '#6C4A00'
+        warning: '#6C4A00',
+        purple: '#6f2fa2',
+        yellow: '#826521',
       },
     },
   },

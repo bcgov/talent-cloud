@@ -11,6 +11,7 @@ import {
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
+import useFunctions from '@/hooks/useFunctions';
 import useAvailability from '@/hooks/useAvailability';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
@@ -20,6 +21,7 @@ import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
 import type { AvailabilityType } from '@/common';
+import ProfileFunctions from './ProfileFunctions';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -27,6 +29,7 @@ const Profile = () => {
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
+  const { functions } = useFunctions();
 
   const { role } = useRole();
   const [availabilityQuery, setAvailabilityQuery] = useState<{
@@ -115,6 +118,7 @@ const Profile = () => {
               handleOpenEditPopUp={handleOpenEditPopUp}
               updatePersonnel={updatePersonnel}
             />
+            <ProfileFunctions functions={functions} personnel={personnel} />
             <Scheduler
               name={personnel.firstName}
               availability={availability}

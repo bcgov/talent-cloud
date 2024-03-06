@@ -3,6 +3,13 @@ import { Experience } from "../../common/enums";
 
 export class ExperienceRO {
   @ApiProperty({
+    description: 'Id of function',
+    required: true,
+    example: '1',
+  })
+  id: number;
+
+  @ApiProperty({
     description: 'Name of function',
     required: true,
     example: 'Operations',
