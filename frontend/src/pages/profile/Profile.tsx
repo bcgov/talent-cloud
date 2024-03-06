@@ -127,19 +127,7 @@ const Profile = () => {
               openEditPopUp={handleOpenEditPopUp}
               personnel={personnel}
             />
-            <DialogUI
-              open={openEditPopUp}
-              onClose={updatePersonnel}
-              handleOpen={handleOpenEditPopUp}
-              title={'Edit Notes'}
-            >
-              <ProfileEditForm
-                personnel={personnel}
-                open={openEditPopUp}
-                handleOpenEditPopUp={handleOpenEditPopUp}
-                updatePersonnel={updatePersonnel}
-              />
-            </DialogUI>
+
             <ProfileFunctions functions={functions} personnel={personnel} />
             <Scheduler
               name={personnel.firstName}
@@ -152,70 +140,83 @@ const Profile = () => {
               handleOpenEditNotes={handleOpenEditNotes}
               handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}
             />
-            <DialogUI
-              open={openEditNotes}
-              onClose={handleOpenEditNotes}
-              handleOpen={handleOpenEditNotes}
-              title={'Edit Notes'}
-            >
-              <EditNotes
-                name={'logisticsNotes'}
-                label="Notes"
-                notes={{ logisticsNotes: personnel.logisticsNotes }}
-                onSubmit={updatePersonnel}
-                handleClose={handleOpenEditNotes}
-              />
-            </DialogUI>
-
-            <DialogUI
-              open={openEditCoordinatorNotes}
-              onClose={handleOpenEditCoordinatorNotes}
-              handleOpen={handleOpenEditCoordinatorNotes}
-              title={'Edit Coordinator Notes'}
-            >
-              <EditNotes
-                name={'coordinatorNotes'}
-                label="Coordinator Notes"
-                notes={{ coordinatorNotes: personnel.coordinatorNotes }}
-                onSubmit={updatePersonnel}
-                handleClose={handleOpenEditCoordinatorNotes}
-              />
-            </DialogUI>
-
-            <Dialog
-              open={schedulerDialogOpen}
-              handler={handleSchedulerOpen}
-              placeholder={''}
-              size="md"
-            >
-              <DialogHeader
-                placeholder={''}
-                className="flex flex-row align-middle bg-calBlue"
-              >
-                <h4 className="grow font-bold">
-                  {editCell?.availabilityType ? 'Edit Event' : 'New Event'}
-                </h4>
-                <Button
-                  placeholder={''}
-                  variant="text"
-                  className="text-sm"
-                  onClick={() => setSchedulerDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-              </DialogHeader>
-              <DialogBody placeholder={''}>
-                <SchedulerPopUp
-                  editedFrom={editCell?.from}
-                  editedTo={editCell?.to}
-                  editedAvailabilityType={editCell?.availabilityType}
-                  editedDeploymentCode={editCell?.deploymentCode}
-                  editMode={!!editCell?.availabilityType}
-                  onSave={saveAvailabilityDates}
-                />
-              </DialogBody>
-            </Dialog>
           </div>
+          <DialogUI
+            open={openEditPopUp}
+            onClose={updatePersonnel}
+            handleOpen={handleOpenEditPopUp}
+            title={'Edit Notes'}
+          >
+            <ProfileEditForm
+              personnel={personnel}
+              open={openEditPopUp}
+              handleOpenEditPopUp={handleOpenEditPopUp}
+              updatePersonnel={updatePersonnel}
+            />
+          </DialogUI>
+          <DialogUI
+            open={openEditNotes}
+            onClose={handleOpenEditNotes}
+            handleOpen={handleOpenEditNotes}
+            title={'Edit Notes'}
+          >
+            <EditNotes
+              name={'logisticsNotes'}
+              label="Notes"
+              notes={{ logisticsNotes: personnel.logisticsNotes }}
+              onSubmit={updatePersonnel}
+              handleClose={handleOpenEditNotes}
+            />
+          </DialogUI>
+
+          <DialogUI
+            open={openEditCoordinatorNotes}
+            onClose={handleOpenEditCoordinatorNotes}
+            handleOpen={handleOpenEditCoordinatorNotes}
+            title={'Edit Coordinator Notes'}
+          >
+            <EditNotes
+              name={'coordinatorNotes'}
+              label="Coordinator Notes"
+              notes={{ coordinatorNotes: personnel.coordinatorNotes }}
+              onSubmit={updatePersonnel}
+              handleClose={handleOpenEditCoordinatorNotes}
+            />
+          </DialogUI>
+
+          <Dialog
+            open={schedulerDialogOpen}
+            handler={handleSchedulerOpen}
+            placeholder={''}
+            size="md"
+          >
+            <DialogHeader
+              placeholder={''}
+              className="flex flex-row align-middle bg-calBlue"
+            >
+              <h4 className="grow font-bold">
+                {editCell?.availabilityType ? 'Edit Event' : 'New Event'}
+              </h4>
+              <Button
+                placeholder={''}
+                variant="text"
+                className="text-sm"
+                onClick={() => setSchedulerDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+            </DialogHeader>
+            <DialogBody placeholder={''}>
+              <SchedulerPopUp
+                editedFrom={editCell?.from}
+                editedTo={editCell?.to}
+                editedAvailabilityType={editCell?.availabilityType}
+                editedDeploymentCode={editCell?.deploymentCode}
+                editMode={!!editCell?.availabilityType}
+                onSave={saveAvailabilityDates}
+              />
+            </DialogBody>
+          </Dialog>
         </div>
       )}
     </div>
