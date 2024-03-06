@@ -21,7 +21,8 @@ export const useGetFilters = () => {
         data: { functions, locations },
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
-      setRegions(Array.from(new Set(locations.map((itm: Location) => itm.region))));
+      const reg=Array.from(new Set(locations.map((itm: Location) => itm.region)))
+      setRegions(reg.sort() as Region[]);
       setFunctions(functions);
     })();
   }, []);

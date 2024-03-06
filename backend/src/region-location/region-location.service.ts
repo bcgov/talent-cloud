@@ -19,7 +19,7 @@ export class RegionsAndLocationsService {
    */
   async getRegionsAndLocations(): Promise<LocationRO[]> {
     const locations = await this.locationRepository.find({
-      order: { region: 'ASC', locationName: 'ASC' },
+      order: { locationName: 'ASC', region: 'ASC' },
     });
     return locations.map((loc) => loc.toResponseObject());
   }
