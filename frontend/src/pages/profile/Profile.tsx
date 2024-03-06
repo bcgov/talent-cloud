@@ -22,6 +22,9 @@ import type { AvailabilityRange } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
 import type { AvailabilityType } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
+import ProfileNotes from './ProfileNotes';
+import { EditNotes } from './EditNotes';
+import { DialogUI } from '@/components';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -32,6 +35,18 @@ const Profile = () => {
   const { functions } = useFunctions();
 
   const { role } = useRole();
+
+  const [openEditNotes, setOpenEditNotes] = useState(false);
+  const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
+
+  const handleOpenEditNotes = () => {
+    setOpenEditNotes(!openEditNotes);
+  };
+
+  const handleOpenEditCoordinatorNotes = () => {
+    setOpenEditCoordinatorNotes(!openEditCoordinatorNotes);
+  };
+
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
     to: string;
@@ -112,12 +127,19 @@ const Profile = () => {
               openEditPopUp={handleOpenEditPopUp}
               personnel={personnel}
             />
+            <DialogUI
+              open={openEditPopUp}
+              onClose={handleOpenEditPopUp}
+              handleOpen={handleOpenEditPopUp}
+              title={'Edit Notes'}
+            >
             <ProfileEditForm
               personnel={personnel}
               open={openEditPopUp}
               handleOpenEditPopUp={handleOpenEditPopUp}
               updatePersonnel={updatePersonnel}
             />
+            </DialogUI>
             <ProfileFunctions functions={functions} personnel={personnel} />
             <Scheduler
               name={personnel.firstName}
@@ -125,7 +147,41 @@ const Profile = () => {
               onChangeAvailabilityDates={onChangeAvailabilityQuery}
               openSchedulerDialog={openSchedulerDialog}
             />
-          </div>
+            <ProfileNotes
+              personnel={personnel}
+              handleOpenEditNotes={handleOpenEditNotes}
+              handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}
+            />
+            <DialogUI
+              open={openEditNotes}
+              onClose={handleOpenEditNotes}
+              handleOpen={handleOpenEditNotes}
+              title={'Edit Notes'}
+            >
+              <EditNotes
+                name={'logisticsNotes'}
+                label="Notes"
+                notes={{ logisticsNotes: personnel.logisticsNotes }}
+                onSubmit={updatePersonnel}
+                handleClose={handleOpenEditNotes}
+              />
+            </DialogUI>
+
+            <DialogUI
+              open={openEditCoordinatorNotes}
+              onClose={handleOpenEditCoordinatorNotes}
+              handleOpen={handleOpenEditCoordinatorNotes}
+              title={'Edit Coordinator Notes'}
+            >
+              <EditNotes
+                name={'coordinatorNotes'}
+                label="Coordinator Notes"
+                notes={{ coordinatorNotes: personnel.coordinatorNotes }}
+                onSubmit={updatePersonnel}
+                handleClose={handleOpenEditCoordinatorNotes}
+              />
+            </DialogUI>
+          
           <Dialog
             open={schedulerDialogOpen}
             handler={handleSchedulerOpen}
@@ -159,6 +215,7 @@ const Profile = () => {
               />
             </DialogBody>
           </Dialog>
+          </div>
         </div>
       )}
     </div>

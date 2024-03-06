@@ -5,8 +5,6 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
 import dayjs from 'dayjs';
-import { Role } from '@/common';
-import { useRole } from '@/hooks';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
 const ProfileDetails = ({
@@ -17,7 +15,7 @@ const ProfileDetails = ({
   openEditPopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
-  const { role } = useRole();
+
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const generalInformation = [
     {
@@ -70,17 +68,6 @@ const ProfileDetails = ({
     { title: 'Union Membership', content: personnel.classification },
   ];
 
-  const notes = {
-    coordinator: [
-      { title: 'Logistics Notes', content: personnel.logisticsNotes ?? '' },
-      { title: '', content: '' },
-      { title: 'Coordinator Notes', content: personnel.coordinatorNotes ?? '' },
-    ],
-    logistics: [
-      { title: 'Logistics Notes', content: personnel.logisticsNotes ?? '' },
-    ],
-  };
-
   return (
     <section className="bg-white">
       <div className="pt-6 lg:px-10">
@@ -132,17 +119,6 @@ const ProfileDetails = ({
                   numColumns={3}
                   title={'Organizational Information'}
                   columns={organizational}
-                />
-              </div>
-              <div className="border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
-
-              <div className="col-span-1 lg:col-span-5">
-                <DetailsSection
-                  numColumns={4}
-                  title={'Notes'}
-                  columns={
-                    role === Role.COORDINATOR ? notes.coordinator : notes.logistics
-                  }
                 />
               </div>
             </div>
