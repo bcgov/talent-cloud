@@ -31,6 +31,7 @@ export class ExperienceEntity {
 
   toResponseObject(): ExperienceRO {
     return {
+      id: this.functionId,
       functionName: this.function.name,
       functionAbbrv: this.function.abbreviation,
       experienceType: this.experienceType,

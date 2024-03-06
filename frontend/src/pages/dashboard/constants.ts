@@ -51,6 +51,7 @@ export interface Location {
 export interface ExperienceInterface {
   experienceType: Experience;
   functionName: string;
+  id: number;
 }
 export interface AvailabilityInterface {
   availabilityType: AvailabilityType;
