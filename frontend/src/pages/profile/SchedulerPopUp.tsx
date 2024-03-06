@@ -122,11 +122,13 @@ const SchedulerPopUp = ({
     <div className="grid grid-cols-2">
       <div className="">
         <div>
-          <span className="text-sm text-black font-bold">Activation Code</span>
+          <span className="text-sm text-black font-bold">
+            Task No. / Resource Request No.
+          </span>
           <Input
             variant="static"
-            label="Activation Code"
-            placeholder="If not a deployment, type 'available' or 'unavailable'"
+            label="Task No. / Resource Request No."
+            placeholder="Use for deployments only"
             crossOrigin={''}
             labelProps={{
               className: 'hidden',
