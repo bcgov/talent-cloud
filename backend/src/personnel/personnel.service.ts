@@ -187,7 +187,6 @@ export class PersonnelService {
     id: string,
   ): Promise<Record<string, PersonnelRO>> {
     const person = await this.personnelRepository.findOne({ where: { id }, relations: ['experiences', 'experiences.function'] });
-    console.log(person);
 
     return person.toResponseObject(role);
   }

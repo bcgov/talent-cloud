@@ -42,7 +42,6 @@ const ProfileFunctions = ({
             value="Outside Experience"
           />
         );
-      // f9f2f6 826521
       case Experience.INTERESTED:
         return (
           <Chip
