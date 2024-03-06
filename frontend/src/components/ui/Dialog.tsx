@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 
 type DialogProps = {
   open: boolean;
-  onClose: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  onClose: (e: Event) => void;
   handleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   title: string;
   children: ReactElement;
@@ -17,7 +17,11 @@ export const DialogUI = ({
   children,
 }: DialogProps) => {
   return (
-    <Dialog open={open} onClose={()=> console.log('closed')} className="relative z-50">
+    <Dialog
+      open={open}
+      onClose={(...props: any) => onClose(props.event)}
+      className="relative z-50"
+    >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
