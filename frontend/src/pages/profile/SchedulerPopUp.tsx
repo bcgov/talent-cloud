@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
@@ -15,12 +15,14 @@ const SchedulerPopUp = ({
   editedTo,
   editedAvailabilityType,
   editedDeploymentCode,
+  editMode,
   onSave,
 }: {
   editedFrom?: string;
   editedTo?: string;
   editedAvailabilityType?: AvailabilityType;
   editedDeploymentCode?: string;
+  editMode: boolean;
   onSave: (dates: AvailabilityRange) => void;
 }) => {
   const [range, setRange] = useState<DateRange | undefined>({
@@ -31,7 +33,11 @@ const SchedulerPopUp = ({
     editedAvailabilityType ?? AvailabilityType.AVAILABLE,
   );
   const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode ?? '');
+  const [fromInput, setFromInput] = useState(
+    editedFrom ?? dayjs().format('YYYY-MM-DD'),
+  );
   const [fromError, setFromError] = useState(false);
+  const [toInput, setToInput] = useState(editedTo ?? dayjs().format('YYYY-MM-DD'));
   const [toError, setToError] = useState(false);
 
   const BUTTON_GROUP_SELECTED_CLASS = 'bg-blue text-white capitalize hover:bg-blue';
@@ -57,7 +63,19 @@ const SchedulerPopUp = ({
     onSave(availabilityRange);
   };
 
-  // Setting the errors in from / to values when needed
+  const deleteDates = () => {
+    if (!editedFrom || !editedTo) {
+      // Logic is off if this case happens, as delete should only be clickable if this is an edit
+      return;
+    }
+    const availabilityRange: AvailabilityRange = {
+      from: dayjs(editedFrom).format('YYYY-MM-DD'),
+      to: dayjs(editedTo).format('YYYY-MM-DD'),
+      type: AvailabilityType.NOT_INDICATED,
+    };
+    onSave(availabilityRange);
+  };
+
   const fromToOnBlur = (value: string, key: string) => {
     const day = dayjs(value);
     if (!day.isValid()) {
@@ -81,6 +99,25 @@ const SchedulerPopUp = ({
     }
   };
 
+  useEffect(() => {
+    if (range) {
+      const fromDay = dayjs(range.from);
+      const toDay = dayjs(range.to ?? range.from);
+      if (fromDay.isAfter(toDay, 'day')) {
+        setFromError(true);
+        setToError(true);
+      } else {
+        setFromError(false);
+        setToError(false);
+        setFromInput(fromDay.format('YYYY-MM-DD'));
+        setToInput(toDay.format('YYYY-MM-DD'));
+      }
+    } else {
+      setFromError(true);
+      setToError(true);
+    }
+  }, [range]);
+
   return (
     <div className="grid grid-cols-2">
       <div className="">
@@ -103,7 +140,8 @@ const SchedulerPopUp = ({
             <span className="text-sm text-black font-bold">Start Date</span>
             <Input
               variant="static"
-              defaultValue={dayjs(range?.from).format('YYYY-MM-DD')}
+              value={fromInput}
+              onChange={(e) => setFromInput(e.target.value)}
               onBlur={(e) => fromToOnBlur(e.target.value, 'from')}
               crossOrigin={''}
               error={fromError}
@@ -116,7 +154,8 @@ const SchedulerPopUp = ({
             <span className="text-sm text-black font-bold">End Date</span>
             <Input
               variant="static"
-              defaultValue={dayjs(range?.to).format('YYYY-MM-DD')}
+              value={toInput}
+              onChange={(e) => setToInput(e.target.value)}
               onBlur={(e) => fromToOnBlur(e.target.value, 'to')}
               error={toError}
               crossOrigin={''}
@@ -172,17 +211,34 @@ const SchedulerPopUp = ({
             </Button>
           </ButtonGroup>
         </div>
-        <div className="pt-6">
-          <Button
-            placeholder={''}
-            className="w-full bg-blue"
-            onClick={() => {
-              saveDates();
-            }}
-            disabled={fromError || toError}
-          >
-            Save
-          </Button>
+        <div className="pt-6 flex flex-row w-full gap-4">
+          {editMode && (
+            <div className="basis-1/2">
+              <Button
+                placeholder={''}
+                className="w-full"
+                variant="text"
+                onClick={() => {
+                  deleteDates();
+                }}
+                disabled={fromError || toError}
+              >
+                Delete Event
+              </Button>
+            </div>
+          )}
+          <div className={editMode ? 'basis-1/2' : 'basis-full'}>
+            <Button
+              placeholder={''}
+              className="w-full bg-blue"
+              onClick={() => {
+                saveDates();
+              }}
+              disabled={fromError || toError}
+            >
+              Save
+            </Button>
+          </div>
         </div>
       </div>
       <div className="flex justify-center">

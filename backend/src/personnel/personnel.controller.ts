@@ -135,8 +135,8 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get personnel By Id',
-    description: 'Returns the personnel data to the profile view',
+    summary: 'Update personnel availability',
+    description: 'Update availability',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -157,7 +157,7 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get personnel availability By Id',
+    summary: 'Get personnel availability for specific dates',
     description: 'Returns the personnel data to the profile view',
   })
   @ApiResponse({

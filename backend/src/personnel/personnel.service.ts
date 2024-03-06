@@ -267,48 +267,55 @@ export class PersonnelService {
         .addOrderBy('availability.date', 'ASC');
     const existingAvailability = await getQb.getMany();
 
-    const availabilityDates: Partial<AvailabilityEntity>[] = [];
-
-    for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
-      const date = format(i, 'yyyy-MM-dd');
-      const fromExisting = existingAvailability.find((a) => a.date === date);
-      if (fromExisting) {
-        availabilityDates.push({
-          ...fromExisting,
-          availabilityType: AvailabilityType[type],
-          deploymentCode: deploymentCode || null,
-        });
-      } else {
-        availabilityDates.push(
-          this.availabilityRepository.create({
-            date,
+    if (availability.type !== AvailabilityType.NOT_INDICATED) {
+      const availabilityDates: Partial<AvailabilityEntity>[] = [];
+      for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
+        const date = format(i, 'yyyy-MM-dd');
+        const fromExisting = existingAvailability.find((a) => a.date === date);
+        if (fromExisting) {
+          availabilityDates.push({
+            ...fromExisting,
             availabilityType: AvailabilityType[type],
             deploymentCode: deploymentCode || null,
-            personnel: { id },
-          })
-        );
+          });
+        } else {
+          availabilityDates.push(
+            this.availabilityRepository.create({
+              date,
+              availabilityType: AvailabilityType[type],
+              deploymentCode: deploymentCode || null,
+              personnel: { id },
+            })
+          );
+        }
+      }
+  
+      const updatedAvail = await this.availabilityRepository.save(availabilityDates);
+      let deleted: DeleteResult;
+      if (removeFrom || removeTo) {
+        let deleteQb = this.availabilityRepository.createQueryBuilder();
+          deleteQb = deleteQb.andWhere('personnel = :id', { id });
+          deleteQb.andWhere(
+            new Brackets((qb) => {
+              qb.
+                where('date < :from AND date >= :removeFrom', { from, removeFrom: removeFrom || from })
+                .orWhere('date > :to AND date <= :removeTo', { to, removeTo: removeTo || to });
+            })
+          );
+        deleted = await deleteQb.delete().execute();
+      }
+
+      return {
+        updates: updatedAvail,
+        deleted,
+      };
+    } else {
+      // Not Indicated means to delete these values
+      const deleted = await this.availabilityRepository.delete(existingAvailability.map(a => a.id));
+      return {
+        updates: [],
+        deleted,
       }
     }
-
-    const updatedAvail = await this.availabilityRepository.save(availabilityDates);
-    let deleted: DeleteResult;
-
-    if (removeFrom || removeTo) {
-      let deleteQb = this.availabilityRepository.createQueryBuilder();
-        deleteQb = deleteQb.andWhere('personnel = :id', { id });
-        deleteQb.andWhere(
-          new Brackets((qb) => {
-            qb.
-              where('date < :from AND date >= :removeFrom', { from, removeFrom: removeFrom || from })
-              .orWhere('date > :to AND date <= :removeTo', { to, removeTo: removeTo || to });
-          })
-        );
-      deleted = await deleteQb.delete().execute();
-    }
-
-    return {
-      updates: updatedAvail,
-      deleted,
-    };
   }
 }
