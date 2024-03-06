@@ -42,7 +42,10 @@ export class PersonnelService {
     try {
       await this.personnelRepository.update(id, { ...person });
       return (
-        await this.personnelRepository.findOne({ where: { id } })
+        await this.personnelRepository.findOne({
+          where: { id },
+          relations: ['experiences', 'experiences.function'],
+        })
       ).toResponseObject(role);
     } catch (e) {
       console.log(e);
@@ -186,7 +189,10 @@ export class PersonnelService {
     role: Role,
     id: string,
   ): Promise<Record<string, PersonnelRO>> {
-    const person = await this.personnelRepository.findOne({ where: { id }, relations: ['experiences', 'experiences.function'] });
+    const person = await this.personnelRepository.findOne({
+      where: { id },
+      relations: ['experiences', 'experiences.function'],
+    });
 
     return person.toResponseObject(role);
   }
@@ -234,13 +240,25 @@ export class PersonnelService {
     return availableDates;
   }
 
-  async getEventStartDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
-    const start = await this.availabilityRepository.query('SELECT get_last_status_date_prior($1, $2, $3) as start_date', [personnelId, date.date, date.availabilityType]);
+  async getEventStartDate(
+    personnelId: string,
+    date: AvailabilityEntity,
+  ): Promise<string> {
+    const start = await this.availabilityRepository.query(
+      'SELECT get_last_status_date_prior($1, $2, $3) as start_date',
+      [personnelId, date.date, date.availabilityType],
+    );
     return format(start[0].start_date, 'yyyy-MM-dd');
   }
 
-  async getEventEndDate(personnelId: string, date: AvailabilityEntity): Promise<string> {
-    const end = await this.availabilityRepository.query('SELECT get_last_status_date_after($1, $2, $3) as end_date', [personnelId, date.date, date.availabilityType]);
+  async getEventEndDate(
+    personnelId: string,
+    date: AvailabilityEntity,
+  ): Promise<string> {
+    const end = await this.availabilityRepository.query(
+      'SELECT get_last_status_date_after($1, $2, $3) as end_date',
+      [personnelId, date.date, date.availabilityType],
+    );
     return format(end[0].end_date, 'yyyy-MM-dd');
   }
 
@@ -250,21 +268,25 @@ export class PersonnelService {
    * @param availability
    * @returns
    */
-  async updateAvailability(id: string, availability: UpdateAvailabilityDTO):
-    Promise<{ updates: (UpdateResult | AvailabilityEntity)[], deleted?: DeleteResult }>
-  {
-    const { from, to, type, deploymentCode, removeFrom, removeTo } = availability;
+  async updateAvailability(
+    id: string,
+    availability: UpdateAvailabilityDTO,
+  ): Promise<{
+    updates: (UpdateResult | AvailabilityEntity)[];
+    deleted?: DeleteResult;
+  }> {
+    const { from, to, type, deploymentCode, removeFrom, removeTo } =
+      availability;
 
     const startDate = parse(from, 'yyyy-MM-dd', new Date());
     const endDate = parse(to, 'yyyy-MM-dd', new Date());
 
-
-    const getQb =
-      this.availabilityRepository.createQueryBuilder('availability')
-        .andWhere('date >= :startDate', { startDate: from })
-        .andWhere('date <= :endDate', { endDate: to })
-        .andWhere('personnel = :id', { id })
-        .addOrderBy('availability.date', 'ASC');
+    const getQb = this.availabilityRepository
+      .createQueryBuilder('availability')
+      .andWhere('date >= :startDate', { startDate: from })
+      .andWhere('date <= :endDate', { endDate: to })
+      .andWhere('personnel = :id', { id })
+      .addOrderBy('availability.date', 'ASC');
     const existingAvailability = await getQb.getMany();
 
     if (availability.type !== AvailabilityType.NOT_INDICATED) {
@@ -285,23 +307,29 @@ export class PersonnelService {
               availabilityType: AvailabilityType[type],
               deploymentCode: deploymentCode || null,
               personnel: { id },
-            })
+            }),
           );
         }
       }
-  
-      const updatedAvail = await this.availabilityRepository.save(availabilityDates);
+
+      const updatedAvail = await this.availabilityRepository.save(
+        availabilityDates,
+      );
       let deleted: DeleteResult;
       if (removeFrom || removeTo) {
         let deleteQb = this.availabilityRepository.createQueryBuilder();
-          deleteQb = deleteQb.andWhere('personnel = :id', { id });
-          deleteQb.andWhere(
-            new Brackets((qb) => {
-              qb.
-                where('date < :from AND date >= :removeFrom', { from, removeFrom: removeFrom || from })
-                .orWhere('date > :to AND date <= :removeTo', { to, removeTo: removeTo || to });
-            })
-          );
+        deleteQb = deleteQb.andWhere('personnel = :id', { id });
+        deleteQb.andWhere(
+          new Brackets((qb) => {
+            qb.where('date < :from AND date >= :removeFrom', {
+              from,
+              removeFrom: removeFrom || from,
+            }).orWhere('date > :to AND date <= :removeTo', {
+              to,
+              removeTo: removeTo || to,
+            });
+          }),
+        );
         deleted = await deleteQb.delete().execute();
       }
 
@@ -311,11 +339,13 @@ export class PersonnelService {
       };
     } else {
       // Not Indicated means to delete these values
-      const deleted = await this.availabilityRepository.delete(existingAvailability.map(a => a.id));
+      const deleted = await this.availabilityRepository.delete(
+        existingAvailability.map((a) => a.id),
+      );
       return {
         updates: [],
         deleted,
-      }
+      };
     }
   }
 }
