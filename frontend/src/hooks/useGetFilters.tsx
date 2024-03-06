@@ -15,13 +15,18 @@ export const useGetFilters = () => {
   const [regions, setRegions] = useState<Region[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
 
+  const sortRegion = (reg: Region[])=> {
+  return reg.sort((a: Region, b: Region )=>  a.localeCompare(b))
+}
+
   useEffect(() => {
     (async () => {
       const {
         data: { functions, locations },
       } = await AxiosPrivate.get('/filters');
       setLocations(locations);
-      setRegions(Array.from(new Set(locations.map((itm: Location) => itm.region))));
+      const reg=Array.from(new Set(locations.map((itm: Location) => itm.region))) as Region[];
+      setRegions(sortRegion(reg));
       setFunctions(functions);
     })();
   }, []);
