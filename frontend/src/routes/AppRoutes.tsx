@@ -14,9 +14,9 @@ const SplashPage = lazy(() => import('../pages/splash/SplashPage'));
 
 export default () => {
   return (
-    <Suspense fallback={<Loading />}>
-      <ErrorProvider>
-        <AuthProvider>
+    <AuthProvider>
+      <Suspense fallback={<Loading />}>
+        <ErrorProvider>
           <RoleProvider>
             <BrowserRouter>
               <Routes>
@@ -34,8 +34,8 @@ export default () => {
               </Routes>
             </BrowserRouter>
           </RoleProvider>
-        </AuthProvider>
-      </ErrorProvider>
-    </Suspense>
+        </ErrorProvider>
+      </Suspense>
+    </AuthProvider>
   );
 };
