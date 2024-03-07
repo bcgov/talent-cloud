@@ -7,6 +7,7 @@ type DialogProps = {
   handleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   title: string;
   children: ReactElement;
+  style?: string
 };
 
 export const DialogUI = ({
@@ -15,6 +16,7 @@ export const DialogUI = ({
   handleOpen,
   title,
   children,
+  style
 }: DialogProps) => {
   return (
     <Dialog
@@ -30,8 +32,8 @@ export const DialogUI = ({
         {/* Container to center the panel */}
         <div className="flex min-h-full items-center justify-center p-4">
           {/* The actual dialog panel  */}
-          <Dialog.Panel className="mx-auto rounded bg-white  lg:w-2/3 xl:w-1/2">
-            <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-4">
+          <Dialog.Panel className={`mx-auto rounded bg-white ${style}`}>
+            <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-2">
               <h4 className="font-bold">{title}</h4>
               <button
                 className="text-sm text-primaryBlue underline font-normal"

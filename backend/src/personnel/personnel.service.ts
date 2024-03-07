@@ -35,7 +35,7 @@ export class PersonnelService {
   async updatePersonnel(id: string, personnel: UpdatePersonnelDTO, role: Role) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelRepository.findOne({ where: { id } });
-
+    this.logger.log(`${JSON.stringify(personnel)}`);
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
     });
@@ -101,7 +101,7 @@ export class PersonnelService {
     }
     if (query.showInactive) {
       qb.andWhere('personnel.status In (:...status)', {
-        status: [Status.NEW, Status.INACTIVE, Status.ACTIVE],
+        status: [Status.PENDING, Status.INACTIVE, Status.ACTIVE],
       });
     } else {
       qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });

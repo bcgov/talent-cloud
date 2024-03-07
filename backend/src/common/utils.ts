@@ -103,7 +103,11 @@ export const rowData = () => {
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     status:
       Status[
-        faker.helpers.arrayElement([Status.ACTIVE, Status.INACTIVE, Status.NEW])
+        faker.helpers.arrayElement([
+          Status.ACTIVE,
+          Status.INACTIVE,
+          Status.PENDING,
+        ])
       ],
     availability: availability() as AvailabilityEntity[],
     experiences: experiences() as ExperienceEntity[],

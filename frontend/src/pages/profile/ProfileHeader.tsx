@@ -1,11 +1,10 @@
-import {
-  ClipboardDocumentListIcon,
-  HomeIcon,
-  MapPinIcon,
-} from '@heroicons/react/24/solid';
+import { HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
 import { Role, Status } from '@/common';
 import { PersonnelStatus } from '@/components';
+import { Banner } from '@/components/ui/Banner';
+import { BannerType } from '@/common/enums/banner-enum';
+import { Toggle } from '@/components/toggle/Toggle';
 
 function HorizontalLine() {
   return (
@@ -24,9 +23,13 @@ function HorizontalLine() {
 const ProfileHeader = ({
   personnel,
   role,
+  handleOpenReviewApplicant,
+  updatePersonnel,
 }: {
   personnel: Personnel;
+  handleOpenReviewApplicant: () => void;
   role?: Role;
+  updatePersonnel: (personnel: Partial<Personnel>) => void;
 }) => {
   return (
     <>
@@ -39,13 +42,13 @@ const ProfileHeader = ({
         </div>
       </div>
       <div className="flex flex-col items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
-        <h2 className="font-semibold">
+        <h2 className="font-semibold px-2">
           {personnel.firstName} {personnel.lastName}
         </h2>
         {role === Role.COORDINATOR && (
-          <div>
+          <span>
             <PersonnelStatus status={personnel?.status} />
-          </div>
+          </span>
         )}
 
         <div className="hidden lg:flex lg:px-6 xl:px-12">
@@ -74,18 +77,38 @@ const ProfileHeader = ({
               </p>
             </div>
           </div>
-
-          <div className="flex flex-row">
-            <ClipboardDocumentListIcon className="h-7 w-7 text-textGray" />
-            <div className="pl-2">
-              <p className="subtext">Applicant Reviewed Status</p>
-              <p>{personnel.status === Status.NEW ? 'Not Reviewed' : 'Reviewed'}</p>
-            </div>
-          </div>
         </div>
       </div>
-      <div className="px-6 lg:px-0 pb-12 bg-white w-full pt-4 lg:pl-48">
-        <p className="text-textGray">Last deployed 28 days ago</p>
+      <div className="px-6 lg:px-0 pb-12 bg-white w-full pt-4 lg:pl-48 ">
+        {personnel.status === Status.PENDING && (
+          <Banner
+            content={
+              <p className="flex flex-col lg:flex-row items-center text-center space-y-8 lg:space-y-0 text-warningDark">
+                <span className="font-bold">Pending Applicant Alert:</span>
+                <span>
+                  This profile requires coordinator view to ensure deployment
+                  readiness.
+                </span>
+              </p>
+            }
+            onClick={handleOpenReviewApplicant}
+            buttonText={'Complete Review'}
+            type={BannerType.WARNING}
+          />
+        )}
+        {role === Role.COORDINATOR && personnel.status !== Status.PENDING && (
+          <div className="flex flex-row justify-start md:items-center md:mr-12">
+            <Toggle
+              value={personnel.status === Status.ACTIVE}
+              handleToggle={(checked: boolean) =>
+                updatePersonnel({
+                  status: checked ? Status.ACTIVE : Status.INACTIVE,
+                })
+              }
+              label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
+            />
+          </div>
+        )}
       </div>
     </>
   );
