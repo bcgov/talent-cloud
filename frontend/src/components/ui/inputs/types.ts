@@ -1,8 +1,11 @@
+import { FormikErrors } from "formik";
+
 export type InputProps = {
   label: string;
   type?: string;
   disabled?: boolean;
   required?: boolean;
+  error?: FormikErrors<any> | string | undefined;
 };
 
 export type SelectProps = InputProps & {

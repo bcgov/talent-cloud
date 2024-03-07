@@ -9,6 +9,7 @@ export const TextInput = ({
   label,
   required,
   disabled,
+  error,
   ...props
 }: InputProps) => {
   const [field, meta] = useField(props as any as FieldInputProps<string>);
@@ -17,18 +18,23 @@ export const TextInput = ({
     field.value = formatPhone(field.value);
     meta.value = formatPhone(meta.value);
   }
+  
+  const getClass = (): string => {
+    if (error) {
+      return classes.menu.error;
+    } else if (disabled) {
+      return classes.menu.disabled;
+    }
+    return classes.menu.container;
+  };
 
   return (
     <label htmlFor={field.name}>
       {label}
       {required && <span className="text-error">*</span>}
-      <input
-        {...field}
-        disabled={disabled}
-        className={disabled ? classes.menu.disabled : classes.menu.container}
-      />
+      <input {...field} disabled={disabled} className={getClass()} />
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="font-bold text-error">{msg}</div>}
+        {(msg) => <div className="text-errorRed">{msg}</div>}
       </ErrorMessage>
     </label>
   );

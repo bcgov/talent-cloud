@@ -3,6 +3,8 @@ import type { FieldInputProps } from 'formik';
 import { ErrorMessage, useField } from 'formik';
 import type { SelectProps } from './types';
 
+
+
 export const Select = ({
   label,
   required,
@@ -12,13 +14,14 @@ export const Select = ({
   ...props
 }: SelectProps) => {
   const [field] = useField(props as any as FieldInputProps<string>);
+  
   return (
     <label htmlFor={field.name}>
       {label}
       {required && <span className="text-error">*</span>}
       <select
         {...field}
-        disabled={disabled}
+        disabled={disabled} 
         onChange={onChange ?? field.onChange}
         className={disabled ? classes.menu.disabled : classes.menu.container}
       >
@@ -29,7 +32,7 @@ export const Select = ({
         ))}
       </select>
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="font-bold text-error">{msg}</div>}
+        {(msg) => <div className="text-errorRed">{msg}</div>}
       </ErrorMessage>
     </label>
   );

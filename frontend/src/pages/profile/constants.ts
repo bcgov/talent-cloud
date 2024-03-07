@@ -3,56 +3,55 @@ import * as Yup from 'yup';
 
 export const EditProfileValidationSchema = Yup.object().shape({
   firstName: Yup.string()
-    .min(2, 'Min length 2 characters')
-    .max(50, 'Max length 50 characters')
-    .required('First name is required'),
+    .min(2, 'Min length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
   lastName: Yup.string()
-    .min(2, 'Min length 2 characters')
-    .max(50, 'Max length 50 characters')
-    .required('Last name is required'),
+    .min(2, 'Min length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
   dateJoined: Yup.date(),
   workLocation: Yup.object().shape({
     region: Yup.string()
       .optional()
-      .min(2, 'Min length 2 characters')
-      .max(50, 'Max length 50 characters')
-      .required('Work Region is required'),
+      .min(2, 'Min length 2 characters.')
+      .max(50, 'Max length 50 characters.'),
     locationName: Yup.string()
       .optional()
-      .min(2, 'Min length 2 characters')
-      .max(50, 'Max length 50 characters')
-      .required('Work Location is required'),
+      .min(2, 'Min length 2 characters.')
+      .max(50, 'Max length 50 characters.')
   }),
   homeLocation: Yup.object().shape({
     region: Yup.string()
       .optional()
-      .min(2, 'Min length 2 characters')
-      .max(50, 'Max length 50 characters'),
+      .min(2, 'Min length 2 characters.')
+      .max(50, 'Max length 50 characters.')
+      .required('This field is required.'),
     locationName: Yup.string()
       .optional()
-      .min(2, 'Min length 2 characters')
-      .max(50, 'Max length 50 characters'),
+      .min(2, 'Min length 2 characters.')
+      .max(50, 'Max length 50 characters.'),
   }),
-  remoteOnly: Yup.boolean().required('Remote Only is required'),
-  willingToTravel: Yup.boolean().required('Willingness to travel is required'),
+  remoteOnly: Yup.boolean().required('This field is required.'),
+  willingToTravel: Yup.boolean().required('This field is required.'),
   primaryPhone: Yup.string()
-    .min(10, 'Please enter a ten digit phone number')
-    .max(14, 'Please enter a ten digit phone number')
-    .required('Primary number is required'),
+    .min(10, 'Invalid phone number format. Please enter ten digits.')
+    .max(14, 'Invalid phone number format. Please enter ten digits.')
+    .required('This field is required.'),
   secondaryPhone: Yup.string()
     .optional()
-    .min(10, 'Please enter a ten digit phone number')
-    .max(14, 'Please enter a ten digit phone number'),
+    .min(10, 'Invalid phone number format. Please enter ten digits.')
+    .max(14, 'Invalid phone number format. Please enter ten digits.'),
   workPhone: Yup.string()
     .optional()
-    .min(10, 'Please enter a ten digit phone number')
-    .max(14, 'Please enter a ten digit phone number'),
+    .min(10, 'Invalid phone number format. Please enter ten digits.')
+    .max(14, 'Invalid phone number format. Please enter ten digits.'),
   supervisor: Yup.string()
-    .min(2, 'Min length 2 characters')
-    .max(50, 'Max length 50 characters')
-    .required('Supervisor is required'),
-  ministry: Yup.string().required('Ministry is required'),
-  classification: Yup.string().required('Union membership is required'),
+    .min(2, 'Max length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
+  ministry: Yup.string().required('This field is required.'),
+  classification: Yup.string().required('This field is required.'),
 });
 
 export const fields = {
@@ -83,7 +82,7 @@ export const fields = {
     region: {
       name: 'workLocation.region',
       label: 'Work Region',
-      required: true,
+      required: false,
       type: 'select',
       disabled: true,
     },
@@ -93,14 +92,14 @@ export const fields = {
       type: 'select',
       disabled: false,
 
-      required: true,
+      required: false,
     },
   },
   homeLocation: {
     region: {
       name: 'homeLocation.region',
       label: 'Home Region',
-      required: false,
+      required: true,
       type: 'select',
       disabled: true,
     },
@@ -109,7 +108,7 @@ export const fields = {
       label: 'Home Location',
       type: 'select',
       disabled: false,
-      required: false,
+      required: true,
     },
   },
 
@@ -157,13 +156,15 @@ export const fields = {
     disabled: true,
   },
 
+  
   supervisor: {
     name: 'supervisor',
-    label: 'Supervisor',
+    label: 'Supervisor ',
     required: true,
     type: 'text',
     disabled: false,
   },
+  
   workPhone: {
     name: 'workPhone',
     label: 'Work Number',

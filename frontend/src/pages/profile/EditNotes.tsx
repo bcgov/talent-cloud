@@ -20,10 +20,10 @@ export const EditNotes = ({
   const notesSchema = Yup.object().shape({
     logisticsNotes: Yup.string()
       .optional()
-      .max(500, 'Notes must be less than 500 characters'),
+      .max(500, 'Max character limit exceeded. (500/500)'),
     coordinatorNotes: Yup.string()
       .optional()
-      .max(500, 'Notes must be less than 500 characters'),
+      .max(500, 'Max character limit exceeded. (500/500)'),
   });
 
   const handleSubmit = async (values: FormikValues) => {
@@ -52,7 +52,7 @@ export const EditNotes = ({
           FormikProps<{ [key: string]: string }>) => (
           <Form>
             <div className="flex flex-col items-center justify-center w-full">
-              <TextArea {...props} label={label} {...notesField} />
+              <TextArea {...props} label={label} {...notesField} error={errors[name]}/>
             </div>
             <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
 
@@ -70,13 +70,6 @@ export const EditNotes = ({
                 type="submit"
                 disabled={isSubmitting || !props.isValid}
               />
-            </div>
-            <div className="w-full flex flex-row justify-end">
-              {Object.values(errors).length > 0 && (
-                <div className="text-error font-bold">
-                  Please resolve form errors
-                </div>
-              )}
             </div>
           </Form>
         )}

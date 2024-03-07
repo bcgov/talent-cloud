@@ -33,6 +33,7 @@ module.exports = withMT({
         sans: ['"BCSans"'],
       },
       colors: {
+        errorRed: '#D8292F',
         transparent: 'transparent',
         primaryBlue: '#003366',
         primaryYellow: '#fcba19',

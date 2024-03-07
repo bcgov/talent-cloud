@@ -102,19 +102,20 @@ export const ProfileEditForm = ({
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
               <div className="w-1/3">
-                <TextInput {...props} {...fields.dateJoined} />
+                <TextInput {...props} {...fields.dateJoined} error={errors.dateJoined} />
               </div>
 
               <div className="w-full grid grid-cols-2  gap-6">
-                <TextInput {...props} {...fields.firstName} />
-                <TextInput {...props} {...fields.lastName} />
+                <TextInput {...props} {...fields.firstName} error={errors.firstName} />
+                <TextInput {...props} {...fields.lastName} error={errors.lastName} />
               </div>
 
               <div className="w-full grid grid-cols-2 gap-6">
                 <Select
                   {...props}
                   {...fields.workLocation.locationName}
-                  onChange={(e) =>
+                  error={errors.workLocation?.locationName}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     handleChangeLocation(e, {
                       isSubmitting,
                       errors,
@@ -129,6 +130,7 @@ export const ProfileEditForm = ({
                 <Select
                   {...props}
                   {...fields.workLocation.region}
+                  error={errors.workLocation?.region}
                   disabled={true}
                   options={regions.map((itm) => ({
                     label: itm,
@@ -140,7 +142,8 @@ export const ProfileEditForm = ({
                 <Select
                   {...props}
                   {...fields.homeLocation.locationName}
-                  onChange={(e) =>
+                  error={errors.homeLocation?.locationName}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     handleChangeLocation(e, {
                       isSubmitting,
                       errors,
@@ -155,6 +158,7 @@ export const ProfileEditForm = ({
                 <Select
                   {...props}
                   {...fields.homeLocation.region}
+                  error={errors.homeLocation?.region}
                   disabled={true}
                   options={regions.map((itm) => ({
                     label: itm,
@@ -163,26 +167,26 @@ export const ProfileEditForm = ({
                 />
               </div>
               <div className="w-full grid grid-cols-2 gap-6">
-                <Select {...props} {...fields.remoteOnly} />
-                <Select {...props} {...fields.willingToTravel} />
+                <Select {...props} {...fields.remoteOnly} error={errors.remoteOnly}/>
+                <Select {...props} {...fields.willingToTravel} error={errors.willingToTravel}/>
               </div>
               <Divider />
               <SectionHeader section={sections.contact.header} />
               <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <TextInput {...props} {...fields.primaryPhone} />
-                <TextInput {...props} {...fields.secondaryPhone} />
-                <TextInput {...props} {...fields.email} />
+                <TextInput {...props} {...fields.primaryPhone} error={errors.primaryPhone} />
+                <TextInput {...props} {...fields.secondaryPhone} error={errors.secondaryPhone} />
+                <TextInput {...props} {...fields.email} error={errors.email} />
               </div>
 
               <Divider />
               <SectionHeader section={sections.organization.header} />
               <div className="w-full grid grid-cols-2 gap-6">
-                <TextInput {...props} {...fields.supervisor} />
-                <TextInput {...props} {...fields.workPhone} />
+                <TextInput {...props} {...fields.supervisor} error={errors.supervisor} />
+                <TextInput {...props} {...fields.workPhone} error={errors.workPhone} />
               </div>
               <div className="w-full grid grid-cols-2 gap-6">
-                <Select {...props} {...fields.ministry} />
-                <Select {...props} {...fields.classification} />
+                <Select {...props} {...fields.ministry} error={errors.ministry} />
+                <Select {...props} {...fields.classification} error={errors.classification} />
               </div>
             </div>
           </div>
@@ -203,11 +207,7 @@ export const ProfileEditForm = ({
               disabled={isSubmitting || !props.isValid}
             />
           </div>
-          <div className="w-full flex flex-row justify-end">
-            {Object.values(errors).length > 0 && (
-              <div className="text-error font-bold">Please resolve form errors</div>
-            )}
-          </div>
+
         </Form>
       )}
     </Formik>
