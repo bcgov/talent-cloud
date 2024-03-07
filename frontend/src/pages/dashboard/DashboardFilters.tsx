@@ -96,7 +96,6 @@ export const Filters = ({
               value={filterValues.availabilityType}
               onChange={handleSingleSelect}
               resetDates={handleSetDates}
-              
             />
           </div>
           <div className="col-span-1 md:col-span-2">
