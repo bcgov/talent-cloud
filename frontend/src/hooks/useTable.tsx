@@ -156,14 +156,21 @@ export const useTable = () => {
           to: '',
         },
       }));
-      return;
+    } else {
+      setFilterValues((prev: any) => ({
+        ...prev,
+        currentPage: 1,
+        availabilityDates: range,
+      }));
     }
+  };
+  const resetType = () => {
     setFilterValues((prev: any) => ({
       ...prev,
       currentPage: 1,
-      availabilityDates: range,
+      availabilityType: '',
     }));
-  };
+  }
   return {
     tableData,
     handlePageParams,
@@ -175,6 +182,7 @@ export const useTable = () => {
     handleClose,
     handleCloseMany,
     handleSetDates,
+    resetType,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,

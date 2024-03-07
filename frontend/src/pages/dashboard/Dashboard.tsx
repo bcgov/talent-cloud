@@ -20,6 +20,7 @@ const Dashboard = () => {
     handleClose,
     handleCloseMany,
     handleSetDates,
+    resetType
   } = useTable();
   const { role } = useRole();
 
@@ -35,6 +36,7 @@ const Dashboard = () => {
         handleSearch={handleSearch}
         handleClose={handleClose}
         handleCloseMany={handleCloseMany}
+        resetType={resetType}
       />
 
       <Table

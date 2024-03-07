@@ -4,18 +4,22 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { Menu, Transition } from '@headlessui/react';
 import { Chip } from '../ui';
+import { DateRange } from 'react-day-picker';
 
 export const SingleSelect = ({
-  value,
   onChange,
   label,
   field,
+
+  resetDates,
+  value,
 }: {
   onChange: (e: ChangeEvent<HTMLInputElement>) => any;
   label: string;
   field: any;
+
+  resetDates: (dates: DateRange) => void;
   value?: string;
-  handleClose: (name: string, value: string) => void;
 }) => {
   const handleChange = (name: string, value: string) => {
     const event = {
@@ -25,6 +29,16 @@ export const SingleSelect = ({
   };
   const placeholder = 'Select Availability Status';
 
+  const handleClose = (name: string, value: string) => {
+    
+    resetDates({ to: undefined, from: undefined });
+    const event = {
+      target: { name: field.name, value: '' },
+    } as unknown as ChangeEvent<HTMLInputElement>;
+
+    onChange(event);
+  };
+
   return (
     <>
       <label>{label}</label>
@@ -33,11 +47,7 @@ export const SingleSelect = ({
           <>
             {value ? (
               <div className={menuItemClass[field.name]}>
-                <Chip
-                  value={value}
-                  name={field.name}
-                  handleClose={() => handleChange(field.name, '')}
-                />
+                <Chip value={value} name={field.name} handleClose={handleClose} />
                 <Menu.Button>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-gray-900"
