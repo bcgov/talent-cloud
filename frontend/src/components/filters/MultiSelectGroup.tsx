@@ -48,7 +48,7 @@ export const MultiSelectGroup = ({
           <MenuChips
             values={values}
             label={label.toLowerCase()}
-            handleClose={handleClose}
+            handleClose={()=> handleClose(field.name, values)}
             handleCloseMany={handleCloseMany}
             name={field.name}
           />

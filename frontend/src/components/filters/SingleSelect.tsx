@@ -4,13 +4,13 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { Menu, Transition } from '@headlessui/react';
 import { Chip } from '../ui';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 
 export const SingleSelect = ({
   onChange,
   label,
   field,
-
+  
   resetDates,
   value,
 }: {
@@ -29,14 +29,9 @@ export const SingleSelect = ({
   };
   const placeholder = 'Select Availability Status';
 
-  const handleClose = (name: string, value: string) => {
-    
-    resetDates({ to: undefined, from: undefined });
-    const event = {
-      target: { name: field.name, value: '' },
-    } as unknown as ChangeEvent<HTMLInputElement>;
-
-    onChange(event);
+  const handleClose = () => {
+    resetDates({ from: undefined, to: undefined });
+    handleChange(field.name, "");
   };
 
   return (

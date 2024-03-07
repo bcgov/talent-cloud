@@ -1,7 +1,4 @@
-import type {
-  CaptionProps,
-  DateRange,
-} from 'react-day-picker';
+import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
 import { ChangeEvent, Fragment } from 'react';
 import { menuItemClass, calendarClass } from '../classes';
@@ -17,7 +14,7 @@ export const DatePicker = ({
   label,
   field,
   disabled,
-  reset
+  reset,
 }: {
   onChange: (range: DateRange | undefined) => void;
   label: string;

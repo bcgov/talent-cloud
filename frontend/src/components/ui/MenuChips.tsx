@@ -9,7 +9,7 @@ export const MenuChips = ({
   name,
 }: {
   values: any[];
-  handleClose: (name: string, value: any) => void;
+  handleClose: () => void;
   handleCloseMany: (name: string) => void;
   label: string;
   name: string;
@@ -21,7 +21,7 @@ export const MenuChips = ({
           <Chip
             value={`${values?.length} selected`}
             name={name}
-            handleClose={handleCloseMany}
+            handleClose={()=>handleCloseMany(name)}
           />
         ) : (
           values?.map((value: any) => (

@@ -32,7 +32,7 @@ export const Filters = ({
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
   handleSetDates: (range: DateRange | undefined) => void;
-  resetType: () => void
+  resetType: () => void;
 }) => {
   const { filters } = useGetFilters();
 
@@ -96,6 +96,7 @@ export const Filters = ({
               value={filterValues.availabilityType}
               onChange={handleSingleSelect}
               resetDates={handleSetDates}
+              
             />
           </div>
           <div className="col-span-1 md:col-span-2">
