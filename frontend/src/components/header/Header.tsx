@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { logout } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
+import {  headerLink } from '@/common/links';
 
 export const Header = ({
   appName,
@@ -27,9 +28,9 @@ export const Header = ({
     <header className="relative w-full border-b z-40 py-0">
       <div className="hidden w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
         <div className="lg:flex">
-          <Link to={Routes.Home} className="py-0 my-0">
+          <a href={headerLink} className="py-0 my-0" target={'_blank'} rel={"noopener noreferrer"}>
             <EmcrLogo />
-          </Link>
+          </a>
         </div>
         {authenticated && (
           <>
