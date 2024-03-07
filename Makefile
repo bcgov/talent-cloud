@@ -109,7 +109,13 @@ db-prep:
 #	@oc process -f openshift/patroni.bc.yml | oc create -n ${TOOLS_NAMESPACE} -f -
 
 db-create:
-	@oc process -f openshift/patroni.dc.yml -p APP_NAME=$(APP_NAME) | oc apply -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/patroni.bc.yml | oc apply -n $(TOOLS_NAMESPACE) -f -
+
+db-backup-build:
+	@oc process -f openshift/backup.dc.yml -p APP_NAME=tcloud-backup | oc apply -n $(TARGET_NAMESPACE) -f -
+
+db-backup-create:
+	@oc process -f openshift/backup.dc.yml -p APP_NAME=tcloud-backup | oc apply -n $(TARGET_NAMESPACE) -f -
 
 networking-prep:
 	@oc process -f openshift/networking.yml | oc apply -n $(TARGET_NAMESPACE) -f -
