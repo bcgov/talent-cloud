@@ -32,7 +32,7 @@ const usePersonnel = ({
       );
       setPersonnel(res.data);
     } catch (e) {
-      window.alert('Error updating personnel');
+      //TODO error toast
     }
   };
 
