@@ -4,6 +4,7 @@ export interface CustomCaptionProps extends CaptionProps {
   hideResetButton?: boolean;
   startingDate?: Date;
   onChange: (range: DateRange | undefined) => void;
+  reset?: () => void;
 }
 
 export interface SelectorProps {

@@ -17,7 +17,11 @@ export const DatePickerHeader = (props: CustomCaptionProps) => {
   return (
     <div className="flex flex-col justify-start w-full items-start">
       {props.hideResetButton !== true && (
-        <ResetButton goToMonth={goToMonth} onChange={props.onChange} />
+        <ResetButton
+          reset={props?.reset}
+          goToMonth={goToMonth}
+          onChange={props.onChange}
+        />
       )}
       <div className="flex flex-row items-center justify-between w-full pl-2 space-x-8">
         <MonthSelector displayMonth={props.displayMonth} goToMonth={goToMonth} />

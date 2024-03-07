@@ -14,12 +14,14 @@ export const DatePicker = ({
   label,
   field,
   disabled,
+  reset,
 }: {
   onChange: (range: DateRange | undefined) => void;
   label: string;
   field: any;
   value: DateRange;
   disabled?: boolean;
+  reset?: () => void;
 }) => {
   return (
     <>
@@ -62,7 +64,12 @@ export const DatePicker = ({
                     classNames={calendarClass}
                     components={{
                       Caption: (props: CaptionProps) => (
-                        <DatePickerHeader {...props} onChange={onChange} />
+                        <DatePickerHeader
+                          {...props}
+                          onChange={onChange}
+                          startingDate={value.from}
+                          reset={reset}
+                        />
                       ),
                     }}
                   />

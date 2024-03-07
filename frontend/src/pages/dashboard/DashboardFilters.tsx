@@ -22,6 +22,7 @@ export const Filters = ({
   handleClose,
   handleCloseMany,
   handleSetDates,
+  resetType,
 }: {
   handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -31,6 +32,7 @@ export const Filters = ({
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
   handleSetDates: (range: DateRange | undefined) => void;
+  resetType: () => void;
 }) => {
   const { filters } = useGetFilters();
 
@@ -93,7 +95,7 @@ export const Filters = ({
               label="Availability"
               value={filterValues.availabilityType}
               onChange={handleSingleSelect}
-              handleClose={handleClose}
+              resetDates={handleSetDates}
             />
           </div>
           <div className="col-span-1 md:col-span-2">
@@ -103,6 +105,7 @@ export const Filters = ({
               value={filterValues.availabilityDates}
               onChange={handleSetDates}
               disabled={!filterValues.availabilityType}
+              reset={resetType}
             />
           </div>
         </div>
