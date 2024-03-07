@@ -10,7 +10,7 @@ export const SingleSelect = ({
   onChange,
   label,
   field,
-  
+
   resetDates,
   value,
 }: {
@@ -31,7 +31,7 @@ export const SingleSelect = ({
 
   const handleClose = () => {
     resetDates({ from: undefined, to: undefined });
-    handleChange(field.name, "");
+    handleChange(field.name, '');
   };
 
   return (
@@ -42,7 +42,7 @@ export const SingleSelect = ({
           <>
             {value ? (
               <div className={menuItemClass[field.name]}>
-                <Chip value={value} name={field.name} handleClose={handleClose} />
+                <Chip value={value} handleClose={handleClose} />
                 <Menu.Button>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-gray-900"

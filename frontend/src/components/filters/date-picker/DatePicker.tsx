@@ -1,6 +1,6 @@
 import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
-import { ChangeEvent, Fragment } from 'react';
+import { Fragment } from 'react';
 import { menuItemClass, calendarClass } from '../classes';
 import { Menu, Transition } from '@headlessui/react';
 import { DatePickerHeader } from './DatePickerHeader';

@@ -33,7 +33,7 @@ export const MultiSelect = ({
           <MenuChips
             values={values}
             label={field.name}
-            handleClose={()=> handleClose(field.name, values)}
+            handleClose={() => handleClose(field.name, values)}
             handleCloseMany={handleCloseMany}
             name={field.name}
           />

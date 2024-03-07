@@ -3,11 +3,9 @@ import { classes } from '../filters/classes';
 
 export const Chip = ({
   value,
-  name,
   handleClose,
 }: {
   value: string;
-  name: string;
   handleClose: () => any;
 }) => (
   <MuiChip
