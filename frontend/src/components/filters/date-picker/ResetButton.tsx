@@ -12,6 +12,7 @@ export const ResetButton = (props: ResetProps) => (
       props.reset && props.reset();
       props.onChange({ from: undefined, to: undefined });
       props.goToMonth(new Date());
+
     }}
   >
     Reset

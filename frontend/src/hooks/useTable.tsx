@@ -170,7 +170,7 @@ export const useTable = () => {
       currentPage: 1,
       availabilityType: '',
     }));
-  };
+  }
   return {
     tableData,
     handlePageParams,
