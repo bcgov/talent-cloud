@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { logout } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
-import { footerLinks, headerLink } from '@/common/links';
+import {  headerLink } from '@/common/links';
 
 export const Header = ({
   appName,
