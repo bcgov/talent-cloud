@@ -36,7 +36,7 @@ const ProfileDetails = ({
     },
     {
       title: 'Date Joined',
-      content: dayjs(personnel.applicationDate).format('MMMM D, YYYY'),
+      content: dayjs(personnel.dateJoined).format('MMMM D, YYYY'),
     },
   ];
 
