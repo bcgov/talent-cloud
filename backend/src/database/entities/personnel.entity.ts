@@ -101,16 +101,16 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({
     name: 'coordinatorNotes',
-    type: 'varchar',
-    length: 512,
+    type: 'text',
+
     nullable: true,
   })
   coordinatorNotes: string;
 
   @Column({
     name: 'logisticsNotes',
-    type: 'varchar',
-    length: 512,
+    type: 'text',
+
     nullable: true,
   })
   logisticsNotes: string;

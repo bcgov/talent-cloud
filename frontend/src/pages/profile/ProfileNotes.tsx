@@ -5,7 +5,6 @@ import type { Personnel } from '../dashboard';
 import { Role } from '@/common';
 import { useRole } from '@/hooks';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import Detail from './Detail';
 
 const ProfileNotes = ({
   personnel,
@@ -49,31 +48,39 @@ const ProfileNotes = ({
           </AccordionHeader>
 
           <AccordionBody>
-            <div className="py-5 px-8">
+            <div className="py-5 px-8 h-auto">
               <div className={`grid grid-cols-1 lg:grid-cols-2 pt-4 gap-24`}>
                 <div>
-                  <Detail
-                    title="Notes"
-                    content={personnel.logisticsNotes}
-                    icon={
+                  <div className="py-2">
+                    <div className="flex flex-row items-center space-x-2">
+                      <h5>Notes</h5>
                       <button onClick={handleOpenEditNotes}>
                         <PencilSquareIcon className="h-5 w-5" />
                       </button>
-                    }
-                  />
+                    </div>
+                    <textarea
+                      disabled
+                      value={personnel.logisticsNotes}
+                      className="w-full resize-auto border-none outline-none min-h-[300px]"
+                    />
+                  </div>
                 </div>
 
                 {role === Role.COORDINATOR && (
                   <div>
-                    <Detail
-                      title="Coordinator Notes"
-                      content={personnel.coordinatorNotes}
-                      icon={
+                    <div className="py-2">
+                      <div className="flex flex-row items-center space-x-2">
+                        <h5>Coordinator Notes</h5>
                         <button onClick={handleOpenEditCoordinatorNotes}>
                           <PencilSquareIcon className="h-5 w-5" />
                         </button>
-                      }
-                    />
+                      </div>
+                      <textarea
+                        className="w-full resize-none border-none outline-none min-h-[300px]"
+                        disabled
+                        value={personnel.coordinatorNotes}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
