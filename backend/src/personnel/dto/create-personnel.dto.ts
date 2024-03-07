@@ -132,7 +132,7 @@ export class CreatePersonnelDTO {
     example: 'A Paragraph of notes',
   })
   @IsString()
-  @Length(2, 250)
+  @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.coordinatorNotes !== '')
   coordinatorNotes: string;
@@ -142,7 +142,7 @@ export class CreatePersonnelDTO {
     example: 'A Paragraph of notes',
   })
   @IsString()
-  @Length(2, 250)
+  @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.logisticsNotes !== '')
   logisticsNotes: string;

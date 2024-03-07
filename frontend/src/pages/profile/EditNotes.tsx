@@ -20,10 +20,10 @@ export const EditNotes = ({
   const notesSchema = Yup.object().shape({
     logisticsNotes: Yup.string()
       .optional()
-      .max(500, 'Max character limit exceeded. (500/500)'),
+      .max(1000, 'Notes must be less than 1000 characters'),
     coordinatorNotes: Yup.string()
       .optional()
-      .max(500, 'Max character limit exceeded. (500/500)'),
+      .max(1000, 'Notes must be less than 1000 characters'),
   });
 
   const handleSubmit = async (values: FormikValues) => {
@@ -56,7 +56,7 @@ export const EditNotes = ({
                 {...props}
                 label={label}
                 {...notesField}
-                error={errors[name]}
+                error={errors.logisticsNotes ?? errors.coordinatorNotes}
               />
             </div>
             <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
