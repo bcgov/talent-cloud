@@ -4,8 +4,10 @@ export const classes = {
       'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#606060] border border-[#606060] color-[#828282] ',
     textArea:
       'textarea resize flex flex-row  p-2.5 text-sm w-full font-normal bg-white min-h-[300px] rounded-sm text-[#828282] border border-[#606060] color-[#828282] outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 ',
-    textAreaError: 'textarea resize flex flex-row  p-2.5 text-sm w-full font-normal bg-white min-h-[300px] rounded-sm text-[#828282] border border-errorRed color-[#828282] outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 ',
-    error: 'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#606060] border border-errorRed color-[#828282] ',
+    textAreaError:
+      'textarea resize flex flex-row  p-2.5 text-sm w-full font-normal bg-white min-h-[300px] rounded-sm text-[#828282] border border-errorRed color-[#828282] outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 ',
+    error:
+      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between aria-disabled="true" aria-haspopup="false" aria-expanded="false" aria-controls="" text-[#606060] border border-errorRed color-[#828282] ',
     buttonContainer: 'flex flex-row items-center justify-end',
     button:
       'bg-white flex flex-row justify-between items-center no-wrap fill-[#606060]',

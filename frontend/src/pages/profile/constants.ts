@@ -19,7 +19,7 @@ export const EditProfileValidationSchema = Yup.object().shape({
     locationName: Yup.string()
       .optional()
       .min(2, 'Min length 2 characters.')
-      .max(50, 'Max length 50 characters.')
+      .max(50, 'Max length 50 characters.'),
   }),
   homeLocation: Yup.object().shape({
     region: Yup.string()
@@ -156,7 +156,6 @@ export const fields = {
     disabled: true,
   },
 
-  
   supervisor: {
     name: 'supervisor',
     label: 'Supervisor ',
@@ -164,7 +163,7 @@ export const fields = {
     type: 'text',
     disabled: false,
   },
-  
+
   workPhone: {
     name: 'workPhone',
     label: 'Work Number',

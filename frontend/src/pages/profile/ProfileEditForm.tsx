@@ -102,11 +102,19 @@ export const ProfileEditForm = ({
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
               <div className="w-1/3">
-                <TextInput {...props} {...fields.dateJoined} error={errors.dateJoined} />
+                <TextInput
+                  {...props}
+                  {...fields.dateJoined}
+                  error={errors.dateJoined}
+                />
               </div>
 
               <div className="w-full grid grid-cols-2  gap-6">
-                <TextInput {...props} {...fields.firstName} error={errors.firstName} />
+                <TextInput
+                  {...props}
+                  {...fields.firstName}
+                  error={errors.firstName}
+                />
                 <TextInput {...props} {...fields.lastName} error={errors.lastName} />
               </div>
 
@@ -167,26 +175,54 @@ export const ProfileEditForm = ({
                 />
               </div>
               <div className="w-full grid grid-cols-2 gap-6">
-                <Select {...props} {...fields.remoteOnly} error={errors.remoteOnly}/>
-                <Select {...props} {...fields.willingToTravel} error={errors.willingToTravel}/>
+                <Select
+                  {...props}
+                  {...fields.remoteOnly}
+                  error={errors.remoteOnly}
+                />
+                <Select
+                  {...props}
+                  {...fields.willingToTravel}
+                  error={errors.willingToTravel}
+                />
               </div>
               <Divider />
               <SectionHeader section={sections.contact.header} />
               <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <TextInput {...props} {...fields.primaryPhone} error={errors.primaryPhone} />
-                <TextInput {...props} {...fields.secondaryPhone} error={errors.secondaryPhone} />
+                <TextInput
+                  {...props}
+                  {...fields.primaryPhone}
+                  error={errors.primaryPhone}
+                />
+                <TextInput
+                  {...props}
+                  {...fields.secondaryPhone}
+                  error={errors.secondaryPhone}
+                />
                 <TextInput {...props} {...fields.email} error={errors.email} />
               </div>
 
               <Divider />
               <SectionHeader section={sections.organization.header} />
               <div className="w-full grid grid-cols-2 gap-6">
-                <TextInput {...props} {...fields.supervisor} error={errors.supervisor} />
-                <TextInput {...props} {...fields.workPhone} error={errors.workPhone} />
+                <TextInput
+                  {...props}
+                  {...fields.supervisor}
+                  error={errors.supervisor}
+                />
+                <TextInput
+                  {...props}
+                  {...fields.workPhone}
+                  error={errors.workPhone}
+                />
               </div>
               <div className="w-full grid grid-cols-2 gap-6">
                 <Select {...props} {...fields.ministry} error={errors.ministry} />
-                <Select {...props} {...fields.classification} error={errors.classification} />
+                <Select
+                  {...props}
+                  {...fields.classification}
+                  error={errors.classification}
+                />
               </div>
             </div>
           </div>
@@ -207,7 +243,6 @@ export const ProfileEditForm = ({
               disabled={isSubmitting || !props.isValid}
             />
           </div>
-
         </Form>
       )}
     </Formik>

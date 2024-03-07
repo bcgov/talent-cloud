@@ -1,4 +1,4 @@
-import { FormikErrors } from "formik";
+import type { FormikErrors } from 'formik';
 
 export type InputProps = {
   label: string;

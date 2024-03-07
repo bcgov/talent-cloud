@@ -52,7 +52,12 @@ export const EditNotes = ({
           FormikProps<{ [key: string]: string }>) => (
           <Form>
             <div className="flex flex-col items-center justify-center w-full">
-              <TextArea {...props} label={label} {...notesField} error={errors[name]}/>
+              <TextArea
+                {...props}
+                label={label}
+                {...notesField}
+                error={errors[name]}
+              />
             </div>
             <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
 

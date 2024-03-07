@@ -18,7 +18,7 @@ export const TextInput = ({
     field.value = formatPhone(field.value);
     meta.value = formatPhone(meta.value);
   }
-  
+
   const getClass = (): string => {
     if (error) {
       return classes.menu.error;
