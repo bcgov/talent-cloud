@@ -5,7 +5,7 @@ export type InputProps = {
   type?: string;
   disabled?: boolean;
   required?: boolean;
-  error?: FormikErrors<any> | string | undefined;
+  error?: FormikErrors<any> | string ;
 };
 
 export type SelectProps = InputProps & {
