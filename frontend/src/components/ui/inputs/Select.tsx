@@ -30,7 +30,7 @@ export const Select = ({
         ))}
       </select>
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="text-errorRed">{msg}</div>}
+        {(msg) => <div className="text-errorRed font-normal">{msg}</div>}
       </ErrorMessage>
     </label>
   );
