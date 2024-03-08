@@ -1,8 +1,8 @@
 import { Status } from '@/common';
 
 export const PersonnelStatus = ({ status }: { status: Status }) => {
-  if (status === Status.NEW) {
-    return <span className="bg-infoBannerLight px-2 rounded-full mr-2">New</span>;
+  if (status === Status.PENDING) {
+    return <span className="bg-infoBannerLight px-2 rounded-full mr-2">Pending Approval</span>;
   }
   if (status === Status.ACTIVE) {
     return (

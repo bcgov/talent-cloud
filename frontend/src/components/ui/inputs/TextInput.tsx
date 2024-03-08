@@ -34,7 +34,7 @@ export const TextInput = ({
       {required && <span className="text-error">*</span>}
       <input {...field} disabled={disabled} className={getClass()} />
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="text-errorRed">{msg}</div>}
+        {(msg) => <div className="font-normal text-errorRed">{msg}</div>}
       </ErrorMessage>
     </label>
   );

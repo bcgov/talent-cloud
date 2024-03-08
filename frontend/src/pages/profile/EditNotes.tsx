@@ -38,7 +38,7 @@ export const EditNotes = ({
     disabled: false,
   };
   return (
-    <div className="w-full">
+    <div className="w-full lg:w-2/3 xl:w-1/2">
       <Formik
         validationSchema={notesSchema}
         initialValues={notes}

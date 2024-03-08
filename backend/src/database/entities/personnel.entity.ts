@@ -115,7 +115,12 @@ export class PersonnelEntity extends BaseEntity {
   })
   logisticsNotes: string;
 
-  @Column({ name: 'status', type: 'enum', enum: Status, default: Status.NEW })
+  @Column({
+    name: 'status',
+    type: 'enum',
+    enum: Status,
+    default: Status.PENDING,
+  })
   status: Status;
 
   @Column({

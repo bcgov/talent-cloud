@@ -3,9 +3,9 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import {
   Breadcrumbs,
-  Button,
   Dialog,
   DialogHeader,
+  Button,
   DialogBody,
 } from '@material-tailwind/react';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
@@ -20,11 +20,12 @@ import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
-import type { AvailabilityType } from '@/common';
+import { Status, type AvailabilityType } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
 import { DialogUI } from '@/components';
+import { ReviewApplicant } from '../ReviewApplicant';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -81,7 +82,10 @@ const Profile = () => {
     }
     setOpenEditPopUp(!openEditPopUp);
   };
-
+  const [openReviewApplicant, setOpenReviewApplicant] = useState(false);
+  const handleOpenReviewApplicant = () => {
+    setOpenReviewApplicant(!openReviewApplicant);
+  };
   const openSchedulerDialog = (
     from?: string,
     to?: string,
@@ -96,9 +100,12 @@ const Profile = () => {
     }
     setSchedulerDialogOpen(!schedulerDialogOpen);
   };
-
+  const getBackground =
+    personnel?.status === Status.PENDING ? 'inactive' : 'grayBackground';
   return (
-    <div className="min-h-screen pt-12 pb-24 bg-grayBackground w-full overflow-x-hidden">
+    <div
+      className={`min-h-screen pt-12 pb-24 bg-${getBackground} w-full overflow-x-hidden`}
+    >
       <Breadcrumbs
         placeholder={'Breadcrumbs'}
         className="px-12 bg-grayBackground max-w-full"
@@ -121,7 +128,12 @@ const Profile = () => {
       {personnel && (
         <div>
           <div className="pt-12">
-            <ProfileHeader personnel={personnel} role={role} />
+            <ProfileHeader
+              personnel={personnel}
+              role={role}
+              handleOpenReviewApplicant={handleOpenReviewApplicant}
+              updatePersonnel={updatePersonnel}
+            />
 
             <ProfileDetails
               openEditPopUp={handleOpenEditPopUp}
@@ -145,7 +157,8 @@ const Profile = () => {
             open={openEditPopUp}
             onClose={updatePersonnel}
             handleOpen={handleOpenEditPopUp}
-            title={'Edit Notes'}
+            title={'Edit Member Details'}
+            style={'lg:w-2/3 xl:w-1/2'}
           >
             <ProfileEditForm
               personnel={personnel}
@@ -159,6 +172,7 @@ const Profile = () => {
             onClose={handleOpenEditNotes}
             handleOpen={handleOpenEditNotes}
             title={'Edit Notes'}
+            style={'lg:w-2/3 xl:w-1/2'}
           >
             <EditNotes
               name={'logisticsNotes'}
@@ -174,6 +188,7 @@ const Profile = () => {
             onClose={handleOpenEditCoordinatorNotes}
             handleOpen={handleOpenEditCoordinatorNotes}
             title={'Edit Coordinator Notes'}
+            style={'lg:w-2/3 xl:w-1/2'}
           >
             <EditNotes
               name={'coordinatorNotes'}
@@ -181,6 +196,21 @@ const Profile = () => {
               notes={{ coordinatorNotes: personnel.coordinatorNotes }}
               onSubmit={updatePersonnel}
               handleClose={handleOpenEditCoordinatorNotes}
+            />
+          </DialogUI>
+          <DialogUI
+            open={openReviewApplicant}
+            onClose={handleOpenReviewApplicant}
+            handleOpen={handleOpenReviewApplicant}
+            title={'Confirm Review'}
+            style={'w-3/4 lg:w-1/3 xl:w-1/4'}
+          >
+            <ReviewApplicant
+              onClose={handleOpenReviewApplicant}
+              onClick={() => {
+                updatePersonnel({ status: Status.ACTIVE });
+                handleOpenReviewApplicant();
+              }}
             />
           </DialogUI>
 

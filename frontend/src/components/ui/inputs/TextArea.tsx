@@ -22,7 +22,7 @@ export const TextArea = ({
         className={error ? classes.menu.textAreaError : classes.menu.textArea}
       />
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="text-errorRed">{msg}</div>}
+        {(msg) => <div className="font-normal text-errorRed">{msg}</div>}
       </ErrorMessage>
     </label>
   );
