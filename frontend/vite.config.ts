@@ -7,10 +7,22 @@ export default defineConfig({
   esbuild: {
     jsxInject: `import React from 'react'`,
   },
-  assetsInclude: ['assets/images/*'],
+  assetsInclude: ['public/assets/images/*'],
   plugins: [
     react(),
     VitePWA({
+      includeAssets: [
+        'public/assets/favicon.ico',
+        'robots.txt',
+        'public/assets/images/*.png',
+        'public/assets/images/*.svg',
+        'public/assets/fonts/*.woff2',
+        'public/assets/fonts/*.woff',
+        'public/assets/fonts/*.ttf',
+      ],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html}'],
+      },
       registerType: 'autoUpdate',
       manifest: {
         short_name: 'Talent Cloud',
