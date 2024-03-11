@@ -85,7 +85,6 @@ export class PersonnelService {
 
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
-    qb.leftJoinAndSelect('personnel.availability', 'availability');
     qb.leftJoinAndSelect('personnel.workLocation', 'location');
 
     if (query.name) {
@@ -136,6 +135,7 @@ export class PersonnelService {
      */
 
     if (query.availabilityType) {
+      qb.leftJoinAndSelect('personnel.availability', 'availability');
       qb.andWhere('availability.availabilityType = :availabilityType', {
         availabilityType: query.availabilityType,
       });
@@ -154,19 +154,7 @@ export class PersonnelService {
         });
       }
     } else {
-      /**
-       * If no availability type is provided, we will default to today's date and return all statuses
-       */
-      qb.andWhere(
-        new Brackets((qb) => {
-          qb.where('availability.date = :date', {
-            date: datePST(new Date()),
-          }).orWhere(
-            'personnel.id not in (select p.id from availability a join personnel p on p.id=a.personnel where date=:date)',
-            { date: datePST(new Date()) },
-          );
-        }),
-      );
+      qb.leftJoinAndSelect('personnel.availability', 'availability', 'availability.date = :date', { date: datePST(new Date()) });
     }
 
     if (query.showInactive) {
