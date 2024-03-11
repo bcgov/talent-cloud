@@ -10,12 +10,12 @@ import { useGetFilters } from '@/hooks/useGetFilters';
 import dayjs from 'dayjs';
 
 export const ProfileEditForm = ({
-  handleOpenEditPopUp,
+  handleOpenEditProfilePopUp,
   personnel,
   updatePersonnel,
 }: {
   open: boolean;
-  handleOpenEditPopUp: (e: MouseEvent<HTMLElement>) => void;
+  handleOpenEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
   personnel: Personnel;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
 }) => {
@@ -60,7 +60,7 @@ export const ProfileEditForm = ({
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone.replace(/[(]|-|[)]|\s/gi, '');
-    values.dateJoined=dayjs(values.dateJoined).format('MMMM D, YYYY')
+    values.dateJoined = dayjs(values.dateJoined).format('MMMM D, YYYY');
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
@@ -85,7 +85,7 @@ export const ProfileEditForm = ({
     helpers.setSubmitting(false);
     await updatePersonnel(values);
 
-    handleOpenEditPopUp(props.event);
+    handleOpenEditProfilePopUp(props.event);
   };
 
   return (
@@ -234,7 +234,7 @@ export const ProfileEditForm = ({
             <Button
               variant={ButtonTypes.SECONDARY}
               type="button"
-              onClick={handleOpenEditPopUp}
+              onClick={handleOpenEditProfilePopUp}
               text="Cancel"
             />
 

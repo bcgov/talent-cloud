@@ -77,7 +77,17 @@ export class PersonnelController {
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    return await this.personnelService.updatePersonnel(id, personnel, req.role);
+    delete personnel.availability;  // Ensure we don't use this endpoint to update availability
+    const { experiences, ...details } = personnel;
+
+    // For now, these are distinct and will not be updated at the same time
+    if (experiences) {
+      return this.personnelService.updatePersonnelExperiences(id, experiences, req.role);
+    } else if (Object.keys(details).length > 0) {
+      return this.personnelService.updatePersonnel(id, details, req.role);
+    } else {
+      return this.personnelService.getPersonnelById(req.role, id);
+    }
   }
 
   @ApiOperation({

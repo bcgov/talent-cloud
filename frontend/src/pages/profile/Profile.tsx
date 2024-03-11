@@ -18,7 +18,7 @@ import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
-import type { AvailabilityRange } from '../dashboard';
+import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
 import { Status, type AvailabilityType } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
@@ -26,10 +26,13 @@ import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
 import { DialogUI } from '@/components';
 import { ReviewApplicant } from '../ReviewApplicant';
+import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel, updatePersonnel } = usePersonnel({ personnelId });
+  const { personnel, updatePersonnel, updateExperiences } = usePersonnel({
+    personnelId,
+  });
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
@@ -39,6 +42,8 @@ const Profile = () => {
 
   const [openEditNotes, setOpenEditNotes] = useState(false);
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
+  const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
+  const [openEditFunctionsPopUp, setOpenEditFunctionsPopUp] = useState(false);
 
   const handleOpenEditNotes = () => {
     setOpenEditNotes(!openEditNotes);
@@ -74,13 +79,17 @@ const Profile = () => {
     setSchedulerDialogOpen(false);
     getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
-  const [openEditPopUp, setOpenEditPopUp] = useState(false);
 
-  const handleOpenEditPopUp = (e: MouseEvent<HTMLElement>) => {
-    if (openEditPopUp === false) {
+  const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
+    await updateExperiences(experiences);
+    setOpenEditFunctionsPopUp(false);
+  };
+
+  const handleOpenEditProfilePopUp = (e: MouseEvent<HTMLElement>) => {
+    if (openEditProfilePopUp === false) {
       e.stopPropagation();
     }
-    setOpenEditPopUp(!openEditPopUp);
+    setOpenEditProfilePopUp(!openEditProfilePopUp);
   };
   const [openReviewApplicant, setOpenReviewApplicant] = useState(false);
   const handleOpenReviewApplicant = () => {
@@ -100,6 +109,13 @@ const Profile = () => {
     }
     setSchedulerDialogOpen(!schedulerDialogOpen);
   };
+  const handleOpenEditFunctionsPopUp = (e: MouseEvent<HTMLElement>) => {
+    if (openEditFunctionsPopUp === false) {
+      e.stopPropagation();
+    }
+    setOpenEditFunctionsPopUp(!openEditFunctionsPopUp);
+  };
+
   const getBackground =
     personnel?.status === Status.PENDING ? 'inactive' : 'grayBackground';
   return (
@@ -136,11 +152,15 @@ const Profile = () => {
             />
 
             <ProfileDetails
-              openEditPopUp={handleOpenEditPopUp}
+              openEditProfilePopUp={handleOpenEditProfilePopUp}
               personnel={personnel}
             />
 
-            <ProfileFunctions functions={functions} personnel={personnel} />
+            <ProfileFunctions
+              functions={functions}
+              personnel={personnel}
+              openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+            />
             <Scheduler
               name={personnel.firstName}
               availability={availability}
@@ -153,20 +173,41 @@ const Profile = () => {
               handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}
             />
           </div>
+
+          {/* Edit Profile */}
           <DialogUI
-            open={openEditPopUp}
+            open={openEditProfilePopUp}
             onClose={updatePersonnel}
-            handleOpen={handleOpenEditPopUp}
+            handleOpen={handleOpenEditProfilePopUp}
             title={'Edit Member Details'}
             style={'lg:w-2/3 xl:w-1/2'}
           >
             <ProfileEditForm
               personnel={personnel}
-              open={openEditPopUp}
-              handleOpenEditPopUp={handleOpenEditPopUp}
+              open={openEditProfilePopUp}
+              handleOpenEditProfilePopUp={handleOpenEditProfilePopUp}
               updatePersonnel={updatePersonnel}
             />
           </DialogUI>
+
+          {/* Functions */}
+          <DialogUI
+            open={openEditFunctionsPopUp}
+            onClose={() => {}}
+            handleOpen={handleOpenEditFunctionsPopUp}
+            title={'Edit Experience Levels'}
+            style={'lg:w-2/3 xl:w-1/2'}
+          >
+            <ProfileFunctionEdit
+              personnel={personnel}
+              open={openEditFunctionsPopUp}
+              allFunctions={functions}
+              handleOpenEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+              updatePersonnelExperiences={savePersonnelExperiences}
+            />
+          </DialogUI>
+
+          {/* Notes */}
           <DialogUI
             open={openEditNotes}
             onClose={handleOpenEditNotes}
@@ -183,6 +224,7 @@ const Profile = () => {
             />
           </DialogUI>
 
+          {/* Coordinator Notes */}
           <DialogUI
             open={openEditCoordinatorNotes}
             onClose={handleOpenEditCoordinatorNotes}
@@ -214,6 +256,7 @@ const Profile = () => {
             />
           </DialogUI>
 
+          {/* Scheduler */}
           <Dialog
             open={schedulerDialogOpen}
             handler={handleSchedulerOpen}

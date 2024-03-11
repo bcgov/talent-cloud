@@ -5,6 +5,7 @@ import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
+import { PersonnelExperienceDTO } from './dto/personnel-experiences.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelRO } from './ro/personnel.ro';
@@ -12,6 +13,7 @@ import { Role } from '../auth/interface';
 import { AvailabilityType, Status } from '../common/enums';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 
@@ -22,6 +24,8 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
+    @InjectRepository(ExperienceEntity)
+    private experiencesRepository: Repository<ExperienceEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -42,16 +46,34 @@ export class PersonnelService {
 
     try {
       await this.personnelRepository.update(id, { ...person });
-      return (
-        await this.personnelRepository.findOne({
-          where: { id },
-          relations: ['experiences', 'experiences.function'],
-        })
-      ).toResponseObject(role);
+      return this.getPersonnelById(role, id);
     } catch (e) {
       console.log(e);
     }
   }
+
+  /**
+   * Update Personnel Experiences
+   * @param id 
+   * @param experiences 
+   * @param role 
+   * @returns 
+   */
+  async updatePersonnelExperiences(id: string, experiences: PersonnelExperienceDTO[], role: Role) {
+    const experienceEntities = experiences.map((e) => ({
+      functionId: e.id,
+      personnelId: id,
+      experienceType: e.experienceType,
+    }));
+    try {
+      await this.experiencesRepository.delete({ personnelId: id });
+      await this.experiencesRepository.save(experienceEntities);
+      return this.getPersonnelById(role, id);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   /**
    * create a personnel entity
    * @param personnel

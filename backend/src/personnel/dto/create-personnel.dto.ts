@@ -9,12 +9,12 @@ import {
   Length,
   ValidateIf,
 } from 'class-validator';
+import { PersonnelExperienceDTO } from './personnel-experiences.dto';
 import { AvailabilityType } from '../../common/enums';
 import { Classification } from '../../common/enums/classification.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
-import { ExperienceEntity } from '../../database/entities/personnel-function-experience.entity';
 import { TrainingEntity } from '../../database/entities/training.entity';
 
 class PersonnelLocationDTO {
@@ -195,7 +195,7 @@ export class CreatePersonnelDTO {
     ],
   })
   @IsOptional()
-  experiences?: ExperienceEntity[];
+  experiences?: PersonnelExperienceDTO[];
 
   @ApiProperty({
     description: 'An array of availability for this personnel',
