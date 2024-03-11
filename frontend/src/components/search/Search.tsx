@@ -5,11 +5,11 @@ import { menuItemClass } from '../filters/classes';
 export const Search = ({
   field,
   handleSearchInput,
-  value
+  value,
 }: {
   field: FieldInterface;
   handleSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?:string;
+  value?: string;
 }) => {
   return (
     <div className="relative w-full">

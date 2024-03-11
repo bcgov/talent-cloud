@@ -21,15 +21,12 @@ export const handleSearchParams = (
     );
   }
   if (!filterValues?.availabilityDates.from) {
-    searchParamsUrl.delete(
-      'availabilityFromDate')
-      
+    searchParamsUrl.delete('availabilityFromDate');
   }
   if (!filterValues?.availabilityDates.to) {
-    searchParamsUrl.delete(
-      'availabilityToDate');
+    searchParamsUrl.delete('availabilityToDate');
   }
-  
+
   if (filterValues?.showInactive === false) {
     searchParamsUrl.delete('showInactive');
   } else {

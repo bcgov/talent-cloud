@@ -60,7 +60,7 @@ export const ProfileEditForm = ({
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone.replace(/[(]|-|[)]|\s/gi, '');
-    values.dateJoined=dayjs(values.dateJoined).format('MMMM D, YYYY')
+    values.dateJoined = dayjs(values.dateJoined).format('MMMM D, YYYY');
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {

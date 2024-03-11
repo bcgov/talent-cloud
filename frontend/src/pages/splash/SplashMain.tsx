@@ -45,7 +45,6 @@ export const SplashMain = ({ content }: { content: any }) => {
             />
           </div>
         </div>
-
       </div>
       <div className="hidden col-span-1 w-full px-0 lg:flex relative">
         <SplashImage />
