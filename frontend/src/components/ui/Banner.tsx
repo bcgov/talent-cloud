@@ -38,7 +38,7 @@ const WarningBanner = ({
   onClick?: () => void;
   buttonText?: string;
 }) => (
-  <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2 w-full xl:w-2/3 justify-between space-y-8 lg:space-y-0">
+  <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2 w-full xl:w-2/3 justify-evenly space-y-8 lg:space-y-0">
     <span className="flex flex-col md:flex-row">
       <ExclamationTriangleIcon className="text-warning  h-6 hidden sm:inline-block sm:mr-2" />
       {content}

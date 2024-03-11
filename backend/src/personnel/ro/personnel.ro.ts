@@ -160,6 +160,13 @@ export class PersonnelRO {
     description: 'Availability',
     isArray: true,
     type: () => AvailabilityRO,
+    required: false,
   })
-  availability: AvailabilityRO[];
+  availability?: AvailabilityRO[];
+
+  @ApiProperty({
+    description: 'Date of last deployment (last date of the deployment)',
+    required: false,
+  })
+  lastDeployed?: string;
 }
