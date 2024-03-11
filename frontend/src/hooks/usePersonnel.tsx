@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AxiosPrivate } from '../utils';
-import type { Personnel } from '@/pages/dashboard';
+import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 
 const usePersonnel = ({
@@ -10,6 +10,7 @@ const usePersonnel = ({
 }): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues) => Promise<void>;
+  updateExperiences: (experiences: ExperienceInterface[]) => Promise<void>;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
 
@@ -36,9 +37,21 @@ const usePersonnel = ({
     }
   };
 
+  const updateExperiences = async (experiences: ExperienceInterface[]) => {
+    try {
+      const res = await AxiosPrivate.patch(encodeURI(`/personnel/${personnelId}`), {
+        experiences,
+      });
+      setPersonnel(res.data);
+    } catch (e) {
+      // TODO error toast
+    }
+  };
+
   return {
     personnel,
     updatePersonnel,
+    updateExperiences,
   };
 };
 

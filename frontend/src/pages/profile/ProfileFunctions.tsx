@@ -1,4 +1,9 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
+import type { MouseEvent } from 'react';
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/solid';
 import {
   Accordion,
   AccordionBody,
@@ -12,9 +17,11 @@ import { Experience } from '@/common';
 const ProfileFunctions = ({
   functions,
   personnel,
+  openEditFunctionsPopUp,
 }: {
   functions: FunctionType[];
   personnel: Personnel;
+  openEditFunctionsPopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -74,7 +81,16 @@ const ProfileFunctions = ({
             onClick={() => handleOpen(1)}
             className="bg-grayBackground px-8"
           >
-            Function & Experience Levels
+            <div className=" w-full justify-between items-center flex lg:flex-row">
+              <span>Function & Experience Levels</span>
+              <button
+                onClick={openEditFunctionsPopUp}
+                className="z-20 flex text-primaryBlue flex-row items-center"
+              >
+                <PencilSquareIcon className="h-6 w-6" />
+                <span className="pl-2 font-normal underline text-sm">Edit</span>
+              </button>
+            </div>
           </AccordionHeader>
           <AccordionBody className="px-8">
             <div className="">

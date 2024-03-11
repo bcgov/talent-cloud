@@ -9,10 +9,10 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 
 const ProfileDetails = ({
   personnel,
-  openEditPopUp,
+  openEditProfilePopUp,
 }: {
   personnel: Personnel;
-  openEditPopUp: (e: MouseEvent<HTMLElement>) => void;
+  openEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
 
@@ -91,7 +91,7 @@ const ProfileDetails = ({
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>
               <button
-                onClick={openEditPopUp}
+                onClick={openEditProfilePopUp}
                 className="z-20 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />
