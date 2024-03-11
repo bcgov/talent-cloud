@@ -53,6 +53,7 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Post()
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async createPersonnel(
     @Body() personnel: CreatePersonnelDTO[],
     @Request() req: RequestWithRoles,
@@ -69,7 +70,7 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Patch(':id')
-  @Roles(Role.COORDINATOR)
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async updatePersonnel(
     @Body() personnel: UpdatePersonnelDTO,
     @Request() req: RequestWithRoles,
@@ -148,10 +149,11 @@ export class PersonnelController {
     @Param('id') id: string,
     @Body() availability: UpdateAvailabilityDTO,
     @Req() req: RequestWithRoles,
-  ): Promise<{ updates: (UpdateResult | AvailabilityEntity)[], deleted?: DeleteResult }> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
+  ): Promise<{
+    updates: (UpdateResult | AvailabilityEntity)[];
+    deleted?: DeleteResult;
+  }> {
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.personnelService.updateAvailability(id, availability);
   }
@@ -170,26 +172,27 @@ export class PersonnelController {
     @Req() req: RequestWithRoles,
     @Query() query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username}`,
-    );
-    const dates = await this.personnelService.getAvailability(
-      id,
-      query,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    const dates = await this.personnelService.getAvailability(id, query);
 
     const dateROs = dates.map((d) => d.toResponseObject());
 
     const firstDate = dates[0];
     if (firstDate.availabilityType !== 'NOT_INDICATED') {
-      const actualStart = await this.personnelService.getEventStartDate(id, firstDate);
+      const actualStart = await this.personnelService.getEventStartDate(
+        id,
+        firstDate,
+      );
       dateROs[0].actualStartDate = actualStart;
     }
 
-    const lastDate = dates[dates.length-1];
+    const lastDate = dates[dates.length - 1];
     if (lastDate.availabilityType !== 'NOT_INDICATED') {
-      const actualEnd = await this.personnelService.getEventEndDate(id, lastDate);
-      dateROs[dateROs.length-1].actualEndDate = actualEnd;
+      const actualEnd = await this.personnelService.getEventEndDate(
+        id,
+        lastDate,
+      );
+      dateROs[dateROs.length - 1].actualEndDate = actualEnd;
     }
 
     return dateROs;
