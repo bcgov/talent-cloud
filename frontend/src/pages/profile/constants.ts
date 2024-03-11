@@ -35,17 +35,14 @@ export const EditProfileValidationSchema = Yup.object().shape({
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
   primaryPhone: Yup.string()
-    .min(10, 'Invalid phone number format. Please enter ten digits.')
-    .max(14, 'Invalid phone number format. Please enter ten digits.')
+    .length(14, 'Invalid phone number format. Please enter ten digits.')
     .required('This field is required.'),
   secondaryPhone: Yup.string()
     .optional()
-    .min(10, 'Invalid phone number format. Please enter ten digits.')
-    .max(14, 'Invalid phone number format. Please enter ten digits.'),
+    .length(14, 'Invalid phone number format. Please enter ten digits.'),
   workPhone: Yup.string()
     .optional()
-    .min(10, 'Invalid phone number format. Please enter ten digits.')
-    .max(14, 'Invalid phone number format. Please enter ten digits.'),
+    .length(14, 'Invalid phone number format. Please enter ten digits.'), 
   supervisor: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
