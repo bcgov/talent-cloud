@@ -1,22 +1,56 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
-
+import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 export default defineConfig({
   esbuild: {
     jsxInject: `import React from 'react'`,
   },
   assetsInclude: ['assets/images/*'],
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        short_name: 'Talent Cloud',
+        name: 'Talent Cloud EMCR Resource Manager',
+        icons: [
+          {
+            src: 'favicon.ico',
+            sizes: '64x64 32x32 24x24 16x16',
+            type: 'image/x-icon',
+          },
+        ],
+        start_url: '.',
+        display: 'standalone',
+        theme_color: '#000000',
+        background_color: '#ffffff',
+      },
+    }),
+  ],
   optimizeDeps: {
     include: [
       '@material-tailwind/react',
-      'react',
-      'react-dom',
-      'react-router-dom',
-      'react-router',
       'axios',
+      '@headlessui/react',
+      '@material-tailwind/react',
+      '@react-keycloak/web',
+      '@tailwindcss/forms',
+      'autoprefixer',
+      'axios',
+      'date-fns',
+      'dayjs',
+      'formik',
+
+      'react',
+      'react-day-picker',
+      'react-dom',
+      'react-router',
+      'react-router-dom',
+
+      'uuid',
+      'yup',
     ],
   },
   base: './',
@@ -43,6 +77,7 @@ export default defineConfig({
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.cjs'],
   },
   build: {
+    manifest: true,
     assetsDir: 'static',
     // Build Target
     // https://vitejs.dev/config/build-options.html#build-target
@@ -56,7 +91,20 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Split external library from transpiled code.
+          '@headlessui/react': ['@headlessui/react'],
 
+          '@material-tailwind/react': ['@material-tailwind/react'],
+          '@react-keycloak/web': ['@react-keycloak/web'],
+
+          autoprefixer: ['autoprefixer'],
+          'date-fns': ['date-fns'],
+          dayjs: ['dayjs'],
+          formik: ['formik'],
+
+          'react-day-picker': ['react-day-picker'],
+
+          uuid: ['uuid'],
+          yup: ['yup'],
           react: ['react', 'react-dom', 'react-router-dom', 'react-router'],
           axios: ['axios'],
         },
