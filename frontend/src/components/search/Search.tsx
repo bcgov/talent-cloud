@@ -5,9 +5,11 @@ import { menuItemClass } from '../filters/classes';
 export const Search = ({
   field,
   handleSearchInput,
+  value
 }: {
   field: FieldInterface;
   handleSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?:string;
 }) => {
   return (
     <div className="relative w-full">
@@ -18,6 +20,7 @@ export const Search = ({
           <input
             className={menuItemClass[field.name]}
             name={field.name}
+            value={value}
             type="text"
             placeholder={'Search for a member by name'}
             onChange={handleSearchInput}

@@ -38,7 +38,7 @@ export const EditNotes = ({
     disabled: false,
   };
   return (
-    <div className="w-full lg:w-2/3 xl:w-1/2">
+    
       <Formik
         validationSchema={notesSchema}
         initialValues={notes}
@@ -61,7 +61,7 @@ export const EditNotes = ({
             </div>
             <div className="w-full border border-t-1 mx-0 px-0 shadow-lg mt-16"></div>
 
-            <div className="flex flex-row space-x-6 py-4 justify-end px-8">
+            <div className="flex flex-row space-x-6 py-4 justify-end px-8 w-full">
               <Button
                 variant={ButtonTypes.SECONDARY}
                 type="button"
@@ -79,6 +79,6 @@ export const EditNotes = ({
           </Form>
         )}
       </Formik>
-    </div>
+
   );
 };

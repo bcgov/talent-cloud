@@ -20,6 +20,16 @@ export const handleSearchParams = (
       format(filterValues?.availabilityDates?.to ?? new Date(), 'yyyy-MM-dd'),
     );
   }
+  if (!filterValues?.availabilityDates.from) {
+    searchParamsUrl.delete(
+      'availabilityFromDate')
+      
+  }
+  if (!filterValues?.availabilityDates.to) {
+    searchParamsUrl.delete(
+      'availabilityToDate');
+  }
+  
   if (filterValues?.showInactive === false) {
     searchParamsUrl.delete('showInactive');
   } else {

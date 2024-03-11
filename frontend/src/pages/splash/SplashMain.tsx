@@ -43,26 +43,9 @@ export const SplashMain = ({ content }: { content: any }) => {
               text={'Log In'}
               onClick={() => nav(Routes.Login)}
             />
-            <a className="text-white flex flex-row nowrap" href="/">
-              Don’t have an IDIR{' '}
-              <span>
-                <ChevronRightIcon className="h-6 w-6" />
-              </span>
-            </a>
           </div>
         </div>
 
-        <div className="text-left flex flex-col py-12 lg:py-0">
-          <p className="font-bold pb-2">{content.linksHeader}</p>
-          {content.links.map((link: any, i: number) => (
-            <span key={i.toString() + link.name}>
-              •
-              <a className="pl-2 text-info underline" href={link.url}>
-                {link.name}
-              </a>
-            </span>
-          ))}
-        </div>
       </div>
       <div className="hidden col-span-1 w-full px-0 lg:flex relative">
         <SplashImage />

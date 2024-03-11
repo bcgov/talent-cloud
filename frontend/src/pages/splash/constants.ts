@@ -1,16 +1,8 @@
 export const main = {
   title: 'Welcome to Talent Cloud',
   banner: 'TEAMS applications are now open for 2024. Access intake form ',
-  bannerLink: { name: 'here ', url: '' },
+  bannerLink: { name: 'here ', url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=54fe9462-616c-48e2-aa4f-51f7078a0e81' },
   subtitle: 'Temporary Emergency Assignment Management System',
-  linksHeader: 'Learn more about:',
-  links: [
-    { name: 'Member training ', url: '' },
-    { name: 'Deployment decisions and assessing deployment readiness ', url: '' },
-    { name: 'PREOC/PECC', url: '' },
-    { name: 'Coordinator responsibilities', url: '' },
-    { name: 'Contact Us', url: '' },
-  ],
   description: {
     pt1: 'This is the staffing system (previously known as TEAMS) that maintains a resource pool of highly-qualified employees from various ministries that have appropriate skills to work in emergency operations centres.',
     pt2: 'Members temporarily leave their regular employment and can be deployed to either a Provincial Regional Emergency Operations Centre (PREOC) or Provincial Emergency Coordination Centre (PECC) for ',
@@ -18,7 +10,6 @@ export const main = {
     pt3: 'followed by adequate rest and a return to regular work.',
   },
   login: {
-    link: { name: 'Don’t have an IDIR?', url: '' },
     title: 'Login',
     description: 'Use your IDIR to access the TEAMS member database.',
   },
