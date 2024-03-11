@@ -62,7 +62,7 @@ export const renderCells = (
     willingToTravel,
     remoteOnly,
     availability,
-    classification,
+    unionMembership,
     ministry,
   } = personnel;
   return [
@@ -149,8 +149,8 @@ export const renderCells = (
     {
       key: uuidv4(),
       columnName: DashboardColumns.UNION_MEMBERSHIP,
-      value: classification,
-      className: tableClass(DashboardColumns.UNION_MEMBERSHIP, classification),
+      value: unionMembership,
+      className: tableClass(DashboardColumns.UNION_MEMBERSHIP, unionMembership),
     },
     {
       key: uuidv4(),

@@ -222,8 +222,8 @@ export const ProfileEditForm = ({
                 <Select {...props} {...fields.ministry} error={errors.ministry} />
                 <Select
                   {...props}
-                  {...fields.classification}
-                  error={errors.classification}
+                  {...fields.unionMembership}
+                  error={errors.unionMembership}
                 />
               </div>
             </div>

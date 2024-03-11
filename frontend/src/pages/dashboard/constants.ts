@@ -1,7 +1,7 @@
 import type {
   AvailabilityType,
   AvailabilityTypeName,
-  Classification,
+  UnionMembership,
   Experience,
   Ministry,
   Region,
@@ -70,7 +70,7 @@ export interface Personnel {
   status: Status;
   willingToTravel: boolean;
   remoteOnly: boolean;
-  classification: string;
+  unionMembership: string;
   ministry: string;
   applicationDate?: Date;
   primaryPhone: string;
@@ -120,7 +120,7 @@ export interface DashboardRow {
   [DashboardColumns.AVAILABILITY]: AvailabilityType;
   [DashboardColumns.TRAVEL]: boolean;
   [DashboardColumns.REMOTE]: boolean;
-  [DashboardColumns.UNION_MEMBERSHIP]: Classification;
+  [DashboardColumns.UNION_MEMBERSHIP]: UnionMembership;
   [DashboardColumns.MINISTRY]: Ministry;
 }
 export interface DashboardFilters {

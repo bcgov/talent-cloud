@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import {
   Ministry,
   Experience,
-  Classification,
+  UnionMembership,
   AvailabilityType,
   Status,
 } from './enums';
@@ -93,7 +93,7 @@ export const rowData = () => {
     workLocation: faker.helpers.arrayElement(regionsAndLocations),
     homeLocation: faker.helpers.arrayElement(regionsAndLocations),
     ministry: faker.helpers.arrayElement(Object.values(Ministry)),
-    classification: faker.helpers.arrayElement(Object.values(Classification)),
+    unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
     applicationDate: faker.date.past(),
     skillsAbilities: faker.lorem.paragraph(),
     logisticsNotes: faker.lorem.paragraph(),
