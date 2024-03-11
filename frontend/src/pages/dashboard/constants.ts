@@ -82,6 +82,7 @@ export interface Personnel {
   coordinatorNotes: string;
   logisticsNotes: string;
   dateJoined: Date;
+  lastDeployed?: number;
 }
 
 export interface Availability {

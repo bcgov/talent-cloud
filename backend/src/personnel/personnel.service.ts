@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format, eachDayOfInterval, parse } from 'date-fns';
+import {
+  format,
+  eachDayOfInterval,
+  parse,
+} from 'date-fns';
 import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -185,6 +189,19 @@ export class PersonnelService {
     return { personnel, count };
   }
 
+  async getLastDeployedDate(id: string): Promise<string | undefined> {
+    const qb = this.availabilityRepository.createQueryBuilder('availability');
+    qb.where('availability.personnel = :id', { id });
+    qb.andWhere('availability.availabilityType = :type', {
+      type: AvailabilityType.DEPLOYED,
+    });
+    qb.andWhere('availability.date <= :date', { date: datePST(new Date()) });
+    qb.orderBy('availability.date', 'DESC');
+    qb.take(1);
+    const lastDeployed = await qb.getOne();
+    return lastDeployed?.date;
+  }
+
   /**
    * Get Personnel By ID
    * Returns a default availability range of 31 days for a single personnel
@@ -198,8 +215,10 @@ export class PersonnelService {
       where: { id },
       relations: ['experiences', 'experiences.function'],
     });
+    const lastDeployed = await this.getLastDeployedDate(id);
+    const personnel = person.toResponseObject(role, lastDeployed);
 
-    return person.toResponseObject(role);
+    return personnel;
   }
   /**
    * Get the availability of a personnel for a specific date range

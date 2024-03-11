@@ -147,7 +147,10 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
-  toResponseObject(role: Role): Record<string, PersonnelRO> {
+  toResponseObject(
+    role: Role,
+    lastDeployed?: string,
+  ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
 
     const data = {
@@ -168,6 +171,7 @@ export class PersonnelEntity extends BaseEntity {
       logisticsNotes: this.logisticsNotes,
       supervisor: this.supervisor,
       status: this.status,
+      lastDeployed: lastDeployed ?? null,
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,

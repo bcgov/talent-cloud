@@ -23,7 +23,7 @@ const functionSql = `INSERT INTO public."location" (id, location_name, region) V
   (19, 'Fort Nelson',  'NEA' ),
   (20, 'Kamloops',  'CTL' ),
   (21, 'Kelowna',  'CTL' ),
-  (22, 'Kimberly',  'SEA' ),
+  (22, 'Kimberley',  'SEA' ),
   (23, 'Langford',  'HQ' ),
   (24,'Langley',  'SWE' ),
   (25, 'Lillooet',  'SWE' ),
