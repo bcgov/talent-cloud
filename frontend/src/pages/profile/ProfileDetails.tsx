@@ -65,7 +65,7 @@ const ProfileDetails = ({
   const organizational = [
     { title: 'Supervisor Name', content: personnel.supervisor },
     { title: 'Ministry', content: personnel.ministry },
-    { title: 'Union Membership', content: personnel.classification },
+    { title: 'Union Membership', content: personnel.unionMembership },
   ];
 
   return (

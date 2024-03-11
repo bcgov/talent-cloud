@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { PersonnelExperienceDTO } from './personnel-experiences.dto';
 import { AvailabilityType } from '../../common/enums';
-import { Classification } from '../../common/enums/classification.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
@@ -148,13 +148,13 @@ export class CreatePersonnelDTO {
   logisticsNotes: string;
 
   @ApiProperty({
-    description: 'Classification of personnel',
-    enum: Classification,
-    example: Classification.BCGEU,
+    description: 'UnionMembership of personnel',
+    enum: UnionMembership,
+    example: UnionMembership.BCGEU,
   })
-  @IsEnum(Classification)
+  @IsEnum(UnionMembership)
   @IsOptional()
-  classification: Classification;
+  unionMembership: UnionMembership;
 
   @ApiProperty({
     description: 'If this personnel is remote only',

@@ -1,4 +1,4 @@
-import { AvailabilityTypeName, Classification } from '@/common';
+import { AvailabilityTypeName, UnionMembership } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
@@ -38,11 +38,11 @@ export const tableClasses = {
 };
 const getUnionMembershipClass = (value?: string) => {
   switch (value) {
-    case Classification.BCGEU:
+    case UnionMembership.BCGEU:
       return tableClasses.bcgeu;
-    case Classification.EXCLUDED:
+    case UnionMembership.EXCLUDED:
       return tableClasses.excluded;
-    case Classification.PEA:
+    case UnionMembership.PEA:
       return tableClasses.pea;
     default:
       return tdClass;

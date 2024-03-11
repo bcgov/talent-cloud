@@ -1,4 +1,4 @@
-export enum Classification {
+export enum UnionMembership {
   BCGEU = 'BCGEU',
   EXCLUDED = 'EXCLUDED',
   PEA = 'PEA',

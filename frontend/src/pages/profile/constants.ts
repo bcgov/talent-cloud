@@ -1,4 +1,4 @@
-import { Ministry, Classification } from '@/common';
+import { Ministry, UnionMembership } from '@/common';
 import * as Yup from 'yup';
 
 export const EditProfileValidationSchema = Yup.object().shape({
@@ -42,13 +42,13 @@ export const EditProfileValidationSchema = Yup.object().shape({
     .length(14, 'Invalid phone number format. Please enter ten digits.'),
   workPhone: Yup.string()
     .optional()
-    .length(14, 'Invalid phone number format. Please enter ten digits.'), 
+    .length(14, 'Invalid phone number format. Please enter ten digits.'),
   supervisor: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
   ministry: Yup.string().required('This field is required.'),
-  classification: Yup.string().required('This field is required.'),
+  unionMembership: Yup.string().required('This field is required.'),
 });
 
 export const fields = {
@@ -176,13 +176,13 @@ export const fields = {
     disabled: false,
     options: Object.values(Ministry).map((itm) => ({ label: itm, value: itm })),
   },
-  classification: {
-    name: 'classification',
+  unionMembership: {
+    name: 'unionMembership',
     label: 'Union Membership',
     required: true,
     type: 'select',
     disabled: false,
-    options: Object.values(Classification).map((itm) => ({
+    options: Object.values(UnionMembership).map((itm) => ({
       label: itm.toString(),
       value: itm.toString(),
     })),

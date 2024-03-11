@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { AvailabilityRO } from './availability.ro';
 import { ExperienceRO } from './experience.ro';
-import { Classification, Ministry, Status } from '../../common/enums';
+import { UnionMembership, Ministry, Status } from '../../common/enums';
 import { LocationRO } from '../../region-location/region-location.ro';
 
 export class PersonnelRO {
@@ -85,11 +85,11 @@ export class PersonnelRO {
   ministry: Ministry;
 
   @ApiProperty({
-    description: "Personnel's classification",
+    description: "Personnel's unionMembership",
     required: true,
-    example: Classification.BCGEU,
+    example: UnionMembership.BCGEU,
   })
-  classification: Classification;
+  unionMembership: UnionMembership;
 
   @ApiProperty({
     description: 'Date personnel applied',

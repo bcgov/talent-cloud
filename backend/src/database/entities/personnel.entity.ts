@@ -7,7 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
-  ManyToOne,
+  ManyToOne
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
@@ -16,7 +16,7 @@ import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Role } from '../../auth/interface';
 import { AvailabilityType, Status } from '../../common/enums';
-import { Classification } from '../../common/enums/classification.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
@@ -126,12 +126,12 @@ export class PersonnelEntity extends BaseEntity {
   status: Status;
 
   @Column({
-    name: 'classification',
+    name: 'union_membership',
     type: 'enum',
-    enum: Classification,
-    enumName: 'classification',
+    enum: UnionMembership,
+    enumName: 'union_membership',
   })
-  classification: Classification;
+  unionMembership: UnionMembership;
 
   @Column({ name: 'remote_only', type: 'boolean', default: false })
   remoteOnly: boolean;
@@ -166,7 +166,7 @@ export class PersonnelEntity extends BaseEntity {
       homeLocation: this?.homeLocation?.toResponseObject() ?? {},
       workLocation: this?.workLocation?.toResponseObject() ?? {},
       ministry: this.ministry,
-      classification: this.classification,
+      unionMembership: this.unionMembership,
       applicationDate: this.applicationDate,
       skillsAbilities: this.skillsAbilities,
       coordinatorNotes: this.coordinatorNotes,
