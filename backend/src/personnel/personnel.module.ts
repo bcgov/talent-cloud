@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ExperienceEntity } from 'src/database/entities/personnel-function-experience.entity';
+import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 import { PersonnelController } from './personnel.controller';
 import { PersonnelService } from './personnel.service';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
