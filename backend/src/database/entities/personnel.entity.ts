@@ -44,8 +44,8 @@ export class PersonnelEntity extends BaseEntity {
     },
     { name: 'work_region', referencedColumnName: 'region' },
   ])
-  @ManyToOne(() => LocationEntity, { eager: true })
-  workLocation: LocationEntity;
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
+  workLocation?: LocationEntity;
 
   @JoinColumn([
     {
@@ -54,7 +54,7 @@ export class PersonnelEntity extends BaseEntity {
     },
     { name: 'home_region', referencedColumnName: 'region' },
   ])
-  @ManyToOne(() => LocationEntity, { eager: true })
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
   homeLocation: LocationEntity;
 
   @Column({
