@@ -11,9 +11,9 @@ import {
 } from 'class-validator';
 import { PersonnelExperienceDTO } from './personnel-experiences.dto';
 import { AvailabilityType } from '../../common/enums';
-import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { TrainingEntity } from '../../database/entities/training.entity';
 

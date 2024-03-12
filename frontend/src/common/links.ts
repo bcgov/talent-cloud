@@ -1,7 +1,11 @@
 import type { LinkProps } from '@/common';
-export const headerLink = 'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams'
+export const headerLink =
+  'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams';
 export const footerLinks: LinkProps[] = [
-  { href: 'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams', label: 'Home' },
+  {
+    href: 'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams',
+    label: 'Home',
+  },
   {
     href: 'https://www2.gov.bc.ca/gov/content/home/disclaimer',
     label: 'Disclaimer',

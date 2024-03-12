@@ -16,7 +16,7 @@ export const TextArea = ({
     <label htmlFor={field.name} className="w-full px-16 py-8">
       {label}
       {required && <span className="text-error">*</span>}
-      <textarea        
+      <textarea
         {...field}
         disabled={disabled}
         className={error ? classes.menu.textAreaError : classes.menu.textArea}

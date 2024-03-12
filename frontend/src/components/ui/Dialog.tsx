@@ -7,7 +7,7 @@ type DialogProps = {
   handleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   title: string;
   children: ReactElement;
-  style?: string
+  style?: string;
 };
 
 export const DialogUI = ({
@@ -16,7 +16,7 @@ export const DialogUI = ({
   handleOpen,
   title,
   children,
-  style
+  style,
 }: DialogProps) => {
   return (
     <Dialog
