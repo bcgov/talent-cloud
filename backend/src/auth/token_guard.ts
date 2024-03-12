@@ -16,9 +16,9 @@ export class TokenGuard implements CanActivate {
 
     const authHeader = request.headers.authentication;
 
-    const authToken = authHeader.split(' ')[1];
+    
 
-    if (!authToken) {
+    if (!authHeader) {
       throw new UnauthorizedException();
     }
     const token = process.env.CHEFS_WS_TOKEN;
@@ -27,7 +27,7 @@ export class TokenGuard implements CanActivate {
       throw new InternalServerErrorException();
     }
     try {
-      this.validateToken(authToken, token);
+      this.validateToken(authHeader, token);
       return true;
     } catch {
       throw new UnauthorizedException();

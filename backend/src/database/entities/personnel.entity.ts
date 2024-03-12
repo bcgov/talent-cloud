@@ -179,13 +179,13 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'first_nation_exp_working', type: 'boolean', nullable: true })
   firstNationExperienceWorking?: boolean;
 
-  @Column({ name: 'peccExperience', type: 'boolean', nullable: true })
+  @Column({ name: 'pecc_exp', type: 'boolean', nullable: true })
   peccExperience?: boolean;
 
-  @Column({ name: 'preocExperience', type: 'boolean', nullable: true })
+  @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
   preocExperience?: boolean;
 
-  @Column({ name: 'emergencyExperience', type: 'boolean', nullable: true })
+  @Column({ name: 'emergency_exp', type: 'boolean', nullable: true })
   emergencyExperience?: boolean;
 
   @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })

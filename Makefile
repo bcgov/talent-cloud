@@ -221,13 +221,7 @@ delete-db:
 
 # if this doesn't run, try to run the SERVER pod cmd and copy the first pod name into this command
 seed-data-oc: 
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
-
-seed-functions-oc: 
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
-
-seed-locations-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
-
-create-availability-functions-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
