@@ -38,14 +38,14 @@ const WarningBanner = ({
   onClick?: () => void;
   buttonText?: string;
 }) => (
-  <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2 w-full xl:w-2/3 justify-evenly space-y-8 lg:space-y-0">
-    <span className="flex flex-col md:flex-row">
+  <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2  text-sm xl:w-4/5 justify-evenly space-y-8 lg:space-y-0">
+    <span className="flex flex-col md:flex-row text-sm">
       <ExclamationTriangleIcon className="text-warning  h-6 hidden sm:inline-block sm:mr-2" />
       {content}
     </span>
     {onClick ? (
       <button
-        className="bg-warningBannerDark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2"
+        className="bg-warningBannerDark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm"
         onClick={onClick}
       >
         {buttonText}

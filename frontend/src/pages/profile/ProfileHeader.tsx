@@ -5,7 +5,7 @@ import { PersonnelStatus } from '@/components';
 import { Banner } from '@/components/ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Toggle } from '@/components/toggle/Toggle';
-import { differenceInCalendarDays } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 
 function HorizontalLine() {
   return (
@@ -32,7 +32,10 @@ const ProfileHeader = ({
   role?: Role;
   updatePersonnel: (personnel: Partial<Personnel>) => void;
 }) => {
-  const lastDeployed = personnel?.lastDeployed ? `${differenceInCalendarDays(new Date(), new Date(personnel.lastDeployed))} days ago` : '-'
+  const lastDeployed = personnel?.lastDeployed
+    ? `${differenceInDays(new Date(), new Date(personnel.lastDeployed))} days ago`
+    : '-';
+
   return (
     <>
       <div className="px-10 float-left hidden lg:inline-block">
@@ -56,15 +59,13 @@ const ProfileHeader = ({
         <div className="hidden lg:flex lg:px-6 xl:px-12">
           <HorizontalLine />
         </div>
-        
+
         <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row xl:space-x-24">
-        <div className="flex flex-row">
+          <div className="flex flex-row">
             <ClockIcon className="h-7 w-7 text-textGray" />
             <div className="px-2">
               <p className="subtext">Last Deployed</p>
-              <p>
-                {lastDeployed}
-              </p>
+              <p>{lastDeployed}</p>
             </div>
           </div>
           <div className="flex flex-row">
@@ -90,12 +91,12 @@ const ProfileHeader = ({
           </div>
         </div>
       </div>
-      <div className="px-6 lg:px-0 pb-12 bg-white w-full pt-4 lg:pl-48 ">
+      <div className="px-6 pb-12 bg-white w-full pt-4 lg:pl-48 ">
         {personnel.status === Status.PENDING && (
           <Banner
             content={
-              <p className="flex flex-col lg:flex-row items-center text-center space-y-8 lg:space-y-0 text-warningDark">
-                <span className="font-bold">Pending Applicant Alert:{' '}</span>
+              <p className="flex flex-col lg:flex-row items-center text-center space-y-8 lg:space-y-0 text-sm text-warningDark">
+                <span className="font-bold">Pending Applicant Alert: </span>
                 <span className="pl-2">
                   This profile requires coordinator review to ensure deployment
                   readiness.
