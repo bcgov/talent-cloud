@@ -87,6 +87,7 @@ module.exports = withMT({
         yellow: '#f9f2c6',
       },
       textColor: {
+        placeholder: "#828282",
         info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
@@ -99,6 +100,7 @@ module.exports = withMT({
         warning: '#6C4A00',
         purple: '#6f2fa2',
         yellow: '#826521',
+        icon: "#606060"
       },
     },
   },

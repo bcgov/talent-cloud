@@ -5,10 +5,12 @@ export const Chip = ({
   value,
   handleClose,
   name,
+  display,
 }: {
   value: string;
   handleClose: (name: string, value: string) => any;
   name: string;
+  display?: string;
 }) => (
   <MuiChip
     value={
@@ -17,7 +19,7 @@ export const Chip = ({
         variant="small"
         className="font-bold text-info capitalize leading-none"
       >
-        {value}
+        {display ?? value}
       </Typography>
     }
     variant="ghost"

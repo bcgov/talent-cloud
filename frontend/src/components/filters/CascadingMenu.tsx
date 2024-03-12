@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { NestedMenu } from './NestedMenu';
 import { MenuButton, Chip, Menu, MenuList, MenuHandler } from '../ui';
-import { ExperienceName } from '@/common';
+import { ExperienceName, FunctionName } from '@/common';
 import { classes } from './classes';
 
 export const CascadingMenu = ({
@@ -25,7 +25,15 @@ export const CascadingMenu = ({
     } as unknown as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
-
+  const displayValue = (value: string) => {
+    if (value === FunctionName.EMERGENCY_SUPPORT_SERVICES) {
+      return 'ESS';
+    } else if (value === FunctionName.ADVANCED_PLANNING_UNIT) {
+      return 'APU';
+    } else {
+      return value;
+    }
+  };
   return (
     <>
       <label>{label}</label>
@@ -33,10 +41,12 @@ export const CascadingMenu = ({
         <MenuHandler field={field}>
           {value ? (
             <Chip
-              handleClose={() => handleChange(field.name, '')}
-              value={
+              handleClose={handleChange}
+              name={field.name}
+              value={''}
+              display={
                 nestedValue
-                  ? `${value}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
+                  ? `${displayValue(value)}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
                   : `${value}: All`
               }
             />
