@@ -12,11 +12,7 @@ export const Toggle = ({
 }) => {
   return (
     <>
-      {label && (
-        <label htmlFor={'showInactive'} className="px-4">
-          {label}
-        </label>
-      )}
+      {label && <p className="label px-4">{label}</p>}
       <Switch
         checked={value}
         onChange={handleToggle}

@@ -36,7 +36,7 @@ export const SingleSelect = ({
 
   return (
     <>
-      <label>{label}</label>
+      <span className="label">{label}</span>
       <Menu as="div" className="relative inline-block text-left w-full">
         {({ open }) => (
           <>

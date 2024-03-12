@@ -36,8 +36,8 @@ export const CascadingMenu = ({
   };
   return (
     <>
-      <label>{label}</label>
-      <Menu dismiss={{ itemPress: false }}>
+      <span className="label">{label}</span>
+      <Menu dismiss={{ itemPress: false, outsidePress: true }}>
         <MenuHandler field={field}>
           {value ? (
             <Chip

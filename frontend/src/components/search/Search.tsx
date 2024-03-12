@@ -18,6 +18,7 @@ export const Search = ({
         <div className="absolute w-full">
           <MagnifyingGlassIcon className="h-6 w-6 text-icon absolute inset-y-4 right-4" />
           <input
+            autoComplete="name"
             value={value}
             className={classes.menu.container}
             name={field.name}
