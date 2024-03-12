@@ -25,7 +25,7 @@ const MonthPicker = ({
             variant="text"
             onClick={() => setYear(year - 1)}
           >
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronLeftIcon className="h-4 w-4 text-icon" />
           </Button>
         </div>
         <div>
@@ -35,7 +35,7 @@ const MonthPicker = ({
             variant="text"
             onClick={() => setYear(year + 1)}
           >
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="h-4 w-4 text-icon" />
           </Button>
         </div>
       </div>

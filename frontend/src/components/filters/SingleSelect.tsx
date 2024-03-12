@@ -42,25 +42,25 @@ export const SingleSelect = ({
           <>
             {value ? (
               <div className={menuItemClass[field.name]}>
-                <Chip value={value} handleClose={handleClose} />
+                <Chip value={value} name={field.name} handleClose={handleClose} />
                 <Menu.Button>
                   <ChevronDownIcon
-                    className="-mr-1 h-5 w-5 text-gray-900"
+                    className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
                   />
                 </Menu.Button>
               </div>
             ) : (
               <Menu.Button className={menuItemClass[field.name]}>
-                <span>{placeholder}</span>
+                <span className="text-placeholder">{placeholder}</span>
                 {open ? (
                   <ChevronUpIcon
-                    className="-mr-1 h-5 w-5 text-gray-900"
+                    className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
                   />
                 ) : (
                   <ChevronDownIcon
-                    className="-mr-1 h-5 w-5 text-gray-900"
+                    className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
                   />
                 )}
