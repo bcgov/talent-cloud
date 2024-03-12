@@ -124,7 +124,7 @@ export const ProfileEditForm = ({
                 <Select
                   {...props}
                   {...fields.workLocation.locationName}
-                  error={errors.workLocation?.locationName}
+                  error={errors.workLocation}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     handleChangeLocation(e, {
                       isSubmitting,
@@ -140,7 +140,7 @@ export const ProfileEditForm = ({
                 <Select
                   {...props}
                   {...fields.workLocation.region}
-                  error={errors.workLocation?.region}
+                  error={errors.workLocation}
                   disabled={true}
                   options={regions.map((itm) => ({
                     label: itm,
@@ -209,8 +209,18 @@ export const ProfileEditForm = ({
               <div className="w-full grid grid-cols-2 gap-6">
                 <TextInput
                   {...props}
-                  {...fields.supervisor}
-                  error={errors.supervisor}
+                  {...fields.supervisorFirstName}
+                  error={errors.supervisorFirstName}
+                />
+                <TextInput
+                  {...props}
+                  {...fields.supervisorLastName}
+                  error={errors.supervisorLastName}
+                />
+                <TextInput
+                  {...props}
+                  {...fields.supervisorEmail}
+                  error={errors?.supervisorEmail}
                 />
                 <TextInput
                   {...props}

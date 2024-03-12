@@ -57,18 +57,19 @@ export class PersonnelRO {
 
   @ApiProperty({
     description: "Personnel's work region and location",
-    required: true,
+    required: false,
     example: {
       id: 1,
       locationName: 'Victoria',
       region: 'SWE',
     },
   })
-  workLocation: LocationRO;
+
+  workLocation?: LocationRO;
 
   @ApiProperty({
     description: "Personnel's home region and location",
-    required: false,
+    required: true,
     example: {
       id: 1,
       locationName: 'Victoria',

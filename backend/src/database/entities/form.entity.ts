@@ -18,9 +18,6 @@ export class Form extends BaseEntity {
   @Column()
   formId: string;
 
-  @Column({ type: 'jsonb' })
-  data: unknown;
-
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 }

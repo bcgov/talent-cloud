@@ -57,7 +57,7 @@ export const renderCells = (
   const {
     lastName,
     firstName,
-    workLocation,
+    homeLocation,
     experiences,
     willingToTravel,
     remoteOnly,
@@ -76,19 +76,19 @@ export const renderCells = (
     {
       key: uuidv4(),
       columnName: DashboardColumns.REGION,
-      value: workLocation.region,
+      value: homeLocation.region,
       className: tableClass(
         DashboardColumns.REGION,
-        workLocation?.region.toLowerCase(),
+        homeLocation?.region?.toLowerCase() ?? '',
       ),
     },
     {
       key: uuidv4(),
       columnName: DashboardColumns.LOCATION,
-      value: workLocation.locationName,
+      value: homeLocation.locationName,
       className: tableClass(
         DashboardColumns.LOCATION,
-        workLocation?.locationName.toLowerCase(),
+        homeLocation?.locationName.toLowerCase() ?? '',
       ),
     },
     {

@@ -63,7 +63,7 @@ export interface Personnel {
   id: string;
   firstName: string;
   lastName: string;
-  workLocation: Location;
+  workLocation?: Location;
   homeLocation: Location;
   experiences?: ExperienceInterface[];
   availability?: AvailabilityInterface[];
@@ -77,7 +77,9 @@ export interface Personnel {
   secondaryPhone: string;
   workPhone: string;
   email: string;
-  supervisor: string;
+  supervisorFirstName: string;
+  supervisorLastName: string;
+  supervisorEmail?: string;
   reviewed: boolean;
   coordinatorNotes: string;
   logisticsNotes: string;

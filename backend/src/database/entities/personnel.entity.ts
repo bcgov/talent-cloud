@@ -7,7 +7,8 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
-  ManyToOne
+  ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
@@ -22,6 +23,7 @@ import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 import { format } from 'date-fns';
 import { datePST } from '../../common/helpers';
+import { Form } from './form.entity';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -90,8 +92,14 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'application_date', type: 'timestamp' })
   applicationDate: Date;
 
-  @Column({ name: 'supervisor', type: 'varchar', length: 100 })
-  supervisor: string;
+  @Column({ name: 'supervisor_first_name', type: 'varchar', length: 100 })
+  supervisorFirstName: string;
+
+  @Column({ name: 'supervisor_last_name', type: 'varchar', length: 100 })
+  supervisorLastName: string;
+
+  @Column({ name: 'supervisor_email', type: 'varchar', length: 50 })
+  supervisorEmail?: string;
 
   @Column({
     name: 'skills_abilities',
@@ -149,6 +157,40 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
+  @OneToOne(() => Form, (form) => form.id)
+  @JoinColumn({ name: 'intake_form_id', referencedColumnName: 'id'})
+  intakeForm?: Form;
+
+  @Column({ name: 'first_aid_level', type: 'varchar', length: 100, nullable: true })
+  firstAidLevel?: string;
+
+  @Column({ name: 'first_aid_expiry', type: 'date', nullable: true })
+  firstAidExpiry?: string;
+
+  @Column({ name: 'driver_license(s)', type: 'varchar', length: 100, nullable: true })
+  driverLicense?: string[];
+
+  @Column({ name: 'psychological_first_aid', type: 'boolean', nullable: true })
+  psychologicalFirstAid?: boolean;
+
+  @Column({ name: 'first_nation_exp_living', type: 'boolean', nullable: true })
+  firstNationExperienceLiving?: boolean;
+
+  @Column({ name: 'first_nation_exp_working', type: 'boolean', nullable: true })
+  firstNationExperienceWorking?: boolean;
+
+  @Column({ name: 'peccExperience', type: 'boolean', nullable: true })
+  peccExperience?: boolean;
+
+  @Column({ name: 'preocExperience', type: 'boolean', nullable: true })
+  preocExperience?: boolean;
+
+  @Column({ name: 'emergencyExperience', type: 'boolean', nullable: true })
+  emergencyExperience?: boolean;
+
+  @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
+  jobTitle?: string;
+
   toResponseObject(
     role: Role,
     lastDeployed?: string,
@@ -171,7 +213,19 @@ export class PersonnelEntity extends BaseEntity {
       skillsAbilities: this.skillsAbilities,
       coordinatorNotes: this.coordinatorNotes,
       logisticsNotes: this.logisticsNotes,
-      supervisor: this.supervisor,
+      supervisorFirstName: this.supervisorFirstName,
+      supervisorLastName: this.supervisorLastName,
+      supervisorEmail: this.supervisorEmail ?? '',
+      firstAidLevel: this.firstAidLevel ?? '',
+      firstAidExpiry: this.firstAidExpiry ?? '',
+      driverLicense: this.driverLicense ?? '',
+      psychologicalFirstAid: this.psychologicalFirstAid ?? '',
+      firstNationExperienceLiving: this.firstNationExperienceLiving ?? '',
+      firstNationExperienceWorking: this.firstNationExperienceWorking ?? '',
+      peccExperience: this.peccExperience ?? '',
+      preocExperience: this.preocExperience ?? '',
+      emergencyExperience: this.emergencyExperience ?? '',
+      jobTitle: this.jobTitle ?? '',
       status: this.status,
       lastDeployed: lastDeployed ?? null,
       dateJoined: this.dateJoined,
@@ -193,7 +247,7 @@ export class PersonnelEntity extends BaseEntity {
           availabilityType: AvailabilityType.NOT_INDICATED,
           deploymentCode: '',
         }),
-      ]
+      ];
     }
 
     // this is required in order to conditionally omit certain fields from the response based on the user role
