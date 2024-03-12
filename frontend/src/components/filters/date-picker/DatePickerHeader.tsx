@@ -29,10 +29,10 @@ export const DatePickerHeader = (props: CustomCaptionProps) => {
 
         <div>
           <button onClick={() => previousMonth && goToMonth(previousMonth)}>
-            <ChevronLeftIcon className="h-4 w-4 stroke-4" />
+            <ChevronLeftIcon className="h-4 w-4 stroke-4 text-icon" />
           </button>
           <button onClick={() => nextMonth && goToMonth(nextMonth)}>
-            <ChevronRightIcon className="h-4 w-4 stroke-4" />
+            <ChevronRightIcon className="h-4 w-4 stroke-4 text-icon" />
           </button>
         </div>
       </div>

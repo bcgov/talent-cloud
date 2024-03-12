@@ -13,7 +13,7 @@ export const MonthSelector = (props: SelectorProps) => (
             {months.find((itm) => itm.value === props.displayMonth.getMonth())
               ?.label ?? ''}
           </span>
-          <ChevronDownIcon className="font-bold h-5 w-5 stroke-4" />
+          <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 text-icon" />
         </Menu.Button>
       </div>
     </div>
