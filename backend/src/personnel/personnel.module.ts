@@ -14,6 +14,6 @@ import { LoggerModule } from '../logger/logger.module';
   ],
   controllers: [PersonnelController],
   providers: [PersonnelService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, PersonnelService],
 })
 export class PersonnelModule {}
