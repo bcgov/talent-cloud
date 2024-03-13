@@ -56,12 +56,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup ENV file
         run: cp .env.example .env
-      - name: Build & Deploy
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
-          make deployment-build
-          make deployment-tag-to-deploy
+      # - name: Build & Deploy
+      #   run: |
+      #     cd "$GITHUB_WORKSPACE"
+      #     oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
+      #     make deployment-build
+      #     make deployment-tag-to-deploy
       - name: Cache OpenShift CLI
         id: cache-oc
         uses: actions/cache@v2
