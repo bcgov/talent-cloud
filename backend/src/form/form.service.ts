@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 import { FunctionService } from '../function/function.service';
 import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
 import { PersonnelEntity } from 'src/database/entities/personnel.entity';
-// WIP
+
 @Injectable()
 export class FormService {
   constructor(
@@ -56,13 +56,20 @@ export class FormService {
         data: requestFormData.data.submission.submission.data,
       });
   }
-
-  //TODO unique constraint on email
-  async processFormData(submission: CreateFormDTO) {
+//TODO PROD: unique constraint on email address
+  /**
+   * Create a new form entity, and passes the form id and submission id to createPersonnel function
+   * @param submission 
+   */
+  async processFormData(submission: CreateFormDTO): Promise<PersonnelEntity[]> {
     const form = await this.saveForm(submission);
-    await this.createPersonnel(submission.data, form);
+    return await this.createPersonnel(submission.data, form);
   }
-
+/**
+ * Saves the form id and submission id
+ * @param data 
+ * @returns 
+ */
   async saveForm(data: CreateFormDTO): Promise<Form> {
     try {
       this.logger.log(`Form data saved successfully`);
@@ -71,6 +78,12 @@ export class FormService {
       this.logger.error(`Error saving form data: ${e}`);
     }
   }
+  /**
+   * Creates a new personnel entity from the form 
+   * @param data 
+   * @param form 
+   * @returns 
+   */
   async createPersonnel(data: IntakeFormData, form: Form): Promise<PersonnelEntity[]> {
     
     const {
@@ -104,7 +117,7 @@ export class FormService {
         experienceType: Experience.INTERESTED,
       }));
 
-    console.log(functionsArray, 'FUNCS');
+    
     const createPersonnelDTO: CreatePersonnelDTO = {
       firstName: personalDetails.firstName,
       lastName: personalDetails.lastName,
