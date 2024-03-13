@@ -23,7 +23,7 @@ export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
-export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server)
+export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
@@ -204,7 +204,7 @@ migration-revert:
 	@docker exec tc-backend-${ENV} npm run migration:revert
 
 migration-run:
-	@docker exec tc-backend-${ENV} npm run migration:run
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/migrate.ts")'
 
 
 
@@ -220,8 +220,12 @@ delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
 
 # if this doesn't run, try to run the SERVER pod cmd and copy the first pod name into this command
+# TODO remove the last command for production 
 seed-data-oc: 
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
+
+migration-run-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/migrate.js")'

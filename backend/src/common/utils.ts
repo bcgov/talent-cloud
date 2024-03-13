@@ -35,7 +35,7 @@ const regionsAndLocations = [
   { id: 3, region: 'HQ', locationName: 'Brentwood Bay' },
   { id: 4, region: 'SWE', locationName: 'Burnaby' },
   { id: 5, region: 'NWE', locationName: 'Burns Lake' },
-  { id: 6, region: 'SWE', locationName: 'Bonnington Falls' },
+  { id: 6, region: 'SEA', locationName: 'Bonnington Falls' },
   { id: 7, region: 'VIC', locationName: 'Campbell River' },
   { id: 8, region: 'SEA', locationName: 'Castlegar' },
   { id: 9, region: 'VIC', locationName: 'Cumberland' },

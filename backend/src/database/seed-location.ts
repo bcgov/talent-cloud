@@ -7,7 +7,7 @@ const functionSql = `INSERT INTO public."location" (id, location_name, region) V
   (3, 'Brentwood Bay',  'HQ' ),
   (4, 'Burnaby',  'SWE' ),
   (5, 'Burns Lake',  'NWE' ),
-  (6, 'Bonnington Falls',  'SWE' ),
+  (6, 'Bonnington Falls',  'SEA' ),
   (7, 'Campbell River',  'VIC' ),
   (8, 'Castlegar',  'SEA' ),
   (9, 'Cumberland',  'VIC' ),

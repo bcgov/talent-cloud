@@ -8,8 +8,7 @@ export const config = {
   username: process.env.DB_USER ?? 'tc_user',
   password: process.env.DB_PASSWORD ?? 'tc_password',
   database: process.env.DB_NAME ?? 'tc',
-  // TODO change this to false in production
-  synchronize: true,
+  synchronize: false,
   entities: [join(__dirname, '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
 };
