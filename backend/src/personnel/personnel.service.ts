@@ -111,7 +111,7 @@ export class PersonnelService {
 
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
-    qb.leftJoinAndSelect('personnel.workLocation', 'location');
+    qb.leftJoinAndSelect('personnel.homeLocation', 'location');
 
     if (query.name) {
       qb.andWhere(
@@ -132,15 +132,15 @@ export class PersonnelService {
       qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
     }
     if (query.region?.length) {
-      qb.andWhere('personnel.workLocation.region IN (:...regions)', {
+      qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
       qb.andWhere(
-        'personnel.workLocation.locationName IN (:...workLocations)',
+        'personnel.homeLocation.locationName IN (:...homeLocations)',
         {
-          workLocations: query.location,
+          homeLocations: query.location,
         },
       );
     }

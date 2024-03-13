@@ -73,7 +73,7 @@ export const Filters = ({
                       )
                     : filters?.location?.groupedOptions,
               }}
-              label="Work Location"
+              label="Home Location"
               values={filterValues.location}
             />
           </div>

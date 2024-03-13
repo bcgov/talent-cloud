@@ -128,7 +128,8 @@ export const useTable = () => {
       [name]: Array.from(valueSet),
     }));
   };
-  const handleClose = (name: string, value: string) => {
+
+  const handleClose = (name: string, value: string | string[]) => {
     const event = {
       target: {
         name: name,

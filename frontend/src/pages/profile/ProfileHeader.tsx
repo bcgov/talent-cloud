@@ -73,8 +73,8 @@ const ProfileHeader = ({
             <div className="pl-2">
               <p className="subtext">Work Location</p>
               <p>
-                {personnel.workLocation.locationName},{' '}
-                {personnel.workLocation.region}
+                {personnel.workLocation?.locationName ?? '-'},{' '}
+                {personnel.workLocation?.region ?? '-'}
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ const ProfileHeader = ({
               <p className="subtext">Home Location</p>
               <p>
                 {personnel.homeLocation.locationName},{' '}
-                {personnel.workLocation.region}
+                {personnel.homeLocation.region}
               </p>
             </div>
           </div>

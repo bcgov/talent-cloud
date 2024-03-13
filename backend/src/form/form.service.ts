@@ -1,15 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
-import { FormSubmissionEventPayload } from './interface';
+import { FormSubmissionEventPayload, IntakeFormData } from './interface';
 import { Form } from '../database/entities/form.entity';
 import { AppLogger } from '../logger/logger.service';
+import { PersonnelService } from '../personnel/personnel.service';
+import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
+import { RegionsAndLocationsService } from '../region-location/region-location.service';
+import { Experience, Ministry, UnionMembership } from '../common/enums';
+import { CreateFormDTO } from './form.dto';
+import { format } from 'date-fns';
+import { FunctionService } from '../function/function.service';
+import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
+import { PersonnelEntity } from 'src/database/entities/personnel.entity';
 
 @Injectable()
 export class FormService {
   constructor(
     @InjectRepository(Form) private formRepo: Repository<Form>,
+    @Inject(PersonnelService) private personnelService: PersonnelService,
+    @Inject(RegionsAndLocationsService)
+    private locationService: RegionsAndLocationsService,
+    @Inject(FunctionService) private functionService: FunctionService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(FormService.name);
@@ -35,27 +48,131 @@ export class FormService {
       },
     );
     this.logger.log(`Received form data from submission event`);
-    const submissionData: Partial<Form> =
-      requestFormData.data.submission.submission;
-    requestFormData &&
-      this.processFormData({ submissionId, formId, data: submissionData });
-  }
 
-  //TODO deterimine if the submission ID of an edited form is the same as the original form
-  // If yes, check submission ID prior to saving form data, if submission id exits, update the original entry, otherwise, save a new entry
-  // If no, then create a spike to detrmine how to handle form updates/resubmitted forms for the same applicant
-  // Do we need a way to ensure that applicants can only submit a form once? Can we log idir or use email as a unique identifier?
-  async processFormData(submission: Partial<Form>) {
+    requestFormData &&
+      this.processFormData({
+        submissionId,
+        formId,
+        data: requestFormData.data.submission.submission.data,
+      });
+  }
+//TODO PROD: unique constraint on email address
+  /**
+   * Create a new form entity, and passes the form id and submission id to createPersonnel function
+   * @param submission 
+   */
+  async processFormData(submission: CreateFormDTO): Promise<PersonnelEntity[]> {
+    const form = await this.saveForm(submission);
+    return await this.createPersonnel(submission.data, form);
+  }
+/**
+ * Saves the form id and submission id
+ * @param data 
+ * @returns 
+ */
+  async saveForm(data: CreateFormDTO): Promise<Form> {
     try {
-      await this.formRepo.save(this.formRepo.create(submission));
       this.logger.log(`Form data saved successfully`);
+      return await this.formRepo.save(this.formRepo.create(data));
     } catch (e) {
       this.logger.error(`Error saving form data: ${e}`);
     }
-    this.logger.log(`Form data saved successfully`);
-    return {
-      message: 'Form data saved successfully',
-      status: 201,
+  }
+  /**
+   * Creates a new personnel entity from the form 
+   * @param data 
+   * @param form 
+   * @returns 
+   */
+  async createPersonnel(data: IntakeFormData, form: Form): Promise<PersonnelEntity[]> {
+    
+    const {
+      personalDetails,
+      roles,
+      workDetails,
+      supervisorInfo,
+      experience,
+      deploymentPreferences,
+      other,
+    } = data;
+
+    const workLocation = await this.locationService.getLocationByName(
+      workDetails.workLocation,
+    );
+
+    const homeLocation = await this.locationService.getLocationByName(
+      personalDetails.homeLocation,
+    );
+
+    const functions = await this.functionService.getFunctions();
+    
+    const interestedIn = Object.keys(roles).filter(
+      (role) => roles[role] === true,
+    );
+
+    const functionsArray: PersonnelExperienceDTO[] = functions
+      .filter((func) => interestedIn.includes(func.abbreviation))
+      .map((func) => ({
+        functionId: func.id,
+        experienceType: Experience.INTERESTED,
+      }));
+
+    
+    const createPersonnelDTO: CreatePersonnelDTO = {
+      firstName: personalDetails.firstName,
+      lastName: personalDetails.lastName,
+      workLocation: workLocation,
+      homeLocation: homeLocation,
+      ministry: Object.values(Ministry)[0],
+      primaryPhone: personalDetails.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
+      secondaryPhone:
+        personalDetails?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '') ?? '',
+      workPhone: workDetails.workPhone.replace(/[(]|-|[)]|\s/gi, ''),
+      email: workDetails.workEmail,
+      supervisorFirstName: supervisorInfo?.supervisorFirstName,
+      supervisorLastName: supervisorInfo?.supervisorLastName,
+      supervisorEmail: supervisorInfo?.supervisorEmail,
+      dateJoined: format(new Date(), 'yyyy-MM-dd'),
+      unionMembership: UnionMembership[workDetails.unionMembership],
+      remoteOnly: deploymentPreferences.remoteOnly as boolean,
+      willingToTravel: deploymentPreferences.remoteOnly as boolean,
+      firstNationExperienceLiving:
+        experience.firstNations?.living === ''
+          ? false
+          : (experience.firstNations?.living as boolean),
+      firstNationExperienceWorking:
+        experience.firstNations?.working === ''
+          ? false
+          : (experience.firstNations?.working as boolean),
+      peccExperience:
+        experience.pecc === '' ? false : (experience.pecc as boolean),
+      preocExperience:
+        experience.preoc === '' ? false : (experience.preoc as boolean),
+      emergencyExperience:
+        experience.emergency === '' ? false : (experience.emergency as boolean),
+      jobTitle: workDetails.jobTitle,
+      driverLicense: other.dl.join(';'),
+      firstAidLevel: other.firstAid.level,
+      firstAidExpiry: other.firstAid.expiryDate,
+      psychologicalFirstAid: other.pfa === '' ? false : (other.pfa as boolean),
+      intakeForm: form,
+      skillsAbilities: '',
+      coordinatorNotes: '',
+      logisticsNotes: '',
+      trainings: [],
+      applicationDate: format(new Date(), 'yyyy-MM-dd'),
+      experiences: functionsArray,
     };
+    try {
+      this.logger.log(`Form data saved successfully`);
+      return await this.personnelService.createPersonnel([
+        createPersonnelDTO,
+      ]);
+      
+      
+    } catch (e) {
+      this.logger.error(`Error saving form data: ${e}`);
+    }
+    
   }
 }

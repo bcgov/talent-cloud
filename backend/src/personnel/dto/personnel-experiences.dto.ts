@@ -7,7 +7,14 @@ export class PersonnelExperienceDTO {
     required: true,
     example: 1,
   })
-  id: number;
+  functionId?: number;
+
+  @ApiProperty({
+    description: 'Id of Function',
+    required: true,
+    example: 1,
+  })
+  id?: number;
 
   @ApiProperty({
     description: 'Experience Type',

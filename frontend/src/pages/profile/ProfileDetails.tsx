@@ -20,7 +20,7 @@ const ProfileDetails = ({
   const generalInformation = [
     {
       title: 'Work Location, Region',
-      content: `${personnel.workLocation.locationName}, ${personnel.workLocation.region}`,
+      content: `${personnel.workLocation?.locationName ?? '-'}, ${personnel.workLocation?.region ?? '-'}`,
     },
     {
       title: 'Remote Only',
@@ -63,7 +63,9 @@ const ProfileDetails = ({
   ];
 
   const organizational = [
-    { title: 'Supervisor Name', content: personnel.supervisor },
+    { title: 'Supervisor First Name', content: personnel.supervisorFirstName },
+    { title: 'Supervisor Last Name', content: personnel.supervisorLastName },
+    { title: 'Supervisor Email', content: personnel.supervisorEmail ?? '-' },
     { title: 'Ministry', content: personnel.ministry },
     { title: 'Union Membership', content: personnel.unionMembership },
   ];

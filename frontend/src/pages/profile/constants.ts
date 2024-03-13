@@ -43,10 +43,15 @@ export const EditProfileValidationSchema = Yup.object().shape({
   workPhone: Yup.string()
     .optional()
     .length(14, 'Invalid phone number format. Please enter ten digits.'),
-  supervisor: Yup.string()
+  supervisorFirstName: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
+  supervisorLastName: Yup.string()
+    .min(2, 'Max length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
+  supervisorEmail: Yup.string().optional().email('Invalid email format.'),
   ministry: Yup.string().required('This field is required.'),
   unionMembership: Yup.string().required('This field is required.'),
 });
@@ -153,14 +158,27 @@ export const fields = {
     disabled: true,
   },
 
-  supervisor: {
-    name: 'supervisor',
-    label: 'Supervisor ',
+  supervisorFirstName: {
+    name: 'supervisorFirstName',
+    label: 'Supervisor First Name',
     required: true,
     type: 'text',
     disabled: false,
   },
-
+  supervisorLastName: {
+    name: 'supervisorLastName',
+    label: 'Supervisor Last Name',
+    required: true,
+    type: 'text',
+    disabled: false,
+  },
+  supervisorEmail: {
+    name: 'supervisorEmail',
+    label: 'Supervisor Email',
+    required: false,
+    type: 'text',
+    disabled: false,
+  },
   workPhone: {
     name: 'workPhone',
     label: 'Work Number',
