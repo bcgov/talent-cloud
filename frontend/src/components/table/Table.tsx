@@ -35,7 +35,7 @@ export const Table = ({
             <Toggle
               value={pageParams.showInactive}
               handleToggle={(checked: boolean) =>
-                handlePageParams({ showInactive: checked })
+                handlePageParams({ currentPage: 1, showInactive: checked })
               }
               label="Show Inactive"
             />

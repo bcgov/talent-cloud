@@ -25,7 +25,7 @@ export const DatePicker = ({
 }) => {
   return (
     <>
-      <label>{label}</label>
+      <span className="label">{label}</span>
       <Menu as="div" className="relative inline-block text-center w-full">
         <>
           <Tooltip
