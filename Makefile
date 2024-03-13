@@ -23,7 +23,7 @@ export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
-export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server)
+export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
@@ -204,7 +204,7 @@ migration-revert:
 	@docker exec tc-backend-${ENV} npm run migration:revert
 
 migration-run:
-	@docker exec tc-backend-${ENV} npm run migration:run
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./src/database/datasource.ts
 
 
 
@@ -224,4 +224,6 @@ seed-data-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
+
+migration-run-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
