@@ -98,7 +98,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'supervisor_last_name', type: 'varchar', length: 100 })
   supervisorLastName: string;
 
-  @Column({ name: 'supervisor_email', type: 'varchar', length: 50 })
+  @Column({
+    name: 'supervisor_email',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
   supervisorEmail?: string;
 
   @Column({
@@ -157,17 +162,27 @@ export class PersonnelEntity extends BaseEntity {
   @JoinTable({ name: 'personnel_training' })
   trainings: TrainingEntity[];
 
-  @OneToOne(() => Form, (form) => form.id)
-  @JoinColumn({ name: 'intake_form_id', referencedColumnName: 'id'})
+  @OneToOne(() => Form, (form) => form.id, { nullable: true })
+  @JoinColumn({ name: 'intake_form_id', referencedColumnName: 'id' })
   intakeForm?: Form;
 
-  @Column({ name: 'first_aid_level', type: 'varchar', length: 100, nullable: true })
+  @Column({
+    name: 'first_aid_level',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   firstAidLevel?: string;
 
   @Column({ name: 'first_aid_expiry', type: 'date', nullable: true })
   firstAidExpiry?: string;
 
-  @Column({ name: 'driver_license(s)', type: 'varchar', length: 100, nullable: true })
+  @Column({
+    name: 'driver_license(s)',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   driverLicense?: string[];
 
   @Column({ name: 'psychological_first_aid', type: 'boolean', nullable: true })
