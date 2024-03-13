@@ -1,4 +1,5 @@
 import { instanceToPlain } from 'class-transformer';
+import { format } from 'date-fns';
 import {
   Column,
   Entity,
@@ -16,12 +17,11 @@ import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
 import { Role } from '../../auth/interface';
 import { AvailabilityType, Status } from '../../common/enums';
-import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
+import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { format } from 'date-fns';
-import { datePST } from '../../common/helpers';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
