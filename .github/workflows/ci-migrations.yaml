@@ -13,7 +13,7 @@ env:
   PROJECT: tcloud
 
 jobs:
-  run-migrations:
+  migrations:
     name: Run migrations (dev)
     environment: dev
     runs-on: ubuntu-latest
