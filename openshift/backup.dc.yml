@@ -380,7 +380,7 @@ parameters:
     displayName: Backup Volume Size
     description: The size of the persistent volume used to store the backups, e.g. 512Mi, 1Gi, 2Gi.  Ensure this is sized correctly.  Refer to the container documentation for details.
     required: true
-    value: 150Mi
+    value: 300Mi
   - name: BACKUP_VOLUME_CLASS
     displayName: Backup Volume Class
     description: The class of the persistent volume used to store the backups; netapp-file-standard is the recommended default.
@@ -395,7 +395,7 @@ parameters:
     displayName: Backup Volume Size
     description: The size of the persistent volume used for restoring and verifying backups, e.g. 512Mi, 1Gi, 2Gi.  Ensure this is sized correctly.  It should be large enough to contain your largest database.
     required: true
-    value: 150Mi
+    value: 300Mi
   - name: VERIFICATION_VOLUME_CLASS
     displayName: Backup Volume Class
     description: The class of the persistent volume used for restoring and verifying backups; netapp-file-standard, netapp-block-standard.
@@ -410,7 +410,7 @@ parameters:
     displayName: Resources CPU Request
     description: The resources CPU request (in cores) for this build.
     required: true
-    value: "25m"
+    value: "15m"
   - name: CPU_LIMIT
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.

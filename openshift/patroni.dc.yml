@@ -51,7 +51,7 @@ parameters:
   - name: CPU_LIMIT
     description: Maximum amount of CPU the container can use.
     displayName: CPU Limit
-    value: "100m"
+    value: "150m"
   - name: MEMORY_REQUEST
     description: Starting amount of memory the container can use.
     displayName: Memory Request
@@ -78,7 +78,7 @@ parameters:
   - name: PVC_SIZE
     description: The size of the persistent volume to create.
     displayName: Persistent Volume Size
-    value: 300Mi
+    value: 700Mi
   - name: STORAGE_CLASS
     value: netapp-file-standard
   - name: IMAGE_REGISTRY
