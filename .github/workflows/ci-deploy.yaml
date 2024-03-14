@@ -9,9 +9,9 @@ name: OpenShift Build and Deploy to Dev
 on:
   push:
     branches:
-      - split-actions
-# tags:
-#   - dev
+      - main
+tags:
+  - dev
 
 env:
   CLUSTER: https://api.gold.devops.gov.bc.ca:6443
