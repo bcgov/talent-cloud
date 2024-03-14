@@ -5,7 +5,8 @@ import { PersonnelStatus } from '@/components';
 import { Banner } from '@/components/ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Toggle } from '@/components/toggle/Toggle';
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
+import { offsetTimezoneDate } from '@/utils';
 
 function HorizontalLine() {
   return (
@@ -32,10 +33,17 @@ const ProfileHeader = ({
   role?: Role;
   updatePersonnel: (personnel: Partial<Personnel>) => void;
 }) => {
-  const lastDeployed = personnel?.lastDeployed
-    ? `${differenceInDays(new Date(), new Date(personnel.lastDeployed))} days ago`
-    : '-';
-
+  const getLastDeployed = () => {
+    if (personnel?.lastDeployed) {
+      const difference = differenceInDays(
+        offsetTimezoneDate(format(new Date(), 'yyyy-MM-dd')),
+        offsetTimezoneDate(personnel.lastDeployed),
+      );
+      if (difference === 0) return 'Currently Deployed';
+      else return `${difference} days ago`;
+    }
+    return '-';
+  };
   return (
     <>
       <div className="px-10 float-left hidden lg:inline-block">
@@ -60,12 +68,12 @@ const ProfileHeader = ({
           <HorizontalLine />
         </div>
 
-        <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row xl:space-x-24">
+        <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-16 xl:space-x-24">
           <div className="flex flex-row">
             <ClockIcon className="h-7 w-7 text-textGray" />
             <div className="px-2">
               <p className="subtext">Last Deployed</p>
-              <p>{lastDeployed}</p>
+              <p>{getLastDeployed()}</p>
             </div>
           </div>
           <div className="flex flex-row">
