@@ -41,7 +41,11 @@ export const SplashMain = ({ content }: { content: any }) => {
             <p className="text-white">
               Use your IDIR to access the TEAMS member database.
             </p>
-            <Button variant={ButtonTypes.PRIMARY} text={'Log In'} onClick={login} />
+            <Button
+              variant={ButtonTypes.SECONDARY_LIGHT}
+              text={'Log In'}
+              onClick={login}
+            />
           </div>
         </div>
       </div>
