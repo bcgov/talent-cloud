@@ -51,15 +51,15 @@ parameters:
   - name: CPU_LIMIT
     description: Maximum amount of CPU the container can use.
     displayName: CPU Limit
-    value: "150m"
+    value: "100m"
   - name: MEMORY_REQUEST
     description: Starting amount of memory the container can use.
     displayName: Memory Request
-    value: 256Mi
+    value: 128Mi
   - name: MEMORY_LIMIT
     description: Maximum amount of memory the container can use.
     displayName: Memory Limit
-    value: 512Mi
+    value: 256Mi
   - name: IMAGE_STREAM_NAMESPACE
     description: |
       The OpenShift Namespace where the patroni and postgresql

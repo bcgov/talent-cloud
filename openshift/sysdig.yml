@@ -1,0 +1,11 @@
+kind: SysdigTeam
+apiVersion: ops.gov.bc.ca/v1alpha1
+metadata:
+  name: cd4869-sysdigteam
+  namespace: cd4869-tools
+spec:
+  team:
+    description: Sysdig Team for Talent Cloud
+    users:
+    - name: enter.email@email.ca
+      role: ROLE_TEAM_EDIT
