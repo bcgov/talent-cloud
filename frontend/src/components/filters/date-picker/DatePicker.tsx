@@ -34,6 +34,7 @@ export const DatePicker = ({
             disabled={!disabled}
           >
             <Menu.Button
+              aria-label="Month Select Menu Button"
               disabled={disabled}
               className={menuItemClass[disabled ? 'disabled' : field.name]}
             >

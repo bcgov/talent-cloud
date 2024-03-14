@@ -8,12 +8,18 @@ export const MonthSelector = (props: SelectorProps) => (
   <Menu>
     <div className="flex flex-col">
       <div className="flex flex-row">
-        <Menu.Button className="w-full flex  font-bold  items-center pb-1">
+        <Menu.Button
+          aria-label="month selecter"
+          className="w-full flex  font-bold  items-center pb-1"
+        >
           <span className="text-md pr-1">
             {months.find((itm) => itm.value === props.displayMonth.getMonth())
               ?.label ?? ''}
           </span>
-          <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 text-icon" />
+          <ChevronDownIcon
+            className="font-bold h-5 w-5 stroke-4 text-icon"
+            aria-label="open"
+          />
         </Menu.Button>
       </div>
     </div>

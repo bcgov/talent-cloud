@@ -16,6 +16,7 @@ export const TableFooterPageSelect = ({
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             onChange({ rowsPerPage: parseInt(e.target.value) })
           }
+          aria-label="select page size"
           name="rows"
         >
           <option className="pr-4" value={25}>
