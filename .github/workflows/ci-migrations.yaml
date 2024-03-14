@@ -1,4 +1,4 @@
-name: Run Migrations (dev)
+name: run_migrations
 
 on:
   workflow_dispatch:  
