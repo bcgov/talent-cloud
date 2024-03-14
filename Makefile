@@ -225,5 +225,8 @@ seed-data-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 
+seed-dummy-data-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
+
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
