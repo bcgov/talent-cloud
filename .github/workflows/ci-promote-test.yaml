@@ -79,18 +79,5 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make deployment-tag-to-deploy
-          
-      - name: Run migrations
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
-          export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
-          
-      - name: Seed Data
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
-          export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make seed-data-oc    
+          make deployment-tag-to-deploy-server
+          make deployment-tag-to-deploy-client
