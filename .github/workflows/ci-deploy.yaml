@@ -10,8 +10,8 @@ on:
   push:
     branches:
       - main
-tags:
-  - dev
+  tags:
+    - dev
 
 env:
   CLUSTER: https://api.gold.devops.gov.bc.ca:6443
