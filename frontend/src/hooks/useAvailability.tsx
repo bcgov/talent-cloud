@@ -11,6 +11,7 @@ const useAvailability = ({
   getAvailability: (from: string, to: string) => Promise<void>;
   saveAvailability: (dates: AvailabilityRange) => Promise<void>;
 } => {
+  console.log('test');
   const [availability, setAvailability] = useState<Availability[]>([]);
 
   const getAvailability = async (from: string, to: string) => {
