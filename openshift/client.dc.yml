@@ -94,7 +94,7 @@ objects:
                   cpu: 50m
                   memory: 64Mi
                 requests:
-                  cpu: 25m
+                  cpu: 15m
                   memory: 48Mi
               securityContext:
                 capabilities:
