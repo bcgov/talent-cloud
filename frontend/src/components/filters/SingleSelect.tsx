@@ -27,7 +27,7 @@ export const SingleSelect = ({
     } as unknown as ChangeEvent<HTMLInputElement>;
     onChange(event);
   };
-  const placeholder = 'Select Availability Status';
+  const placeholder = 'Select availability type';
 
   const handleClose = () => {
     resetDates({ from: undefined, to: undefined });
@@ -43,25 +43,31 @@ export const SingleSelect = ({
             {value ? (
               <div className={menuItemClass[field.name]}>
                 <Chip value={value} name={field.name} handleClose={handleClose} />
-                <Menu.Button>
+                <Menu.Button aria-label="Single Select Menu Button">
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
+                    aria-label="close"
                   />
                 </Menu.Button>
               </div>
             ) : (
-              <Menu.Button className={menuItemClass[field.name]}>
+              <Menu.Button
+                className={menuItemClass[field.name]}
+                aria-label="Single Select Menu Button"
+              >
                 <span className="text-placeholder">{placeholder}</span>
                 {open ? (
                   <ChevronUpIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
+                    aria-label="open"
                   />
                 ) : (
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
+                    aria-label="close"
                   />
                 )}
               </Menu.Button>
@@ -81,6 +87,7 @@ export const SingleSelect = ({
                   {field.options.map((itm: { label: string; value: string }) => (
                     <Menu.Item key={itm.value}>
                       <button
+                        aria-label="Single Select Menu Button"
                         onClick={() => handleChange(field.name, itm.value)}
                         className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                       >

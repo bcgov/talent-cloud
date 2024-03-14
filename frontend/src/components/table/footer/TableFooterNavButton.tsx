@@ -2,13 +2,16 @@ export const TableFooterNavButton = ({
   disabled,
   icon,
   onClick,
+  ariaLabel,
 }: {
   disabled: boolean;
   icon: any;
   onClick: any;
+  ariaLabel: string;
 }) => {
   return (
     <button
+      aria-label={ariaLabel}
       disabled={disabled}
       onClick={onClick}
       className={

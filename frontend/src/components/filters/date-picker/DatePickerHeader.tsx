@@ -28,10 +28,16 @@ export const DatePickerHeader = (props: CustomCaptionProps) => {
         <YearSelector displayMonth={props.displayMonth} goToMonth={goToMonth} />
 
         <div>
-          <button onClick={() => previousMonth && goToMonth(previousMonth)}>
+          <button
+            aria-label="previous month"
+            onClick={() => previousMonth && goToMonth(previousMonth)}
+          >
             <ChevronLeftIcon className="h-4 w-4 stroke-4 text-icon" />
           </button>
-          <button onClick={() => nextMonth && goToMonth(nextMonth)}>
+          <button
+            aria-label="next month"
+            onClick={() => nextMonth && goToMonth(nextMonth)}
+          >
             <ChevronRightIcon className="h-4 w-4 stroke-4 text-icon" />
           </button>
         </div>

@@ -8,7 +8,10 @@ import type { SelectorProps } from './interface';
 export const YearSelector = (props: SelectorProps) => (
   <Menu>
     <div className="flex flex-row">
-      <Menu.Button className="w-full flex  font-bold  items-center pb-1">
+      <Menu.Button
+        className="w-full flex  font-bold  items-center pb-1"
+        aria-label="open"
+      >
         <span className="text-md pr-1">{getYear(props.displayMonth)}</span>
         <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-icon" />
       </Menu.Button>

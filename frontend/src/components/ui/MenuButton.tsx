@@ -9,11 +9,11 @@ export const MenuButton = () => {
   return (
     <div className={classes.menu.buttonContainer}>
       {open ? (
-        <button className={classes.menu.button}>
+        <button className={classes.menu.button} aria-label="close">
           <ChevronUpIcon className="h-8 w-5 text-icon" />
         </button>
       ) : (
-        <button className={classes.menu.button}>
+        <button className={classes.menu.button} aria-label="open">
           <ChevronDownIcon className="h-8 w-5 text-icon" />
         </button>
       )}

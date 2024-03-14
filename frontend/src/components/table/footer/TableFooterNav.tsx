@@ -26,11 +26,13 @@ export const TableFooterNav = ({
       aria-label="Pagination"
     >
       <TableFooterNavButton
+        ariaLabel="navigate to first page"
         disabled={currentPage === 1}
         onClick={() => onChange({ currentPage: 1 })}
         icon={<ChevronDoubleLeftIcon className={iconButtonClass} />}
       />
       <TableFooterNavButton
+        ariaLabel="navigate to previous page"
         disabled={currentPage === 1}
         onClick={() => onChange({ currentPage: currentPage - 1 })}
         icon={<ChevronLeftIcon className={iconButtonClass} />}
@@ -43,6 +45,7 @@ export const TableFooterNav = ({
       )}
       {pageRange.map((itm) => (
         <button
+          aria-label={`navigate to page ${itm}`}
           key={itm}
           onClick={() => onChange({ currentPage: itm })}
           className={
@@ -61,6 +64,7 @@ export const TableFooterNav = ({
         </span>
       )}
       <button
+        aria-label={`navigate to last page`}
         disabled={currentPage === totalPages}
         key={pageRange.length - 1}
         onClick={() => onChange({ currentPage: totalPages })}
@@ -73,6 +77,7 @@ export const TableFooterNav = ({
         {totalPages}
       </button>
       <TableFooterNavButton
+        ariaLabel="navigate to next page"
         disabled={currentPage === totalPages}
         onClick={() =>
           onChange({
@@ -82,6 +87,7 @@ export const TableFooterNav = ({
         icon={<ChevronRightIcon className={iconButtonClass} />}
       />
       <TableFooterNavButton
+        ariaLabel="navigate to last page"
         disabled={currentPage === totalPages}
         onClick={() =>
           onChange({
