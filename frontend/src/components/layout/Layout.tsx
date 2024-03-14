@@ -3,32 +3,29 @@ import { Header } from '../header';
 import { APP_NAME } from '../../common';
 
 import { Footer } from '.';
+import { useRole } from '@/hooks';
+import { useKeycloak } from '@react-keycloak/web';
 
-export const Layout = ({
-  children,
-  authenticated,
-  username,
-}: {
-  children: ReactElement;
-  username?: string;
-  authenticated?: boolean;
-}) => {
+export const Layout = ({ children }: { children: ReactElement }) => {
+  const { username } = useRole();
+  const { keycloak } = useKeycloak();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header
         appName={APP_NAME}
         username={username ?? ''}
-        authenticated={authenticated}
+        authenticated={keycloak.authenticated}
       />
       <div
         className={[
           'w-full  mt-12 ',
-          authenticated ? ' bg-white' : ' bg-primaryBlue',
+          keycloak.authenticated ? ' bg-white' : ' bg-primaryBlue',
         ].join(', ')}
       >
         {children}
       </div>
-      {authenticated && <Footer />}
+      {keycloak.authenticated && <Footer />}
     </div>
   );
 };

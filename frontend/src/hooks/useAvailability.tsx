@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { AxiosPrivate } from '../utils';
+
 import type { Availability, AvailabilityRange } from '@/pages/dashboard';
+import { useAxios } from './useAxios';
 
 const useAvailability = ({
   personnelId,
@@ -11,6 +12,7 @@ const useAvailability = ({
   getAvailability: (from: string, to: string) => Promise<void>;
   saveAvailability: (dates: AvailabilityRange) => Promise<void>;
 } => {
+  const { AxiosPrivate } = useAxios();
   const [availability, setAvailability] = useState<Availability[]>([]);
 
   const getAvailability = async (from: string, to: string) => {

@@ -8,13 +8,14 @@ import {
 import type { Region } from '@/common/enums/region.enum';
 import type { FunctionType, Location } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
-import { AxiosPrivate } from '@/utils';
 import { useEffect, useState } from 'react';
+import { useAxios } from './useAxios';
 
 export const useGetFilters = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
+  const { AxiosPrivate } = useAxios();
 
   const sortRegion = (reg: Region[]) => {
     return reg.sort((a: Region, b: Region) => a.localeCompare(b));

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AxiosPrivate } from '../utils';
 import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
+import { useAxios } from './useAxios';
 
 const usePersonnel = ({
   personnelId,
@@ -13,6 +13,7 @@ const usePersonnel = ({
   updateExperiences: (experiences: ExperienceInterface[]) => Promise<void>;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
+  const { AxiosPrivate } = useAxios();
 
   useEffect(() => {
     (async () => {

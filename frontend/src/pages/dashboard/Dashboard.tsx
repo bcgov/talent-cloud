@@ -21,6 +21,7 @@ const Dashboard = () => {
     handleCloseMany,
     handleSetDates,
     resetType,
+    loading,
   } = useTable();
   const { role } = useRole();
 
@@ -48,6 +49,7 @@ const Dashboard = () => {
         pageParams={filterValues}
         handlePageParams={handlePageParams}
         showFunctionColumn={showFunctionColumn}
+        loading={loading}
       />
     </div>
   );

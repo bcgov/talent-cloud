@@ -5,9 +5,9 @@ import { Routes } from '@/routes';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { Menu } from '@headlessui/react';
+import { headerLink } from '@/common/links';
 import { logout } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
-import { headerLink } from '@/common/links';
 
 export const Header = ({
   appName,
@@ -47,7 +47,9 @@ export const Header = ({
             </div>
 
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
-              {username && <UserMenu username={username} />}
+              {username && (
+                <UserMenu username={username} logout={() => logout(keycloak)} />
+              )}
             </div>
           </>
         )}
@@ -78,7 +80,7 @@ export const Header = ({
                 <div className="hover:bg-grayBackground  px-8 py-8 w-full  border border-t-1 border-300">
                   <button
                     className="text-normal font-normal"
-                    onClick={() => logout(keycloak, Routes.Home)}
+                    onClick={() => logout(keycloak)}
                   >
                     Logout
                   </button>
