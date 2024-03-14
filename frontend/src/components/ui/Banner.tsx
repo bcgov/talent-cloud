@@ -18,7 +18,12 @@ const InfoBanner = ({
       <InformationCircleIcon className="text-info  h-6 hidden sm:inline-block sm:mr-2" />
       {content}
       {link && (
-        <a className="font-bold inline" href={link.url}>
+        <a
+          className="font-bold inline"
+          href={link.url}
+          target={'_blank'}
+          rel={'noopener noreferrer'}
+        >
           {link.name}
           <ArrowRightIcon className="h-4 w-4 inline mb-1" />
         </a>
@@ -51,7 +56,12 @@ const WarningBanner = ({
         {buttonText}
       </button>
     ) : (
-      <a className="font-bold inline" href={link?.url}>
+      <a
+        className="font-bold inline"
+        href={link?.url}
+        target={'_blank'}
+        rel={'noopener noreferrer'}
+      >
         {link?.name}
       </a>
     )}
@@ -70,7 +80,12 @@ const ErrorBanner = ({
       <InformationCircleIcon className="text-error  h-6 hidden sm:inline-block sm:mr-2" />
       {content}
       {link && (
-        <a className="font-bold inline" href={link.url}>
+        <a
+          className="font-bold inline"
+          href={link.url}
+          target={'_blank'}
+          rel={'noopener noreferrer'}
+        >
           {link.name}
           <ArrowRightIcon className="h-4 w-4 inline mb-1" />
         </a>
@@ -91,7 +106,12 @@ const SuccessBanner = ({
       <InformationCircleIcon className="text-success  h-6 hidden sm:inline-block sm:mr-2" />
       {content}
       {link && (
-        <a className="font-bold inline" href={link.url}>
+        <a
+          className="font-bold inline"
+          href={link.url}
+          target={'_blank'}
+          rel={'noopener noreferrer'}
+        >
           {link.name}
           <ArrowRightIcon className="h-4 w-4 inline mb-1" />
         </a>

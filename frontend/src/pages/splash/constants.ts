@@ -3,7 +3,7 @@ export const main = {
   banner: 'TEAMS applications are now open for 2024. Access intake form ',
   bannerLink: {
     name: 'here ',
-    url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=54fe9462-616c-48e2-aa4f-51f7078a0e81',
+    url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',
   },
   subtitle: 'Temporary Emergency Assignment Management System',
   description: {
