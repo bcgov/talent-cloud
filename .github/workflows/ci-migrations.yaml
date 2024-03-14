@@ -1,9 +1,6 @@
 name: Run Migrations (dev)
 
 on:
-  push: 
-    branches: 
-      - split-migrate-action
   workflow_dispatch:  
 
 env:
