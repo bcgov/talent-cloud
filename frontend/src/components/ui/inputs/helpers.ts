@@ -1,7 +1,6 @@
 export const formatPhone = (value: string) => {
   if (!value) return value;
   let currentValue = value.replace(/[^\d]/g, '');
-  console.log(currentValue.length, currentValue);
   if (currentValue.length > 7) {
     currentValue = currentValue.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   }
