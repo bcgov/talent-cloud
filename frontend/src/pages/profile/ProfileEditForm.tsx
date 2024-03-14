@@ -242,7 +242,7 @@ export const ProfileEditForm = ({
 
           <div className="flex flex-row space-x-6 py-4 justify-end px-8">
             <Button
-              variant={ButtonTypes.SECONDARY}
+              variant={ButtonTypes.PRIMARY}
               type="button"
               onClick={handleOpenEditProfilePopUp}
               text="Cancel"

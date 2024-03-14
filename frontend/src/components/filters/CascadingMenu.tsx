@@ -57,16 +57,18 @@ export const CascadingMenu = ({
           )}
           <MenuButton />
         </MenuHandler>
-        <MenuList className={field.name}>
-          {field.options?.map((option: any) => (
-            <NestedMenu
-              field={field}
-              handleChange={handleChange}
-              nestedField={nestedField}
-              option={option}
-              key={option}
-            />
-          ))}
+        <MenuList>
+          <div className="w-full">
+            {field.options?.map((option: any) => (
+              <NestedMenu
+                field={field}
+                handleChange={handleChange}
+                nestedField={nestedField}
+                option={option}
+                key={option}
+              />
+            ))}
+          </div>
         </MenuList>
       </Menu>
     </>

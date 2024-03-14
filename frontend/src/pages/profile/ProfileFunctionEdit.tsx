@@ -100,7 +100,7 @@ export const ProfileFunctionEdit = ({
       </div>
       <div className="border-t-4 flex flex-row space-x-6 py-4 justify-end px-8">
         <Button
-          variant={ButtonTypes.SECONDARY}
+          variant={ButtonTypes.PRIMARY}
           type="button"
           onClick={handleOpenEditFunctionsPopUp}
           text="Cancel"

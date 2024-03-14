@@ -5,6 +5,7 @@ export type InputProps = {
   type?: string;
   disabled?: boolean;
   required?: boolean;
+  placeholder?: string;
   error?: FormikErrors<any> | string;
 };
 

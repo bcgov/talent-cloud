@@ -115,7 +115,23 @@ export const Filters = ({
         </div>
       </div>
       <div className="text-center  md:col-span-1 flex  flex-nowrap self-end pb-1">
-        <Button variant={ButtonTypes.SECONDARY} text="Clear All" onClick={onClear} />
+        <Button
+          variant={ButtonTypes.SECONDARY}
+          text="Clear All"
+          onClick={onClear}
+          disabled={
+            [
+              filterValues.name,
+              filterValues.experience,
+              filterValues.function,
+              filterValues.availabilityType,
+              filterValues.availabilityDates.from,
+              filterValues.availabilityDates.to,
+            ].filter((itm) => itm).length === 0 &&
+            filterValues?.region?.length === 0 &&
+            filterValues?.location?.length === 0
+          }
+        />
       </div>
     </div>
   );

@@ -45,11 +45,11 @@ export const MultiSelect = ({
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <Checkbox
                   onChange={onChange}
-                  checked={values?.includes(option)}
+                  checked={values?.includes(option.value)}
                   name={field.name}
-                  value={option}
+                  value={option.value}
                 />
-                {option}
+                {option.label}
               </label>
             </MenuItem>
           ))}
