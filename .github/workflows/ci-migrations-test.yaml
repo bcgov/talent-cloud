@@ -1,4 +1,4 @@
-name: run_migrations
+name: Run Migrations (Test)
 
 on:
   workflow_dispatch:  
@@ -11,12 +11,12 @@ env:
 
 jobs:
   run_migrations:
-    name: Migration
-    environment: dev
+    name: Run Migrations (Test)
+    environment: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      OS_NAMESPACE_SUFFIX: dev
+      OS_NAMESPACE_SUFFIX: test
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
