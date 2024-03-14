@@ -5,6 +5,7 @@ import type { Personnel } from '../dashboard';
 import { Role } from '@/common';
 import { useRole } from '@/hooks';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { classes } from '@/components/filters/classes';
 
 const ProfileNotes = ({
   personnel,
@@ -54,14 +55,18 @@ const ProfileNotes = ({
                   <div className="py-2">
                     <div className="flex flex-row items-center space-x-2">
                       <h5>Notes</h5>
-                      <button onClick={handleOpenEditNotes}>
+                      <button
+                        aria-label="open logistics notes"
+                        onClick={handleOpenEditNotes}
+                      >
                         <PencilSquareIcon className="h-5 w-5" />
                       </button>
                     </div>
                     <textarea
                       disabled
+                      placeholder="Please add any additional notes or comments."
                       value={personnel.logisticsNotes}
-                      className="w-full resize-auto border-none outline-none min-h-[300px]"
+                      className={classes.menu.textArea}
                     />
                   </div>
                 </div>
@@ -71,12 +76,16 @@ const ProfileNotes = ({
                     <div className="py-2">
                       <div className="flex flex-row items-center space-x-2">
                         <h5>Coordinator Notes</h5>
-                        <button onClick={handleOpenEditCoordinatorNotes}>
+                        <button
+                          aria-label="open coordinator notes"
+                          onClick={handleOpenEditCoordinatorNotes}
+                        >
                           <PencilSquareIcon className="h-5 w-5" />
                         </button>
                       </div>
                       <textarea
-                        className="w-full resize-none border-none outline-none min-h-[300px]"
+                        placeholder="Please add any additional notes or comments."
+                        className={classes.menu.textArea}
                         disabled
                         value={personnel.coordinatorNotes}
                       />

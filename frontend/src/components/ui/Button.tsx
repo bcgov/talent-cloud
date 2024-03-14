@@ -3,10 +3,7 @@ import { ButtonTypes } from '@/common';
 import { button } from './classes';
 
 export const Button = ({ type, variant, text, onClick, disabled }: ButtonProps) => {
-  const buttonClass = (disabled?: boolean) => {
-    if (disabled) {
-      return button.disabledButton;
-    }
+  const buttonClass = () => {
     if (variant === ButtonTypes.PRIMARY) {
       return button.primaryButton;
     }
@@ -16,6 +13,9 @@ export const Button = ({ type, variant, text, onClick, disabled }: ButtonProps) 
     if (variant === ButtonTypes.TERTIARY) {
       return button.tertiaryButton;
     }
+    if (variant === ButtonTypes.SECONDARY_LIGHT) {
+      return button.secondaryLight;
+    }
   };
 
   return (
@@ -24,7 +24,8 @@ export const Button = ({ type, variant, text, onClick, disabled }: ButtonProps) 
       onClick={onClick}
       disabled={disabled}
       aria-disabled={disabled}
-      className={buttonClass(disabled)}
+      aria-label={text}
+      className={buttonClass()}
     >
       {text}
     </button>

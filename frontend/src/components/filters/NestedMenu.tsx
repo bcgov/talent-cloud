@@ -27,9 +27,9 @@ export const NestedMenu = ({
       offset={15}
       dismiss={{ itemPress: false }}
     >
-      <MenuHandler>
-        <MenuItem placeholder={option}>
-          <div className="flex items-center justify-between">
+      <MenuHandler className="w-full">
+        <MenuItem placeholder={option} className="w-full">
+          <div className="flex items-center justify-between w-full space-x-24">
             <span className={classes.menu.listItem}>{option}</span>
             <ChevronRightIcon
               strokeWidth={2.5}

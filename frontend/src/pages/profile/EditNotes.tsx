@@ -33,7 +33,7 @@ export const EditNotes = ({
 
   const notesField = {
     name: name,
-    placeholder: 'Enter notes here',
+    placeholder: 'Please enter any additional notes or comments.',
     required: false,
     disabled: false,
   };
@@ -62,7 +62,7 @@ export const EditNotes = ({
 
           <div className="flex flex-row space-x-6 py-4 justify-end px-8 w-full">
             <Button
-              variant={ButtonTypes.SECONDARY}
+              variant={ButtonTypes.PRIMARY}
               type="button"
               onClick={handleClose}
               text="Cancel"

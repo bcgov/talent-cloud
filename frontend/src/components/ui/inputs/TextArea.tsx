@@ -8,6 +8,7 @@ export const TextArea = ({
   required,
   error,
   disabled,
+  placeholder,
   ...props
 }: InputProps) => {
   const [field] = useField(props as any as FieldInputProps<string>);
@@ -18,6 +19,7 @@ export const TextArea = ({
       {required && <span className="text-error">*</span>}
       <textarea
         {...field}
+        placeholder={placeholder ?? ''}
         disabled={disabled}
         className={error ? classes.menu.textAreaError : classes.menu.textArea}
       />

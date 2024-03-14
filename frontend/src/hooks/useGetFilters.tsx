@@ -3,6 +3,7 @@ import {
   AvailabilityTypeName,
   Experience,
   ExperienceName,
+  RegionName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
 import type { FunctionType, Location } from '@/pages/dashboard';
@@ -40,7 +41,7 @@ export const useGetFilters = () => {
 
     region: {
       name: DashboardFilterNames.REGION,
-      options: regions,
+      options: regions.map((itm) => ({ label: RegionName[itm], value: itm })),
     },
     location: {
       name: DashboardFilterNames.LOCATION,
