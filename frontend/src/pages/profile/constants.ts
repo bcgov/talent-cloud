@@ -1,6 +1,7 @@
 import { Ministry, UnionMembership } from '@/common';
 import * as Yup from 'yup';
-
+const phoneNumber = (value: any) =>
+  value.toString().replace(/[^\d]/g, '').length === 10;
 export const EditProfileValidationSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(2, 'Min length 2 characters.')
@@ -34,15 +35,22 @@ export const EditProfileValidationSchema = Yup.object().shape({
   }),
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
-  primaryPhone: Yup.string()
-    .length(14, 'Invalid phone number format. Please enter ten digits.')
-    .required('This field is required.'),
-  secondaryPhone: Yup.string()
-    .optional()
-    .length(14, 'Invalid phone number format. Please enter ten digits.'),
-  workPhone: Yup.string()
-    .optional()
-    .length(14, 'Invalid phone number format. Please enter ten digits.'),
+  primaryPhone: Yup.string().test(
+    'phone number',
+    'Invalid phone number format. Please enter ten digits.',
+    phoneNumber,
+  ),
+
+  secondaryPhone: Yup.string().test(
+    'phone number',
+    'Invalid phone number format. Please enter ten digits.',
+    phoneNumber,
+  ),
+  workPhone: Yup.string().test(
+    'phone number',
+    'Invalid phone number format. Please enter ten digits.',
+    phoneNumber,
+  ),
   supervisorFirstName: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
