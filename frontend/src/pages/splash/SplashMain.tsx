@@ -4,7 +4,6 @@ import { Button } from '@/components';
 import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router';
 
 export const SplashMain = ({ content }: { content: any }) => {
@@ -60,12 +59,6 @@ export const SplashMain = ({ content }: { content: any }) => {
             text={'Log In'}
             onClick={() => nav(Routes.Login)}
           />
-          <a className="text-white flex flex-row nowrap" href="/">
-            Don’t have an IDIR{' '}
-            <span>
-              <ChevronRightIcon className="h-6 w-6" />
-            </span>
-          </a>
         </div>
       </div>
     </div>
