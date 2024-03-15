@@ -9,7 +9,6 @@ name: OpenShift Build and Deploy to Dev
 on:
   push:
     branches:
-      - deploy
       - main
     tags:
       - dev
@@ -49,7 +48,6 @@ jobs:
     name: OpenShift Build & Tag Backend for Deployment
     environment: dev
     runs-on: ubuntu-latest
-    concurrency: build-frontend
     timeout-minutes: 20
     env:
       BUILD_REF: ${{ github.ref }}

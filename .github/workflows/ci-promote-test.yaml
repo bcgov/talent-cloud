@@ -5,6 +5,8 @@ name: OpenShift Deploy/Promotion to Test
 
 on:
   push:
+    branches:
+      - deploy
     tags:
       - test
 
