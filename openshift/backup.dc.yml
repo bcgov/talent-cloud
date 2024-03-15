@@ -183,12 +183,12 @@ objects:
                 - name: DATABASE_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${DATABASE_DEPLOYMENT_NAME}
+                      name: ${DATABASE_DEPLOYMENT_NAME}-creds
                       key: ${DATABASE_USER_KEY_NAME}
                 - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${DATABASE_DEPLOYMENT_NAME}
+                      name: ${DATABASE_DEPLOYMENT_NAME}-creds
                       key: ${DATABASE_PASSWORD_KEY_NAME}
                 - name: ENVIRONMENT_FRIENDLY_NAME
                   value: ${ENVIRONMENT_FRIENDLY_NAME}

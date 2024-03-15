@@ -145,8 +145,8 @@ objects:
                   cpu: 75m
                   memory: 256Mi
                 requests:
-                  cpu: 25m
-                  memory: 64Mi
+                  cpu: 35m
+                  memory: 128Mi
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               imagePullPolicy: Always
