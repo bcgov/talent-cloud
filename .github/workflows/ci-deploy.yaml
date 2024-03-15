@@ -9,6 +9,7 @@ name: OpenShift Build and Deploy to Dev
 on:
   push:
     branches:
+      - deploy
       - main
     tags:
       - dev
@@ -59,48 +60,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup ENV file
         run: cp .env.example .env
-      - uses: dorny/paths-filter@v2
-        id: backend_changes
-        with:
-          filters: |
-            backend:
-              - 'backend/**'
-          base: ${{ github.ref}}
       - name: Build & Deploy Backend
-        if: steps.backend_changes.outputs.backend == 'true'
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           make deployment-build-server
-          make deployment-tag-to-deploy-server  
-  build-frontend:
-    name: OpenShift Build & Tag Frontend for Deployment
-    environment: dev
-    runs-on: ubuntu-latest
-    concurrency: build-backend
-    timeout-minutes: 20
-    env:
-      BUILD_REF: ${{ github.ref }}
-      OS_NAMESPACE_SUFFIX: dev
-      AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup ENV file
-        run: cp .env.example .env
-      - uses: dorny/paths-filter@v2
-        id: frontend_changes
-        with:
-          filters: |
-            frontend:
-              - 'frontend/**'
-          base: ${{ github.ref}}
-      - name: Build & Deploy Frontend
-        env:
-          OS_NAMESPACE_SUFFIX: dev
-        if: steps.frontend_changes.outputs.frontend == 'true'
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           make deployment-build-client
+          make deployment-tag-to-deploy-server  
           make deployment-tag-to-deploy-client
