@@ -5,8 +5,6 @@ name: OpenShift Deploy/Promotion to Test
 
 on:
   push:
-    branches:
-      - deploy
     tags:
       - test
 
@@ -81,5 +79,4 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make deployment-tag-to-deploy-server
-          make deployment-tag-to-deploy-client
+          make deployment-tag-to-deploy

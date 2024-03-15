@@ -1,15 +1,13 @@
 # Build and Deploy to dev env.
 # Trigger with tag dev
 # Connected with repo environment 'dev'
-# Build and Deploy to dev env.
-# Trigger with tag dev
-# Connected with repo environment 'dev'
 name: OpenShift Build and Deploy to Dev
 
 on:
   push:
     branches:
       - main
+      - deploy
     tags:
       - dev
 
@@ -43,11 +41,12 @@ jobs:
         run: |
           oc login --token="$AUTH_TOKEN" --server="$CLUSTER"
           cd "$GITHUB_WORKSPACE"
-          make deployment-update  
-  build-backend:
-    name: OpenShift Build & Tag Backend for Deployment
+          make deployment-update
+  build:
+    name: OpenShift Build & Tag for Deployment
     environment: dev
     runs-on: ubuntu-latest
+    concurrency: ci-build
     timeout-minutes: 20
     env:
       BUILD_REF: ${{ github.ref }}
@@ -55,14 +54,12 @@ jobs:
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
       - name: Setup ENV file
         run: cp .env.example .env
-      - name: Build & Deploy Backend
+      - name: Build & Deploy
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
-          make deployment-build-server
-          make deployment-build-client
-          make deployment-tag-to-deploy-server  
-          make deployment-tag-to-deploy-client
+          make deployment-build
+          make deployment-tag-to-deploy

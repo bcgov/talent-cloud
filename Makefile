@@ -147,33 +147,25 @@ deployment-update:
 	@oc -n $(TARGET_NAMESPACE) process -f openshift/server.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f -
 	@oc -n $(TARGET_NAMESPACE) process -f openshift/client.dc.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CONFIG_VERSION=$(COMMIT_SHA) | oc apply -n $(TARGET_NAMESPACE) -f -
 
-build-config-update-server:
+build-config-update:
 	@echo "Processiong and applying Server Building config in $(TOOLS_NAMESPACE) namespace"
 	@oc -n $(TOOLS_NAMESPACE) process -f openshift/server.bc.yml -p REF=$(BUILD_REF) -p APP_NAME=$(APP_NAME) | oc apply -n $(TOOLS_NAMESPACE) -f -
-
-build-config-update-client:
 	@echo "Processiong and applying Client Building config in $(TOOLS_NAMESPACE) namespace"
 	@oc -n $(TOOLS_NAMESPACE) process -f openshift/client.bc.yml -p REF=$(BUILD_REF) -p APP_NAME=$(APP_NAME) | oc apply -n $(TOOLS_NAMESPACE) -f -
 
-deployment-build-server: build-config-update-server
+deployment-build-server: build-config-update
 	@echo "Building server image in $(TOOLS_NAMESPACE) namespace"
 	@oc cancel-build bc/$(APP_NAME)-server -n $(TOOLS_NAMESPACE)
 	@oc start-build $(APP_NAME)-server -n $(TOOLS_NAMESPACE) --wait --follow=true --build-arg VERSION="$(LAST_COMMIT)"
 	@oc tag $(APP_NAME)-server:latest $(APP_NAME)-server:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE)
-	
-
-deployment-build-client: build-config-update-client
 	@echo "Building Client image in $(TOOLS_NAMESPACE) namespace"
 	@oc cancel-build bc/$(APP_NAME)-client -n $(TOOLS_NAMESPACE)
 	@oc start-build $(APP_NAME)-client -n $(TOOLS_NAMESPACE) --wait --follow=true --build-arg VERSION="$(LAST_COMMIT)"
-	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-client:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE)
+	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-client:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE
 
-deployment-tag-to-deploy-server:
+deployment-tag-to-deploy:
 	@oc tag $(APP_NAME)-server:$(COMMIT_SHA) $(APP_NAME)-server:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
-	
-
-deployment-tag-to-deploy-client:
-	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-client:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
+	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-client:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)	
 
 ### Tagging
 tag-dev:
