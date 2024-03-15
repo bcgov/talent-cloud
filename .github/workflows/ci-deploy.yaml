@@ -9,7 +9,7 @@ name: OpenShift Build and Deploy to Dev
 on:
   push:
     branches:
-      - main
+      - FIX-deployment
     tags:
       - dev
 
@@ -62,12 +62,12 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: backend_changes
         with:
-          filters: |
-            backend:
-              - 'backend/**'
+          # filters: |
+          #   backend:
+          #     - 'backend/**'
           base: ${{ github.ref}}
       - name: Build & Deploy Backend
-        if: steps.backend_changes.outputs.backend == 'true'
+        # if: steps.backend_changes.outputs.backend == 'true'
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
@@ -91,14 +91,14 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: frontend_changes
         with:
-          filters: |
-            frontend:
-              - 'frontend/**'
+          # filters: |
+          #   frontend:
+          #     - 'frontend/**'
           base: ${{ github.ref}}
       - name: Build & Deploy Frontend
         env:
           OS_NAMESPACE_SUFFIX: dev
-        if: steps.frontend_changes.outputs.frontend == 'true'
+        # if: steps.frontend_changes.outputs.frontend == 'true'
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
