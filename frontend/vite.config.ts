@@ -7,19 +7,11 @@ export default defineConfig({
   esbuild: {
     jsxInject: `import React from 'react'`,
   },
-  assetsInclude: ['public/assets/images/*'],
+  assetsInclude: ['public/assets/*'],
   plugins: [
     react(),
     VitePWA({
-      includeAssets: [
-        'public/assets/favicon.ico',
-        'robots.txt',
-        'public/assets/images/*.png',
-        'public/assets/images/*.svg',
-        'public/assets/fonts/*.woff2',
-        'public/assets/fonts/*.woff',
-        'public/assets/fonts/*.ttf',
-      ],
+      includeAssets: ['public/assets/*'],
       workbox: {
         globPatterns: ['**/*.{js,css,html}'],
       },
@@ -54,13 +46,11 @@ export default defineConfig({
       'date-fns',
       'dayjs',
       'formik',
-
       'react',
       'react-day-picker',
       'react-dom',
       'react-router',
       'react-router-dom',
-
       'uuid',
       'yup',
     ],
