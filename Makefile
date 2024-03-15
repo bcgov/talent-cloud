@@ -109,7 +109,7 @@ db-prep:
 #	@oc process -f openshift/patroni.bc.yml | oc create -n ${TOOLS_NAMESPACE} -f -
 
 db-create:
-	@oc process -f openshift/patroni.bc.yml | oc apply -n $(TOOLS_NAMESPACE) -f -
+	@oc process -f openshift/patroni.dc.yml -p APP_NAME=tcloud | oc apply -n $(TARGET_NAMESPACE) -f -
 
 db-backup-build:
 	@oc process -f openshift/backup.dc.yml -p APP_NAME=tcloud-backup | oc apply -n $(TARGET_NAMESPACE) -f -
@@ -184,10 +184,9 @@ tag-test:
 	@git tag -fa test -m "Deploy $(git rev-parse --abbrev-ref HEAD) to TEST env"
 	@git push --force origin refs/tags/test:refs/tags/test
 
-
-#tag-prod:
-#	@git tag -fa test -m "Deploy $(git rev-parse --abbrev-ref HEAD) to TEST env"
-#	@git push --force origin refs/tags/test:refs/tags/test
+tag-prod:
+	@git tag -fa prod -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
+	@git push --force origin refs/tags/test:refs/tags/prod
 
 build-local-prod:
 	@docker-compose down
