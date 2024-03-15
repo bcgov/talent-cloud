@@ -153,7 +153,7 @@ build-config-update:
 	@echo "Processiong and applying Client Building config in $(TOOLS_NAMESPACE) namespace"
 	@oc -n $(TOOLS_NAMESPACE) process -f openshift/client.bc.yml -p REF=$(BUILD_REF) -p APP_NAME=$(APP_NAME) | oc apply -n $(TOOLS_NAMESPACE) -f -
 
-deployment-build-server: build-config-update
+deployment-build: build-config-update
 	@echo "Building server image in $(TOOLS_NAMESPACE) namespace"
 	@oc cancel-build bc/$(APP_NAME)-server -n $(TOOLS_NAMESPACE)
 	@oc start-build $(APP_NAME)-server -n $(TOOLS_NAMESPACE) --wait --follow=true --build-arg VERSION="$(LAST_COMMIT)"
