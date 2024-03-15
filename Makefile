@@ -161,7 +161,7 @@ deployment-build: build-config-update
 	@echo "Building Client image in $(TOOLS_NAMESPACE) namespace"
 	@oc cancel-build bc/$(APP_NAME)-client -n $(TOOLS_NAMESPACE)
 	@oc start-build $(APP_NAME)-client -n $(TOOLS_NAMESPACE) --wait --follow=true --build-arg VERSION="$(LAST_COMMIT)"
-	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-client:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE
+	@oc tag $(APP_NAME)-client:latest $(APP_NAME)-client:$(COMMIT_SHA) -n $(TOOLS_NAMESPACE)
 
 deployment-tag-to-deploy:
 	@oc tag $(APP_NAME)-server:$(COMMIT_SHA) $(APP_NAME)-server:$(OS_NAMESPACE_SUFFIX) -n $(TOOLS_NAMESPACE)
