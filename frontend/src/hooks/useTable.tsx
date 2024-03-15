@@ -2,7 +2,6 @@ import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
-import { AxiosPrivate } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { truncatePageRange } from './utils';
 import type { DashboardFilters, Personnel } from '@/pages/dashboard';
@@ -12,9 +11,13 @@ import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 
+import { useAxios } from './useAxios';
+
 export const useTable = () => {
   const { handleError } = useError();
+  const { AxiosPrivate } = useAxios();
 
+  const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
     pageRange: [],
@@ -73,6 +76,8 @@ export const useTable = () => {
         });
       } catch (e) {
         handleError(e);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [debouncedValue]);
@@ -184,6 +189,7 @@ export const useTable = () => {
     handleCloseMany,
     handleSetDates,
     resetType,
+    loading,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,

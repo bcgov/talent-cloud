@@ -4,10 +4,14 @@ import { Button } from '@/components';
 import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
-import { useNavigate } from 'react-router';
+import { createCustomLoginUrl } from '@/utils/keycloak';
+import { useKeycloak } from '@react-keycloak/web';
 
 export const SplashMain = ({ content }: { content: any }) => {
-  const nav = useNavigate();
+  const { keycloak } = useKeycloak();
+  const login = () => {
+    window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
+  };
 
   return (
     <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-16 lg:px-0 lg:pr-0 2xl:px-64">
@@ -38,9 +42,9 @@ export const SplashMain = ({ content }: { content: any }) => {
               Use your IDIR to access the TEAMS member database.
             </p>
             <Button
-              variant={ButtonTypes.PRIMARY}
+              variant={ButtonTypes.SECONDARY_LIGHT}
               text={'Log In'}
-              onClick={() => nav(Routes.Login)}
+              onClick={login}
             />
           </div>
         </div>
@@ -57,7 +61,7 @@ export const SplashMain = ({ content }: { content: any }) => {
           <Button
             variant={ButtonTypes.SECONDARY_LIGHT}
             text={'Log In'}
-            onClick={() => nav(Routes.Login)}
+            onClick={login}
           />
         </div>
       </div>

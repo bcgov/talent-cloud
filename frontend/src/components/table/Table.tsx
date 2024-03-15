@@ -2,6 +2,7 @@ import { DashboardColumns } from '@/pages/dashboard';
 import type { Column, PageParams, TableData } from '.';
 import { TableFooter, TableBody, TableHeader } from '.';
 import { Toggle } from '../toggle/Toggle';
+import { Loading } from '../ui';
 
 export const Table = ({
   title,
@@ -12,6 +13,7 @@ export const Table = ({
   showToggle,
   handlePageParams,
   showFunctionColumn,
+  loading,
 }: {
   title: string;
   subtitle: string;
@@ -21,6 +23,7 @@ export const Table = ({
   showToggle: boolean;
   handlePageParams: (params: Partial<PageParams>) => void;
   showFunctionColumn: boolean;
+  loading: boolean;
 }) => {
   return (
     <div className="shadow-lg rounded-md w-full bg-white border border-gray  overflow-x-scroll">
@@ -51,18 +54,22 @@ export const Table = ({
               : columns.filter((itm) => itm.name !== DashboardColumns.FUNCTION)
           }
         />
-        <TableBody
-          rows={
-            showFunctionColumn
-              ? tableData.rows
-              : tableData.rows.map((itm) => ({
-                  ...itm,
-                  cells: itm.cells.filter(
-                    (cell) => cell.columnName !== DashboardColumns.FUNCTION,
-                  ),
-                }))
-          }
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <TableBody
+            rows={
+              showFunctionColumn
+                ? tableData.rows
+                : tableData.rows.map((itm) => ({
+                    ...itm,
+                    cells: itm.cells.filter(
+                      (cell) => cell.columnName !== DashboardColumns.FUNCTION,
+                    ),
+                  }))
+            }
+          />
+        )}
       </table>
       <TableFooter
         pageParams={pageParams}

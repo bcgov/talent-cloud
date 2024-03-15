@@ -9,7 +9,7 @@ import {
   DialogBody,
 } from '@material-tailwind/react';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
 import useFunctions from '@/hooks/useFunctions';
 import useAvailability from '@/hooks/useAvailability';
@@ -27,6 +27,7 @@ import { EditNotes } from './EditNotes';
 import { DialogUI } from '@/components';
 import { ReviewApplicant } from '../ReviewApplicant';
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
+import { Routes } from '@/routes';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -126,14 +127,14 @@ const Profile = () => {
         placeholder={'Breadcrumbs'}
         className="px-12 bg-grayBackground max-w-full"
       >
-        <a href="/dashboard" className="text-linkBlue">
+        <Link to={Routes.Dashboard} className="text-linkBlue">
           <div className="flex flex-row items-center">
             <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />
             <span className="pl-2 underline decoration-solid">
               Personnel (Dashboard)
             </span>
           </div>
-        </a>
+        </Link>
         {personnel && (
           <span className="font-bold text-black">
             {personnel.firstName} {personnel.lastName}

@@ -1,6 +1,5 @@
 import type { Role } from '@/common';
-import { getUserInfo } from '@/services';
-import { useKeycloak } from '@react-keycloak/web';
+import { useAxios } from '@/hooks/useAxios';
 
 import type { ReactElement } from 'react';
 import { createContext, useEffect, useMemo, useState } from 'react';
@@ -13,22 +12,21 @@ export const RoleContext = createContext<{
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
-
-  const { keycloak } = useKeycloak();
+  const { AxiosPrivate } = useAxios();
 
   useEffect(() => {
     (async () => {
       try {
         const {
           data: { username, role },
-        } = await getUserInfo();
+        } = await AxiosPrivate.get('/auth/userInfo');
         setUsername(username);
         setRole(role as Role);
       } catch (e: unknown) {
         console.log(e);
       }
     })();
-  }, [keycloak.authenticated]);
+  }, []);
 
   const value = useMemo(
     () => ({

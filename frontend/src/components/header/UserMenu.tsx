@@ -1,22 +1,20 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-
-import { logout } from '@/utils/keycloak';
-import { Routes } from '@/routes';
-import { useKeycloak } from '@react-keycloak/web';
 import { UserIcon } from '../images';
 
-export const UserMenu = ({ username }: { username?: string }) => {
-  const { keycloak } = useKeycloak();
-
+export const UserMenu = ({
+  username,
+  logout,
+}: {
+  username?: string;
+  logout: () => void;
+}) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
-          {username && <h6 className="font-bold">{username}</h6>}
-          <UserIcon />
-        </Menu.Button>
-      </div>
+      <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
+        {username && <h6 className="font-bold">{username}</h6>}
+        <UserIcon />
+      </Menu.Button>
 
       <Transition
         as={Fragment}
@@ -30,10 +28,7 @@ export const UserMenu = ({ username }: { username?: string }) => {
         <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
-              <button
-                className="py-2 px-4 text-sm"
-                onClick={() => logout(keycloak, Routes.Home)}
-              >
+              <button onClick={logout} className="py-2 px-4 text-sm">
                 Logout
               </button>
             </Menu.Item>
