@@ -186,7 +186,7 @@ tag-test:
 
 tag-prod:
 	@git tag -fa prod -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
-	@git push --force origin refs/tags/test:refs/tags/prod
+	@git push --force origin refs/tags/prod:refs/tags/prod
 
 build-local-prod:
 	@docker-compose down
