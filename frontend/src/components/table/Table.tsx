@@ -54,9 +54,7 @@ export const Table = ({
               : columns.filter((itm) => itm.name !== DashboardColumns.FUNCTION)
           }
         />
-        {loading ? (
-          <Loading />
-        ) : (
+        {!loading && (
           <TableBody
             rows={
               showFunctionColumn
@@ -71,6 +69,11 @@ export const Table = ({
           />
         )}
       </table>
+      {loading && (
+        <div className="w-full py-64">
+          <Loading height="[1/4]" />
+        </div>
+      )}
       <TableFooter
         pageParams={pageParams}
         tableData={tableData}
