@@ -68,4 +68,11 @@ export class AppController {
       locations: await this.locationService.getRegionsAndLocations(),
     };
   }
+  @Get('/formId')
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
+  async getFormId() {
+    return {
+        formId: process.env.CHEFS_FORM_ID
+    };
+  }
 }

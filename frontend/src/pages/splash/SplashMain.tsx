@@ -4,14 +4,31 @@ import { Button } from '@/components';
 import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
+import { AxiosPublic } from '@/utils';
 import { createCustomLoginUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
+import { useEffect, useState } from 'react';
 
 export const SplashMain = ({ content }: { content: any }) => {
   const { keycloak } = useKeycloak();
   const login = () => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
   };
+
+  const [formId, setFormId] = useState<string>('');
+  console.log(formId);
+  useEffect(() => {
+    (async () => {
+      try {
+        const {
+          data: { formId },
+        } = await AxiosPublic.get('/formId');
+        setFormId(formId);
+      } catch (e: any) {
+        throw new Error(e);
+      }
+    })();
+  }, []);
 
   return (
     <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-16 lg:px-0 lg:pr-0 2xl:px-64">
@@ -21,7 +38,9 @@ export const SplashMain = ({ content }: { content: any }) => {
           content={content.banner}
           link={{
             name: 'here ',
-            url: content.bannerLink.url,
+            url: formId
+              ? `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`
+              : 'https://submit.digital.gov.bc.ca/app/form',
           }}
         />
 

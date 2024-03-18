@@ -19,7 +19,7 @@ const InfoBanner = ({
       {content}
       {link && (
         <a
-          className="font-bold inline"
+          className="font-bold inline cursor-pointer"
           href={link.url}
           target={'_blank'}
           rel={'noopener noreferrer'}
