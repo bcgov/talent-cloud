@@ -4,7 +4,7 @@ export const SCHEDULER_AVAILABLE_START_CLASS =
   'h-20 border-l-4 border-calGreenTwo bg-calGreen hover:bg-calGreenHover cursor-pointer text-sm z-10 pl-2';
 export const SCHEDULER_AVAILABLE_CLASS =
   'h-20 border-l border-cyan-950 bg-calGreen hover:bg-calGreenHover cursor-pointer';
-export const SCHEDULER_AVAILABLE_TEXT_CLASS = `text-nowrap font-bold text-calGreenTwo text-xs pointer-events-none`;
+export const SCHEDULER_AVAILABLE_TEXT_CLASS = `text-nowrap font-bold text-calGreenText text-xs pointer-events-none`;
 export const SCHEDULER_DEPLOYED_START_CLASS =
   'h-20 border-l-4 border-calBlueTwo bg-calBlue hover:bg-calBlueHover cursor-pointer text-sm z-10 pl-2';
 export const SCHEDULER_DEPLOYED_CLASS =

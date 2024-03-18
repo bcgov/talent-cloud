@@ -15,14 +15,14 @@ export const Search = ({
     <div className="relative w-full">
       <label>
         Search by Name
-        <div className="absolute w-full">
-          <MagnifyingGlassIcon className="h-6 w-6 text-icon absolute inset-y-4 right-4" />
+        <div className="absolute w-full text-defaultGray placeholder:text-defaultGray">
+          <MagnifyingGlassIcon className="h-6 w-6 text-defaultGray absolute inset-y-4 right-4" />
           <input
             autoComplete="name"
             value={value}
+            type="text"
             className={classes.menu.container}
             name={field.name}
-            type="text"
             placeholder={'Search for a member by name'}
             onChange={handleSearchInput}
           />

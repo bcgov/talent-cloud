@@ -84,6 +84,7 @@ const ProfileFunctions = ({
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Function & Experience Levels</span>
               <button
+                aria-label="edit functions"
                 onClick={openEditFunctionsPopUp}
                 className="z-20 flex text-primaryBlue flex-row items-center"
               >

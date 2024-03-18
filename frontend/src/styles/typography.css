@@ -9,10 +9,9 @@ h1 {
 }
 h2 {
   @apply text-dark;
-  font-size: 31.10px;
+  font-size: 21.6px;
   font-weight: 400;
-  line-height: 49.8px;
-
+  line-height: 34.6px;
 }
 h3 {
   @apply text-dark;
@@ -22,10 +21,9 @@ h3 {
 }
 
 h4 {
-  @apply text-dark;
-  font-size: 21.6px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 34.6px;
+  line-height: 25.6px;
 }
 p {
   @apply text-dark;
@@ -44,14 +42,17 @@ label {
 }
 
 .subtext {
-  @apply text-textGray;
+  @apply text-defaultGray;
   font-size: 14px;
   font-weight: 400;
   line-height: 19.07px; 
 }
 
+input::placeholder {
+  @apply text-defaultGray font-normal text-sm;
 
+}
 
-::placeholder {
-  color: "#828282"
+input::-ms-input-placeholder { /* Edge 12 -18 */
+  @apply text-defaultGray font-normal text-sm;
 }

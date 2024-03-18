@@ -12,7 +12,7 @@ export const UserMenu = ({
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
-        {username && <h6 className="font-bold">{username}</h6>}
+        {username && <p className="font-bold">{username}</p>}
         <UserIcon />
       </Menu.Button>
 
@@ -28,7 +28,11 @@ export const UserMenu = ({
         <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
-              <button onClick={logout} className="py-2 px-4 text-sm">
+              <button
+                aria-label="logout"
+                onClick={logout}
+                className="py-2 px-4 text-sm"
+              >
                 Logout
               </button>
             </Menu.Item>

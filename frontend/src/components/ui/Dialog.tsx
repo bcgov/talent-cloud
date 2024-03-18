@@ -36,6 +36,7 @@ export const DialogUI = ({
             <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-2">
               <h4 className="font-bold">{title}</h4>
               <button
+                aria-label="close"
                 className="text-sm text-primaryBlue underline font-normal"
                 onClick={handleOpen}
               >

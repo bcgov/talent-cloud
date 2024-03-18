@@ -50,6 +50,7 @@ const WarningBanner = ({
     </span>
     {onClick ? (
       <button
+        aria-label="banner button"
         className="bg-warningBannerDark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm"
         onClick={onClick}
       >

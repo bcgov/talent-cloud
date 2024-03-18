@@ -37,6 +37,7 @@ export const MonthSelector = (props: SelectorProps) => (
           {months.map((itm) => (
             <Menu.Item key={itm.value}>
               <button
+                aria-label="month selecter"
                 onClick={() =>
                   props.goToMonth(
                     new Date(props.displayMonth.getFullYear(), itm.value, 1),

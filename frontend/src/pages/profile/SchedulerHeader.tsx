@@ -2,7 +2,7 @@ const SchedulerHeader = () => {
   return (
     <div>
       <div className="flex flex-row gap-24 py-6">
-        <span className="text-sm text-calGreenTwo">A = Available</span>
+        <span className="text-sm text-calGreenText">A = Available</span>
         <span className="text-sm text-calRedTwo">U = Unavailable</span>
         <span className="text-sm text-calBlueTwo">D = Deployed</span>
       </div>

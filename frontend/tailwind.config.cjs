@@ -34,13 +34,13 @@ module.exports = withMT({
       },
       colors: {
         errorRed: '#D8292F',
+        
         transparent: 'transparent',
         primaryBlue: '#003366',
         primaryYellow: '#fcba19',
         activeGreen: '#d6ebd0',
         inputGray: '#606060',
         disabledGray: '#CFCFCF',
-        textGray: '#696a6a',
         linkBlue: '#1a5a96',
         // semantic colours
         error: '#A12622',
@@ -57,6 +57,7 @@ module.exports = withMT({
         calGreen: '#eef7eb',
         calGreenTwo: '#84967d',
         calGreenHover: '#dff0d9',
+        calGreenText: "#2D4821",
         calRed: '#f9eeef',
         calRedTwo: '#a6312c',
         calRedHover: '#f2dbdd',
@@ -87,12 +88,12 @@ module.exports = withMT({
         yellow: '#f9f2c6',
       },
       textColor: {
-        placeholder: "#828282",
+        defaultGray: "#606060",
         info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
-        dark: '#313132',
-        darkGrey: "#3A3A3A", 
+        dark: '#000000',
+        darkGrey: '#313132', 
         light: '#FFFFFF',
         black: '#000000',
         ministry: '#1A5A96',
@@ -101,6 +102,7 @@ module.exports = withMT({
         purple: '#6f2fa2',
         yellow: '#826521',
         icon: "#606060"
+        
       },
     },
   },

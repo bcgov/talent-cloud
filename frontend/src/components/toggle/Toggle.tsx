@@ -22,6 +22,7 @@ export const Toggle = ({
       >
         {({ checked }) => (
           <button
+            aria-label="toggle switch"
             className={`${
               checked ? 'bg-backgroundBlue' : 'bg-gray-200'
             } relative inline-flex h-6 w-11 items-center rounded-full`}

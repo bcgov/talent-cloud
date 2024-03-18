@@ -130,6 +130,7 @@ const SchedulerControl = ({
           placeholder={''}
           className="border-none"
           labelProps={{ className: 'hidden' }}
+          aria-label="Select Number of Months"
           containerProps={{ className: 'min-w-px' }}
           onChange={(num) => {
             if (num) {
@@ -153,6 +154,7 @@ const SchedulerControl = ({
       <div className="pt-2">
         <Button
           variant="text"
+          aria-label="Add Event"
           size="sm"
           className="bg-calBlueTwo text-white normal-case"
           placeholder={''}

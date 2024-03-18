@@ -42,7 +42,7 @@ export const Header = ({
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2">
               <CloudIcon />
               <Link to={Routes.Dashboard} className="hover:underline">
-                <h4>{appName.toUpperCase()}</h4>
+                <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
 
@@ -79,6 +79,7 @@ export const Header = ({
                 </div>
                 <div className="hover:bg-grayBackground  px-8 py-8 w-full  border border-t-1 border-300">
                   <button
+                    aria-label="logout"
                     className="text-normal font-normal"
                     onClick={() => logout(keycloak)}
                   >
