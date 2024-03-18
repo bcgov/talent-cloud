@@ -22,7 +22,7 @@ export const SplashMain = ({ content }: { content: any }) => {
       try {
         const {
           data: { formId },
-        } = await AxiosPublic.get('/formId');
+        } = await AxiosPublic.get('/form');
         setFormId(formId);
       } catch (e: any) {
         throw new Error(e);

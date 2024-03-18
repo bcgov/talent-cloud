@@ -68,14 +68,4 @@ export class AppController {
       locations: await this.locationService.getRegionsAndLocations(),
     };
   }
-/**
- * Returns the formId for the chefs form based on the current env
- * @returns 
- */
-  @Get('/formId')
-  getFormId(): {formId: string} {
-    return {
-        formId: `${process.env.CHEFS_FORM_ID}`
-    };
-  }
 }
