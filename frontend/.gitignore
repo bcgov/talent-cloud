@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 chefs-response.json
+dev-dist/*
