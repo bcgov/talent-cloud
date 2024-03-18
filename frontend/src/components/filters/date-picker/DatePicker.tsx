@@ -40,7 +40,7 @@ export const DatePicker = ({
             >
               <span>{getDateDisplay(value)} </span>
 
-              <CalendarDaysIcon className="h-6 w-6 text-textGray" />
+              <CalendarDaysIcon className="h-6 w-6 text-defaultGray" />
             </Menu.Button>
           </Tooltip>
           <Transition

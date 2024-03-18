@@ -1,13 +1,13 @@
 export const classes = {
   menu: {
     container:
-      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between placeholder:text-placeholder border border-[#606060] color-[#828282] ',
+      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between border border-[#606060] text-defaultGray ::placeholder:text-defaultGray',
     textArea:
       'placeholder:text-dark text-dark textarea resize flex flex-row  p-2.5 w-full font-normal bg-white min-h-[300px] rounded-sm border border-[#606060]  outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 disabled:text-dark',
     textAreaError:
       'textarea resize flex flex-row  p-2.5 text-sm w-full font-normal bg-white min-h-[300px] rounded-sm text-[#828282] border border-errorRed color-[#828282] outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 ',
     error:
-      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between text-[#606060] border border-errorRed color-[#828282] ',
+      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between text-defaultGray border border-errorRed color-[#828282] ',
     buttonContainer: 'flex flex-row items-center justify-end',
     button:
       'bg-white flex flex-row justify-between items-center no-wrap fill-[#606060]',
@@ -15,7 +15,7 @@ export const classes = {
     listItem: 'flex cursor-pointer items-center justify-start text-list-item',
     chipsContainer: 'flex flex-row items-center justify-start',
     chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none',
-    placeholder: 'text-[#828282]',
+    placeholder: 'text-defaultGray',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
     disabled:
@@ -28,13 +28,13 @@ export const menuItemClass: { [key: string]: string } = {
   location:
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   function: classes.menu.container,
-  name: classes.menu.container,
+
   availabilityDates:
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   availabilityType:
     classes.menu.container + ' md:rounded-tr-none md:rounded-br-none',
   disabled:
-    'rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between text-[#606060] border border-[#606060] color-[#828282] md:rounded-tl-none md:rounded-bl-none md:border-l-0 bg-gray-200',
+    'rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between text-defaultGray border border-[#606060] color-[#828282] md:rounded-tl-none md:rounded-bl-none md:border-l-0 bg-gray-200',
 };
 
 export const calendarClass: { [key: string]: string } = {

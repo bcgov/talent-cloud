@@ -3,7 +3,7 @@ import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
 
-export const tdClass = 'text-dark px-6 py-4 whitespace-nowrap';
+export const tdClass = 'text-darkGray px-6 py-4 whitespace-nowrap';
 
 export const classificationClass =
   'block  font-bold border border-gray rounded-md mt-4 mx-8 text-center ';

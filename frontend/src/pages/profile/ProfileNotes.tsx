@@ -42,9 +42,10 @@ const ProfileNotes = ({
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Notes</span>
               <button
+                aria-label="edit notes"
                 onClick={handleOpenEditNotes}
                 className="z-20 flex text-primaryBlue flex-row items-center"
-              ></button>
+              />
             </div>
           </AccordionHeader>
 

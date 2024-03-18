@@ -79,13 +79,14 @@ const Cell = ({
         dayOfMonthStatus && cellClick && cellClick(dayOfMonthStatus.date)
       }
       onKeyDown={() => {}}
+      aria-label="open scheduler day"
       role="button"
     >
       <div className="flex flex-col h-full">
         <div className="flex-grow">
           {dayOfMonthStatus?.date &&
             dayjs().isSame(dayOfMonthStatus?.date, 'day') && (
-              <span className="font-bold text-xs">Today</span>
+              <span className="font-bold text-calGreenText text-xs">Today</span>
             )}
         </div>
         {dayOfMonthStatus?.start &&

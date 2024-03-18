@@ -93,6 +93,7 @@ const ProfileDetails = ({
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>
               <button
+                aria-label="edit profile"
                 onClick={openEditProfilePopUp}
                 className="z-20 flex text-primaryBlue flex-row items-center"
               >

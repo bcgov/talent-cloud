@@ -8,3 +8,4 @@ cypress
 cypress.config.ts
 cypress.d.ts
 vitest.config.ts
+dev-dist/*

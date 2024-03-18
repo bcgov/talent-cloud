@@ -70,14 +70,14 @@ const ProfileHeader = ({
 
         <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-16 xl:space-x-24">
           <div className="flex flex-row">
-            <ClockIcon className="h-7 w-7 text-textGray" />
+            <ClockIcon className="h-7 w-7 text-defaultGray" />
             <div className="px-2">
               <p className="subtext">Last Deployed</p>
               <p>{getLastDeployed()}</p>
             </div>
           </div>
           <div className="flex flex-row">
-            <MapPinIcon className="text-textGray h-7 w-7" />
+            <MapPinIcon className="text-defaultGray h-7 w-7" />
             <div className="pl-2">
               <p className="subtext">Work Location</p>
               <p>
@@ -88,7 +88,7 @@ const ProfileHeader = ({
           </div>
 
           <div className="flex flex-row">
-            <HomeIcon className="h-7 w-7 text-textGray" />
+            <HomeIcon className="h-7 w-7 text-defaultGray" />
             <div className="pl-2">
               <p className="subtext">Home Location</p>
               <p>

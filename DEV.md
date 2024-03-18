@@ -50,3 +50,7 @@ To login to the local client:
 In order to import existing TEAMS members, we have written scripts to translate data from the Master Excel spreadsheet currently in use as of March, 2024 to manage TEAMS rosters and deployments into our system. Our script pulls each relevant row from the spreadsheet and creates INSERT SQL statements to be ran into a database.
 
 To use and install TSLab, follow the instructions [here](https://github.com/yunabe/tslab). The Jupyter Notebook can be opened under the `notebooks` directory. This will require an xlsx file named `teamsmembers.xlsx` in the `notebooks` directory.
+
+### Migrations
+
+In order to run migrations locally, run `make migration-run`, followed by `make seed-data`

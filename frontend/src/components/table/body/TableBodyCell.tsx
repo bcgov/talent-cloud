@@ -58,7 +58,7 @@ export const TableBodyCell = ({
       return (
         <td className={cell.className}>
           {cell.value.availability}{' '}
-          <span className="text-textGray">{cell.value.days ?? ''}</span>
+          <span className="text-defaultGray">{cell.value.days ?? ''}</span>
         </td>
       );
     default:

@@ -29,7 +29,7 @@ export const Table = ({
     <div className="shadow-lg rounded-md w-full bg-white border border-gray  overflow-x-scroll">
       <div className="flex flex-col md:flex-row items-center justify-between mx-8">
         <div className="flex flex-col py-6">
-          <h4 className="text-black font-bold">{title}</h4>
+          <h2 className="text-black font-bold">{title}</h2>
           <p>{`${tableData.totalRows} ${subtitle}`}</p>
         </div>
 
