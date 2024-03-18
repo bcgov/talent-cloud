@@ -1,7 +1,9 @@
 import { Ministry, UnionMembership } from '@/common';
 import * as Yup from 'yup';
+
 const phoneNumber = (value: any) =>
   value.toString().replace(/[^\d]/g, '').length === 10;
+
 export const EditProfileValidationSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(2, 'Min length 2 characters.')
@@ -35,12 +37,13 @@ export const EditProfileValidationSchema = Yup.object().shape({
   }),
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
-  primaryPhone: Yup.string().test(
-    'phone number',
-    'Invalid phone number format. Please enter ten digits.',
-    phoneNumber,
-  ),
-
+  primaryPhone: Yup.string()
+    .test(
+      'phone number',
+      'Invalid phone number format. Please enter ten digits.',
+      phoneNumber,
+    )
+    .required('This field is required.'),
   secondaryPhone: Yup.string().test(
     'phone number',
     'Invalid phone number format. Please enter ten digits.',
@@ -70,13 +73,15 @@ export const fields = {
     label: 'Date Joined',
     disabled: true,
     type: 'text',
-
+    autocomplete: 'off',
     required: true,
   },
   firstName: {
     name: 'firstName',
     label: 'First Name',
     type: 'text',
+    autocomplete: 'off',
+
     disabled: false,
     required: true,
   },
@@ -85,6 +90,7 @@ export const fields = {
     label: 'Last Name',
 
     type: 'text',
+    autocomplete: 'off',
     disabled: false,
     required: true,
   },
@@ -94,12 +100,14 @@ export const fields = {
       label: 'Work Region',
       required: false,
       type: 'select',
+      autocomplete: 'off',
       disabled: true,
     },
     locationName: {
       name: 'workLocation.locationName',
       label: 'Work Location',
       type: 'select',
+      autocomplete: 'off',
       disabled: false,
 
       required: false,
@@ -111,12 +119,14 @@ export const fields = {
       label: 'Home Region',
       required: true,
       type: 'select',
+      autocomplete: 'off',
       disabled: true,
     },
     locationName: {
       name: 'homeLocation.locationName',
       label: 'Home Location',
       type: 'select',
+      autocomplete: 'off',
       disabled: false,
       required: true,
     },
@@ -127,6 +137,7 @@ export const fields = {
     label: 'Remote Only',
     required: true,
     type: 'select',
+    autocomplete: 'off',
     disabled: false,
     options: [
       { label: 'Yes', value: 'true' },
@@ -138,6 +149,7 @@ export const fields = {
     label: 'Willingness to Travel',
     required: true,
     type: 'select',
+    autocomplete: 'off',
     disabled: false,
     options: [
       { label: 'Yes', value: 'true' },
@@ -148,14 +160,16 @@ export const fields = {
     name: 'primaryPhone',
     label: 'Primary Number',
     required: true,
-    type: 'phone',
+    type: 'tel',
+    autocomplete: 'off',
     disabled: false,
   },
   secondaryPhone: {
     name: 'secondaryPhone',
     label: 'Secondary Number',
     required: false,
-    type: 'phone',
+    type: 'tel',
+    autocomplete: 'off',
     disabled: false,
   },
   email: {
@@ -163,6 +177,7 @@ export const fields = {
     label: 'Email',
     required: true,
     type: 'text',
+    autocomplete: 'off',
     disabled: true,
   },
 
@@ -171,6 +186,7 @@ export const fields = {
     label: 'Supervisor First Name',
     required: true,
     type: 'text',
+    autocomplete: 'off',
     disabled: false,
   },
   supervisorLastName: {
@@ -178,6 +194,7 @@ export const fields = {
     label: 'Supervisor Last Name',
     required: true,
     type: 'text',
+    autocomplete: 'off',
     disabled: false,
   },
   supervisorEmail: {
@@ -185,13 +202,15 @@ export const fields = {
     label: 'Supervisor Email',
     required: false,
     type: 'text',
+    autocomplete: 'off',
     disabled: false,
   },
   workPhone: {
     name: 'workPhone',
     label: 'Work Number',
     required: false,
-    type: 'phone',
+    type: 'tel',
+    autocomplete: 'off',
     disabled: false,
   },
   ministry: {
@@ -199,6 +218,7 @@ export const fields = {
     label: 'Ministry',
     required: true,
     type: 'select',
+    autocomplete: 'off',
     disabled: false,
     options: Object.values(Ministry).map((itm) => ({ label: itm, value: itm })),
   },
@@ -207,6 +227,7 @@ export const fields = {
     label: 'Union Membership',
     required: true,
     type: 'select',
+    autocomplete: 'off',
     disabled: false,
     options: Object.values(UnionMembership).map((itm) => ({
       label: itm.toString(),
