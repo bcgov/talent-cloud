@@ -154,13 +154,13 @@ const SchedulerControl = ({
       <div className="pt-2">
         <Button
           variant="text"
-          aria-label="Add Event"
+          aria-label="Update Availability"
           size="sm"
           className="bg-calBlueTwo text-white normal-case"
           placeholder={''}
           onClick={addEventClicked}
         >
-          Add Event
+          Update Availability
         </Button>
       </div>
     </div>
