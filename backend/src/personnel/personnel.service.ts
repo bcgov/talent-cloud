@@ -382,4 +382,12 @@ export class PersonnelService {
       };
     }
   }
+/**
+ * Find a personnel entity by email
+ * @param email 
+ * @returns 
+ */
+  async getPersonnelByEmail(email:string): Promise<PersonnelEntity[]>{
+    return await this.personnelRepository.find({where:{email}});
+  }
 }

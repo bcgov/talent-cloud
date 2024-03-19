@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {  Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
@@ -13,7 +13,8 @@ import { CreateFormDTO } from './form.dto';
 import { format } from 'date-fns';
 import { FunctionService } from '../function/function.service';
 import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { ENV } from '../database/entities/env.enum';
 
 @Injectable()
 export class FormService {
@@ -62,8 +63,18 @@ export class FormService {
    * @param submission 
    */
   async processFormData(submission: CreateFormDTO): Promise<PersonnelEntity[]> {
-    const form = await this.saveForm(submission);
-    return await this.createPersonnel(submission.data, form);
+    const previouslySubmitted: PersonnelEntity[] = await this.personnelService.getPersonnelByEmail(submission.data.workDetails.workEmail);
+
+    if(previouslySubmitted.length > 0 && process.env.ENV === ENV.PROD){
+      this.logger.log(`Personnel with email ${submission.data.workDetails.workEmail} already exists`);
+      throw new Error(`Personnel with email ${submission.data.workDetails.workEmail} already exists`);
+    } else {
+      const form = await this.saveForm(submission);
+      return await this.createPersonnel(submission.data, form);
+    }
+
+    
+
   }
 /**
  * Saves the form id and submission id
