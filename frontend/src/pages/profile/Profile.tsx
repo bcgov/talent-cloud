@@ -25,7 +25,7 @@ import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
 import { DialogUI } from '@/components';
-import { ReviewApplicant } from '../ReviewApplicant';
+import { ReviewApplicant } from './ReviewApplicant';
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 import { Routes } from '@/routes';
 
@@ -251,7 +251,10 @@ const Profile = () => {
             <ReviewApplicant
               onClose={handleOpenReviewApplicant}
               onClick={() => {
-                updatePersonnel({ status: Status.ACTIVE });
+                updatePersonnel({
+                  status: Status.ACTIVE,
+                  dateJoined: dayjs(new Date()),
+                });
                 handleOpenReviewApplicant();
               }}
             />

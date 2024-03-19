@@ -35,7 +35,11 @@ const ProfileDetails = ({
       content: `${personnel.willingToTravel === true ? 'Yes' : 'No'}`,
     },
     {
-      title: 'Date Joined',
+      title: 'Application Date',
+      content: dayjs(personnel.applicationDate).format('MMMM D, YYYY'),
+    },
+    {
+      title: 'Reviewed Date',
       content: dayjs(personnel.dateJoined).format('MMMM D, YYYY'),
     },
   ];
