@@ -38,12 +38,12 @@ export const EditProfileValidationSchema = Yup.object().shape({
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
   primaryPhone: Yup.string()
+    .required('This field is required.')
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
       phoneNumber,
-    )
-    .required('This field is required.'),
+    ),
   secondaryPhone: Yup.string().test(
     'phone number',
     'Invalid phone number format. Please enter ten digits.',
