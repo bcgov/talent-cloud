@@ -103,7 +103,7 @@ export const ProfileEditForm = ({
           <div className="flex min-h-full px-8 pt-8 items-center justify-center">
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
-              <div className="w-1/3">
+              <div className="w-full lg:w-1/3">
                 <TextInput
                   {...props}
                   {...fields.dateJoined}
@@ -111,7 +111,7 @@ export const ProfileEditForm = ({
                 />
               </div>
 
-              <div className="w-full grid grid-cols-2  gap-6">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
                 <TextInput
                   {...props}
                   {...fields.firstName}
@@ -120,35 +120,7 @@ export const ProfileEditForm = ({
                 <TextInput {...props} {...fields.lastName} error={errors.lastName} />
               </div>
 
-              <div className="w-full grid grid-cols-2 gap-6">
-                <Select
-                  {...props}
-                  {...fields.workLocation.locationName}
-                  error={errors.workLocation}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                    handleChangeLocation(e, {
-                      isSubmitting,
-                      errors,
-                      ...props,
-                    })
-                  }
-                  options={locations.map((itm) => ({
-                    label: itm.locationName,
-                    value: itm.locationName,
-                  }))}
-                />
-                <Select
-                  {...props}
-                  {...fields.workLocation.region}
-                  error={errors.workLocation}
-                  disabled={true}
-                  options={regions.map((itm) => ({
-                    label: itm,
-                    value: itm,
-                  }))}
-                />
-              </div>
-              <div className="w-full grid grid-cols-2 gap-6">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Select
                   {...props}
                   {...fields.homeLocation.locationName}
@@ -176,7 +148,35 @@ export const ProfileEditForm = ({
                   }))}
                 />
               </div>
-              <div className="w-full grid grid-cols-2 gap-6">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Select
+                  {...props}
+                  {...fields.workLocation.locationName}
+                  error={errors.workLocation}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                    handleChangeLocation(e, {
+                      isSubmitting,
+                      errors,
+                      ...props,
+                    })
+                  }
+                  options={locations.map((itm) => ({
+                    label: itm.locationName,
+                    value: itm.locationName,
+                  }))}
+                />
+                <Select
+                  {...props}
+                  {...fields.workLocation.region}
+                  error={errors.workLocation}
+                  disabled={true}
+                  options={regions.map((itm) => ({
+                    label: itm,
+                    value: itm,
+                  }))}
+                />
+              </div>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Select
                   {...props}
                   {...fields.remoteOnly}
@@ -190,7 +190,7 @@ export const ProfileEditForm = ({
               </div>
               <Divider />
               <SectionHeader section={sections.contact.header} />
-              <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TextInput
                   {...props}
                   {...fields.primaryPhone}
@@ -201,12 +201,30 @@ export const ProfileEditForm = ({
                   {...fields.secondaryPhone}
                   error={errors.secondaryPhone}
                 />
-                <TextInput {...props} {...fields.email} error={errors.email} />
               </div>
-
+              <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="col-span-1 lg:col-span-1">
+                  <TextInput
+                    {...props}
+                    {...fields.workPhone}
+                    error={errors.workPhone}
+                  />
+                </div>
+                <div className="col-span-1  lg:col-span-2">
+                  <TextInput {...props} {...fields.email} error={errors.email} />
+                </div>
+              </div>
               <Divider />
               <SectionHeader section={sections.organization.header} />
-              <div className="w-full grid grid-cols-2 gap-6">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Select {...props} {...fields.ministry} error={errors.ministry} />
+                <Select
+                  {...props}
+                  {...fields.unionMembership}
+                  error={errors.unionMembership}
+                />
+              </div>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TextInput
                   {...props}
                   {...fields.supervisorFirstName}
@@ -217,24 +235,15 @@ export const ProfileEditForm = ({
                   {...fields.supervisorLastName}
                   error={errors.supervisorLastName}
                 />
-                <TextInput
-                  {...props}
-                  {...fields.supervisorEmail}
-                  error={errors?.supervisorEmail}
-                />
-                <TextInput
-                  {...props}
-                  {...fields.workPhone}
-                  error={errors.workPhone}
-                />
               </div>
-              <div className="w-full grid grid-cols-2 gap-6">
-                <Select {...props} {...fields.ministry} error={errors.ministry} />
-                <Select
-                  {...props}
-                  {...fields.unionMembership}
-                  error={errors.unionMembership}
-                />
+              <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="col-span-1 lg:col-span-2">
+                  <TextInput
+                    {...props}
+                    {...fields.supervisorEmail}
+                    error={errors?.supervisorEmail}
+                  />
+                </div>
               </div>
             </div>
           </div>

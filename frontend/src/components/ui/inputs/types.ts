@@ -6,6 +6,7 @@ export type InputProps = {
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
+  autocomplete?: string;
   error?: FormikErrors<any> | string;
 };
 
