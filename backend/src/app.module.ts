@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
@@ -9,6 +10,7 @@ import { FunctionModule } from './function/function.module';
 import { LoggerModule } from './logger/logger.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 
 @Module({
@@ -29,5 +31,11 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     RegionsAndLocationsModule,
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
