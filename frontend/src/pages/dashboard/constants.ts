@@ -25,7 +25,7 @@ export enum DashboardColumns {
   REMOTE = 'Remote Only',
   UNION_MEMBERSHIP = 'Union Membership',
   REGION = 'Region',
-  LOCATION = 'Work Location',
+  LOCATION = 'Home Location',
   TRAVEL = 'Willingness To Travel',
   MINISTRY = 'Ministry',
   NAME = 'Name',

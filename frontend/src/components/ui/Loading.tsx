@@ -1,6 +1,9 @@
-export const Loading = () => {
+export const Loading = ({ height }: { height?: string }) => {
+  const screenHeight = height ?? 'screen';
   return (
-    <div className="w-full flex flex-row items-center justify-center h-screen">
+    <div
+      className={`w-full flex flex-row items-center justify-center h-${screenHeight}`}
+    >
       <div>
         <svg
           aria-hidden="true"
