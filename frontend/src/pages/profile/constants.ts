@@ -13,7 +13,6 @@ export const EditProfileValidationSchema = Yup.object().shape({
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
-  dateJoined: Yup.date(),
   workLocation: Yup.object().shape({
     region: Yup.string()
       .optional()
@@ -68,14 +67,6 @@ export const EditProfileValidationSchema = Yup.object().shape({
 });
 
 export const fields = {
-  dateJoined: {
-    name: 'dateJoined',
-    label: 'Date Joined',
-    disabled: true,
-    type: 'text',
-    autocomplete: 'off',
-    required: true,
-  },
   firstName: {
     name: 'firstName',
     label: 'First Name',

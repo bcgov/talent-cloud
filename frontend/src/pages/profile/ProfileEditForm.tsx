@@ -103,14 +103,6 @@ export const ProfileEditForm = ({
           <div className="flex min-h-full px-8 pt-8 items-center justify-center">
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
-              <div className="w-full lg:w-1/3">
-                <TextInput
-                  {...props}
-                  {...fields.dateJoined}
-                  error={errors.dateJoined}
-                />
-              </div>
-
               <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
                 <TextInput
                   {...props}
