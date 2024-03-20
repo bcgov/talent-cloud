@@ -15,8 +15,8 @@ import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
-import { TrainingEntity } from '../../database/entities/training.entity';
 import { Form } from '../../database/entities/form.entity';
+import { TrainingEntity } from '../../database/entities/training.entity';
 
 class PersonnelLocationDTO {
   @IsString()
@@ -231,75 +231,75 @@ export class CreatePersonnelDTO {
   @IsOptional()
   availability?: AvailabilityEntity[];
 
-@ApiProperty({
-  description: "First Nation Experience Living",
-})
-@IsOptional()
+  @ApiProperty({
+    description: 'First Nation Experience Living',
+  })
+  @IsOptional()
   firstNationExperienceLiving?: boolean;
 
-@ApiProperty({
-  description: "First Nation Experience Working",
-})
-@IsOptional()
-firstNationExperienceWorking?: boolean
+  @ApiProperty({
+    description: 'First Nation Experience Working',
+  })
+  @IsOptional()
+  firstNationExperienceWorking?: boolean;
 
-@ApiProperty({
-  description: "PECC Experience",
-})
-@IsOptional()
-peccExperience?: boolean;
+  @ApiProperty({
+    description: 'PECC Experience',
+  })
+  @IsOptional()
+  peccExperience?: boolean;
 
-@ApiProperty({
-  description: "PREOC Experience",
-})
-@IsOptional()
-preocExperience?: boolean
+  @ApiProperty({
+    description: 'PREOC Experience',
+  })
+  @IsOptional()
+  preocExperience?: boolean;
 
-@ApiProperty({
-  description: "Emergency Experience",
-})
-@IsOptional()
-emergencyExperience?: boolean
+  @ApiProperty({
+    description: 'Emergency Experience',
+  })
+  @IsOptional()
+  emergencyExperience?: boolean;
 
-@ApiProperty({
-  description: "Job Title",
-})
-@IsOptional()
-jobTitle?: string
+  @ApiProperty({
+    description: 'Job Title',
+  })
+  @IsOptional()
+  jobTitle?: string;
 
-@ApiProperty({
-  description: "Driver License",
-})
-@IsOptional()
-driverLicense?: string
+  @ApiProperty({
+    description: 'Driver License',
+  })
+  @IsOptional()
+  driverLicense?: string;
 
-@ApiProperty({
-  description: "First Aid Level",
-})
-@IsOptional()
-firstAidLevel?: string
+  @ApiProperty({
+    description: 'First Aid Level',
+  })
+  @IsOptional()
+  firstAidLevel?: string;
 
-@ApiProperty({
-  description: "First Aid Expiry",
-})
-@IsOptional()
-firstAidExpiry?: string
+  @ApiProperty({
+    description: 'First Aid Expiry',
+  })
+  @IsOptional()
+  firstAidExpiry?: string;
 
-@ApiProperty({
-  description: "Psychological First Aid",
-})
-@IsOptional()
-psychologicalFirstAid?: boolean
+  @ApiProperty({
+    description: 'Psychological First Aid',
+  })
+  @IsOptional()
+  psychologicalFirstAid?: boolean;
 
-@ApiProperty()
-@IsOptional()
-intakeForm?: Form
+  @ApiProperty()
+  @IsOptional()
+  intakeForm?: Form;
 
-@ApiProperty()
-@IsOptional()
-dateJoined: string;
+  @ApiProperty()
+  @IsOptional()
+  dateJoined?: string;
 
-@ApiProperty()
-@IsOptional()
-applicationDate: string;
+  @ApiProperty()
+  @IsOptional()
+  applicationDate?: string;
 }
