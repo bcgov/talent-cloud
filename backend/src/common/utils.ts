@@ -93,10 +93,26 @@ const regionsAndLocations = [
 ];
 
 export const rowData = () => {
+  const status =
+    Status[
+      faker.helpers.arrayElement([
+        Status.ACTIVE,
+        Status.INACTIVE,
+        Status.PENDING,
+      ])
+    ];
+  const applicationDate = faker.date.past();
+
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
-    dateJoined: faker.date.past(),
+    dateJoined:
+      status !== Status.PENDING
+        ? faker.date.between({
+            from: applicationDate,
+            to: format(new Date(), 'yyyy-MM-dd'),
+          })
+        : undefined,
     email: faker.internet.email(),
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
@@ -105,7 +121,7 @@ export const rowData = () => {
     homeLocation: faker.helpers.arrayElement(regionsAndLocations),
     ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
-    applicationDate: faker.date.past(),
+    applicationDate: applicationDate,
     skillsAbilities: faker.lorem.paragraph(),
     logisticsNotes: faker.lorem.paragraph(),
     coordinatorNotes: faker.lorem.sentence(),
@@ -124,16 +140,11 @@ export const rowData = () => {
     supervisorFirstName: faker.person.firstName(),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    status:
-      Status[
-        faker.helpers.arrayElement([
-          Status.ACTIVE,
-          Status.INACTIVE,
-          Status.PENDING,
-        ])
-      ],
-    availability: availability() as AvailabilityEntity[],
-    experiences: experiences() as ExperienceEntity[],
+    status: status,
+    availability:
+      status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
+    experiences:
+      status !== Status.PENDING ? (experiences() as ExperienceEntity[]) : [],
   };
 };
 const threeMonthsArray = () => {
