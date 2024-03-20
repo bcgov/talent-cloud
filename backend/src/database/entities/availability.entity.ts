@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import {
   Column,
   Entity,
@@ -18,7 +17,6 @@ export class AvailabilityEntity {
   @Column({
     name: 'date',
     type: 'date',
-    default: format(new Date(), 'yyyy-MM-dd'),
   })
   date: string;
 
@@ -45,7 +43,7 @@ export class AvailabilityEntity {
       deploymentCode: this.deploymentCode,
     };
   }
-  constructor(data?: Partial<AvailabilityEntity>){
+  constructor(data?: Partial<AvailabilityEntity>) {
     Object.assign(this, data);
   }
 }
