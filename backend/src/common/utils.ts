@@ -8,12 +8,12 @@ import {
   AvailabilityType,
   Status,
 } from './enums';
+import { DriverLicense } from './enums/driver-license.enum';
+import { FirstAid } from './enums/first-aid.enum';
 import { AppModule } from '../app.module';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 import { PersonnelService } from '../personnel/personnel.service';
-import { FirstAid } from './enums/first-aid.enum';
-import { DriverLicense } from './enums/driver-license.enum';
 
 const functions = [
   { id: 1, name: 'Operations', abbreviation: 'Ops' },
@@ -88,6 +88,8 @@ const regionsAndLocations = [
   { id: 56, region: 'HQ', locationName: 'Victoria' },
   { id: 57, region: 'SWE', locationName: 'Whistler' },
   { id: 58, region: 'NEA', locationName: 'Williams Lake' },
+  { id: 59, region: 'NWE', locationName: 'Vanderhoof' },
+  { id: 60, region: 'VIC', locationName: 'Sooke' },
 ];
 
 export const rowData = () => {
