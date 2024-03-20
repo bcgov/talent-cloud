@@ -61,8 +61,7 @@ const functionSql = `INSERT INTO public."location" (id, location_name, region) V
   (57, 'Whistler',  'SWE' ),
   (58, 'Williams Lake',  'NEA' ), 
   (59, 'Vanderhoof', 'NWE'), 
-  (60, 'Sooke', 'VIC'), 
-  (61, 'Fort Nelson' 'NEA')`;
+  (60, 'Sooke', 'VIC')`;
 
 const seedLocation = async () => {
   await datasource.initialize();
