@@ -40,7 +40,9 @@ const ProfileDetails = ({
     },
     {
       title: 'Reviewed Date',
-      content: personnel.dateJoined ? dayjs(personnel.dateJoined).format('MMMM D, YYYY') : "-" ,
+      content: personnel.dateJoined
+        ? dayjs(personnel.dateJoined).format('MMMM D, YYYY')
+        : '-',
     },
   ];
 

@@ -7,7 +7,6 @@ import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'form
 import { Form, Formik } from 'formik';
 import { Button, SectionHeader, Select, TextInput } from '@/components';
 import { useGetFilters } from '@/hooks/useGetFilters';
-import dayjs from 'dayjs';
 
 export const ProfileEditForm = ({
   handleOpenEditProfilePopUp,
