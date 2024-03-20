@@ -4,7 +4,6 @@ export * from './experience.enum';
 export * from './function.enum';
 export * from './ministry.enum';
 export * from './region.enum';
-export * from './work-location.enum';
 export * from './status.enum';
-export * from './driver-license.enum'
+export * from './driver-license.enum';
 export * from './first-aid.enum';
