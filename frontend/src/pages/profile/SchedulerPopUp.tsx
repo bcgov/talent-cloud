@@ -249,6 +249,7 @@ const SchedulerPopUp = ({
           selected={range}
           onSelect={setRange}
           showOutsideDays
+          defaultMonth={editedFrom ? offsetTimezoneDate(editedFrom) : new Date()}
           captionLayout="dropdown-buttons"
           className="border-0 w-[275px]"
           classNames={calendarClass}
@@ -256,9 +257,6 @@ const SchedulerPopUp = ({
             Caption: (props: CaptionProps) => (
               <DatePickerHeader
                 {...props}
-                startingDate={
-                  editedFrom ? offsetTimezoneDate(editedFrom) : undefined
-                }
                 hideResetButton={true}
                 onChange={setRange}
               />

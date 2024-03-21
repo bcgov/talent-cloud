@@ -4,16 +4,10 @@ import type { CustomCaptionProps } from './interface';
 import { ResetButton } from './ResetButton';
 import { MonthSelector } from './MonthSelector';
 import { YearSelector } from './YearSelector';
-import { useEffect } from 'react';
 
 export const DatePickerHeader = (props: CustomCaptionProps) => {
   const { goToMonth, nextMonth, previousMonth } = useNavigation();
 
-  useEffect(() => {
-    if (props.startingDate) {
-      goToMonth(props.startingDate);
-    }
-  }, []);
   return (
     <div className="flex flex-col justify-start w-full items-start">
       {props.hideResetButton !== true && (
