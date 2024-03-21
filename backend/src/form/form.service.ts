@@ -1,19 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { Repository } from 'typeorm';
-import { FormSubmissionEventPayload, IntakeFormData } from './interface';
-import { Form } from '../database/entities/form.entity';
-import { AppLogger } from '../logger/logger.service';
-import { PersonnelService } from '../personnel/personnel.service';
-import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
-import { RegionsAndLocationsService } from '../region-location/region-location.service';
-import { Experience, Ministry, UnionMembership } from '../common/enums';
-import { CreateFormDTO } from './form.dto';
 import { format } from 'date-fns';
-import { FunctionService } from '../function/function.service';
-import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
 import { PersonnelEntity } from 'src/database/entities/personnel.entity';
+import { Repository } from 'typeorm';
+import { CreateFormDTO } from './form.dto';
+import { FormSubmissionEventPayload, IntakeFormData } from './interface';
+import { Experience, Ministry, UnionMembership } from '../common/enums';
+import { Form } from '../database/entities/form.entity';
+import { FunctionService } from '../function/function.service';
+import { AppLogger } from '../logger/logger.service';
+import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
+import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
+import { PersonnelService } from '../personnel/personnel.service';
+import { RegionsAndLocationsService } from '../region-location/region-location.service';
 
 @Injectable()
 export class FormService {
@@ -56,20 +56,20 @@ export class FormService {
         data: requestFormData.data.submission.submission.data,
       });
   }
-//TODO PROD: unique constraint on email address
+  //TODO PROD: unique constraint on email address
   /**
    * Create a new form entity, and passes the form id and submission id to createPersonnel function
-   * @param submission 
+   * @param submission
    */
   async processFormData(submission: CreateFormDTO): Promise<PersonnelEntity[]> {
     const form = await this.saveForm(submission);
     return await this.createPersonnel(submission.data, form);
   }
-/**
- * Saves the form id and submission id
- * @param data 
- * @returns 
- */
+  /**
+   * Saves the form id and submission id
+   * @param data
+   * @returns
+   */
   async saveForm(data: CreateFormDTO): Promise<Form> {
     try {
       this.logger.log(`Form data saved successfully`);
@@ -79,13 +79,15 @@ export class FormService {
     }
   }
   /**
-   * Creates a new personnel entity from the form 
-   * @param data 
-   * @param form 
-   * @returns 
+   * Creates a new personnel entity from the form
+   * @param data
+   * @param form
+   * @returns
    */
-  async createPersonnel(data: IntakeFormData, form: Form): Promise<PersonnelEntity[]> {
-    
+  async createPersonnel(
+    data: IntakeFormData,
+    form: Form,
+  ): Promise<PersonnelEntity[]> {
     const {
       personalDetails,
       roles,
@@ -105,7 +107,7 @@ export class FormService {
     );
 
     const functions = await this.functionService.getFunctions();
-    
+
     const interestedIn = Object.keys(roles).filter(
       (role) => roles[role] === true,
     );
@@ -117,7 +119,6 @@ export class FormService {
         experienceType: Experience.INTERESTED,
       }));
 
-    
     const createPersonnelDTO: CreatePersonnelDTO = {
       firstName: personalDetails.firstName,
       lastName: personalDetails.lastName,
@@ -132,7 +133,7 @@ export class FormService {
       supervisorFirstName: supervisorInfo?.supervisorFirstName,
       supervisorLastName: supervisorInfo?.supervisorLastName,
       supervisorEmail: supervisorInfo?.supervisorEmail,
-      dateJoined: format(new Date(), 'yyyy-MM-dd'),
+      dateJoined: undefined,
       unionMembership: UnionMembership[workDetails.unionMembership],
       remoteOnly: deploymentPreferences.remoteOnly as boolean,
       willingToTravel: deploymentPreferences.remoteOnly as boolean,
@@ -165,14 +166,9 @@ export class FormService {
     };
     try {
       this.logger.log(`Form data saved successfully`);
-      return await this.personnelService.createPersonnel([
-        createPersonnelDTO,
-      ]);
-      
-      
+      return await this.personnelService.createPersonnel([createPersonnelDTO]);
     } catch (e) {
       this.logger.error(`Error saving form data: ${e}`);
     }
-    
   }
 }

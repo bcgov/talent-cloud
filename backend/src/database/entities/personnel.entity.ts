@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
+import { Form } from './form.entity';
 import { LocationEntity } from './location.entity';
 import { ExperienceEntity } from './personnel-function-experience.entity';
 import { TrainingEntity } from './training.entity';
@@ -23,7 +24,6 @@ import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { Form } from './form.entity';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -36,7 +36,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({ type: 'date', name: 'date_joined' })
+  @Column({ type: 'date', name: 'date_joined', nullable: true })
   dateJoined: Date;
 
   @JoinColumn([

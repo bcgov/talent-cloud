@@ -7,7 +7,6 @@ import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'form
 import { Form, Formik } from 'formik';
 import { Button, SectionHeader, Select, TextInput } from '@/components';
 import { useGetFilters } from '@/hooks/useGetFilters';
-import dayjs from 'dayjs';
 
 export const ProfileEditForm = ({
   handleOpenEditProfilePopUp,
@@ -60,7 +59,6 @@ export const ProfileEditForm = ({
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone.replace(/[(]|-|[)]|\s/gi, '');
-    values.dateJoined = dayjs(values.dateJoined).format('MMMM D, YYYY');
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
@@ -103,14 +101,6 @@ export const ProfileEditForm = ({
           <div className="flex min-h-full px-8 pt-8 items-center justify-center">
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
-              <div className="w-full lg:w-1/3">
-                <TextInput
-                  {...props}
-                  {...fields.dateJoined}
-                  error={errors.dateJoined}
-                />
-              </div>
-
               <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
                 <TextInput
                   {...props}
