@@ -59,6 +59,7 @@ export const DatePicker = ({
                     mode="range"
                     selected={value}
                     onSelect={onChange}
+                    defaultMonth={value.from}
                     showOutsideDays
                     captionLayout="dropdown-buttons"
                     className="border-0"
@@ -68,7 +69,6 @@ export const DatePicker = ({
                         <DatePickerHeader
                           {...props}
                           onChange={onChange}
-                          startingDate={value.from}
                           reset={reset}
                         />
                       ),
