@@ -41,7 +41,10 @@ export class PersonnelService {
     const person = await this.personnelRepository.findOne({ where: { id } });
     this.logger.log(`${JSON.stringify(personnel)}`);
 
-    if (personnel.workLocation.locationName === '') {
+    if (
+      personnel?.workLocation &&
+      personnel?.workLocation?.locationName === ''
+    ) {
       personnel.workLocation = {
         locationName: null,
         region: null,

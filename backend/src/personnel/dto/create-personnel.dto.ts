@@ -23,7 +23,7 @@ class PersonnelLocationDTO {
   id?: number;
 
   @IsString()
-  locationName: string;
+  locationName?: string;
 
   @ApiProperty({
     description: 'Ministry personnel works in',
@@ -31,7 +31,7 @@ class PersonnelLocationDTO {
     example: Region.SWE,
   })
   @IsEnum(Region)
-  region: Region;
+  region?: Region;
 }
 
 export class CreatePersonnelDTO {
@@ -59,8 +59,8 @@ export class CreatePersonnelDTO {
     },
   })
   @IsOptional()
-  @ValidateIf((o) => o.workLocation.locationName !== '')
-  workLocation: PersonnelLocationDTO;
+  @ValidateIf((o) => o.workLocation && o.workLocation?.locationName !== '')
+  workLocation?: PersonnelLocationDTO;
 
   @ApiProperty({
     description: "Personnel's home location",
