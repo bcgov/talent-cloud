@@ -11,7 +11,7 @@ export interface FirstAid {
 }
 export interface OtherQualifications {
   dl: string[];
-  pfa?: boolean|string;
+  pfa?: boolean | string;
   firstAid: FirstAid;
 }
 export interface Roles {
@@ -27,13 +27,13 @@ export interface Roles {
   Recovery: boolean;
 }
 export interface FirstNationExperience {
-  living?: boolean|string;
-  working?: boolean|string;
+  living?: boolean | string;
+  working?: boolean | string;
 }
 export interface Experience {
-  pecc?: boolean|string;
-  preoc?: boolean|string;
-  emergency?: boolean|string;
+  pecc?: boolean | string;
+  preoc?: boolean | string;
+  emergency?: boolean | string;
   firstNations?: FirstNationExperience;
 }
 export interface WorkDetails {
@@ -58,8 +58,8 @@ export interface PersonalDetails {
   secondaryPhone?: string;
 }
 export interface DeploymentPreferences {
-  remoteOnly: boolean|string;
-  willingToTravel: boolean|string;
+  remoteOnly: boolean;
+  willingToTravel: boolean;
 }
 
 export interface IntakeFormData {
