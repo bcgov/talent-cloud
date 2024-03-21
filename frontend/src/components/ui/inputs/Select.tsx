@@ -23,9 +23,9 @@ export const Select = ({
         onChange={onChange ?? field.onChange}
         className={disabled ? classes.menu.disabled : classes.menu.container}
       >
-        <option value={undefined}>
+        {!required && <option value={undefined}>
           
-        </option>
+        </option>}
         {options?.map((itm, index) => (
           <option key={itm.value + index.toString()} value={itm.value}>
             {itm.label}
