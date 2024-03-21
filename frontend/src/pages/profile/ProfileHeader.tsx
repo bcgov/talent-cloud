@@ -81,8 +81,8 @@ const ProfileHeader = ({
             <div className="pl-2">
               <p className="subtext">Work Location</p>
               <p>
-                {personnel.workLocation?.locationName ?? '-'},{' '}
-                {personnel.workLocation?.region ?? '-'}
+              {personnel.workLocation?.locationName ? `${personnel.workLocation?.locationName},
+                ${personnel.workLocation?.region}`: "-"}
               </p>
             </div>
           </div>

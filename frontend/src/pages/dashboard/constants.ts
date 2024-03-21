@@ -83,7 +83,7 @@ export interface Personnel {
   reviewed: boolean;
   coordinatorNotes: string;
   logisticsNotes: string;
-  dateJoined: Date;
+  dateJoined?: Date;
   lastDeployed?: string;
 }
 

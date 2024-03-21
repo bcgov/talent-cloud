@@ -89,7 +89,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
 
-  @Column({ name: 'application_date', type: 'timestamp' })
+  @Column({ name: 'application_date', type: 'date' })
   applicationDate: Date;
 
   @Column({ name: 'supervisor_first_name', type: 'varchar', length: 100 })
