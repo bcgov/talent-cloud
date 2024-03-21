@@ -36,9 +36,22 @@ export const ProfileEditForm = ({
     e: ChangeEvent<HTMLSelectElement>,
     props: FormikState<Personnel> & FormikProps<Personnel>,
   ) => {
+    const fieldName = e.target.name.split('.')[0];
+    console.log(e.target.value)
+    if(!e.target.value) {
+      props.setValues({
+      ...props.values,
+      [fieldName]: {
+        id: undefined,
+        locationName: "",
+        region: ""
+      },
+    })
+    
+  } else {
     const location = locations.find((itm) => itm.locationName === e.target.value);
 
-    const fieldName = e.target.name.split('.')[0];
+    
 
     props.setValues({
       ...props.values,
@@ -48,6 +61,8 @@ export const ProfileEditForm = ({
         region: location?.region,
       },
     });
+  }
+  
   };
 
   const handleSubmit = async (
@@ -55,17 +70,18 @@ export const ProfileEditForm = ({
     helpers: FormikHelpers<Personnel>,
     ...props: any
   ) => {
-    // trim all the formatted characters out of the phone numbers
-    values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
-
+    
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
       if (values[key as keyof Personnel] === personnel[key as keyof Personnel]) {
         delete values[key as keyof Personnel];
       }
     });
+    // trim all the formatted characters out of the phone numbers
+    values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
+
     if (values.remoteOnly === 'true') {
       values.remoteOnly = true;
     }

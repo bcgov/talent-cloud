@@ -4,8 +4,8 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
-import dayjs from 'dayjs';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { datePST, formatPhone } from '@/utils';
 
 const ProfileDetails = ({
   personnel,
@@ -20,7 +20,7 @@ const ProfileDetails = ({
   const generalInformation = [
     {
       title: 'Work Location, Region',
-      content: `${personnel.workLocation?.locationName ?? '-'}, ${personnel.workLocation?.region ?? '-'}`,
+      content: personnel.workLocation?.locationName ? `${personnel.workLocation?.locationName}, ${personnel.workLocation?.region}` : 'Not Listed',
     },
     {
       title: 'Remote Only',
@@ -36,12 +36,12 @@ const ProfileDetails = ({
     },
     {
       title: 'Application Date',
-      content: dayjs(personnel.applicationDate).format('MMMM D, YYYY'),
+      content: personnel?.applicationDate ? datePST(personnel.applicationDate) : "-",
     },
     {
       title: 'Reviewed Date',
-      content: personnel.dateJoined
-        ? dayjs(personnel.dateJoined).format('MMMM D, YYYY')
+      content: personnel.dateJoined 
+        ? datePST(personnel.dateJoined)
         : '-',
     },
   ];
@@ -50,20 +50,17 @@ const ProfileDetails = ({
     {
       title: 'Primary Number',
       content:
-        personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
-        'Not Listed',
+        formatPhone(personnel?.primaryPhone) ?? "Not Listed"
     },
     {
       title: 'Secondary Number',
       content:
-        personnel?.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
-        'Not Listed',
+        formatPhone(personnel?.secondaryPhone) ?? "Not Listed"
     },
     {
       title: 'Work Phone',
       content:
-        personnel?.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
-        'Not Listed',
+        formatPhone(personnel?.workPhone) ?? "Not Listed"
     },
     { title: 'Email Address', content: personnel.email },
   ];

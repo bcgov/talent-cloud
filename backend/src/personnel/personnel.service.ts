@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  format,
-  eachDayOfInterval,
-  parse,
-} from 'date-fns';
+import { format, eachDayOfInterval, parse } from 'date-fns';
 import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -44,6 +40,17 @@ export class PersonnelService {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelRepository.findOne({ where: { id } });
     this.logger.log(`${JSON.stringify(personnel)}`);
+
+    if (
+      personnel?.workLocation &&
+      personnel?.workLocation?.locationName === ''
+    ) {
+      personnel.workLocation = {
+        locationName: null,
+        region: null,
+      };
+    }
+
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
     });
@@ -58,12 +65,16 @@ export class PersonnelService {
 
   /**
    * Update Personnel Experiences
-   * @param id 
-   * @param experiences 
-   * @param role 
-   * @returns 
+   * @param id
+   * @param experiences
+   * @param role
+   * @returns
    */
-  async updatePersonnelExperiences(id: string, experiences: PersonnelExperienceDTO[], role: Role) {
+  async updatePersonnelExperiences(
+    id: string,
+    experiences: PersonnelExperienceDTO[],
+    role: Role,
+  ) {
     const experienceEntities = experiences.map((e) => ({
       functionId: e.id,
       personnelId: id,
@@ -180,7 +191,12 @@ export class PersonnelService {
         });
       }
     } else {
-      qb.leftJoinAndSelect('personnel.availability', 'availability', 'availability.date = :date', { date: datePST(new Date()) });
+      qb.leftJoinAndSelect(
+        'personnel.availability',
+        'availability',
+        'availability.date = :date',
+        { date: datePST(new Date()) },
+      );
     }
 
     if (query.showInactive) {

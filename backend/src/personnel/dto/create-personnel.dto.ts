@@ -19,8 +19,11 @@ import { Form } from '../../database/entities/form.entity';
 import { TrainingEntity } from '../../database/entities/training.entity';
 
 class PersonnelLocationDTO {
+  @IsOptional()
+  id?: number;
+
   @IsString()
-  locationName: string;
+  locationName?: string;
 
   @ApiProperty({
     description: 'Ministry personnel works in',
@@ -28,7 +31,7 @@ class PersonnelLocationDTO {
     example: Region.SWE,
   })
   @IsEnum(Region)
-  region: Region;
+  region?: Region;
 }
 
 export class CreatePersonnelDTO {
@@ -56,7 +59,8 @@ export class CreatePersonnelDTO {
     },
   })
   @IsOptional()
-  workLocation: PersonnelLocationDTO;
+  @ValidateIf((o) => o.workLocation && o.workLocation?.locationName !== '')
+  workLocation?: PersonnelLocationDTO;
 
   @ApiProperty({
     description: "Personnel's home location",
@@ -100,7 +104,7 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @IsOptional()
   @Length(10, 10)
-  @ValidateIf((o) => o.otherPhone !== '')
+  @ValidateIf((o) => o.workPhone !== '')
   workPhone?: string;
 
   @ApiProperty({
@@ -131,8 +135,10 @@ export class CreatePersonnelDTO {
     description: "Name of personnel's supervisor",
     example: 'River Cartwright',
   })
-  @IsString()
+  @IsEmail()
+  @ValidateIf((o) => o.supervisorEmail !== '')
   @Length(2, 50)
+  @IsOptional()
   supervisorEmail?: string;
 
   @ApiProperty({

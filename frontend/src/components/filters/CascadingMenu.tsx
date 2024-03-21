@@ -51,9 +51,9 @@ export const CascadingMenu = ({
               }
             />
           ) : (
-            <span className={classes.menu.placeholder}>
+            <p className={classes.menu.placeholder}>
               Select {label.toLowerCase()}(s)
-            </span>
+             </p>
           )}
           <MenuButton />
         </MenuHandler>

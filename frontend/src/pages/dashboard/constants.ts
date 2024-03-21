@@ -74,8 +74,8 @@ export interface Personnel {
   ministry: string;
   applicationDate?: Date;
   primaryPhone: string;
-  secondaryPhone: string;
-  workPhone: string;
+  secondaryPhone?: string;
+  workPhone?: string;
   email: string;
   supervisorFirstName: string;
   supervisorLastName: string;
@@ -83,7 +83,7 @@ export interface Personnel {
   reviewed: boolean;
   coordinatorNotes: string;
   logisticsNotes: string;
-  dateJoined: Date;
+  dateJoined?: Date;
   lastDeployed?: string;
 }
 
