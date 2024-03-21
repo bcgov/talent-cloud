@@ -24,9 +24,9 @@ export const ProfileEditForm = ({
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     secondaryPhone:
-      personnel.secondaryPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+      personnel.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     workPhone:
-      personnel.workPhone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
+      personnel.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
   };
 
   delete initialValues?.availability;
@@ -57,8 +57,8 @@ export const ProfileEditForm = ({
   ) => {
     // trim all the formatted characters out of the phone numbers
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.secondaryPhone = values?.secondaryPhone.replace(/[(]|-|[)]|\s/gi, '');
-    values.workPhone = values?.workPhone.replace(/[(]|-|[)]|\s/gi, '');
+    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
