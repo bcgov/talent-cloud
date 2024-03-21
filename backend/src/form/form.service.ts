@@ -135,8 +135,8 @@ export class FormService {
       supervisorEmail: supervisorInfo?.supervisorEmail,
       dateJoined: undefined,
       unionMembership: UnionMembership[workDetails.unionMembership],
-      remoteOnly: deploymentPreferences.remoteOnly as boolean,
-      willingToTravel: deploymentPreferences.remoteOnly as boolean,
+      remoteOnly: deploymentPreferences.remoteOnly,
+      willingToTravel: deploymentPreferences.willingToTravel,
       firstNationExperienceLiving:
         experience.firstNations?.living === ''
           ? false
