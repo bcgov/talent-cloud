@@ -19,6 +19,9 @@ import { Form } from '../../database/entities/form.entity';
 import { TrainingEntity } from '../../database/entities/training.entity';
 
 class PersonnelLocationDTO {
+  @IsOptional()
+  id?: number;
+
   @IsString()
   locationName: string;
 
@@ -56,6 +59,7 @@ export class CreatePersonnelDTO {
     },
   })
   @IsOptional()
+  @ValidateIf((o) => o.workLocation.locationName !== '')
   workLocation: PersonnelLocationDTO;
 
   @ApiProperty({

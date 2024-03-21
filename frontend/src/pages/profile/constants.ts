@@ -16,27 +16,21 @@ export const EditProfileValidationSchema = Yup.object().shape({
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
-  workLocation: Yup.object().shape({
-    region: Yup.string()
-      .optional()
-      .min(2, 'Min length 2 characters.')
-      .max(50, 'Max length 50 characters.'),
-    locationName: Yup.string()
-      .optional()
-      .min(2, 'Min length 2 characters.')
-      .max(50, 'Max length 50 characters.'),
-  }),
-  homeLocation: Yup.object().shape({
-    region: Yup.string()
-      .optional()
-      .min(2, 'Min length 2 characters.')
-      .max(50, 'Max length 50 characters.')
-      .required('This field is required.'),
-    locationName: Yup.string()
-      .optional()
-      .min(2, 'Min length 2 characters.')
-      .max(50, 'Max length 50 characters.'),
-  }),
+    workLocation: Yup.object().shape({
+      region: Yup.string()
+        .optional(),
+      
+      locationName: Yup.string()
+        .optional()
+      
+    }),
+    homeLocation: Yup.object().shape({
+      region: Yup.string()
+        .required('This field is required.'),
+      locationName: Yup.string().min(2, "This field is required").required('This field is required.'),
+        
+        
+    }).required("This field is required"),
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
   primaryPhone: Yup.string()

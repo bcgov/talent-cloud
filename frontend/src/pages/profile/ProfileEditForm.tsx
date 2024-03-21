@@ -36,9 +36,22 @@ export const ProfileEditForm = ({
     e: ChangeEvent<HTMLSelectElement>,
     props: FormikState<Personnel> & FormikProps<Personnel>,
   ) => {
+    const fieldName = e.target.name.split('.')[0];
+    console.log(e.target.value)
+    if(!e.target.value) {
+      props.setValues({
+      ...props.values,
+      [fieldName]: {
+        id: undefined,
+        locationName: "",
+        region: ""
+      },
+    })
+    
+  } else {
     const location = locations.find((itm) => itm.locationName === e.target.value);
 
-    const fieldName = e.target.name.split('.')[0];
+    
 
     props.setValues({
       ...props.values,
@@ -48,6 +61,8 @@ export const ProfileEditForm = ({
         region: location?.region,
       },
     });
+  }
+  
   };
 
   const handleSubmit = async (
@@ -66,7 +81,7 @@ export const ProfileEditForm = ({
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
-console.log(values)
+
     if (values.remoteOnly === 'true') {
       values.remoteOnly = true;
     }

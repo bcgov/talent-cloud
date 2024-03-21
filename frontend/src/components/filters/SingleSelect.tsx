@@ -1,5 +1,5 @@
 import { type ChangeEvent, Fragment } from 'react';
-import { menuItemClass } from './classes';
+import { classes, menuItemClass } from './classes';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { Menu, Transition } from '@headlessui/react';
@@ -56,7 +56,7 @@ export const SingleSelect = ({
                 className={menuItemClass[field.name]}
                 aria-label="Single Select Menu Button"
               >
-                <span className="text-placeholder">{placeholder}</span>
+                <p className={classes.menu.placeholder}>{placeholder}</p>
                 {open ? (
                   <ChevronUpIcon
                     className="-mr-1 h-5 w-5 text-icon"
