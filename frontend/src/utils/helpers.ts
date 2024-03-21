@@ -14,5 +14,5 @@ export const offsetTimezoneDate = (dateString: string): Date => {
 };
 
 export const datePST = (date: Date): string => {
-  return date.toLocaleString('en-US', { timeZone: 'PST' });
+  return date.toLocaleString('en-US', { timeZone: 'PST'}).split('T')[0];
 };

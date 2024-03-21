@@ -2,7 +2,10 @@ import { Ministry, UnionMembership } from '@/common';
 import * as Yup from 'yup';
 
 const phoneNumber = (value: any) =>
-  value.toString().replace(/[^\d]/g, '').length === 10;
+  {
+    if(value === ""||!value){return true}
+    else return value?.toString().replace(/[^\d]/g, '').length === 10;
+  }
 
 export const EditProfileValidationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -47,12 +50,12 @@ export const EditProfileValidationSchema = Yup.object().shape({
     'phone number',
     'Invalid phone number format. Please enter ten digits.',
     phoneNumber,
-  ),
+  ).optional(),
   workPhone: Yup.string().test(
     'phone number',
     'Invalid phone number format. Please enter ten digits.',
     phoneNumber,
-  ),
+  ).optional(),
   supervisorFirstName: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
@@ -72,7 +75,6 @@ export const fields = {
     label: 'First Name',
     type: 'text',
     autocomplete: 'off',
-
     disabled: false,
     required: true,
   },

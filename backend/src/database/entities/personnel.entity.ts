@@ -36,7 +36,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({ type: 'date', name: 'date_joined', nullable: true })
+  @Column({ type: 'timestamp', name: 'date_joined', nullable: true })
   dateJoined: Date;
 
   @JoinColumn([
@@ -89,7 +89,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
 
-  @Column({ name: 'application_date', type: 'date' })
+  @Column({ name: 'application_date', type: 'timestamp' })
   applicationDate: Date;
 
   @Column({ name: 'supervisor_first_name', type: 'varchar', length: 100 })

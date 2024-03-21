@@ -100,7 +100,7 @@ export class CreatePersonnelDTO {
   @IsAlphanumeric()
   @IsOptional()
   @Length(10, 10)
-  @ValidateIf((o) => o.otherPhone !== '')
+  @ValidateIf((o) => o.workPhone !== '')
   workPhone?: string;
 
   @ApiProperty({
@@ -131,8 +131,10 @@ export class CreatePersonnelDTO {
     description: "Name of personnel's supervisor",
     example: 'River Cartwright',
   })
-  @IsString()
+  @IsEmail()
+  @ValidateIf((o) => o.supervisorEmail !== '')
   @Length(2, 50)
+  @IsOptional()
   supervisorEmail?: string;
 
   @ApiProperty({

@@ -35,6 +35,7 @@ export const TextInput = ({
       {required && <span className="text-error">*</span>}
       <input
         {...field}
+        data-lpignore={true}
         disabled={disabled}
         className={getClass()}
         type={type}
