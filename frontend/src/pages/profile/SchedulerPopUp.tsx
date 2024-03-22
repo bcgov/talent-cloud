@@ -45,7 +45,7 @@ const SchedulerPopUp = ({
 
   const saveDates = () => {
     const fromDay = dayjs(range?.from);
-    const toDay = dayjs(range?.to);
+    const toDay = dayjs(range?.to ?? range?.from);
     const availabilityRange: AvailabilityRange = {
       from: fromDay.format('YYYY-MM-DD'),
       to: toDay.format('YYYY-MM-DD'),
