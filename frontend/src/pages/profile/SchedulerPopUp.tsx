@@ -225,7 +225,7 @@ const SchedulerPopUp = ({
                 }}
                 disabled={fromError || toError}
               >
-                Delete Event
+                Delete Availability
               </Button>
             </div>
           )}
