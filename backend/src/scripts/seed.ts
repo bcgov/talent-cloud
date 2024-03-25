@@ -57,5 +57,3 @@ export const handler = async (_event?: unknown) => {
     return 'failure';
   }
 };
-
-console.log(handler());
