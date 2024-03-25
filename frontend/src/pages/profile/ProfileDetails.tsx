@@ -6,6 +6,8 @@ import DetailsSection from './DetailsSection';
 import type { Personnel } from '../dashboard';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { datePST, formatPhone } from '@/utils';
+import { useRole } from '@/hooks';
+import { Role } from '@/common';
 
 const ProfileDetails = ({
   personnel,
@@ -15,6 +17,7 @@ const ProfileDetails = ({
   openEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
+  const {role} = useRole()
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const generalInformation = [
@@ -95,14 +98,14 @@ const ProfileDetails = ({
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>
-              <button
+              {role && role === Role.COORDINATOR && <button
                 aria-label="edit profile"
                 onClick={openEditProfilePopUp}
                 className="z-20 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />
                 <span className="pl-2 font-normal underline text-sm">Edit</span>
-              </button>
+              </button>}
             </div>
           </AccordionHeader>
 
