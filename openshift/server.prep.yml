@@ -39,6 +39,7 @@ objects:
       api_key: ${CHEFS_API_KEY}
       token: ${CHEFS_WS_TOKEN}
       form_id: ${CHEFS_FORM_ID}
+      disabled: ${CHEFS_FORM_DISABLED}
   - kind: ConfigMap
     apiVersion: v1
     metadata:

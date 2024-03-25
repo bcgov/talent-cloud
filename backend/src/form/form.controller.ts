@@ -35,14 +35,15 @@ export class FormSubmissionController {
   }
 
   /**
- * Returns the formId for the chefs form based on the current env
- * @returns 
- */
+   * Returns the formId for the chefs form based on the current env
+   * @returns
+   */
   @Get()
   @Public()
-  getFormId(): {formId: string} {
+  getFormId(): { formId: string; disabled: boolean } {
     return {
-        formId: `${process.env.CHEFS_FORM_ID}`
+      formId: `${process.env.CHEFS_FORM_ID}`,
+      disabled: process.env.CHEFS_FORM_DISABLED === 'true',
     };
   }
 }

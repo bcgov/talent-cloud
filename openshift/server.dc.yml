@@ -141,6 +141,11 @@ objects:
                     secretKeyRef:
                       key: form_id
                       name: ${APP_NAME}-chefs
+                - name: CHEFS_FORM_DISABLED
+                  valueFrom:
+                    secretKeyRef:
+                      key: disabled
+                      name: ${APP_NAME}-chefs
               image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
               ports:
                 - containerPort: '${{SERVER_PORT}}'
