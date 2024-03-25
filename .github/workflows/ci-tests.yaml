@@ -32,8 +32,11 @@ jobs:
       - name: Run Migrations
         run: make migration-run
 
-      - name: Seed Test Data
+      - name: Seed Test Locations/Functions
         run: make seed-data
+      
+      - name: Seed Test Data
+        run: make seed-dummy-data
 
       - name: Run Tests
         run: make test-backend-pipeline

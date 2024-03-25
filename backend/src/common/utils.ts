@@ -212,7 +212,7 @@ const experiences = () => {
   );
 };
 
-export const generateData = () => {
+const generateData = () => {
   const people = [];
   for (let i = 0; i < 200; i++) {
     people.push(rowData());
@@ -220,7 +220,7 @@ export const generateData = () => {
   return people;
 };
 
-const handler = async () => {
+export const handler = async () => {
   const app = await NestFactory.createApplicationContext(AppModule);
   const data = generateData();
 
@@ -229,4 +229,4 @@ const handler = async () => {
   return await personnelService.createPersonnel(data);
 };
 
-console.log(handler());
+handler();
