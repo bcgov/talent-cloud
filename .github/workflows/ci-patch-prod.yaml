@@ -1,10 +1,11 @@
 # Promotion to prod env.
 # Trigger with tag push
 # Connected with repo environment 'prod'
-name: OpenShift Deploy/Promotion to Prod
+name: OpenShift Hotfix to Prod
 
 on:
-    workflow_dispatch:
+    branches:
+      - Patch-version
       
 
 env:
