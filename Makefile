@@ -25,12 +25,13 @@ export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
+
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-color --format="%h, %cn, %f, %D" | sed 's/->/:/')
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
-
+export PATCH_VERSION?=1.0.1
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
 	@$(shell echo ./scripts/setenv.sh local ci )
@@ -183,6 +184,12 @@ tag-dev:
 tag-test:
 	@git tag -fa test -m "Deploy $(git rev-parse --abbrev-ref HEAD) to TEST env"
 	@git push --force origin refs/tags/test:refs/tags/test
+
+tag-prod-patch:
+	@git tag -fa prod$(PATCH_VERSION) -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
+	@git push --force origin refs/tags/prod$(PATCH_VERSION):refs/tags/prod$(PATCH_VERSION)
+	@oc tag $(APP_NAME)-server:$(COMMIT_SHA) $(APP_NAME)-server:prod -n $(TOOLS_NAMESPACE)
+	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-client:prod -n $(TOOLS_NAMESPACE)
 
 tag-prod:
 	@git tag -fa prod -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
