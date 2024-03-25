@@ -4,7 +4,6 @@ services:
     image: postgres:15-alpine
     container_name: ${PROJECT}-db-${ENV}
     restart: always
-    env_file: .env
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST_CI}
       POSTGRES_PORT: ${POSTGRES_PORT_CI}
@@ -65,16 +64,15 @@ services:
     restart: always
     stdin_open: true
     command: "npm run start:dev"
-    env_file: .env
     environment:
       NODE_ENV: ${ENV}
-      PORT: ${API_PORT_CI}
+      PORT: 3000
       DB_PORT: ${DB_PORT_CI}
       DB_HOST: ${DB_HOST_CI}
       DB_NAME: ${DB_NAME_CI}
       DB_USER: ${DB_USER_CI}
       KEYCLOAK_REALM:  ${KEYCLOAK_REALM_CI}
-      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_SERVER_CI}
+      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL_CI}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT_CI}
       DB_PASSWORD: ${DB_PASSWORD_CI}
       CHOKIDAR_USEPOLLING: "true"
