@@ -32,6 +32,16 @@ export KEYCLOAK_ADMIN_CI=admin
 export KEYCLOAK_PASSWORD_CI=password
 export KEYCLOAK_PORT_CI=8080
 
+export DB_HOST_CI=db
+export DB_NAME_CI=tc
+export DB_USER_CI=tc_user
+export DB_PASSWORD_CI=tc_password
+export DB_TYPE_CI=postgres
+export DB_PORT_CI=5432
+
+export POSTGRES_HOST_CI=localhost
+export POSTGRES_PORT_CI=5432
+
 
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)

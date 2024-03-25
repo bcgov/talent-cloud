@@ -6,12 +6,12 @@ services:
     restart: always
     env_file: .env
     environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_ROOT_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST_CI}
+      POSTGRES_PORT: ${POSTGRES_PORT_CI}
+      POSTGRES_DB: ${DB_NAME_CI}
+      POSTGRES_USER: ${DB_USER_CI}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_CI}
+      POSTGRES_ROOT_PASSWORD: ${DB_PASSWORD_CI}
     ports:
       - "5433:5432"
     volumes:
@@ -68,15 +68,15 @@ services:
     env_file: .env
     environment:
       NODE_ENV: ${ENV}
-      PORT: ${API_PORT}
-      DB_PORT: ${DB_PORT}
-      DB_HOST: ${DB_HOST}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
+      PORT: ${API_PORT_CI}
+      DB_PORT: ${DB_PORT_CI}
+      DB_HOST: ${DB_HOST_CI}
+      DB_NAME: ${DB_NAME_CI}
+      DB_USER: ${DB_USER_CI}
       KEYCLOAK_REALM:  ${KEYCLOAK_REALM_CI}
       KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_SERVER_CI}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT_CI}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD_CI}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
@@ -101,14 +101,13 @@ services:
     volumes:
       - keycloak:/opt/keycloak/data
       - ./keycloak/default.json:/opt/keycloak/data/import/default.json
-    env_file: .env
     environment:
       KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
-      DB_VENDOR: ${DB_TYPE}
+      DB_VENDOR: ${DB_TYPE_CI}
       DB_ADDR: db
-      DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
-      DB_USERNAME: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: jdbc:postgresql://${POSTGRES_HOST_CI}:${POSTGRES_PORT_CI}/${DB_NAME_CI}
+      DB_USERNAME: ${DB_USER_CI}
+      DB_PASSWORD: ${DB_PASSWORD_CI}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_CI}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD_CI}
       HEALTH_ENABLED: "true"
