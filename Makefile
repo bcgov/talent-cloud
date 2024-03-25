@@ -188,8 +188,6 @@ tag-test:
 tag-prod-patch:
 	@git tag -fa prod$(PATCH_VERSION) -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
 	@git push --force origin refs/tags/prod$(PATCH_VERSION):refs/tags/prod$(PATCH_VERSION)
-	@oc tag $(APP_NAME)-server:$(COMMIT_SHA) $(APP_NAME)-server:prod -n $(TOOLS_NAMESPACE)
-	@oc tag $(APP_NAME)-client:$(COMMIT_SHA) $(APP_NAME)-client:prod -n $(TOOLS_NAMESPACE)
 
 tag-prod:
 	@git tag -fa prod -m "Deploy $(git rev-parse --abbrev-ref HEAD) to PROD env"
