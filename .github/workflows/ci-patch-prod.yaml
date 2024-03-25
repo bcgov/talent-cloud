@@ -4,6 +4,7 @@
 name: OpenShift Hotfix to Prod
 
 on:
+  push:
     branches:
       - Patch-version
       
