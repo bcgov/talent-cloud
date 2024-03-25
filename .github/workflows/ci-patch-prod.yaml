@@ -16,7 +16,7 @@ env:
 
 jobs:
   config:
-    name: Deploy Config (Prod)
+    name: OpenShift Hotfix to Prod
     environment: prod
     runs-on: ubuntu-latest
     env:
