@@ -16,7 +16,7 @@ export CONTAINER_REGISTRY := ""
 # Openshift
 export APP_NAME:=tcloud
 export OS_NAMESPACE_PREFIX:=cd4869
-export OS_NAMESPACE_SUFFIX?=dev
+export OS_NAMESPACE_SUFFIX?=test
 export TARGET_NAMESPACE=$(OS_NAMESPACE_PREFIX)-$(OS_NAMESPACE_SUFFIX)
 export TOOLS_NAMESPACE=$(OS_NAMESPACE_PREFIX)-tools
 export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
@@ -213,16 +213,13 @@ migration-revert:
 
 migration-run:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./src/database/datasource.ts
-
-
-
 	
 seed-data: 
-	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
-	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
-	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
-	@docker exec -it tc-backend-local ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
-
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
+	
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"

@@ -19,7 +19,10 @@
     "test:pipeline": "cypress run --headless",
     "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
     "prepare": "cd ../ && husky install ./frontend/.husky",
-    "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/"
+    "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/", 
+    "cypress:run": "cypress run --config video=false --component",
+    "cypress:run:e2e": "cypress run --e2e", 
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@react-keycloak/web": "3.4.0",
