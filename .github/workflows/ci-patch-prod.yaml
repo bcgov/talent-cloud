@@ -4,8 +4,8 @@
 name: OpenShift Deploy/Promotion to Prod
 
 on:
-    branches:
-      - Patch-Version
+    workflow_dispatch:
+      
 
 env:
   CLUSTER: https://api.gold.devops.gov.bc.ca:6443
