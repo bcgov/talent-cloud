@@ -15,7 +15,6 @@ export const handler = async (_event?: unknown) => {
   }
 
   const locationRepo = datasource.getRepository('location');
-
   const functionRepo = datasource.getRepository('function');
   const personnelRepo = datasource.getRepository('personnel');
 
@@ -25,13 +24,17 @@ export const handler = async (_event?: unknown) => {
     const locationData = await locationRepo.find();
 
     if (locationData.length === 0) {
-      return await datasource.query(locationSql);
+      await datasource.query(locationSql);
     }
+
     console.log('Seeding Function Data...');
+
     const functionData = await functionRepo.find();
+
     if (functionData.length === 0) {
-      return await datasource.query(functionSql);
+      await datasource.query(functionSql);
     }
+
     console.log('Seeding DB Functions...');
     await datasource.query(functionSqlPrior);
     await datasource.query(functionSqlAfter);
@@ -40,6 +43,7 @@ export const handler = async (_event?: unknown) => {
     const seededFunctions = await functionRepo.find();
 
     console.log('Seeding Data...');
+
     const personnelData = dataHandler(
       seededLocations as LocationEntity[],
       seededFunctions as FunctionEntity[],
@@ -57,3 +61,4 @@ export const handler = async (_event?: unknown) => {
     return 'failure';
   }
 };
+handler();
