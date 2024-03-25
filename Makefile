@@ -19,9 +19,20 @@ export OS_NAMESPACE_PREFIX:=cd4869
 export OS_NAMESPACE_SUFFIX?=test
 export TARGET_NAMESPACE=$(OS_NAMESPACE_PREFIX)-$(OS_NAMESPACE_SUFFIX)
 export TOOLS_NAMESPACE=$(OS_NAMESPACE_PREFIX)-tools
+
 export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
+
+export KEYCLOAK_REALM_CI=local
+export KEYCLOAK_CLIENT_CI=local-client
+export KEYCLOAK_AUTH_URL_CI=http://localhost:8080
+
+export KEYCLOAK_ADMIN_CI=admin
+export KEYCLOAK_PASSWORD_CI=password
+export KEYCLOAK_PORT_CI=8080
+
+
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
