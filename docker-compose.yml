@@ -37,23 +37,6 @@ services:
       - tc
     depends_on:
       - backend
-  caddy:
-    container_name:  ${PROJECT}-caddy-${ENV}
-    profiles: ["caddy"]
-    build: ./frontend
-    environment:
-      NODE_ENV: ${ENV}
-      PORT: 3000
-      BACKEND_URL: http://backend:3000
-      LOG_LEVEL: info
-    ports: ["3005:3000"]
-    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-    depends_on:
-    - backend
-    networks:
-      - tc
   backend:
     container_name: ${PROJECT}-backend-${ENV}
     entrypoint: sh -c "npm i && npm run start:dev"  

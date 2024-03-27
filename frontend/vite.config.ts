@@ -67,6 +67,7 @@ export default defineConfig({
       allow: ['..'],
     },
     proxy: {
+      // should we set a host here?
       // Proxy API requests to the backend
       '/api': {
         target: process.env.BACKEND_URL,
@@ -74,6 +75,17 @@ export default defineConfig({
       },
     },
   },
+  // should we use vite preview for running the tests?
+  // preview: {
+  //   proxy: {
+  //     // should we set a host here?
+  //     // Proxy API requests to the backend
+  //     '/api': {
+  //       target: process.env.BACKEND_URL,
+  //       changeOrigin: true,
+  //     },
+  //   },
+  // },
   resolve: {
     // https://vitejs.dev/config/shared-options.html#resolve-alias
     alias: {
