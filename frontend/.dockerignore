@@ -3,9 +3,6 @@ coverage
 .idea
 dist
 node_modules
-cypress
 .husky
-cypress.config.ts
-cypress.d.ts
 vitest.config.ts
 dev-dist/*
