@@ -40,6 +40,8 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: ./frontend
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
       
       - uses: actions/upload-artifact@v2
         if: failure()
