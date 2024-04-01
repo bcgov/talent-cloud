@@ -6,7 +6,7 @@ describe('local host spec', () => {
 
   it('visits localhost', () => {
     cy.visit('http://localhost:3000');
-    cy.get('Log In').click();
+    cy.get('button:contains("Log In")').filter(':visible').click();
   });
 
   // it('visits 127.0.0.1', () => {
