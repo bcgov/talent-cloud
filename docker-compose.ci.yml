@@ -66,6 +66,7 @@ services:
       - ./backend:/usr/src/app
     depends_on:
       - db
+      - keycloak
     networks:
       - tc
   keycloak:

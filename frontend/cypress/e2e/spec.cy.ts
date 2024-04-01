@@ -12,7 +12,6 @@ describe('local host spec', () => {
     cy.wait('@apicheck').then((interception) => {
       cy.log(interception.response?.body.authUrl);
       cy.log(interception.response?.body.realm);
-      cy.screenshot();
       assert.isNotNull(interception.response.body, '1st API call has data');
     });
     // cy.get('button:contains("Log In")').filter(':visible').click();
