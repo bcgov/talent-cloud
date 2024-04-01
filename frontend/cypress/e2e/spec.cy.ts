@@ -5,8 +5,14 @@ describe('local host spec', () => {
   // });
 
   it('visits localhost', () => {
-    cy.visit('http://localhost:3000');
-    cy.get('button:contains("Log In")').filter(':visible').click();
+    cy.intercept({ method: 'GET', url: 'http://localhost:3000/api/v1/keycloak' }).as(
+      'apicheck',
+    );
+    // cy.visit('http://localhost:3000');
+    cy.wait('@apicheck').then((interception) => {
+      assert.isNotNull(interception.response.body, '1st API call has data');
+    });
+    // cy.get('button:contains("Log In")').filter(':visible').click();
   });
 
   // it('visits 127.0.0.1', () => {
