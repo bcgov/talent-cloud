@@ -10,8 +10,6 @@ describe('local host spec', () => {
     );
     cy.visit('http://localhost:3000');
     cy.wait('@apicheck').then((interception) => {
-      cy.log(interception.response?.body.authUrl);
-      cy.log(interception.response?.body.realm);
       assert.isNotNull(interception.response.body, '1st API call has data');
     });
     // cy.get('button:contains("Log In")').filter(':visible').click();
