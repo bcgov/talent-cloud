@@ -8,14 +8,15 @@ describe('local host spec', () => {
     cy.intercept(
       { method: 'GET', url: 'http://localhost:3000/api/v1/keycloak' },
       {
-        KEYCLOAK_REALM: 'local',
-        KEYCLOAK_CLIENT: 'local-client',
-        KEYCLOAK_AUTH_URL: 'http://localhost:8080',
+        realm: 'local',
+        client: 'local-client',
+        authUrl: 'http://localhost:8080',
       },
     ).as('apicheck');
     cy.visit('http://localhost:3000');
     cy.wait('@apicheck').then((interception) => {
       assert.isNotNull(interception.response.body, '1st API call has data');
+      assert.equal(interception.response.body.client, 'local-client');
     });
     // cy.get('button:contains("Log In")').filter(':visible').click();
   });
