@@ -38,10 +38,10 @@ jobs:
       - name: Seed Test Locations/Functions
         run: make seed-data-ci
 
-      - name: Run Tests
+      - name: Run Backend Tests
         run: make test-backend-pipeline
 
-      - name: Run Tests
+      - name: Run Frontend Tests
         run: make test-frontend-pipeline
       
       - uses: actions/upload-artifact@v2
