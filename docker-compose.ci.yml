@@ -36,6 +36,7 @@ services:
       - tc
     depends_on:
       - backend
+      - keycloak
   backend:
     container_name: ${PROJECT}-backend-ci
     image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
