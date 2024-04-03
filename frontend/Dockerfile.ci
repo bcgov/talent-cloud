@@ -1,18 +1,19 @@
-###################
+##################
 # BUILD FOR CI TESTS
 ###################
+# Only needed if running cypress inside the container
+FROM cypress/included:latest
 
-FROM cypress/base:20.10.0
+
+
+ENV PATH $PATH:/app/node_modules/.bin
 
 WORKDIR /app
-
 ENV PORT 3000
 
-COPY *.json .
+COPY package*.json . 
+COPY . . 
 
-RUN npm ci
-
-COPY . .
+RUN npm ci 
 
 EXPOSE 3000
-

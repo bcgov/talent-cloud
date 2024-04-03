@@ -2,7 +2,14 @@ import type { ButtonProps } from '@/common';
 import { ButtonTypes } from '@/common';
 import { button } from './classes';
 
-export const Button = ({ type, variant, text, onClick, disabled }: ButtonProps) => {
+export const Button = ({
+  id,
+  type,
+  variant,
+  text,
+  onClick,
+  disabled,
+}: ButtonProps) => {
   const buttonClass = () => {
     if (variant === ButtonTypes.PRIMARY) {
       return button.primaryButton;
@@ -20,6 +27,7 @@ export const Button = ({ type, variant, text, onClick, disabled }: ButtonProps) 
 
   return (
     <button
+      id={id}
       type={type ?? 'button'}
       onClick={onClick}
       disabled={disabled}

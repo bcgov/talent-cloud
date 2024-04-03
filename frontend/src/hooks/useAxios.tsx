@@ -14,11 +14,12 @@ export const useAxios = () => {
   const { keycloak } = useKeycloak();
 
   const RequestResponseInterceptor = (config: any) => {
-    config.headers = {
-      Authorization: `Bearer ${keycloak?.token}`,
-      // rest of the headers...
-    };
-
+    if (keycloak?.token) {
+      config.headers = {
+        Authorization: `Bearer ${keycloak.token}`,
+        // rest of the headers...
+      };
+    }
     return config;
   };
 
