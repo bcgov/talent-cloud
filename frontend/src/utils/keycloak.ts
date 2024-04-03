@@ -16,7 +16,7 @@ export const createCustomLoginUrl = (
 
   const loginUrl = kcInstance.createLoginUrl({
     idpHint,
-    redirectUri: `http://localhost:3000/${route}`,
+    redirectUri: `${window.location.origin}${route}`,
   });
   const fullLoginUrl = loginUrl + `&idps_to_show=${idpHint || idps.join(',')}`;
 
