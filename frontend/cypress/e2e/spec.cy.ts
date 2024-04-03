@@ -5,18 +5,11 @@ describe('local host spec', () => {
   // });
 
   it('visits localhost', () => {
-    cy.intercept(
-      { method: 'GET', url: '/api/v1/keycloak' },
-      {
-        realm: 'local',
-        client: 'local-clients',
-        authUrl: 'http://keycloak.localhost:8080/auth',
-      },
-    ).as('apicheck');
+    cy.intercept({ method: 'GET', url: '/api/v1/keycloak' }).as('apicheck');
     cy.visit('http://localhost:3000');
     cy.wait('@apicheck').then((interception) => {
       assert.isNotNull(interception.response.body, '1st API call has data');
-      assert.equal(interception.response.body.client, 'local-clients');
+      assert.equal(interception.response.body.client, 'local-client');
     });
     // cy.get('button:contains("Log In")').filter(':visible').click();
   });
