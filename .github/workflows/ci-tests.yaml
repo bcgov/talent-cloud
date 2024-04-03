@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   pull_request:
 
+env:
+  KEYCLOAK_LOCAL_AUTH_URL: 'http://localhost:8080'
+  KEYCLOAK_REALM: 'local'
+  KEYCLOAK_CLIENT: 'local-client'
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
