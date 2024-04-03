@@ -10,7 +10,7 @@ describe('local host spec', () => {
       {
         realm: 'local',
         client: 'local-clients',
-        authUrl: 'http://localhost:8080',
+        authUrl: 'http://keycloak.localhost:8080/auth',
       },
     ).as('apicheck');
     cy.visit('http://localhost:3000');

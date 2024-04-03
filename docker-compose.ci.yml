@@ -21,7 +21,7 @@ services:
   frontend:
     container_name:  ${PROJECT}-frontend-${ENV}
     entrypoint: sh -c "npm ci && npm run dev -- --host"
-    image: cypress/base:20.10.0
+    image: node:20-bullseye
     environment:
       NODE_ENV: ci
       PORT: 3000
