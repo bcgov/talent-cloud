@@ -1,6 +1,6 @@
 import { datasource } from './datasource';
 
-const functionSql = `INSERT INTO public."location" (location_name, region) VALUES
+export const functionSql = `INSERT INTO public."location" (location_name, region) VALUES
   ('100 Mile House',  'NEA' ),
   ('150 Mile House',  'NEA' ),
   ('Abbotsford',  'SWE' ),

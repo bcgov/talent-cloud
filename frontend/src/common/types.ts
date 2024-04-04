@@ -18,6 +18,7 @@ export type ButtonProps = {
   onClick?: (e: MouseEvent<HTMLElement>) => any;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  id?: string;
 };
 
 export type NavProps = {

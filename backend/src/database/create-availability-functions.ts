@@ -1,6 +1,6 @@
 import { datasource } from "./datasource";
 
-const functionSqlPrior = `create or replace function get_last_status_date_prior(personnel_id uuid, starting_date date, starting_status character varying(50))
+export const functionSqlPrior = `create or replace function get_last_status_date_prior(personnel_id uuid, starting_date date, starting_status character varying(50))
   returns date
   language plpgsql
   as
@@ -28,7 +28,7 @@ const functionSqlPrior = `create or replace function get_last_status_date_prior(
 $$;
 `;
 
-const functionSqlAfter = `create or replace function get_last_status_date_after(personnel_id uuid, starting_date date, starting_status character varying(50))
+export const functionSqlAfter = `create or replace function get_last_status_date_after(personnel_id uuid, starting_date date, starting_status character varying(50))
   returns date
   language plpgsql
   as

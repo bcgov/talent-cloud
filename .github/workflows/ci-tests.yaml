@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   pull_request:
 
+env:
+  ENV: ci
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -12,6 +15,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
 
       - uses: actions/setup-node@v3
         with:
@@ -29,11 +35,23 @@ jobs:
       - name: Run Docker containers
         run: make build-test
 
-      - name: Run Tests
+      - name: Run Migrations
+        run: make migration-run
+
+      - name: Seed Test Locations/Functions
+        run: make seed-data
+
+      - name: Run Backend Tests
         run: make test-backend-pipeline
 
-      - name: Run Tests
+      - name: Run Frontend Tests
         run: make test-frontend-pipeline
+      
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: ./frontend/cypress/screenshots
 
       - name: Stop containers
         run: make close

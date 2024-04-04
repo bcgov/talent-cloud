@@ -18,15 +18,14 @@ services:
       - pg_data:/var/lib/postgresql/data
     networks:
       - tc
-
   frontend:
-    container_name:  ${PROJECT}-frontend-ci
-    entrypoint: sh -c "npm run dev"
+    container_name:  ${PROJECT}-frontend-${ENV}
+    entrypoint: sh -c "npm ci && npm run dev -- --host"
     build:
-      context: ./frontend
+      context: "./frontend"
       dockerfile: Dockerfile.ci
     environment:
-      NODE_ENV: ${ENV}
+      NODE_ENV: ci
       PORT: 3000
       BACKEND_URL: http://backend:3000
     ports: 
@@ -39,23 +38,6 @@ services:
       - tc
     depends_on:
       - backend
-  caddy:
-    container_name:  ${PROJECT}-caddy-ci
-    profiles: ["caddy"]
-    build: ./frontend
-    environment:
-      NODE_ENV: ${ENV}
-      PORT: 3000
-      BACKEND_URL: http://backend:3000
-      LOG_LEVEL: info
-    ports: ["3005:3000"]
-    volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-    depends_on:
-    - backend
-    networks:
-      - tc
   backend:
     container_name: ${PROJECT}-backend-ci
     image: ${PROJECT}-backend:${GIT_LOCAL_BRANCH}
@@ -68,13 +50,14 @@ services:
     env_file: .env
     environment:
       NODE_ENV: ${ENV}
-      PORT: ${API_PORT}
+      ENV: ${ENV}
+      PORT: 3000
       DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       KEYCLOAK_REALM:  ${KEYCLOAK_REALM}
-      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_SERVER}
+      KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       DB_PASSWORD: ${DB_PASSWORD}
       CHOKIDAR_USEPOLLING: "true"

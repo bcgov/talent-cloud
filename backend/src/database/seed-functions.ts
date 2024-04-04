@@ -1,6 +1,6 @@
 import { datasource } from './datasource';
 
-const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
+export const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
 	 ('Operations','Ops'),
 	 ('Emergency Support Services','ESS'),
 	 ('First Nations','FN'),
