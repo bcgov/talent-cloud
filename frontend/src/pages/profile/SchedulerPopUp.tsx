@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 
 import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
-import { ButtonGroup, Button, Input } from '@material-tailwind/react';
+import {
+  ButtonGroup,
+  Button,
+  Dialog,
+  DialogBody,
+  Input,
+} from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import { calendarClass } from '@/components/filters/classes';
 import { DatePickerHeader } from '@/components/filters/date-picker/DatePickerHeader';
@@ -39,6 +45,7 @@ const SchedulerPopUp = ({
   const [fromError, setFromError] = useState(false);
   const [toInput, setToInput] = useState(editedTo ?? dayjs().format('YYYY-MM-DD'));
   const [toError, setToError] = useState(false);
+  const [confirmModal, setConfirmModal] = useState<'DELETE' | 'EDIT' | null>(null);
 
   const BUTTON_GROUP_SELECTED_CLASS = 'bg-blue text-white capitalize hover:bg-blue';
   const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
@@ -99,6 +106,15 @@ const SchedulerPopUp = ({
     }
   };
 
+  const confirmAction = () => {
+    setConfirmModal(null);
+    if (confirmModal === 'DELETE') {
+      deleteDates();
+    } else if (confirmModal === 'EDIT') {
+      saveDates();
+    }
+  };
+
   useEffect(() => {
     if (range) {
       const fromDay = dayjs(range.from);
@@ -117,6 +133,66 @@ const SchedulerPopUp = ({
       setToError(true);
     }
   }, [range]);
+
+  const EditConfirmContent = () => (
+    <div className="py-4 px-4">
+      <p className="font-bold text-lg">Update availability in Calendar?</p>
+      <p className="pt-2">
+        Modifying availability within a currently selected date range resets the
+        entire selection. This action replaces previous availability once changes are
+        saved.
+      </p>
+      <div className="pt-12 flex justify-end">
+        <Button
+          aria-label="close"
+          variant="text"
+          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
+          onClick={() => setConfirmModal(null)}
+          placeholder={''}
+        >
+          Cancel
+        </Button>
+        <Button
+          aria-label="confirm"
+          onClick={confirmAction}
+          placeholder={''}
+          className="normal-case bg-primaryBlue cursor-pointer"
+        >
+          Confirm Update
+        </Button>
+      </div>
+    </div>
+  );
+
+  const DeleteConfirmContent = () => (
+    <div className="py-4 px-4">
+      <p className="font-bold text-lg">Delete availability from Calendar?</p>
+      <p className="pt-2">
+        Once an availability is deleted, the selected date range on the calendar will
+        be reset to blank. You may need to reconfirm this member&apos;s availability
+        for these dates later.
+      </p>
+      <div className="pt-12 flex justify-end">
+        <Button
+          aria-label="close"
+          variant="text"
+          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
+          onClick={() => setConfirmModal(null)}
+          placeholder={''}
+        >
+          Cancel
+        </Button>
+        <Button
+          aria-label="confirm"
+          onClick={confirmAction}
+          placeholder={''}
+          className="normal-case bg-primaryBlue cursor-pointer"
+        >
+          Confirm Delete
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="grid grid-cols-2">
@@ -221,7 +297,7 @@ const SchedulerPopUp = ({
                 className="w-full"
                 variant="text"
                 onClick={() => {
-                  deleteDates();
+                  setConfirmModal('DELETE');
                 }}
                 disabled={fromError || toError}
               >
@@ -234,7 +310,7 @@ const SchedulerPopUp = ({
               placeholder={''}
               className="w-full bg-blue"
               onClick={() => {
-                saveDates();
+                setConfirmModal('EDIT');
               }}
               disabled={fromError || toError}
             >
@@ -264,6 +340,18 @@ const SchedulerPopUp = ({
           }}
         />
       </div>
+      <Dialog
+        open={!!confirmModal}
+        handler={() => {}}
+        title={'Confirm'}
+        placeholder={''}
+        size="sm"
+      >
+        <DialogBody placeholder={''}>
+          {confirmModal === 'DELETE' && <DeleteConfirmContent />}
+          {confirmModal === 'EDIT' && <EditConfirmContent />}
+        </DialogBody>
+      </Dialog>
     </div>
   );
 };
