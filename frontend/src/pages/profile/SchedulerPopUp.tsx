@@ -136,13 +136,11 @@ const SchedulerPopUp = ({
 
   const EditConfirmContent = () => (
     <div className="py-4 px-4">
-      <p className="font-bold text-lg">Edit availability in Calendar?</p>
+      <p className="font-bold text-lg">Update availability in Calendar?</p>
       <p className="pt-2">
         Modifying availability within a currently selected date range resets the
-        entire selection.
-      </p>
-      <p className="pt-2">
-        This action replaces previous availability and cannot be undone once saved.
+        entire selection. This action replaces previous availability once changes are
+        saved.
       </p>
       <div className="pt-12 flex justify-end">
         <Button
@@ -160,7 +158,7 @@ const SchedulerPopUp = ({
           placeholder={''}
           className="normal-case bg-primaryBlue cursor-pointer"
         >
-          Confirm Edit
+          Confirm Update
         </Button>
       </div>
     </div>
@@ -171,8 +169,8 @@ const SchedulerPopUp = ({
       <p className="font-bold text-lg">Delete availability from Calendar?</p>
       <p className="pt-2">
         Once an availability is deleted, the selected date range on the calendar will
-        be reset to blank. You may need to reconfirm availability for these dates
-        later.
+        be reset to blank. You may need to reconfirm this member&apos;s availability
+        for these dates later.
       </p>
       <div className="pt-12 flex justify-end">
         <Button
