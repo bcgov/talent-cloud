@@ -218,10 +218,9 @@ seed-data:
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/common/utils.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts")'
 
-seed-data-ci:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts").handler()'
+
 
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
@@ -234,7 +233,7 @@ seed-data-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 
 seed-dummy-data-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/common/utils.js")'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed.js")'
 
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js

@@ -36,7 +36,7 @@ jobs:
         run: make migration-run
 
       - name: Seed Test Locations/Functions
-        run: make seed-data-ci
+        run: make seed-data
 
       - name: Run Backend Tests
         run: make test-backend-pipeline

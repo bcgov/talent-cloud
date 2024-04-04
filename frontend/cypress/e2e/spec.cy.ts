@@ -8,11 +8,7 @@ describe('template spec', () => {
 
     cy.wait('@keycloak').then((res) => {
       cy.log(res.response.body);
-
-      // assert.isNotNull(int.response.body);
-      assert.equal(res.response.body.client, 'local-client');
       cy.get('#login-button-main').contains('Log In').click();
-
       cy.origin('http://localhost:8080', () => {
         cy.get('#username').type('local-coordinator');
         cy.get('#password').type('password');

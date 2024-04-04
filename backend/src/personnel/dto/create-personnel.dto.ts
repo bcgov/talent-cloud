@@ -10,7 +10,7 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { PersonnelExperienceDTO } from './personnel-experiences.dto';
-import { AvailabilityType } from '../../common/enums';
+import { AvailabilityType, Status } from '../../common/enums';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { Region } from '../../common/enums/region.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
@@ -308,4 +308,8 @@ export class CreatePersonnelDTO {
   @ApiProperty()
   @IsOptional()
   applicationDate?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  status?: Status;
 }

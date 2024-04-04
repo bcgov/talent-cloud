@@ -50,6 +50,7 @@ services:
     env_file: .env
     environment:
       NODE_ENV: ${ENV}
+      ENV: ${ENV}
       PORT: 3000
       DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}

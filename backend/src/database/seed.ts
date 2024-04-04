@@ -1,7 +1,8 @@
 import { FunctionEntity } from './entities/function.entity';
 import { LocationEntity } from './entities/location.entity';
-import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/utils';
+import { PersonnelEntity } from './entities/personnel.entity';
+import { personnel } from './data'
 import {
   functionSqlAfter,
   functionSqlPrior,
@@ -9,8 +10,13 @@ import {
 import { datasource } from '../database/datasource';
 import { functionSql } from '../database/seed-functions';
 import { functionSql as locationSql } from '../database/seed-location';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const handler = async (_event?: unknown) => {
+export const handler = async () => {
+
+
+const cicd = process.env.ENV === 'ci';
+
   if (!datasource.isInitialized) {
     await datasource.initialize();
   }
@@ -46,7 +52,7 @@ export const handler = async (_event?: unknown) => {
 
     console.log('Seeding Data...');
 
-    const personnelData = dataHandler(seededLocations, seededFunctions);
+    const personnelData = cicd ? personnel : dataHandler(seededLocations, seededFunctions);
 
     await Promise.all(personnelData.map((itm) => personnelRepo.save(itm)));
 
@@ -60,3 +66,5 @@ export const handler = async (_event?: unknown) => {
     return 'failure';
   }
 };
+
+handler()

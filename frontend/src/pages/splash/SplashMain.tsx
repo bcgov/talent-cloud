@@ -34,18 +34,6 @@ export const SplashMain = ({ content }: { content: any }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await AxiosPublic.get('/keycloak');
-
-        console.log(data);
-      } catch (e: any) {
-        throw new Error(e);
-      }
-    })();
-  }, []);
-
   return (
     <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-16 lg:px-0 lg:pr-0 2xl:px-64">
       <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start space-y-16  lg:px-24  xl:px-32 lg:py-24 text-left">
