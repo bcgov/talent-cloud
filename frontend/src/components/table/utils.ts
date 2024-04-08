@@ -26,12 +26,6 @@ export const handleSearchParams = (
   if (!filterValues?.availabilityDates.to) {
     searchParamsUrl.delete('availabilityToDate');
   }
-
-  if (filterValues?.showInactive === false) {
-    searchParamsUrl.delete('showInactive');
-  } else {
-    searchParamsUrl.set('showInactive', 'true');
-  }
   if (filterValues?.name) {
     searchParamsUrl.set('name', filterValues?.name);
   } else {
@@ -64,5 +58,11 @@ export const handleSearchParams = (
     searchParamsUrl.set('experience', filterValues.experience);
   } else {
     searchParamsUrl.delete('experience');
+  }
+
+  if (filterValues?.status) {
+    searchParamsUrl.set('status', filterValues.status);
+  } else {
+    searchParamsUrl.delete('status');
   }
 };

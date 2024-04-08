@@ -31,6 +31,7 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { Status } from 'src/common/enums';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -110,14 +111,23 @@ export class PersonnelController {
 
     const queryResponse: {
       personnel: PersonnelEntity[];
-      count: number;
+      count: {
+        [Status.ACTIVE]: number;
+        [Status.INACTIVE]: number;
+        [Status.PENDING]: number;
+      
+      };
     } = await this.personnelService.getPersonnel(query);
 
     return {
       personnel: queryResponse.personnel.map((itm) =>
         itm.toResponseObject(req.role),
       ),
-      count: queryResponse.count,
+      count: {
+        [Status.ACTIVE]: queryResponse.count[Status.ACTIVE],
+        [Status.INACTIVE]: queryResponse.count[Status.INACTIVE],
+        [Status.PENDING]: queryResponse.count[Status.PENDING],
+      },
       rows: query.rows,
       page: query.page,
     };

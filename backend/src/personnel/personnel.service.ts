@@ -116,9 +116,16 @@ export class PersonnelService {
    */
   async getPersonnel(
     query: GetPersonnelDTO,
-  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+  ): Promise<{
+    personnel: PersonnelEntity[]; count: {
+      [Status.ACTIVE]: number;
+      [Status.INACTIVE]: number;
+      [Status.PENDING]: number;
+    }
+  }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     this.logger.log(`Query: ${JSON.stringify(query)}`);
+
 
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
@@ -135,13 +142,7 @@ export class PersonnelService {
         }),
       );
     }
-    if (query.showInactive) {
-      qb.andWhere('personnel.status In (:...status)', {
-        status: [Status.PENDING, Status.INACTIVE, Status.ACTIVE],
-      });
-    } else {
-      qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
-    }
+
     if (query.region?.length) {
       qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
         regions: query.region,
@@ -199,21 +200,39 @@ export class PersonnelService {
       );
     }
 
-    if (query.showInactive) {
-      qb.orderBy('personnel.status', 'DESC');
+
+    if (query.status === Status.PENDING) {
+      qb.orderBy('personnel.applicationDate', 'DESC');
       qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     } else {
-      qb.orderBy('personnel.lastName', 'ASC');
+      qb.orderBy('personnel.dateJoined', 'DESC');
+      qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     }
 
-    qb.take(query.rows);
-    qb.skip((query.page - 1) * query.rows);
+    const personnel = await qb.take(query.rows).skip((query.page - 1) * query.rows).andWhere('personnel.status = :status', {
+      status: query.status,
+    }).getMany();
+    const activeCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.ACTIVE,
+    }).getCount();
+    const inactiveCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.INACTIVE,
+    }).getCount();
+    const pendingCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.PENDING,
+    }).getCount();
 
-    const [personnel, count] = await qb.getManyAndCount();
-    return { personnel, count };
-  }
+    const count = {
+      [Status.ACTIVE]: activeCount,
+      [Status.INACTIVE]: inactiveCount,
+      [Status.PENDING]: pendingCount,
+    }
+
+    return { personnel, count }
+  };
+
 
   async getLastDeployedDate(id: string): Promise<string | undefined> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');

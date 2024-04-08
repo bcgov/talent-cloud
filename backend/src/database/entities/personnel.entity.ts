@@ -1,5 +1,5 @@
 import { instanceToPlain } from 'class-transformer';
-import { format } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
 import {
   Column,
   Entity,
@@ -206,6 +206,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
   jobTitle?: string;
 
+  @Column({name: 'ics_training', type: 'boolean', nullable: true})  
+  ics?: boolean;
+
+  @Column({name: 'supervisor_approval', type: 'boolean', nullable: true})
+  supervisorApproval?: boolean;
+
   toResponseObject(
     role: Role,
     lastDeployed?: string,
@@ -242,6 +248,7 @@ export class PersonnelEntity extends BaseEntity {
       emergencyExperience: this.emergencyExperience ?? '',
       jobTitle: this.jobTitle ?? '',
       status: this.status,
+      newMember: Status.ACTIVE && differenceInDays(new Date(), this.dateJoined) < 31, 
       lastDeployed: lastDeployed ?? null,
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,

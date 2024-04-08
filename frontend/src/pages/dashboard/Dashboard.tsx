@@ -1,29 +1,25 @@
-import { Table } from '@/components';
+import { Loading, Table, Tabs } from '@/components';
 import { Filters } from './DashboardFilters';
-import { Role } from '@/common';
-import { useRole, useTable } from '@/hooks';
+import { useTable } from '@/hooks';
 
 const Dashboard = () => {
-  const title = 'Search Results';
-  const subtitle = 'members found';
-
   const {
     filterValues,
     tableData,
     handleMultiSelect,
     handleSingleSelect,
     handleSearch,
-    handlePageParams,
     onClear,
+    handlePageParams,
     dashboardColumns,
-    showFunctionColumn,
+    tabs,
+    onChangeTab,
     handleClose,
     handleCloseMany,
     handleSetDates,
     resetType,
     loading,
   } = useTable();
-  const { role } = useRole();
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
@@ -40,17 +36,22 @@ const Dashboard = () => {
         resetType={resetType}
       />
 
-      <Table
-        title={title}
-        subtitle={subtitle}
-        showToggle={role === Role.COORDINATOR}
-        columns={dashboardColumns}
-        tableData={tableData}
-        pageParams={filterValues}
-        handlePageParams={handlePageParams}
-        showFunctionColumn={showFunctionColumn}
-        loading={loading}
-      />
+      <div className="w-full text-left py-8  sticky top-0 caption-top bg-white">
+        <h2 className="font-bold px-4">Search Results</h2>
+      </div>
+      <Tabs onChangeTab={onChangeTab} data={tabs}>
+        <Table
+          tableData={tableData}
+          columns={dashboardColumns}
+          pageParams={filterValues}
+          handlePageParams={handlePageParams}
+        />
+      </Tabs>
+      {loading && (
+        <div className="w-full py-64">
+          <Loading height="[1/4]" />
+        </div>
+      )}
     </div>
   );
 };

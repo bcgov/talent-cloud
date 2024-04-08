@@ -1,10 +1,10 @@
 import type { Cell } from '@/components';
-import { PersonnelStatus, booleanToString } from '@/components';
+import { booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { Status } from '@/common';
+import { Status, StatusNames } from '@/common';
 
 export const TableBodyCell = ({
   cell,
@@ -16,21 +16,9 @@ export const TableBodyCell = ({
   status: Status;
 }) => {
   switch (cell.columnName) {
-    case DashboardColumns.TRAVEL:
-      return (
-        <td className={cell.className}>
-          {cell.value ? (
-            <CheckCircleIcon className={iconClass(cell.value)} />
-          ) : (
-            <XCircleIcon className={iconClass(cell.value)} />
-          )}
-          {booleanToString(cell.value).toUpperCase()}
-        </td>
-      );
     case DashboardColumns.NAME:
       return (
         <td className={cell.className}>
-          {status !== Status.ACTIVE && <PersonnelStatus status={status} />}
           <Link
             to={`/profile/${id}`}
             target="_blank"
@@ -39,6 +27,11 @@ export const TableBodyCell = ({
           >
             {cell.value}
           </Link>
+          {status === Status.NEW && (
+            <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+              {StatusNames.NEW}
+            </span>
+          )}
         </td>
       );
     case DashboardColumns.REMOTE:
@@ -59,6 +52,18 @@ export const TableBodyCell = ({
         <td className={cell.className}>
           {cell.value.availability}{' '}
           <span className="text-defaultGray">{cell.value.days ?? ''}</span>
+        </td>
+      );
+    case DashboardColumns.TRAVEL:
+    case DashboardColumns.ICS:
+      return (
+        <td className={cell.className}>
+          {cell.value ? (
+            <CheckCircleIcon className={iconClass(cell.value)} />
+          ) : (
+            <XCircleIcon className={iconClass(cell.value)} />
+          )}
+          {booleanToString(cell.value).toUpperCase()}
         </td>
       );
     default:

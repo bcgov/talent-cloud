@@ -9,7 +9,7 @@ import {
 } from '../database/create-availability-functions';
 import { datasource } from '../database/datasource';
 import { functionSql } from '../database/seed-functions';
-import { functionSql as locationSql } from '../database/seed-location';
+import {  locationSql } from '../database/seed-location';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {

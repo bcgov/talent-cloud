@@ -14,3 +14,5 @@ export * from './SectionHeader';
 export * from './inputs';
 export * from './Dialog';
 export * from './Tooltip';
+export * from './Tabs';
+export * from './Table';

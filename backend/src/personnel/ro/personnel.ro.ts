@@ -136,6 +136,14 @@ export class PersonnelRO {
   status: Status;
 
   @ApiProperty({
+    description: 'Is Personnel newly approved',
+    required: false,
+    example: true,
+    default: false,
+  })
+  newMember: boolean;
+
+  @ApiProperty({
     description: 'Is Personnel remote only',
     required: true,
     example: false,

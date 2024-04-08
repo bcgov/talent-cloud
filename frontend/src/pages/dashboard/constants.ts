@@ -30,6 +30,8 @@ export enum DashboardColumns {
   MINISTRY = 'Ministry',
   NAME = 'Name',
   STATUS = 'Status',
+  SUPERVISOR_APPROVAL = 'Supervisor Approval',
+  ICS = 'ICS',
 }
 
 export interface FunctionType {
@@ -68,6 +70,7 @@ export interface Personnel {
   experiences?: ExperienceInterface[];
   availability?: AvailabilityInterface[];
   status: Status;
+  newMember?: boolean;
   willingToTravel: boolean;
   remoteOnly: boolean;
   unionMembership: string;
@@ -80,6 +83,8 @@ export interface Personnel {
   supervisorFirstName: string;
   supervisorLastName: string;
   supervisorEmail?: string;
+  supervisorApproval?: boolean;
+  ics?: boolean;
   reviewed: boolean;
   coordinatorNotes: string;
   logisticsNotes: string;
@@ -128,7 +133,7 @@ export interface DashboardRow {
 export interface DashboardFilters {
   rowsPerPage: number;
   currentPage: number;
-  showInactive?: boolean;
+  status?: Status;
   name?: string;
   region?: string[];
   location?: string[];

@@ -47,7 +47,7 @@ const ProfileHeader = ({
   return (
     <>
       <div className="px-10 float-left hidden lg:inline-block">
-        <div className="w-32 h-32 grid rounded-full bg-blue justify-center content-center">
+        <div className="w-32 h-32 grid rounded-full bg-primaryBlue justify-center content-center">
           <h1 className="text-white font-bold text-5xl">
             {personnel.firstName?.charAt(0)}
             {personnel.lastName?.charAt(0)}
@@ -81,8 +81,10 @@ const ProfileHeader = ({
             <div className="pl-2">
               <p className="subtext">Work Location</p>
               <p>
-              {personnel.workLocation?.locationName ? `${personnel.workLocation?.locationName},
-                ${personnel.workLocation?.region}`: "-"}
+                {personnel.workLocation?.locationName
+                  ? `${personnel.workLocation?.locationName},
+                ${personnel.workLocation?.region}`
+                  : '-'}
               </p>
             </div>
           </div>
