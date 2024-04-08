@@ -210,6 +210,12 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
   jobTitle?: string;
 
+  @Column({name: 'ics_training', type: 'boolean', nullable: true})  
+  ics?: boolean;
+
+  @Column({name: 'supervisor_approval', type: 'boolean', nullable: true})
+  supervisorApproval?: boolean;
+
   toResponseObject(
     role: Role,
     lastDeployed?: string,
