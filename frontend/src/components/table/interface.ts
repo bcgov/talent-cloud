@@ -22,6 +22,7 @@ export interface TabCount {
 
 export interface TableData {
   rows: Row[];
+  columns: Column[];
   pageRange: number[];
   totalRows: number;
   totalPages: number;

@@ -1,46 +1,35 @@
-import { v4 as uuidv4 } from 'uuid';
 import { DashboardColumns } from '@/pages/dashboard';
 
 export const activeAndInactive = [
-  { key: uuidv4(), name: DashboardColumns.NAME },
-  { key: uuidv4(), name: DashboardColumns.REGION },
-  { key: uuidv4(), name: DashboardColumns.LOCATION },
-  { key: uuidv4(), name: DashboardColumns.AVAILABILITY },
-  { key: uuidv4(), name: DashboardColumns.TRAVEL },
-  { key: uuidv4(), name: DashboardColumns.REMOTE },
-  { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
-  { key: uuidv4(), name: DashboardColumns.MINISTRY },
-];
-
-export const activeAndInactiveWithFunction = [
-  { key: uuidv4(), name: DashboardColumns.NAME },
-  { key: uuidv4(), name: DashboardColumns.REGION },
-  { key: uuidv4(), name: DashboardColumns.LOCATION },
-  { key: uuidv4(), name: DashboardColumns.FUNCTION },
-  { key: uuidv4(), name: DashboardColumns.AVAILABILITY },
-  { key: uuidv4(), name: DashboardColumns.TRAVEL },
-  { key: uuidv4(), name: DashboardColumns.REMOTE },
-  { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
-  { key: uuidv4(), name: DashboardColumns.MINISTRY },
-];
-
-export const pendingWithFunction = [
-  { key: uuidv4(), name: DashboardColumns.NAME },
-  { key: uuidv4(), name: DashboardColumns.REGION },
-  { key: uuidv4(), name: DashboardColumns.LOCATION },
-  { key: uuidv4(), name: DashboardColumns.ICS },
-  { key: uuidv4(), name: DashboardColumns.SUPERVISOR_APPROVAL },
-  { key: uuidv4(), name: DashboardColumns.FUNCTION },
-  { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
-  { key: uuidv4(), name: DashboardColumns.MINISTRY },
+  { key: DashboardColumns.NAME, name: DashboardColumns.NAME },
+  { key: DashboardColumns.DATE_APPROVED, name: DashboardColumns.DATE_APPROVED },
+  { key: DashboardColumns.REGION, name: DashboardColumns.REGION },
+  { key: DashboardColumns.LOCATION, name: DashboardColumns.LOCATION },
+  { key: DashboardColumns.FUNCTION, name: DashboardColumns.FUNCTION },
+  { key: DashboardColumns.AVAILABILITY, name: DashboardColumns.AVAILABILITY },
+  { key: DashboardColumns.TRAVEL, name: DashboardColumns.TRAVEL },
+  { key: DashboardColumns.REMOTE, name: DashboardColumns.REMOTE },
+  {
+    key: DashboardColumns.UNION_MEMBERSHIP,
+    name: DashboardColumns.UNION_MEMBERSHIP,
+  },
+  { key: DashboardColumns.MINISTRY, name: DashboardColumns.MINISTRY },
 ];
 
 export const pending = [
-  { key: uuidv4(), name: DashboardColumns.NAME },
-  { key: uuidv4(), name: DashboardColumns.REGION },
-  { key: uuidv4(), name: DashboardColumns.LOCATION },
-  { key: uuidv4(), name: DashboardColumns.ICS },
-  { key: uuidv4(), name: DashboardColumns.SUPERVISOR_APPROVAL },
-  { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
-  { key: uuidv4(), name: DashboardColumns.MINISTRY },
+  { key: DashboardColumns.NAME, name: DashboardColumns.NAME },
+  { key: DashboardColumns.DATE_APPLIED, name: DashboardColumns.DATE_APPLIED },
+  { key: DashboardColumns.REGION, name: DashboardColumns.REGION },
+  { key: DashboardColumns.LOCATION, name: DashboardColumns.LOCATION },
+  { key: DashboardColumns.ICS, name: DashboardColumns.ICS },
+  {
+    key: DashboardColumns.SUPERVISOR_APPROVAL,
+    name: DashboardColumns.SUPERVISOR_APPROVAL,
+  },
+  { key: DashboardColumns.FUNCTION, name: DashboardColumns.FUNCTION },
+  {
+    key: DashboardColumns.UNION_MEMBERSHIP,
+    name: DashboardColumns.UNION_MEMBERSHIP,
+  },
+  { key: DashboardColumns.MINISTRY, name: DashboardColumns.MINISTRY },
 ];

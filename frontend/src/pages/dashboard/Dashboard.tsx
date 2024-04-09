@@ -12,7 +12,6 @@ const Dashboard = () => {
     handleSearch,
     onClear,
     handlePageParams,
-    dashboardColumns,
     tabs,
     onChangeTab,
     handleClose,
@@ -46,7 +45,6 @@ const Dashboard = () => {
         <Tabs onChangeTab={onChangeTab} data={tabs}>
           <Table
             tableData={tableData}
-            columns={dashboardColumns}
             pageParams={filterValues}
             handlePageParams={handlePageParams}
           />
@@ -54,7 +52,6 @@ const Dashboard = () => {
       ) : (
         <Table
           tableData={tableData}
-          columns={dashboardColumns}
           pageParams={filterValues}
           handlePageParams={handlePageParams}
         />

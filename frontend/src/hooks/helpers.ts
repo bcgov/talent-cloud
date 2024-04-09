@@ -11,9 +11,9 @@ import type {
   DashboardFilters,
 } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
+import { datePST } from '@/utils';
 import { differenceInDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * If availability  status is set, then calculate the partial or full availability
@@ -59,182 +59,181 @@ export const renderCells = (
   personnel: Personnel,
   filterValues: DashboardFilters,
 ) => {
-  const {
-    lastName,
-    firstName,
-    homeLocation,
-    ics,
-    supervisorApproval,
-    experiences,
-    willingToTravel,
-    remoteOnly,
-    availability,
-    unionMembership,
-    ministry,
-  } = personnel;
-  if (filterValues.status === Status.PENDING) {
-    return [
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.NAME,
-        value: `${lastName?.toUpperCase()},  ${firstName}`,
-        className: tableClass(DashboardColumns.NAME, ''),
-      },
+  const columns = {
+    name: {
+      key: DashboardColumns.NAME,
+      columnName: DashboardColumns.NAME,
+      value: `${personnel.lastName?.toUpperCase()},  ${personnel.firstName}`,
+      className: tableClass(DashboardColumns.NAME, ''),
+    },
 
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.REGION,
-        value: homeLocation.region,
-        className: tableClass(
-          DashboardColumns.REGION,
-          homeLocation?.region?.toLowerCase() ?? '',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.LOCATION,
-        value: homeLocation.locationName,
-        className: tableClass(
-          DashboardColumns.LOCATION,
-          homeLocation?.locationName.toLowerCase() ?? '',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.ICS,
-        value: ics,
-        className: tableClass(DashboardColumns.TRAVEL, ics ? 'yes' : 'no'),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.SUPERVISOR_APPROVAL,
-        value: supervisorApproval ? 'Yes' : 'No',
-        className: tableClass(
-          DashboardColumns.LOCATION,
-          homeLocation?.locationName.toLowerCase() ?? '',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.FUNCTION,
-        value: `${experiences?.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences?.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
-        className: experiences?.find(
-          (itm: any) => itm.functionName === filterValues.function,
-        )
-          ? tableClass(DashboardColumns.FUNCTION, '')
-          : 'hidden',
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.UNION_MEMBERSHIP,
-        value: unionMembership,
-        className: tableClass(DashboardColumns.UNION_MEMBERSHIP, unionMembership),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.MINISTRY,
-        value: ministry,
-        className: tableClass(DashboardColumns.MINISTRY, ministry?.toLowerCase()),
-      },
-    ];
-  } else {
-    return [
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.NAME,
-        value: `${lastName?.toUpperCase()},  ${firstName}`,
-        className: tableClass(DashboardColumns.NAME, ''),
-      },
-
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.REGION,
-        value: homeLocation.region,
-        className: tableClass(
-          DashboardColumns.REGION,
-          homeLocation?.region?.toLowerCase() ?? '',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.LOCATION,
-        value: homeLocation.locationName,
-        className: tableClass(
-          DashboardColumns.LOCATION,
-          homeLocation?.locationName.toLowerCase() ?? '',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.FUNCTION,
-        value: `${experiences?.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[experiences?.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
-        className: experiences?.find(
-          (itm: any) => itm.functionName === filterValues.function,
-        )
-          ? tableClass(DashboardColumns.FUNCTION, '')
-          : 'hidden',
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.AVAILABILITY,
-        // value will be the status type and/or the number of days available
-        value: filterValues.availabilityType
+    region: {
+      key: DashboardColumns.REGION,
+      columnName: DashboardColumns.REGION,
+      value: personnel.homeLocation.region,
+      className: tableClass(
+        DashboardColumns.REGION,
+        personnel.homeLocation?.region?.toLowerCase() ?? '',
+      ),
+    },
+    location: {
+      key: DashboardColumns.LOCATION,
+      columnName: DashboardColumns.LOCATION,
+      value: personnel.homeLocation.locationName,
+      className: tableClass(
+        DashboardColumns.LOCATION,
+        personnel.homeLocation?.locationName.toLowerCase() ?? '',
+      ),
+    },
+    ics: {
+      key: DashboardColumns.ICS,
+      columnName: DashboardColumns.ICS,
+      value: personnel.ics,
+      className: tableClass(DashboardColumns.TRAVEL, personnel.ics ? 'yes' : 'no'),
+    },
+    supervisorApproval: {
+      key: DashboardColumns.SUPERVISOR_APPROVAL,
+      columnName: DashboardColumns.SUPERVISOR_APPROVAL,
+      value: personnel.supervisorApproval ? 'Yes' : 'No',
+      className: tableClass(
+        DashboardColumns.SUPERVISOR_APPROVAL,
+        personnel.homeLocation?.locationName.toLowerCase() ?? '',
+      ),
+    },
+    function: {
+      key: DashboardColumns.FUNCTION,
+      columnName: DashboardColumns.FUNCTION,
+      value: `${personnel.experiences?.find((itm: any) => itm.functionName === filterValues.function)?.functionName}:${ExperienceName[personnel.experiences?.find((itm: any) => itm.functionName === filterValues.function)?.experienceType as keyof typeof ExperienceName]}`,
+      className: personnel.experiences?.find(
+        (itm: any) => itm.functionName === filterValues.function,
+      )
+        ? tableClass(DashboardColumns.FUNCTION, '')
+        : 'hidden',
+    },
+    unionMembership: {
+      key: DashboardColumns.UNION_MEMBERSHIP,
+      columnName: DashboardColumns.UNION_MEMBERSHIP,
+      value: personnel.unionMembership,
+      className: tableClass(
+        DashboardColumns.UNION_MEMBERSHIP,
+        personnel.unionMembership,
+      ),
+    },
+    ministry: {
+      key: DashboardColumns.MINISTRY,
+      columnName: DashboardColumns.MINISTRY,
+      value: personnel.ministry,
+      className: tableClass(
+        DashboardColumns.MINISTRY,
+        personnel.ministry?.toLowerCase(),
+      ),
+    },
+    availability: {
+      key: DashboardColumns.AVAILABILITY,
+      columnName: DashboardColumns.AVAILABILITY,
+      // value will be the status type and/or the number of days available
+      value: filterValues.availabilityType
+        ? getAvailabilityValue(
+            AvailabilityType[
+              filterValues.availabilityType as unknown as keyof typeof AvailabilityType
+            ],
+            filterValues.availabilityDates,
+            personnel.availability ?? [],
+          )
+        : {
+            availability:
+              AvailabilityTypeName[
+                personnel.availability?.[0]
+                  ?.availabilityType as keyof typeof AvailabilityType
+              ],
+          },
+      className: tableClass(
+        DashboardColumns.AVAILABILITY,
+        filterValues.availabilityType
           ? getAvailabilityValue(
               AvailabilityType[
                 filterValues.availabilityType as unknown as keyof typeof AvailabilityType
               ],
               filterValues.availabilityDates,
-              availability ?? [],
-            )
-          : {
-              availability:
-                AvailabilityTypeName[
-                  availability?.[0]
-                    ?.availabilityType as keyof typeof AvailabilityType
-                ],
-            },
-        className: tableClass(
-          DashboardColumns.AVAILABILITY,
-          filterValues.availabilityType
-            ? getAvailabilityValue(
-                AvailabilityType[
-                  filterValues.availabilityType as unknown as keyof typeof AvailabilityType
-                ],
-                filterValues.availabilityDates,
-                availability ?? [],
-              ).availability
-            : AvailabilityTypeName[
-                availability?.[0]?.availabilityType as keyof typeof AvailabilityType
-              ],
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.TRAVEL,
-        value: willingToTravel,
-        className: tableClass(
-          DashboardColumns.TRAVEL,
-          willingToTravel ? 'yes' : 'no',
-        ),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.REMOTE,
-        value: remoteOnly,
-        className: tableClass(DashboardColumns.REMOTE, remoteOnly ? 'yes' : 'no'),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.UNION_MEMBERSHIP,
-        value: unionMembership,
-        className: tableClass(DashboardColumns.UNION_MEMBERSHIP, unionMembership),
-      },
-      {
-        key: uuidv4(),
-        columnName: DashboardColumns.MINISTRY,
-        value: ministry,
-        className: tableClass(DashboardColumns.MINISTRY, ministry?.toLowerCase()),
-      },
-    ];
+              personnel.availability ?? [],
+            ).availability
+          : AvailabilityTypeName[
+              personnel.availability?.[0]
+                ?.availabilityType as keyof typeof AvailabilityType
+            ],
+      ),
+    },
+    willingToTravel: {
+      key: DashboardColumns.TRAVEL,
+      columnName: DashboardColumns.TRAVEL,
+      value: personnel.willingToTravel,
+      className: tableClass(
+        DashboardColumns.TRAVEL,
+        personnel.willingToTravel ? 'yes' : 'no',
+      ),
+    },
+    remoteOnly: {
+      key: DashboardColumns.REMOTE,
+      columnName: DashboardColumns.REMOTE,
+      value: personnel.remoteOnly ? 'Yes' : 'No',
+      className: tableClass(
+        DashboardColumns.REMOTE,
+        personnel.remoteOnly ? 'yes' : 'no',
+      ),
+    },
+    dateApplied: {
+      key: DashboardColumns.DATE_APPLIED,
+      columnName: DashboardColumns.DATE_APPLIED,
+      value: personnel.applicationDate && datePST(personnel.applicationDate, true),
+      className: tableClass(DashboardColumns.DATE_APPLIED, ''),
+    },
+    dateApproved: {
+      key: DashboardColumns.DATE_APPROVED,
+      columnName: DashboardColumns.DATE_APPROVED,
+      value: personnel.dateJoined && datePST(personnel.dateJoined, true),
+      className: tableClass(DashboardColumns.DATE_APPROVED, ''),
+    },
+  };
+
+  const pendingColumns = [
+    columns.name,
+    columns.dateApplied,
+    columns.region,
+    columns.location,
+    columns.ics,
+    columns.supervisorApproval,
+    columns.function,
+    columns.unionMembership,
+    columns.ministry,
+  ];
+
+  const activeAndInactiveColumns = [
+    columns.name,
+    columns.dateApproved,
+    columns.region,
+    columns.location,
+    columns.function,
+    columns.availability,
+    columns.willingToTravel,
+    columns.remoteOnly,
+    columns.unionMembership,
+    columns.ministry,
+  ];
+
+  if (filterValues.status === Status.PENDING && !filterValues.function) {
+    return pendingColumns.filter(
+      (column) => column.key !== DashboardColumns.FUNCTION,
+    );
+  }
+  if (filterValues.status === Status.PENDING && filterValues.function) {
+    return pendingColumns;
+  }
+  if (filterValues.status !== Status.PENDING && !filterValues.function) {
+    return activeAndInactiveColumns.filter(
+      (column) => column.key !== DashboardColumns.FUNCTION,
+    );
+  }
+  if (filterValues.status !== Status.PENDING && filterValues.function) {
+    return activeAndInactiveColumns;
   }
 };

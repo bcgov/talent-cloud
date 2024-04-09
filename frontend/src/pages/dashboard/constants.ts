@@ -32,6 +32,8 @@ export enum DashboardColumns {
   STATUS = 'Status',
   SUPERVISOR_APPROVAL = 'Supervisor Approval',
   ICS = 'ICS',
+  DATE_APPLIED = 'Date Applied',
+  DATE_APPROVED = 'Date Approved',
 }
 
 export interface FunctionType {

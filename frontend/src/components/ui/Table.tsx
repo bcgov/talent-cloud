@@ -1,4 +1,4 @@
-import type { Cell, Column, PageParams, Row, TableData } from '@/components';
+import type { Cell, PageParams, Row, TableData } from '@/components';
 import {
   TableBodyCell,
   TableFooterNav,
@@ -11,19 +11,16 @@ export const Table = ({
   pageParams,
   handlePageParams,
   tableData,
-  columns,
 }: {
   pageParams: PageParams;
   handlePageParams: (data: Partial<DashboardFilters>) => void;
   tableData: TableData;
-  columns: Column[];
 }) => {
   const { rows, totalRows } = tableData;
-  console.log(tableData.rows.length);
 
   return (
     <table className="border border-separate border-spacing-0 order-slate-400 shadow-lg rounded-md w-full bg-white ">
-      <TableHeader columns={columns} />
+      <TableHeader columns={tableData.columns} />
 
       <tbody>
         {rows.map((row: Row) => (
@@ -42,7 +39,11 @@ export const Table = ({
 
       <tfoot className="py-4 px-8 border border-t-2 border-gray-600">
         <tr>
-          <th colSpan={columns.length - 2} scope="row" className="px-8 h-[80px]">
+          <th
+            colSpan={tableData.columns.length - 2}
+            scope="row"
+            className="px-8 h-[80px]"
+          >
             <TableFooterPageSelect
               totalRows={totalRows}
               onChange={handlePageParams}

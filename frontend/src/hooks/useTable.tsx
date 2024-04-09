@@ -4,13 +4,12 @@ import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
 
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, Personnel } from '@/pages/dashboard';
 import {
-  activeAndInactive,
-  activeAndInactiveWithFunction,
-  pending,
-  pendingWithFunction,
-} from '@/pages/dashboard/columns';
+  DashboardColumns,
+  type DashboardFilters,
+  type Personnel,
+} from '@/pages/dashboard';
+import { activeAndInactive, pending } from '@/pages/dashboard/columns';
 import { useDebounce } from './useDebounce';
 import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
@@ -25,6 +24,7 @@ export const useTable = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
+    columns: [],
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
@@ -52,20 +52,22 @@ export const useTable = () => {
 
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-  const [dashboardColumns, setDashboardColumns] = useState(activeAndInactive);
+
   const debouncedValue = useDebounce<{ [key: string]: unknown }>(
     filterValues,
     defaultDebounceValue,
   );
 
   const renderColumns = (value: Status) => {
-    if (value === Status.PENDING && filterValues.function) {
-      setDashboardColumns(pendingWithFunction);
-    } else if (value === Status.PENDING && !filterValues.function) {
-      setDashboardColumns(pending);
-    } else if (value !== Status.PENDING && filterValues.function) {
-      setDashboardColumns(activeAndInactiveWithFunction);
-    } else setDashboardColumns(activeAndInactive);
+    if (value === Status.PENDING) {
+      return !filterValues.function
+        ? pending.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
+        : pending;
+    } else {
+      return !filterValues.function
+        ? activeAndInactive.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
+        : activeAndInactive;
+    }
   };
 
   useEffect(() => {
@@ -84,12 +86,13 @@ export const useTable = () => {
         pageRange.splice(0, 1);
 
         const currentPage = filterValues?.currentPage ?? 1;
-        renderColumns(filterValues.status);
+
         setTableData({
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
           totalRows: count[filterValues.status],
           count,
+          columns: renderColumns(filterValues.status),
           rows: personnel.map(
             ({ id, status, newMember, ...personnel }: Personnel) => ({
               key: id,
@@ -242,7 +245,6 @@ export const useTable = () => {
           to: '',
         },
       }),
-    dashboardColumns,
     tabs: [
       {
         label: StatusNames.ACTIVE,

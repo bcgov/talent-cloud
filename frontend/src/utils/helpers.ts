@@ -13,7 +13,13 @@ export const offsetTimezoneDate = (dateString: string): Date => {
   return newDate;
 };
 
-export const datePST = (date: Date): string => {
+export const datePST = (date: Date, short?: boolean): string => {
+  if (short)
+    return new Date(date).toLocaleString('PST', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
   return new Date(date).toLocaleString('PST', {
     month: 'long',
     day: 'numeric',
