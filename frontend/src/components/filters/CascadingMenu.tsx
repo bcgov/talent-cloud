@@ -38,7 +38,7 @@ export const CascadingMenu = ({
     <>
       <span className="label">{label}</span>
       <Menu dismiss={{ itemPress: false, outsidePress: true }}>
-        <MenuHandler field={field}>
+        <MenuHandler field={field} id={field.name}>
           {value ? (
             <Chip
               handleClose={handleChange}
@@ -53,7 +53,7 @@ export const CascadingMenu = ({
           ) : (
             <p className={classes.menu.placeholder}>
               Select {label.toLowerCase()}(s)
-             </p>
+            </p>
           )}
           <MenuButton />
         </MenuHandler>

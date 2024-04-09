@@ -44,7 +44,7 @@ export const MultiSelectGroup = ({
     <>
       <span className="label">{label}</span>
       <Menu dismiss={{ outsidePress: true, itemPress: false }}>
-        <MenuHandler field={field}>
+        <MenuHandler field={field} id={field.name}>
           <MenuChips
             values={values}
             label={label.toLowerCase()}
@@ -63,6 +63,7 @@ export const MultiSelectGroup = ({
                   <MenuItem>
                     <label className={classes.menu.listLabel}>
                       <Checkbox
+                        id={group.label}
                         onChange={onChangeGroup}
                         name={field.name}
                         value={group.options}
@@ -87,6 +88,7 @@ export const MultiSelectGroup = ({
                     <MenuItem key={option}>
                       <label className={classes.menu.listItem} htmlFor={option}>
                         <Checkbox
+                          id={option.name}
                           onChange={onChange}
                           checked={values?.includes(option)}
                           name={field.name}

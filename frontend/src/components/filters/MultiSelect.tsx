@@ -29,7 +29,7 @@ export const MultiSelect = ({
     <>
       <span className="label">{label}</span>
       <Menu dismiss={{ outsidePress: true, itemPress: false }}>
-        <MenuHandler field={field}>
+        <MenuHandler field={field} id={field.name}>
           <MenuChips
             values={values}
             label={field.name}
@@ -41,9 +41,10 @@ export const MultiSelect = ({
         </MenuHandler>
         <MenuList className={field.name}>
           {field.options?.map((option: any) => (
-            <MenuItem key={option}>
+            <MenuItem key={option} id={option.label}>
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <Checkbox
+                  id={option.label}
                   onChange={onChange}
                   checked={values?.includes(option.value)}
                   name={field.name}
