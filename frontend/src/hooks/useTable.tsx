@@ -103,7 +103,6 @@ export const useTable = () => {
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
           totalRows: count[filterValues.status],
-
           columns: renderColumns(filterValues.status),
           rows: personnel.map(
             ({ id, status, newMember, ...personnel }: Personnel) => ({
