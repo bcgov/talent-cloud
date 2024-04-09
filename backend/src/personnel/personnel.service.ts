@@ -15,7 +15,7 @@ import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
-import { TrainingEntity } from 'src/database/entities/training.entity';
+import { TrainingEntity } from '../database/entities/training.entity';
 import { AppLogger } from '../logger/logger.service';
 
 @Injectable()

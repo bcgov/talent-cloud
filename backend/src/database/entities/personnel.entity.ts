@@ -24,7 +24,7 @@ import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { ICS_TRAINING_NAME } from 'src/common/const';
+import { ICS_TRAINING_NAME } from '../../common/const';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {

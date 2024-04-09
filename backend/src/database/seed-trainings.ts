@@ -1,4 +1,4 @@
-import { ICS_TRAINING_NAME } from 'src/common/const';
+import { ICS_TRAINING_NAME } from '../common/const';
 import { datasource } from './datasource';
 
 const insertTrainingSql = `INSERT INTO public."training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
