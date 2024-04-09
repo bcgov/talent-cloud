@@ -32,6 +32,7 @@ import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { Status } from '../common/enums';
+import { ICS_TRAINING_NAME } from '../common/const';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -80,6 +81,12 @@ export class PersonnelController {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     delete personnel.availability;  // Ensure we don't use this endpoint to update availability
+
+    if (personnel.icsTraining === true) {
+      personnel.trainings = await this.personnelService.getTrainingsByNames([ICS_TRAINING_NAME]);
+    } else if (personnel.icsTraining === false) {
+      personnel.trainings = [];
+    }
     const { experiences, ...details } = personnel;
 
     // For now, these are distinct and will not be updated at the same time

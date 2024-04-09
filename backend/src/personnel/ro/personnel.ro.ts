@@ -122,11 +122,32 @@ export class PersonnelRO {
   logisticsNotes: string;
 
   @ApiProperty({
-    description: 'Supervisor of Personnel',
+    description: 'Supervisor of Personnel First Name',
     required: true,
-    example: 'Fred Andrews',
+    example: 'Fred',
   })
-  supervisor: string;
+  supervisorFirstName: string;
+
+  @ApiProperty({
+    description: 'Supervisor of Personnel Last Name',
+    required: true,
+    example: 'Andrews',
+  })
+  supervisorLastName: string;
+
+  @ApiProperty({
+    description: 'Supervisor of Personnel Email',
+    required: false,
+    example: 'fandrews@gov.bc.ca',
+  })
+  supervisorEmail: string;
+
+  @ApiProperty({
+    description: 'Has member been approved by supervisor',
+    required: true,
+    example: false,
+  })
+  approvedBySupervisor: boolean;
 
   @ApiProperty({
     description: 'Is Personnel active in the roster',
@@ -156,6 +177,12 @@ export class PersonnelRO {
     example: true,
   })
   willingToTravel: boolean;
+
+  @ApiProperty({
+    description: 'Has finished ICS Training',
+    required: true,
+  })
+  icsTraining: boolean;
 
   @ApiProperty({
     description: 'Experience with functions',

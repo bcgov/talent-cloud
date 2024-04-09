@@ -88,13 +88,13 @@ export const renderCells = (
     ics: {
       key: DashboardColumns.ICS,
       columnName: DashboardColumns.ICS,
-      value: personnel.ics,
-      className: tableClass(DashboardColumns.TRAVEL, personnel.ics ? 'yes' : 'no'),
+      value: personnel.icsTraining,
+      className: tableClass(DashboardColumns.TRAVEL, personnel.icsTraining ? 'yes' : 'no'),
     },
     supervisorApproval: {
       key: DashboardColumns.SUPERVISOR_APPROVAL,
       columnName: DashboardColumns.SUPERVISOR_APPROVAL,
-      value: personnel.supervisorApproval ? 'Yes' : 'No',
+      value: personnel.approvedBySupervisor ? 'Yes' : 'No',
       className: tableClass(
         DashboardColumns.SUPERVISOR_APPROVAL,
         personnel.homeLocation?.locationName.toLowerCase() ?? '',
