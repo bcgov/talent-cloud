@@ -31,7 +31,7 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { Status } from 'src/common/enums';
+import { Status } from '../common/enums';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
