@@ -272,7 +272,9 @@ const Profile = () => {
               className="flex flex-row align-middle bg-calBlue"
             >
               <h4 className="grow font-bold">
-                {editCell?.availabilityType ? 'Edit Availability' : 'New Availability'}
+                {editCell?.availabilityType
+                  ? 'Edit Availability'
+                  : 'Add Availability'}
               </h4>
               <Button
                 placeholder={''}
