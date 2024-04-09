@@ -85,8 +85,8 @@ export interface Personnel {
   supervisorFirstName: string;
   supervisorLastName: string;
   supervisorEmail?: string;
-  supervisorApproval?: boolean;
-  ics?: boolean;
+  approvedBySupervisor: boolean;
+  icsTraining: boolean;
   reviewed: boolean;
   coordinatorNotes: string;
   logisticsNotes: string;
