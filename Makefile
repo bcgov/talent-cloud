@@ -220,6 +220,9 @@ seed-locations-functions:
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
 
 seed-data:
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts")'
 
 delete-db:
