@@ -4,7 +4,6 @@ import { handler as dataHandler } from '../common/utils';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { personnel } from './data'
 import { datasource } from '../database/datasource';
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
 
