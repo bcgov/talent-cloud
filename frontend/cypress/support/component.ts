@@ -25,6 +25,7 @@ import './commands';
 import { mount } from 'cypress/react18';
 
 Cypress.Commands.add('mount', mount);
-
+Cypress.env('KEYCLOAK_USER', process.env.KEYCLOAK_USER);
+Cypress.env('KEYCLOAK_PASSWORD', process.env.KEYCLOAK_PASSWORD);
 // Example use:
 // cy.mount(<MyComponent />)

@@ -39,24 +39,23 @@
 
 Cypress.Commands.add('login_coordinator', () => {
   cy.visit('/');
-  cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
+  cy.get('#login-button-main').contains('Log In').click();
+  cy.wait(2000);
 
-  cy.wait('@keycloak').then((res) => {
-    cy.log(res.response.body);
-    cy.get('#login-button-main').contains('Log In').click();
-    cy.origin('https://logontest7.gov.bc.ca/', () => {
-      cy.get('#username').type(Cypress.env('KEYCLOAK_USER'));
-      cy.get('#password').type(Cypress.env('KEYCLOAK_PASSWORD'));
-      cy.get('#kc-login').click();
-    });
-
-    cy.get('h1').contains('Personnel');
-    cy.get('p').contains('Local Coordinator');
+  cy.origin('https://logontest7.gov.bc.ca', () => {
+    cy.get('#user').type(Cypress.env('KEYCLOAK_USER'));
+    cy.get('#password').type(Cypress.env('KEYCLOAK_PASSWORD'));
+    cy.contains('Continue').click();
   });
+
+  cy.wait(2000);
+  cy.visit('/dashboard');
+  cy.get('h1').contains('Personnel');
+  cy.get('p').contains('Chelsea Brown');
 });
 
 Cypress.Commands.add('logout_coordinator', () => {
   cy.visit('/dashboard');
-  cy.contains('Local Coordinator').click();
+  cy.contains('Chelsea Brown').click();
   cy.contains('Logout').click();
 });
