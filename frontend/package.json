@@ -16,7 +16,7 @@
     "test:unit": "vitest --mode test",
     "test:cov": "vitest run --mode test --coverage",
     "build": "vite build",
-    "test:pipeline": "cypress run --headless",
+    "test:pipeline": "npx cypress run --headless",
     "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
     "prepare": "cd ../ && husky install ./frontend/.husky",
     "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/"
@@ -43,14 +43,11 @@
   "devDependencies": {
     "autoprefixer": "10.4.17",
     "@tailwindcss/forms": "0.5.7",
-    
     "postcss": "8.4.33",
     "postcss-import": "16.0.0",
     "prettier": "3.2.4",
-    
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3",
-    
     "@headlessui/react": "1.7.18",
     "@heroicons/react": "2.1.1",
     "@material-tailwind/react": "2.1.8",

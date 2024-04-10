@@ -38,7 +38,7 @@
 // }
 
 Cypress.Commands.add('login_coordinator', () => {
-  cy.visit('http://localhost:3000');
+  cy.visit('/');
   cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
 
   cy.wait('@keycloak').then((res) => {
@@ -56,7 +56,7 @@ Cypress.Commands.add('login_coordinator', () => {
 });
 
 Cypress.Commands.add('login_logistics', () => {
-  cy.visit('http://localhost:3000');
+  cy.visit('/');
 
   cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
 

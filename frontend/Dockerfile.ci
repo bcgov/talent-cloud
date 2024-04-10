@@ -2,15 +2,13 @@
 # BUILD FOR CI TESTS
 ###################
 # Only needed if running cypress inside the container
-FROM cypress/included:latest
-
-
+FROM cypress/included:13.4.0
 
 ENV PATH $PATH:/app/node_modules/.bin
 
 WORKDIR /app
 ENV PORT 3000
-
+ENV NO_COLOR=1
 COPY package*.json . 
 COPY . . 
 
