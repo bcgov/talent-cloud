@@ -2,6 +2,10 @@ import { defineConfig } from 'cypress';
 import customViteConfig from './vite.config.js';
 
 export default defineConfig({
+  env: {
+    KEYCLOAK_USER: process.env.KEYCLOAK_USER,
+    KEYCLOAK_PASSWORD: process.env.KEYCLOAK_PASSWORD,
+  },
   e2e: {
     baseUrl: 'http://localhost:3000',
     viewportWidth: 1440,

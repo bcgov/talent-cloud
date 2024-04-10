@@ -9,6 +9,8 @@ env:
   KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
   KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
+  KEYCLOAK_USER: ${{ secrets.KEYCLOAK_USER }}
+  KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
 
 jobs:
   run-tests:

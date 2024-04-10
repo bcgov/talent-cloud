@@ -44,9 +44,9 @@ Cypress.Commands.add('login_coordinator', () => {
   cy.wait('@keycloak').then((res) => {
     cy.log(res.response.body);
     cy.get('#login-button-main').contains('Log In').click();
-    cy.origin('http://localhost:8080', () => {
-      cy.get('#username').type('local-coordinator');
-      cy.get('#password').type('password');
+    cy.origin('https://logontest7.gov.bc.ca/', () => {
+      cy.get('#username').type(Cypress.env('KEYCLOAK_USER'));
+      cy.get('#password').type(Cypress.env('KEYCLOAK_PASSWORD'));
       cy.get('#kc-login').click();
     });
 
@@ -55,31 +55,8 @@ Cypress.Commands.add('login_coordinator', () => {
   });
 });
 
-Cypress.Commands.add('login_logistics', () => {
-  cy.visit('/');
-
-  cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
-
-  cy.wait('@keycloak').then((res) => {
-    cy.get('#login-button-main').contains('Log In').click();
-    cy.origin('http://localhost:8080', () => {
-      cy.get('#username').type('local-logistics');
-      cy.get('#password').type('password');
-      cy.get('#kc-login').click();
-    });
-    cy.get('h1').contains('Personnel');
-    cy.get('p').contains('Logistics Officer');
-  });
-});
-
 Cypress.Commands.add('logout_coordinator', () => {
   cy.visit('/dashboard');
   cy.contains('Local Coordinator').click();
-  cy.contains('Logout').click();
-});
-
-Cypress.Commands.add('logout_logistics', () => {
-  cy.visit('/dashboard');
-  cy.contains('Logistics Officer').click();
   cy.contains('Logout').click();
 });
