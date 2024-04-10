@@ -6,6 +6,9 @@ on:
 
 env:
   ENV: ci
+  KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
 
 jobs:
   run-tests:
