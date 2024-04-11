@@ -43,7 +43,7 @@ jobs:
       - name: Run Migrations
         run: make migration-run
 
-      - name: Seed Test Locations/Functions
+      - name: Seed Test Data
         run: make seed-data
 
       - name: Run Backend Tests
