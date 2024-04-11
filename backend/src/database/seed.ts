@@ -3,13 +3,7 @@ import { LocationEntity } from './entities/location.entity';
 import { handler as dataHandler } from '../common/utils';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { personnel } from './data'
-import {
-  functionSqlAfter,
-  functionSqlPrior,
-} from '../database/create-availability-functions';
 import { datasource } from '../database/datasource';
-import { functionSql } from '../database/seed-functions';
-import {  locationSql } from '../database/seed-location';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
@@ -26,26 +20,6 @@ const cicd = process.env.ENV === 'ci';
   const personnelRepo = datasource.getRepository(PersonnelEntity);
 
   try {
-    console.log('Seeding Location Data...');
-
-    const locationData = await locationRepo.find();
-
-    if (locationData.length === 0) {
-      await datasource.query(locationSql);
-    }
-
-    console.log('Seeding Function Data...');
-
-    const functionData = await functionRepo.find();
-
-    if (functionData.length === 0) {
-      await datasource.query(functionSql);
-    }
-
-    console.log('Seeding DB Functions...');
-
-    await datasource.query(functionSqlPrior);
-    await datasource.query(functionSqlAfter);
 
     const seededLocations = await locationRepo.find();
     const seededFunctions = await functionRepo.find();

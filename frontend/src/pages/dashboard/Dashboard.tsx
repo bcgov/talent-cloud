@@ -12,13 +12,15 @@ const Dashboard = () => {
     handleSearch,
     onClear,
     handlePageParams,
-    tabs,
     onChangeTab,
     handleClose,
     handleCloseMany,
     handleSetDates,
     resetType,
     loading,
+    selectedTab,
+    tabs,
+    counts,
   } = useTable();
 
   const { role } = useRole();
@@ -42,7 +44,12 @@ const Dashboard = () => {
         <h2 className="font-bold px-4">Search Results</h2>
       </div>
       {role === Role.COORDINATOR ? (
-        <Tabs onChangeTab={onChangeTab} data={tabs}>
+        <Tabs
+          onChangeTab={onChangeTab}
+          tabs={tabs}
+          selectedTab={selectedTab}
+          counts={counts}
+        >
           <Table
             tableData={tableData}
             pageParams={filterValues}

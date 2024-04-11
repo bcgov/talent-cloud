@@ -28,12 +28,20 @@ export const useTable = () => {
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
-    count: {
-      [Status.ACTIVE]: 0,
-      [Status.INACTIVE]: 0,
-      [Status.PENDING]: 0,
-    },
   });
+  const [counts, setCounts] = useState<any>({
+    [Status.ACTIVE]: 0,
+    [Status.INACTIVE]: 0,
+    [Status.PENDING]: 0,
+  });
+  const tabs = [
+    { index: 0, label: StatusNames.ACTIVE, value: Status.ACTIVE },
+    { index: 1, label: StatusNames.INACTIVE, value: Status.INACTIVE },
+    { index: 2, label: StatusNames.PENDING, value: Status.PENDING },
+  ];
+
+  const [selectedTab, setSelectedTab] = useState(0);
+
   const [filterValues, setFilterValues] = useState<any>({
     rowsPerPage: 25,
     currentPage: 1,
@@ -86,12 +94,12 @@ export const useTable = () => {
         pageRange.splice(0, 1);
 
         const currentPage = filterValues?.currentPage ?? 1;
-
+        setCounts(count);
         setTableData({
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
           totalRows: count[filterValues.status],
-          count,
+
           columns: renderColumns(filterValues.status),
           rows: personnel.map(
             ({ id, status, newMember, ...personnel }: Personnel) => ({
@@ -208,11 +216,12 @@ export const useTable = () => {
     }));
   };
 
-  const onChangeTab = (value: Status) => {
+  const onChangeTab = (index: number) => {
+    setSelectedTab(index);
     setFilterValues((prev: any) => ({
       ...prev,
       currentPage: 1,
-      status: value,
+      status: tabs[index].value,
     }));
   };
 
@@ -228,6 +237,9 @@ export const useTable = () => {
     handleSetDates,
     resetType,
     loading,
+    counts,
+    tabs,
+    selectedTab,
     onChangeTab,
     onClear: () =>
       setFilterValues({
@@ -245,22 +257,5 @@ export const useTable = () => {
           to: '',
         },
       }),
-    tabs: [
-      {
-        label: StatusNames.ACTIVE,
-        value: Status.ACTIVE,
-        count: tableData.count[Status.ACTIVE],
-      },
-      {
-        label: StatusNames.INACTIVE,
-        value: Status.INACTIVE,
-        count: tableData.count[Status.INACTIVE],
-      },
-      {
-        label: StatusNames.PENDING,
-        value: Status.PENDING,
-        count: tableData.count[Status.PENDING],
-      },
-    ],
   };
 };
