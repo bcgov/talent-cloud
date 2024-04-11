@@ -1,11 +1,11 @@
 import { Ministry, UnionMembership } from '@/common';
 import * as Yup from 'yup';
 
-const phoneNumber = (value: any) =>
-  {
-    if(value === ""||!value){return true}
-    else return value?.toString().replace(/[^\d]/g, '').length === 10;
-  }
+const phoneNumber = (value: any) => {
+  if (value === '' || !value) {
+    return true;
+  } else return value?.toString().replace(/[^\d]/g, '').length === 10;
+};
 
 export const EditProfileValidationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -16,21 +16,19 @@ export const EditProfileValidationSchema = Yup.object().shape({
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
-    workLocation: Yup.object().shape({
-      region: Yup.string()
-        .optional(),
-      
+  workLocation: Yup.object().shape({
+    region: Yup.string().optional(),
+
+    locationName: Yup.string().optional(),
+  }),
+  homeLocation: Yup.object()
+    .shape({
+      region: Yup.string().required('This field is required.'),
       locationName: Yup.string()
-        .optional()
-      
-    }),
-    homeLocation: Yup.object().shape({
-      region: Yup.string()
+        .min(2, 'This field is required')
         .required('This field is required.'),
-      locationName: Yup.string().min(2, "This field is required").required('This field is required.'),
-        
-        
-    }).required("This field is required"),
+    })
+    .required('This field is required'),
   remoteOnly: Yup.boolean().required('This field is required.'),
   willingToTravel: Yup.boolean().required('This field is required.'),
   primaryPhone: Yup.string()
@@ -40,16 +38,20 @@ export const EditProfileValidationSchema = Yup.object().shape({
       'Invalid phone number format. Please enter ten digits.',
       phoneNumber,
     ),
-  secondaryPhone: Yup.string().test(
-    'phone number',
-    'Invalid phone number format. Please enter ten digits.',
-    phoneNumber,
-  ).optional(),
-  workPhone: Yup.string().test(
-    'phone number',
-    'Invalid phone number format. Please enter ten digits.',
-    phoneNumber,
-  ).optional(),
+  secondaryPhone: Yup.string()
+    .test(
+      'phone number',
+      'Invalid phone number format. Please enter ten digits.',
+      phoneNumber,
+    )
+    .optional(),
+  workPhone: Yup.string()
+    .test(
+      'phone number',
+      'Invalid phone number format. Please enter ten digits.',
+      phoneNumber,
+    )
+    .optional(),
   supervisorFirstName: Yup.string()
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
@@ -61,9 +63,31 @@ export const EditProfileValidationSchema = Yup.object().shape({
   supervisorEmail: Yup.string().optional().email('Invalid email format.'),
   ministry: Yup.string().required('This field is required.'),
   unionMembership: Yup.string().required('This field is required.'),
+  icsTraining: Yup.boolean().required('This field is required.'),
+  approvedBySupervisor: Yup.boolean().required('This field is required.'),
 });
 
 export const fields = {
+  applicationDate: {
+    name: 'applicationDate',
+    label: 'Date Applied',
+    type: 'text',
+    autocomplete: 'off',
+    disabled: true,
+    required: true,
+  },
+  icsTraining: {
+    name: 'icsTraining',
+    label: 'ICS Training',
+    required: true,
+    type: 'select',
+    autocomplete: 'off',
+    disabled: false,
+    options: [
+      { label: 'Incomplete', value: 'false' },
+      { label: 'Completed', value: 'true' },
+    ],
+  },
   firstName: {
     name: 'firstName',
     label: 'First Name',
@@ -191,6 +215,18 @@ export const fields = {
     type: 'text',
     autocomplete: 'off',
     disabled: false,
+  },
+  approvedBySupervisor: {
+    name: 'approvedBySupervisor',
+    label: ' Supervisor Approval',
+    required: true,
+    type: 'select',
+    autocomplete: 'off',
+    disabled: false,
+    options: [
+      { label: 'Not Yet Received', value: 'false' },
+      { label: 'Received', value: 'true' },
+    ],
   },
   workPhone: {
     name: 'workPhone',

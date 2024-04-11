@@ -6,7 +6,7 @@ const Detail = ({
   icon,
 }: {
   title: string;
-  content: string;
+  content: string | JSX.Element;
   icon?: ReactElement;
 }) => {
   return (

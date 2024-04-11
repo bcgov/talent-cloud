@@ -1,4 +1,10 @@
-import { ClockIcon, HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
+import {
+  CheckIcon,
+  ClockIcon,
+  HomeIcon,
+  MapPinIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
 import { Role, Status } from '@/common';
 import { PersonnelStatus } from '@/components';
@@ -105,15 +111,51 @@ const ProfileHeader = ({
         {personnel.status === Status.PENDING && (
           <Banner
             content={
-              <p className="flex flex-col lg:flex-row items-center text-center space-y-8 lg:space-y-0 text-sm text-warningDark">
-                <span className="font-bold">Pending Applicant Alert: </span>
-                <span className="pl-2">
-                  This profile requires coordinator review to ensure deployment
-                  readiness.
+              <p className="flex flex-col text-sm text-warningDark">
+                <span className="font-bold">Complete Review Alert</span>
+                <span className="pt-2">
+                  {personnel.icsTraining === true &&
+                  personnel.approvedBySupervisor === true
+                    ? 'This applicant fulfilled the following requirements for profile review:'
+                    : 'This applicant is missing the following requirements to complete their profile review:'}
                 </span>
+                <span className="pl-2 flex flex-row">
+                  {personnel.approvedBySupervisor === true ? (
+                    <CheckIcon className="h-5 text-calGreenTwo" />
+                  ) : (
+                    <XMarkIcon className="h-5 text-errorRed" />
+                  )}
+                  Supervisor Approval
+                </span>
+                <span className="pl-2 flex flex-row">
+                  {personnel.icsTraining === true ? (
+                    <CheckIcon className="h-5 text-calGreenTwo" />
+                  ) : (
+                    <XMarkIcon className="h-5 text-errorRed" />
+                  )}
+                  Completed ICS Training
+                </span>
+                {personnel.icsTraining === true &&
+                personnel.approvedBySupervisor === true ? (
+                  <span>
+                    Please Review the following details before clicking
+                    &apos;Complete Review&apos;.
+                  </span>
+                ) : (
+                  <span>
+                    Please make sure to update the information above in{' '}
+                    <span className="font-bold">Applicant Details</span> before
+                    changing the applicant&apos;s status to &apos;Active&apos;.
+                  </span>
+                )}
               </p>
             }
-            onClick={handleOpenReviewApplicant}
+            onClick={
+              personnel.icsTraining === true &&
+              personnel.approvedBySupervisor === true
+                ? handleOpenReviewApplicant
+                : undefined
+            }
             buttonText={'Complete Review'}
             type={BannerType.WARNING}
           />
