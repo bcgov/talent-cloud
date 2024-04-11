@@ -214,14 +214,14 @@ migration-revert:
 migration-run:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./src/database/datasource.ts
 
-seed-data:
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-trainings.ts")'
 
-seed-data-ci:seed-data
-	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-test-data.ts")'
+
+seed-data:
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-functions.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-location.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/trainings.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts")'
 
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
@@ -232,7 +232,6 @@ seed-data-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-location.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-trainings.js")'
 
 seed-dummy-data-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed.js")'
