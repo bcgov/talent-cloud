@@ -88,12 +88,9 @@ export interface Personnel {
   approvedBySupervisor: boolean;
   icsTraining: boolean;
   reviewed: boolean;
-}
-
   date: string;
   availabilityType: AvailabilityType;
   deploymentCode?: string;
-  id?: string;
   actualStartDate?: string;
   actualEndDate?: string;
 }
