@@ -28,6 +28,11 @@ export const useTable = () => {
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
+    count: {
+      [Status.ACTIVE]: 0,
+      [Status.INACTIVE]: 0,
+      [Status.PENDING]: 0,
+    },
   });
   const [counts, setCounts] = useState<any>({
     [Status.ACTIVE]: 0,
@@ -60,7 +65,6 @@ export const useTable = () => {
 
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-
   const debouncedValue = useDebounce<{ [key: string]: unknown }>(
     filterValues,
     defaultDebounceValue,
@@ -99,7 +103,6 @@ export const useTable = () => {
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
           totalRows: count[filterValues.status],
-
           columns: renderColumns(filterValues.status),
           rows: personnel.map(
             ({ id, status, newMember, ...personnel }: Personnel) => ({

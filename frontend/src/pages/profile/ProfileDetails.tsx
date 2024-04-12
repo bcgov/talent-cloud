@@ -7,7 +7,7 @@ import type { Personnel } from '../dashboard';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { datePST, formatPhone } from '@/utils';
 import { useRole } from '@/hooks';
-import { Role } from '@/common';
+import { Role, Status } from '@/common';
 
 const ProfileDetails = ({
   personnel,
@@ -17,13 +17,15 @@ const ProfileDetails = ({
   openEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
 }) => {
   const [open, setOpen] = useState(1);
-  const {role} = useRole()
+  const { role } = useRole();
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const generalInformation = [
     {
       title: 'Work Location, Region',
-      content: personnel.workLocation?.locationName ? `${personnel.workLocation?.locationName}, ${personnel.workLocation?.region}` : 'Not Listed',
+      content: personnel.workLocation?.locationName
+        ? `${personnel.workLocation?.locationName}, ${personnel.workLocation?.region}`
+        : 'Not Listed',
     },
     {
       title: 'Remote Only',
@@ -39,31 +41,36 @@ const ProfileDetails = ({
     },
     {
       title: 'Application Date',
-      content: personnel?.applicationDate ? datePST(personnel.applicationDate) : "-",
+      content: personnel?.applicationDate ? datePST(personnel.applicationDate) : '-',
     },
-    {
-      title: 'Reviewed Date',
-      content: personnel.dateJoined 
-        ? datePST(personnel.dateJoined)
-        : '-',
-    },
+    personnel.status === Status.PENDING
+      ? {
+          title: 'ICS Training',
+          content:
+            personnel.icsTraining === true ? (
+              <span className="text-calGreenTwo">Completed</span>
+            ) : (
+              <span className="text-errorRed">Incomplete</span>
+            ),
+        }
+      : {
+          title: 'Reviewed Date',
+          content: personnel.dateJoined ? datePST(personnel.dateJoined) : '-',
+        },
   ];
 
   const contact = [
     {
       title: 'Primary Number',
-      content:
-        formatPhone(personnel?.primaryPhone) ?? "Not Listed"
+      content: formatPhone(personnel?.primaryPhone) ?? 'Not Listed',
     },
     {
       title: 'Secondary Number',
-      content:
-        formatPhone(personnel?.secondaryPhone) ?? "Not Listed"
+      content: formatPhone(personnel?.secondaryPhone) ?? 'Not Listed',
     },
     {
       title: 'Work Phone',
-      content:
-        formatPhone(personnel?.workPhone) ?? "Not Listed"
+      content: formatPhone(personnel?.workPhone) ?? 'Not Listed',
     },
     { title: 'Email Address', content: personnel.email },
   ];
@@ -74,6 +81,15 @@ const ProfileDetails = ({
     { title: 'Supervisor Email', content: personnel.supervisorEmail ?? '-' },
     { title: 'Ministry', content: personnel.ministry },
     { title: 'Union Membership', content: personnel.unionMembership },
+    {
+      title: 'Supervisor Approval',
+      content:
+        personnel.approvedBySupervisor === true ? (
+          <span className="text-calGreenTwo">Received</span>
+        ) : (
+          <span className="text-errorRed">Not Yet Received</span>
+        ),
+    },
   ];
 
   return (
@@ -98,14 +114,16 @@ const ProfileDetails = ({
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Member Details</span>
-              {role && role === Role.COORDINATOR && <button
-                aria-label="edit profile"
-                onClick={openEditProfilePopUp}
-                className="z-20 flex text-primaryBlue flex-row items-center"
-              >
-                <PencilSquareIcon className="h-6 w-6" />
-                <span className="pl-2 font-normal underline text-sm">Edit</span>
-              </button>}
+              {role && role === Role.COORDINATOR && (
+                <button
+                  aria-label="edit profile"
+                  onClick={openEditProfilePopUp}
+                  className="z-20 flex text-primaryBlue flex-row items-center"
+                >
+                  <PencilSquareIcon className="h-6 w-6" />
+                  <span className="pl-2 font-normal underline text-sm">Edit</span>
+                </button>
+              )}
             </div>
           </AccordionHeader>
 

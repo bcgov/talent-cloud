@@ -7,7 +7,7 @@ const DetailsSection = ({
 }: {
   numColumns: number;
   title: string;
-  columns: { title: string; content: string }[] | undefined;
+  columns: { title: string; content: string | JSX.Element }[] | undefined;
 }) => {
   return (
     <div className="py-5">

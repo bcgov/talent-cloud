@@ -1,4 +1,5 @@
 import { type ChangeEvent, type MouseEvent } from 'react';
+import dayjs from 'dayjs';
 import type { Personnel } from '../dashboard';
 import { ButtonTypes } from '@/common';
 import { EditProfileValidationSchema, fields, sections } from './constants';
@@ -21,6 +22,7 @@ export const ProfileEditForm = ({
   const { locations, regions } = useGetFilters();
   const initialValues: Personnel = {
     ...personnel,
+    applicationDate: dayjs(personnel?.applicationDate)?.format('YYYY-MM-DD'),
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     secondaryPhone:
@@ -37,32 +39,27 @@ export const ProfileEditForm = ({
     props: FormikState<Personnel> & FormikProps<Personnel>,
   ) => {
     const fieldName = e.target.name.split('.')[0];
-    console.log(e.target.value)
-    if(!e.target.value) {
+    if (!e.target.value) {
       props.setValues({
-      ...props.values,
-      [fieldName]: {
-        id: undefined,
-        locationName: "",
-        region: ""
-      },
-    })
-    
-  } else {
-    const location = locations.find((itm) => itm.locationName === e.target.value);
+        ...props.values,
+        [fieldName]: {
+          id: undefined,
+          locationName: '',
+          region: '',
+        },
+      });
+    } else {
+      const location = locations.find((itm) => itm.locationName === e.target.value);
 
-    
-
-    props.setValues({
-      ...props.values,
-      [fieldName]: {
-        id: location?.id,
-        locationName: location?.locationName,
-        region: location?.region,
-      },
-    });
-  }
-  
+      props.setValues({
+        ...props.values,
+        [fieldName]: {
+          id: location?.id,
+          locationName: location?.locationName,
+          region: location?.region,
+        },
+      });
+    }
   };
 
   const handleSubmit = async (
@@ -70,7 +67,6 @@ export const ProfileEditForm = ({
     helpers: FormikHelpers<Personnel>,
     ...props: any
   ) => {
-    
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
       if (values[key as keyof Personnel] === personnel[key as keyof Personnel]) {
@@ -95,6 +91,20 @@ export const ProfileEditForm = ({
     if (values.willingToTravel === 'false') {
       values.willingToTravel = false;
     }
+
+    if (values.icsTraining === 'true') {
+      values.icsTraining = true;
+    }
+    if (values.icsTraining === 'false') {
+      values.icsTraining = false;
+    }
+
+    if (values.approvedBySupervisor === 'true') {
+      values.approvedBySupervisor = true;
+    }
+    if (values.approvedBySupervisor === 'false') {
+      values.approvedBySupervisor = false;
+    }
     // TODO success toast?
     helpers.setSubmitting(false);
     await updatePersonnel(values);
@@ -117,6 +127,18 @@ export const ProfileEditForm = ({
           <div className="flex min-h-full px-8 pt-8 items-center justify-center">
             <div className="flex flex-col w-full items-start justify-start space-y-8">
               <SectionHeader section={sections.general.header} />
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
+                <TextInput
+                  {...props}
+                  {...fields.applicationDate}
+                  error={errors.applicationDate}
+                />
+                <Select
+                  {...props}
+                  {...fields.icsTraining}
+                  error={errors.icsTraining}
+                />
+              </div>
               <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
                 <TextInput
                   {...props}
@@ -242,14 +264,17 @@ export const ProfileEditForm = ({
                   error={errors.supervisorLastName}
                 />
               </div>
-              <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="col-span-1 lg:col-span-2">
-                  <TextInput
-                    {...props}
-                    {...fields.supervisorEmail}
-                    error={errors?.supervisorEmail}
-                  />
-                </div>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TextInput
+                  {...props}
+                  {...fields.supervisorEmail}
+                  error={errors?.supervisorEmail}
+                />
+                <Select
+                  {...props}
+                  {...fields.approvedBySupervisor}
+                  error={errors.approvedBySupervisor}
+                />
               </div>
             </div>
           </div>

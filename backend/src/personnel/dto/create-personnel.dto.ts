@@ -319,5 +319,5 @@ export class CreatePersonnelDTO {
 
   @ApiProperty()
   @IsOptional()
-  icsTraining?: boolean = false;
+  icsTraining?: boolean;
 }

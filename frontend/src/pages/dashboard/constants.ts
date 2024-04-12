@@ -77,7 +77,7 @@ export interface Personnel {
   remoteOnly: boolean;
   unionMembership: string;
   ministry: string;
-  applicationDate?: Date;
+  applicationDate?: Date | string;
   primaryPhone: string;
   secondaryPhone?: string;
   workPhone?: string;
@@ -88,17 +88,9 @@ export interface Personnel {
   approvedBySupervisor: boolean;
   icsTraining: boolean;
   reviewed: boolean;
-  coordinatorNotes: string;
-  logisticsNotes: string;
-  dateJoined?: Date;
-  lastDeployed?: string;
-}
-
-export interface Availability {
   date: string;
   availabilityType: AvailabilityType;
   deploymentCode?: string;
-  id?: string;
   actualStartDate?: string;
   actualEndDate?: string;
 }
