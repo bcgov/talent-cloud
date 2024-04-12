@@ -27,28 +27,7 @@ describe('Coordinator Flow', () => {
 
     cy.logout_coordinator();
   });
-  // /**
-  //  * Logs in as coordinator and views the pending tab, which should contain three personnel.
-  //  * Verifies that the count of the other tabs is also three
-  // //  */
-  // it('views the pending tab', () => {
-  //   cy.login_coordinator();
 
-  //   cy.contains('Pending').click();
-  //   cy.intercept('GET', '**/api/v1/personnel?page=1&rows=25&status=PENDING').as(
-  //     'getPendingPersonnel',
-  //   );
-  //   cy.wait('@getPendingPersonnel').then((intercept) => {
-  //     expect(intercept.response.body.personnel).to.have.length(3);
-  //     expect(intercept.response.body.count.ACTIVE).to.equal(3);
-  //     expect(intercept.response.body.count.PENDING).to.equal(3);
-  //     expect(intercept.response.body.count.INACTIVE).to.equal(3);
-  //   });
-  //   cy.logout_coordinator();
-  // });
-  // /**
-  //  * Logs in as coordinator and filters by region. The count for all three tabs should update when the filter is applied.
-  //  */
   it('filters the response by region and location', () => {
     cy.login_coordinator();
 
@@ -95,43 +74,6 @@ describe('Coordinator Flow', () => {
 
     cy.logout_coordinator();
   });
-
-  // /**
-  //  * Logs in as coordinator and filters by function/experience.
-  //  * There should be no active/inactive personnel returned.
-  //  * There should be one pending personnel returned.
-  //  */
-
-  // // it('filters the response by function', () => {
-  // //   cy.login_coordinator();
-
-  // //   cy.get('#function').click();
-
-  // //   cy.get('#Operations').click();
-  // //   cy.get('#Interested').click();
-
-  // //   cy.intercept(
-  // //     'GET',
-  // //     '**/api/v1/personnel?page=1&rows=25&status=ACTIVE&function=Operations&experience=INTERESTED',
-  // //   ).as('getActiveOpsInterested');
-  // //   cy.wait('@getActiveOpsInterested').then((intercept) => {
-  // //     expect(intercept.response.body.personnel).to.have.length(0);
-  // //     expect(intercept.response.body.count.ACTIVE).to.equal(0);
-  // //     expect(intercept.response.body.count.INACTIVE).to.equal(0);
-  // //     expect(intercept.response.body.count.PENDING).to.equal(1);
-  // //   });
-
-  // //   cy.contains('Pending').click();
-  // //   cy.intercept(
-  // //     'GET',
-  // //     '**/api/v1/personnel?page=1&rows=25&status=PENDING&function=Operations&experience=INTERESTED',
-  // //   ).as('getPendingOpsInterested');
-  // //   cy.wait('@getPendingOpsInterested').then((intercept) => {
-  // //     expect(intercept.response.body.personnel).to.have.length(1);
-  // //   });
-
-  // //   cy.logout_coordinator();
-  // // });
 
   it('filters the response by availability', () => {
     cy.login_coordinator();
