@@ -1,11 +1,6 @@
-import { ICS_TRAINING_NAME } from '../common/const';
 import { datasource } from './datasource';
+import { insertPersonnelTrainingSql, insertTrainingSql } from './queries';
 
-const insertTrainingSql = `INSERT INTO public."training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
-const insertPersonnelTrainingSql = `
-INSERT INTO public."personnel_training" ("personnelId", "trainingId")
-SELECT id as "personnelId", 1 as "trainingId" FROM public."personnel" WHERE status = 'ACTIVE';
-`
 
 const seedFunction = async () => {
   await datasource.initialize();

@@ -20,19 +20,23 @@ services:
       - tc
   frontend:
     container_name:  ${PROJECT}-frontend-${ENV}
-    entrypoint: sh -c "npm ci && npm run dev -- --host"
+    entrypoint: sh -c "npm run dev"
+    env_file: .env
     build:
       context: "./frontend"
       dockerfile: Dockerfile.ci
     environment:
       NODE_ENV: ci
+      ENV: ci
       PORT: 3000
       BACKEND_URL: http://backend:3000
+      CYPRESS_BASE_URL: ${CYPRESS_BASE_URL}
+      CYPRESS_AUTH_ORIGIN: ${CYPRESS_AUTH_ORIGIN}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
     ports: 
       - "3000:3000"
     volumes: ["./frontend:/app", "/app/node_modules"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
     working_dir: "/app"
     networks:
       - tc
@@ -71,42 +75,12 @@ services:
       - db
     networks:
       - tc
-  keycloak:
-    container_name: ${PROJECT}-keycloak-${ENV}
-    build:
-      context: ./keycloak
-    command:
-      - start-dev
-      - --import-realm
-      - --hostname-strict=false
-      - --hostname-strict-https=false
-    platform: linux/arm64/v8
-    volumes:
-      - keycloak:/opt/keycloak/data
-      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
-    env_file: .env
-    environment:
-      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
-      DB_VENDOR: ${DB_TYPE}
-      DB_ADDR: db
-      DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
-      DB_USERNAME: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
-      HEALTH_ENABLED: "true"
-      HTTP_ENABLED: "true"
-      METRICS_ENABLED: "true"
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
-      - "8787:8787" # debug port
-    networks:
-      - tc
+    
 volumes:
   pg_data: {}
   keycloak: {}
+
 networks:
   tc:
     driver: bridge
+    

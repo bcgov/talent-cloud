@@ -40,3 +40,4 @@ chefs-response.json
 *.xlsx
 *.sql
 ministries.json
+frontend/cypress/screenshots/*

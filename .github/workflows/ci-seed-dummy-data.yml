@@ -9,6 +9,7 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
+  ENV: dev
 
 jobs:
   run_migrations:
