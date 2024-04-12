@@ -4,3 +4,5 @@ export enum APP_ENV {
   TEST = 'test',
   PROD = 'production',
 }
+
+export const ICS_TRAINING_NAME = 'ICS Training';  // Explicitly for ICS training

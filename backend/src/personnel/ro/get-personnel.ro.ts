@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PersonnelRO } from './personnel.ro';
+import { Status } from '../../common/enums';
 
 export class GetPersonnelRO {
   @ApiProperty({
@@ -22,7 +23,12 @@ export class GetPersonnelRO {
     description: 'Total number of results',
     example: 33,
   })
-  count: number;
+  count: {
+    [Status.ACTIVE]: number;
+    [Status.INACTIVE]: number;
+    [Status.PENDING]: number;
+
+  };
 
   @ApiProperty({
     name: 'personnel',

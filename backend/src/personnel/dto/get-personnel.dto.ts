@@ -14,6 +14,7 @@ import {
   Experience,
   FunctionName,
   Region,
+  Status,
 } from '../../common/enums';
 import { QueryDTO } from '../../common/query.dto';
 
@@ -26,13 +27,9 @@ export class GetPersonnelDTO extends QueryDTO {
   name: string;
 
   @ApiPropertyOptional({
-    description: 'Find only active personnel. If false, this will find all',
-    default: false,
+    description: 'Find personnel by status',
   })
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => value === 'false' || value === false)
-  showInactive: boolean;
+  status: Status;
 
   @ApiPropertyOptional({
     description:

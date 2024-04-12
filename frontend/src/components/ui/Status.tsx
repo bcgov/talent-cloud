@@ -1,6 +1,6 @@
 import { Status } from '@/common';
 
-export const PersonnelStatus = ({ status }: { status: Status }) => {
+export const PersonnelStatus = ({ status }: { status: Status | string }) => {
   if (status === Status.PENDING) {
     return (
       <span className="bg-infoBannerLight px-2 rounded-full mr-2">

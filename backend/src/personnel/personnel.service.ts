@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
-import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Brackets, DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { GetPersonnelDTO } from './dto/get-personnel.dto';
@@ -15,6 +15,7 @@ import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { TrainingEntity } from '../database/entities/training.entity';
 import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
@@ -26,6 +27,8 @@ export class PersonnelService {
     private availabilityRepository: Repository<AvailabilityEntity>,
     @InjectRepository(ExperienceEntity)
     private experiencesRepository: Repository<ExperienceEntity>,
+    @InjectRepository(TrainingEntity)
+    private trainingRepository: Repository<TrainingEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -56,7 +59,8 @@ export class PersonnelService {
     });
 
     try {
-      await this.personnelRepository.update(id, { ...person });
+      // This is a 'save' rather than 'update' to allow for updating many-to-many relations
+      await this.personnelRepository.save(person);
       return this.getPersonnelById(role, id);
     } catch (e) {
       console.log(e);
@@ -116,13 +120,21 @@ export class PersonnelService {
    */
   async getPersonnel(
     query: GetPersonnelDTO,
-  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+  ): Promise<{
+    personnel: PersonnelEntity[]; count: {
+      [Status.ACTIVE]: number;
+      [Status.INACTIVE]: number;
+      [Status.PENDING]: number;
+    }
+  }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     this.logger.log(`Query: ${JSON.stringify(query)}`);
+
 
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
+    qb.leftJoinAndSelect('personnel.trainings', 'trainings');
 
     if (query.name) {
       qb.andWhere(
@@ -135,13 +147,7 @@ export class PersonnelService {
         }),
       );
     }
-    if (query.showInactive) {
-      qb.andWhere('personnel.status In (:...status)', {
-        status: [Status.PENDING, Status.INACTIVE, Status.ACTIVE],
-      });
-    } else {
-      qb.andWhere('personnel.status = :status', { status: Status.ACTIVE });
-    }
+
     if (query.region?.length) {
       qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
         regions: query.region,
@@ -199,21 +205,39 @@ export class PersonnelService {
       );
     }
 
-    if (query.showInactive) {
-      qb.orderBy('personnel.status', 'DESC');
+
+    if (query.status === Status.PENDING) {
+      qb.orderBy('personnel.applicationDate', 'DESC');
       qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     } else {
-      qb.orderBy('personnel.lastName', 'ASC');
+      qb.orderBy('personnel.dateJoined', 'DESC');
+      qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     }
 
-    qb.take(query.rows);
-    qb.skip((query.page - 1) * query.rows);
+    const personnel = await qb.take(query.rows).skip((query.page - 1) * query.rows).andWhere('personnel.status = :status', {
+      status: query.status,
+    }).getMany();
+    const activeCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.ACTIVE,
+    }).getCount();
+    const inactiveCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.INACTIVE,
+    }).getCount();
+    const pendingCount = await qb.andWhere('personnel.status = :status', {
+      status: Status.PENDING,
+    }).getCount();
 
-    const [personnel, count] = await qb.getManyAndCount();
-    return { personnel, count };
-  }
+    const count = {
+      [Status.ACTIVE]: activeCount,
+      [Status.INACTIVE]: inactiveCount,
+      [Status.PENDING]: pendingCount,
+    }
+
+    return { personnel, count }
+  };
+
 
   async getLastDeployedDate(id: string): Promise<string | undefined> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
@@ -239,7 +263,7 @@ export class PersonnelService {
   ): Promise<Record<string, PersonnelRO>> {
     const person = await this.personnelRepository.findOne({
       where: { id },
-      relations: ['experiences', 'experiences.function'],
+      relations: ['experiences', 'experiences.function', 'trainings'],
     });
     const lastDeployed = await this.getLastDeployedDate(id);
     const personnel = person.toResponseObject(role, lastDeployed);
@@ -397,5 +421,15 @@ export class PersonnelService {
         deleted,
       };
     }
+  }
+
+  async getTrainingsByNames(names: string[]): Promise<TrainingEntity[]> {
+    const trainings = await this.trainingRepository.find({ where: { name: In(names) }});
+    if (trainings.length !== names.length) {
+      throw new NotFoundException({
+        message: 'Not all training names exist in our database',
+      });
+    }
+    return trainings;
   }
 }

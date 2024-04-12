@@ -36,7 +36,7 @@ module.exports = withMT({
         errorRed: '#D8292F',
         
         transparent: 'transparent',
-        primaryBlue: '#003366',
+        primaryBlue: '#38598A',
         primaryYellow: '#fcba19',
         activeGreen: '#d6ebd0',
         inputGray: '#606060',
@@ -68,13 +68,14 @@ module.exports = withMT({
         darkYellow: '#826521',
       },
       backgroundColor: {
+        primaryBackgroundBlue: "#38598A", 
         backgroundBlue: '#003366',
         grayBackground: '#F6F9FC',
         transparent: 'transparent',
         active: '#EFF7EB',
         inactive: '#F4F4F4',
         defaultGray: '#f2f2f2',
-        blue: '#38598A',
+        
         white: '#FFFFFF',
         errorBannerDark: '#A12622',
         errorBannerLight: '#F2DEDE',
@@ -84,8 +85,7 @@ module.exports = withMT({
         warningBannerLight: '#F9F1C6',
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#D9EAF7',
-        purple: '#e8d9f7',
-        yellow: '#f9f2c6',
+        
       },
       textColor: {
         defaultGray: "#606060",
@@ -99,8 +99,7 @@ module.exports = withMT({
         ministry: '#1A5A96',
         error: '#A12622', 
         warning: '#6C4A00',
-        purple: '#6f2fa2',
-        yellow: '#826521',
+        
         icon: "#606060"
         
       },

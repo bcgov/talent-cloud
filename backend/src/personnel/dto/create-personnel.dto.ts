@@ -141,6 +141,10 @@ export class CreatePersonnelDTO {
   @IsOptional()
   supervisorEmail?: string;
 
+  @ApiProperty()
+  @IsOptional()
+  approvedBySupervisor?: boolean;
+
   @ApiProperty({
     description: 'Any notable skills and abilities this personnel might have',
     example: 'Indigenous Relations trained, Swift Water Training',
@@ -195,7 +199,7 @@ export class CreatePersonnelDTO {
 
   @ApiProperty({
     description: 'What trainings this personnel has had',
-    example: ['ICS100', 'THE_CORE', 'WEBEOC'],
+    example: ['ICS Training', 'THE_CORE', 'WEBEOC'],
   })
   @IsOptional()
   trainings: TrainingEntity[];
@@ -312,4 +316,8 @@ export class CreatePersonnelDTO {
   @ApiProperty()
   @IsOptional()
   status?: Status;
+
+  @ApiProperty()
+  @IsOptional()
+  icsTraining?: boolean = false;
 }

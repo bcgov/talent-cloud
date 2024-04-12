@@ -2,16 +2,20 @@ import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
-import { v4 as uuidv4 } from 'uuid';
+
 import { truncatePageRange } from './utils';
-import type { DashboardFilters, Personnel } from '@/pages/dashboard';
-import { DashboardColumns } from '@/pages/dashboard';
+import {
+  DashboardColumns,
+  type DashboardFilters,
+  type Personnel,
+} from '@/pages/dashboard';
+import { activeAndInactive, pending } from '@/pages/dashboard/columns';
 import { useDebounce } from './useDebounce';
 import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
-
 import { useAxios } from './useAxios';
+import { Status, StatusNames } from '@/common';
 
 export const useTable = () => {
   const { handleError } = useError();
@@ -20,14 +24,28 @@ export const useTable = () => {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
+    columns: [],
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
   });
+  const [counts, setCounts] = useState<any>({
+    [Status.ACTIVE]: 0,
+    [Status.INACTIVE]: 0,
+    [Status.PENDING]: 0,
+  });
+  const tabs = [
+    { index: 0, label: StatusNames.ACTIVE, value: Status.ACTIVE },
+    { index: 1, label: StatusNames.INACTIVE, value: Status.INACTIVE },
+    { index: 2, label: StatusNames.PENDING, value: Status.PENDING },
+  ];
+
+  const [selectedTab, setSelectedTab] = useState(0);
+
   const [filterValues, setFilterValues] = useState<any>({
     rowsPerPage: 25,
     currentPage: 1,
-    showInactive: false,
+    status: Status.ACTIVE,
     name: '',
     region: [],
     location: [],
@@ -42,37 +60,57 @@ export const useTable = () => {
 
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
+
   const debouncedValue = useDebounce<{ [key: string]: unknown }>(
     filterValues,
     defaultDebounceValue,
   );
 
+  const renderColumns = (value: Status) => {
+    if (value === Status.PENDING) {
+      return !filterValues.function
+        ? pending.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
+        : pending;
+    } else {
+      return !filterValues.function
+        ? activeAndInactive.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
+        : activeAndInactive;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       handleSearchParams(searchParamsUrl, filterValues);
-
       try {
         const {
           data: { personnel, count },
         } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
-
         const rowsPerPage = filterValues?.rowsPerPage ?? 25;
-        const totalPages = Math.ceil(count / rowsPerPage);
+
+        const totalPages = Math.ceil(count[filterValues.status] / rowsPerPage);
+
         const pageRange = [...Array(totalPages).keys()];
 
         pageRange.splice(0, 1);
 
         const currentPage = filterValues?.currentPage ?? 1;
-
+        setCounts(count);
         setTableData({
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
-          totalRows: count,
-          rows: personnel.map(({ id, status, ...personnel }: Personnel) => ({
-            key: id,
-            status: status,
-            cells: renderCells({ id, status, ...personnel }, filterValues),
-          })),
+          totalRows: count[filterValues.status],
+
+          columns: renderColumns(filterValues.status),
+          rows: personnel.map(
+            ({ id, status, newMember, ...personnel }: Personnel) => ({
+              key: id,
+              status: newMember ? Status.NEW : status,
+              cells: renderCells(
+                { id, status, newMember, ...personnel },
+                filterValues,
+              ),
+            }),
+          ),
         });
       } catch (e) {
         handleError(e);
@@ -177,24 +215,37 @@ export const useTable = () => {
       availabilityType: '',
     }));
   };
+
+  const onChangeTab = (index: number) => {
+    setSelectedTab(index);
+    setFilterValues((prev: any) => ({
+      ...prev,
+      currentPage: 1,
+      status: tabs[index].value,
+    }));
+  };
+
   return {
     tableData,
     handlePageParams,
     handleMultiSelect,
     handleSingleSelect,
     handleSearch,
-    showFunctionColumn: filterValues.function,
     filterValues,
     handleClose,
     handleCloseMany,
     handleSetDates,
     resetType,
     loading,
+    counts,
+    tabs,
+    selectedTab,
+    onChangeTab,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,
         currentPage: 1,
-        showInactive: false,
+        status: Status.ACTIVE,
         name: '',
         region: [],
         location: [],
@@ -206,16 +257,5 @@ export const useTable = () => {
           to: '',
         },
       }),
-    dashboardColumns: [
-      { key: uuidv4(), name: DashboardColumns.NAME },
-      { key: uuidv4(), name: DashboardColumns.REGION },
-      { key: uuidv4(), name: DashboardColumns.LOCATION },
-      { key: uuidv4(), name: DashboardColumns.FUNCTION },
-      { key: uuidv4(), name: DashboardColumns.AVAILABILITY },
-      { key: uuidv4(), name: DashboardColumns.TRAVEL },
-      { key: uuidv4(), name: DashboardColumns.REMOTE },
-      { key: uuidv4(), name: DashboardColumns.UNION_MEMBERSHIP },
-      { key: uuidv4(), name: DashboardColumns.MINISTRY },
-    ],
   };
 };

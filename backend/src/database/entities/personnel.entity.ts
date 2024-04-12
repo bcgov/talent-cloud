@@ -1,5 +1,5 @@
 import { instanceToPlain } from 'class-transformer';
-import { format } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
 import {
   Column,
   Entity,
@@ -24,6 +24,7 @@ import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
+import { ICS_TRAINING_NAME } from '../../common/const';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -105,6 +106,9 @@ export class PersonnelEntity extends BaseEntity {
     nullable: true,
   })
   supervisorEmail?: string;
+
+  @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
+  approvedBySupervisor: boolean;
 
   @Column({
     name: 'skills_abilities',
@@ -231,6 +235,7 @@ export class PersonnelEntity extends BaseEntity {
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail ?? '',
+      approvedBySupervisor: this.approvedBySupervisor,
       firstAidLevel: this.firstAidLevel ?? '',
       firstAidExpiry: this.firstAidExpiry ?? '',
       driverLicense: this.driverLicense ?? '',
@@ -242,14 +247,16 @@ export class PersonnelEntity extends BaseEntity {
       emergencyExperience: this.emergencyExperience ?? '',
       jobTitle: this.jobTitle ?? '',
       status: this.status,
+      newMember: Status.ACTIVE && differenceInDays(new Date(), this.dateJoined) < 31, 
       lastDeployed: lastDeployed ?? null,
       dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
+      icsTraining: this.trainings?.some(t => t.name === ICS_TRAINING_NAME) || false,
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ||
         [],
-      // trainings
+      // trainings will not be returned until we have a more robust system
       availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],
     };

@@ -1,6 +1,6 @@
 import { datasource } from './datasource';
 
-export const functionSql = `INSERT INTO public."location" (location_name, region) VALUES
+export const locationSql = `INSERT INTO public."location" (location_name, region) VALUES
   ('100 Mile House',  'NEA' ),
   ('150 Mile House',  'NEA' ),
   ('Abbotsford',  'SWE' ),
@@ -68,7 +68,7 @@ const seedLocation = async () => {
 
   const locations = await datasource.query(`SELECT * FROM public."location"`);
   if (locations.length === 0) {
-    return await datasource.query(functionSql);
+    return await datasource.query(locationSql);
   }
   return 'Already seeded';
 };

@@ -1,11 +1,22 @@
 import { DashboardColumns } from '@/pages/dashboard';
 import type { Column } from '../interface';
+import { Role } from '@/common';
+import { useRole } from '@/hooks';
 export const TableHeader = ({
   columns,
 }: {
   columns: { name: string; key: string }[];
 }) => {
   const renderName = (name: string) => {
+    if (name === DashboardColumns.SUPERVISOR_APPROVAL) {
+      return (
+        <span>
+          {name.split(' ')[0]}
+          <br />
+          {name.split(' ')[1]}
+        </span>
+      );
+    }
     if (name === DashboardColumns.TRAVEL) {
       return (
         <>
@@ -46,6 +57,7 @@ export const TableHeader = ({
     } else return name;
   };
 
+  const { role } = useRole();
   return (
     <thead>
       <tr>
@@ -53,7 +65,7 @@ export const TableHeader = ({
           <th
             key={key}
             scope="col"
-            className="px-6 py-4 text-dark text-left  border-primaryBlue border-b-2 whitespace-wrap w-auto overflow-x-hidden"
+            className={`bg-white sticky ${role === Role.COORDINATOR ? 'top-40' : 'top-20'} px-6 py-4  text-dark text-left   border-b-primaryBlue border-b-2 border-t-gray-300 border-t-2 whitespace-wrap w-auto overflow-x-hidden shadow-blue-gray-900`}
           >
             {renderName(name)}
           </th>

@@ -16,9 +16,13 @@ export interface Column {
   name: string;
   key: string;
 }
+export interface TabCount {
+  [key: string]: number;
+}
 
 export interface TableData {
   rows: Row[];
+  columns: Column[];
   pageRange: number[];
   totalRows: number;
   totalPages: number;
