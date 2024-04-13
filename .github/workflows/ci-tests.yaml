@@ -6,6 +6,15 @@ on:
 
 env:
   ENV: ci
+  KEYCLOAK_PORT: 8080
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  KEYCLOAK_CLIENT: ${{ secrets.KEYCLOAK_CLIENT }}
+  KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
+  KEYCLOAK_USER: ${{ secrets.KEYCLOAK_USER }}
+  KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+  CYPRESS_BASE_URL: http://localhost:3000
+  CYPRESS_AUTH_ORIGIN: https://logontest7.gov.bc.ca/
+  TARGET: dev
 
 jobs:
   run-tests:
@@ -35,18 +44,15 @@ jobs:
       - name: Run Docker containers
         run: make build-test
 
-      - name: Run Migrations
-        run: make migration-run
-
-      - name: Seed Test Locations/Functions
-        run: make seed-data
-
-      - name: Run Backend Tests
-        run: make test-backend-pipeline
-
+      - name: Seed Test Data
+        run: make seed-test-data
+      
       - name: Run Frontend Tests
         run: make test-frontend-pipeline
       
+      - name: Run Backend Tests
+        run: make test-backend-pipeline
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

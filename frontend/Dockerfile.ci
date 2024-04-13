@@ -2,7 +2,7 @@
 # BUILD FOR CI TESTS
 ###################
 # Only needed if running cypress inside the container
-FROM cypress/included:latest
+FROM cypress/included:13.6.0
 
 
 
@@ -13,6 +13,11 @@ ENV PORT 3000
 
 COPY package*.json . 
 COPY . . 
+
+ENV CYPRESS_BASE_URL = $CYPRESS_BASE_URL
+ENV CYPRESS_AUTH_ORIGIN = $CYPRESS_AUTH_ORIGIN
+ENV KEYCLOAK_USER = $KEYCLOAK_USER
+ENV KEYCLOAK_PASSWORD = $KEYCLOAK_PASSWORD
 
 RUN npm ci 
 

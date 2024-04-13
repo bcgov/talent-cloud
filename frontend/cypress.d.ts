@@ -8,6 +8,8 @@ declare global {
   namespace Cypress {
     interface Chainable {
       mount: typeof mount;
+      login_coordinator(): Chainable<void>;
+      logout_coordinator(): Chainable<void>;
     }
   }
 }

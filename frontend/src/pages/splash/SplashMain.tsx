@@ -1,13 +1,9 @@
 import { ButtonTypes } from '@/common';
-import { BannerType } from '@/common/enums/banner-enum';
 import { Button } from '@/components';
 import { SplashImage } from '@/components/images';
-import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
-import { AxiosPublic } from '@/utils';
 import { createCustomLoginUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useState } from 'react';
 
 export const SplashMain = ({ content }: { content: any }) => {
   const { keycloak } = useKeycloak();
@@ -15,48 +11,18 @@ export const SplashMain = ({ content }: { content: any }) => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
   };
 
-  const [formId, setFormId] = useState<string>('');
-  const [formDisabled, setFormDisabled] = useState<boolean>(false);
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { formId, disabled },
-        } = await AxiosPublic.get('/form');
-
-        if (disabled) {
-          setFormDisabled(true);
-        }
-        setFormId(formId);
-      } catch (e: any) {
-        throw new Error(e);
-      }
-    })();
-  }, []);
-
   return (
     <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-16 lg:px-0 lg:pr-0 2xl:px-64">
       <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start space-y-16  lg:px-24  xl:px-32 lg:py-24 text-left">
-        {formDisabled ? (
-          <Banner
-            type={BannerType.INFO}
-            content={`TEAMS applications are not yet open for ${new Date().getFullYear()}. Please stay tuned. Details coming soon.`}
-          />
-        ) : (
-          <Banner
+        {/* TODO - uncomment when we want to allow access to the form*/}
+        {/* <Banner
             type={BannerType.INFO}
             content={content.banner}
             link={{
               name: 'here ',
-              url: formId
-                ? encodeURI(
-                    `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`,
-                  )
-                : 'https://submit.digital.gov.bc.ca/app/form',
+              url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${process.env.FORM_ID}`
             }}
-          />
-        )}
-
+          /> */}
         <span className="text-info">{content.subtitle}</span>
         <h1 className="font-bold">{content.title}</h1>
         <div className="space-y-12">

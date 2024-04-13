@@ -1,16 +1,6 @@
 import { datasource } from './datasource';
+import { functionSql } from './queries';
 
-export const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
-	 ('Operations','Ops'),
-	 ('Emergency Support Services','ESS'),
-	 ('First Nations','FN'),
-	 ('Finance','Fin'),
-	 ('Liaison','Liaison'),
-	 ('Logistics','Logs'),
-	 ('Planning','Plans'),
-	 ('Advanced Planning Unit','APU'),
-	 ('Recovery','Recovery'),
-	 ('Deputy Director','DDir');`;
 
 const seedFunction = async () => {
   await datasource.initialize();

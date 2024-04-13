@@ -43,7 +43,7 @@ export const SingleSelect = ({
             {value ? (
               <div className={menuItemClass[field.name]}>
                 <Chip value={value} name={field.name} handleClose={handleClose} />
-                <Menu.Button aria-label="Single Select Menu Button">
+                <Menu.Button aria-label="Single Select Menu Button" id={field.name}>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
@@ -53,6 +53,7 @@ export const SingleSelect = ({
               </div>
             ) : (
               <Menu.Button
+                id={field.name}
                 className={menuItemClass[field.name]}
                 aria-label="Single Select Menu Button"
               >
