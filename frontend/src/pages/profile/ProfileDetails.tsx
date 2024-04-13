@@ -48,7 +48,7 @@ const ProfileDetails = ({
           title: 'ICS Training',
           content:
             personnel.icsTraining === true ? (
-              <span className="text-calGreenTwo">Completed</span>
+              <span className="text-success">Completed</span>
             ) : (
               <span className="text-errorRed">Incomplete</span>
             ),
@@ -85,7 +85,7 @@ const ProfileDetails = ({
       title: 'Supervisor Approval',
       content:
         personnel.approvedBySupervisor === true ? (
-          <span className="text-calGreenTwo">Received</span>
+          <span className="text-success">Received</span>
         ) : (
           <span className="text-errorRed">Not Yet Received</span>
         ),

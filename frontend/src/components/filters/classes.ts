@@ -15,7 +15,8 @@ export const classes = {
     listItem: 'flex cursor-pointer items-center justify-start text-list-item',
     chipsContainer: 'flex flex-row items-center justify-start',
     chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none',
-    placeholder: 'truncate inline text-defaultGray  text-sm text-defaultGray text-ellipsis text-nowrap',
+    placeholder:
+      'truncate inline text-defaultGray  text-sm text-defaultGray text-ellipsis text-nowrap',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
     disabled:
@@ -42,7 +43,7 @@ export const calendarClass: { [key: string]: string } = {
   caption_label: 'text-sm text-black font-bold',
   nav: 'flex items-center',
   nav_button:
-    'h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300',
+    'h-6 w-6 bg-transparent hover:bg-primaryBlue-gray-50 p-1 rounded-md transition-colors duration-300',
   nav_button_previous: 'absolute right-5',
   nav_button_next: 'absolute right-1',
   table: 'w-full border-collapse',

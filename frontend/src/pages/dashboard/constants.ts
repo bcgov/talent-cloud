@@ -77,7 +77,8 @@ export interface Personnel {
   remoteOnly: boolean;
   unionMembership: string;
   ministry: string;
-  applicationDate?: Date | string;
+  applicationDate?: Date;
+  dateJoined: Date;
   primaryPhone: string;
   secondaryPhone?: string;
   workPhone?: string;

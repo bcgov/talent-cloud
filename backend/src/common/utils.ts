@@ -35,7 +35,7 @@ export const rowData = (
       status !== Status.PENDING
         ? faker.date.between({
             from: applicationDate,
-            to: format(new Date(), 'yyyy-MM-dd'),
+            to: new Date(),
           })
         : undefined,
     email: faker.internet.email(),
@@ -63,6 +63,7 @@ export const rowData = (
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
+    approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     status: status,

@@ -269,7 +269,7 @@ const Profile = () => {
           >
             <DialogHeader
               placeholder={''}
-              className="flex flex-row align-middle bg-calBlue"
+              className="flex flex-row align-middle bg-grayBackground"
             >
               <h4 className="grow font-bold">
                 {editCell?.availabilityType

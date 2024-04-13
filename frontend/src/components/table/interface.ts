@@ -26,7 +26,6 @@ export interface TableData {
   pageRange: number[];
   totalRows: number;
   totalPages: number;
-  count: TabCount;
 }
 
 export interface PageParams {
