@@ -16,7 +16,7 @@ export CONTAINER_REGISTRY := ""
 # Openshift
 export APP_NAME:=tcloud
 export OS_NAMESPACE_PREFIX:=cd4869
-export OS_NAMESPACE_SUFFIX?=test
+export OS_NAMESPACE_SUFFIX?=dev
 export TARGET_NAMESPACE=$(OS_NAMESPACE_PREFIX)-$(OS_NAMESPACE_SUFFIX)
 export TOOLS_NAMESPACE=$(OS_NAMESPACE_PREFIX)-tools
 export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
