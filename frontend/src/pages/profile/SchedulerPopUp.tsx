@@ -47,7 +47,8 @@ const SchedulerPopUp = ({
   const [toError, setToError] = useState(false);
   const [confirmModal, setConfirmModal] = useState<'DELETE' | 'EDIT' | null>(null);
 
-  const BUTTON_GROUP_SELECTED_CLASS = 'bg-blue text-white capitalize hover:bg-blue';
+  const BUTTON_GROUP_SELECTED_CLASS =
+    'bg-primaryBlue text-white capitalize hover:bg-primaryBlue';
   const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
 
   const saveDates = () => {
@@ -308,7 +309,7 @@ const SchedulerPopUp = ({
           <div className={editMode ? 'basis-1/2' : 'basis-full'}>
             <Button
               placeholder={''}
-              className="w-full bg-blue"
+              className="w-full bg-primaryBlue"
               onClick={() => {
                 setConfirmModal('EDIT');
               }}

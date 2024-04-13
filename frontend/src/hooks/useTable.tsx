@@ -28,17 +28,13 @@ export const useTable = () => {
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
-    count: {
-      [Status.ACTIVE]: 0,
-      [Status.INACTIVE]: 0,
-      [Status.PENDING]: 0,
-    },
   });
   const [counts, setCounts] = useState<any>({
     [Status.ACTIVE]: 0,
     [Status.INACTIVE]: 0,
     [Status.PENDING]: 0,
   });
+
   const tabs = [
     { index: 0, label: StatusNames.ACTIVE, value: Status.ACTIVE },
     { index: 1, label: StatusNames.INACTIVE, value: Status.INACTIVE },
@@ -98,7 +94,7 @@ export const useTable = () => {
         pageRange.splice(0, 1);
 
         const currentPage = filterValues?.currentPage ?? 1;
-        setCounts(count);
+
         setTableData({
           totalPages,
           pageRange: truncatePageRange(totalPages, currentPage, pageRange),
@@ -115,6 +111,7 @@ export const useTable = () => {
             }),
           ),
         });
+        setCounts(count);
       } catch (e) {
         handleError(e);
       } finally {

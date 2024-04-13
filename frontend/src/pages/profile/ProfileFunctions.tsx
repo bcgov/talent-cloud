@@ -31,7 +31,7 @@ const ProfileFunctions = ({
       case Experience.CHIEF_EXPERIENCED:
         return (
           <Chip
-            className="text-purple bg-purple border-darkPurple border-2 rounded-md font-bold capitalize py-0"
+            className="text-darkPurple bg-lightPurple border-darkPurple border-2 rounded-md font-bold capitalize py-0"
             value="Chief Experienced"
           />
         );
@@ -45,7 +45,7 @@ const ProfileFunctions = ({
       case Experience.OUTSIDE_EXPERIENCED:
         return (
           <Chip
-            className="text-yellow bg-yellow border-darkYellow border-2 rounded-md font-bold capitalize py-0"
+            className="text-darkYellow bg-lightYellow border-darkYellow border-2 rounded-md font-bold capitalize py-0"
             value="Outside Experienced"
           />
         );

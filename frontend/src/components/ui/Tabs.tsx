@@ -33,10 +33,7 @@ export const Tabs = ({
             className={`px-2 md:px-6 py-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'}`}
           >
             {({ selected }) => (
-              <button
-                // onClick={() => onChangeTab(value)}
-                className={` ${selected ? 'font-bold' : 'font-normal'}`}
-              >
+              <button className={` ${selected ? 'font-bold' : 'font-normal'}`}>
                 {' '}
                 {label}{' '}
                 <span

@@ -65,7 +65,9 @@ module.exports = withMT({
         calBlueTwo: '#1a5b97',
         calBlueHover: '#d8eaf5',
         darkPurple: '#6f2fa2',
+        lightPurple: '#E8D9F7',
         darkYellow: '#826521',
+        lightYellow: '#F9F1C6'
       },
       backgroundColor: {
         primaryBackgroundBlue: "#38598A", 
