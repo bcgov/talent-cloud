@@ -219,7 +219,7 @@ const Profile = () => {
             <EditNotes
               name={'logisticsNotes'}
               label="Notes"
-              notes={{ logisticsNotes: personnel.logisticsNotes }}
+              notes={{ logisticsNotes: personnel?.logisticsNotes ?? '' }}
               onSubmit={updatePersonnel}
               handleClose={handleOpenEditNotes}
             />
@@ -236,7 +236,7 @@ const Profile = () => {
             <EditNotes
               name={'coordinatorNotes'}
               label="Coordinator Notes"
-              notes={{ coordinatorNotes: personnel.coordinatorNotes }}
+              notes={{ coordinatorNotes: personnel?.coordinatorNotes ?? '' }}
               onSubmit={updatePersonnel}
               handleClose={handleOpenEditCoordinatorNotes}
             />

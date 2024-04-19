@@ -1,6 +1,8 @@
 import { ButtonTypes } from '@/common';
+import { BannerType } from '@/common/enums/banner-enum';
 import { Button } from '@/components';
 import { SplashImage } from '@/components/images';
+import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
 import { createCustomLoginUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
@@ -23,6 +25,10 @@ export const SplashMain = ({ content }: { content: any }) => {
               url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${process.env.FORM_ID}`
             }}
           /> */}
+        <Banner
+          type={BannerType.INFO}
+          content="TEAMS applications are not yet open for 2024. Please stay tuned. Details coming soon."
+        />
         <span className="text-info">{content.subtitle}</span>
         <h1 className="font-bold">{content.title}</h1>
         <div className="space-y-12">
