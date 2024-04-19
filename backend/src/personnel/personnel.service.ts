@@ -280,7 +280,7 @@ export class PersonnelService {
   async getAvailability(
     id: string,
     query: GetAvailabilityDTO,
-  ): Promise<AvailabilityEntity[]> {
+  ): Promise<AvailabilityRO[]> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     qb.where('availability.personnel = :id', { id });
@@ -325,7 +325,7 @@ export class PersonnelService {
     
     let currentEndIndex = 0;
     // map over the availbility entities and update them so that *each* entity includes the end date of the availbilityType "group" that it belongs to
-    const availabilityWithStartAndEndDate = availabilityWithStartDate.map((d: any, index: number) => {
+    const availabilityWithStartAndEndDate = availabilityWithStartDate.map((d: AvailabilityRO, index: number) => {
       if(index === 0){
         return {...d, end: true, groupEndDate: availabilityWithStartDate[currentEndIndex].date}
       }
