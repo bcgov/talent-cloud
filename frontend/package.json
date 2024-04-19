@@ -22,6 +22,7 @@
     "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/"
   },
   "dependencies": {
+    "@bcgov/bc-sans": "2.1.0",
     "@react-keycloak/web": "3.4.0",
     "@vitejs/plugin-react": "4.2.1",
     "axios": "1.6.5",
