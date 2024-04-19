@@ -4,6 +4,9 @@
 
 
 @layer utilities {
+  .truncate-small {
+    @apply truncate md:overflow-visible md:whitespace-normal md:text-nowrap
+  }
   .text-list-header {
 
 font-size: 16px;

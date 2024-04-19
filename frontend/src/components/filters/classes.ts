@@ -1,3 +1,7 @@
+export const BUTTON_GROUP_SELECTED_CLASS =
+  'bg-primaryBlue text-white capitalize hover:bg-primaryBlue';
+
+export const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
 export const classes = {
   menu: {
     container:
@@ -51,10 +55,11 @@ export const calendarClass: { [key: string]: string } = {
   head_cell: 'm-0.5 w-9 font-normal text-sm',
   row: 'flex w-full',
   cell: 'text-gray-600  h-10 w-10 text-center text-sm p-0 m-0 relative  focus-within:relative focus-within:z-20',
-  day: 'h-10 w-10 p-0 font-normal aria-selected:bg-infoBannerLight aria-selected:rounded-none',
+  day: 'h-10 w-10 p-0 font-normal aria-selected:bg-infoBannerLight',
   dropdown_year: 'text-sm',
   day_range_end: 'aria-selected:bg-infoBannerLight aria-selected:rounded-r-full',
-  day_range_start: 'aria-selected:bg-infoBannerLight aria-selected:rounded-l-full',
+  day_range_start:
+    'aria-selected:bg-infoBannerLight aria-selected:rounded-l-full rounded-l-full bg-infoBannerLight',
   day_selected: 'bg-infoBannerLight rounded-none',
   day_today: ' rounded-full bg-gray-200 text-gray-900 ',
   day_outside:

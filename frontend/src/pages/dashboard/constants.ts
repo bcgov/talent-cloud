@@ -62,6 +62,10 @@ export interface Availability {
   actualStartDate?: string;
   availabilityType: AvailabilityType;
   date: string;
+  start?: boolean;
+  end?: boolean;
+  groupStartDate?: string;
+  groupEndDate?: string;
   deploymentCode?: string;
 }
 
@@ -89,6 +93,8 @@ export interface Personnel {
   supervisorLastName: string;
   supervisorEmail?: string;
   approvedBySupervisor: boolean;
+  logisticsNotes?: string;
+  coordinatorNotes?: string;
   icsTraining: boolean;
   reviewed: boolean;
   date: string;

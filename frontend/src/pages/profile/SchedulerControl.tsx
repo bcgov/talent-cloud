@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Input,
@@ -8,34 +8,25 @@ import {
   Select,
   Option,
 } from '@material-tailwind/react';
-import dayjs from 'dayjs';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import MonthPicker from '@/components/ui/MonthPicker';
+import type { DateRange } from 'react-day-picker';
+import { addMonths, format } from 'date-fns';
 
 const SchedulerControl = ({
+  availabilityQuery,
   onChangeAvailabilityDates,
   addEventClicked,
 }: {
-  onChangeAvailabilityDates: (from: string, to: string) => void;
+  availabilityQuery: DateRange;
+  onChangeAvailabilityDates: (range: DateRange) => void;
   addEventClicked: () => void;
 }) => {
   const numMonthsItems = [1, 3, 6, 12];
-
-  const [fromMonth, setFromMonth] = useState<number>(new Date().getMonth() + 1);
-  const [fromYear, setFromYear] = useState<number>(new Date().getFullYear());
-  const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 3);
-  const [toYear, setToYear] = useState<number>(new Date().getFullYear());
   const [numMonths, setNumMonths] = useState<number>(3);
 
-  // When values change, then we send a reuqest
-  useEffect(() => {
-    const fromString = dayjs(`${fromYear}/${fromMonth}/01`).format('YYYY-MM-DD');
-    const toString = dayjs(`${toYear}/${toMonth}/01`)
-      .endOf('month')
-      .format('YYYY-MM-DD');
-    onChangeAvailabilityDates(fromString, toString);
-  }, [fromMonth, fromYear, toMonth, toYear, numMonths]);
-
+  const fromDate = availabilityQuery.from ?? new Date();
+  const toDate = availabilityQuery.to ?? new Date();
   return (
     <div className="flex flex-row">
       <div className="w-40 pt-1">
@@ -45,12 +36,12 @@ const SchedulerControl = ({
           className="bg-calBlue normal-case"
           placeholder={''}
           onClick={() => {
-            const fromDate = dayjs(new Date());
-            const toDate = fromDate.add(numMonths - 1, 'months');
-            setFromMonth(fromDate.month() + 1);
-            setFromYear(fromDate.year());
-            setToMonth(toDate.month() + 1);
-            setToYear(toDate.year());
+            const date = new Date();
+            const from = new Date(date.getFullYear(), date.getMonth(), 1);
+            onChangeAvailabilityDates({
+              to: new Date(from.getFullYear(), from.getMonth() + numMonths, 0),
+              from,
+            });
           }}
         >
           Jump to Today
@@ -69,21 +60,19 @@ const SchedulerControl = ({
               labelProps={{
                 className: 'hidden',
               }}
-              value={dayjs(`${fromYear}/${fromMonth}/1`).format('MMM YYYY')}
+              value={format(fromDate, 'MMM yyyy')}
             />
           </PopoverHandler>
           <PopoverContent placeholder={''} className="z-50">
             <MonthPicker
-              startYear={fromYear}
-              onSelect={({ month, year }) => {
+              startYear={fromDate.getFullYear()}
+              onSelect={({ month, year }) =>
                 // FROM was changed, so we set TO according to numMonths
-                setFromMonth(month);
-                setFromYear(year);
-                const fromDate = dayjs(`${year}/${month}/01`);
-                const toDate = fromDate.add(numMonths - 1, 'months');
-                setToMonth(toDate.month() + 1);
-                setToYear(toDate.year());
-              }}
+                onChangeAvailabilityDates({
+                  to: new Date(year, month + numMonths, 0),
+                  from: new Date(year, month, 1),
+                })
+              }
             />
           </PopoverContent>
         </Popover>
@@ -104,21 +93,18 @@ const SchedulerControl = ({
               labelProps={{
                 className: 'hidden',
               }}
-              value={dayjs(`${toYear}/${toMonth}/1`).format('MMM YYYY')}
+              value={format(toDate, 'MMM yyyy')}
             />
           </PopoverHandler>
           <PopoverContent placeholder={''} className="z-50">
             <MonthPicker
-              startYear={toYear}
-              onSelect={({ month, year }) => {
-                // TO was changed, so we set FROM according to numMonths
-                setToMonth(month);
-                setToYear(year);
-                const toDate = dayjs(`${year}/${month}/01`);
-                const fromDate = toDate.subtract(numMonths - 1, 'months');
-                setFromMonth(fromDate.month() + 1);
-                setFromYear(fromDate.year());
-              }}
+              startYear={toDate.getFullYear()}
+              onSelect={({ month, year }) =>
+                onChangeAvailabilityDates({
+                  to: new Date(year, month + 1, 0),
+                  from: new Date(year, month - numMonths, 1),
+                })
+              }
             />
           </PopoverContent>
         </Popover>
@@ -126,7 +112,8 @@ const SchedulerControl = ({
       <div className="grow" />
       <div className="w-32">
         <Select
-          value={`${numMonths}`}
+          value={numMonths.toString()}
+          name={'numMonths'}
           placeholder={''}
           className="border-none"
           labelProps={{ className: 'hidden' }}
@@ -134,13 +121,17 @@ const SchedulerControl = ({
           containerProps={{ className: 'min-w-px' }}
           onChange={(num) => {
             if (num) {
-              // numMonths was changed, so we set TO to numMonths after FROM
               const monthsToAdd = parseInt(num, 10);
+
+              const toDate = addMonths(
+                availabilityQuery?.from ?? new Date(),
+                monthsToAdd,
+              );
               setNumMonths(monthsToAdd);
-              const fromDate = dayjs(`${fromYear}/${fromMonth}/01`);
-              const toDate = fromDate.add(monthsToAdd - 1, 'months');
-              setToMonth(toDate.month() + 1);
-              setToYear(toDate.year());
+              onChangeAvailabilityDates({
+                to: new Date(toDate.getFullYear(), toDate.getMonth(), 0),
+                from: availabilityQuery?.from ?? new Date(),
+              });
             }
           }}
         >

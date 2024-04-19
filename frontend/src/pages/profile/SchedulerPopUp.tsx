@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import type { CaptionProps, DateRange } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';
 import {
@@ -10,46 +9,49 @@ import {
   Input,
 } from '@material-tailwind/react';
 import dayjs from 'dayjs';
-import { calendarClass } from '@/components/filters/classes';
+import {
+  BUTTON_GROUP_SELECTED_CLASS,
+  BUTTON_GROUP_UNSELECTED_CLASS,
+  calendarClass,
+} from '@/components/filters/classes';
 import { DatePickerHeader } from '@/components/filters/date-picker/DatePickerHeader';
-import type { AvailabilityRange } from '../dashboard';
+import type { AvailabilityInterface, AvailabilityRange } from '../dashboard';
 import { AvailabilityType } from '@/common';
+import { EditConfirmContent } from '@/components/filters/EditConfirmationModal';
+import { DeleteConfirmContent } from './DeleteConfirmationModal';
 import { offsetTimezoneDate } from '@/utils';
 
 const SchedulerPopUp = ({
-  editedFrom,
-  editedTo,
-  editedAvailabilityType,
-  editedDeploymentCode,
+  cell,
   editMode,
   onSave,
+  onDelete,
 }: {
-  editedFrom?: string;
-  editedTo?: string;
-  editedAvailabilityType?: AvailabilityType;
-  editedDeploymentCode?: string;
+  cell?: AvailabilityInterface;
   editMode: boolean;
-  onSave: (dates: AvailabilityRange) => void;
+  onSave: (availabilityRange: AvailabilityRange) => void;
+  onDelete: (availabilityRange: AvailabilityRange) => void;
 }) => {
   const [range, setRange] = useState<DateRange | undefined>({
-    from: editedFrom ? offsetTimezoneDate(editedFrom) : new Date(),
-    to: editedTo ? offsetTimezoneDate(editedTo) : new Date(),
+    from: cell?.groupStartDate
+      ? offsetTimezoneDate(cell.groupStartDate)
+      : new Date(),
+
+    to: cell?.groupEndDate ? offsetTimezoneDate(cell.groupEndDate) : new Date(),
   });
   const [selectedStatus, setSelectedStatus] = useState<AvailabilityType>(
-    editedAvailabilityType ?? AvailabilityType.AVAILABLE,
+    cell?.availabilityType ?? AvailabilityType.AVAILABLE,
   );
-  const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode ?? '');
+  const [deploymentCode, setDeploymentCode] = useState(cell?.deploymentCode ?? '');
   const [fromInput, setFromInput] = useState(
-    editedFrom ?? dayjs().format('YYYY-MM-DD'),
+    cell?.groupStartDate ?? dayjs().format('YYYY-MM-DD'),
+  );
+  const [toInput, setToInput] = useState(
+    cell?.groupEndDate ?? dayjs().format('YYYY-MM-DD'),
   );
   const [fromError, setFromError] = useState(false);
-  const [toInput, setToInput] = useState(editedTo ?? dayjs().format('YYYY-MM-DD'));
   const [toError, setToError] = useState(false);
   const [confirmModal, setConfirmModal] = useState<'DELETE' | 'EDIT' | null>(null);
-
-  const BUTTON_GROUP_SELECTED_CLASS =
-    'bg-primaryBlue text-white capitalize hover:bg-primaryBlue';
-  const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
 
   const saveDates = () => {
     const fromDay = dayjs(range?.from);
@@ -58,27 +60,32 @@ const SchedulerPopUp = ({
       from: fromDay.format('YYYY-MM-DD'),
       to: toDay.format('YYYY-MM-DD'),
       type: selectedStatus,
+      deploymentCode: deploymentCode ?? '',
     };
-    if (deploymentCode.length) {
-      availabilityRange.deploymentCode = deploymentCode;
-    }
-    if (dayjs(editedFrom).isBefore(fromDay, 'date')) {
-      availabilityRange.removeFrom = editedFrom;
-    }
-    if (dayjs(editedTo).isAfter(toDay, 'date')) {
-      availabilityRange.removeTo = editedTo;
+
+    if (selectedStatus === cell?.availabilityType) {
+      onDelete({
+        from: dayjs(cell.groupStartDate).format('YYYY-MM-DD'),
+        to: dayjs(range?.from).format('YYYY-MM-DD'),
+        type: AvailabilityType.NOT_INDICATED,
+      });
+      onDelete({
+        from: dayjs(range?.to).format('YYYY-MM-DD'),
+        to: dayjs(cell.groupEndDate).format('YYYY-MM-DD'),
+        type: AvailabilityType.NOT_INDICATED,
+      });
     }
     onSave(availabilityRange);
   };
 
   const deleteDates = () => {
-    if (!editedFrom || !editedTo) {
+    if (!cell?.groupStartDate || !cell?.groupEndDate) {
       // Logic is off if this case happens, as delete should only be clickable if this is an edit
       return;
     }
     const availabilityRange: AvailabilityRange = {
-      from: dayjs(editedFrom).format('YYYY-MM-DD'),
-      to: dayjs(editedTo).format('YYYY-MM-DD'),
+      from: cell.groupStartDate,
+      to: cell.groupEndDate,
       type: AvailabilityType.NOT_INDICATED,
     };
     onSave(availabilityRange);
@@ -116,84 +123,11 @@ const SchedulerPopUp = ({
     }
   };
 
-  useEffect(() => {
-    if (range) {
-      const fromDay = dayjs(range.from);
-      const toDay = dayjs(range.to ?? range.from);
-      if (fromDay.isAfter(toDay, 'day')) {
-        setFromError(true);
-        setToError(true);
-      } else {
-        setFromError(false);
-        setToError(false);
-        setFromInput(fromDay.format('YYYY-MM-DD'));
-        setToInput(toDay.format('YYYY-MM-DD'));
-      }
-    } else {
-      setFromError(true);
-      setToError(true);
-    }
-  }, [range]);
-
-  const EditConfirmContent = () => (
-    <div className="py-4 px-4">
-      <p className="font-bold text-lg">Update availability in Calendar?</p>
-      <p className="pt-2">
-        Modifying availability within a currently selected date range resets the
-        entire selection. This action replaces previous availability once changes are
-        saved.
-      </p>
-      <div className="pt-12 flex justify-end">
-        <Button
-          aria-label="close"
-          variant="text"
-          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
-          onClick={() => setConfirmModal(null)}
-          placeholder={''}
-        >
-          Cancel
-        </Button>
-        <Button
-          aria-label="confirm"
-          onClick={confirmAction}
-          placeholder={''}
-          className="normal-case bg-primaryBlue cursor-pointer"
-        >
-          Confirm Update
-        </Button>
-      </div>
-    </div>
-  );
-
-  const DeleteConfirmContent = () => (
-    <div className="py-4 px-4">
-      <p className="font-bold text-lg">Delete availability from Calendar?</p>
-      <p className="pt-2">
-        Once an availability is deleted, the selected date range on the calendar will
-        be reset to blank. You may need to reconfirm this member&apos;s availability
-        for these dates later.
-      </p>
-      <div className="pt-12 flex justify-end">
-        <Button
-          aria-label="close"
-          variant="text"
-          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
-          onClick={() => setConfirmModal(null)}
-          placeholder={''}
-        >
-          Cancel
-        </Button>
-        <Button
-          aria-label="confirm"
-          onClick={confirmAction}
-          placeholder={''}
-          className="normal-case bg-primaryBlue cursor-pointer"
-        >
-          Confirm Delete
-        </Button>
-      </div>
-    </div>
-  );
+  const onChangeDatePicker = (dates: DateRange | undefined) => {
+    setRange({ to: dates?.to, from: dates?.from });
+    setFromInput(dates?.from ? dayjs(dates?.from).format('YYYY-MM-DD') : '');
+    setToInput(dates?.to ? dayjs(dates?.to).format('YYYY-MM-DD') : '');
+  };
 
   return (
     <div className="grid grid-cols-2">
@@ -324,9 +258,13 @@ const SchedulerPopUp = ({
         <DayPicker
           mode="range"
           selected={range}
-          onSelect={setRange}
+          onSelect={onChangeDatePicker}
           showOutsideDays
-          defaultMonth={editedFrom ? offsetTimezoneDate(editedFrom) : new Date()}
+          defaultMonth={
+            cell?.groupStartDate
+              ? offsetTimezoneDate(cell?.groupStartDate)
+              : new Date()
+          }
           captionLayout="dropdown-buttons"
           className="border-0 w-[275px]"
           classNames={calendarClass}
@@ -335,7 +273,7 @@ const SchedulerPopUp = ({
               <DatePickerHeader
                 {...props}
                 hideResetButton={true}
-                onChange={setRange}
+                onChange={onChangeDatePicker}
               />
             ),
           }}
@@ -349,8 +287,18 @@ const SchedulerPopUp = ({
         size="sm"
       >
         <DialogBody placeholder={''}>
-          {confirmModal === 'DELETE' && <DeleteConfirmContent />}
-          {confirmModal === 'EDIT' && <EditConfirmContent />}
+          {confirmModal === 'DELETE' && (
+            <DeleteConfirmContent
+              confirmAction={confirmAction}
+              handleConfirmModal={() => setConfirmModal(null)}
+            />
+          )}
+          {confirmModal === 'EDIT' && (
+            <EditConfirmContent
+              confirmAction={confirmAction}
+              handleConfirmModal={() => setConfirmModal(null)}
+            />
+          )}
         </DialogBody>
       </Dialog>
     </div>

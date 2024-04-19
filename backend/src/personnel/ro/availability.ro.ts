@@ -7,7 +7,21 @@ export class AvailabilityRO {
     required: true,
     example: '2023-01-01',
   })
-  date: string;
+  date: string
+  
+  @ApiProperty({
+    description: 'Start date of this availability group',
+    required: true,
+    example: '2023-01-01',
+  })
+  groupStartDate?: string;
+
+  @ApiProperty({
+    description: 'End date of this availability group',
+    required: true,
+    example: '2023-01-01',
+  })
+  groupEndDate?: string;
 
   @ApiProperty({
     description: 'Availability type',
@@ -23,17 +37,4 @@ export class AvailabilityRO {
   })
   deploymentCode?: string;
 
-  @ApiProperty({
-    description: 'The true start date of the event if this date falls at the start of a query',
-    required: false,
-    example: '2022-12-28',
-  })
-  actualStartDate?: string;
-
-  @ApiProperty({
-    description: 'The true end date of the event if this date falls at the end of a query',
-    required: false,
-    example: '2023-02-03',
-  })
-  actualEndDate?: string;
 }

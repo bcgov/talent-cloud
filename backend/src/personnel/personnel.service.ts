@@ -17,6 +17,7 @@ import { ExperienceEntity } from '../database/entities/personnel-function-experi
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { TrainingEntity } from '../database/entities/training.entity';
 import { AppLogger } from '../logger/logger.service';
+import { AvailabilityRO } from './ro/availability.ro';
 
 @Injectable()
 export class PersonnelService {
@@ -249,7 +250,7 @@ export class PersonnelService {
     qb.orderBy('availability.date', 'DESC');
     qb.take(1);
     const lastDeployed = await qb.getOne();
-    return lastDeployed?.date;
+    return format(lastDeployed?.date, 'yyyy-MM-dd');
   }
 
   /**
@@ -282,24 +283,15 @@ export class PersonnelService {
   ): Promise<AvailabilityEntity[]> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
-    const start = parse(query.from, 'yyyy-MM-dd', new Date());
-
-    const end = parse(query.to, 'yyyy-MM-dd', new Date());
-
-    // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
-    start.setDate(1);
-
-    const endDate = new Date(end.getFullYear(), end.getMonth() + 1, 0);
-
     qb.where('availability.personnel = :id', { id });
     qb.andWhere(
-      'availability.date >= :start AND availability.date <= :endDate',
-      { start, endDate },
+      'availability.date >= :start AND availability.date <= :groupEndDate',
+      { start: query.from, groupEndDate: query.to },
     );
 
     const availability = await qb.getMany();
-
-    const dates = eachDayOfInterval({ start, end: endDate });
+    
+    const dates = eachDayOfInterval({ start: query.from, end: query.to });
 
     const availableDates: AvailabilityEntity[] = dates.map(
       (date) =>
@@ -311,29 +303,64 @@ export class PersonnelService {
         }),
     );
 
-    return availableDates;
+    //TO DO - include groupStartDate and groupEndDate as columns in the availability table and remove this logic?
+    // groupStartDate and groupEndDate need to be accessible from the individual availability entities so that the entity "knows" which group it is a part of
+    // groupStartDate and groupEndDate are passed in when events are created, so this would be a simple change but would require a migration to write in these values for existing data fields
+
+    let currentStartIndex = 0
+    // map over the availbility entities and update them so that *each* entity includes the start date of the availbilityType "group" that it belongs to
+    const availabilityWithStartDate: AvailabilityRO[] = availableDates.map((d: AvailabilityEntity, index: number) => {
+      
+      if(index === 0){
+        return {...d, start: true, groupStartDate: availableDates[currentStartIndex].date}
+      }
+      if(d.availabilityType !== availableDates[index-1]?.availabilityType){
+        currentStartIndex = index
+        return {...d, groupStartDate: availableDates[currentStartIndex].date, start: true}
+      } else {
+        return {...d, groupStartDate: availableDates[currentStartIndex].date} 
+      }
+    }).reverse()
+  
+    
+    let currentEndIndex = 0;
+    // map over the availbility entities and update them so that *each* entity includes the end date of the availbilityType "group" that it belongs to
+    const availabilityWithStartAndEndDate = availabilityWithStartDate.map((d: any, index: number) => {
+      if(index === 0){
+        return {...d, end: true, groupEndDate: availabilityWithStartDate[currentEndIndex].date}
+      }
+      if(d.availabilityType !== availabilityWithStartDate[index-1]?.availabilityType){
+        currentEndIndex = index
+        return {...d, groupEndDate: availabilityWithStartDate[currentEndIndex].date, end: true}
+      } else {
+        return {...d, groupEndDate: availabilityWithStartDate[currentEndIndex].date} 
+      }
+    })
+
+    // return the availability entities so that each entity includes the start and end date of the group it belongs to
+    return availabilityWithStartAndEndDate.reverse()
   }
 
   async getEventStartDate(
     personnelId: string,
     date: AvailabilityEntity,
-  ): Promise<string> {
+  ): Promise<Date> {
     const start = await this.availabilityRepository.query(
       'SELECT get_last_status_date_prior($1, $2, $3) as start_date',
       [personnelId, date.date, date.availabilityType],
     );
-    return format(start[0].start_date, 'yyyy-MM-dd');
+    return start[0].start_date
   }
 
   async getEventEndDate(
     personnelId: string,
     date: AvailabilityEntity,
-  ): Promise<string> {
+  ): Promise<Date> {
     const end = await this.availabilityRepository.query(
       'SELECT get_last_status_date_after($1, $2, $3) as end_date',
       [personnelId, date.date, date.availabilityType],
     );
-    return format(end[0].end_date, 'yyyy-MM-dd');
+    return end[0].end_date
   }
 
   /**
@@ -352,20 +379,20 @@ export class PersonnelService {
     const { from, to, type, deploymentCode, removeFrom, removeTo } =
       availability;
 
-    const startDate = parse(from, 'yyyy-MM-dd', new Date());
-    const endDate = parse(to, 'yyyy-MM-dd', new Date());
+    const groupStartDate = parse(from, 'yyyy-MM-dd', new Date());
+    const groupEndDate = parse(to, 'yyyy-MM-dd', new Date());
 
     const getQb = this.availabilityRepository
       .createQueryBuilder('availability')
-      .andWhere('date >= :startDate', { startDate: from })
-      .andWhere('date <= :endDate', { endDate: to })
+      .andWhere('date >= :groupStartDate', { groupStartDate: from })
+      .andWhere('date <= :groupEndDate', { groupEndDate: to })
       .andWhere('personnel = :id', { id })
       .addOrderBy('availability.date', 'ASC');
     const existingAvailability = await getQb.getMany();
 
     if (availability.type !== AvailabilityType.NOT_INDICATED) {
       const availabilityDates: Partial<AvailabilityEntity>[] = [];
-      for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
+      for (let i = groupStartDate; i <= groupEndDate; i.setDate(i.getDate() + 1)) {
         const date = format(i, 'yyyy-MM-dd');
         const fromExisting = existingAvailability.find((a) => a.date === date);
         if (fromExisting) {

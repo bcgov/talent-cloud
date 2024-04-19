@@ -18,9 +18,13 @@ import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
-import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
+import type {
+  AvailabilityInterface,
+  AvailabilityRange,
+  ExperienceInterface,
+} from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm';
-import { Status, type AvailabilityType } from '@/common';
+import { Status } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
@@ -34,7 +38,13 @@ const Profile = () => {
   const { personnel, updatePersonnel, updateExperiences } = usePersonnel({
     personnelId,
   });
-  const { availability, getAvailability, saveAvailability } = useAvailability({
+  const {
+    availability,
+    handleQuery,
+    availabilityQuery,
+    saveAvailability,
+    deleteAvailability,
+  } = useAvailability({
     personnelId,
   });
   const { functions } = useFunctions();
@@ -54,31 +64,17 @@ const Profile = () => {
     setOpenEditCoordinatorNotes(!openEditCoordinatorNotes);
   };
 
-  const [availabilityQuery, setAvailabilityQuery] = useState<{
-    from: string;
-    to: string;
-  }>({
-    from: dayjs().startOf('month').format('YYYY-MM-DD'),
-    to: dayjs().endOf('month').format('YYYY-MM-DD'),
-  });
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
-  const handleSchedulerOpen = () => setSchedulerDialogOpen(!schedulerDialogOpen);
-  const [editCell, setEditCell] = useState<{
-    from?: string;
-    to?: string;
-    availabilityType?: AvailabilityType;
-    deploymentCode?: string;
-  }>();
+  const [editCell, setEditCell] = useState<AvailabilityInterface>();
 
-  const onChangeAvailabilityQuery = (from: string, to: string) => {
-    setAvailabilityQuery({ from, to });
-    getAvailability(from, to);
+  const handleSchedulerOpen = (cell?: AvailabilityInterface) => {
+    setSchedulerDialogOpen(!schedulerDialogOpen);
+    setEditCell(cell);
   };
 
   const saveAvailabilityDates = async (dates: AvailabilityRange) => {
     await saveAvailability(dates);
     setSchedulerDialogOpen(false);
-    getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
@@ -95,20 +91,6 @@ const Profile = () => {
   const [openReviewApplicant, setOpenReviewApplicant] = useState(false);
   const handleOpenReviewApplicant = () => {
     setOpenReviewApplicant(!openReviewApplicant);
-  };
-  const openSchedulerDialog = (
-    from?: string,
-    to?: string,
-    availabilityType?: AvailabilityType,
-    deploymentCode?: string,
-  ) => {
-    if (!schedulerDialogOpen) {
-      // Account for parameters
-      setEditCell({ from, to, availabilityType, deploymentCode });
-    } else {
-      setEditCell(undefined);
-    }
-    setSchedulerDialogOpen(!schedulerDialogOpen);
   };
   const handleOpenEditFunctionsPopUp = (e: MouseEvent<HTMLElement>) => {
     if (openEditFunctionsPopUp === false) {
@@ -165,8 +147,9 @@ const Profile = () => {
             <Scheduler
               name={personnel.firstName}
               availability={availability}
-              onChangeAvailabilityDates={onChangeAvailabilityQuery}
-              openSchedulerDialog={openSchedulerDialog}
+              availabilityQuery={availabilityQuery}
+              onChangeAvailabilityDates={handleQuery}
+              openSchedulerDialog={handleSchedulerOpen}
             />
             <ProfileNotes
               personnel={personnel}
@@ -225,7 +208,7 @@ const Profile = () => {
             />
           </DialogUI>
 
-          {/* Coordinator Notes */}
+          {/* Coordinator Notes  */}
           <DialogUI
             open={openEditCoordinatorNotes}
             onClose={handleOpenEditCoordinatorNotes}
@@ -287,12 +270,10 @@ const Profile = () => {
             </DialogHeader>
             <DialogBody placeholder={''}>
               <SchedulerPopUp
-                editedFrom={editCell?.from}
-                editedTo={editCell?.to}
-                editedAvailabilityType={editCell?.availabilityType}
-                editedDeploymentCode={editCell?.deploymentCode}
+                cell={editCell}
                 editMode={!!editCell?.availabilityType}
                 onSave={saveAvailabilityDates}
+                onDelete={deleteAvailability}
               />
             </DialogBody>
           </Dialog>
