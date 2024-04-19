@@ -69,6 +69,7 @@ export default defineConfig({
     proxy: {
       // Proxy API requests to the backend
       '/api': {
+        rewrite: (path) => path.replace(/^\/api\/\v1/, ''),
         target: process.env.BACKEND_URL,
         changeOrigin: true,
       },
