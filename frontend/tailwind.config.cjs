@@ -30,7 +30,7 @@ module.exports = withMT({
         '32': 'repeat(32, minmax(0, 1fr))',
       },
       fontFamily: {
-        sans: ['"BCSans"'],
+        sans: ['"BC Sans"'],
       },
       colors: {
         errorRed: '#D8292F',
