@@ -207,7 +207,7 @@ export class PersonnelService {
 
 
     if (query.status === Status.PENDING) {
-      qb.orderBy('personnel.applicationDate', 'DESC');
+      qb.orderBy('personnel.applicationDate', 'ASC');
       qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     } else {

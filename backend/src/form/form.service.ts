@@ -161,7 +161,7 @@ export class FormService {
       coordinatorNotes: '',
       logisticsNotes: '',
       trainings: [],
-      applicationDate: format(new Date(), 'yyyy-MM-dd'),
+      applicationDate: new Date(),
       experiences: functionsArray,
     };
     try {

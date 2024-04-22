@@ -5,11 +5,7 @@ import {
   Status,
 } from '@/common';
 import { tableClass } from '@/components/table/classes';
-import type {
-  AvailabilityInterface,
-  Personnel,
-  DashboardFilters,
-} from '@/pages/dashboard';
+import type { Availability, Personnel, DashboardFilters } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { datePST } from '@/utils';
 import { differenceInDays } from 'date-fns';
@@ -23,7 +19,7 @@ import type { DateRange } from 'react-day-picker';
 export const getAvailabilityValue = (
   availabilityType: AvailabilityType,
   availabilityDates: DateRange,
-  availability: AvailabilityInterface[],
+  availability: Availability[],
 ) => {
   const totalAvailableDays = availability.filter(
     (itm) => itm.availabilityType === availabilityType,
@@ -89,7 +85,10 @@ export const renderCells = (
       key: DashboardColumns.ICS,
       columnName: DashboardColumns.ICS,
       value: personnel.icsTraining,
-      className: tableClass(DashboardColumns.TRAVEL, personnel.icsTraining ? 'yes' : 'no'),
+      className: tableClass(
+        DashboardColumns.TRAVEL,
+        personnel.icsTraining ? 'yes' : 'no',
+      ),
     },
     supervisorApproval: {
       key: DashboardColumns.SUPERVISOR_APPROVAL,
@@ -184,7 +183,9 @@ export const renderCells = (
     dateApplied: {
       key: DashboardColumns.DATE_APPLIED,
       columnName: DashboardColumns.DATE_APPLIED,
-      value: personnel.applicationDate && datePST(personnel.applicationDate, true),
+      value:
+        personnel.applicationDate &&
+        datePST(personnel.applicationDate as Date, true),
       className: tableClass(DashboardColumns.DATE_APPLIED, ''),
     },
     dateApproved: {

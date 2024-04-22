@@ -57,7 +57,9 @@ export interface ExperienceInterface {
   functionName: string;
   id: number;
 }
-export interface AvailabilityInterface {
+export interface Availability {
+  actualEndDate?: string;
+  actualStartDate?: string;
   availabilityType: AvailabilityType;
   date: string;
   deploymentCode?: string;
@@ -70,14 +72,14 @@ export interface Personnel {
   workLocation?: Location;
   homeLocation: Location;
   experiences?: ExperienceInterface[];
-  availability?: AvailabilityInterface[];
+  availability?: Availability[];
   status: Status;
   newMember?: boolean;
   willingToTravel: boolean;
   remoteOnly: boolean;
   unionMembership: string;
   ministry: string;
-  applicationDate?: Date;
+  applicationDate?: Date | string;
   dateJoined: Date;
   primaryPhone: string;
   secondaryPhone?: string;
@@ -94,6 +96,9 @@ export interface Personnel {
   deploymentCode?: string;
   actualStartDate?: string;
   actualEndDate?: string;
+  logisticsNotes?: string;
+  coordinatorNotes?: string;
+  lastDeployed?: string;
 }
 
 export interface AvailabilityRange {

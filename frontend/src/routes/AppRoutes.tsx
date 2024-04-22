@@ -1,8 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
-import { Layout, Loading } from '@/components';
-import { PublicRoute } from './PublicRoute';
+import { Loading } from '@/components';
 import { PrivateRoute } from './PrivateRoute';
 import { AuthProvider, ErrorProvider, RoleProvider } from '@/providers';
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -17,20 +16,16 @@ export default () => {
         <ErrorProvider>
           <RoleProvider>
             <BrowserRouter>
-              <Layout>
-                <Routes>
-                  <Route element={<PublicRoute />}>
-                    <Route path={AppRoutes.Home} element={<SplashPage />} />
-                    <Route path={AppRoutes.NotFound} element={<NotFound />} />
+              <Routes>
+                <Route path={AppRoutes.Home} element={<SplashPage />} />
+                <Route path={AppRoutes.NotFound} element={<NotFound />} />
+                <Route element={<PrivateRoute />}>
+                  <Route path={AppRoutes.Dashboard} element={<Dashboard />} />
+                  <Route path={AppRoutes.Profile}>
+                    <Route path=":personnelId" element={<Profile />} />
                   </Route>
-                  <Route element={<PrivateRoute />}>
-                    <Route path={AppRoutes.Dashboard} element={<Dashboard />} />
-                    <Route path={AppRoutes.Profile}>
-                      <Route path=":personnelId" element={<Profile />} />
-                    </Route>
-                  </Route>
-                </Routes>
-              </Layout>
+                </Route>
+              </Routes>
             </BrowserRouter>
           </RoleProvider>
         </ErrorProvider>
