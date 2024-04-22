@@ -311,7 +311,7 @@ export class CreatePersonnelDTO {
 
   @ApiProperty()
   @IsOptional()
-  applicationDate?: string;
+  applicationDate?: Date;
 
   @ApiProperty()
   @IsOptional()

@@ -1,5 +1,4 @@
 import { type ChangeEvent, type MouseEvent } from 'react';
-import dayjs from 'dayjs';
 import type { Personnel } from '../dashboard';
 import { ButtonTypes } from '@/common';
 import { EditProfileValidationSchema, fields, sections } from './constants';
@@ -8,6 +7,7 @@ import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'form
 import { Form, Formik } from 'formik';
 import { Button, SectionHeader, Select, TextInput } from '@/components';
 import { useGetFilters } from '@/hooks/useGetFilters';
+import { datePST } from '@/utils';
 
 export const ProfileEditForm = ({
   handleOpenEditProfilePopUp,
@@ -22,7 +22,7 @@ export const ProfileEditForm = ({
   const { locations, regions } = useGetFilters();
   const initialValues: Personnel = {
     ...personnel,
-    applicationDate: dayjs(personnel?.applicationDate)?.format('YYYY-MM-DD'),
+    applicationDate: datePST(personnel.applicationDate as Date, true),
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     secondaryPhone:

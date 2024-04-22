@@ -41,7 +41,9 @@ const ProfileDetails = ({
     },
     {
       title: 'Application Date',
-      content: personnel?.applicationDate ? datePST(personnel.applicationDate) : '-',
+      content: personnel?.applicationDate
+        ? datePST(personnel.applicationDate as Date)
+        : '-',
     },
     personnel.status === Status.PENDING
       ? {
