@@ -303,9 +303,9 @@ export class PersonnelService {
         }),
     );
 
-    //TO DO - include groupStartDate and groupEndDate as columns in the availability table and remove this logic?
+    //TODO - include groupStartDate and groupEndDate as columns in the availability table and remove this logic?
     // groupStartDate and groupEndDate need to be accessible from the individual availability entities so that the entity "knows" which group it is a part of
-    // groupStartDate and groupEndDate are passed in when events are created, so this would be a simple change but would require a migration to write in these values for existing data fields
+    // groupStartDate and groupEndDate are passed in when events are created, so this would be a simple change but would require a migration to write in these values for existing entries
 
     let currentStartIndex = 0
     // map over the availbility entities and update them so that *each* entity includes the start date of the availbilityType "group" that it belongs to
