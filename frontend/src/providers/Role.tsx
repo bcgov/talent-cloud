@@ -26,7 +26,7 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
         console.log(e);
       }
     })();
-  }, []);
+  }, [username, AxiosPrivate]);
 
   const value = useMemo(
     () => ({

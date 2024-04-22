@@ -61,7 +61,7 @@ export const useTable = () => {
 
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
-  const debouncedValue = useDebounce<{ [key: string]: unknown }>(
+  const debouncedFilters = useDebounce<{ [key: string]: unknown }>(
     filterValues,
     defaultDebounceValue,
   );
@@ -77,48 +77,49 @@ export const useTable = () => {
         : activeAndInactive;
     }
   };
+  const debouncedFiltersAsync = async () => {
+    handleSearchParams(searchParamsUrl, filterValues);
+    try {
+      const {
+        data: { personnel, count },
+      } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
+      const rowsPerPage = filterValues?.rowsPerPage ?? 25;
+
+      const totalPages = Math.ceil(count[filterValues.status] / rowsPerPage);
+
+      const pageRange = [...Array(totalPages).keys()];
+
+      pageRange.splice(0, 1);
+
+      const currentPage = filterValues?.currentPage ?? 1;
+
+      setTableData({
+        totalPages,
+        pageRange: truncatePageRange(totalPages, currentPage, pageRange),
+        totalRows: count[filterValues.status],
+        columns: renderColumns(filterValues.status),
+        rows: personnel.map(
+          ({ id, status, newMember, ...personnel }: Personnel) => ({
+            key: id,
+            status: newMember ? Status.NEW : status,
+            cells: renderCells(
+              { id, status, newMember, ...personnel },
+              filterValues,
+            ),
+          }),
+        ),
+      });
+      setCounts(count);
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      handleSearchParams(searchParamsUrl, filterValues);
-      try {
-        const {
-          data: { personnel, count },
-        } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
-        const rowsPerPage = filterValues?.rowsPerPage ?? 25;
-
-        const totalPages = Math.ceil(count[filterValues.status] / rowsPerPage);
-
-        const pageRange = [...Array(totalPages).keys()];
-
-        pageRange.splice(0, 1);
-
-        const currentPage = filterValues?.currentPage ?? 1;
-
-        setTableData({
-          totalPages,
-          pageRange: truncatePageRange(totalPages, currentPage, pageRange),
-          totalRows: count[filterValues.status],
-          columns: renderColumns(filterValues.status),
-          rows: personnel.map(
-            ({ id, status, newMember, ...personnel }: Personnel) => ({
-              key: id,
-              status: newMember ? Status.NEW : status,
-              cells: renderCells(
-                { id, status, newMember, ...personnel },
-                filterValues,
-              ),
-            }),
-          ),
-        });
-        setCounts(count);
-      } catch (e) {
-        handleError(e);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [debouncedValue]);
+    if (debouncedFilters) debouncedFiltersAsync();
+  }, [debouncedFilters]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
     setFilterValues({ ...filterValues, ...change });
