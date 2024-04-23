@@ -49,7 +49,7 @@ export const useAxios = () => {
 
       AxiosPrivate.interceptors.response.eject(resInterceptor);
     };
-  }, [keycloak?.token]);
+  }, [keycloak?.token, RequestResponseInterceptor]);
 
   return {
     AxiosPrivate,

@@ -33,7 +33,7 @@ export const useGetFilters = () => {
       setRegions(sortRegion(reg));
       setFunctions(functions);
     })();
-  }, []);
+  }, [AxiosPrivate]);
 
   const filters = {
     name: {

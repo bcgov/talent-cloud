@@ -24,7 +24,7 @@ const usePersonnel = ({
         console.log(e);
       }
     })();
-  }, [personnelId]);
+  }, [personnelId, AxiosPrivate]);
 
   const updatePersonnel = async (personnel: FormikValues) => {
     try {

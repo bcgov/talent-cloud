@@ -10,7 +10,7 @@ const useFunctions = () => {
       const { data } = await AxiosPrivate.get('/function');
       setFunctions(data);
     })();
-  }, []);
+  }, [AxiosPrivate]);
 
   return {
     functions,
