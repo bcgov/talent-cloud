@@ -11,6 +11,7 @@ import { LoggerModule } from './logger/logger.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { BcwsModule } from './bcws/bcws.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
     FunctionModule,
     FormModule,
     RegionsAndLocationsModule,
+    BcwsModule
   ],
   controllers: [AppController],
   providers: [

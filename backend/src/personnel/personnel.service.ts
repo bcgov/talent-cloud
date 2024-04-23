@@ -432,4 +432,13 @@ export class PersonnelService {
     }
     return trainings;
   }
+
+  async getApprovedBcwsApplicants(){
+    //TODO implement query once we have this data - this is for initial endpoint testing only
+    // will need to query for personnel approved in the past 24 hours(?) since the bcws endpoint will be called once nightly
+    // alternatively we might keep a record of when the last call was made, and then query for approvals between now and then, in case of a delay (?)
+    // we could also maintain a list of the ids shared and return all approved ids not included in this list - I think this would be the most accurate - the list might get long but we could clear it after some time ?
+    const approved = ['employee id one', 'employee id two', 'employee id three']
+    return approved;
+  }
 }
