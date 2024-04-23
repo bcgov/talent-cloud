@@ -1,5 +1,5 @@
 export const main = {
-  title: 'Welcome to CORE',
+  title: 'Welcome to CORE Team',
   banner: 'TEAMS applications are now open for 2024. Access intake form ',
   bannerLink: {
     name: 'here ',
