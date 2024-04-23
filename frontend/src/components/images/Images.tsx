@@ -14,6 +14,14 @@ export const BcGovLogo = () => (
   />
 );
 
+export const BcGovLogoHorizontal = () => (
+  <img
+    width={262}
+    className="-my-2"
+    src={new URL('/assets/images/BCID_H_rgb_pos.png', import.meta.url).href}
+    alt="bc government logo"
+  />
+);
 export const UserIcon = () => (
   <img
     src={new URL('/assets/images/profile-icon.svg', import.meta.url).href}

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
-import { CloudIcon, EmcrLogo } from '../images';
+import { BcGovLogoHorizontal, CloudIcon } from '../images';
 import { Routes } from '@/routes';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ export const Header = ({
             target={'_blank'}
             rel={'noopener noreferrer'}
           >
-            <EmcrLogo />
+            <BcGovLogoHorizontal />
           </a>
         </div>
         {authenticated && (
