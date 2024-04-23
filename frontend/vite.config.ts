@@ -4,10 +4,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   // vite config
-  define: {
-    // ENV: process.env.ENV,
-    // BACKEND_DOCS: process.env.ENV === 'production' ? "" : `https://${process.env.ENV}.coreteam.gov.bc.ca/api/v1`,
-  },
   esbuild: {
     jsxInject: `import React from 'react'`,
   },
