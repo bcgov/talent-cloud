@@ -122,7 +122,6 @@ export const useTable = () => {
   }, [debouncedFilters]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
-    console.log(change);
     setFilterValues({ ...filterValues, ...change });
   };
 
