@@ -15,7 +15,7 @@ export enum Ministry {
   IRR = 'IRR',
   JEDI = 'JEDI',
   LBR = 'LBR',
-  MHA = 'MHA',
+  MMHA = 'MMHA',
   MUNI = 'MUNI',
   PSFS = 'PSFS',
   PSSG = 'PSSG',
@@ -27,7 +27,7 @@ export enum Ministry {
 
 export enum MinistryName {
   AF = 'Agriculture and Food',
-  MHA = 'Mental Health and Addictions',
+  MMHA = 'Mental Health and Addictions',
   AG = 'Attorney General',
   MCF = 'Children and Family Development',
   CITZ = "Citizens' Services",
