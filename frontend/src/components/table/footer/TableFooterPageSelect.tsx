@@ -1,12 +1,12 @@
 import type { ChangeEvent } from 'react';
-import type { PageParams } from '../interface';
+import type { DashboardFilters } from '@/pages/dashboard';
 
 export const TableFooterPageSelect = ({
   totalRows,
   onChange,
 }: {
   totalRows: number;
-  onChange: (pageParams: Partial<PageParams>) => void;
+  onChange: (data: Partial<DashboardFilters>) => void;
 }) => {
   return (
     <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">

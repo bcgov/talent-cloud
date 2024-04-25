@@ -21,6 +21,7 @@ const Dashboard = () => {
     selectedTab,
     tabs,
     counts,
+    handleChangeRowsPerPage,
   } = useTable();
 
   const { role } = useRole();
@@ -54,6 +55,7 @@ const Dashboard = () => {
             tableData={tableData}
             pageParams={filterValues}
             handlePageParams={handlePageParams}
+            handleChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </Tabs>
       ) : (

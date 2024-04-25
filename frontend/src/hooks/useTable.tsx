@@ -122,9 +122,13 @@ export const useTable = () => {
   }, [debouncedFilters]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
+    console.log(change);
     setFilterValues({ ...filterValues, ...change });
   };
 
+  const handleChangeRowsPerPage = (change: Partial<DashboardFilters>) => {
+    setFilterValues({ ...filterValues, ...change, currentPage: 1 });
+  };
   const handleSingleSelect = (e: ChangeEvent<HTMLInputElement>) => {
     setFilterValues((prev: any) => ({
       ...prev,
@@ -242,6 +246,7 @@ export const useTable = () => {
     tabs,
     selectedTab,
     onChangeTab,
+    handleChangeRowsPerPage,
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,
