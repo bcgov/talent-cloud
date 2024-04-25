@@ -67,17 +67,20 @@ export const ProfileEditForm = ({
     helpers: FormikHelpers<Personnel>,
     ...props: any
   ) => {
+    // trim all the formatted characters out of the phone numbers
+    values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
+
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {
       if (values[key as keyof Personnel] === personnel[key as keyof Personnel]) {
         delete values[key as keyof Personnel];
       }
     });
-    // trim all the formatted characters out of the phone numbers
-    values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
 
+    // disabled field
+    delete values.applicationDate;
     if (values.remoteOnly === 'true') {
       values.remoteOnly = true;
     }
