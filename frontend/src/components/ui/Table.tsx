@@ -10,10 +10,12 @@ import type { DashboardFilters } from '@/pages/dashboard';
 export const Table = ({
   pageParams,
   handlePageParams,
+  handleChangeRowsPerPage,
   tableData,
 }: {
   pageParams: PageParams;
   handlePageParams: (data: Partial<DashboardFilters>) => void;
+  handleChangeRowsPerPage: (data: Partial<DashboardFilters>) => void;
   tableData: TableData;
 }) => {
   const { rows, totalRows } = tableData;
@@ -46,7 +48,7 @@ export const Table = ({
           >
             <TableFooterPageSelect
               totalRows={totalRows}
-              onChange={handlePageParams}
+              onChange={handleChangeRowsPerPage}
             />
           </th>
           <td colSpan={2} className="align-right">
