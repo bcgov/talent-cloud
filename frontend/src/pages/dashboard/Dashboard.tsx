@@ -63,6 +63,7 @@ const Dashboard = () => {
           tableData={tableData}
           pageParams={filterValues}
           handlePageParams={handlePageParams}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
         />
       )}
       {loading && (
