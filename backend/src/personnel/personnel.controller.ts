@@ -15,6 +15,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Programs } from 'src/auth/program.decorator';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -25,7 +26,7 @@ import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { RequestWithRoles } from '../auth/interface';
+import { Program, RequestWithRoles } from '../auth/interface';
 import { ICS_TRAINING_NAME } from '../common/const';
 import { Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
@@ -36,6 +37,7 @@ import { QueryTransformPipe } from '../query-validation.pipe';
 @Controller('personnel')
 @ApiTags('Personnel API')
 @UseInterceptors(ClassSerializerInterceptor)
+@Programs([Program.BCWS, Program.EMCR])
 export class PersonnelController {
   constructor(
     @Inject(PersonnelService)

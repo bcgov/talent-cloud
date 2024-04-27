@@ -40,6 +40,12 @@ objects:
       token: ${CHEFS_WS_TOKEN}
       form_id: ${CHEFS_FORM_ID}
       disabled: ${CHEFS_FORM_DISABLED}
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-bcws
+    stringData:
+      bcws_token: ${BCWS_TOKEN}
   - kind: ConfigMap
     apiVersion: v1
     metadata:
