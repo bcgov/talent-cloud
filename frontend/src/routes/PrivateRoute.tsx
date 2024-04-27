@@ -8,11 +8,11 @@ export const PrivateRoute = () => {
 
   if (!keycloak.authenticated) {
     return <Navigate to={Routes.Home} />;
+  } else {
+    return (
+      <Layout>
+        <Outlet />
+      </Layout>
+    );
   }
-
-  return (
-    <Layout>
-      <Outlet />
-    </Layout>
-  );
 };

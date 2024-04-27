@@ -1,40 +1,26 @@
-import type { Role } from '@/common';
-import { useAxios } from '@/hooks/useAxios';
-
+import { Program, Role } from '@/common';
 import type { ReactElement } from 'react';
-import { createContext, useEffect, useMemo, useState } from 'react';
-
-export const RoleContext = createContext<{
-  role?: Role;
+import { createContext, useState } from 'react';
+export type User = {
+  role: Role;
+  program: Program;
   username: string;
-}>({ role: undefined, username: '' });
+}
+
+export type Ctx = {
+  user: User,
+  setUser: (user: User) => void,
+}
+
+const defaultUserValue = { role: Role.LOGISTICS, program: Program.EMCR, username: "" };
+
+export const RoleContext = createContext<Ctx>({ user: defaultUserValue, setUser: () => { } });
+
+
 
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
-  const [role, setRole] = useState<Role>();
-  const [username, setUsername] = useState<string>('');
-  const { AxiosPrivate } = useAxios();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { username, role },
-        } = await AxiosPrivate.get('/auth/userInfo');
-        setUsername(username);
-        setRole(role as Role);
-      } catch (e: unknown) {
-        console.log(e);
-      }
-    })();
-  }, [username, AxiosPrivate]);
+  const [user, setUser] = useState<User>(defaultUserValue)
 
-  const value = useMemo(
-    () => ({
-      role,
-      username,
-    }),
-    [role],
-  );
-
-  return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
+  return <RoleContext.Provider value={{ user, setUser }}>{children}</RoleContext.Provider>;
 };

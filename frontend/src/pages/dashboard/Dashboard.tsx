@@ -24,8 +24,9 @@ const Dashboard = () => {
     handleChangeRowsPerPage,
   } = useTable();
 
-  const { role } = useRole();
-
+  const { user } = useRole();
+  const role = user.role
+  
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
       <h1 className="text-left font-bold">Personnel</h1>

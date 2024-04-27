@@ -7,23 +7,26 @@ import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { headerLink } from '@/common/links';
 import { logout } from '@/utils/keycloak';
-import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
+import { useRole } from '@/hooks';
+import { Program } from '@/common';
+import { Toggle } from '../toggle/Toggle';
 
 export const Header = ({
   appName,
-  username,
-  authenticated,
+  keycloak,
 }: {
   appName: string;
-  username?: string;
-  authenticated?: boolean;
+  keycloak: Keycloak;
 }) => {
   const [open, setOpen] = useState(false);
 
   const showMenu = () => {
     setOpen(!open);
   };
-  const { keycloak } = useKeycloak();
+  const { user,  route, handleViewToggle } = useRole();
+  const { program } = user;
+
   return (
     <header className="relative w-full border-b z-40 py-0">
       <div className="hidden w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
@@ -37,7 +40,7 @@ export const Header = ({
             <BcGovLogoHorizontal />
           </a>
         </div>
-        {authenticated && (
+        {keycloak.authenticated && (
           <>
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2">
               <CloudIcon />
@@ -45,10 +48,19 @@ export const Header = ({
                 <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
-
+            {route && program === Program.ADMIN ? (
+              <div className="flex flex-row ">
+                <p className="text-dark"></p>
+                <Toggle
+                  value={route === Program.BCWS}
+                  label={route}
+                  handleToggle={handleViewToggle}
+                />
+              </div>
+            ) : <p>{route}</p>}
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
-              {username && (
-                <UserMenu username={username} logout={() => logout(keycloak)} />
+              {user.username && (
+                <UserMenu username={user.username} logout={() => logout(keycloak)} />
               )}
             </div>
           </>
@@ -56,7 +68,7 @@ export const Header = ({
       </div>
 
       <div className="md:hidden">
-        {authenticated && (
+        {keycloak?.authenticated && (
           <Menu>
             <Menu.Button>
               {({ open }) =>
