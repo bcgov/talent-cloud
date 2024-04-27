@@ -10,10 +10,14 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
 import { Program, Role, Token } from './interface';
 import { Metadata } from './metadata';
+import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly logger: AppLogger,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
@@ -29,7 +33,7 @@ export class AuthGuard implements CanActivate {
       Metadata.TOKEN_TYPE,
       [context.getHandler(), context.getClass()],
     );
-    console.log(TokenEndpoint, 'TOKEN ENDPOINT');
+
     // Allow passthrough on token endpoints - these endpoints use the token guard to validate auth
     if (TokenEndpoint) {
       return true;
@@ -46,10 +50,12 @@ export class AuthGuard implements CanActivate {
     const token = this.parseJwt(authHeader);
 
     if (!authHeader.includes('Bearer ')) {
+      this.logger.error('Unauthorized user without credentials');
       throw new UnauthorizedException('Unauthorized user without credentials');
     }
 
     if (!token) {
+      this.logger.error('Unauthorized user without token');
       throw new UnauthorizedException();
     }
     try {
@@ -78,11 +84,13 @@ export class AuthGuard implements CanActivate {
 
   validateToken(token: Token) {
     if (!token) {
+      this.logger.error('Unauthorized user without credentials');
       throw new UnauthorizedException();
     }
     const payload = token as jwt.JwtPayload;
 
     if (payload.iss !== `${AUTH_SERVER}/realms/${AUTH_REALM}`) {
+      this.logger.error('Unauthorized user - Invalid realm');
       throw new UnauthorizedException();
     }
 
@@ -90,6 +98,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     if (payload.exp > Date.now()) {
+      this.logger.error('Unauthorized user - token expired');
       throw new UnauthorizedException();
     }
 
@@ -124,9 +133,11 @@ export class AuthGuard implements CanActivate {
     const hasValidProgramRole =
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR) ||
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS);
-    console.log(payload.resource_access?.[AUTH_CLIENT].roles, 'ROLES');
+
     if (!hasValidProgramRole) {
-      console.log('Logged in user must have a valid program role');
+      this.logger.error(
+        'Unauthorized user - no valid program is listed in the cient roles',
+      );
       throw new UnauthorizedException();
     }
     if (
@@ -147,14 +158,13 @@ export class AuthGuard implements CanActivate {
   }
 
   setProdProgramRoles(payload: JwtPayload, request: Request): void {
-    console.log(payload.client_roles);
-
     const hasValidProgramRole =
       payload.client_roles.includes(Program.EMCR) ||
       payload.client_roles.includes(Program.BCWS);
     if (!hasValidProgramRole) {
-      console.log('Logged in user must have a valid program role');
-      throw new UnauthorizedException();
+      this.logger.error(
+        'Unauthorized user - no valid program is listed in the cient roles',
+      );
     }
     if (
       payload.client_roles.includes(Program.EMCR) &&

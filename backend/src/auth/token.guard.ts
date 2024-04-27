@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { TokenType } from './interface';
 import { Metadata } from './metadata';
+import { AppLogger } from '../logger/logger.service';
 
 /**
  * Guard to allow access to endpoints annotated with the bcws token decorator
@@ -14,7 +15,10 @@ import { Metadata } from './metadata';
  */
 @Injectable()
 export class TokenGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private logger: AppLogger,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
@@ -30,8 +34,8 @@ export class TokenGuard implements CanActivate {
       Metadata.TOKEN_TYPE,
       context.getHandler(),
     );
-    console.log(tokenType, 'TOKEN GUARD - TOKEN TYPE');
 
+    this.logger.log(TokenGuard.name, tokenType);
     if (!tokenType) {
       return true;
     }
@@ -40,6 +44,7 @@ export class TokenGuard implements CanActivate {
     const authHeader = request.headers.authentication;
 
     if (!authHeader) {
+      this.logger.error('Unauthorized - invalid auth header');
       throw new UnauthorizedException();
     }
 
@@ -48,6 +53,7 @@ export class TokenGuard implements CanActivate {
         this.validateChefsToken(authHeader);
         return true;
       } catch {
+        this.logger.error('Error validating token');
         throw new UnauthorizedException();
       }
     }
@@ -57,6 +63,7 @@ export class TokenGuard implements CanActivate {
         this.validateBcwsToken(authHeader);
         return true;
       } catch {
+        this.logger.error('Error validating token');
         throw new UnauthorizedException();
       }
     }
@@ -64,11 +71,13 @@ export class TokenGuard implements CanActivate {
 
   validateChefsToken(authHeader: string) {
     if (authHeader !== process.env.CHEFS_WS_TOKEN) {
+      this.logger.error('Unauthorized - invalid auth token');
       throw new UnauthorizedException();
     }
   }
   validateBcwsToken(authHeader: string) {
     if (authHeader !== process.env.BCWS_TOKEN) {
+      this.logger.error('Unauthorized - invalid auth token');
       throw new UnauthorizedException();
     }
   }
