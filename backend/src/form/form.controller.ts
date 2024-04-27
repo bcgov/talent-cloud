@@ -11,7 +11,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { FormService } from './form.service';
 import { Public } from '../auth/public.decorator';
-import { TokenGuard } from '../auth/token_guard';
+import { TokenGuard } from '../auth/token.guard';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('form')
