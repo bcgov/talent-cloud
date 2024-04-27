@@ -25,8 +25,8 @@ const Dashboard = () => {
   } = useTable();
 
   const { user } = useRole();
-  const role = user.role
-  
+  const role = user.role;
+
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
       <h1 className="text-left font-bold">Personnel</h1>

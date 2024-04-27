@@ -3,7 +3,7 @@ export enum Role {
   LOGISTICS = 'logistics',
 }
 export enum Program {
-  BCWS = 'bcws', 
-  EMCR = 'emcr', 
+  BCWS = 'bcws',
+  EMCR = 'emcr',
   ADMIN = 'admin',
 }

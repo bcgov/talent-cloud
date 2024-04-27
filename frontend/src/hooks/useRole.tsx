@@ -1,24 +1,19 @@
-
-import { Program, Role } from '@/common';
-import { RoleContext, User, } from '@/providers/Role';
+import { Program } from '@/common';
+import { RoleContext } from '@/providers/Role';
 import { useContext, useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
 
-
 export const useRole = () => {
-  const { user, setUser } = useContext(RoleContext)
+  const { user, setUser } = useContext(RoleContext);
   const { AxiosPrivate } = useAxios();
-  const [route, setRoute] = useState("")
-
-
+  const [route, setRoute] = useState('');
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await AxiosPrivate.get('/auth/userInfo')
-        const { username, role, program } = data
-        setUser({ role, program, username })
-        
+        const { data } = await AxiosPrivate.get('/auth/userInfo');
+        const { username, role, program } = data;
+        setUser({ role, program, username });
       } catch (e: unknown) {
         console.log(e);
       }
@@ -26,27 +21,26 @@ export const useRole = () => {
   }, [AxiosPrivate]);
 
   useEffect(() => {
-    const isAdmin = user.program === 'admin'
+    const isAdmin = user.program === 'admin';
 
-    const isBcws = user.program === 'bcws'
-    const isEmcr = user.program === 'emcr'
+    const isBcws = user.program === 'bcws';
+    const isEmcr = user.program === 'emcr';
     if (isBcws) {
-      setRoute("bcws")
+      setRoute('bcws');
     }
     if (isEmcr) {
-      setRoute("emcr")
+      setRoute('emcr');
     }
     if (isAdmin) {
       const userView = localStorage.getItem('view');
       if (userView && userView !== undefined) {
-        setRoute(userView)
+        setRoute(userView);
       } else {
         localStorage.setItem('view', 'emcr');
-        setRoute('emcr')
+        setRoute('emcr');
       }
     }
-  }, [])
-
+  }, []);
 
   const handleViewToggle = () => {
     if (route === Program.EMCR) {
@@ -58,8 +52,7 @@ export const useRole = () => {
 
   return {
     user,
-    route, 
-    handleViewToggle
-  }
-
+    route,
+    handleViewToggle,
+  };
 };

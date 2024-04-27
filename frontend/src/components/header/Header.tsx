@@ -24,7 +24,7 @@ export const Header = ({
   const showMenu = () => {
     setOpen(!open);
   };
-  const { user,  route, handleViewToggle } = useRole();
+  const { user, route, handleViewToggle } = useRole();
   const { program } = user;
 
   return (
@@ -57,7 +57,9 @@ export const Header = ({
                   handleToggle={handleViewToggle}
                 />
               </div>
-            ) : <p>{route}</p>}
+            ) : (
+              <p>{route}</p>
+            )}
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {user.username && (
                 <UserMenu username={user.username} logout={() => logout(keycloak)} />
