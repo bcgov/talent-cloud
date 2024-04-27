@@ -203,10 +203,6 @@ export class AuthGuard implements CanActivate {
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.LOGISTICS)
     ) {
       request['role'] = Role.LOGISTICS;
-    } else if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.LIAISON)
-    ) {
-      request['role'] = Role.LIAISON;
     } else {
       request['role'] = '';
     }
