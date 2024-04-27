@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { AppLogger } from 'src/logger/logger.service';
 import { Program, Role } from './interface';
 import { Metadata } from './metadata';
+import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

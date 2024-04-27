@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule } from 'src/logger/logger.module';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { RolesGuard } from './roles.guard';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({
   imports: [LoggerModule],
