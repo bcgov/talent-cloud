@@ -8,10 +8,10 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Programs } from 'src/auth/program.decorator';
 import { FunctionService } from './function.service';
 import { FunctionRO } from './ro/function.ro';
 import { Program } from '../auth/interface';
+import { Programs } from '../auth/program.decorator';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('function')
