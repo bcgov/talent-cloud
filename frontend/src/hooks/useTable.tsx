@@ -11,14 +11,12 @@ import {
 } from '@/pages/dashboard';
 import { activeAndInactive, pending } from '@/pages/dashboard/columns';
 import { useDebounce } from './useDebounce';
-import { useError } from './useError';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
 
 export const useTable = () => {
-  const { handleError } = useError();
   const { AxiosPrivate } = useAxios();
 
   const [loading, setLoading] = useState(true);
@@ -111,7 +109,7 @@ export const useTable = () => {
       });
       setCounts(count);
     } catch (e) {
-      handleError(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }
