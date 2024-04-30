@@ -23,5 +23,5 @@ export class UserInfoRO {
     isArray: true,
     type: () => Program,
   })
-  program: Program[];
+  program: Program;
 }

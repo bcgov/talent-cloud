@@ -30,13 +30,12 @@ export class TokenGuard implements CanActivate {
       return true;
     }
 
-    const tokenType = this.reflector.get<TokenType[]>(
+    const requiredTokens = this.reflector.get<TokenType[]>(
       Metadata.TOKEN_TYPE,
       context.getHandler(),
     );
 
-    this.logger.log(TokenGuard.name, tokenType);
-    if (!tokenType) {
+    if (!requiredTokens) {
       return true;
     }
 
@@ -48,7 +47,7 @@ export class TokenGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    if (tokenType.includes(TokenType.CHEFS)) {
+    if (requiredTokens.includes(TokenType.CHEFS)) {
       try {
         this.validateChefsToken(authHeader);
         return true;
@@ -58,7 +57,7 @@ export class TokenGuard implements CanActivate {
       }
     }
 
-    if (tokenType.includes(TokenType.BCWS)) {
+    if (requiredTokens.includes(TokenType.BCWS)) {
       try {
         this.validateBcwsToken(authHeader);
         return true;

@@ -53,6 +53,6 @@ interface ResourceAccess {
 
 export interface RequestWithRoles extends Request {
   role?: Role;
-  program: Program[];
+  program: Program;
   username: string;
 }

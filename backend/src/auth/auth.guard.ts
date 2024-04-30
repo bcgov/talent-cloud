@@ -17,7 +17,9 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private readonly logger: AppLogger,
-  ) {}
+  ) {
+    this.logger.setContext(AuthGuard.name);
+  }
 
   canActivate(context: ExecutionContext): boolean {
     const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
@@ -64,6 +66,11 @@ export class AuthGuard implements CanActivate {
     } catch {
       throw new UnauthorizedException();
     }
+
+    this.logger.log(
+      `Authenticated user: ${request?.username}, ${request?.program}, ${request?.role}`,
+    );
+
     return true;
   }
 
@@ -130,16 +137,6 @@ export class AuthGuard implements CanActivate {
   }
 
   setDevProgramRoles(payload: JwtPayload, request: Request): void {
-    const hasValidProgramRole =
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR) ||
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS);
-
-    if (!hasValidProgramRole) {
-      this.logger.error(
-        'Unauthorized user - no valid program is listed in the cient roles',
-      );
-      throw new UnauthorizedException();
-    }
     if (
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR) &&
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
@@ -153,19 +150,16 @@ export class AuthGuard implements CanActivate {
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
     ) {
       request['program'] = Program.BCWS;
+    } else {
+      this.logger.error(
+        'Unauthorized user - no valid program is listed in the client roles',
+      );
+      throw new UnauthorizedException();
     }
     this.setDevRoles(payload, request);
   }
 
   setProdProgramRoles(payload: JwtPayload, request: Request): void {
-    const hasValidProgramRole =
-      payload.client_roles.includes(Program.EMCR) ||
-      payload.client_roles.includes(Program.BCWS);
-    if (!hasValidProgramRole) {
-      this.logger.error(
-        'Unauthorized user - no valid program is listed in the cient roles',
-      );
-    }
     if (
       payload.client_roles.includes(Program.EMCR) &&
       payload.client_roles.includes(Program.BCWS)
@@ -175,8 +169,13 @@ export class AuthGuard implements CanActivate {
       request['program'] = Program.EMCR;
     } else if (payload.client_roles.includes(Program.BCWS)) {
       request['program'] = Program.BCWS;
+    } else {
+      {
+        this.logger.error(
+          'Unauthorized user - no valid program is listed in the cient roles',
+        );
+      }
     }
-
     this.setProdRoles(payload, request);
   }
 
