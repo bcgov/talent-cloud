@@ -15,6 +15,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Token } from 'src/auth/token.decorator';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -25,7 +26,7 @@ import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { Program, RequestWithRoles } from '../auth/interface';
+import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
 import { Status } from '../common/enums';
@@ -223,5 +224,10 @@ export class PersonnelController {
     }
 
     return dateROs;
+  }
+  @Get('/bcws/approved')
+  @Token(TokenType.BCWS)
+  async getApprovedApplicants() {
+    return await this.personnelService.getApprovedApplicants();
   }
 }
