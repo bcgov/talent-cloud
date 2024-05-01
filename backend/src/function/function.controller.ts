@@ -17,7 +17,6 @@ import { QueryTransformPipe } from '../query-validation.pipe';
 @Controller('function')
 @ApiTags('Functions API')
 @UseInterceptors(ClassSerializerInterceptor)
-@Programs([Program.BCWS, Program.EMCR])
 export class FunctionController {
   constructor(
     @Inject(FunctionService)
@@ -33,6 +32,7 @@ export class FunctionController {
     type: [FunctionRO],
   })
   @Get()
+  @Programs([Program.EMCR])
   @UsePipes(new QueryTransformPipe())
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();

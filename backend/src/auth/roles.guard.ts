@@ -20,21 +20,21 @@ export class RolesGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (PublicEndpoint) {
+    if (publicEndpoint) {
       return true;
     }
 
-    const TokenEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const tokenEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.TOKEN_TYPE,
       [context.getHandler(), context.getClass()],
     );
 
-    if (TokenEndpoint) {
+    if (tokenEndpoint) {
       return true;
     }
 

@@ -21,12 +21,12 @@ export class TokenGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (PublicEndpoint) {
+    if (publicEndpoint) {
       return true;
     }
 

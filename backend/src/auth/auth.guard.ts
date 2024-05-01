@@ -22,22 +22,22 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean {
-    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (PublicEndpoint) {
+    if (publicEndpoint) {
       return true;
     }
 
-    const TokenEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const tokenEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.TOKEN_TYPE,
       [context.getHandler(), context.getClass()],
     );
 
     // Allow passthrough on token endpoints - these endpoints use the token guard to validate auth
-    if (TokenEndpoint) {
+    if (tokenEndpoint) {
       return true;
     }
 
