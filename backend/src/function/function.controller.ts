@@ -17,7 +17,6 @@ import { QueryTransformPipe } from '../query-validation.pipe';
 @Controller('function')
 @ApiTags('Functions API')
 @UseInterceptors(ClassSerializerInterceptor)
-@Programs([Program.BCWS, Program.EMCR])
 export class FunctionController {
   constructor(
     @Inject(FunctionService)
