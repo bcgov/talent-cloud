@@ -81,16 +81,12 @@ export class RolesGuard implements CanActivate {
   }
 
   async validateProgram(
-    currentUserPrograms: Program[],
+    currentUserProgram: Program,
     requiredProgramRoles: Program[],
   ) {
     try {
       //  current request.user.program must be listed in the endpoints required programs
-      if (
-        requiredProgramRoles.every((itm) =>
-          currentUserPrograms.find((userProgram) => userProgram === itm),
-        )
-      ) {
+      if (requiredProgramRoles.includes(currentUserProgram)) {
         return true;
       }
     } catch {

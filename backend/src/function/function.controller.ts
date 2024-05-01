@@ -32,7 +32,7 @@ export class FunctionController {
     type: [FunctionRO],
   })
   @Get()
-  @Programs([Program.EMCR])
+  @Programs([Program.EMCR, Program.ADMIN])
   @UsePipes(new QueryTransformPipe())
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();
