@@ -40,7 +40,7 @@ export class TokenGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authentication;
+    const authHeader = request.headers.authorization;
 
     if (!authHeader) {
       this.logger.error('Unauthorized - invalid auth header');

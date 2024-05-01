@@ -25,14 +25,13 @@ import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { RequestWithRoles, Role } from '../auth/interface';
-import { Roles } from '../auth/roles.decorator';
+import { RequestWithRoles } from '../auth/interface';
+import { ICS_TRAINING_NAME } from '../common/const';
+import { Status } from '../common/enums';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { Status } from '../common/enums';
-import { ICS_TRAINING_NAME } from '../common/const';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -55,7 +54,6 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Post()
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async createPersonnel(
     @Body() personnel: CreatePersonnelDTO[],
     @Request() req: RequestWithRoles,
@@ -72,7 +70,6 @@ export class PersonnelController {
     status: HttpStatus.ACCEPTED,
   })
   @Patch(':id')
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async updatePersonnel(
     @Body() personnel: UpdatePersonnelDTO,
     @Request() req: RequestWithRoles,
@@ -80,10 +77,12 @@ export class PersonnelController {
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    delete personnel.availability;  // Ensure we don't use this endpoint to update availability
+    delete personnel.availability; // Ensure we don't use this endpoint to update availability
 
     if (personnel.icsTraining === true) {
-      personnel.trainings = await this.personnelService.getTrainingsByNames([ICS_TRAINING_NAME]);
+      personnel.trainings = await this.personnelService.getTrainingsByNames([
+        ICS_TRAINING_NAME,
+      ]);
     } else if (personnel.icsTraining === false) {
       personnel.trainings = [];
     }
@@ -91,7 +90,11 @@ export class PersonnelController {
 
     // For now, these are distinct and will not be updated at the same time
     if (experiences) {
-      return this.personnelService.updatePersonnelExperiences(id, experiences, req.role);
+      return this.personnelService.updatePersonnelExperiences(
+        id,
+        experiences,
+        req.role,
+      );
     } else if (Object.keys(details).length > 0) {
       return this.personnelService.updatePersonnel(id, details, req.role);
     } else {
@@ -108,7 +111,6 @@ export class PersonnelController {
     type: GetPersonnelRO,
   })
   @Get()
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @UsePipes(new QueryTransformPipe())
   async getPersonnel(
     @Request() req: RequestWithRoles,
@@ -122,7 +124,6 @@ export class PersonnelController {
         [Status.ACTIVE]: number;
         [Status.INACTIVE]: number;
         [Status.PENDING]: number;
-      
       };
     } = await this.personnelService.getPersonnel(query);
 
@@ -149,7 +150,6 @@ export class PersonnelController {
     type: GetPersonnelRO,
   })
   @Get(':id')
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async getPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
@@ -171,7 +171,6 @@ export class PersonnelController {
     type: GetPersonnelRO,
   })
   @Patch(':id/availability')
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async updatePersonnelAvailability(
     @Param('id') id: string,
     @Body() availability: UpdateAvailabilityDTO,
@@ -193,7 +192,6 @@ export class PersonnelController {
     status: HttpStatus.OK,
   })
   @Get(':id/availability')
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async getPersonnelAvailability(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
