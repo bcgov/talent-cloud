@@ -1,6 +1,6 @@
 import { ICS_TRAINING_NAME } from '../common/const';
 
-export const locationSql = `INSERT INTO public."location" (id, location_name, region) 
+export const locationSql = `INSERT INTO public."emcr_location" (id, location_name, region) 
   VALUES(1, '100 Mile House',  'NEA' ),
   (2, '150 Mile House',  'NEA' ),
   (3, 'Abbotsford',  'SWE' ),
@@ -63,14 +63,14 @@ export const locationSql = `INSERT INTO public."location" (id, location_name, re
   (60, 'Vanderhoof', 'NWE'), 
   (61, 'Sooke', 'VIC')`;
 
-export const insertTrainingSql = `INSERT INTO public."training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
+export const insertTrainingSql = `INSERT INTO public."emcr_training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
 
 export const insertPersonnelTrainingSql = `
-INSERT INTO public."personnel_training" ("personnelId", "trainingId")
-SELECT id as "personnelId", 1 as "trainingId" FROM public."personnel" WHERE status = 'ACTIVE';
-`
+INSERT INTO public."emcr_personnel_training" ("personnel_id", "training_id")
+SELECT id as "personnel_id", 1 as "training_id" FROM public."emcr_personnel" WHERE status = 'ACTIVE';
+`;
 
-export const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
+export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviation) VALUES
 	 ('Operations','Ops'),
 	 ('Emergency Support Services','ESS'),
 	 ('First Nations','FN'),

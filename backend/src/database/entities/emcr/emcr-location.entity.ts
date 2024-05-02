@@ -1,10 +1,11 @@
 import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
-import { Region } from '../../common/enums';
-import { LocationRO } from '../../region-location/region-location.ro';
 
-@Entity('location')
-@Unique('UQ_location', ['locationName', 'region'])
-export class LocationEntity {
+import { Region } from '../../../common/enums/emcr';
+import { EmcrLocationRO } from '../../../personnel/ro/emcr';
+
+@Entity('emcr_location')
+@Unique('UQ_emcr_location', ['locationName', 'region'])
+export class EmcrLocationEntity {
   @PrimaryColumn('int')
   id: number;
 
@@ -20,7 +21,7 @@ export class LocationEntity {
   @Column({ name: 'region', enum: Region, enumName: 'region', type: 'enum' })
   region: Region;
 
-  toResponseObject(): LocationRO {
+  toResponseObject(): EmcrLocationRO {
     return {
       id: this.id,
       locationName: this.locationName,

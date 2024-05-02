@@ -1,12 +1,10 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { GetPersonnelDTO } from './personnel/dto/get-personnel.dto';
-
-
+import { GetEmcrPersonnelDTO } from './personnel/dto/emcr';
 
 @Injectable()
 export class QueryTransformPipe implements PipeTransform {
-  async transform(value: GetPersonnelDTO, { metatype }: ArgumentMetadata) {
+  async transform(value: GetEmcrPersonnelDTO, { metatype }: ArgumentMetadata) {
     if (!metatype) {
       return value;
     }

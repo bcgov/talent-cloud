@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
-export class FunctionRO {
+export class EmcrFunctionRO {
   @ApiProperty({
     description: 'Function id',
     required: true,
@@ -15,7 +15,7 @@ export class FunctionRO {
   })
   name: string;
 
-  @ApiProperty( {
+  @ApiProperty({
     description: 'Function abbreviated name',
     required: true,
     example: 'Ops',

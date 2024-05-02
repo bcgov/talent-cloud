@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Experience } from '../../common/enums';
+import { Experience } from '../../../common/enums/emcr/experience.enum';
 
-export class PersonnelExperienceDTO {
+export class EmcrPersonnelExperienceDTO {
   @ApiProperty({
     description: 'Id of Function',
     required: true,
@@ -19,8 +19,7 @@ export class PersonnelExperienceDTO {
   @ApiProperty({
     description: 'Experience Type',
     required: true,
-    example: Experience.CHIEF_EXPERIENCED
+    example: Experience.CHIEF_EXPERIENCED,
   })
   experienceType: Experience;
-
 }

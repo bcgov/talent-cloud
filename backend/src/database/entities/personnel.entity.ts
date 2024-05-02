@@ -1,30 +1,24 @@
 import { instanceToPlain } from 'class-transformer';
-import { differenceInDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
   JoinColumn,
-  ManyToOne,
   OneToOne,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
+import { BcwsPersonnelEntity } from './bcws';
+import { EmcrPersonnelEntity } from './emcr';
 import { Form } from './form.entity';
-import { LocationEntity } from './location.entity';
-import { ExperienceEntity } from './personnel-function-experience.entity';
-import { TrainingEntity } from './training.entity';
 import { Role } from '../../auth/interface';
-import { AvailabilityType, Status } from '../../common/enums';
-import { Ministry } from '../../common/enums/ministry.enum';
+import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { Ministry } from '../../common/enums/emcr';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
-import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
-import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { ICS_TRAINING_NAME } from '../../common/const';
+import { CreatePersonnelDTO, PersonnelRO } from '../../personnel';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -36,29 +30,6 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
-
-  @Column({ type: 'timestamp', name: 'date_joined', nullable: true })
-  dateJoined: Date;
-
-  @JoinColumn([
-    {
-      name: 'work_location',
-      referencedColumnName: 'locationName',
-    },
-    { name: 'work_region', referencedColumnName: 'region' },
-  ])
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
-  workLocation?: LocationEntity;
-
-  @JoinColumn([
-    {
-      name: 'home_location',
-      referencedColumnName: 'locationName',
-    },
-    { name: 'home_region', referencedColumnName: 'region' },
-  ])
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
-  homeLocation: LocationEntity;
 
   @Column({
     name: 'ministry',
@@ -90,9 +61,6 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'email', type: 'varchar', length: 50 })
   email: string;
 
-  @Column({ name: 'application_date', type: 'timestamp' })
-  applicationDate: Date;
-
   @Column({ name: 'supervisor_first_name', type: 'varchar', length: 100 })
   supervisorFirstName: string;
 
@@ -106,41 +74,6 @@ export class PersonnelEntity extends BaseEntity {
     nullable: true,
   })
   supervisorEmail?: string;
-
-  @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
-  approvedBySupervisor: boolean;
-
-  @Column({
-    name: 'skills_abilities',
-    type: 'varchar',
-    length: 512,
-    nullable: true,
-  })
-  skillsAbilities: string;
-
-  @Column({
-    name: 'coordinatorNotes',
-    type: 'text',
-
-    nullable: true,
-  })
-  coordinatorNotes: string;
-
-  @Column({
-    name: 'logisticsNotes',
-    type: 'text',
-
-    nullable: true,
-  })
-  logisticsNotes: string;
-
-  @Column({
-    name: 'status',
-    type: 'enum',
-    enum: Status,
-    default: Status.PENDING,
-  })
-  status: Status;
 
   @Column({
     name: 'union_membership',
@@ -156,30 +89,15 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
   willingToTravel: boolean;
 
-  @OneToMany(() => ExperienceEntity, (ee) => ee.personnel, { cascade: true })
-  experiences: ExperienceEntity[];
-
   @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
   availability: AvailabilityEntity[];
-
-  @ManyToMany(() => TrainingEntity)
-  @JoinTable({ name: 'personnel_training' })
-  trainings: TrainingEntity[];
 
   @OneToOne(() => Form, (form) => form.id, { nullable: true })
   @JoinColumn({ name: 'intake_form_id', referencedColumnName: 'id' })
   intakeForm?: Form;
 
-  @Column({
-    name: 'first_aid_level',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  firstAidLevel?: string;
-
-  @Column({ name: 'first_aid_expiry', type: 'date', nullable: true })
-  firstAidExpiry?: string;
+  @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
+  jobTitle?: string;
 
   @Column({
     name: 'driver_license(s)',
@@ -189,33 +107,17 @@ export class PersonnelEntity extends BaseEntity {
   })
   driverLicense?: string[];
 
-  @Column({ name: 'psychological_first_aid', type: 'boolean', nullable: true })
-  psychologicalFirstAid?: boolean;
+  @OneToOne(() => EmcrPersonnelEntity, (e) => e.personnel)
+  emcr: EmcrPersonnelEntity;
 
-  @Column({ name: 'first_nation_exp_living', type: 'boolean', nullable: true })
-  firstNationExperienceLiving?: boolean;
-
-  @Column({ name: 'first_nation_exp_working', type: 'boolean', nullable: true })
-  firstNationExperienceWorking?: boolean;
-
-  @Column({ name: 'pecc_exp', type: 'boolean', nullable: true })
-  peccExperience?: boolean;
-
-  @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
-  preocExperience?: boolean;
-
-  @Column({ name: 'emergency_exp', type: 'boolean', nullable: true })
-  emergencyExperience?: boolean;
-
-  @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
-  jobTitle?: string;
+  @OneToOne(() => BcwsPersonnelEntity, (b) => b.personnel)
+  bcws: BcwsPersonnelEntity;
 
   toResponseObject(
     role: Role,
     lastDeployed?: string,
   ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
-
     const data = {
       id: this.id,
       firstName: this.firstName,
@@ -224,38 +126,16 @@ export class PersonnelEntity extends BaseEntity {
       primaryPhone: this.primaryPhone,
       secondaryPhone: this.secondaryPhone,
       workPhone: this.workPhone,
-      homeLocation: this?.homeLocation?.toResponseObject() ?? {},
-      workLocation: this?.workLocation?.toResponseObject() ?? {},
       ministry: this.ministry,
       unionMembership: this.unionMembership,
-      applicationDate: this.applicationDate,
-      skillsAbilities: this.skillsAbilities,
-      coordinatorNotes: this.coordinatorNotes,
-      logisticsNotes: this.logisticsNotes,
+      lastDeployed: lastDeployed ?? null,
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail ?? '',
-      approvedBySupervisor: this.approvedBySupervisor,
-      firstAidLevel: this.firstAidLevel ?? '',
-      firstAidExpiry: this.firstAidExpiry ?? '',
       driverLicense: this.driverLicense ?? '',
-      psychologicalFirstAid: this.psychologicalFirstAid ?? '',
-      firstNationExperienceLiving: this.firstNationExperienceLiving ?? '',
-      firstNationExperienceWorking: this.firstNationExperienceWorking ?? '',
-      peccExperience: this.peccExperience ?? '',
-      preocExperience: this.preocExperience ?? '',
-      emergencyExperience: this.emergencyExperience ?? '',
       jobTitle: this.jobTitle ?? '',
-      status: this.status,
-      newMember: Status.ACTIVE && differenceInDays(new Date(), this.dateJoined) < 31, 
-      lastDeployed: lastDeployed ?? null,
-      dateJoined: this.dateJoined,
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
-      icsTraining: this.trainings?.some(t => t.name === ICS_TRAINING_NAME) || false,
-      experiences:
-        this.experiences?.map((experience) => experience.toResponseObject()) ||
-        [],
       // trainings will not be returned until we have a more robust system
       availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],

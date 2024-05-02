@@ -1,23 +1,24 @@
 import { faker } from '@faker-js/faker';
 import { format } from 'date-fns';
-import {
-  Ministry,
-  Experience,
-  UnionMembership,
-  AvailabilityType,
-  Status,
-} from './enums';
+
+import { AvailabilityType } from './enums/availability-type.enum';
 import { DriverLicense } from './enums/driver-license.enum';
-import { FirstAid } from './enums/first-aid.enum';
+import { FirstAid, Ministry, Experience } from './enums/emcr';
+import { Status } from './enums/status.enum';
+import { UnionMembership } from './enums/union-membership.enum';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { FunctionEntity } from '../database/entities/function.entity';
-import { LocationEntity } from '../database/entities/location.entity';
-import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
+import {
+  EmcrExperienceEntity,
+  EmcrFunctionEntity,
+  EmcrLocationEntity,
+} from '../database/entities/emcr';
+import { CreatePersonnelDTO } from '../personnel';
+import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 
 export const rowData = (
-  locations: LocationEntity[],
-  functions: FunctionEntity[],
-) => {
+  locations: EmcrLocationEntity[],
+  functions: EmcrFunctionEntity[],
+): { personnelData: CreatePersonnelDTO; emcrData: CreatePersonnelEmcrDTO } => {
   const status =
     Status[
       faker.helpers.arrayElement([
@@ -28,9 +29,21 @@ export const rowData = (
     ];
   const applicationDate = faker.date.past();
 
-  return {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
+  const emcrData: CreatePersonnelEmcrDTO = {
+    applicationDate: applicationDate,
+    logisticsNotes: faker.lorem.paragraph(),
+    coordinatorNotes: faker.lorem.sentence(),
+    firstAidLevel: faker.helpers.arrayElement(Object.values(FirstAid)),
+    firstAidExpiry: faker.date.past(),
+    psychologicalFirstAid: faker.datatype.boolean({ probability: 0.2 }),
+    firstNationExperienceLiving: faker.datatype.boolean({ probability: 0.2 }),
+    firstNationExperienceWorking: faker.datatype.boolean({ probability: 0.2 }),
+    peccExperience: faker.datatype.boolean({ probability: 0.4 }),
+    preocExperience: faker.datatype.boolean({ probability: 0.4 }),
+    emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
+    approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
+    workLocation: faker.helpers.arrayElement(locations),
+    trainings: [],
     dateJoined:
       status !== Status.PENDING
         ? faker.date.between({
@@ -38,42 +51,35 @@ export const rowData = (
             to: new Date(),
           })
         : undefined,
+    homeLocation: faker.helpers.arrayElement(locations),
+    status: status,
+    experiences:
+      status !== Status.PENDING
+        ? (experiences(functions) as EmcrExperienceEntity[])
+        : [],
+  };
+
+  const personnelData: CreatePersonnelDTO = {
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
     email: faker.internet.email(),
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
     workPhone: faker.string.numeric('##########'),
-    workLocation: faker.helpers.arrayElement(locations),
-    homeLocation: faker.helpers.arrayElement(locations),
     ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
-    applicationDate: applicationDate,
-    skillsAbilities: faker.lorem.paragraph(),
-    logisticsNotes: faker.lorem.paragraph(),
-    coordinatorNotes: faker.lorem.sentence(),
-    firstAidLevel: faker.helpers.arrayElement(Object.values(FirstAid)),
-    firstAidExpiry: faker.date.past(),
-    driverLicense: [faker.helpers.arrayElement(Object.values(DriverLicense))],
-    psychologicalFirstAid: faker.datatype.boolean({ probability: 0.2 }),
-    firstNationExperienceLiving: faker.datatype.boolean({ probability: 0.2 }),
-    firstNationExperienceWorking: faker.datatype.boolean({ probability: 0.2 }),
-    peccExperience: faker.datatype.boolean({ probability: 0.4 }),
-    preocExperience: faker.datatype.boolean({ probability: 0.4 }),
-    emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
     jobTitle: faker.company.catchPhrase(),
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
-    approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
+    driverLicense: [faker.helpers.arrayElement(Object.values(DriverLicense))],
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
-    status: status,
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
-    experiences:
-      status !== Status.PENDING
-        ? (experiences(functions) as ExperienceEntity[])
-        : [],
   };
+
+  return { personnelData, emcrData };
 };
 const threeMonthsArray = () => {
   const today = new Date();
@@ -120,7 +126,7 @@ const availability = () => {
   return availabilities;
 };
 
-const experiences = (functions: FunctionEntity[]) => {
+const experiences = (functions: EmcrFunctionEntity[]) => {
   const experiences = [];
   for (let i = 0; i < 5; i++) {
     const functionEntity: { id: number; name: string; abbreviation: string } =
@@ -141,10 +147,16 @@ const experiences = (functions: FunctionEntity[]) => {
 };
 
 export const handler = (
-  locations: LocationEntity[],
-  functions: FunctionEntity[],
-) => {
-  const people = [];
+  locations: EmcrLocationEntity[],
+  functions: EmcrFunctionEntity[],
+): {
+  personnelData: CreatePersonnelDTO;
+  emcrData: CreatePersonnelEmcrDTO;
+}[] => {
+  const people: {
+    personnelData: CreatePersonnelDTO;
+    emcrData: CreatePersonnelEmcrDTO;
+  }[] = [];
   for (let i = 0; i < 200; i++) {
     people.push(rowData(locations, functions));
   }

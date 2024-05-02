@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Region } from '../common/enums';
+import { Region } from '../../../common/enums/emcr';
 
-export class LocationRO {
+export class EmcrLocationRO {
   @ApiProperty({
     description: 'Location id',
     required: false,

@@ -8,8 +8,7 @@ export enum Function {
   PLANNING,
   ADVANCED_PLANNING_UNIT,
   RECOVERY,
-  DEPUTY_DIRECTOR
-  
+  DEPUTY_DIRECTOR,
 }
 
 export enum FunctionName {
@@ -23,7 +22,6 @@ export enum FunctionName {
   ADVANCED_PLANNING_UNIT = 'Advanced Planning Unit',
   RECOVERY = 'Recovery',
   DEPUTY_DIRECTOR = 'Director',
-  
 }
 
 export enum FunctionNameAbbrv {
