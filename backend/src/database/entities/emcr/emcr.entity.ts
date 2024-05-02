@@ -1,7 +1,5 @@
 import { instanceToPlain } from 'class-transformer';
 import { differenceInDays } from 'date-fns';
-import { CreatePersonnelEmcrDTO } from 'src/personnel/dto/emcr';
-import { EmcrRO } from 'src/personnel/ro/emcr';
 import {
   Column,
   Entity,
@@ -20,6 +18,8 @@ import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
+import { CreatePersonnelEmcrDTO } from '../../../personnel/dto/emcr';
+import { EmcrRO } from '../../../personnel/ro/emcr';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {

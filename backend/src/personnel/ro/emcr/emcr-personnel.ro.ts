@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Status } from 'src/common/enums/status.enum';
 import { EmcrExperienceRO } from './experience.ro';
 import { EmcrLocationRO } from './region-location.ro';
 import { PersonnelRO } from '../personnel.ro';
+import { Status } from '../../../common/enums/status.enum';
 
 export class EmcrRO extends PersonnelRO {
   @ApiProperty({
