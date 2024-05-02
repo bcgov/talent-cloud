@@ -420,7 +420,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-local" ],
     "clientRoles" : {
-      "local-client" : [ "coordinator" ]
+      "local-client" : [ "emcr", "bcws", "coordinator" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
@@ -446,7 +446,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-local" ],
     "clientRoles" : {
-      "local-client" : [ "logistics" ]
+      "local-client" : [ "emcr", "bcws", "logistics" ]
     },
     "notBefore" : 0,
     "groups" : [ ]

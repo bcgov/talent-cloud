@@ -118,18 +118,16 @@ export class PersonnelService {
    * @returns {PersonnelEntity[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
-  async getPersonnel(
-    query: GetPersonnelDTO,
-  ): Promise<{
-    personnel: PersonnelEntity[]; count: {
+  async getPersonnel(query: GetPersonnelDTO): Promise<{
+    personnel: PersonnelEntity[];
+    count: {
       [Status.ACTIVE]: number;
       [Status.INACTIVE]: number;
       [Status.PENDING]: number;
-    }
+    };
   }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     this.logger.log(`Query: ${JSON.stringify(query)}`);
-
 
     qb.leftJoinAndSelect('personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
@@ -205,7 +203,6 @@ export class PersonnelService {
       );
     }
 
-
     if (query.status === Status.PENDING) {
       qb.orderBy('personnel.applicationDate', 'ASC');
       qb.addOrderBy('personnel.lastName', 'ASC');
@@ -216,28 +213,37 @@ export class PersonnelService {
       qb.addOrderBy('personnel.firstName', 'ASC');
     }
 
-    const personnel = await qb.take(query.rows).skip((query.page - 1) * query.rows).andWhere('personnel.status = :status', {
-      status: query.status,
-    }).getMany();
-    const activeCount = await qb.andWhere('personnel.status = :status', {
-      status: Status.ACTIVE,
-    }).getCount();
-    const inactiveCount = await qb.andWhere('personnel.status = :status', {
-      status: Status.INACTIVE,
-    }).getCount();
-    const pendingCount = await qb.andWhere('personnel.status = :status', {
-      status: Status.PENDING,
-    }).getCount();
+    const personnel = await qb
+      .take(query.rows)
+      .skip((query.page - 1) * query.rows)
+      .andWhere('personnel.status = :status', {
+        status: query.status,
+      })
+      .getMany();
+    const activeCount = await qb
+      .andWhere('personnel.status = :status', {
+        status: Status.ACTIVE,
+      })
+      .getCount();
+    const inactiveCount = await qb
+      .andWhere('personnel.status = :status', {
+        status: Status.INACTIVE,
+      })
+      .getCount();
+    const pendingCount = await qb
+      .andWhere('personnel.status = :status', {
+        status: Status.PENDING,
+      })
+      .getCount();
 
     const count = {
       [Status.ACTIVE]: activeCount,
       [Status.INACTIVE]: inactiveCount,
       [Status.PENDING]: pendingCount,
-    }
+    };
 
-    return { personnel, count }
-  };
-
+    return { personnel, count };
+  }
 
   async getLastDeployedDate(id: string): Promise<string | undefined> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
@@ -424,12 +430,19 @@ export class PersonnelService {
   }
 
   async getTrainingsByNames(names: string[]): Promise<TrainingEntity[]> {
-    const trainings = await this.trainingRepository.find({ where: { name: In(names) }});
+    const trainings = await this.trainingRepository.find({
+      where: { name: In(names) },
+    });
     if (trainings.length !== names.length) {
       throw new NotFoundException({
         message: 'Not all training names exist in our database',
       });
     }
     return trainings;
+  }
+
+  //TODO finish implementing this - this is for a test only
+  async getApprovedApplicants() {
+    return ['123456', '123455', '123454'];
   }
 }

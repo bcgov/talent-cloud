@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { format } from 'date-fns';
-import { FunctionEntity } from 'src/database/entities/function.entity';
-import { LocationEntity } from 'src/database/entities/location.entity';
 import {
   Ministry,
   Experience,
@@ -12,6 +10,8 @@ import {
 import { DriverLicense } from './enums/driver-license.enum';
 import { FirstAid } from './enums/first-aid.enum';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { FunctionEntity } from '../database/entities/function.entity';
+import { LocationEntity } from '../database/entities/location.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 
 export const rowData = (

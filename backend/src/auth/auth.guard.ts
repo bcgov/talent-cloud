@@ -8,35 +8,56 @@ import { Reflector } from '@nestjs/core';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
-import { Role, Token } from './interface';
+import { Program, Role, Token } from './interface';
 import { Metadata } from './metadata';
+import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(AuthGuard.name);
+  }
 
   canActivate(context: ExecutionContext): boolean {
-    const PublicEndpoint = this.reflector.getAllAndOverride<boolean>(
+    const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
     );
 
-    if (PublicEndpoint) {
+    if (publicEndpoint) {
+      return true;
+    }
+
+    const tokenEndpoint = this.reflector.getAllAndOverride<boolean>(
+      Metadata.TOKEN_TYPE,
+      [context.getHandler(), context.getClass()],
+    );
+
+    // Allow passthrough on token endpoints - these endpoints use the token guard to validate auth
+    if (tokenEndpoint) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
 
     const authHeader = request.headers.authorization;
+
     if (!authHeader) {
       throw new UnauthorizedException();
     }
+
     const token = this.parseJwt(authHeader);
+
     if (!authHeader.includes('Bearer ')) {
+      this.logger.error('Unauthorized user without credentials');
       throw new UnauthorizedException('Unauthorized user without credentials');
     }
 
     if (!token) {
+      this.logger.error('Unauthorized user without token');
       throw new UnauthorizedException();
     }
     try {
@@ -45,6 +66,11 @@ export class AuthGuard implements CanActivate {
     } catch {
       throw new UnauthorizedException();
     }
+
+    this.logger.log(
+      `Authenticated user: ${request?.username}, ${request?.program}, ${request?.role}`,
+    );
+
     return true;
   }
 
@@ -65,11 +91,13 @@ export class AuthGuard implements CanActivate {
 
   validateToken(token: Token) {
     if (!token) {
+      this.logger.error('Unauthorized user without credentials');
       throw new UnauthorizedException();
     }
     const payload = token as jwt.JwtPayload;
 
     if (payload.iss !== `${AUTH_SERVER}/realms/${AUTH_REALM}`) {
+      this.logger.error('Unauthorized user - Invalid realm');
       throw new UnauthorizedException();
     }
 
@@ -77,6 +105,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     if (payload.exp > Date.now()) {
+      this.logger.error('Unauthorized user - token expired');
       throw new UnauthorizedException();
     }
 
@@ -93,17 +122,72 @@ export class AuthGuard implements CanActivate {
   setRequestUserInfo(payload: JwtPayload, request: Request): void {
     // the local keycloak instance includes the key "resource_access" instead of  the key "client roles" so we need to check for both in order to use this locally.
     // sometimes on local we use the actual keycloak instance instead of containerized local keycloak instance so we need to check for client roles on local as well.
-    const useDevRoles =
+    const useDevProgramRoles =
       process.env.NODE_ENV !== 'production' && !payload.client_roles;
-    if (useDevRoles) {
-      this.setDevRoles(payload, request);
+    if (useDevProgramRoles) {
+      this.setDevProgramRoles(payload, request);
     } else {
-      this.setProdRoles(payload, request);
+      this.setProdProgramRoles(payload, request);
     }
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
       request['username'] = '';
+    }
+  }
+
+  setDevProgramRoles(payload: JwtPayload, request: Request): void {
+    if (
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR) &&
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
+    ) {
+      request['program'] = Program.ADMIN;
+    } else if (
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR)
+    ) {
+      request['program'] = Program.EMCR;
+    } else if (
+      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
+    ) {
+      request['program'] = Program.BCWS;
+    } else {
+      this.logger.error(
+        'Unauthorized user - no valid program is listed in the client roles',
+      );
+      throw new UnauthorizedException();
+    }
+    this.setDevRoles(payload, request);
+  }
+
+  setProdProgramRoles(payload: JwtPayload, request: Request): void {
+    if (
+      payload.client_roles.includes(Program.EMCR) &&
+      payload.client_roles.includes(Program.BCWS)
+    ) {
+      request['program'] = Program.ADMIN;
+    } else if (payload.client_roles.includes(Program.EMCR)) {
+      request['program'] = Program.EMCR;
+    } else if (payload.client_roles.includes(Program.BCWS)) {
+      request['program'] = Program.BCWS;
+    } else {
+      {
+        this.logger.error(
+          'Unauthorized user - no valid program is listed in the cient roles',
+        );
+      }
+    }
+    this.setProdRoles(payload, request);
+  }
+
+  setProdRoles(payload: JwtPayload, request: Request): void {
+    // only include a single role in the request object.
+    // include the role with the highest permissions level.
+    if (payload.client_roles.includes(Role.COORDINATOR)) {
+      request['role'] = Role.COORDINATOR;
+    } else if (payload.client_roles.includes(Role.LOGISTICS)) {
+      request['role'] = Role.LOGISTICS;
+    } else {
+      request['role'] = '';
     }
   }
 
@@ -117,18 +201,6 @@ export class AuthGuard implements CanActivate {
     } else if (
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.LOGISTICS)
     ) {
-      request['role'] = Role.LOGISTICS;
-    } else {
-      request['role'] = '';
-    }
-  }
-
-  setProdRoles(payload: JwtPayload, request: Request): void {
-    // only include a single role in the request object.
-    // include the role with the highest permissions level.
-    if (payload.client_roles.includes(Role.COORDINATOR)) {
-      request['role'] = Role.COORDINATOR;
-    } else if (payload.client_roles.includes(Role.LOGISTICS)) {
       request['role'] = Role.LOGISTICS;
     } else {
       request['role'] = '';

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../interface';
+import { Program, Role } from '../interface';
 
 export class UserInfoRO {
   @ApiProperty({
@@ -16,4 +16,12 @@ export class UserInfoRO {
     type: () => Role,
   })
   role: Role;
+
+  @ApiProperty({
+    name: 'program',
+    description: 'Program of the logged in user',
+    isArray: true,
+    type: () => Program,
+  })
+  program: Program;
 }
