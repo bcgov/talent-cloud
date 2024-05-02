@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './auth/roles.guard';
+import { TokenGuard } from './auth/token.guard';
 import { AppLogger } from './logger/logger.service';
 import { Documentation } from './swagger';
 
@@ -14,7 +15,9 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  app.useLogger(new AppLogger());
+  const logger = new AppLogger();
+
+  app.useLogger(logger);
 
   const port = parseInt(process.env.PORT ?? '3000');
 
@@ -32,8 +35,12 @@ async function bootstrap() {
   );
 
   const reflector = app.get(Reflector);
-
-  app.useGlobalGuards(new AuthGuard(reflector), new RolesGuard(reflector));
+  // first verify the user is logged in with idir, then update the request user object with the relevant program, then, if applicable, update the request user object with the relevant role (only EMCR uses this currently)
+  app.useGlobalGuards(
+    new AuthGuard(reflector, logger),
+    new RolesGuard(reflector, logger),
+    new TokenGuard(reflector, logger),
+  );
 
   Documentation(app);
 

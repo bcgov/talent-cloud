@@ -1,5 +1,6 @@
 export enum Metadata {
   ROLES = 'roles',
-  PUBLIC_ENDPOINT = 'PublicEndpoint',
-  TOKEN_ENDPOINT = 'TokenEndpoint',
+  PROGRAM = 'program',
+  PUBLIC_ENDPOINT = 'public_endpoint',
+  TOKEN_TYPE = 'token_type',
 }

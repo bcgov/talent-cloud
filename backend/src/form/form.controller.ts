@@ -4,14 +4,14 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   Req,
-  UseGuards,
   RawBodyRequest,
   Get,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FormService } from './form.service';
+import { TokenType } from '../auth/interface';
 import { Public } from '../auth/public.decorator';
-import { TokenGuard } from '../auth/token_guard';
+import { Token } from '../auth/token.decorator';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('form')
@@ -26,8 +26,7 @@ export class FormSubmissionController {
   }
 
   @Post()
-  @Public()
-  @UseGuards(TokenGuard)
+  @Token(TokenType.CHEFS)
   async handleIncomingEvents(@Req() req: RawBodyRequest<Request>) {
     this.logger.log('Received form submission event');
     const rawBody = JSON.parse(req.rawBody.toString());

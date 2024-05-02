@@ -10,8 +10,8 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FunctionService } from './function.service';
 import { FunctionRO } from './ro/function.ro';
-import { Role } from '../auth/interface';
-import { Roles } from '../auth/roles.decorator';
+import { Program } from '../auth/interface';
+import { Programs } from '../auth/program.decorator';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('function')
@@ -32,7 +32,7 @@ export class FunctionController {
     type: [FunctionRO],
   })
   @Get()
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
+  @Programs([Program.EMCR, Program.ADMIN])
   @UsePipes(new QueryTransformPipe())
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();
