@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { EmcrRO } from './emcr';
 import { PersonnelRO } from './personnel.ro';
 import { Status } from '../../common/enums/status.enum';
 
@@ -35,5 +36,5 @@ export class GetPersonnelRO {
     isArray: true,
     type: () => PersonnelRO,
   })
-  personnel: Record<'Personnel', PersonnelRO>[];
+  personnel: Record<'Personnel', EmcrRO>[];
 }
