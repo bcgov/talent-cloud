@@ -5,9 +5,8 @@ import {
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { RequestWithRoles, Role } from './auth/interface';
+import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
-import { Roles } from './auth/roles.decorator';
 import { FunctionService } from './function/function.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
@@ -60,7 +59,6 @@ export class AppController {
     };
   }
   @Get('/filters')
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   async getFilters(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url} ${req.role}`);
     return {
