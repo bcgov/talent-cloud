@@ -67,7 +67,7 @@ export const insertTrainingSql = `INSERT INTO public."emcr_training" ("id", "nam
 
 export const insertPersonnelTrainingSql = `
 INSERT INTO public."emcr_personnel_training" ("personnel_id", "training_id")
-SELECT id as "personnel_id", 1 as "training_id" FROM public."emcr_personnel" WHERE status = 'ACTIVE';
+SELECT personnel_id as "personnel_id", 1 as "training_id" FROM public."emcr_personnel" WHERE status = 'ACTIVE';
 `;
 
 export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviation) VALUES
