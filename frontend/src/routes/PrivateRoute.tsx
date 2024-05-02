@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Routes from './constants';
 import { useKeycloak } from '@react-keycloak/web';
 import { Layout } from '@/components';
+import { RoleProvider } from '@/providers';
 
 export const PrivateRoute = () => {
   const { keycloak } = useKeycloak();
@@ -11,8 +12,10 @@ export const PrivateRoute = () => {
   }
 
   return (
-    <Layout>
-      <Outlet />
-    </Layout>
+    <RoleProvider>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </RoleProvider>
   );
 };
