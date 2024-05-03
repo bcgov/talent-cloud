@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Experience } from "../../common/enums";
+import { ApiProperty } from '@nestjs/swagger';
+import { Experience } from '../../../common/enums/emcr';
 
-export class ExperienceRO {
+export class EmcrExperienceRO {
   @ApiProperty({
     description: 'Id of function',
     required: true,

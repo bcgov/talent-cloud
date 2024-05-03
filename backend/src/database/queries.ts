@@ -63,14 +63,14 @@ export const locationSql = `INSERT INTO public."location" (id, location_name, re
   (60, 'Vanderhoof', 'NWE'), 
   (61, 'Sooke', 'VIC')`;
 
-export const insertTrainingSql = `INSERT INTO public."training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
+export const insertTrainingSql = `INSERT INTO public."emcr_training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
 
 export const insertPersonnelTrainingSql = `
-INSERT INTO public."personnel_training" ("personnelId", "trainingId")
-SELECT id as "personnelId", 1 as "trainingId" FROM public."personnel" WHERE status = 'ACTIVE';
-`
+INSERT INTO public."emcr_personnel_training" ("personnel_id", "training_id")
+SELECT personnel_id as "personnel_id", 1 as "training_id" FROM public."emcr_personnel" WHERE status = 'ACTIVE';
+`;
 
-export const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
+export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviation) VALUES
 	 ('Operations','Ops'),
 	 ('Emergency Support Services','ESS'),
 	 ('First Nations','FN'),
@@ -81,3 +81,96 @@ export const functionSql = `INSERT INTO public."function" (name,abbreviation) VA
 	 ('Advanced Planning Unit','APU'),
 	 ('Recovery','Recovery'),
 	 ('Deputy Director','DDir');`;
+
+export const bcwsLocations = `
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Golden','SOUTHEAST'),
+	 ('Grand Forks','SOUTHEAST'),
+	 ('Prince George','PRINCE_GEORGE'),
+	 ('Vanderhoof','PRINCE_GEORGE'),
+	 ('Fort St. James','PRINCE_GEORGE'),
+	 ('MacKenzie','PRINCE_GEORGE'),
+	 ('Fort St. John','PRINCE_GEORGE'),
+	 ('Alexis Creek','CARIBOO'),
+	 ('Quesnel','CARIBOO'),
+	 ('Williams Lake','CARIBOO');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Alexis Creek','CARIBOO'),
+	 ('100 Mile House','CARIBOO'),
+	 ('Boston Bar','COASTAL'),
+	 ('Chilliwack','COASTAL'),
+	 ('Cultus Lake','COASTAL'),
+	 ('Masset','COASTAL'),
+	 ('Pemberton','COASTAL'),
+	 ('Squamish','COASTAL'),
+	 ('Powell River','COASTAL'),
+	 ('Bella Coola','COASTAL');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Boston Bar','COASTAL'),
+	 ('Vancouver','COASTAL'),
+	 ('Chilliwack','COASTAL'),
+	 ('Abbotsford','COASTAL'),
+	 ('Cultus Lake','COASTAL'),
+	 ('Masset','COASTAL'),
+	 ('Pemberton','COASTAL'),
+	 ('Squamish','COASTAL'),
+	 ('Powell River','COASTAL'),
+	 ('Sechelt','COASTAL');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Victoria','COASTAL'),
+	 ('Duncan','COASTAL'),
+	 ('Nanaimo','COASTAL'),
+	 ('Port Alberni','COASTAL'),
+	 ('Parksville','COASTAL'),
+	 ('Campbell River','COASTAL'),
+	 ('Bella Coola','COASTAL'),
+	 ('Clearwater','KAMLOOPS'),
+	 ('Princeton','KAMLOOPS'),
+	 ('Lytton','KAMLOOPS');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Kamloops','KAMLOOPS'),
+	 ('Clearwater','KAMLOOPS'),
+	 ('Salmon Arm','KAMLOOPS'),
+	 ('Vernon','KAMLOOPS'),
+	 ('Kelowna','KAMLOOPS'),
+	 ('Penticton','KAMLOOPS'),
+	 ('Princeton','KAMLOOPS'),
+	 ('Merritt','KAMLOOPS'),
+	 ('Lytton','KAMLOOPS'),
+	 ('Lillooet','KAMLOOPS');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Houston','NORTHWEST'),
+	 ('Smither','NORTHWEST'),
+	 ('Hazelton','NORTHWEST'),
+	 ('Dease Lake','NORTHWEST'),
+	 ('Atlin','NORTHWEST'),
+	 ('Prince Rupert','NORTHWEST'),
+	 ('Burns Lake','NORTHWEST'),
+	 ('Houston','NORTHWEST'),
+	 ('Smither','NORTHWEST'),
+	 ('Hazelton','NORTHWEST');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Dease Lake','NORTHWEST'),
+	 ('Atlin','NORTHWEST'),
+	 ('Terrace','NORTHWEST'),
+	 ('Prince Rupert','NORTHWEST'),
+	 ('Valemount','PRINCE_GEORGE'),
+	 ('Blue River','PRINCE_GEORGE'),
+	 ('Chetwynd','PRINCE_GEORGE'),
+	 ('Valemount','PRINCE_GEORGE'),
+	 ('Blue River','PRINCE_GEORGE'),
+	 ('Dawson Creek','PRINCE_GEORGE');
+INSERT INTO public.bcws_location (location_name,fire_centre) VALUES
+	 ('Chetwynd','PRINCE_GEORGE'),
+	 ('Fort Nelson','PRINCE_GEORGE'),
+	 ('Invermere','SOUTHEAST'),
+	 ('Nakusp','SOUTHEAST'),
+	 ('Cranbrook','SOUTHEAST'),
+	 ('Kimberley','SOUTHEAST'),
+	 ('Invermere','SOUTHEAST'),
+	 ('Nelson','SOUTHEAST'),
+	 ('Nakusp','SOUTHEAST'),
+	 ('Castelgar','SOUTHEAST');
+
+
+`;

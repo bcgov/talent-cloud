@@ -1,11 +1,7 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('training')
-export class TrainingEntity {
+@Entity('emcr_training')
+export class EmcrTrainingEntity {
   @PrimaryGeneratedColumn('increment')
   id: string;
 

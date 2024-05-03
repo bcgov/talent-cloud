@@ -6,8 +6,9 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
+
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
-import { AvailabilityRO } from '../../personnel/ro/availability.ro';
+import { AvailabilityRO } from '../../personnel';
 
 @Entity('availability')
 export class AvailabilityEntity {

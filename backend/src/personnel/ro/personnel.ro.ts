@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { AvailabilityRO } from './availability.ro';
-import { ExperienceRO } from './experience.ro';
-import { UnionMembership, Ministry, Status } from '../../common/enums';
-import { LocationRO } from '../../region-location/region-location.ro';
+import { Ministry } from '../../common/enums/ministry.enum';
+import { Status } from '../../common/enums/status.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -56,29 +56,6 @@ export class PersonnelRO {
   workPhone: string;
 
   @ApiProperty({
-    description: "Personnel's work region and location",
-    required: false,
-    example: {
-      id: 1,
-      locationName: 'Victoria',
-      region: 'SWE',
-    },
-  })
-
-  workLocation?: LocationRO;
-
-  @ApiProperty({
-    description: "Personnel's home region and location",
-    required: true,
-    example: {
-      id: 1,
-      locationName: 'Victoria',
-      regionName: 'SWE',
-    },
-  })
-  homeLocation: LocationRO;
-
-  @ApiProperty({
     description: "Personnel's ministry",
     required: true,
     example: Ministry.CITZ,
@@ -91,35 +68,6 @@ export class PersonnelRO {
     example: UnionMembership.BCGEU,
   })
   unionMembership: UnionMembership;
-
-  @ApiProperty({
-    description: 'Date personnel applied',
-    required: true,
-    example: new Date(),
-  })
-  applicationDate: Date;
-
-  @ApiProperty({
-    description: "Personnel's noted skills and abilities",
-    required: false,
-    example: 'IT experience',
-  })
-  skillsAbilities: string;
-
-  @ApiProperty({
-    description: 'Notes about Personnel - Only vieweable by coordinators',
-    required: false,
-    example: 'MOTI Area Roads Mgr R24',
-  })
-  @Expose({ groups: ['coordinator'] })
-  coordinatorNotes: string;
-
-  @ApiProperty({
-    description: 'Notes about Personnel',
-    required: false,
-    example: 'MOTI Area Roads Mgr R24',
-  })
-  logisticsNotes: string;
 
   @ApiProperty({
     description: 'Supervisor of Personnel First Name',
@@ -143,6 +91,49 @@ export class PersonnelRO {
   supervisorEmail: string;
 
   @ApiProperty({
+    description: 'Is Personnel remote only',
+    required: true,
+    example: false,
+  })
+  remoteOnly: boolean;
+
+  @ApiProperty({
+    description: 'Is Personnel willing to travel',
+    required: true,
+    example: true,
+  })
+  willingToTravel: boolean;
+
+  @ApiProperty({
+    description: 'Availability',
+    isArray: true,
+    type: () => AvailabilityRO,
+    required: false,
+  })
+  availability?: AvailabilityRO[];
+
+  @ApiProperty({
+    description: 'Date personnel applied',
+    required: true,
+    example: new Date(),
+  })
+  applicationDate: Date;
+  @ApiProperty({
+    description: 'Notes about Personnel - Only vieweable by coordinators',
+    required: false,
+    example: 'MOTI Area Roads Mgr R24',
+  })
+  @Expose({ groups: ['coordinator'] })
+  coordinatorNotes: string;
+
+  @ApiProperty({
+    description: 'Notes about Personnel',
+    required: false,
+    example: 'MOTI Area Roads Mgr R24',
+  })
+  logisticsNotes: string;
+
+  @ApiProperty({
     description: 'Has member been approved by supervisor',
     required: true,
     example: false,
@@ -163,42 +154,6 @@ export class PersonnelRO {
     default: false,
   })
   newMember: boolean;
-
-  @ApiProperty({
-    description: 'Is Personnel remote only',
-    required: true,
-    example: false,
-  })
-  remoteOnly: boolean;
-
-  @ApiProperty({
-    description: 'Is Personnel willing to travel',
-    required: true,
-    example: true,
-  })
-  willingToTravel: boolean;
-
-  @ApiProperty({
-    description: 'Has finished ICS Training',
-    required: true,
-  })
-  icsTraining: boolean;
-
-  @ApiProperty({
-    description: 'Experience with functions',
-    required: true,
-    isArray: true,
-    type: () => ExperienceRO,
-  })
-  experiences: ExperienceRO[];
-
-  @ApiProperty({
-    description: 'Availability',
-    isArray: true,
-    type: () => AvailabilityRO,
-    required: false,
-  })
-  availability?: AvailabilityRO[];
 
   @ApiProperty({
     description: 'Date of last deployment (last date of the deployment)',

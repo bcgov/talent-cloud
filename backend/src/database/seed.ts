@@ -1,19 +1,15 @@
-import { FunctionEntity } from './entities/function.entity';
-import { LocationEntity } from './entities/location.entity';
-import { handler as dataHandler } from '../common/utils';
-import { PersonnelEntity } from './entities/personnel.entity';
-import { datasource } from '../database/datasource';
-import { TrainingEntity } from './entities/training.entity';
 import {
-  locationSql, functionSql, insertTrainingSql
-} from '../database/queries';
-import { testSql } from './test-data';
-// import {}
+  EmcrFunctionEntity,
+  LocationEntity,
+  EmcrPersonnelEntity,
+} from './entities/emcr';
+import { PersonnelEntity } from './entities/personnel.entity';
+
+import { handler as dataHandler } from '../common/utils';
+import { datasource } from '../database/datasource';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
-
-
   const cicd = process.env.ENV === 'ci';
 
   if (!datasource.isInitialized) {
@@ -21,34 +17,37 @@ export const handler = async () => {
   }
 
   const locationRepo = datasource.getRepository(LocationEntity);
-  const functionRepo = datasource.getRepository(FunctionEntity);
-  const trainingRepo = datasource.getRepository(TrainingEntity);
+  const functionRepo = datasource.getRepository(EmcrFunctionEntity);
 
   const personnelRepo = datasource.getRepository(PersonnelEntity);
+  const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-
     const seededLocations = await locationRepo.find();
     const seededFunctions = await functionRepo.find();
-    const seededTrainings = await trainingRepo.find();
+
     console.log('Seeding Data...');
 
-
-    if (seededLocations.length === 0) {
-      await datasource.query(locationSql);
-    }
-    if (seededFunctions.length === 0) {
-      await datasource.query(functionSql);
-    }
-    if (seededTrainings.length === 0) {
-      await datasource.query(insertTrainingSql);
-    }
     if (cicd) {
-      await datasource.query(testSql);
+      // await datasource.query(testSql);
     } else if (!cicd) {
-      const personnelData = dataHandler(seededLocations, seededFunctions);
+      const data = dataHandler(seededLocations, seededFunctions);
 
-      await Promise.all(personnelData.map((itm) => personnelRepo.save(itm)));
+      await Promise.all(
+        data.map(async (personnel) => {
+          const { personnelData, emcrData } = personnel;
+
+          const emcr = new EmcrPersonnelEntity(emcrData);
+
+          const person = await personnelRepo.save(
+            personnelRepo.create(new PersonnelEntity(personnelData)),
+          );
+
+          emcr.personnelId = person.id;
+
+          await emcrPersonnelRepo.save(emcr);
+        }),
+      );
     }
 
     console.log('...complete...');
@@ -62,4 +61,4 @@ export const handler = async () => {
   }
 };
 
-handler()
+handler();
