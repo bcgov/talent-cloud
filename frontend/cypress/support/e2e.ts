@@ -37,7 +37,7 @@ Cypress.Commands.add('login_coordinator', () => {
 
   cy.get('#login-button-main').click();
 
-  cy.origin('https://logontest7.gov.bc.ca/', () => {
+  cy.origin('https://sfstest7.gov.bc.ca/', () => {
     cy.get('#user').type(Cypress.env('CYPRESS_KEYCLOAK_USER'));
     cy.get('#password').type(Cypress.env('CYPRESS_KEYCLOAK_PASSWORD'));
     cy.contains('Continue').click();
