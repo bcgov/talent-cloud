@@ -122,7 +122,7 @@ networking-prep:
 	@oc process -f openshift/networking.yml | oc apply -n $(TARGET_NAMESPACE) -f -
 
 deployment-prep:
-	@oc process -f openshift/server.prep.yml -p APP_NAME=$(APP_NAME) -p BCWS_TOKEN=$(BCWS_TOKEN) KEYCLOAK_AUTH_SERVER=$(KEYCLOAK_AUTH) -p KEYCLOAK_CLIENT=$(KEYCLOAK_CLIENT) -p APP_ENV=$(OS_NAMESPACE_SUFFIX) | oc create -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/server.prep.yml -p APP_NAME=$(APP_NAME) -p BCWS_TOKEN=$(BCWS_TOKEN) -p KEYCLOAK_AUTH_SERVER=$(KEYCLOAK_AUTH) -p KEYCLOAK_CLIENT=$(KEYCLOAK_CLIENT) -p APP_ENV=$(OS_NAMESPACE_SUFFIX) | oc create -n $(TARGET_NAMESPACE) -f -
 	@oc policy add-role-to-user system:image-puller system:serviceaccount:$(TARGET_NAMESPACE):default -n $(TOOLS_NAMESPACE)
 
 server-create:
