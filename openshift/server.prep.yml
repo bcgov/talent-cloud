@@ -21,6 +21,9 @@ parameters:
     description: Environment for the application
     required: true
     value: dev
+  - name: BCWS_TOKEN
+    description: Token for BCWS integration
+    required: true
 objects:
   - kind: Secret
     apiVersion: v1
