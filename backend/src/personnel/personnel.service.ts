@@ -443,6 +443,22 @@ export class PersonnelService {
 
   //TODO finish implementing this - this is for a test only
   async getApprovedApplicants() {
-    return ['123456', '123455', '123454'];
+    return [
+      {
+        "employeeId": "123456",
+        "firstName": "Teams",
+        "lastName": "Member",
+      },
+      {
+        "employeeId": "112233",
+        "firstName": "New",
+        "lastName": "Worker",
+      },
+      {
+        "employeeId": "126789",
+        "firstName": "Returning",
+        "lastName": "Officer",
+      },
+    ]
   }
 }
