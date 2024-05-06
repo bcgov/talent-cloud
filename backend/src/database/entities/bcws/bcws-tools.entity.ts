@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ToolsName } from '../../../common/enums/bcws/tools.enum';
+import { Tools } from '../../../common/enums/bcws/tools.enum';
 
 @Entity('bcws_tools')
 export class BcwsToolsEntity {
@@ -9,10 +9,10 @@ export class BcwsToolsEntity {
   @Column({
     name: 'name',
     type: 'enum',
-    enum: ToolsName,
-    enumName: 'bcws-tools-name',
+    enum: Tools,
+    enumName: 'bcws-tools',
   })
-  name: ToolsName;
+  name: Tools;
 
   toResponseObject() {
     return {

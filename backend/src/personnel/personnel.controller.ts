@@ -17,10 +17,9 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto/emcr';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
-import { GetPersonnelDTO } from './dto/get-personnel.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
-import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
 import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
@@ -29,9 +28,10 @@ import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
-import { Status } from '../common/enums';
+import { Status } from '../common/enums/status.enum';
+
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { EmcrPersonnelEntity } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 
@@ -74,13 +74,11 @@ export class PersonnelController {
   })
   @Patch(':id')
   async updatePersonnel(
-    @Body() personnel: UpdatePersonnelDTO,
+    @Body() personnel: UpdateEmcrPersonnelDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-
-    delete personnel.availability; // Ensure we don't use this endpoint to update availability
 
     if (personnel.icsTraining === true) {
       personnel.trainings = await this.personnelService.getTrainingsByNames([
@@ -117,12 +115,12 @@ export class PersonnelController {
   @UsePipes(new QueryTransformPipe())
   async getPersonnel(
     @Request() req: RequestWithRoles,
-    @Query() query?: GetPersonnelDTO,
+    @Query() query?: GetEmcrPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const queryResponse: {
-      personnel: PersonnelEntity[];
+      personnel: EmcrPersonnelEntity[];
       count: {
         [Status.ACTIVE]: number;
         [Status.INACTIVE]: number;

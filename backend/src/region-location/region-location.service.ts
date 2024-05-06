@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { LocationRO } from './region-location.ro';
-import { LocationEntity } from '../database/entities/location.entity';
+import { LocationEntity } from '../database/entities/emcr/emcr-location.entity';
 
 @Injectable()
 export class RegionsAndLocationsService {
@@ -23,11 +23,11 @@ export class RegionsAndLocationsService {
     });
     return locations.map((loc) => loc.toResponseObject());
   }
-/**
- * Get location by name
- * @param locationName 
- * @returns 
- */
+  /**
+   * Get location by name
+   * @param locationName
+   * @returns
+   */
   async getLocationByName(locationName: string): Promise<LocationRO> {
     const location = await this.locationRepository.findOne({
       where: { locationName },

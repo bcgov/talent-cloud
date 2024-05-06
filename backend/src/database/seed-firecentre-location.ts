@@ -1,5 +1,5 @@
 import { datasource } from './datasource';
-import { bcwsLocations } from './queries';
+import { bcwsLocationsSql } from './queries';
 
 const seedLocation = async () => {
   await datasource.initialize();
@@ -8,7 +8,7 @@ const seedLocation = async () => {
     `SELECT * FROM public.bcws_location`,
   );
   if (locations.length === 0) {
-    await datasource.query(bcwsLocations);
+    await datasource.query(bcwsLocationsSql);
   }
   return 'Already seeded';
 };
