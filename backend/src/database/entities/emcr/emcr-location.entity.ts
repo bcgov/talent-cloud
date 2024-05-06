@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 import { Region } from '../../../common/enums/emcr';
 import { LocationRO } from '../../../region-location/region-location.ro';
 
-@Entity('location')
-@Unique('UQ_EMCR_LOCATION_NAME', ['locationName', 'region'])
+@Entity('emcr_location')
+@Unique('UQ_emcr_location', ['locationName', 'region'])
 export class LocationEntity {
   @PrimaryColumn('int')
   id: number;
