@@ -41,8 +41,8 @@ const ProfileDetails = ({
     },
     {
       title: 'Application Date',
-      content: personnel?.applicationDate
-        ? datePST(personnel.applicationDate as Date)
+      content: personnel?.dateApplied
+        ? datePST(personnel.dateApplied as Date)
         : '-',
     },
     personnel.status === Status.PENDING
@@ -57,7 +57,7 @@ const ProfileDetails = ({
         }
       : {
           title: 'Reviewed Date',
-          content: personnel.dateJoined ? datePST(personnel.dateJoined) : '-',
+          content: personnel.dateApproved ? datePST(personnel.dateApproved) : '-',
         },
   ];
 

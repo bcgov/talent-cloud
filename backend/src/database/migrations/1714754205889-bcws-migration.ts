@@ -8,11 +8,20 @@ export class Migration1714754205889 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `CREATE TYPE "public"."bcws-tools-name" AS ENUM('Adobe Pro', 'Corporate Accounting System (CAS)', 'Daily Estimated Costs/Wildfire Costing (DEC/WFCST)', 'Excel', 'Fire Analysis Cost Estimate (FACE)', 'Inventory Management (IMIS)', 'Resource Request Tracking (RRT)', 'Visio')`,
+      `CREATE TYPE "public"."bcws-tools" AS ENUM(
+        'ADOBE',
+        'CAS',
+        'DEC',
+        'EXCEL',
+        'FACE',
+        'IMIS',
+        'RRT',
+        'VISIO'
+      )`,
     );
 
     await queryRunner.query(
-      `CREATE TABLE "bcws_tools" ("id" integer NOT NULL, "name" "public"."bcws-tools-name" NOT NULL, CONSTRAINT "PK_2aa1d18f606874e74e47f5a23cc" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "bcws_tools" ("id" integer NOT NULL, "name" "public"."bcws-tools" NOT NULL, CONSTRAINT "PK_2aa1d18f606874e74e47f5a23cc" PRIMARY KEY ("id"))`,
     );
 
     await queryRunner.query(
@@ -63,7 +72,7 @@ export class Migration1714754205889 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `CREATE TABLE "bcws_personnel" ("personnel_id" uuid NOT NULL, "status" "public"."status" NOT NULL, "employee_id" character varying(6) NOT NULL, "date_applied" TIMESTAMP, "date_approved" TIMESTAMP, "approved_by_supervisor" boolean NOT NULL DEFAULT false, "purchase_card_holder" boolean NOT NULL DEFAULT false, "paylist_id" character varying(6) NOT NULL, "liason_first_name" character varying(50), "liason_last_name" character varying(50), "liason_phone_number" character varying(10), "liason_email" character varying(50), "coordinator_notes" text, "logistics_notes" text, "willingess_statement" boolean NOT NULL DEFAULT false, "par_q" boolean NOT NULL DEFAULT false, "workplace_policy" boolean NOT NULL DEFAULT false, "orientation" boolean NOT NULL DEFAULT false, "second_choice_role" "public"."bcws-role" NOT NULL, "first_choice_role" "public"."bcws-role" NOT NULL, "work_fire_centre" integer, "home_fire_centre" integer NOT NULL, CONSTRAINT "PK_2ddf70585d0507b08e800568780" PRIMARY KEY ("personnel_id"))`,
+      `CREATE TABLE "bcws_personnel" ("personnel_id" uuid NOT NULL, "status" "public"."status" NOT NULL, "employee_id" character varying(6) NOT NULL, "date_applied" TIMESTAMP, "date_approved" TIMESTAMP, "approved_by_supervisor" boolean NOT NULL DEFAULT false, "purchase_card_holder" boolean NOT NULL DEFAULT false, "paylist_id" character varying(6) NOT NULL, "liason_first_name" character varying(50), "liason_last_name" character varying(50), "liason_phone_number" character varying(10), "liason_email" character varying(50), "coordinator_notes" text, "logistics_notes" text, "willingess_statement" boolean NOT NULL DEFAULT false, "par_q" boolean NOT NULL DEFAULT false, "workplace_policy" boolean NOT NULL DEFAULT false, "orientation" boolean NOT NULL DEFAULT false, "work_fire_centre" integer, "home_fire_centre" integer NOT NULL, CONSTRAINT "PK_2ddf70585d0507b08e800568780" PRIMARY KEY ("personnel_id"))`,
     );
 
     await queryRunner.query(
@@ -143,6 +152,7 @@ export class Migration1714754205889 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "bcws_personnel_tools" DROP CONSTRAINT "FK_b33c0a7ad2fbfd1fb459eae3f1f"`,
     );
+
     await queryRunner.query(
       `ALTER TABLE "bcws_personnel_roles" DROP CONSTRAINT "FK_8a88071c0954a35b09a33c61411"`,
     );
@@ -168,7 +178,7 @@ export class Migration1714754205889 implements MigrationInterface {
     await queryRunner.query(`DROP TYPE "public"."language-fluency-type"`);
     await queryRunner.query(`DROP TYPE "public"."language-proficiency"`);
     await queryRunner.query(`DROP TABLE "bcws_personnel"`);
-    await queryRunner.query(`DROP TYPE "public"."bcws-role"`);
+
     await queryRunner.query(`DROP TYPE "public"."ofa"`);
     await queryRunner.query(`DROP TYPE "public"."status"`);
     await queryRunner.query(`DROP TABLE "bcws_personnel_tools"`);
@@ -181,7 +191,8 @@ export class Migration1714754205889 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "bcws_location"`);
     await queryRunner.query(`DROP TYPE "public"."fire-centre"`);
     await queryRunner.query(`DROP TABLE "bcws_tools"`);
-    await queryRunner.query(`DROP TYPE "public"."bcws-tools-name"`);
+    await queryRunner.query(`DROP TYPE "public"."bcws-tools"`);
     await queryRunner.query(`DROP TABLE "bcws_certification"`);
+    await queryRunner.query(`DROP TYPE "public"."bcws-role"`);
   }
 }

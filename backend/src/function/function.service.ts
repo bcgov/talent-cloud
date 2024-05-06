@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FunctionEntity } from '../database/entities/function.entity';
+import { EmcrFunctionEntity } from '../database/entities/emcr/emcr-function.entity';
 
 @Injectable()
 export class FunctionService {
   constructor(
-    @InjectRepository(FunctionEntity)
-    private functionRepository: Repository<FunctionEntity>,
+    @InjectRepository(EmcrFunctionEntity)
+    private functionRepository: Repository<EmcrFunctionEntity>,
   ) {}
-  
+
   /**
    * Get all functions
    * No query parameters for now
-   * @returns {FunctionEntity[]} List of functions
+   * @returns {EmcrFunctionEntity[]} List of functions
    */
-  async getFunctions(): Promise<FunctionEntity[]> {
+  async getFunctions(): Promise<EmcrFunctionEntity[]> {
     return this.functionRepository.find();
   }
 }

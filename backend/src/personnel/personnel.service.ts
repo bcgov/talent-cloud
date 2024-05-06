@@ -3,19 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
 import { Brackets, DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import {
+  EmcrPersonnelExperienceDTO,
+  GetEmcrPersonnelDTO,
+  UpdateEmcrPersonnelDTO,
+} from './dto/emcr';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
-import { GetPersonnelDTO } from './dto/get-personnel.dto';
-import { PersonnelExperienceDTO } from './dto/personnel-experiences.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
-import { UpdatePersonnelDTO } from './dto/update-personnel.dto';
-import { PersonnelRO } from './ro/personnel.ro';
+
+import { EmcrRO } from './ro/emcr';
 import { Role } from '../auth/interface';
-import { AvailabilityType, Status } from '../common/enums';
+import { AvailabilityType } from '../common/enums/availability-type.enum';
+import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
+import {
+  EmcrPersonnelEntity,
+  EmcrExperienceEntity,
+  EmcrTrainingEntity,
+} from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
-import { TrainingEntity } from '../database/entities/training.entity';
 import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
@@ -23,12 +30,14 @@ export class PersonnelService {
   constructor(
     @InjectRepository(PersonnelEntity)
     private personnelRepository: Repository<PersonnelEntity>,
+    @InjectRepository(EmcrPersonnelEntity)
+    private emcrPersonnelRepository: Repository<EmcrPersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
-    @InjectRepository(ExperienceEntity)
-    private experiencesRepository: Repository<ExperienceEntity>,
-    @InjectRepository(TrainingEntity)
-    private trainingRepository: Repository<TrainingEntity>,
+    @InjectRepository(EmcrExperienceEntity)
+    private experiencesRepository: Repository<EmcrExperienceEntity>,
+    @InjectRepository(EmcrTrainingEntity)
+    private trainingRepository: Repository<EmcrTrainingEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -39,7 +48,11 @@ export class PersonnelService {
    * @param personnel
    * @returns
    */
-  async updatePersonnel(id: string, personnel: UpdatePersonnelDTO, role: Role) {
+  async updatePersonnel(
+    id: string,
+    personnel: UpdateEmcrPersonnelDTO,
+    role: Role,
+  ) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelRepository.findOne({ where: { id } });
     this.logger.log(`${JSON.stringify(personnel)}`);
@@ -60,7 +73,8 @@ export class PersonnelService {
 
     try {
       // This is a 'save' rather than 'update' to allow for updating many-to-many relations
-      await this.personnelRepository.save(person);
+      const save = await this.personnelRepository.save(person);
+      console.log(save);
       return this.getPersonnelById(role, id);
     } catch (e) {
       console.log(e);
@@ -76,7 +90,7 @@ export class PersonnelService {
    */
   async updatePersonnelExperiences(
     id: string,
-    experiences: PersonnelExperienceDTO[],
+    experiences: EmcrPersonnelExperienceDTO[],
     role: Role,
   ) {
     const experienceEntities = experiences.map((e) => ({
@@ -115,24 +129,25 @@ export class PersonnelService {
    * Get Personnel
    * Given specific queries, get associated personnel and their function experiences
    * @param query Includes pagination query, ie. page and number of rows
-   * @returns {PersonnelEntity[]} List of personnel
+   * @returns {EmcrPersonnelEntity[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
-  async getPersonnel(query: GetPersonnelDTO): Promise<{
-    personnel: PersonnelEntity[];
+  async getPersonnel(query: GetEmcrPersonnelDTO): Promise<{
+    personnel: EmcrPersonnelEntity[];
     count: {
       [Status.ACTIVE]: number;
       [Status.INACTIVE]: number;
       [Status.PENDING]: number;
     };
   }> {
-    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    const qb =
+      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
     this.logger.log(`Query: ${JSON.stringify(query)}`);
-
-    qb.leftJoinAndSelect('personnel.experiences', 'experiences');
+    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel');
+    qb.leftJoinAndSelect('emcr_personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
-    qb.leftJoinAndSelect('personnel.homeLocation', 'location');
-    qb.leftJoinAndSelect('personnel.trainings', 'trainings');
+    qb.leftJoinAndSelect('emcr_personnel.homeLocation', 'location');
+    // qb.leftJoinAndSelect('emcr_personnel.trainings', 'trainings');
 
     if (query.name) {
       qb.andWhere(
@@ -147,13 +162,13 @@ export class PersonnelService {
     }
 
     if (query.region?.length) {
-      qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
+      qb.andWhere('emcr_personnel.homeLocation.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
       qb.andWhere(
-        'personnel.homeLocation.locationName IN (:...homeLocations)',
+        'emcr_personnel.homeLocation.locationName IN (:...homeLocations)',
         {
           homeLocations: query.location,
         },
@@ -204,11 +219,11 @@ export class PersonnelService {
     }
 
     if (query.status === Status.PENDING) {
-      qb.orderBy('personnel.applicationDate', 'ASC');
+      qb.orderBy('emcr_personnel.dateApplied', 'ASC');
       qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     } else {
-      qb.orderBy('personnel.dateJoined', 'DESC');
+      qb.orderBy('emcr_personnel.dateApproved', 'DESC');
       qb.addOrderBy('personnel.lastName', 'ASC');
       qb.addOrderBy('personnel.firstName', 'ASC');
     }
@@ -216,22 +231,22 @@ export class PersonnelService {
     const personnel = await qb
       .take(query.rows)
       .skip((query.page - 1) * query.rows)
-      .andWhere('personnel.status = :status', {
+      .andWhere('emcr_personnel.status = :status', {
         status: query.status,
       })
       .getMany();
     const activeCount = await qb
-      .andWhere('personnel.status = :status', {
+      .andWhere('emcr_personnel.status = :status', {
         status: Status.ACTIVE,
       })
       .getCount();
     const inactiveCount = await qb
-      .andWhere('personnel.status = :status', {
+      .andWhere('emcr_personnel.status = :status', {
         status: Status.INACTIVE,
       })
       .getCount();
     const pendingCount = await qb
-      .andWhere('personnel.status = :status', {
+      .andWhere('emcr_personnel.status = :status', {
         status: Status.PENDING,
       })
       .getCount();
@@ -261,15 +276,15 @@ export class PersonnelService {
   /**
    * Get Personnel By ID
    * Returns a default availability range of 31 days for a single personnel
-   * @returns {PersonnelEntity} Single personnel
+   * @returns {EmcrPersonnelEntity} Single personnel
    */
   async getPersonnelById(
     role: Role,
     id: string,
-  ): Promise<Record<string, PersonnelRO>> {
-    const person = await this.personnelRepository.findOne({
-      where: { id },
-      relations: ['experiences', 'experiences.function', 'trainings'],
+  ): Promise<Record<string, EmcrRO>> {
+    const person = await this.emcrPersonnelRepository.findOne({
+      where: { personnel: { id } },
+      relations: ['experiences', 'experiences.function', 'training'],
     });
     const lastDeployed = await this.getLastDeployedDate(id);
     const personnel = person.toResponseObject(role, lastDeployed);
@@ -429,7 +444,7 @@ export class PersonnelService {
     }
   }
 
-  async getTrainingsByNames(names: string[]): Promise<TrainingEntity[]> {
+  async getTrainingsByNames(names: string[]): Promise<EmcrTrainingEntity[]> {
     const trainings = await this.trainingRepository.find({
       where: { name: In(names) },
     });
@@ -445,20 +460,20 @@ export class PersonnelService {
   async getApprovedApplicants() {
     return [
       {
-        "employeeId": "123456",
-        "firstName": "Teams",
-        "lastName": "Member",
+        employeeId: '123456',
+        firstName: 'Teams',
+        lastName: 'Member',
       },
       {
-        "employeeId": "112233",
-        "firstName": "New",
-        "lastName": "Worker",
+        employeeId: '112233',
+        firstName: 'New',
+        lastName: 'Worker',
       },
       {
-        "employeeId": "126789",
-        "firstName": "Returning",
-        "lastName": "Officer",
+        employeeId: '126789',
+        firstName: 'Returning',
+        lastName: 'Officer',
       },
-    ]
+    ];
   }
 }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Region } from '../common/enums/emcr';
+import { IsOptional } from 'class-validator';
+import { Region } from '../../common/enums/emcr';
 
 export class LocationRO {
   @ApiProperty({
@@ -21,5 +22,6 @@ export class LocationRO {
     required: true,
     example: Region.SWE,
   })
+  @IsOptional()
   region: Region;
 }

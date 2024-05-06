@@ -253,7 +253,7 @@ const Profile = () => {
               onClick={() => {
                 updatePersonnel({
                   status: Status.ACTIVE,
-                  dateJoined: dayjs(new Date()),
+                  dateApproved: dayjs(new Date()),
                 });
                 handleOpenReviewApplicant();
               }}

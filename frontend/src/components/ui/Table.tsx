@@ -26,7 +26,7 @@ export const Table = ({
 
       <tbody>
         {rows.map((row: Row) => (
-          <tr key={row.key}>
+          <tr key={row.key} id={row.key}>
             {row.cells.map((itm: Cell) => (
               <TableBodyCell
                 key={itm.key}

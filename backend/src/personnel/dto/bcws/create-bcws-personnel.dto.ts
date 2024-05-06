@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEmail,
   IsEnum,
   IsOptional,
@@ -11,7 +12,7 @@ import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certificati
 import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
-import { BcwsRole, FireCentre } from '../../../common/enums/bcws';
+import { FireCentre } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
 class BcwsLocationDTO {
@@ -138,40 +139,30 @@ export class CreatePersonnelBcwsDTO {
   orientation: boolean;
 
   @ApiProperty({
-    enum: BcwsRole,
-  })
-  secondChoiceRole: BcwsRole;
-
-  @ApiProperty({
-    enum: BcwsRole,
-  })
-  firstChoiceRole: BcwsRole;
-
-  @ApiProperty({
     description: 'Tools used by the personnel',
     required: false,
   })
-  @IsOptional()
-  tools?: CreateBcwsPersonnelToolsDTO[];
+  @IsArray()
+  tools: CreateBcwsPersonnelToolsDTO[];
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',
     required: false,
   })
-  @IsOptional()
-  languages?: CreateBcwsPersonnelLanguagesDTO[];
+  @IsArray()
+  languages: CreateBcwsPersonnelLanguagesDTO[];
 
   @ApiProperty({
     description: 'Roles and sections for the personnel',
     required: false,
   })
-  @IsOptional()
-  roles?: CreateBcwsPersonnelRolesDTO[];
+  @IsArray()
+  roles: CreateBcwsPersonnelRolesDTO[];
 
   @ApiProperty({
     description: 'Certifications for the personnel',
     required: false,
   })
-  @IsOptional()
-  certifications?: CreateBcwsCertificationsDTO[];
+  @IsArray()
+  certifications: CreateBcwsCertificationsDTO[];
 }

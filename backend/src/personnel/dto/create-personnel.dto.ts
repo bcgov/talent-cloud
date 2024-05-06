@@ -9,30 +9,13 @@ import {
   Length,
   ValidateIf,
 } from 'class-validator';
-import { PersonnelExperienceDTO } from './personnel-experiences.dto';
-import { AvailabilityType, Status } from '../../common/enums';
+
+import { CreatePersonnelEmcrDTO } from './emcr';
+import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { Ministry } from '../../common/enums/ministry.enum';
-import { Region } from '../../common/enums/region.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { Form } from '../../database/entities/form.entity';
-import { TrainingEntity } from '../../database/entities/training.entity';
-
-class PersonnelLocationDTO {
-  @IsOptional()
-  id?: number;
-
-  @IsString()
-  locationName?: string;
-
-  @ApiProperty({
-    description: 'Ministry personnel works in',
-    enum: Region,
-    example: Region.SWE,
-  })
-  @IsEnum(Region)
-  region?: Region;
-}
 
 export class CreatePersonnelDTO {
   @ApiProperty({
@@ -50,26 +33,6 @@ export class CreatePersonnelDTO {
   @IsString()
   @Length(2, 50)
   lastName: string;
-
-  @ApiProperty({
-    description: "Personnel's work location",
-    example: {
-      locationName: 'Victoria',
-      region: Region.SWE,
-    },
-  })
-  @IsOptional()
-  @ValidateIf((o) => o.workLocation && o.workLocation?.locationName !== '')
-  workLocation?: PersonnelLocationDTO;
-
-  @ApiProperty({
-    description: "Personnel's home location",
-    example: {
-      locationName: 'Victoria',
-      region: Region.SWE,
-    },
-  })
-  homeLocation: PersonnelLocationDTO;
 
   @ApiProperty({
     description: 'Ministry personnel works in',
@@ -141,39 +104,6 @@ export class CreatePersonnelDTO {
   @IsOptional()
   supervisorEmail?: string;
 
-  @ApiProperty()
-  @IsOptional()
-  approvedBySupervisor?: boolean;
-
-  @ApiProperty({
-    description: 'Any notable skills and abilities this personnel might have',
-    example: 'Indigenous Relations trained, Swift Water Training',
-  })
-  @IsString()
-  @Length(2, 50)
-  @IsOptional()
-  skillsAbilities: string;
-
-  @ApiProperty({
-    description: 'Any coordinator notes for this personnel',
-    example: 'A Paragraph of notes',
-  })
-  @IsString()
-  @Length(2, 1000)
-  @IsOptional()
-  @ValidateIf((o) => o.coordinatorNotes !== '')
-  coordinatorNotes: string;
-
-  @ApiProperty({
-    description: 'Any other notes for this personnel',
-    example: 'A Paragraph of notes',
-  })
-  @IsString()
-  @Length(2, 1000)
-  @IsOptional()
-  @ValidateIf((o) => o.logisticsNotes !== '')
-  logisticsNotes: string;
-
   @ApiProperty({
     description: 'UnionMembership of personnel',
     enum: UnionMembership,
@@ -198,33 +128,6 @@ export class CreatePersonnelDTO {
   willingToTravel: boolean;
 
   @ApiProperty({
-    description: 'What trainings this personnel has had',
-    example: ['ICS Training', 'THE_CORE', 'WEBEOC'],
-  })
-  @IsOptional()
-  trainings: TrainingEntity[];
-
-  @ApiProperty({
-    description: 'Experiences this personnel has had in specific functions',
-    example: [
-      {
-        function: 'OPS',
-        experience: 'CHIEF',
-      },
-      {
-        function: 'LOGS',
-        experience: 'CHIEF',
-      },
-      {
-        function: 'PLANS',
-        experience: 'INTERESTED',
-      },
-    ],
-  })
-  @IsOptional()
-  experiences?: PersonnelExperienceDTO[];
-
-  @ApiProperty({
     description: 'An array of availability for this personnel',
     example: [
       {
@@ -242,36 +145,6 @@ export class CreatePersonnelDTO {
   availability?: AvailabilityEntity[];
 
   @ApiProperty({
-    description: 'First Nation Experience Living',
-  })
-  @IsOptional()
-  firstNationExperienceLiving?: boolean;
-
-  @ApiProperty({
-    description: 'First Nation Experience Working',
-  })
-  @IsOptional()
-  firstNationExperienceWorking?: boolean;
-
-  @ApiProperty({
-    description: 'PECC Experience',
-  })
-  @IsOptional()
-  peccExperience?: boolean;
-
-  @ApiProperty({
-    description: 'PREOC Experience',
-  })
-  @IsOptional()
-  preocExperience?: boolean;
-
-  @ApiProperty({
-    description: 'Emergency Experience',
-  })
-  @IsOptional()
-  emergencyExperience?: boolean;
-
-  @ApiProperty({
     description: 'Job Title',
   })
   @IsOptional()
@@ -281,43 +154,12 @@ export class CreatePersonnelDTO {
     description: 'Driver License',
   })
   @IsOptional()
-  driverLicense?: string;
-
-  @ApiProperty({
-    description: 'First Aid Level',
-  })
-  @IsOptional()
-  firstAidLevel?: string;
-
-  @ApiProperty({
-    description: 'First Aid Expiry',
-  })
-  @IsOptional()
-  firstAidExpiry?: string;
-
-  @ApiProperty({
-    description: 'Psychological First Aid',
-  })
-  @IsOptional()
-  psychologicalFirstAid?: boolean;
+  driverLicense?: string[];
 
   @ApiProperty()
   @IsOptional()
   intakeForm?: Form;
 
-  @ApiProperty()
   @IsOptional()
-  dateJoined?: string;
-
-  @ApiProperty()
-  @IsOptional()
-  applicationDate?: Date;
-
-  @ApiProperty()
-  @IsOptional()
-  status?: Status;
-
-  @ApiProperty()
-  @IsOptional()
-  icsTraining?: boolean;
+  emcr?: CreatePersonnelEmcrDTO;
 }

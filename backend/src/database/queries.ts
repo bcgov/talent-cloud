@@ -1,7 +1,8 @@
 import { ICS_TRAINING_NAME } from '../common/const';
 
-export const locationSql = `INSERT INTO public."location" (id, location_name, region) 
-  VALUES(1, '100 Mile House',  'NEA' ),
+export const locationSql = `INSERT INTO public."emcr_location" (id, location_name, region) 
+  VALUES
+  (1, '100 Mile House',  'NEA' ),
   (2, '150 Mile House',  'NEA' ),
   (3, 'Abbotsford',  'SWE' ),
   (4, 'Brentwood Bay',  'HQ' ),
@@ -63,14 +64,14 @@ export const locationSql = `INSERT INTO public."location" (id, location_name, re
   (60, 'Vanderhoof', 'NWE'), 
   (61, 'Sooke', 'VIC')`;
 
-export const insertTrainingSql = `INSERT INTO public."training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
+export const insertTrainingSql = `INSERT INTO public."emcr_training" ("id", "name") VALUES (1, '${ICS_TRAINING_NAME}');`;
 
 export const insertPersonnelTrainingSql = `
-INSERT INTO public."personnel_training" ("personnelId", "trainingId")
-SELECT id as "personnelId", 1 as "trainingId" FROM public."personnel" WHERE status = 'ACTIVE';
+INSERT INTO public."emcr_personnel_training" ("personnel_id", "training_id")
+SELECT id as "personnel_id", 1 as "training_id" FROM public."emcr_personnel" WHERE status = 'ACTIVE';
 `;
 
-export const functionSql = `INSERT INTO public."function" (name,abbreviation) VALUES
+export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviation) VALUES
 	 ('Operations','Ops'),
 	 ('Emergency Support Services','ESS'),
 	 ('First Nations','FN'),
@@ -82,7 +83,7 @@ export const functionSql = `INSERT INTO public."function" (name,abbreviation) VA
 	 ('Recovery','Recovery'),
 	 ('Deputy Director','DDir');`;
 
-export const bcwsLocations = `
+export const bcwsLocationsSql = `
    INSERT INTO public.bcws_location (id, location_name,fire_centre) VALUES
    (1, 'Alexis Creek','CARIBOO'),
    (2, 'Quesnel','CARIBOO'),
@@ -142,74 +143,79 @@ export const bcwsLocations = `
    (56, 'Grand Forks','SOUTHEAST');
    `;
 
-export const roles = `INSERT INTO public.bcws_role (id,"name","section") VALUES
-      (1,'DEMOBILIZATION_UNIT_LEADER','PLANNING'),
-      (2,'DOCUMENTATION_UNIT_LEADER','PLANNING'),
-      (3,'FIRE_BEHAVIOUR_SPECIALIST','PLANNING'),
-      (4,'GIS_SPECIALIST','PLANNING'),
-      (5,'PLANNING_ASSISTANT','PLANNING'),
-      (6,'PLANNING_ASSISTANT','PLANNING'),
-      (7,'PLANS_OFFICER','PLANNING'),
-      (8,'PLANS_SECTION_CHIEF','PLANNING'),
-      (9,'REHAB_SPECIALIST','PLANNING'),
-      (10,'RESOURCE_UNIT_LEADER','PLANNING'),
-      (11,'SITUATION_UNIT_LEADER','PLANNING'),
-      (12,'ASSET_MANAGEMENT','LOGISTICS'),
-      (13,'CAMP_MANAGER','LOGISTICS'),
-      (14,'COMMUNICATION_UNIT_LEADER','LOGISTICS'),
-      (15,'CONTRACT_MONITOR','LOGISTICS'),
-      (16,'DISPATCHER','LOGISTICS'),
-      (17,'FACILITIES_UNIT_LEADER','LOGISTICS'),
-      (18,'FOOD_UNIT_LEADER','LOGISTICS'),
-      (19,'GROUND_SUPPORT_UNIT_LEADER','LOGISTICS'),
-      (20,'LOGISTICS_ASSISTANT','LOGISTICS'),
-      (21,'LIAISON_OFFICER','LOGISTICS'),
-      (22,'LOGISTICS_SECTION_CHIEF','LOGISTICS'),
-      (23,'MEDICAL_UNIT_LEADER','LOGISTICS'),
-      (24,'SERVICE_BRANCH_DIRECTOR','LOGISTICS'),
-      (25,'SUPPLY_UNIT_LEADER','LOGISTICS'),
-      (26,'SUPPORT_BRANCH_DIRECTOR','LOGISTICS'),
-      (27,'WAREHOUSE_MANAGER','LOGISTICS'),
-      (28,'ACCOUNTS_PAYABLE','FINANCE_ADMIN'),
-      (29,'COMPENSATION_CLAIMS_UNIT_LEADER','FINANCE_ADMIN'),
-      (30,'CONTRACT_ADMINISTRATION','FINANCE_ADMIN'),
-      (31,'COST_UNIT_LEADER','FINANCE_ADMIN'),
-      (32,'FINANCE_ASSISTANT','FINANCE_ADMIN'),
-      (33,'FINANCE_LIAISON','FINANCE_ADMIN'),
-      (34,'FINANCE_OFFICER','FINANCE_ADMIN'),
-      (35,'FINANCE_SECTION_CHIEF','FINANCE_ADMIN'),
-      (36,'PROCUREMENT_UNIT_LEADER','FINANCE_ADMIN'),
-      (37,'TIME_RECORDER','FINANCE_ADMIN'),
-      (38,'TIME_UNIT_LEADER','FINANCE_ADMIN'),
-      (39,'DIVISION_SUPERVISOR','OPERATIONS'),
-      (40,'EQUIPMENT_BRANCH_DIRECTOR','OPERATIONS'),
-      (41,'EQUIPMENT_GROUP_SUPERVISOR','OPERATIONS'),
-      (42,'LINE_LOCATOR','OPERATIONS'),
-      (43,'STRIKE_TEAM_LEADER','OPERATIONS'),
-      (44,'TASK_FORCE_LEADER','OPERATIONS'),
-      (45,'INFORMATION_ASSISTANT','COMMAND'),
-      (46,'INFORMATION_OFFICER','COMMAND'),
-      (47,'LIAISON_OFFICER','COMMAND'),
-      (48,'SAFETY_OFFICER','COMMAND'),
-      (49,'AVIATION_ASSISTANT','AVIATION'),
-      (50,'HELI_COORDINATOR','AVIATION'),
-      (51,'HELIBASE_MANAGER','AVIATION');`;
+export const rolesSql = `INSERT INTO public.bcws_role (id,"name","section") VALUES
+	 (1,'DEMOBILIZATION_UNIT_LEADER','PLANNING'),
+	 (2,'DOCUMENTATION_UNIT_LEADER','PLANNING'),
+	 (3,'FIRE_BEHAVIOUR_SPECIALIST','PLANNING'),
+	 (4,'GIS_SPECIALIST','PLANNING'),
+	 (5,'PLANNING_ASSISTANT','PLANNING'),
+	 (6,'PLANNING_ASSISTANT','PLANNING'),
+	 (7,'PLANS_OFFICER','PLANNING'),
+	 (8,'PLANS_SECTION_CHIEF','PLANNING'),
+	 (9,'REHAB_SPECIALIST','PLANNING'),
+	 (10,'RESOURCE_UNIT_LEADER','PLANNING'),
+	 (11,'SITUATION_UNIT_LEADER','PLANNING'),
+	 (12,'ASSET_MANAGEMENT','LOGISTICS'),
+	 (13,'CAMP_MANAGER','LOGISTICS'),
+	 (14,'COMMUNICATION_UNIT_LEADER','LOGISTICS'),
+	 (15,'CONTRACT_MONITOR','LOGISTICS'),
+	 (16,'DISPATCHER','LOGISTICS'),
+	 (17,'FACILITIES_UNIT_LEADER','LOGISTICS'),
+	 (18,'FOOD_UNIT_LEADER','LOGISTICS'),
+	 (19,'GROUND_SUPPORT_UNIT_LEADER','LOGISTICS'),
+	 (20,'LOGISTICS_ASSISTANT','LOGISTICS'),
+	 (21,'LIAISON_OFFICER','LOGISTICS'),
+	 (22,'LOGISTICS_SECTION_CHIEF','LOGISTICS'),
+	 (23,'MEDICAL_UNIT_LEADER','LOGISTICS'),
+	 (24,'SERVICE_BRANCH_DIRECTOR','LOGISTICS'),
+	 (25,'SUPPLY_UNIT_LEADER','LOGISTICS'),
+	 (26,'SUPPORT_BRANCH_DIRECTOR','LOGISTICS'),
+	 (27,'WAREHOUSE_MANAGER','LOGISTICS'),
+	 (28,'ACCOUNTS_PAYABLE','FINANCE_ADMIN'),
+	 (29,'COMPENSATION_CLAIMS_UNIT_LEADER','FINANCE_ADMIN'),
+	 (30,'CONTRACT_ADMINISTRATION','FINANCE_ADMIN'),
+	 (31,'COST_UNIT_LEADER','FINANCE_ADMIN'),
+	 (32,'FINANCE_ASSISTANT','FINANCE_ADMIN'),
+	 (33,'FINANCE_LIAISON','FINANCE_ADMIN'),
+	 (34,'FINANCE_OFFICER','FINANCE_ADMIN'),
+	 (35,'FINANCE_SECTION_CHIEF','FINANCE_ADMIN'),
+	 (36,'PROCUREMENT_UNIT_LEADER','FINANCE_ADMIN'),
+	 (37,'TIME_RECORDER','FINANCE_ADMIN'),
+	 (38,'TIME_UNIT_LEADER','FINANCE_ADMIN'),
+	 (39,'DIVISION_SUPERVISOR','OPERATIONS'),
+	 (40,'EQUIPMENT_BRANCH_DIRECTOR','OPERATIONS'),
+	 (41,'EQUIPMENT_GROUP_SUPERVISOR','OPERATIONS'),
+	 (42,'LINE_LOCATOR','OPERATIONS'),
+	 (43,'STRIKE_TEAM_LEADER','OPERATIONS'),
+	 (44,'TASK_FORCE_LEADER','OPERATIONS'),
+	 (45,'INFORMATION_ASSISTANT','COMMAND'),
+	 (46,'INFORMATION_OFFICER','COMMAND'),
+	 (47,'LIAISON_OFFICER','COMMAND'),
+	 (48,'SAFETY_OFFICER','COMMAND'),
+	 (49,'AVIATION_ASSISTANT','AVIATION'),
+	 (50,'HELI_COORDINATOR','AVIATION'),
+	 (51,'HELIBASE_MANAGER','AVIATION');`;
 
-export const certs = `insert into bcws_certification (id, name)
-         values 
-           (1, 'Forklift - Certified'),
-           (2, 'Psychological First Aid (PFA)'),
-           (3, 'Radio Operator'),
-           (4, 'Volunteer Fire Dept'),
-           (5, 'Quad/ATV')`;
+export const certsSql = `insert into bcws_certification (id, name) values 
+        (1, 'Forklift - Certified'),
+        (2, 'Psychological First Aid (PFA)'),
+        (3, 'Radio Operator'),
+        (4, 'Volunteer Fire Dept'),
+        (5, 'Quad/ATV'),
+        (6, 'Food Safe Level I'),
+        (7, 'Food Safe Level II'),
+        (8, 'OFA I'),
+        (9, 'OFA II'),
+        (10, 'OFA III')
+        `;
 
-export const tools = `insert into bcws_tools (id,  name)
-           values
-           (1, 'Adobe Pro'),
-           (2, 'Corporate Accounting System (CAS)'),
-           (3, 'Daily Estimated Costs/Wildfire Costing (DEC/WFCST)'),
-           (4, 'Excel'),
-           (5, 'Fire Analysis Cost Estimate (FACE)'),
-           (6, 'Inventory Management (IMIS)'),
-           (7, 'Resource Request Tracking (RRT)'),
-           (8, 'Visio')`;
+export const toolsSql = `insert into bcws_tools (id,  name)
+        values
+        (1, 'ADOBE'),
+        (2, 'CAS'),
+        (3, 'DEC'),
+        (4, 'EXCEL'),
+        (5, 'FACE'),
+        (6, 'IMIS'),
+        (7, 'RRT'),
+        (8, 'VISIO')`;
