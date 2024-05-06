@@ -16,7 +16,6 @@ import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
-import { BcwsRole } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
@@ -109,22 +108,6 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'orientation', type: 'boolean', default: false })
   orientation: boolean;
 
-  @Column({
-    name: 'second_choice_role',
-    type: 'enum',
-    enumName: 'bcws-role',
-    enum: BcwsRole,
-  })
-  secondChoiceRole: BcwsRole;
-
-  @Column({
-    name: 'first_choice_role',
-    type: 'enum',
-    enumName: 'bcws-role',
-    enum: BcwsRole,
-  })
-  firstChoiceRole: BcwsRole;
-
   @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
   tools?: BcwsPersonnelTools[];
 
@@ -168,8 +151,6 @@ export class BcwsPersonnelEntity {
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
       orientation: this.orientation,
-      secondChoiceRole: this.secondChoiceRole,
-      firstChoiceRole: this.firstChoiceRole,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       certifications:
         this.certifications.map((itm) => itm.toResponseObject()) ?? [],

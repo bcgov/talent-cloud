@@ -11,7 +11,7 @@ import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certificati
 import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
-import { BcwsRole, FireCentre, OFA } from '../../../common/enums/bcws';
+import { BcwsRole, FireCentre } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
 class BcwsLocationDTO {
@@ -136,28 +136,6 @@ export class CreatePersonnelBcwsDTO {
     default: false,
   })
   orientation: boolean;
-
-  @ApiProperty()
-  @IsOptional()
-  highestOFA?: OFA;
-
-  @ApiProperty()
-  @IsOptional()
-  ofaExpiryDate?: Date;
-
-  @ApiProperty({ default: false })
-  foodSafetyLevelI: boolean;
-
-  @ApiProperty()
-  @IsOptional()
-  foodSafetyCertificationLevelIExpiry?: Date;
-
-  @ApiProperty({ default: false })
-  foodSafetyLevelII: boolean;
-
-  @ApiProperty()
-  @IsOptional()
-  foodSafetyCertificationLevelIIExpiry?: Date;
 
   @ApiProperty({
     enum: BcwsRole,
