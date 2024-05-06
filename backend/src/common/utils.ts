@@ -6,12 +6,12 @@ import {
   UnionMembership,
   AvailabilityType,
   Status,
+  FirstAid,
 } from './enums';
 import { DriverLicense } from './enums/driver-license.enum';
-import { FirstAid } from './enums/first-aid.enum';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { LocationEntity } from '../database/entities/emcr';
 import { FunctionEntity } from '../database/entities/function.entity';
-import { LocationEntity } from '../database/entities/location.entity';
 import { ExperienceEntity } from '../database/entities/personnel-function-experience.entity';
 
 export const rowData = (
