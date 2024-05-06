@@ -10,15 +10,13 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { BcwsLocationEntity } from './bcws-location.entity';
-
 import { BcwsPersonnelCertificationEntity } from './bcws-personnel-certification.entity';
 import { LanguageEntity } from './bcws-personnel-language.entity';
-
 import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
-import { OFA, BcwsRole } from '../../../common/enums/bcws';
+import { BcwsRole } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
@@ -112,30 +110,6 @@ export class BcwsPersonnelEntity {
   orientation: boolean;
 
   @Column({
-    name: 'highest_ofa',
-    type: 'enum',
-    enum: OFA,
-    enumName: 'ofa',
-    nullable: true,
-  })
-  highestOFA?: OFA;
-
-  @Column({ name: 'ofa_expiry', type: 'timestamp', nullable: true })
-  ofaExpiryDate?: Date;
-
-  @Column({ name: 'food_safety_I', type: 'boolean', default: false })
-  foodSafetyLevelI?: boolean;
-
-  @Column({ name: 'food_safety_I_expiry', type: 'timestamp', nullable: true })
-  foodSafetyCertificationLevelIExpiry?: Date;
-
-  @Column({ name: 'food_safety_II', type: 'boolean', default: false })
-  foodSafetyLevelII?: boolean;
-
-  @Column({ name: 'food_safety_II_expiry', type: 'timestamp', nullable: true })
-  foodSafetyCertificationLevelIIExpiry?: Date;
-
-  @Column({
     name: 'second_choice_role',
     type: 'enum',
     enumName: 'bcws-role',
@@ -194,14 +168,6 @@ export class BcwsPersonnelEntity {
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
       orientation: this.orientation,
-      highestOFA: this.highestOFA,
-      ofaExpiryDate: this.ofaExpiryDate,
-      foodSafetyLevelI: this.foodSafetyLevelI,
-      foodSafetyCertificationLevelIExpiry:
-        this.foodSafetyCertificationLevelIExpiry,
-      foodSafetyLevelII: this.foodSafetyLevelII,
-      foodSafetyCertificationLevelIIExpiry:
-        this.foodSafetyCertificationLevelIIExpiry,
       secondChoiceRole: this.secondChoiceRole,
       firstChoiceRole: this.firstChoiceRole,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
