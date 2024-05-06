@@ -25,6 +25,7 @@ export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
+
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-color --format="%h, %cn, %f, %D" | sed 's/->/:/')

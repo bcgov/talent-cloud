@@ -21,6 +21,11 @@ parameters:
     description: Environment for the application
     required: true
     value: dev
+  - name: BCWS_TOKEN
+    description: Token for BCWS integration
+    generate: expression
+    from: '[a-zA-Z0-9]{32}'
+    required: true
 objects:
   - kind: Secret
     apiVersion: v1
