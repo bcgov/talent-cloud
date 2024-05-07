@@ -32,15 +32,16 @@ export const handler = async () => {
     await datasource.initialize();
   }
 
+  const personnelRepo = datasource.getRepository(PersonnelEntity);
+
   const locationRepo = datasource.getRepository(LocationEntity);
   const functionRepo = datasource.getRepository(EmcrFunctionEntity);
-  const bcwsFireCentreRepo = datasource.getRepository(BcwsLocationEntity);
-  const personnelRepo = datasource.getRepository(PersonnelEntity);
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
-  const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
-  const bcwsToolsRepo = datasource.getRepository(BcwsToolsEntity);
   const emcrTrainingRepo = datasource.getRepository(EmcrTrainingEntity);
 
+  const bcwsFireCentreRepo = datasource.getRepository(BcwsLocationEntity);
+  const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
+  const bcwsToolsRepo = datasource.getRepository(BcwsToolsEntity);
   const bcwsCertificationsRepo = datasource.getRepository(
     BcwsCertificationEntity,
   );
