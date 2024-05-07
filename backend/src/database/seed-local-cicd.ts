@@ -1,8 +1,8 @@
+import { Repository } from 'typeorm';
 import { personnel } from './data';
 import { datasource } from './datasource';
 import { BcwsPersonnelEntity } from './entities/bcws';
 import { BcwsCertificationEntity } from './entities/bcws/bcws-certifications.entity';
-import { BcwsLocationEntity } from './entities/bcws/bcws-location.entity';
 import { BcwsRoleEntity } from './entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from './entities/bcws/bcws-tools.entity';
 import { DivisionEntity } from './entities/division.entity';
@@ -14,12 +14,11 @@ import {
 } from './entities/emcr';
 import { PersonnelEntity } from './entities/personnel.entity';
 import {
-  bcwsLocationsSql,
   certsSql,
   divisionsSql,
   functionSql,
   insertTrainingSql,
-  locationSql,
+  joinedLocationsSql,
   rolesSql,
   toolsSql,
 } from './queries';
@@ -40,8 +39,6 @@ export const handler = async () => {
   const functionRepo = datasource.getRepository(EmcrFunctionEntity);
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
   const emcrTrainingRepo = datasource.getRepository(EmcrTrainingEntity);
-
-  const bcwsFireCentreRepo = datasource.getRepository(BcwsLocationEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
   const bcwsToolsRepo = datasource.getRepository(BcwsToolsEntity);
   const bcwsCertificationsRepo = datasource.getRepository(
@@ -51,40 +48,36 @@ export const handler = async () => {
   const bcwsRolesRepo = datasource.getRepository(BcwsRoleEntity);
 
   try {
-    const seedDivisions = await bcwsDivisionsRepo.find();
-    const seededLocations = await locationRepo.find();
-    const seededFunctions = await functionRepo.find();
-    const seededTrainings = await emcrTrainingRepo.find();
+    async function seedAndFind<T>(repo: Repository<T>, query: string) {
+      const entities = await repo.find();
+      if (entities.length !== 0) {
+        return entities;
+      } else {
+        return repo.query(query) && repo.find();
+      }
+    }
 
-    const seededBcwsFireCentre = await bcwsFireCentreRepo.find();
-    const seededBcwsTools = await bcwsToolsRepo.find();
-    const seededBcwsCertifications = await bcwsCertificationsRepo.find();
-    const seededBcwsRoles = await bcwsRolesRepo.find();
-    if (seedDivisions.length === 0) {
-      await datasource.query(divisionsSql);
-    }
-    if (seededBcwsFireCentre.length === 0) {
-      await datasource.query(bcwsLocationsSql);
-    }
-    if (seededBcwsTools.length === 0) {
-      await datasource.query(toolsSql);
-    }
-    if (seededBcwsCertifications.length === 0) {
-      await datasource.query(certsSql);
-    }
-    if (seededBcwsRoles.length === 0) {
-      await datasource.query(rolesSql);
-    }
-    if (seededLocations.length === 0) {
-      await datasource.query(locationSql);
-    }
-    if (seededFunctions.length === 0) {
-      await datasource.query(functionSql);
-    }
-    if (seededTrainings.length === 0) {
-      await datasource.query(insertTrainingSql);
-    }
-    console.log('Seeding Data...');
+    const seedDivisions = await seedAndFind(bcwsDivisionsRepo, divisionsSql);
+    const seededLocations = await seedAndFind(locationRepo, joinedLocationsSql);
+    const seededFunctions = await seedAndFind(functionRepo, functionSql);
+    const seededTrainings = await seedAndFind(
+      emcrTrainingRepo,
+      insertTrainingSql,
+    );
+    const seededBcwsTools = await seedAndFind(bcwsToolsRepo, toolsSql);
+    const seededBcwsCertifications = await seedAndFind(
+      bcwsCertificationsRepo,
+      certsSql,
+    );
+    const seededBcwsRoles = await seedAndFind(bcwsRolesRepo, rolesSql);
+    const seededEmcrLocations = seededLocations.filter(
+      (itm) => itm.region !== null,
+    );
+    const seededBcwsFireCentre = seededLocations.filter(
+      (itm) => itm.fireCentre !== null,
+    );
+
+    console.log(seededTrainings);
 
     if (cicd) {
       // await datasource.query(testSql);
@@ -102,13 +95,14 @@ export const handler = async () => {
       );
     } else if (!cicd) {
       const data = dataHandler(
-        seededLocations,
+        seededEmcrLocations,
         seededFunctions,
         seededBcwsFireCentre,
         seededBcwsRoles,
         seededBcwsTools,
         seededBcwsCertifications,
         seedDivisions,
+        seededTrainings,
       );
 
       await Promise.all(

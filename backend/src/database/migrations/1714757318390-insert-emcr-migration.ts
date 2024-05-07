@@ -5,9 +5,6 @@ export class Migration1714757318390 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `insert into emcr_location (id, location_name, "region") select id, location_name, region from "location" ON CONFLICT DO NOTHING `,
-    );
-    await queryRunner.query(
       `insert into emcr_function (id, name, abbreviation) select id, name, abbreviation from "function"`,
     );
 
@@ -49,7 +46,7 @@ export class Migration1714757318390 implements MigrationInterface {
       	approved_by_supervisor,
       	"coordinatorNotes",
       	"logisticsNotes",
-      	status,
+      	status::text::status,
       	work_location,
       	work_region,
       	home_location,
@@ -99,10 +96,6 @@ export class Migration1714757318390 implements MigrationInterface {
     );
     await queryRunner.query(
       `delete from public.emcr_personnel_training where "personnel_id" in (select personnel_id from personnel_training)`,
-    );
-
-    await queryRunner.query(
-      `delete from location where id in (select id from "location" )`,
     );
 
     await queryRunner.query(

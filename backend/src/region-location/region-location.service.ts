@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { LocationRO } from './region-location.ro';
-import { LocationEntity } from '../database/entities/emcr/emcr-location.entity';
+import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
 export class RegionsAndLocationsService {

@@ -14,13 +14,13 @@ import { Status } from './enums/status.enum';
 import { UnionMembership } from './enums/union-membership.enum';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
-import { BcwsLocationEntity } from '../database/entities/bcws/bcws-location.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { DivisionEntity } from '../database/entities/division.entity';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
+  EmcrTrainingEntity,
   LocationEntity,
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
@@ -30,11 +30,12 @@ import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 export const rowData = (
   locations: LocationEntity[],
   functions: EmcrFunctionEntity[],
-  bcwsLocations: BcwsLocationEntity[],
+  bcwsLocations: LocationEntity[],
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
   seedDivisions: DivisionEntity[],
+  seededTrainings: EmcrTrainingEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
   emcrData: CreatePersonnelEmcrDTO;
@@ -80,7 +81,7 @@ export const rowData = (
     certifications: createCertifications(seededBcwsCertifications),
     roles: createRoles(seededBcwsRoles),
     languages: createLanguages(),
-    division: faker.helpers.arrayElement(seedDivisions),
+    division_id: faker.helpers.arrayElement(seedDivisions).id,
   };
 
   const emcrData: CreatePersonnelEmcrDTO = {
@@ -97,7 +98,7 @@ export const rowData = (
     emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
     approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
     workLocation: faker.helpers.arrayElement(locations),
-    trainings: [],
+    trainings: [status !== Status.PENDING && seededTrainings[0]],
 
     dateApproved:
       status !== Status.PENDING
@@ -296,11 +297,12 @@ export const createLanguages = () => {
 export const handler = (
   locations: LocationEntity[],
   functions: EmcrFunctionEntity[],
-  bcwsLocations: BcwsLocationEntity[],
+  bcwsLocations: LocationEntity[],
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
   seededBcwsDivisions: DivisionEntity[],
+  seededTrainings: EmcrTrainingEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
   emcrData: CreatePersonnelEmcrDTO;
@@ -321,6 +323,7 @@ export const handler = (
         seededBcwsTools,
         seededBcwsCertifications,
         seededBcwsDivisions,
+        seededTrainings,
       ),
     );
   }

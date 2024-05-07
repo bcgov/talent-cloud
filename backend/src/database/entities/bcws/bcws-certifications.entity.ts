@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('bcws_certification')
 export class BcwsCertificationEntity {
-  @PrimaryColumn('int')
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({

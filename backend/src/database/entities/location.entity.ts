@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { FireCentre } from '../../common/enums';
 import { Region } from '../../common/enums/emcr';
 import { LocationRO } from '../../region-location/region-location.ro';
@@ -6,7 +6,7 @@ import { LocationRO } from '../../region-location/region-location.ro';
 @Entity('location')
 @Unique('UQ_location', ['locationName', 'region'])
 export class LocationEntity {
-  @PrimaryColumn('int')
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({
@@ -19,9 +19,9 @@ export class LocationEntity {
   locationName: string;
 
   @Column({
-    name: 'emcr_region',
+    name: 'region',
     enum: Region,
-    enumName: 'emcr-region',
+    enumName: 'region',
     type: 'enum',
     nullable: true,
   })
