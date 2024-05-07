@@ -17,6 +17,7 @@ import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certific
 import { BcwsLocationEntity } from '../database/entities/bcws/bcws-location.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
+import { DivisionEntity } from '../database/entities/division.entity';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
@@ -33,6 +34,7 @@ export const rowData = (
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
+  seedDivisions: DivisionEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
   emcrData: CreatePersonnelEmcrDTO;
@@ -78,6 +80,7 @@ export const rowData = (
     certifications: createCertifications(seededBcwsCertifications),
     roles: createRoles(seededBcwsRoles),
     languages: createLanguages(),
+    division: faker.helpers.arrayElement(seedDivisions),
   };
 
   const emcrData: CreatePersonnelEmcrDTO = {
@@ -297,6 +300,7 @@ export const handler = (
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
+  seededBcwsDivisions: DivisionEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
   emcrData: CreatePersonnelEmcrDTO;
@@ -316,6 +320,7 @@ export const handler = (
         seededBcwsRoles,
         seededBcwsTools,
         seededBcwsCertifications,
+        seededBcwsDivisions,
       ),
     );
   }

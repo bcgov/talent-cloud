@@ -9,11 +9,12 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { BcwsLocationEntity } from './bcws-location.entity';
 import { BcwsPersonnelCertificationEntity } from './bcws-personnel-certification.entity';
 import { LanguageEntity } from './bcws-personnel-language.entity';
 import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
+import { DivisionEntity } from '../division.entity';
+import { LocationEntity } from '../location.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { Status } from '../../../common/enums/status.enum';
@@ -44,20 +45,20 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
   approvedBySupervisor: boolean;
 
-  @ManyToOne(() => BcwsLocationEntity, { eager: true, nullable: true })
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'work_fire_centre', referencedColumnName: 'id' })
-  workFireCentre?: BcwsLocationEntity;
+  workFireCentre?: LocationEntity;
 
-  @ManyToOne(() => BcwsLocationEntity, { eager: true, nullable: false })
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
   @JoinColumn({ name: 'home_fire_centre', referencedColumnName: 'id' })
-  homeFireCentre: BcwsLocationEntity;
+  homeFireCentre: LocationEntity;
 
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
 
-  //TODO - add this once we have the values for the branch enum
-  // @Column({ name: 'branch', type: 'enum', enum: Branch })
-  // branch: Branch;
+  @OneToOne(() => DivisionEntity, (d) => d.id)
+  @JoinColumn({ name: 'division_id', referencedColumnName: 'id' })
+  division: DivisionEntity;
 
   //TODO confirm length of paylist_id
   @Column({ name: 'paylist_id', type: 'varchar', length: 6 })
@@ -111,11 +112,6 @@ export class BcwsPersonnelEntity {
   @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
   tools?: BcwsPersonnelTools[];
 
-  @OneToMany(() => BcwsPersonnelCertificationEntity, (c) => c.personnel, {
-    cascade: true,
-  })
-  certifications: BcwsPersonnelCertificationEntity[];
-
   @OneToMany(() => BcwsSectionsAndRolesEntity, (s) => s.personnel, {
     cascade: true,
   })
@@ -123,6 +119,11 @@ export class BcwsPersonnelEntity {
 
   @OneToMany(() => LanguageEntity, (l) => l.personnel, { cascade: true })
   languages?: LanguageEntity[];
+
+  @OneToMany(() => BcwsPersonnelCertificationEntity, (c) => c.personnel, {
+    cascade: true,
+  })
+  certifications: BcwsPersonnelCertificationEntity[];
 
   toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
     const response = new BcwsRO();
@@ -150,10 +151,10 @@ export class BcwsPersonnelEntity {
       willingnessStatement: this.willingnessStatement,
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
+      ministry: this.division.toResponseObject().ministry,
+      division: this.division.toResponseObject().division,
       orientation: this.orientation,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
-      certifications:
-        this.certifications.map((itm) => itm.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
     };

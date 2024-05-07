@@ -12,8 +12,8 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { EmcrExperienceEntity } from './emcr-function-experience.entity';
-import { LocationEntity } from './emcr-location.entity';
 import { EmcrTrainingEntity } from './emcr-training.entity';
+import { LocationEntity } from '../location.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';

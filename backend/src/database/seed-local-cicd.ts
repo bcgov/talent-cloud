@@ -5,6 +5,7 @@ import { BcwsCertificationEntity } from './entities/bcws/bcws-certifications.ent
 import { BcwsLocationEntity } from './entities/bcws/bcws-location.entity';
 import { BcwsRoleEntity } from './entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from './entities/bcws/bcws-tools.entity';
+import { DivisionEntity } from './entities/division.entity';
 import {
   EmcrFunctionEntity,
   LocationEntity,
@@ -15,6 +16,7 @@ import { PersonnelEntity } from './entities/personnel.entity';
 import {
   bcwsLocationsSql,
   certsSql,
+  divisionsSql,
   functionSql,
   insertTrainingSql,
   locationSql,
@@ -45,9 +47,11 @@ export const handler = async () => {
   const bcwsCertificationsRepo = datasource.getRepository(
     BcwsCertificationEntity,
   );
+  const bcwsDivisionsRepo = datasource.getRepository(DivisionEntity);
   const bcwsRolesRepo = datasource.getRepository(BcwsRoleEntity);
 
   try {
+    const seedDivisions = await bcwsDivisionsRepo.find();
     const seededLocations = await locationRepo.find();
     const seededFunctions = await functionRepo.find();
     const seededTrainings = await emcrTrainingRepo.find();
@@ -56,7 +60,9 @@ export const handler = async () => {
     const seededBcwsTools = await bcwsToolsRepo.find();
     const seededBcwsCertifications = await bcwsCertificationsRepo.find();
     const seededBcwsRoles = await bcwsRolesRepo.find();
-
+    if (seedDivisions.length === 0) {
+      await datasource.query(divisionsSql);
+    }
     if (seededBcwsFireCentre.length === 0) {
       await datasource.query(bcwsLocationsSql);
     }
@@ -102,6 +108,7 @@ export const handler = async () => {
         seededBcwsRoles,
         seededBcwsTools,
         seededBcwsCertifications,
+        seedDivisions,
       );
 
       await Promise.all(

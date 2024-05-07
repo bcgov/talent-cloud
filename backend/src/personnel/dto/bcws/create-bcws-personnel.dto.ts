@@ -31,6 +31,14 @@ class BcwsLocationDTO {
   fireCentre?: FireCentre;
 }
 
+class DivisionDTO {
+  @ApiProperty()
+  divisionName: string;
+
+  @ApiProperty()
+  ministry: string;
+}
+
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
   @IsOptional()
@@ -62,6 +70,15 @@ export class CreatePersonnelBcwsDTO {
     },
   })
   homeFireCentre?: BcwsLocationDTO;
+
+  @ApiProperty({
+    description: 'Personnel division',
+    example: {
+      divisionName: 'Division Name',
+      ministry: 'Ministry Name',
+    },
+  })
+  division: DivisionDTO;
 
   @ApiProperty()
   @IsOptional()
