@@ -57,7 +57,7 @@ export class Migration1714754205889 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `CREATE TYPE "public"."tools-proficiency" AS ENUM('Basic', 'Intermediate', 'Advanced')`,
+      `CREATE TYPE "public"."tools-proficiency" AS ENUM('BASIC', 'INTERMEDIATE', 'ADVANCED')`,
     );
 
     await queryRunner.query(

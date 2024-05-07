@@ -21,7 +21,7 @@ export enum Tools {
 }
 
 export enum ToolsProficiency {
-  BASIC = 'Basic',
-  INTERMEDIATE = 'Intermediate',
-  ADVANCED = 'Advanced',
+  BASIC = 'BASIC',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
 }
