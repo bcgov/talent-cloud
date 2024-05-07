@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { BcwsRole, Section } from '../../../common/enums/bcws';
 
 @Entity('bcws_role')
 export class BcwsRoleEntity {
-  @PrimaryColumn('int')
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({
