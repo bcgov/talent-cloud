@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { RegionsAndLocationsController } from './region-location.controller';
 import { RegionsAndLocationsService } from './region-location.service';
-import { LocationEntity } from '../database/entities/emcr/emcr-location.entity';
+import { LocationEntity } from '../database/entities/location.entity';
 import { LoggerModule } from '../logger/logger.module';
 
 @Module({

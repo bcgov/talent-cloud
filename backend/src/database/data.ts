@@ -4,7 +4,7 @@ import {
   EmcrFunctionEntity,
   LocationEntity,
 } from './entities/emcr';
-import { Region, Experience } from '../common/enums/emcr';
+import { Experience, Region } from '../common/enums/emcr';
 import { Ministry } from '../common/enums/ministry.enum';
 import { Status } from '../common/enums/status.enum';
 import { UnionMembership } from '../common/enums/union-membership.enum';
