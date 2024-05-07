@@ -40,7 +40,7 @@ export class Migration1714754205889 implements MigrationInterface {
       `CREATE TABLE "bcws_personnel_tools" ("personnel_id" uuid NOT NULL, "tool_id" integer NOT NULL, "level" "public"."tools-proficiency" NOT NULL, CONSTRAINT "PK_ca42c285205618533b456cc03ba" PRIMARY KEY ("personnel_id", "tool_id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "division" ("id" SERIAL NOT NULL, "division_name" character varying(50) NOT NULL, "ministry" "public"."ministry" NOT NULL, CONSTRAINT "PK_b6f0d207e38106dbddabab3a078" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "division" ("id" SERIAL NOT NULL, "division_name" character varying(250) NOT NULL, "ministry" "public"."ministry" NOT NULL, CONSTRAINT "PK_b6f0d207e38106dbddabab3a078" PRIMARY KEY ("id"))`,
     );
 
     await queryRunner.query(
