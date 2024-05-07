@@ -6,7 +6,7 @@ export class DivisionEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'division_name', type: 'varchar', length: 50 })
+  @Column({ name: 'division_name', type: 'varchar', length: 250 })
   divisionName: string;
 
   @Column({
