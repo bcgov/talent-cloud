@@ -4,6 +4,9 @@ export class Migration1714754205889 implements MigrationInterface {
   name = 'BcwsMigration1714754205889';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
+      `ALTER TABLE "location" ALTER COLUMN "region" DROP NOT NULL`,
+    );
+    await queryRunner.query(
       `CREATE TYPE "public"."status" AS ENUM('PENDING', 'INACTIVE', 'ACTIVE')`,
     );
     await queryRunner.query(
@@ -141,5 +144,8 @@ export class Migration1714754205889 implements MigrationInterface {
     await queryRunner.query(`DROP TYPE "public"."bcws-role"`);
     await queryRunner.query(`DROP TABLE "bcws_personnel_certifications"`);
     await queryRunner.query(`DROP TABLE "bcws_certification"`);
+    await queryRunner.query(
+      `ALTER TABLE "location" ALTER COLUMN "region" SET NOT NULL`,
+    );
   }
 }
