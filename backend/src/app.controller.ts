@@ -63,7 +63,9 @@ export class AppController {
     this.logger.log(`${req.url} ${req.role}`);
     return {
       functions: await this.functionService.getFunctions(),
-      locations: await this.locationService.getRegionsAndLocations(),
+      locations: (await this.locationService.getRegionsAndLocations()).filter(
+        (itm) => itm.region !== null,
+      ),
     };
   }
 }
