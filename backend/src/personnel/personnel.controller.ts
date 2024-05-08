@@ -210,7 +210,10 @@ export class PersonnelController {
         id,
         firstDate,
       );
-      dateROs[0].actualStartDate = actualStart;
+      const firstEventDateEnd = dates.findIndex(d => d.availabilityType !== firstDate.availabilityType);
+      for (let i = 0; i < firstEventDateEnd; i++) {
+        dateROs[i].actualStartDate = actualStart;
+      }
     }
 
     const lastDate = dates[dates.length - 1];
@@ -219,7 +222,10 @@ export class PersonnelController {
         id,
         lastDate,
       );
-      dateROs[dateROs.length - 1].actualEndDate = actualEnd;
+      const lastEventDateStart = dates.reverse().findIndex(d => d.availabilityType !== lastDate.availabilityType);
+      for (let i = 1; i <= lastEventDateStart; i++) {
+        dateROs[dateROs.length - i].actualEndDate = actualEnd;
+      }
     }
 
     return dateROs;

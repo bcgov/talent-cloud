@@ -62,10 +62,18 @@ const SchedulerPopUp = ({
     if (deploymentCode.length) {
       availabilityRange.deploymentCode = deploymentCode;
     }
-    if (dayjs(editedFrom).isBefore(fromDay, 'date')) {
+    if (
+      dayjs(editedFrom).isBefore(fromDay, 'date') &&
+      editedAvailabilityType &&
+      selectedStatus === editedAvailabilityType
+    ) {
       availabilityRange.removeFrom = editedFrom;
     }
-    if (dayjs(editedTo).isAfter(toDay, 'date')) {
+    if (
+      dayjs(editedTo).isAfter(toDay, 'date') &&
+      editedAvailabilityType &&
+      selectedStatus === editedAvailabilityType
+    ) {
       availabilityRange.removeTo = editedTo;
     }
     onSave(availabilityRange);
@@ -311,7 +319,14 @@ const SchedulerPopUp = ({
               placeholder={''}
               className="w-full bg-primaryBlue"
               onClick={() => {
-                setConfirmModal('EDIT');
+                if (
+                  editedAvailabilityType &&
+                  editedAvailabilityType === selectedStatus
+                ) {
+                  setConfirmModal('EDIT');
+                } else {
+                  saveDates();
+                }
               }}
               disabled={fromError || toError}
             >
