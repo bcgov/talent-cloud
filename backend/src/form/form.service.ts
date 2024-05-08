@@ -146,7 +146,8 @@ export class FormService {
       homeLocation,
       workLocation,
     };
-    //TODO
+    // TODO create EMCR personnel + BCWS personnel
+    // TODO remove console.log when the above TODO is complete
     console.log(emcrData);
     try {
       this.logger.log(`Form data saved successfully`);
