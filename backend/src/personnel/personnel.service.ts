@@ -55,6 +55,10 @@ export class PersonnelService {
   ) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelRepository.findOne({ where: { id } });
+    const emcr = await this.emcrPersonnelRepository.findOne({
+      where: { personnel: { id } },
+    });
+
     this.logger.log(`${JSON.stringify(personnel)}`);
 
     if (
@@ -69,12 +73,14 @@ export class PersonnelService {
 
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
+      emcr[key] = personnel[key];
     });
 
     try {
       // This is a 'save' rather than 'update' to allow for updating many-to-many relations
-      const save = await this.personnelRepository.save(person);
-      console.log(save);
+      await this.personnelRepository.save(person);
+      await this.emcrPersonnelRepository.save(emcr);
+
       return this.getPersonnelById(role, id);
     } catch (e) {
       console.log(e);
