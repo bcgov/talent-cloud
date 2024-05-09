@@ -462,24 +462,20 @@ export class PersonnelService {
     return trainings;
   }
 
-  //TODO finish implementing this - this is for a test only
-  async getApprovedApplicants() {
-    return [
-      {
-        employeeId: '123456',
-        firstName: 'Teams',
-        lastName: 'Member',
-      },
-      {
-        employeeId: '112233',
-        firstName: 'New',
-        lastName: 'Worker',
-      },
-      {
-        employeeId: '126789',
-        firstName: 'Returning',
-        lastName: 'Officer',
-      },
-    ];
+  /**
+   * Gets all approved BCWS members for e-diaries to pull daily
+   */
+  async getApprovedBCWSMembers(): Promise<{ employeeId: number; firstName: string; lastName: string }[]> {
+    const qb =
+      this.personnelRepository.createQueryBuilder('personnel')
+        .innerJoinAndSelect('personnel.bcws', 'bcws')
+        .select(['personnel.firstName', 'personnel.lastName', 'bcws.employeeId'])
+        .andWhere('bcws.status = :status', { status: Status.ACTIVE });
+    const personnel = await qb.getMany();
+    return personnel.map(p => ({
+      employeeId: p.bcws.employeeId,
+      firstName: p.firstName,
+      lastName: p.lastName,
+    }));
   }
 }
