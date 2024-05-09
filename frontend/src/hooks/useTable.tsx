@@ -1,8 +1,7 @@
 import type { ChangeEvent } from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
-
 import { truncatePageRange } from './utils';
 import {
   DashboardColumns,
@@ -15,12 +14,10 @@ import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
-import { useRole } from './useRole';
-import { Program, RoleContext } from '@/providers';
+import type { Program } from '@/providers';
 
-export const useTable = (route:Program) => {
+export const useTable = (route: Program | undefined) => {
   const { AxiosPrivate } = useAxios();
-  
 
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
@@ -120,7 +117,7 @@ export const useTable = (route:Program) => {
 
   useEffect(() => {
     if (debouncedFilters) debouncedFiltersAsync();
-  }, [debouncedFilters,route ]);
+  }, [debouncedFilters, route]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
     setFilterValues({ ...filterValues, ...change });

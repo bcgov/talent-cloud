@@ -1,9 +1,18 @@
 import { Program, RoleContext } from '@/providers/Role';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect } from 'react';
 import { useAxios } from './useAxios';
 
 export const useRole = () => {
-  const { role, setRole, program, setProgram, username, setUsername, route, setRoute} = useContext(RoleContext);
+  const {
+    role,
+    setRole,
+    program,
+    setProgram,
+    username,
+    setUsername,
+    route,
+    setRoute,
+  } = useContext(RoleContext);
 
   const { AxiosPrivate } = useAxios();
 
@@ -15,12 +24,12 @@ export const useRole = () => {
         } = await AxiosPrivate.get('/auth/userInfo');
         setUsername(username);
         setRole(role);
-        setProgram(program); 
-       
-        if(program==='admin'){
-          setRoute(localStorage.getItem('route') as Program ?? Program.BCWS)
+        setProgram(program);
+
+        if (program === 'admin') {
+          setRoute((localStorage.getItem('route') as Program) ?? Program.BCWS);
         } else {
-          setRoute(program)
+          setRoute(program);
         }
       } catch (e: unknown) {
         console.log(e);
@@ -28,20 +37,17 @@ export const useRole = () => {
     })();
   }, [AxiosPrivate]);
 
-  console.log(route, program, role, username)
+  console.log(route, program, role, username);
 
   const handleToggle = () => {
     if (route === Program.EMCR) {
       setRoute(Program.BCWS);
       localStorage.setItem('route', Program.BCWS);
-      
     } else {
-      setRoute(Program.EMCR); 
+      setRoute(Program.EMCR);
       localStorage.setItem('route', Program.EMCR);
-      
-    }    
-  }
+    }
+  };
 
-  
   return { role, program, username, handleToggle, route };
 };

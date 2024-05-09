@@ -2,10 +2,9 @@ import { Loading, Table, Tabs } from '@/components';
 import { Filters } from './DashboardFilters';
 import { useRole, useTable } from '@/hooks';
 import { Role } from '@/common';
-import { Program } from '@/providers';
 
 const Dashboard = () => {
-  const { route, role } = useRole()
+  const { route, role } = useRole();
   const {
     filterValues,
     tableData,
@@ -24,10 +23,7 @@ const Dashboard = () => {
     tabs,
     counts,
     handleChangeRowsPerPage,
-  
   } = useTable(route);
-
-  
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">

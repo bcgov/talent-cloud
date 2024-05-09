@@ -20,7 +20,7 @@ export const Header = ({
   authenticated?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
-  const { username,  role,  program, handleToggle, route } = useRole();
+  const { username, program, handleToggle, route } = useRole();
 
   const showMenu = () => {
     setOpen(!open);
@@ -47,11 +47,13 @@ export const Header = ({
                 <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
-            {program === Program.ADMIN &&<Toggle 
-            label={route}
-            value={route === Program.BCWS} 
-            handleToggle={handleToggle}            
-            />}
+            {program === Program.ADMIN && (
+              <Toggle
+                label={route}
+                value={route === Program.BCWS}
+                handleToggle={handleToggle}
+              />
+            )}
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {username && (
                 <UserMenu username={username} logout={() => logout(keycloak)} />

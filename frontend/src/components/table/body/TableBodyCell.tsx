@@ -6,7 +6,6 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
 
-
 export const TableBodyCell = ({
   cell,
   id,
@@ -16,7 +15,6 @@ export const TableBodyCell = ({
   id: string;
   status: Status;
 }) => {
-
   switch (cell.columnName) {
     case DashboardColumns.NAME:
       return (
