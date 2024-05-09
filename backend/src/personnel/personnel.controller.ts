@@ -231,7 +231,7 @@ export class PersonnelController {
   }
   @Get('/bcws/approved')
   @Token(TokenType.BCWS)
-  async getApprovedApplicants() {
-    return await this.personnelService.getApprovedApplicants();
+  async getApprovedApplicants(): Promise<{ employeeId: number; firstName: string; lastName: string }[]> {
+    return this.personnelService.getApprovedBCWSMembers();
   }
 }
