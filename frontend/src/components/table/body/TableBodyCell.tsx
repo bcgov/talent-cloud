@@ -5,8 +5,7 @@ import { iconClass } from '@/components/table/classes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
-import { RoleContext } from '@/providers';
-import { useContext } from 'react';
+
 
 export const TableBodyCell = ({
   cell,
@@ -17,13 +16,13 @@ export const TableBodyCell = ({
   id: string;
   status: Status;
 }) => {
-  const { route } = useContext(RoleContext)
+
   switch (cell.columnName) {
     case DashboardColumns.NAME:
       return (
         <td className={cell.className}>
           <Link
-            to={`/${route}/profile/${id}`}
+            to={`/profile/${id}`}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline text-blue-900"
