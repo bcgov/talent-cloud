@@ -118,7 +118,7 @@ export class PersonnelController {
     @Query() query?: GetEmcrPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    console.log('GET');
+
     const queryResponse: {
       personnel: EmcrPersonnelEntity[];
       count: {
@@ -235,7 +235,9 @@ export class PersonnelController {
   }
   @Get('/bcws/approved')
   @Token(TokenType.BCWS)
-  async getApprovedApplicants(): Promise<{ employeeId: number; firstName: string; lastName: string }[]> {
+  async getApprovedApplicants(): Promise<
+    { employeeId: number; firstName: string; lastName: string }[]
+  > {
     return this.personnelService.getApprovedBCWSMembers();
   }
 }
