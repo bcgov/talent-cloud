@@ -12,10 +12,6 @@ export class Migration1714757318390 implements MigrationInterface {
       `insert into emcr_training(id,	name) select id, name from training`,
     );
 
-    await queryRunner.query(
-      `insert into public.emcr_personnel_training("personnel_id", "training_id") select "personnelId", "trainingId" from personnel_training`,
-    );
-
     await queryRunner.query(`
       insert into emcr_personnel 
       (
@@ -62,6 +58,10 @@ export class Migration1714757318390 implements MigrationInterface {
       from
       	personnel
     `);
+
+    await queryRunner.query(
+      `insert into public.emcr_personnel_training("personnel_id", "training_id") select "personnelId", "trainingId" from personnel_training`,
+    );
 
     await queryRunner.query(
       `insert into emcr_function_experience(function_id, experience_type, personnel_id) select function_id, experience_type, personnel_id from personnel_function_experience`,
