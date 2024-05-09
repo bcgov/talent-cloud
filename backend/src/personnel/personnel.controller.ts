@@ -38,7 +38,7 @@ import { QueryTransformPipe } from '../query-validation.pipe';
 @Controller('personnel')
 @ApiTags('Personnel API')
 @UseInterceptors(ClassSerializerInterceptor)
-@Programs([Program.BCWS, Program.EMCR])
+@Programs([Program.BCWS, Program.EMCR, Program.ADMIN])
 export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
@@ -72,7 +72,7 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Patch(':id')
+  @Patch('/emcr/:id')
   async updatePersonnel(
     @Body() personnel: UpdateEmcrPersonnelDTO,
     @Request() req: RequestWithRoles,
@@ -111,14 +111,14 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Get()
+  @Get('/emcr')
   @UsePipes(new QueryTransformPipe())
   async getPersonnel(
     @Request() req: RequestWithRoles,
     @Query() query?: GetEmcrPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-
+    console.log('GET');
     const queryResponse: {
       personnel: EmcrPersonnelEntity[];
       count: {
@@ -150,7 +150,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Get(':id')
+  @Get('/emcr/:id')
   async getPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
@@ -209,7 +209,9 @@ export class PersonnelController {
         id,
         firstDate,
       );
-      const firstEventDateEnd = dates.findIndex(d => d.availabilityType !== firstDate.availabilityType);
+      const firstEventDateEnd = dates.findIndex(
+        (d) => d.availabilityType !== firstDate.availabilityType,
+      );
       for (let i = 0; i < firstEventDateEnd; i++) {
         dateROs[i].actualStartDate = actualStart;
       }
@@ -221,7 +223,9 @@ export class PersonnelController {
         id,
         lastDate,
       );
-      const lastEventDateStart = dates.reverse().findIndex(d => d.availabilityType !== lastDate.availabilityType);
+      const lastEventDateStart = dates
+        .reverse()
+        .findIndex((d) => d.availabilityType !== lastDate.availabilityType);
       for (let i = 1; i <= lastEventDateStart; i++) {
         dateROs[dateROs.length - i].actualEndDate = actualEnd;
       }

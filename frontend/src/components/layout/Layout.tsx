@@ -7,14 +7,13 @@ import { useRole } from '@/hooks';
 import { useKeycloak } from '@react-keycloak/web';
 
 export const Layout = ({ children }: { children: ReactElement }) => {
-  const { username } = useRole();
+  
   const { keycloak } = useKeycloak();
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header
         appName={APP_NAME}
-        username={username ?? ''}
         authenticated={keycloak.authenticated}
       />
       <div
