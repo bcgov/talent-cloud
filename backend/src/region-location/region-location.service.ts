@@ -23,11 +23,11 @@ export class RegionsAndLocationsService {
     });
     return locations.map((loc) => loc.toResponseObject());
   }
-/**
- * Get location by name
- * @param locationName 
- * @returns 
- */
+  /**
+   * Get location by name
+   * @param locationName
+   * @returns
+   */
   async getLocationByName(locationName: string): Promise<LocationRO> {
     const location = await this.locationRepository.findOne({
       where: { locationName },

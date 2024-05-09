@@ -113,9 +113,19 @@ describe('Coordinator Flow', () => {
       expect(intercept.response.body.count.PENDING).to.equal(1);
       expect(intercept.response.body.count.INACTIVE).to.equal(1);
     });
-    //TODO: finish approval flow TC-457
-    // cy.contains('BROWN, Liana').click();
-
     cy.logout_coordinator();
   });
+
+  it('contains the filters specific to emcr', () => {
+    cy.login_coordinator();
+
+    cy.contains('Search By Name').should('exist');
+    cy.contains('Region').should('exist');
+    cy.contains('Home Location').should('exist');
+    cy.contains('Availability').should('exist');
+    cy.contains('Function & Experience Level').should('exist');
+    cy.contains('Availability').should('exist');
+    cy.contains('Availability Date Range').should('exist');
+    cy.logout_coordinator();
+  })
 });

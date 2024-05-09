@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Region } from '../common/enums';
+import { IsOptional } from 'class-validator';
+import { FireCentre } from '../common/enums';
+import { Region } from '../common/enums/emcr';
 
 export class LocationRO {
   @ApiProperty({
@@ -17,9 +19,18 @@ export class LocationRO {
   locationName: string;
 
   @ApiProperty({
-    description: 'Region of location',
-    required: true,
-    example: Region.SWE,
+    description: 'Emcr specific region of a location',
+
+    example: Region,
   })
+  @IsOptional()
   region: Region;
+
+  @ApiProperty({
+    description: 'Fire centre of location',
+
+    example: FireCentre.CARIBOO,
+  })
+  @IsOptional()
+  fireCentre: FireCentre;
 }

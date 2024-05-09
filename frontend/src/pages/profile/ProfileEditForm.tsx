@@ -22,7 +22,7 @@ export const ProfileEditForm = ({
   const { locations, regions } = useGetFilters();
   const initialValues: Personnel = {
     ...personnel,
-    applicationDate: datePST(personnel.applicationDate as Date, true),
+    dateApplied: datePST(personnel.dateApplied as Date, true),
     primaryPhone:
       personnel?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     secondaryPhone:
@@ -80,7 +80,7 @@ export const ProfileEditForm = ({
     });
 
     // disabled field
-    delete values.applicationDate;
+    delete values.dateApplied;
     if (values.remoteOnly === 'true') {
       values.remoteOnly = true;
     }
@@ -133,8 +133,8 @@ export const ProfileEditForm = ({
               <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-6">
                 <TextInput
                   {...props}
-                  {...fields.applicationDate}
-                  error={errors.applicationDate}
+                  {...fields.dateApplied}
+                  error={errors.dateApplied}
                 />
                 <Select
                   {...props}

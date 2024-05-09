@@ -1,21 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsEnum,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsEnum, IsOptional, Length } from 'class-validator';
 import { format } from 'date-fns';
-import {
-  AvailabilityType,
-  Experience,
-  FunctionName,
-  Region,
-  Status,
-} from '../../common/enums';
+import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { Status } from '../../common/enums/status.enum';
 import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
@@ -53,55 +40,4 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   availabilityToDate: string;
-
-  @ApiPropertyOptional({
-    description: 'Regions to search personnel from',
-    example: `${Region.NEA},${Region.NWE}`,
-  })
-  @IsOptional()
-  @IsArray()
-  @IsEnum(Region, { each: true })
-  @Transform(({ value }) =>
-    Array.isArray(value)
-      ? value
-      : value
-          .trim()
-          .split(', ')
-          .map((type) => Region[type]),
-  )
-  region: Region;
-
-  @ApiPropertyOptional({
-    description: 'Locations to search personnel from',
-    example: `Abbotsford, Victoria`,
-  })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @Transform(({ value }) =>
-    Array.isArray(value)
-      ? value
-      : value
-          .trim()
-          .split(', ')
-          .map((type) => type),
-  )
-  location: string;
-
-  @ApiPropertyOptional({
-    description: 'Function name to search personnel from',
-    type: FunctionName,
-    example: FunctionName.OPERATIONS,
-  })
-  @IsOptional()
-  function: FunctionName;
-
-  @ApiPropertyOptional({
-    description: 'Experience level to search personnel from',
-    type: Experience,
-    example: Experience.INTERESTED,
-  })
-  @IsEnum(Experience)
-  @IsOptional()
-  experience: Experience;
 }

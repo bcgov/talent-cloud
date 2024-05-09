@@ -1,17 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { format } from 'date-fns';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
 import { Repository } from 'typeorm';
 import { CreateFormDTO } from './form.dto';
 import { FormSubmissionEventPayload, IntakeFormData } from './interface';
 import { Experience, Ministry, UnionMembership } from '../common/enums';
 import { Form } from '../database/entities/form.entity';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { FunctionService } from '../function/function.service';
 import { AppLogger } from '../logger/logger.service';
-import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
-import { PersonnelExperienceDTO } from '../personnel/dto/personnel-experiences.dto';
+import { CreatePersonnelDTO } from '../personnel';
+import { EmcrPersonnelExperienceDTO } from '../personnel/dto/emcr';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
 
@@ -27,7 +26,6 @@ export class FormService {
   ) {
     this.logger.setContext(FormService.name);
   }
-
   /**
    * process form submission event payload
    * @param eventPayload
@@ -37,7 +35,6 @@ export class FormService {
       `${this.processEventPayload.name}, Submission ID: ${eventPayload.submissionId}, form ID: ${eventPayload.formId}`,
     );
     const { submissionId, formId } = eventPayload;
-
     const requestFormData = await axios.get(
       `${process.env.CHEFS_API}/app/api/v1/submissions/${submissionId}`,
       {
@@ -48,7 +45,6 @@ export class FormService {
       },
     );
     this.logger.log(`Received form data from submission event`);
-
     requestFormData &&
       this.processFormData({
         submissionId,
@@ -97,33 +93,25 @@ export class FormService {
       deploymentPreferences,
       other,
     } = data;
-
     const workLocation = await this.locationService.getLocationByName(
       workDetails.workLocation,
     );
-
     const homeLocation = await this.locationService.getLocationByName(
       personalDetails.homeLocation,
     );
-
     const functions = await this.functionService.getFunctions();
-
     const interestedIn = Object.keys(roles).filter(
       (role) => roles[role] === true,
     );
-
-    const functionsArray: PersonnelExperienceDTO[] = functions
+    const functionsArray: EmcrPersonnelExperienceDTO[] = functions
       .filter((func) => interestedIn.includes(func.abbreviation))
       .map((func) => ({
         functionId: func.id,
         experienceType: Experience.INTERESTED,
       }));
-
     const createPersonnelDTO: CreatePersonnelDTO = {
       firstName: personalDetails.firstName,
       lastName: personalDetails.lastName,
-      workLocation: workLocation,
-      homeLocation: homeLocation,
       ministry: Object.values(Ministry)[0],
       primaryPhone: personalDetails.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
       secondaryPhone:
@@ -133,37 +121,34 @@ export class FormService {
       supervisorFirstName: supervisorInfo?.supervisorFirstName,
       supervisorLastName: supervisorInfo?.supervisorLastName,
       supervisorEmail: supervisorInfo?.supervisorEmail,
-      dateJoined: undefined,
       unionMembership: UnionMembership[workDetails.unionMembership],
       remoteOnly: deploymentPreferences.remoteOnly,
       willingToTravel: deploymentPreferences.willingToTravel,
-      firstNationExperienceLiving:
-        experience.firstNations?.living === ''
-          ? false
-          : (experience.firstNations?.living as boolean),
-      firstNationExperienceWorking:
-        experience.firstNations?.working === ''
-          ? false
-          : (experience.firstNations?.working as boolean),
+      jobTitle: workDetails.jobTitle,
+      driverLicense: other.dl,
+      intakeForm: form,
+    };
+    const emcrData = {
+      applicationDate: new Date(),
       peccExperience:
         experience.pecc === '' ? false : (experience.pecc as boolean),
       preocExperience:
         experience.preoc === '' ? false : (experience.preoc as boolean),
       emergencyExperience:
         experience.emergency === '' ? false : (experience.emergency as boolean),
-      jobTitle: workDetails.jobTitle,
-      driverLicense: other.dl.join(';'),
       firstAidLevel: other.firstAid.level,
       firstAidExpiry: other.firstAid.expiryDate,
       psychologicalFirstAid: other.pfa === '' ? false : (other.pfa as boolean),
-      intakeForm: form,
-      skillsAbilities: '',
       coordinatorNotes: '',
       logisticsNotes: '',
       trainings: [],
-      applicationDate: new Date(),
       experiences: functionsArray,
+      homeLocation,
+      workLocation,
     };
+    // TODO create EMCR personnel + BCWS personnel
+    // TODO remove console.log when the above TODO is complete
+    console.log(emcrData);
     try {
       this.logger.log(`Form data saved successfully`);
       return await this.personnelService.createPersonnel([createPersonnelDTO]);

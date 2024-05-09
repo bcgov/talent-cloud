@@ -68,8 +68,8 @@ export const EditProfileValidationSchema = Yup.object().shape({
 });
 
 export const fields = {
-  applicationDate: {
-    name: 'applicationDate',
+  dateApplied: {
+    name: 'dateApplied',
     label: 'Date Applied',
     type: 'text',
     autocomplete: 'off',

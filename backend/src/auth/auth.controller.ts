@@ -1,8 +1,7 @@
 import { Request, Controller, Get, NotFoundException } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RequestWithRoles, Role } from './interface';
+import { RequestWithRoles } from './interface';
 import { UserInfoRO } from './ro/user-info.ro';
-import { Roles } from './roles.decorator';
 
 @ApiTags('Auth API')
 @Controller('auth')
@@ -20,20 +19,19 @@ export class AuthController {
         roles: {
           type: 'array',
           items: {
-            type: 'string',
+            type: 'varchar',
           },
         },
         username: {
-          type: 'string',
+          type: 'varchar',
         },
       },
     },
   })
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @Get('userInfo')
   async getRole(@Request() req: RequestWithRoles): Promise<UserInfoRO> {
     try {
-      return { role: req.role, username: req.username };
+      return { role: req.role, username: req.username, program: req.program };
     } catch (e) {
       throw new NotFoundException({
         ...e,
