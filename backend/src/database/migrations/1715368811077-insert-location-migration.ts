@@ -124,12 +124,6 @@ export class Migration1715368811077 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // await queryRunner.query(
-    //     `ALTER TABLE "bcws_personnel" DROP CONSTRAINT "FK_4497c09d4ea63c7187360afc685"`,
-    // );
-    // await queryRunner.query(
-    //     `ALTER TABLE "bcws_personnel" DROP CONSTRAINT "FK_874eebc6d744a86c688612247c5"`,
-    // );
     await queryRunner.query(`
         DELETE FROM location WHERE location_name NOT IN (
             '100 Mile House',
