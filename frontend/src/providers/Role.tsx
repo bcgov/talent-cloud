@@ -1,40 +1,55 @@
 import type { Role } from '@/common';
-import { useAxios } from '@/hooks/useAxios';
 
-import type { ReactElement } from 'react';
-import { createContext, useEffect, useMemo, useState } from 'react';
+import type { Dispatch, ReactElement, SetStateAction } from 'react';
 
+import { createContext, useState } from 'react';
+export enum Program {
+  BCWS = 'bcws',
+  EMCR = 'emcr',
+  ADMIN = 'admin',
+}
 export const RoleContext = createContext<{
-  role?: Role;
+  role: Role | undefined;
+  setRole: (role: Role | undefined) => void;
+  program: Program | undefined;
+  setProgram: (program: Program | undefined) => void;
+  route: Program | undefined;
+  setRoute: Dispatch<SetStateAction<Program | undefined>>;
   username: string;
-}>({ role: undefined, username: '' });
+  setUsername: (username: string) => void;
+}>({
+  role: undefined,
+  program: undefined,
+  username: '',
+  setRole: () => {},
+  setProgram: () => {},
+  setUsername: () => {},
+  route: undefined,
+  setRoute: () => {},
+});
 
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
-  const { AxiosPrivate } = useAxios();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { username, role },
-        } = await AxiosPrivate.get('/auth/userInfo');
-        setUsername(username);
-        setRole(role as Role);
-      } catch (e: unknown) {
-        console.log(e);
-      }
-    })();
-  }, [username, AxiosPrivate]);
-
-  const value = useMemo(
-    () => ({
-      role,
-      username,
-    }),
-    [role],
+  const [program, setProgram] = useState<Program>();
+  const [route, setRoute] = useState<Program | undefined>(
+    (localStorage.getItem('route') as Program) ?? Program.BCWS,
   );
 
-  return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
+  return (
+    <RoleContext.Provider
+      value={{
+        role,
+        setRole,
+        username,
+        setUsername,
+        program,
+        setProgram,
+        route,
+        setRoute,
+      }}
+    >
+      {children}
+    </RoleContext.Provider>
+  );
 };

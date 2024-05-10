@@ -2,7 +2,6 @@ import type { ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
-
 import { truncatePageRange } from './utils';
 import {
   DashboardColumns,
@@ -15,8 +14,9 @@ import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
+import type { Program } from '@/providers';
 
-export const useTable = () => {
+export const useTable = (route: Program | undefined) => {
   const { AxiosPrivate } = useAxios();
 
   const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ export const useTable = () => {
     try {
       const {
         data: { personnel, count },
-      } = await AxiosPrivate.get(`/personnel?${searchParamsUrl}`);
+      } = await AxiosPrivate.get(`/personnel/${route}?${searchParamsUrl}`);
       const rowsPerPage = filterValues?.rowsPerPage ?? 25;
 
       const totalPages = Math.ceil(count[filterValues.status] / rowsPerPage);
@@ -117,7 +117,7 @@ export const useTable = () => {
 
   useEffect(() => {
     if (debouncedFilters) debouncedFiltersAsync();
-  }, [debouncedFilters]);
+  }, [debouncedFilters, route]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
     setFilterValues({ ...filterValues, ...change });
@@ -244,6 +244,7 @@ export const useTable = () => {
     selectedTab,
     onChangeTab,
     handleChangeRowsPerPage,
+
     onClear: () =>
       setFilterValues({
         rowsPerPage: 25,

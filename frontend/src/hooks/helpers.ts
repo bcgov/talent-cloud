@@ -183,9 +183,7 @@ export const renderCells = (
     dateApplied: {
       key: DashboardColumns.DATE_APPLIED,
       columnName: DashboardColumns.DATE_APPLIED,
-      value:
-        personnel.dateApplied &&
-        datePST(personnel.dateApplied as Date, true),
+      value: personnel.dateApplied && datePST(personnel.dateApplied as Date, true),
       className: tableClass(DashboardColumns.DATE_APPLIED, ''),
     },
     dateApproved: {

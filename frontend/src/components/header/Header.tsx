@@ -8,17 +8,19 @@ import { Menu } from '@headlessui/react';
 import { headerLink } from '@/common/links';
 import { logout } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
+import { useRole } from '@/hooks';
+import { Toggle } from '../toggle/Toggle';
+import { Program } from '@/providers';
 
 export const Header = ({
   appName,
-  username,
   authenticated,
 }: {
   appName: string;
-  username?: string;
   authenticated?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
+  const { username, program, handleToggle, route } = useRole();
 
   const showMenu = () => {
     setOpen(!open);
@@ -45,7 +47,13 @@ export const Header = ({
                 <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
-
+            {program === Program.ADMIN && (
+              <Toggle
+                label={route}
+                value={route === Program.BCWS}
+                handleToggle={handleToggle}
+              />
+            )}
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {username && (
                 <UserMenu username={username} logout={() => logout(keycloak)} />

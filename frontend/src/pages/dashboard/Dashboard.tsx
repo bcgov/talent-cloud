@@ -4,6 +4,7 @@ import { useRole, useTable } from '@/hooks';
 import { Role } from '@/common';
 
 const Dashboard = () => {
+  const { route, role } = useRole();
   const {
     filterValues,
     tableData,
@@ -22,9 +23,7 @@ const Dashboard = () => {
     tabs,
     counts,
     handleChangeRowsPerPage,
-  } = useTable();
-
-  const { role } = useRole();
+  } = useTable(route);
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
