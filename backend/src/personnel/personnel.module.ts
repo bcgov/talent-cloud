@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
+import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity } from '../database/entities/bcws';
 import { PersonnelController } from './personnel.controller';
 import { PersonnelService } from './personnel.service';
 
