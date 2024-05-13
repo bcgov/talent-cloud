@@ -24,7 +24,7 @@ import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { Program, RequestWithRoles, TokenType } from '../auth/interface';
+import { Program, RequestWithRoles, Role, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
@@ -34,6 +34,8 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { EmcrPersonnelEntity } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
+import { Public } from 'src/auth/public.decorator';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -104,7 +106,7 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get personnel',
+    summary: 'Get emcr personnel',
     description: 'Returns the personnel data to the dashboard view',
   })
   @ApiResponse({
@@ -113,7 +115,7 @@ export class PersonnelController {
   })
   @Get('/emcr')
   @UsePipes(new QueryTransformPipe())
-  async getPersonnel(
+  async getEmcrPersonnel(
     @Request() req: RequestWithRoles,
     @Query() query?: GetEmcrPersonnelDTO,
   ): Promise<GetPersonnelRO> {
@@ -126,7 +128,45 @@ export class PersonnelController {
         [Status.INACTIVE]: number;
         [Status.PENDING]: number;
       };
-    } = await this.personnelService.getPersonnel(query);
+    } = await this.personnelService.getEmcrPersonnel(query);
+
+    return {
+      personnel: queryResponse.personnel.map((itm) =>
+        itm.toResponseObject(req.role),
+      ),
+      count: {
+        [Status.ACTIVE]: queryResponse.count[Status.ACTIVE],
+        [Status.INACTIVE]: queryResponse.count[Status.INACTIVE],
+        [Status.PENDING]: queryResponse.count[Status.PENDING],
+      },
+      rows: query.rows,
+      page: query.page,
+    };
+  }
+
+  @ApiOperation({
+    summary: 'Get emcr personnel',
+    description: 'Returns the personnel data to the dashboard view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @Get('/bcws')
+  @UsePipes(new QueryTransformPipe())
+  async getBcwsPersonnel(
+    @Request() req: RequestWithRoles,
+    @Query() query?: GetBcwsPersonnelDTO,
+  ): Promise<any> {
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    console.log('GET');
+    const queryResponse: {
+      personnel: any[];
+      count: {
+        [Status.ACTIVE]: number;
+        [Status.INACTIVE]: number;
+        [Status.PENDING]: number;
+      };
+    } = await this.personnelService.getBcwsPersonnel(query);
 
     return {
       personnel: queryResponse.personnel.map((itm) =>
