@@ -30,7 +30,6 @@ import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 export const rowData = (
   locations: LocationEntity[],
   functions: EmcrFunctionEntity[],
-  bcwsLocations: LocationEntity[],
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
@@ -52,8 +51,8 @@ export const rowData = (
   const dateApplied = faker.date.past();
 
   const bcwsData: CreatePersonnelBcwsDTO = {
-    homeFireCentre: faker.helpers.arrayElement(bcwsLocations),
-    workFireCentre: faker.helpers.arrayElement(bcwsLocations),
+    homeFireCentre: faker.helpers.arrayElement(locations),
+    workFireCentre: faker.helpers.arrayElement(locations),
     dateApplied: dateApplied,
     dateApproved:
       status !== Status.PENDING
@@ -297,7 +296,6 @@ export const createLanguages = () => {
 export const handler = (
   locations: LocationEntity[],
   functions: EmcrFunctionEntity[],
-  bcwsLocations: LocationEntity[],
   seededBcwsRoles: BcwsRoleEntity[],
   seededBcwsTools: BcwsToolsEntity[],
   seededBcwsCertifications: BcwsCertificationEntity[],
@@ -318,7 +316,6 @@ export const handler = (
       rowData(
         locations,
         functions,
-        bcwsLocations,
         seededBcwsRoles,
         seededBcwsTools,
         seededBcwsCertifications,
