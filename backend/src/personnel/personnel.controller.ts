@@ -15,7 +15,6 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { BcwsPersonnelEntity } from 'src/database/entities/bcws';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
@@ -30,10 +29,8 @@ import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
-import { Status } from '../common/enums/status.enum';
 
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { EmcrPersonnelEntity } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 

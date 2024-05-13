@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
-import { BcwsPersonnelEntity } from 'src/database/entities/bcws';
+import { BcwsPersonnelEntity } from '../database/entities/bcws';
 import { Brackets, DeleteResult, In, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
