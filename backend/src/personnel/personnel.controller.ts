@@ -35,7 +35,6 @@ import { EmcrPersonnelEntity } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
-import { Public } from 'src/auth/public.decorator';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
