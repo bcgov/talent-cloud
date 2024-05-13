@@ -31,6 +31,7 @@ export class BcwsSectionsAndRolesEntity {
   @Column({
     name: 'rank',
     type: 'int',
+    nullable: true,
   })
   rank: number;
 

@@ -144,7 +144,7 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get emcr personnel',
+    summary: 'Get bcws personnel',
     description: 'Returns the personnel data to the dashboard view',
   })
   @ApiResponse({

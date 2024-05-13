@@ -236,10 +236,7 @@ export class PersonnelService {
       );
     }
 
-    if (query.section && query.role) {
-      qb.andWhere('role.section = :section', {
-        section: query.section,
-      });
+    if (query.role) {
       qb.andWhere('role.name = :role', {
         role: query.role,
       });

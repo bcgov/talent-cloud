@@ -1,10 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { GetPersonnelDTO } from '../get-personnel.dto';
-import { Experience, FunctionName, Region } from '../../../common/enums/emcr';
-import { BcwsRole, FireCentre, Section } from '../../../common/enums/bcws';
+import { BcwsRole, FireCentre } from '../../../common/enums/bcws';
 
 export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
   @ApiPropertyOptional({
@@ -42,21 +41,11 @@ export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
   location: string;
 
   @ApiPropertyOptional({
-    description: 'Section to search personnel from',
-    type: Section,
-    example: Section.COMMAND,
-  })
-  @ValidateIf(o => !!o.role)
-  @IsNotEmpty()
-  section: Section;
-
-  @ApiPropertyOptional({
     description: 'Role to search personnel from',
     type: BcwsRole,
     example: BcwsRole.AVIATION_ASSISTANT,
   })
   @IsEnum(BcwsRole)
-  @ValidateIf(o => !!o.section)
-  @IsNotEmpty()
+  @IsOptional()
   role: BcwsRole;
 }
