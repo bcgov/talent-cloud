@@ -13,6 +13,7 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { LoggerModule } from '../logger/logger.module';
+import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { LoggerModule } from '../logger/logger.module';
       EmcrPersonnelEntity,
       EmcrExperienceEntity,
       EmcrTrainingEntity,
+      BcwsPersonnelEntity,
+      BcwsSectionsAndRolesEntity,
       LocationEntity,
     ]),
   ],

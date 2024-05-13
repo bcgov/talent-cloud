@@ -91,6 +91,33 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'liason_email', type: 'varchar', length: 50, nullable: true })
   liaisonEmail?: string;
 
+  @Column({
+    name: 'emergency_contact_first_name',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  emergencyContactFirstName?: string;
+
+  @Column({
+    name: 'emergency_contact_last_name',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  emergencyContactlastName?: string;
+
+  @Column({
+    name: 'emergency_contact_phone_number',
+    type: 'varchar',
+    length: 10,
+    nullable: true,
+  })
+  emergencyContactPhoneNumber?: string;
+
+  @Column({ name: 'emergency_contact_relationship', type: 'varchar', length: 50, nullable: true })
+  emergencyContactRelationship?: string;
+
   @Column({ name: 'coordinator_notes', type: 'text', nullable: true })
   coordinatorNotes?: string;
 
@@ -151,8 +178,8 @@ export class BcwsPersonnelEntity {
       willingnessStatement: this.willingnessStatement,
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
-      ministry: this.division.toResponseObject().ministry,
-      division: this.division.toResponseObject().division,
+      ministry: this.division?.toResponseObject().ministry,
+      division: this.division?.toResponseObject().division,
       orientation: this.orientation,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],

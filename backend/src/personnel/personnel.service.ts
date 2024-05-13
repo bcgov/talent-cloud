@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
-import { Brackets, DeleteResult, In, Repository, UpdateResult } from 'typeorm';
+import { Brackets, DeleteResult, In, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import {
   EmcrPersonnelExperienceDTO,
@@ -24,12 +24,16 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
+import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
+import { BcwsPersonnelEntity } from 'src/database/entities/bcws';
 
 @Injectable()
 export class PersonnelService {
   constructor(
     @InjectRepository(PersonnelEntity)
     private personnelRepository: Repository<PersonnelEntity>,
+    @InjectRepository(BcwsPersonnelEntity)
+    private bcwsPersonnelRepository: Repository<BcwsPersonnelEntity>,
     @InjectRepository(EmcrPersonnelEntity)
     private emcrPersonnelRepository: Repository<EmcrPersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
@@ -131,14 +135,15 @@ export class PersonnelService {
       console.log(e);
     }
   }
+
   /**
-   * Get Personnel
+   * Get EMCR Personnel
    * Given specific queries, get associated personnel and their function experiences
    * @param query Includes pagination query, ie. page and number of rows
    * @returns {EmcrPersonnelEntity[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
-  async getPersonnel(query: GetEmcrPersonnelDTO): Promise<{
+  async getEmcrPersonnel(query: GetEmcrPersonnelDTO): Promise<{
     personnel: EmcrPersonnelEntity[];
     count: {
       [Status.ACTIVE]: number;
@@ -153,19 +158,8 @@ export class PersonnelService {
     qb.leftJoinAndSelect('emcr_personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('emcr_personnel.homeLocation', 'location');
-    // qb.leftJoinAndSelect('emcr_personnel.trainings', 'trainings');
 
-    if (query.name) {
-      qb.andWhere(
-        new Brackets((qb) => {
-          qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', {
-            name: `${query.name}%`,
-          }).orWhere('LOWER(personnel.lastName) LIKE LOWER(:name)', {
-            name: `${query.name}%`,
-          });
-        }),
-      );
-    }
+    this.addQueryBuilderCommonFilters(qb, query.name, query.availabilityType, query.availabilityFromDate, query.availabilityToDate);
 
     if (query.region?.length) {
       qb.andWhere('emcr_personnel.homeLocation.region IN (:...regions)', {
@@ -192,67 +186,181 @@ export class PersonnelService {
       });
     }
 
+    const { personnel, count} = await this.getPersonnelForProgram<EmcrPersonnelEntity>(
+      'EMCR',
+      qb,
+      query.rows,
+      query.page,
+      query.status
+    );
+
+    return { personnel, count };
+  }
+
+  /**
+   * Get BCWS Personnel
+   * Given specific queries, get associated personnel and their function experiences
+   * @param query Includes pagination query, ie. page and number of rows
+   * @returns {BcwsPersonnelEntity[]} List of personnel
+   * @returns {number} Count of total personnel search applies to
+   */
+  async getBcwsPersonnel(query: GetBcwsPersonnelDTO): Promise<{
+    personnel: BcwsPersonnelEntity[];
+    count: {
+      [Status.ACTIVE]: number;
+      [Status.INACTIVE]: number;
+      [Status.PENDING]: number;
+    }
+  }> {
+    this.logger.log(`Query: ${JSON.stringify(query)}`);
+    const qb =
+      this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
+    qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
+    qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
+    qb.leftJoinAndSelect('roles.role', 'role');
+    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'homeFireCentre');
+
+    this.addQueryBuilderCommonFilters(qb, query.name, query.availabilityType, query.availabilityFromDate, query.availabilityToDate);
+
+    if (query.fireCentre?.length) {
+      qb.andWhere('bcws_personnel.homeFireCentre.fireCentre IN (:...fireCentres)', {
+        fireCentres: query.fireCentre,
+      });
+    }
+    if (query.location?.length) {
+      qb.andWhere(
+        'bcws_personnel.homeFireCentre.locationName IN (:...homeLocations)',
+        {
+          homeLocations: query.location,
+        },
+      );
+    }
+
+    if (query.section && query.role) {
+      qb.andWhere('role.section = :section', {
+        section: query.section,
+      });
+      qb.andWhere('role.name = :role', {
+        role: query.role,
+      });
+    }
+
+    const { personnel, count } = await this.getPersonnelForProgram<BcwsPersonnelEntity>(
+      'BCWS',
+      qb,
+      query.rows,
+      query.page,
+      query.status
+    );
+    return { personnel, count };
+  }
+
+  /**
+   * With query builder, add clauses for common fields
+   * @returns {SelectQueryBuilder} Query builder with added clauses
+   */
+  addQueryBuilderCommonFilters<T>(
+    queryBuilder: SelectQueryBuilder<T>,
+    name?: string,
+    availabilityType?: AvailabilityType,
+    availabilityFromDate?: string,
+    availabilityToDate?: string,
+  ): SelectQueryBuilder<T> {
+    if (name) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where('LOWER(personnel.firstName) LIKE LOWER(:name)', {
+            name: `${name}%`,
+          }).orWhere('LOWER(personnel.lastName) LIKE LOWER(:name)', {
+            name: `${name}%`,
+          });
+        }),
+      );
+    }
+
     /**
      * If we have an availability type and a date range, we will use the date range + type
      */
-
-    if (query.availabilityType) {
-      qb.leftJoinAndSelect('personnel.availability', 'availability');
-      qb.andWhere('availability.availabilityType = :availabilityType', {
-        availabilityType: query.availabilityType,
+    if (availabilityType) {
+      queryBuilder.leftJoinAndSelect('personnel.availability', 'availability');
+      queryBuilder.andWhere('availability.availabilityType = :availabilityType', {
+        availabilityType: availabilityType,
       });
-      if (query.availabilityFromDate && query.availabilityToDate) {
+      if (availabilityFromDate && availabilityToDate) {
         this.logger.log(
-          `Availability From Date: ${query.availabilityFromDate} Availability To Date: ${query.availabilityToDate}`,
+          `Availability From Date: ${availabilityFromDate} Availability To Date: ${availabilityToDate}`,
         );
 
-        qb.andWhere('availability.date >= :from AND availability.date <= :to', {
-          from: query.availabilityFromDate,
-          to: query.availabilityToDate,
+        queryBuilder.andWhere('availability.date >= :from AND availability.date <= :to', {
+          from: availabilityFromDate,
+          to: availabilityToDate,
         });
       } else {
-        qb.andWhere('availability.date = :date', {
+        queryBuilder.andWhere('availability.date = :date', {
           date: datePST(new Date()),
         });
       }
     } else {
-      qb.leftJoinAndSelect(
+      queryBuilder.leftJoinAndSelect(
         'personnel.availability',
         'availability',
         'availability.date = :date',
         { date: datePST(new Date()) },
       );
     }
+    return queryBuilder;
+  }
+  
+  /**
+   * From query builder, get personnel and counts of each status
+   * @returns {T[]} List of personnel
+   * @returns {number} Count of total personnel search applies to
+   */
+  async getPersonnelForProgram<T>(
+    program: 'BCWS' | 'EMCR',
+    queryBuilder: SelectQueryBuilder<T>,
+    rows: number,
+    page: number,
+    status: Status
+  ): Promise<{
+    personnel: T[];
+    count: {
+      [Status.ACTIVE]: number;
+      [Status.INACTIVE]: number;
+      [Status.PENDING]: number;
+    }
+  }> {
+    const tableName = program === 'BCWS' ? 'bcws_personnel' : 'emcr_personnel';
 
-    if (query.status === Status.PENDING) {
-      qb.orderBy('emcr_personnel.dateApplied', 'ASC');
-      qb.addOrderBy('personnel.lastName', 'ASC');
-      qb.addOrderBy('personnel.firstName', 'ASC');
+    if (status === Status.PENDING) {
+      queryBuilder.orderBy('bcws_personnel.dateApplied', 'ASC');
+      queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+      queryBuilder.addOrderBy('personnel.firstName', 'ASC');
     } else {
-      qb.orderBy('emcr_personnel.dateApproved', 'DESC');
-      qb.addOrderBy('personnel.lastName', 'ASC');
-      qb.addOrderBy('personnel.firstName', 'ASC');
+      queryBuilder.orderBy('bcws_personnel.dateApproved', 'DESC');
+      queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+      queryBuilder.addOrderBy('personnel.firstName', 'ASC');
     }
 
-    const personnel = await qb
-      .take(query.rows)
-      .skip((query.page - 1) * query.rows)
-      .andWhere('emcr_personnel.status = :status', {
-        status: query.status,
+    const personnel = await queryBuilder
+      .take(rows)
+      .skip((page - 1) * rows)
+      .andWhere(`${tableName}.status = :status`, {
+        status: status,
       })
       .getMany();
-    const activeCount = await qb
-      .andWhere('emcr_personnel.status = :status', {
+    const activeCount = await queryBuilder
+      .andWhere(`${tableName}.status = :status`, {
         status: Status.ACTIVE,
       })
       .getCount();
-    const inactiveCount = await qb
-      .andWhere('emcr_personnel.status = :status', {
+    const inactiveCount = await queryBuilder
+      .andWhere(`${tableName}.status = :status`, {
         status: Status.INACTIVE,
       })
       .getCount();
-    const pendingCount = await qb
-      .andWhere('emcr_personnel.status = :status', {
+    const pendingCount = await queryBuilder
+      .andWhere(`${tableName}.status = :status`, {
         status: Status.PENDING,
       })
       .getCount();
