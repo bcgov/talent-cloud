@@ -19,6 +19,18 @@ Deployment works by tagging a commit `dev`, `test`, or `prod`. This can be done 
 On merge to main, `ci-deploy` will update BCs and DCs if necessary, and then kick off a build on Openshift on tools. Once built, this sits with the `latest` tag.
 Tagging on GitHub will then kick off a flow where the image of a certain commit is tagged with the environment tag. The deployment configs are set such that when an image is tagged with the appropriate environment tag, it promotes that image and deploys it.
 
+### Versioning
+
+Tag the branch that you would like to deploy with the correct version and push to github (ie: v1.2.0) 
+
+Follow this convention: v<major>/<minor>/<patch> ie: v1.1.1 
+
+Create a release on github with the same name. Select the pushed tag as your tag and 'auto' for the previous tag. Generate the version notes. This should show all  of the commits between the last version and your current version. Save the release. You will see the code artifacts attached as zip files. 
+
+When you are ready to deploy, run make tag-prod (assuming you have already ran make tag-dev/ make tag-test and QA has signed off) from the current version on your local. This will update the prod-tag with your current version, and the original tag/release that you have created will remain unchanged and can be used to in order to track the changes and in case you should ever need to roll back to a previous version. 
+
+In Jira, create the release using the same version, and ensure all of the tickets (which should be automatically linked to github via the branch name) have been tagged with this version.
+
 ### Database and Backups
 
 Database backups are handled with the BCGov Backup Container [Repo](https://github.com/BCDevOps/backup-container). We create a build in our `tools` environment and a deployment in our respective environments. This deployment creates a pod that includes a job that runs backups daily, weekly, and monthly.
