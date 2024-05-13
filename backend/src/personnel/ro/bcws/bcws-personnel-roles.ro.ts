@@ -38,5 +38,5 @@ export class BcwsPersonnelRoleRO {
     example: 1,
     type: 'number'
   })
-  rank: number;
+  rank?: number;
 }

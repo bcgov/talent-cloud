@@ -33,7 +33,7 @@ export class BcwsSectionsAndRolesEntity {
     type: 'int',
     nullable: true,
   })
-  rank: number;
+  rank?: number;
 
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
