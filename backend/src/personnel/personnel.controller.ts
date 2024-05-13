@@ -15,7 +15,9 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { BcwsPersonnelEntity } from 'src/database/entities/bcws';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto/emcr';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -24,7 +26,7 @@ import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
-import { Program, RequestWithRoles, Role, TokenType } from '../auth/interface';
+import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
@@ -34,7 +36,6 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { EmcrPersonnelEntity } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -155,11 +156,11 @@ export class PersonnelController {
   async getBcwsPersonnel(
     @Request() req: RequestWithRoles,
     @Query() query?: GetBcwsPersonnelDTO,
-  ): Promise<any> {
+  ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     console.log('GET');
     const queryResponse: {
-      personnel: any[];
+      personnel: BcwsPersonnelEntity[];
       count: {
         [Status.ACTIVE]: number;
         [Status.INACTIVE]: number;

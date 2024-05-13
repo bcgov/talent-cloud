@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
 import { PersonnelController } from './personnel.controller';
 import { PersonnelService } from './personnel.service';
 
@@ -13,7 +14,6 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { LoggerModule } from '../logger/logger.module';
-import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
 
 @Module({
   imports: [
