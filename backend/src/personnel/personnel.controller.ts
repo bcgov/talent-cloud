@@ -121,24 +121,13 @@ export class PersonnelController {
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    const queryResponse: {
-      personnel: EmcrPersonnelEntity[];
-      count: {
-        [Status.ACTIVE]: number;
-        [Status.INACTIVE]: number;
-        [Status.PENDING]: number;
-      };
-    } = await this.personnelService.getEmcrPersonnel(query);
+    const { personnel, count } = await this.personnelService.getEmcrPersonnel(query);
 
     return {
-      personnel: queryResponse.personnel.map((itm) =>
+      personnel: personnel.map((itm) =>
         itm.toResponseObject(req.role),
       ),
-      count: {
-        [Status.ACTIVE]: queryResponse.count[Status.ACTIVE],
-        [Status.INACTIVE]: queryResponse.count[Status.INACTIVE],
-        [Status.PENDING]: queryResponse.count[Status.PENDING],
-      },
+      count,
       rows: query.rows,
       page: query.page,
     };
@@ -159,24 +148,13 @@ export class PersonnelController {
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     console.log('GET');
-    const queryResponse: {
-      personnel: BcwsPersonnelEntity[];
-      count: {
-        [Status.ACTIVE]: number;
-        [Status.INACTIVE]: number;
-        [Status.PENDING]: number;
-      };
-    } = await this.personnelService.getBcwsPersonnel(query);
+    const { personnel, count } = await this.personnelService.getBcwsPersonnel(query);
 
     return {
-      personnel: queryResponse.personnel.map((itm) =>
+      personnel: personnel.map((itm) =>
         itm.toResponseObject(req.role),
       ),
-      count: {
-        [Status.ACTIVE]: queryResponse.count[Status.ACTIVE],
-        [Status.INACTIVE]: queryResponse.count[Status.INACTIVE],
-        [Status.PENDING]: queryResponse.count[Status.PENDING],
-      },
+      count,
       rows: query.rows,
       page: query.page,
     };
