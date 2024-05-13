@@ -254,6 +254,7 @@ export const createRoles = (bcwsRoles: BcwsRoleEntity[]) => {
     personnelRoles.push({
       roleId: role.id,
       expLevel: faker.helpers.arrayElement(Object.values(ExperienceLevel)),
+      rank: i+1,
     });
   }
   const uniqueRoles = new Set(personnelRoles.map((role) => role.roleId));

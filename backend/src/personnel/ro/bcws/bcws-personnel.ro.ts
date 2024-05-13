@@ -132,22 +132,6 @@ export class BcwsRO extends PersonnelRO {
   })
   orientation: boolean;
 
-  @ApiProperty({
-    description: 'Second choice role',
-    type: 'enum',
-    enum: BcwsRole,
-    example: BcwsRole.ACCOUNTS_PAYABLE,
-  })
-  secondChoiceRole: BcwsRole;
-
-  @ApiProperty({
-    description: 'First choice role',
-    type: 'enum',
-    enum: BcwsRole,
-    example: BcwsRole.ACCOUNTS_PAYABLE,
-  })
-  firstChoiceRole: BcwsRole;
-
   //TODO: Add the following properties
   @ApiProperty()
   tools?: BcwsPersonnelToolsRO;

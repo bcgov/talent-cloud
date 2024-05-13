@@ -31,4 +31,12 @@ export class BcwsPersonnelRoleRO {
     enum: ExperienceLevel,
   })
   expLevel: ExperienceLevel;
+
+  @ApiProperty({
+    description: 'Rank of choice for role (first, second, etc.)',
+    required: true,
+    example: 1,
+    type: 'number'
+  })
+  rank?: number;
 }
