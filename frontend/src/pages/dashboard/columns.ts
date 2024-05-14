@@ -31,7 +31,6 @@ export const cols = {
       DashboardColumns.NAME,
       DashboardColumns.FIRE_CENTRE,
       DashboardColumns.LOCATION,
-      DashboardColumns.ROLE,
       DashboardColumns.WILLINGNESS,
       DashboardColumns.RESPECTFUL,
       DashboardColumns.PARQ,

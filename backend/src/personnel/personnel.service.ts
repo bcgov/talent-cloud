@@ -232,7 +232,7 @@ export class PersonnelService {
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
-    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'homeFireCentre');
+    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'location');
     qb.leftJoinAndSelect('bcws_personnel.division', 'division');
 
     this.addQueryBuilderCommonFilters(
@@ -245,7 +245,7 @@ export class PersonnelService {
 
     if (query.fireCentre?.length) {
       qb.andWhere(
-        'bcws_personnel.homeFireCentre.fireCentre IN (:...fireCentres)',
+        'location.fireCentre IN (:...fireCentres)',
         {
           fireCentres: query.fireCentre,
         },
@@ -253,7 +253,7 @@ export class PersonnelService {
     }
     if (query.location?.length) {
       qb.andWhere(
-        'bcws_personnel.homeFireCentre.locationName IN (:...homeLocations)',
+        'location.locationName IN (:...homeLocations)',
         {
           homeLocations: query.location,
         },

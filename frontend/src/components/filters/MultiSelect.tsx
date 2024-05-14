@@ -36,7 +36,7 @@ export const MultiSelect = ({
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
-            maxChips={2}
+            maxChips={field.name === 'region' ? 2 : 1}
           />
           <MenuButton />
         </MenuHandler>

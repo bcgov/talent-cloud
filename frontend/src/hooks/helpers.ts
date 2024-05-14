@@ -200,7 +200,6 @@ export const renderCells = (
       cells.name,
       cells.fireCentre,
       cells.location,
-      cells.role,
       cells.willingnessStatement,
       cells.respectfulWorkplacePolicy,
       cells.parQ,

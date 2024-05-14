@@ -44,6 +44,7 @@ export const Filters = ({
     handleSetDates,
     resetType,
   } = changeHandlers;
+
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
@@ -60,7 +61,7 @@ export const Filters = ({
             <MultiSelect
               field={route === Route.BCWS ? filters.fireCentre : filters.region}
               values={
-                route === Route.BCWS ? filterValues.region : filterValues.fireCentre
+                route === Route.BCWS ? filterValues.fireCentre : filterValues.region
               }
               label={route === Route.BCWS ? 'Fire Centre' : 'Region'}
               onChange={handleMultiSelect}
