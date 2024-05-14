@@ -148,7 +148,7 @@ export const Table = ({
           ></th>
         </tr>
         <tr
-          className={`sticky px-6  bg-white  h-[48px] shadow-blue-gray-900 ${role === Role.COORDINATOR ? ' top-[225px]' : 'top-40'}`}
+          className={`sticky px-6  bg-white  h-[48px] shadow-blue-gray-900 ${role === Role.COORDINATOR ? ' top-[225px]' : ' top-40'}`}
         >
           {columns.map((name: DashboardColumns) => (
             <th
@@ -162,7 +162,7 @@ export const Table = ({
         </tr>
         <tr>
           <th
-            className={`sticky top-[280px] border-b-2 border-primaryBlue`}
+            className={`sticky ${role === Role.COORDINATOR ? ' top-[280px]' : ' top-[210px]'} border-b-2 border-primaryBlue`}
             colSpan={columns.length}
           ></th>
         </tr>
