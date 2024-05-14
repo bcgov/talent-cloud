@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1715451072374 implements MigrationInterface {
+export class DivisionMigration1715451072374 implements MigrationInterface {
   name = 'DivisionMigration1715451072374';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
