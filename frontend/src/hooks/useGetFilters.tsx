@@ -78,7 +78,7 @@ export const useGetFilters = () => {
       groupedOptions:
         route === Route.BCWS
           ? fireCentre.map((itm: FireCentre) => ({
-              label: FireCentreName[itm],
+              label: itm,
               options: locations
                 .filter((loc: Location) => {
                   return loc.fireCentre === itm;

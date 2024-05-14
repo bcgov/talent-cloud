@@ -44,6 +44,21 @@ export const Filters = ({
     handleSetDates,
     resetType,
   } = changeHandlers;
+  const getOptions = () => {
+    if (route === Route.BCWS) {
+      return filterValues.fireCentre && filterValues.fireCentre.length > 0
+        ? filters.location?.groupedOptions?.filter((itm) =>
+            filterValues?.fireCentre?.includes(itm.label),
+          )
+        : filters?.location?.groupedOptions;
+    } else {
+      return filterValues.region && filterValues.region.length > 0
+        ? filters.location?.groupedOptions?.filter((itm) =>
+            filterValues?.region?.includes(itm.label),
+          )
+        : filters?.location?.groupedOptions;
+    }
+  };
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
@@ -76,12 +91,7 @@ export const Filters = ({
               handleCloseMany={handleCloseMany}
               field={{
                 ...filters.location,
-                groupedOptions:
-                  filterValues.region && filterValues.region.length > 0
-                    ? filters.location?.groupedOptions?.filter((itm) =>
-                        filterValues?.region?.includes(itm.label),
-                      )
-                    : filters?.location?.groupedOptions,
+                groupedOptions: getOptions(),
               }}
               label="Home Location"
               values={filterValues.location}

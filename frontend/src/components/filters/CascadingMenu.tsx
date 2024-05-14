@@ -49,7 +49,15 @@ export const CascadingMenu = ({
         : `${value}: All`;
     }
   };
-
+  const handleClose = () => {
+    const event = {
+      target: {
+        name: field.name,
+        value: '',
+      },
+    } as unknown as ChangeEvent<HTMLInputElement>;
+    onChange(event);
+  };
   return (
     <>
       <span className="label">{label}</span>
@@ -57,7 +65,7 @@ export const CascadingMenu = ({
         <MenuHandler field={field} id={field.name}>
           {value ? (
             <Chip
-              handleClose={handleChange}
+              handleClose={handleClose}
               name={field.name}
               value={''}
               display={renderDisplay(value)}

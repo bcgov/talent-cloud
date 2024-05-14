@@ -31,7 +31,7 @@ export const menuItemClass: { [key: string]: string } = {
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   function: classes.menu.container,
   section: classes.menu.container,
-
+  role: classes.menu.container,
   availabilityDates:
     classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
   availabilityType:

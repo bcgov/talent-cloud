@@ -66,8 +66,14 @@ export const handleSearchParams = (
   }
   if (filterValues.role) {
     searchParamsUrl.set('role', filterValues.role);
+  } else {
+    searchParamsUrl.delete('role');
   }
-
+  if (filterValues.section) {
+    searchParamsUrl.set('section', filterValues.section);
+  } else {
+    searchParamsUrl.delete('section');
+  }
   if (filterValues?.status) {
     searchParamsUrl.set('status', filterValues.status);
   } else {

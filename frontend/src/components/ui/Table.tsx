@@ -47,7 +47,7 @@ export const Table = ({
       <table className="table-auto w-full max-w-[1388px] overflow-x-hidden border-separate border border-slate-500">
         <thead>
           <th
-            colSpan={columns.length + 1}
+            colSpan={columns.length}
             className="mt-2 sticky   top-[80px] bg-white w-full  border-2 border-slate-500"
           >
             <div className="text-left py-8  caption-top bg-white">
@@ -70,40 +70,47 @@ export const Table = ({
               <th
                 key={name}
                 scope="col"
-                className={`sticky px-6  bg-white  h-[48px] ${role === Role.COORDINATOR ? ' top-[225px]' : ' top-40'} px-6  text-dark text-left  `}
+                className={`sticky ml-4 bg-white  h-[48px] ${role === Role.COORDINATOR ? ' top-[225px]' : ' top-40'}  text-dark text-left  `}
               >
-                {renderName(name)}
+                <td className="flex flex-row  flex-nowrap text-nowrap pl-4">
+                  {renderName(name)}
+                </td>
               </th>
             ))}
           </tr>
           <tr>
             <th
               className={`sticky ${role === Role.COORDINATOR ? ' top-[280px]' : ' top-[210px]'} border-b-2 border-primaryBlue`}
-              colSpan={columns.length + 1}
+              colSpan={columns.length}
             ></th>
           </tr>
         </thead>
         <tbody>
-          <th className="hidden"></th>
           {rows.map((row: Row) => (
-            <tr
-              key={row.key}
-              id={row.key}
-              className="divide divide-y-2 h-[58px] max-w-[1388px]"
-            >
-              {row.cells.map((itm: Cell) => (
-                <>
-                  <td scope="row" className="py-2 text-nowrap">
-                    <TableBodyCell
-                      key={itm.key}
-                      cell={itm}
-                      id={row.key}
-                      status={row.status}
-                    />
-                  </td>
-                </>
-              ))}
-            </tr>
+            <>
+              <th className="hidden"></th>
+              <tr
+                key={row.key}
+                id={row.key}
+                className="divide divide-y-2 h-[58px] max-w-[1388px]"
+              >
+                {row.cells.map((itm: Cell) => (
+                  <>
+                    <td
+                      scope="row"
+                      className="py-2 text-nowrap pl-2 truncate max-w-[250px]"
+                    >
+                      <TableBodyCell
+                        key={itm.key}
+                        cell={itm}
+                        id={row.key}
+                        status={row.status}
+                      />
+                    </td>
+                  </>
+                ))}
+              </tr>
+            </>
           ))}
         </tbody>
         <tfoot className="py-4 px-8 ">

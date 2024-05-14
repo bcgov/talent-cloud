@@ -30,7 +30,7 @@ export const TableBodyCell = ({
   switch (cell.columnName) {
     case DashboardColumns.NAME:
       return (
-        <>
+        <span>
           <Link
             to={`/profile/${id}`}
             target="_blank"
@@ -44,7 +44,7 @@ export const TableBodyCell = ({
               {StatusNames.NEW}
             </span>
           )}
-        </>
+        </span>
       );
     case DashboardColumns.FUNCTION:
       return (
@@ -182,6 +182,8 @@ export const TableBodyCell = ({
     case DashboardColumns.DATE_APPROVED:
       return <span className="text-sm text-dark-700">{cell.value}</span>;
     default:
-      return <span className={tableClass.rowClass}>{cell.value}</span>;
+      return (
+        <span className={`${tableClass.rowClass} + text-left `}>{cell.value}</span>
+      );
   }
 };

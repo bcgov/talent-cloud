@@ -233,7 +233,7 @@ export const renderCells = (
   };
 
   if (filterValues.status === Status.PENDING) {
-    if (filterValues.role || filterValues.function) {
+    if (filterValues.section || filterValues.function) {
       return pendingCells[route];
     } else
       return pendingCells[route].filter(
@@ -242,7 +242,7 @@ export const renderCells = (
           cell.key !== DashboardColumns.FUNCTION,
       );
   } else {
-    if (filterValues.role || filterValues.function) {
+    if (filterValues.section || filterValues.function) {
       return activeAndInactiveCells[route];
     } else
       return activeAndInactiveCells[route].filter(
