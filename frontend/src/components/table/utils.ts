@@ -42,6 +42,12 @@ export const handleSearchParams = (
     searchParamsUrl.delete('region');
   }
 
+  if (filterValues.fireCentre?.length) {
+    searchParamsUrl.set('fireCentre', filterValues.fireCentre.join(', '));
+  } else {
+    searchParamsUrl.delete('fireCentre');
+  }
+
   if (filterValues?.location?.length) {
     searchParamsUrl.set('location', filterValues?.location?.join(', '));
   } else {
@@ -53,13 +59,23 @@ export const handleSearchParams = (
   } else {
     searchParamsUrl.delete('function');
   }
-
   if (filterValues?.experience) {
     searchParamsUrl.set('experience', filterValues.experience);
   } else {
     searchParamsUrl.delete('experience');
   }
-
+  if (filterValues.role) {
+    searchParamsUrl.set('role', filterValues.role);
+  } else {
+    searchParamsUrl.delete('role');
+    searchParamsUrl.delete('section');
+  }
+  if (filterValues.section) {
+    searchParamsUrl.set('section', filterValues.section);
+  } else {
+    searchParamsUrl.delete('section');
+    searchParamsUrl.delete('role');
+  }
   if (filterValues?.status) {
     searchParamsUrl.set('status', filterValues.status);
   } else {

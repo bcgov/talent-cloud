@@ -1,12 +1,13 @@
 import type {
   AvailabilityType,
-  AvailabilityTypeName,
   UnionMembership,
   Experience,
   Ministry,
   Region,
   Status,
 } from '@/common';
+import type { FireCentre } from '@/common/enums/firecentre.enum';
+import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import type { DateRange } from 'react-day-picker';
 
 export enum DashboardFilterNames {
@@ -17,6 +18,9 @@ export enum DashboardFilterNames {
   FUNCTION = 'function',
   EXPERIENCE = 'experience',
   AVAILABILITY_TYPE = 'availabilityType',
+  FIRE_CENTRE = 'fireCentre',
+  SECTION = 'section',
+  ROLE = 'role',
 }
 
 export enum DashboardColumns {
@@ -26,7 +30,7 @@ export enum DashboardColumns {
   UNION_MEMBERSHIP = 'Union Membership',
   REGION = 'Region',
   LOCATION = 'Home Location',
-  TRAVEL = 'Willingness To Travel',
+  TRAVEL = 'Willing To Travel',
   MINISTRY = 'Ministry',
   NAME = 'Name',
   STATUS = 'Status',
@@ -34,12 +38,22 @@ export enum DashboardColumns {
   ICS = 'ICS',
   DATE_APPLIED = 'Date Applied',
   DATE_APPROVED = 'Date Approved',
+  FIRE_CENTRE = 'Fire Centre',
+  ROLE = 'Role',
+  WILLINGNESS = 'Willingness Statement',
+  PARQ = 'Par Q',
+  ORIENTATION = 'Orientation',
+  RESPECTFUL = 'Respectful Workplace Policy',
 }
 
 export interface FunctionType {
   name: string;
   id: number;
   abbreviation: string;
+}
+
+export interface SectionType {
+  [key: string]: BcwsRole[];
 }
 
 export const dashboardToggle = {
@@ -50,6 +64,7 @@ export interface Location {
   id: number;
   locationName: string;
   region: Region;
+  fireCentre: FireCentre;
 }
 
 export interface ExperienceInterface {
@@ -63,6 +78,11 @@ export interface Availability {
   availabilityType: AvailabilityType;
   date: string;
   deploymentCode?: string;
+}
+
+export interface BcwsRoleInterface {
+  role: BcwsRole;
+  section: Section;
 }
 
 export interface Personnel {
@@ -99,6 +119,22 @@ export interface Personnel {
   logisticsNotes?: string;
   coordinatorNotes?: string;
   lastDeployed?: string;
+  homeFireCentre: Location;
+  division: string;
+  orientation: boolean;
+  willingnessStatement: boolean;
+  parQ: boolean;
+  respectfulWorkplacePolicy: boolean;
+  tools: string[];
+  languages: string[];
+  roles: BcwsRoleInterface[];
+  employeeId: string;
+  paylistId: string;
+  liaisonFirstName: string;
+  liaisonLastName: string;
+  liaisonPhoneNumber: string;
+  liaisonEmail: string;
+  purchaseCardHolder: boolean;
 }
 
 export interface AvailabilityRange {
@@ -139,6 +175,9 @@ export interface DashboardFilters {
   location?: string[];
   function?: string;
   experience?: Experience;
-  availabilityType?: AvailabilityTypeName;
+  availabilityType?: AvailabilityType;
   availabilityDates: DateRange;
+  fireCentre?: string[];
+  section?: Section;
+  role?: BcwsRole;
 }

@@ -1,8 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
-import { BcwsPersonnelEntity } from '../database/entities/bcws';
-import { Brackets, DeleteResult, In, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import {
+  Brackets,
+  DeleteResult,
+  In,
+  Repository,
+  SelectQueryBuilder,
+  UpdateResult,
+} from 'typeorm';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import {
@@ -14,11 +20,12 @@ import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
 import { EmcrRO } from './ro/emcr';
-import { Role } from '../auth/interface';
+import { Program, Role } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { BcwsPersonnelEntity } from '../database/entities/bcws';
 import {
   EmcrPersonnelEntity,
   EmcrExperienceEntity,
@@ -159,7 +166,13 @@ export class PersonnelService {
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('emcr_personnel.homeLocation', 'location');
 
-    this.addQueryBuilderCommonFilters(qb, query.name, query.availabilityType, query.availabilityFromDate, query.availabilityToDate);
+    this.addQueryBuilderCommonFilters(
+      qb,
+      query.name,
+      query.availabilityType,
+      query.availabilityFromDate,
+      query.availabilityToDate,
+    );
 
     if (query.region?.length) {
       qb.andWhere('emcr_personnel.homeLocation.region IN (:...regions)', {
@@ -186,13 +199,14 @@ export class PersonnelService {
       });
     }
 
-    const { personnel, count} = await this.getPersonnelForProgram<EmcrPersonnelEntity>(
-      'EMCR',
-      qb,
-      query.rows,
-      query.page,
-      query.status
-    );
+    const { personnel, count } =
+      await this.getPersonnelForProgram<EmcrPersonnelEntity>(
+        Program.EMCR,
+        qb,
+        query.rows,
+        query.page,
+        query.status,
+      );
 
     return { personnel, count };
   }
@@ -210,7 +224,7 @@ export class PersonnelService {
       [Status.ACTIVE]: number;
       [Status.INACTIVE]: number;
       [Status.PENDING]: number;
-    }
+    };
   }> {
     this.logger.log(`Query: ${JSON.stringify(query)}`);
     const qb =
@@ -218,18 +232,28 @@ export class PersonnelService {
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
-    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'homeFireCentre');
+    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'location');
+    qb.leftJoinAndSelect('bcws_personnel.division', 'division');
 
-    this.addQueryBuilderCommonFilters(qb, query.name, query.availabilityType, query.availabilityFromDate, query.availabilityToDate);
+    this.addQueryBuilderCommonFilters(
+      qb,
+      query.name,
+      query.availabilityType,
+      query.availabilityFromDate,
+      query.availabilityToDate,
+    );
 
     if (query.fireCentre?.length) {
-      qb.andWhere('bcws_personnel.homeFireCentre.fireCentre IN (:...fireCentres)', {
-        fireCentres: query.fireCentre,
-      });
+      qb.andWhere(
+        'location.fireCentre IN (:...fireCentres)',
+        {
+          fireCentres: query.fireCentre,
+        },
+      );
     }
     if (query.location?.length) {
       qb.andWhere(
-        'bcws_personnel.homeFireCentre.locationName IN (:...homeLocations)',
+        'location.locationName IN (:...homeLocations)',
         {
           homeLocations: query.location,
         },
@@ -242,13 +266,14 @@ export class PersonnelService {
       });
     }
 
-    const { personnel, count } = await this.getPersonnelForProgram<BcwsPersonnelEntity>(
-      'BCWS',
-      qb,
-      query.rows,
-      query.page,
-      query.status
-    );
+    const { personnel, count } =
+      await this.getPersonnelForProgram<BcwsPersonnelEntity>(
+        Program.BCWS,
+        qb,
+        query.rows,
+        query.page,
+        query.status,
+      );
     return { personnel, count };
   }
 
@@ -280,18 +305,24 @@ export class PersonnelService {
      */
     if (availabilityType) {
       queryBuilder.leftJoinAndSelect('personnel.availability', 'availability');
-      queryBuilder.andWhere('availability.availabilityType = :availabilityType', {
-        availabilityType: availabilityType,
-      });
+      queryBuilder.andWhere(
+        'availability.availabilityType = :availabilityType',
+        {
+          availabilityType: availabilityType,
+        },
+      );
       if (availabilityFromDate && availabilityToDate) {
         this.logger.log(
           `Availability From Date: ${availabilityFromDate} Availability To Date: ${availabilityToDate}`,
         );
 
-        queryBuilder.andWhere('availability.date >= :from AND availability.date <= :to', {
-          from: availabilityFromDate,
-          to: availabilityToDate,
-        });
+        queryBuilder.andWhere(
+          'availability.date >= :from AND availability.date <= :to',
+          {
+            from: availabilityFromDate,
+            to: availabilityToDate,
+          },
+        );
       } else {
         queryBuilder.andWhere('availability.date = :date', {
           date: datePST(new Date()),
@@ -307,38 +338,52 @@ export class PersonnelService {
     }
     return queryBuilder;
   }
-  
+
   /**
    * From query builder, get personnel and counts of each status
    * @returns {T[]} List of personnel
    * @returns {number} Count of total personnel search applies to
    */
   async getPersonnelForProgram<T>(
-    program: 'BCWS' | 'EMCR',
+    program: Program.EMCR | Program.BCWS,
     queryBuilder: SelectQueryBuilder<T>,
     rows: number,
     page: number,
-    status: Status
+    status: Status,
   ): Promise<{
     personnel: T[];
     count: {
       [Status.ACTIVE]: number;
       [Status.INACTIVE]: number;
       [Status.PENDING]: number;
-    }
+    };
   }> {
-    const tableName = program === 'BCWS' ? 'bcws_personnel' : 'emcr_personnel';
-
-    if (status === Status.PENDING) {
-      queryBuilder.orderBy('bcws_personnel.dateApplied', 'ASC');
-      queryBuilder.addOrderBy('personnel.lastName', 'ASC');
-      queryBuilder.addOrderBy('personnel.firstName', 'ASC');
-    } else {
-      queryBuilder.orderBy('bcws_personnel.dateApproved', 'DESC');
-      queryBuilder.addOrderBy('personnel.lastName', 'ASC');
-      queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+    if (program === Program.BCWS) {
+      if (status === Status.PENDING) {
+        queryBuilder.orderBy('bcws_personnel.dateApplied', 'ASC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+        queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      } else {
+        queryBuilder.orderBy('bcws_personnel.dateApproved', 'DESC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+        queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      }
     }
 
+    if (program === Program.EMCR) {
+      if (status === Status.PENDING) {
+        queryBuilder.orderBy('emcr_personnel.dateApplied', 'ASC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+        queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      } else {
+        queryBuilder.orderBy('emcr_personnel.dateApproved', 'DESC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
+        queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      }
+    }
+
+    const tableName =
+      program === Program.BCWS ? 'bcws_personnel' : 'emcr_personnel';
     const personnel = await queryBuilder
       .take(rows)
       .skip((page - 1) * rows)
@@ -570,14 +615,16 @@ export class PersonnelService {
   /**
    * Gets all approved BCWS members for e-diaries to pull daily
    */
-  async getApprovedBCWSMembers(): Promise<{ employeeId: number; firstName: string; lastName: string }[]> {
-    const qb =
-      this.personnelRepository.createQueryBuilder('personnel')
-        .innerJoinAndSelect('personnel.bcws', 'bcws')
-        .select(['personnel.firstName', 'personnel.lastName', 'bcws.employeeId'])
-        .andWhere('bcws.status = :status', { status: Status.ACTIVE });
+  async getApprovedBCWSMembers(): Promise<
+    { employeeId: number; firstName: string; lastName: string }[]
+  > {
+    const qb = this.personnelRepository
+      .createQueryBuilder('personnel')
+      .innerJoinAndSelect('personnel.bcws', 'bcws')
+      .select(['personnel.firstName', 'personnel.lastName', 'bcws.employeeId'])
+      .andWhere('bcws.status = :status', { status: Status.ACTIVE });
     const personnel = await qb.getMany();
-    return personnel.map(p => ({
+    return personnel.map((p) => ({
       employeeId: p.bcws.employeeId,
       firstName: p.firstName,
       lastName: p.lastName,

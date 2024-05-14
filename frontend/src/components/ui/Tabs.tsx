@@ -1,6 +1,5 @@
 import type { Status } from '@/common';
 import { Tab } from '@headlessui/react';
-import type { ReactElement } from 'react';
 import type { TabCount } from '../table';
 
 export type TabData = {
@@ -14,43 +13,41 @@ export type TabProps = {
   tabs: TabData[];
   selectedTab: number;
   counts: TabCount;
-  children: ReactElement;
 };
 
-export const Tabs = ({
-  onChangeTab,
-  tabs,
-  selectedTab,
-  counts,
-  children,
-}: TabProps) => {
+export const Tabs = ({ onChangeTab, tabs, selectedTab, counts }: TabProps) => {
   return (
     <Tab.Group selectedIndex={selectedTab} onChange={onChangeTab}>
-      <Tab.List className={`bg-white sticky top-24 md:px-6 px-0`} as="div">
+      <Tab.List
+        className={`flex flex-row bg-white sticky top-24 md:px-6 px-0`}
+        as="div"
+      >
         {tabs.map(({ label, value }, index) => (
-          <Tab
-            key={value}
-            className={`px-2 md:px-6 py-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'}`}
-          >
+          <Tab key={value}>
             {({ selected }) => (
-              <button className={` ${selected ? 'font-bold' : 'font-normal'}`}>
-                {' '}
-                {label}{' '}
-                <span
-                  className={`mx-4 px-2.5 border border-gray-400 rounded-sm py-1 ${selected ? 'bg-primaryBlue text-white' : 'text-defaultGray '}`}
+              <>
+                <button
+                  className={`font-normal px-2 py-2 my-.5 md:px-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'} ${selected ? 'text-dark-700' : 'text-dark-600'}`}
                 >
-                  {counts[value]}
-                </span>
-              </button>
+                  {' '}
+                  {label}{' '}
+                  <span
+                    className={`mx-4 px-1.5 border border-gray-400 rounded-md py-1 ${selected ? 'bg-primaryBlue text-white' : 'text-defaultGray '}`}
+                  >
+                    {counts[value]}
+                  </span>
+                </button>
+                {selected && (
+                  <div className="border border-b w-full border-blue-900"></div>
+                )}
+              </>
             )}
           </Tab>
         ))}
       </Tab.List>
       <Tab.Panels>
         {tabs.map(({ value }) => (
-          <Tab.Panel key={value} className="w-full p-0 m-0">
-            {children}
-          </Tab.Panel>
+          <Tab.Panel key={value} className="w-full p-0 m-0" />
         ))}
       </Tab.Panels>
     </Tab.Group>

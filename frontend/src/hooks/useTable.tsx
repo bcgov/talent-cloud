@@ -8,21 +8,21 @@ import {
   type DashboardFilters,
   type Personnel,
 } from '@/pages/dashboard';
-import { activeAndInactive, pending } from '@/pages/dashboard/columns';
+
 import { useDebounce } from './useDebounce';
 import type { DateRange } from 'react-day-picker';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
-import type { Program } from '@/providers';
+import { Route } from '@/providers';
+import { cols } from '@/pages/dashboard/columns';
 
-export const useTable = (route: Program | undefined) => {
+export const useTable = (route?: Route) => {
   const { AxiosPrivate } = useAxios();
 
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
     rows: [],
-    columns: [],
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
@@ -36,26 +36,45 @@ export const useTable = (route: Program | undefined) => {
   const tabs = [
     { index: 0, label: StatusNames.ACTIVE, value: Status.ACTIVE },
     { index: 1, label: StatusNames.INACTIVE, value: Status.INACTIVE },
-    { index: 2, label: StatusNames.PENDING, value: Status.PENDING },
+    { index: 2, label: 'Pending Approval', value: Status.PENDING },
   ];
 
   const [selectedTab, setSelectedTab] = useState(0);
+  const initialFilterValues =
+    route === Route.BCWS
+      ? {
+          rowsPerPage: 25,
+          currentPage: 1,
+          status: Status.ACTIVE,
+          name: '',
+          fireCentre: [],
+          location: [],
+          section: undefined,
+          role: undefined,
+          availabilityType: '',
+          availabilityDates: {
+            from: '',
+            to: '',
+          },
+        }
+      : {
+          rowsPerPage: 25,
+          currentPage: 1,
+          status: Status.ACTIVE,
+          name: '',
+          region: [],
+          location: [],
+          function: undefined,
+          experience: undefined,
+          availabilityType: '',
+          availabilityDates: {
+            from: '',
+            to: '',
+          },
+        };
+  const [filterValues, setFilterValues] = useState<any>(initialFilterValues);
 
-  const [filterValues, setFilterValues] = useState<any>({
-    rowsPerPage: 25,
-    currentPage: 1,
-    status: Status.ACTIVE,
-    name: '',
-    region: [],
-    location: [],
-    function: undefined,
-    experience: undefined,
-    availabilityType: '',
-    availabilityDates: {
-      from: '',
-      to: '',
-    },
-  });
+  const [columns, setColumns] = useState<DashboardColumns[]>([]);
 
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
@@ -64,23 +83,37 @@ export const useTable = (route: Program | undefined) => {
     defaultDebounceValue,
   );
 
-  const renderColumns = (value: Status) => {
-    if (value === Status.PENDING) {
-      return !filterValues.function
-        ? pending.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
-        : pending;
-    } else {
-      return !filterValues.function
-        ? activeAndInactive.filter((itm) => itm.key !== DashboardColumns.FUNCTION)
-        : activeAndInactive;
-    }
+  /**
+   * This function is used to dynamically render the columns based on the selected filter values values
+   * @param columns
+   * @returns
+   */
+  const renderColumns = (columns: DashboardColumns[]) => {
+    return filterValues.function || filterValues.section
+      ? columns
+      : columns
+          .filter((itm) => itm !== DashboardColumns.FUNCTION)
+          .filter((itm) => itm !== DashboardColumns.ROLE);
   };
-  const debouncedFiltersAsync = async () => {
+
+  // This function is used to fetch the data from the backend and uses debounce to ensure requests have a slight delay
+  const debouncedFiltersAsync = async (route: Route) => {
+    // format the query params
     handleSearchParams(searchParamsUrl, filterValues);
+    // set the columns based on the route, and then by filter values
+    setColumns(
+      renderColumns(
+        filterValues.status === Status.PENDING
+          ? cols.pending[route]
+          : cols.active[route],
+      ),
+    );
+
     try {
       const {
         data: { personnel, count },
       } = await AxiosPrivate.get(`/personnel/${route}?${searchParamsUrl}`);
+      // handle pagination
       const rowsPerPage = filterValues?.rowsPerPage ?? 25;
 
       const totalPages = Math.ceil(count[filterValues.status] / rowsPerPage);
@@ -91,19 +124,22 @@ export const useTable = (route: Program | undefined) => {
 
       const currentPage = filterValues?.currentPage ?? 1;
 
+      // set the rows of data to be displayed
       setTableData({
         totalPages,
         pageRange: truncatePageRange(totalPages, currentPage, pageRange),
         totalRows: count[filterValues.status],
-        columns: renderColumns(filterValues.status),
         rows: personnel.map(
           ({ id, status, newMember, ...personnel }: Personnel) => ({
             key: id,
             status: newMember ? Status.NEW : status,
-            cells: renderCells(
-              { id, status, newMember, ...personnel },
-              filterValues,
-            ),
+            cells:
+              route &&
+              renderCells(
+                { id, status, newMember, ...personnel },
+                filterValues,
+                route,
+              ),
           }),
         ),
       });
@@ -116,7 +152,9 @@ export const useTable = (route: Program | undefined) => {
   };
 
   useEffect(() => {
-    if (debouncedFilters) debouncedFiltersAsync();
+    // if the debounced filters are set, then call the async function
+    // call this whenever the debounced filters change or the route is changes
+    if (debouncedFilters && route) debouncedFiltersAsync(route);
   }, [debouncedFilters, route]);
 
   const handlePageParams = (change: Partial<DashboardFilters>) => {
@@ -229,37 +267,40 @@ export const useTable = (route: Program | undefined) => {
 
   return {
     tableData,
-    handlePageParams,
-    handleMultiSelect,
-    handleSingleSelect,
-    handleSearch,
     filterValues,
-    handleClose,
-    handleCloseMany,
-    handleSetDates,
-    resetType,
+
     loading,
     counts,
     tabs,
     selectedTab,
-    onChangeTab,
-    handleChangeRowsPerPage,
-
-    onClear: () =>
-      setFilterValues({
-        rowsPerPage: 25,
-        currentPage: 1,
-        status: Status.ACTIVE,
-        name: '',
-        region: [],
-        location: [],
-        function: null,
-        experience: '',
-        availabilityType: '',
-        availabilityDates: {
-          from: '',
-          to: '',
-        },
-      }),
+    columns,
+    changeHandlers: {
+      handlePageParams,
+      handleMultiSelect,
+      handleSingleSelect,
+      handleSearch,
+      handleClose,
+      handleCloseMany,
+      handleSetDates,
+      resetType,
+      handleChangeRowsPerPage,
+      onChangeTab,
+      onClear: () =>
+        setFilterValues({
+          rowsPerPage: 25,
+          currentPage: 1,
+          status: Status.ACTIVE,
+          name: '',
+          region: [],
+          location: [],
+          function: null,
+          experience: '',
+          availabilityType: '',
+          availabilityDates: {
+            from: '',
+            to: '',
+          },
+        }),
+    },
   };
 };

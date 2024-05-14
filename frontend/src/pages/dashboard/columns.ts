@@ -1,35 +1,52 @@
 import { DashboardColumns } from '@/pages/dashboard';
+import { Route } from '@/providers';
 
-export const activeAndInactive = [
-  { key: DashboardColumns.NAME, name: DashboardColumns.NAME },
-  { key: DashboardColumns.DATE_APPROVED, name: DashboardColumns.DATE_APPROVED },
-  { key: DashboardColumns.REGION, name: DashboardColumns.REGION },
-  { key: DashboardColumns.LOCATION, name: DashboardColumns.LOCATION },
-  { key: DashboardColumns.FUNCTION, name: DashboardColumns.FUNCTION },
-  { key: DashboardColumns.AVAILABILITY, name: DashboardColumns.AVAILABILITY },
-  { key: DashboardColumns.TRAVEL, name: DashboardColumns.TRAVEL },
-  { key: DashboardColumns.REMOTE, name: DashboardColumns.REMOTE },
-  {
-    key: DashboardColumns.UNION_MEMBERSHIP,
-    name: DashboardColumns.UNION_MEMBERSHIP,
+export const cols = {
+  active: {
+    [Route.BCWS]: [
+      DashboardColumns.NAME,
+      DashboardColumns.DATE_APPROVED,
+      DashboardColumns.FIRE_CENTRE,
+      DashboardColumns.LOCATION,
+      DashboardColumns.ROLE,
+      DashboardColumns.AVAILABILITY,
+      DashboardColumns.TRAVEL,
+      DashboardColumns.UNION_MEMBERSHIP,
+    ],
+    [Route.EMCR]: [
+      DashboardColumns.NAME,
+      DashboardColumns.DATE_APPROVED,
+      DashboardColumns.REGION,
+      DashboardColumns.LOCATION,
+      DashboardColumns.FUNCTION,
+      DashboardColumns.AVAILABILITY,
+      DashboardColumns.TRAVEL,
+      DashboardColumns.REMOTE,
+      DashboardColumns.UNION_MEMBERSHIP,
+      DashboardColumns.MINISTRY,
+    ],
   },
-  { key: DashboardColumns.MINISTRY, name: DashboardColumns.MINISTRY },
-];
-
-export const pending = [
-  { key: DashboardColumns.NAME, name: DashboardColumns.NAME },
-  { key: DashboardColumns.DATE_APPLIED, name: DashboardColumns.DATE_APPLIED },
-  { key: DashboardColumns.REGION, name: DashboardColumns.REGION },
-  { key: DashboardColumns.LOCATION, name: DashboardColumns.LOCATION },
-  { key: DashboardColumns.ICS, name: DashboardColumns.ICS },
-  {
-    key: DashboardColumns.SUPERVISOR_APPROVAL,
-    name: DashboardColumns.SUPERVISOR_APPROVAL,
+  pending: {
+    [Route.BCWS]: [
+      DashboardColumns.NAME,
+      DashboardColumns.FIRE_CENTRE,
+      DashboardColumns.LOCATION,
+      DashboardColumns.WILLINGNESS,
+      DashboardColumns.RESPECTFUL,
+      DashboardColumns.PARQ,
+      DashboardColumns.ORIENTATION,
+      DashboardColumns.MINISTRY,
+    ],
+    [Route.EMCR]: [
+      DashboardColumns.NAME,
+      DashboardColumns.DATE_APPLIED,
+      DashboardColumns.REGION,
+      DashboardColumns.LOCATION,
+      DashboardColumns.ICS,
+      DashboardColumns.SUPERVISOR_APPROVAL,
+      DashboardColumns.FUNCTION,
+      DashboardColumns.UNION_MEMBERSHIP,
+      DashboardColumns.MINISTRY,
+    ],
   },
-  { key: DashboardColumns.FUNCTION, name: DashboardColumns.FUNCTION },
-  {
-    key: DashboardColumns.UNION_MEMBERSHIP,
-    name: DashboardColumns.UNION_MEMBERSHIP,
-  },
-  { key: DashboardColumns.MINISTRY, name: DashboardColumns.MINISTRY },
-];
+};

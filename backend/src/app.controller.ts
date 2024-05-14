@@ -58,13 +58,24 @@ export class AppController {
       realm: process.env.KEYCLOAK_REALM,
     };
   }
-  @Get('/filters')
-  async getFilters(@Request() req: RequestWithRoles) {
+  @Get('/emcr/filters')
+  async getEmcrFilters(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url} ${req.role}`);
     return {
       functions: await this.functionService.getFunctions(),
       locations: (await this.locationService.getRegionsAndLocations()).filter(
         (itm) => itm.region !== null,
+      ),
+    };
+  }
+  @Get('/bcws/filters')
+  async getBcwsFilters(@Request() req: RequestWithRoles) {
+    this.logger.log(`${req.url} ${req.role}`);
+
+    return {
+      functions: await this.functionService.getRoles(),
+      locations: (await this.locationService.getRegionsAndLocations()).filter(
+        (itm) => itm.fireCentre !== null,
       ),
     };
   }

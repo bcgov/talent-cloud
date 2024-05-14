@@ -1,4 +1,4 @@
-import { Program, RoleContext } from '@/providers/Role';
+import { Program, RoleContext, Route } from '@/providers/Role';
 import { useContext, useEffect } from 'react';
 import { useAxios } from './useAxios';
 
@@ -27,7 +27,7 @@ export const useRole = () => {
         setProgram(program);
 
         if (program === 'admin') {
-          setRoute((localStorage.getItem('route') as Program) ?? Program.BCWS);
+          setRoute((localStorage.getItem('route') as Route) ?? Route.BCWS);
         } else {
           setRoute(program);
         }
@@ -37,14 +37,12 @@ export const useRole = () => {
     })();
   }, [AxiosPrivate]);
 
-  console.log(route, program, role, username);
-
   const handleToggle = () => {
-    if (route === Program.EMCR) {
-      setRoute(Program.BCWS);
-      localStorage.setItem('route', Program.BCWS);
+    if (route === Route.EMCR) {
+      setRoute(Route.BCWS);
+      localStorage.setItem('route', Route.BCWS);
     } else {
-      setRoute(Program.EMCR);
+      setRoute(Route.EMCR);
       localStorage.setItem('route', Program.EMCR);
     }
   };

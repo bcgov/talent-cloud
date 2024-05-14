@@ -63,11 +63,6 @@ export class CreatePersonnelBcwsDTO {
   })
   homeFireCentre?: BcwsLocationDTO;
 
-  @ApiProperty({
-    description: 'Personnel division',
-  })
-  division_id: number;
-
   @ApiProperty()
   @IsOptional()
   approvedBySupervisor?: boolean;
@@ -170,4 +165,10 @@ export class CreatePersonnelBcwsDTO {
   })
   @IsArray()
   certifications: CreateBcwsCertificationsDTO[];
+
+  @ApiProperty({
+    description: 'Division and Ministry',
+    required: false,
+  })
+  division: number;
 }

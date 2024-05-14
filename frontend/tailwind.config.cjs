@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const withMT = require("@material-tailwind/react/utils/withMT");
- 
+ const { colors } = require('tailwindcss/defaultTheme');
 module.exports = withMT({
 
   content: [
@@ -18,10 +18,13 @@ module.exports = withMT({
     },
     // overridden here as mui tailwind uses these color values for some of the psuedo classes
       colors: {
+        ...colors,
         blue: {
+        ...colors.blue, 
           600: "#4e7192",
         },
         gray: {
+          ...colors.gray,
           900: "#1A5A96",
         },
       },
@@ -94,7 +97,17 @@ module.exports = withMT({
         info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
-        dark: '#000000',
+        dark: {
+          100: '#FFFFFF',
+          200: '#FAFAFA',
+          300: '#F2F2F2',
+          400: '#CFCFCF',
+          500: '#878787',
+          600: '#606060',
+          700: '#313132',
+          800: '#262729',
+          900: '#000000',
+        },
         darkGrey: '#313132', 
         light: '#FFFFFF',
         black: '#000000',
