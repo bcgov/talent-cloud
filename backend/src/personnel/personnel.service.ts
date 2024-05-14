@@ -20,7 +20,7 @@ import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
 import { EmcrRO } from './ro/emcr';
-import { Role } from '../auth/interface';
+import { Program, Role } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
@@ -201,7 +201,7 @@ export class PersonnelService {
 
     const { personnel, count } =
       await this.getPersonnelForProgram<EmcrPersonnelEntity>(
-        'EMCR',
+        Program.EMCR,
         qb,
         query.rows,
         query.page,
@@ -268,7 +268,7 @@ export class PersonnelService {
 
     const { personnel, count } =
       await this.getPersonnelForProgram<BcwsPersonnelEntity>(
-        'BCWS',
+        Program.BCWS,
         qb,
         query.rows,
         query.page,
@@ -345,7 +345,7 @@ export class PersonnelService {
    * @returns {number} Count of total personnel search applies to
    */
   async getPersonnelForProgram<T>(
-    program: 'BCWS' | 'EMCR',
+    program: Program.EMCR | Program.BCWS,
     queryBuilder: SelectQueryBuilder<T>,
     rows: number,
     page: number,
@@ -358,9 +358,7 @@ export class PersonnelService {
       [Status.PENDING]: number;
     };
   }> {
-    const tableName = program === 'BCWS' ? 'bcws_personnel' : 'emcr_personnel';
-
-    if (tableName === 'bcws_personnel') {
+    if (program === Program.BCWS) {
       if (status === Status.PENDING) {
         queryBuilder.orderBy('bcws_personnel.dateApplied', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
@@ -372,7 +370,7 @@ export class PersonnelService {
       }
     }
 
-    if (tableName === 'emcr_personnel') {
+    if (program === Program.EMCR) {
       if (status === Status.PENDING) {
         queryBuilder.orderBy('emcr_personnel.dateApplied', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
@@ -384,6 +382,8 @@ export class PersonnelService {
       }
     }
 
+    const tableName =
+      program === Program.BCWS ? 'bcws_personnel' : 'emcr_personnel';
     const personnel = await queryBuilder
       .take(rows)
       .skip((page - 1) * rows)

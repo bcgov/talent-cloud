@@ -75,12 +75,12 @@ export const TableBodyCell = ({
       return (
         <td className={tableClasses.default}>
           {cell.value ? (
-            <span className={tableClasses.row + ' text-success'}>
+            <span className={`${tableClasses.row} text-success`}>
               <CheckCircleIcon className={iconClass(cell.value)} />
               YES
             </span>
           ) : (
-            <span className={tableClasses.row + ' text-error'}>
+            <span className={`${tableClasses.row} text-error`}>
               <XCircleIcon className={iconClass(cell.value)} />
               NO
             </span>
@@ -171,7 +171,7 @@ export const TableBodyCell = ({
       );
 
     case DashboardColumns.MINISTRY:
-      return <td className={tableClasses.default + ' text-center'}>{cell.value}</td>;
+      return <td className={`${tableClasses.default} text-center`}>{cell.value}</td>;
     case DashboardColumns.RESPECTFUL:
     case DashboardColumns.PARQ:
       return (
@@ -190,8 +190,8 @@ export const TableBodyCell = ({
         </>
       );
     case DashboardColumns.LOCATION:
-      return <td className={tableClasses.default + ' text-left'}>{cell.value}</td>;
+      return <td className={`${tableClasses.default} text-left`}>{cell.value}</td>;
     default:
-      return <td className={tableClasses.default + ' text-left ml-4'}>{cell.value}</td>;
+      return <td className={`${tableClasses.default} text-left ml-4`}>{cell.value}</td>;
   }
 };

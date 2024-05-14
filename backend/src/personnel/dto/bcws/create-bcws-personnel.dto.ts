@@ -14,7 +14,6 @@ import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
 import { FireCentre } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
-import { DivisionEntity } from '../../../database/entities/division.entity';
 
 class BcwsLocationDTO {
   @IsOptional()
@@ -171,5 +170,5 @@ export class CreatePersonnelBcwsDTO {
     description: 'Division and Ministry',
     required: false,
   })
-  division: DivisionEntity;
+  division: number;
 }

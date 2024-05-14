@@ -80,7 +80,7 @@ export const rowData = (
     certifications: createCertifications(seededBcwsCertifications),
     roles: createRoles(seededBcwsRoles),
     languages: createLanguages(),
-    division: faker.helpers.arrayElement(seedDivisions),
+    division: faker.helpers.arrayElement(seedDivisions).id,
   };
 
   const emcrData: CreatePersonnelEmcrDTO = {
