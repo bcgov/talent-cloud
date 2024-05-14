@@ -76,7 +76,15 @@ const renderName = (name: string) => {
         {name.split(' ')[0]} <br />
         {name.split(' ')[1]} {name.split(' ')[2]}
       </td>
-    );
+    )
+  }
+    if (name === DashboardColumns.WILLINGNESS) {
+      return (
+        <td className="flex flex-row  flex-nowrap text-nowrap ">
+          {name.split(' ')[0]} <br />
+          {name.split(' ')[1]}
+        </td>
+      );
   } else return <td className="flex flex-row  flex-nowrap text-nowrap ">{name}</td>;
 };
 export const Table = ({

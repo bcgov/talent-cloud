@@ -157,12 +157,14 @@ export const TableBodyCell = ({
           {cell.value ? (
             <td>
               <span className={tableClasses.row}>
-                <CheckCircleIcon className={iconClass(cell.value)} /> Completed
+                Yes
               </span>
             </td>
           ) : (
             <td>
-              <XCircleIcon className={iconClass(cell.value)} /> Incomplete
+               <span className={tableClasses.row}>
+                No
+              </span>
             </td>
           )}
         </>
@@ -190,6 +192,6 @@ export const TableBodyCell = ({
     case DashboardColumns.LOCATION:
       return <td className={tableClasses.default + ' text-left'}>{cell.value}</td>;
     default:
-      return <td className={tableClasses.default + ' text-center'}>{cell.value}</td>;
+      return <td className={tableClasses.default + ' text-left ml-4'}>{cell.value}</td>;
   }
 };
