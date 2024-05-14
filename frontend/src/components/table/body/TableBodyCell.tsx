@@ -47,19 +47,6 @@ export const TableBodyCell = ({
           )}
         </td>
       );
-    case DashboardColumns.REMOTE:
-      return (
-        <td>
-          <span
-            className={
-              tableClasses.default +
-              ' w-full text-center justify-center items-center'
-            }
-          >
-            {booleanToString(cell.value)}
-          </span>{' '}
-        </td>
-      );
     case DashboardColumns.FUNCTION:
       return (
         <td className={tableClasses.default}>
@@ -154,7 +141,6 @@ export const TableBodyCell = ({
         </>
       );
     case DashboardColumns.REMOTE:
-      console.log(cell.value, "REMORE")
       return (
         <>
           {cell.value ? (
