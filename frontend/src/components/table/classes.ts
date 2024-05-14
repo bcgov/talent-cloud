@@ -1,27 +1,17 @@
 import { AvailabilityTypeName, UnionMembership } from '@/common';
-import { DashboardColumns } from '@/pages/dashboard/constants';
 
 export const rowClass = 'w-full border-b border-t border-gray';
 
-export const tdClass = 'text-darkGray px-6 py-4 whitespace-nowrap';
+export const tdClass = 'text-dark-700 text-sm px-6 py-4 whitespace-nowrap';
 
 export const classificationClass =
   'block  font-bold border border-gray rounded-md mt-4 mx-8 text-center ';
 
-export const tableClasses = {
-  ministry: tdClass,
-  available: [tdClass, 'text-success'].join(', '),
-  unavailable: [tdClass, 'text-error'].join(', '),
-  deployed: [tdClass, 'text-warning'].join(', '),
-  remote: [tdClass].join(', '),
-  travelYes: [
-    tdClass,
-    'flex flex-row items-center justify-start text-sm text-success',
-  ].join(', '),
-  travelNo: [
-    tdClass,
-    'flex flex-row items-center justify-start text-sm text-error',
-  ].join(', '),
+export const tableClasses: { [key: string]: string } = {
+  available: 'text-success',
+  
+  default: tdClass,
+  row: 'flex flex-row items-center justify-center text-sm',
   excluded: [
     classificationClass,
     ' text-error bg-errorBannerLight border-error',
@@ -33,10 +23,10 @@ export const tableClasses = {
     classificationClass,
     ' text-successDark bg-successBannerLight border-successDark',
   ].join(', '),
-  checkIconClass: 'h-6 w-6 text-success mr-2',
-  xIconClass: 'h-6 w-6 text-error mr-2',
+  checkIconClass: 'h-4 w-4 text-success mr-1',
+  xIconClass: 'h-4 w-4 text-error mr-1',
 };
-const getUnionMembershipClass = (value?: string) => {
+export const getUnionMembershipClass = (value?: string) => {
   switch (value) {
     case UnionMembership.BCGEU:
       return tableClasses.bcgeu;
@@ -49,35 +39,18 @@ const getUnionMembershipClass = (value?: string) => {
   }
 };
 
-export const getAvailabilityClass = (value?: string) => {
+export const getAvailabilityClass = (value: AvailabilityTypeName) => {
   switch (value) {
     case AvailabilityTypeName.AVAILABLE:
-      return tableClasses.available;
+      return 'text-success';
     case AvailabilityTypeName.UNAVAILABLE:
-      return tableClasses.unavailable;
+      return 'text-error'
     case AvailabilityTypeName.DEPLOYED:
-      return tableClasses.deployed;
+      return 'text-warning'
     default:
-      return tdClass;
+      return ""
   }
 };
-export const tableClass = (key: string, value?: string) => {
-  switch (key) {
-    case DashboardColumns.MINISTRY:
-      return tableClasses.ministry;
-    case DashboardColumns.REMOTE:
-      return tableClasses.remote;
-    case DashboardColumns.AVAILABILITY:
-      return getAvailabilityClass(value?.split(' ')[0]);
-    case DashboardColumns.TRAVEL:
-      return value === 'yes' ? tableClasses.travelYes : tableClasses.travelNo;
-    case DashboardColumns.UNION_MEMBERSHIP:
-      return getUnionMembershipClass(value);
-    default:
-      return tdClass;
-  }
-};
-
 export const iconClass = (value: boolean) => {
   return value ? tableClasses.checkIconClass : tableClasses.xIconClass;
 };

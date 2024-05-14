@@ -1,10 +1,23 @@
 import type { Cell } from '@/components';
 import { booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
-import { iconClass } from '@/components/table/classes';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  getAvailabilityClass,
+  getUnionMembershipClass,
+  iconClass,
+  tableClasses,
+} from '@/components/table/classes';
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  MinusCircleIcon,
+  MinusIcon,
+  CheckIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
+import { ExperienceName } from '@/common/enums/experience.enum';
+import {  BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const TableBodyCell = ({
   cell,
@@ -18,7 +31,7 @@ export const TableBodyCell = ({
   switch (cell.columnName) {
     case DashboardColumns.NAME:
       return (
-        <td className={cell.className}>
+        <td className={tableClasses.default}>
           <Link
             to={`/profile/${id}`}
             target="_blank"
@@ -35,38 +48,159 @@ export const TableBodyCell = ({
         </td>
       );
     case DashboardColumns.REMOTE:
-      return <td className={cell.className}> {booleanToString(cell.value)}</td>;
-    case DashboardColumns.FUNCTION:
       return (
-        <td className={cell.className}>
-          {
-            <div>
-              <div className="text-sm font-bold">{cell.value.split(':')[0]}</div>
-              <div className="text-sm">{cell.value.split(':')[1]}</div>
-            </div>
-          }
+        <td>
+          <span
+            className={
+              tableClasses.default +
+              ' w-full text-center justify-center items-center'
+            }
+          >
+            {booleanToString(cell.value)}
+          </span>{' '}
         </td>
       );
+    case DashboardColumns.FUNCTION:
+      return (
+        <td className={tableClasses.default}>
+          <div>
+            <div className="text-sm font-bold">{cell.value?.functionName}</div>
+            <div className="text-sm">{ExperienceName[cell.value?.experienceType as keyof typeof ExperienceName]}</div>
+          </div>
+        </td>
+      );
+
     case DashboardColumns.AVAILABILITY:
       return (
-        <td className={cell.className}>
-          {cell.value.availability}{' '}
-          <span className="text-defaultGray">{cell.value.days ?? ''}</span>
+        <td className={tableClasses.default}>
+          <span className={getAvailabilityClass(cell.value?.availability)}>{cell?.value?.availability}</span>
+          <span className="ml-2 text-defaultGray">{cell.value?.days}</span>
         </td>
       );
     case DashboardColumns.TRAVEL:
-    case DashboardColumns.ICS:
       return (
-        <td className={cell.className}>
+        <td className={tableClasses.default}>
           {cell.value ? (
-            <CheckCircleIcon className={iconClass(cell.value)} />
+            <span className={tableClasses.row + ' text-success'}>
+              <CheckCircleIcon className={iconClass(cell.value)} />
+              YES
+            </span>
           ) : (
-            <XCircleIcon className={iconClass(cell.value)} />
+            <span className={tableClasses.row + ' text-error'}>
+              <XCircleIcon className={iconClass(cell.value)} />
+              NO
+            </span>
           )}
-          {booleanToString(cell.value).toUpperCase()}
         </td>
       );
+    case DashboardColumns.ICS:
+      return (
+        <>
+          {cell.value ? (
+            <td className={tableClasses.row}>
+              <CheckCircleIcon className={iconClass(cell.value)} /><span>YES</span>
+            </td>
+          ) : (
+            <td className={tableClasses.row}>
+              <XCircleIcon className={iconClass(cell.value)} /><span>NO</span>
+            </td>
+          )}
+
+        </>
+      );
+    case DashboardColumns.ROLE:
+      return (
+        <td className={tableClasses.default}>
+          <div>
+            <div className="text-sm font-bold">{BcwsRoleName[cell.value?.role as keyof typeof BcwsRoleName]}</div>
+            <div className="text-sm">{SectionName[cell.value?.section as keyof typeof SectionName]}</div>
+          </div>
+        </td>
+
+      )
+    case DashboardColumns.UNION_MEMBERSHIP:
+      return <td className={getUnionMembershipClass(cell.value)}>{cell.value}</td>;
+
+    case DashboardColumns.WILLINGNESS:
+      return (
+        <>
+          {cell.value ? (
+            <td>
+              <span className={tableClasses.row}>
+                <CheckCircleIcon className={iconClass(cell.value)} /> Recieved
+              </span>
+            </td>
+          ) : (
+            <td>
+              <MinusCircleIcon className={iconClass(cell.value)} /> Pending
+            </td>
+          )}
+        </>
+      );
+    case DashboardColumns.ORIENTATION:
+      return (
+        <>
+          {cell.value ? (
+            <td>
+              <span className={tableClasses.row}>
+                <CheckCircleIcon className={iconClass(cell.value)} /> Completed
+              </span>
+            </td>
+          ) : (
+            <td>
+              <XCircleIcon className={iconClass(cell.value)} /> Incomplete
+            </td>
+          )}
+        </>
+      );
+    case DashboardColumns.REMOTE:
+      console.log(cell.value, "REMORE")
+      return (
+        <>
+          {cell.value ? (
+            <td>
+              <span className={tableClasses.row}>
+                <CheckCircleIcon className={iconClass(cell.value)} /> Completed
+              </span>
+            </td>
+          ) : (
+            <td>
+              <XCircleIcon className={iconClass(cell.value)} /> Incomplete
+            </td>
+          )}
+        </>
+      );
+
+    case DashboardColumns.MINISTRY:
+      return (
+
+
+        <td className={tableClasses.default + ' text-center'}>
+          {cell.value}
+        </td>
+
+
+      );
+    case DashboardColumns.RESPECTFUL:
+    case DashboardColumns.PARQ:
+      return (
+        <>
+          {cell.value ? (
+            <td>
+              <span className={tableClasses.row}>
+                <CheckIcon className={iconClass(cell.value)} /> Recieved
+              </span>
+            </td>
+          ) : (
+            <td>
+              <MinusIcon className={iconClass(cell.value)} /> Pending
+            </td>
+          )}
+        </>
+      );
+    case DashboardColumns.LOCATION:
+      return <td className={tableClasses.default + " text-left"}>{cell.value}</td>;
     default:
-      return <td className={cell.className}>{cell.value}</td>;
+      return <td className={tableClasses.default + " text-center"}>{cell.value}</td>;
   }
 };

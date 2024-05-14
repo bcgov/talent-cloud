@@ -32,10 +32,11 @@ export const MultiSelect = ({
         <MenuHandler field={field} id={field.name}>
           <MenuChips
             values={values}
-            label={field.name}
+            placeholder={field.placeholder}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
+            maxChips={2}
           />
           <MenuButton />
         </MenuHandler>

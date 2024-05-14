@@ -5,19 +5,21 @@ export const MenuChips = ({
   values,
   handleClose,
   handleCloseMany,
-  label,
+  placeholder,
   name,
+  maxChips,
 }: {
   values: any[];
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
-  label: string;
+  placeholder: string;
   name: string;
+  maxChips: number;
 }) => (
   <>
     {values?.length ? (
       <div className={classes.menu.chipsContainer}>
-        {(name === 'region' && values?.length > 2) || values?.length > 3 ? (
+        {values.length > maxChips ? (
           <Chip
             value={`${values?.length} selected`}
             name={name}
@@ -30,7 +32,7 @@ export const MenuChips = ({
         )}
       </div>
     ) : (
-      <span className={classes.menu.placeholder}>Select {label}(s)</span>
+      <span className={classes.menu.placeholder}>{placeholder}</span>
     )}
   </>
 );

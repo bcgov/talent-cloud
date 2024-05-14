@@ -10,7 +10,7 @@ import { logout } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
 import { useRole } from '@/hooks';
 import { Toggle } from '../toggle/Toggle';
-import { Program } from '@/providers';
+import { Program, Route } from '@/providers';
 
 export const Header = ({
   appName,
@@ -50,7 +50,7 @@ export const Header = ({
             {program === Program.ADMIN && (
               <Toggle
                 label={route}
-                value={route === Program.BCWS}
+                value={route === Route.BCWS}
                 handleToggle={handleToggle}
               />
             )}

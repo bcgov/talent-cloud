@@ -7,35 +7,43 @@ import {
   Search,
   DatePicker,
 } from '@/components';
-import type { ChangeEvent } from 'react';
 import { SingleSelect } from '@/components/filters/SingleSelect';
 import type { DateRange } from 'react-day-picker';
 import { useGetFilters } from '@/hooks/useGetFilters';
 import type { DashboardFilters } from './constants';
+import { Route } from '@/providers';
+import type { ChangeEvent } from 'react';
 
 export const Filters = ({
-  handleMultiSelect,
-  handleSingleSelect,
-  handleSearch,
-  onClear,
   filterValues,
-  handleClose,
-  handleCloseMany,
-  handleSetDates,
-  resetType,
+  changeHandlers,
+  route,
 }: {
-  handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  onClear: () => void;
   filterValues: DashboardFilters;
-  handleClose: (name: string, value: string) => void;
-  handleCloseMany: (name: string) => void;
-  handleSetDates: (range: DateRange | undefined) => void;
-  resetType: () => void;
+  changeHandlers: {
+    handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+    onClear: () => void;
+    handleClose: (name: string, value: string) => void;
+    handleCloseMany: (name: string) => void;
+    handleSetDates: (range: DateRange | undefined) => void;
+    resetType: () => void;
+  };
+  route?: Route;
 }) => {
   const { filters } = useGetFilters();
 
+  const {
+    handleMultiSelect,
+    handleSingleSelect,
+    handleSearch,
+    onClear,
+    handleClose,
+    handleCloseMany,
+    handleSetDates,
+    resetType,
+  } = changeHandlers;
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
@@ -46,14 +54,15 @@ export const Filters = ({
           value={filterValues.name}
         />
       </div>
-
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
-              field={filters.region}
-              values={filterValues.region}
-              label="Region"
+              field={route === Route.BCWS ? filters.fireCentre : filters.region}
+              values={
+                route === Route.BCWS ? filterValues.region : filterValues.fireCentre
+              }
+              label={route === Route.BCWS ? 'Fire Centre' : 'Region'}
               onChange={handleMultiSelect}
               handleClose={handleClose}
               handleCloseMany={handleCloseMany}
@@ -83,12 +92,16 @@ export const Filters = ({
       {/** lg - column 2 start */}
       <div className="col-span-1 lg:col-span-2">
         <CascadingMenu
-          field={filters.function}
-          nestedField={filters.experience}
-          nestedValue={filterValues.experience}
-          label="Function & Experience Level"
+          field={route === Route.BCWS ? filters.section : filters.function}
+          nestedField={route === Route.BCWS ? filters.role : filters.experience}
+          nestedValue={
+            route === Route.BCWS ? filterValues.role : filterValues.experience
+          }
+          label={
+            route === Route.BCWS ? 'Section/Role' : 'Function & Experience Level'
+          }
           onChange={handleSingleSelect}
-          value={filterValues.function}
+          value={route === Route.BCWS ? filterValues.section : filterValues.function}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-4">

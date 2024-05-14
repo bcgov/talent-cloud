@@ -3,6 +3,9 @@ import { NestedMenu } from './NestedMenu';
 import { MenuButton, Chip, Menu, MenuList, MenuHandler } from '../ui';
 import { ExperienceName, FunctionName } from '@/common';
 import { classes } from './classes';
+import { DashboardFilterNames } from '@/pages/dashboard';
+import type { BcwsRole, Section } from '@/common/enums/sections.enum';
+import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const CascadingMenu = ({
   value,
@@ -17,7 +20,7 @@ export const CascadingMenu = ({
   field: any;
   nestedField: any;
   value?: string;
-  nestedValue?: string;
+  nestedValue?: string | BcwsRole;
 }) => {
   const handleChange = (name: string, value: string) => {
     const event = {
@@ -34,6 +37,19 @@ export const CascadingMenu = ({
       return value;
     }
   };
+
+  const renderDisplay = (value: string) => {
+    if (field.name === DashboardFilterNames.SECTION) {
+      return nestedValue
+        ? `${SectionName[value as Section]}: ${BcwsRoleName[nestedValue as BcwsRole]}`
+        : `${value}: All`;
+    } else {
+      return nestedValue
+        ? `${displayValue(value)}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
+        : `${value}: All`;
+    }
+  };
+
   return (
     <>
       <span className="label">{label}</span>
@@ -44,11 +60,7 @@ export const CascadingMenu = ({
               handleClose={handleChange}
               name={field.name}
               value={''}
-              display={
-                nestedValue
-                  ? `${displayValue(value)}: ${ExperienceName[nestedValue as keyof typeof ExperienceName]}`
-                  : `${value}: All`
-              }
+              display={renderDisplay(value)}
             />
           ) : (
             <p className={classes.menu.placeholder}>

@@ -42,6 +42,12 @@ export const handleSearchParams = (
     searchParamsUrl.delete('region');
   }
 
+  if (filterValues.fireCentre?.length) {
+    searchParamsUrl.set('fireCentre', filterValues.fireCentre.join(', '));
+  } else {
+    searchParamsUrl.delete('fireCentre');
+  }
+
   if (filterValues?.location?.length) {
     searchParamsUrl.set('location', filterValues?.location?.join(', '));
   } else {
@@ -53,11 +59,13 @@ export const handleSearchParams = (
   } else {
     searchParamsUrl.delete('function');
   }
-
   if (filterValues?.experience) {
     searchParamsUrl.set('experience', filterValues.experience);
   } else {
     searchParamsUrl.delete('experience');
+  }
+  if (filterValues.role) {
+    searchParamsUrl.set('role', filterValues.role);
   }
 
   if (filterValues?.status) {

@@ -8,13 +8,17 @@ export enum Program {
   EMCR = 'emcr',
   ADMIN = 'admin',
 }
+export enum Route {
+  BCWS = 'bcws',
+  EMCR = 'emcr',
+}
 export const RoleContext = createContext<{
   role: Role | undefined;
   setRole: (role: Role | undefined) => void;
   program: Program | undefined;
   setProgram: (program: Program | undefined) => void;
-  route: Program | undefined;
-  setRoute: Dispatch<SetStateAction<Program | undefined>>;
+  route: Route | undefined;
+  setRoute: Dispatch<SetStateAction<Route | undefined>>;
   username: string;
   setUsername: (username: string) => void;
 }>({
@@ -32,8 +36,8 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
   const [program, setProgram] = useState<Program>();
-  const [route, setRoute] = useState<Program | undefined>(
-    (localStorage.getItem('route') as Program) ?? Program.BCWS,
+  const [route, setRoute] = useState<Route | undefined>(
+    (localStorage.getItem('route') as Route) ?? Route.BCWS,
   );
 
   return (
