@@ -1,8 +1,6 @@
-import { AvailabilityType } from '@/common';
-import { AvailabilityTypeName, ExperienceName, Status } from '@/common';
+import type { AvailabilityType } from '@/common';
+import { AvailabilityTypeName, Status } from '@/common';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import { BcwsRoleName } from '@/common/enums/sections.enum';
-
 import type { Availability, Personnel, DashboardFilters } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { Route } from '@/providers';
@@ -50,26 +48,31 @@ export const getAvailabilityValue = (
   };
 };
 
-const renderAvailability = (personnel: Personnel, filterValues: DashboardFilters) => {
-  if (filterValues.availabilityType &&
+const renderAvailability = (
+  personnel: Personnel,
+  filterValues: DashboardFilters,
+) => {
+  if (
+    filterValues.availabilityType &&
     personnel?.availability &&
-    personnel?.availability?.length > 0) {
+    personnel?.availability?.length > 0
+  ) {
     return getAvailabilityValue(
       filterValues.availabilityType,
       filterValues.availabilityDates,
       personnel.availability,
-    )
-  }
-
-  else if (!personnel.availability) {
-    return { availability: '' }
+    );
+  } else if (!personnel.availability) {
+    return { availability: '' };
   } else if (personnel.availability.length > 0) {
     return {
       availability:
-        AvailabilityTypeName[personnel.availability[0].availabilityType as keyof typeof AvailabilityType],
-    }
+        AvailabilityTypeName[
+          personnel.availability[0].availabilityType as keyof typeof AvailabilityType
+        ],
+    };
   }
-}
+};
 
 export const renderCells = (
   personnel: Personnel,
@@ -97,7 +100,9 @@ export const renderCells = (
     location: {
       key: DashboardColumns.LOCATION,
       columnName: DashboardColumns.LOCATION,
-      value: personnel?.homeFireCentre?.locationName ?? personnel.homeLocation.locationName,
+      value:
+        personnel?.homeFireCentre?.locationName ??
+        personnel.homeLocation.locationName,
     },
 
     ics: {
@@ -113,8 +118,7 @@ export const renderCells = (
     function: {
       key: DashboardColumns.FUNCTION,
       columnName: DashboardColumns.FUNCTION,
-      value: personnel?.experiences?.[0]
-      
+      value: personnel?.experiences?.[0],
     },
     unionMembership: {
       key: DashboardColumns.UNION_MEMBERSHIP,
@@ -131,7 +135,6 @@ export const renderCells = (
       columnName: DashboardColumns.AVAILABILITY,
       // value will be the status type and/or the number of days available
       value: renderAvailability(personnel, filterValues),
-
     },
     willingToTravel: {
       key: DashboardColumns.TRAVEL,
@@ -191,7 +194,7 @@ export const renderCells = (
       cells.supervisorApproval,
       cells.function,
       cells.unionMembership,
-      cells.ministry
+      cells.ministry,
     ],
     [Route.BCWS]: [
       cells.name,
@@ -227,7 +230,6 @@ export const renderCells = (
       cells.availability,
       cells.willingToTravel,
       cells.unionMembership,
-      
     ],
   };
 

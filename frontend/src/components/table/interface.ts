@@ -2,7 +2,7 @@ import type { Status } from '@/common';
 
 export interface Cell {
   key: string;
-  
+
   columnName: string;
   value: any;
   className: string;

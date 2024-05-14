@@ -12,7 +12,6 @@ export const cols = {
       DashboardColumns.AVAILABILITY,
       DashboardColumns.TRAVEL,
       DashboardColumns.UNION_MEMBERSHIP,
-      
     ],
     [Route.EMCR]: [
       DashboardColumns.NAME,

@@ -1,5 +1,4 @@
 import type { Cell } from '@/components';
-import { booleanToString } from '@/components';
 import { DashboardColumns } from '@/pages/dashboard/constants';
 import {
   getAvailabilityClass,
@@ -17,7 +16,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
 import { ExperienceName } from '@/common/enums/experience.enum';
-import {  BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
+import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const TableBodyCell = ({
   cell,
@@ -52,7 +51,13 @@ export const TableBodyCell = ({
         <td className={tableClasses.default}>
           <div>
             <div className="text-sm font-bold">{cell.value?.functionName}</div>
-            <div className="text-sm">{ExperienceName[cell.value?.experienceType as keyof typeof ExperienceName]}</div>
+            <div className="text-sm">
+              {
+                ExperienceName[
+                  cell.value?.experienceType as keyof typeof ExperienceName
+                ]
+              }
+            </div>
           </div>
         </td>
       );
@@ -60,7 +65,9 @@ export const TableBodyCell = ({
     case DashboardColumns.AVAILABILITY:
       return (
         <td className={tableClasses.default}>
-          <span className={getAvailabilityClass(cell.value?.availability)}>{cell?.value?.availability}</span>
+          <span className={getAvailabilityClass(cell.value?.availability)}>
+            {cell?.value?.availability}
+          </span>
           <span className="ml-2 text-defaultGray">{cell.value?.days}</span>
         </td>
       );
@@ -85,26 +92,30 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <td className={tableClasses.row}>
-              <CheckCircleIcon className={iconClass(cell.value)} /><span>YES</span>
+              <CheckCircleIcon className={iconClass(cell.value)} />
+              <span>YES</span>
             </td>
           ) : (
             <td className={tableClasses.row}>
-              <XCircleIcon className={iconClass(cell.value)} /><span>NO</span>
+              <XCircleIcon className={iconClass(cell.value)} />
+              <span>NO</span>
             </td>
           )}
-
         </>
       );
     case DashboardColumns.ROLE:
       return (
         <td className={tableClasses.default}>
           <div>
-            <div className="text-sm font-bold">{BcwsRoleName[cell.value?.role as keyof typeof BcwsRoleName]}</div>
-            <div className="text-sm">{SectionName[cell.value?.section as keyof typeof SectionName]}</div>
+            <div className="text-sm font-bold">
+              {BcwsRoleName[cell.value?.role as keyof typeof BcwsRoleName]}
+            </div>
+            <div className="text-sm">
+              {SectionName[cell.value?.section as keyof typeof SectionName]}
+            </div>
           </div>
         </td>
-
-      )
+      );
     case DashboardColumns.UNION_MEMBERSHIP:
       return <td className={getUnionMembershipClass(cell.value)}>{cell.value}</td>;
 
@@ -158,15 +169,7 @@ export const TableBodyCell = ({
       );
 
     case DashboardColumns.MINISTRY:
-      return (
-
-
-        <td className={tableClasses.default + ' text-center'}>
-          {cell.value}
-        </td>
-
-
-      );
+      return <td className={tableClasses.default + ' text-center'}>{cell.value}</td>;
     case DashboardColumns.RESPECTFUL:
     case DashboardColumns.PARQ:
       return (
@@ -185,8 +188,8 @@ export const TableBodyCell = ({
         </>
       );
     case DashboardColumns.LOCATION:
-      return <td className={tableClasses.default + " text-left"}>{cell.value}</td>;
+      return <td className={tableClasses.default + ' text-left'}>{cell.value}</td>;
     default:
-      return <td className={tableClasses.default + " text-center"}>{cell.value}</td>;
+      return <td className={tableClasses.default + ' text-center'}>{cell.value}</td>;
   }
 };

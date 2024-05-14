@@ -9,7 +9,7 @@ export const classificationClass =
 
 export const tableClasses: { [key: string]: string } = {
   available: 'text-success',
-  
+
   default: tdClass,
   row: 'flex flex-row items-center justify-center text-sm',
   excluded: [
@@ -44,11 +44,11 @@ export const getAvailabilityClass = (value: AvailabilityTypeName) => {
     case AvailabilityTypeName.AVAILABLE:
       return 'text-success';
     case AvailabilityTypeName.UNAVAILABLE:
-      return 'text-error'
+      return 'text-error';
     case AvailabilityTypeName.DEPLOYED:
-      return 'text-warning'
+      return 'text-warning';
     default:
-      return ""
+      return '';
   }
 };
 export const iconClass = (value: boolean) => {

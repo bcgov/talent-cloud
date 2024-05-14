@@ -73,21 +73,11 @@ const renderName = (name: string) => {
   if (name === DashboardColumns.RESPECTFUL) {
     return (
       <td className="flex flex-row  flex-nowrap text-nowrap ">
-          {name.split(' ')[0]} <br/>{name.split(' ')[1]}  {name.split(' ')[2]}
-      
+        {name.split(' ')[0]} <br />
+        {name.split(' ')[1]} {name.split(' ')[2]}
       </td>
     );
-  }
-  
-   else return (
-   
-        <td className="flex flex-row  flex-nowrap text-nowrap ">
-          
-            {name}
-          
-        </td>
-      );
-   
+  } else return <td className="flex flex-row  flex-nowrap text-nowrap ">{name}</td>;
 };
 export const Table = ({
   pageParams,
