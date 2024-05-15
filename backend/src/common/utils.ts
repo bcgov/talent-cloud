@@ -82,8 +82,11 @@ export const rowData = (
     languages: createLanguages(),
     division: faker.helpers.arrayElement(seedDivisions).id,
   };
-
+  
+  
   const emcrData: CreatePersonnelEmcrDTO = {
+    homeLocation: faker.helpers.arrayElement(locations),
+    workLocation: faker.helpers.arrayElement(locations),
     dateApplied: dateApplied,
     logisticsNotes: faker.lorem.paragraph(),
     coordinatorNotes: faker.lorem.sentence(),
@@ -96,9 +99,7 @@ export const rowData = (
     preocExperience: faker.datatype.boolean({ probability: 0.4 }),
     emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
     approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
-    workLocation: faker.helpers.arrayElement(locations),
     trainings: [status !== Status.PENDING && seededTrainings[0]],
-
     dateApproved:
       status !== Status.PENDING
         ? faker.date.between({
@@ -106,7 +107,6 @@ export const rowData = (
             to: new Date(),
           })
         : undefined,
-    homeLocation: faker.helpers.arrayElement(locations),
     status: status,
     experiences:
       status !== Status.PENDING
@@ -133,9 +133,9 @@ export const rowData = (
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };
-
   return { personnelData, emcrData, bcwsData };
 };
+
 const threeMonthsArray = () => {
   const today = new Date();
   const startDate = new Date(today.getFullYear(), today.getMonth() - 3, 1);
