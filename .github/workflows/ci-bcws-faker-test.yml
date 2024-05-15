@@ -1,5 +1,5 @@
 # Do not run on production
-name: Seed dev faker data
+name: Seed BCWS test faker data
 
 on:
   workflow_dispatch:  
@@ -9,16 +9,16 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
-  ENV: dev
+  ENV: test
 
 jobs:
   seed_faker_data:
-    name: Seed dev faker data
-    environment: dev
+    name: Seed test faker data
+    environment: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      OS_NAMESPACE_SUFFIX: dev
+      OS_NAMESPACE_SUFFIX: test
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
@@ -48,4 +48,4 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make seed-faker-data-oc    
+          make seed-bcws-fake-data-oc    

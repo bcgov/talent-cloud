@@ -8,7 +8,6 @@ import {
   ToolsProficiency,
 } from './enums/bcws';
 import { DriverLicense } from './enums/driver-license.enum';
-import { FirstAid, Experience } from './enums/emcr';
 import { Ministry } from './enums/ministry.enum';
 import { Status } from './enums/status.enum';
 import { UnionMembership } from './enums/union-membership.enum';
@@ -18,26 +17,20 @@ import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { DivisionEntity } from '../database/entities/division.entity';
 import {
-  EmcrExperienceEntity,
-  EmcrFunctionEntity,
-  EmcrTrainingEntity,
   LocationEntity,
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
-import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 
 export const rowData = (
   locations: LocationEntity[],
-  functions: EmcrFunctionEntity[],
-  seededBcwsRoles: BcwsRoleEntity[],
-  seededBcwsTools: BcwsToolsEntity[],
-  seededBcwsCertifications: BcwsCertificationEntity[],
-  seedDivisions: DivisionEntity[],
-  seededTrainings: EmcrTrainingEntity[],
+  roles: BcwsRoleEntity[],
+  tools: BcwsToolsEntity[],
+  certs: BcwsCertificationEntity[],
+  divisions: DivisionEntity[],
+  
 ): {
   personnelData: CreatePersonnelDTO;
-  emcrData: CreatePersonnelEmcrDTO;
   bcwsData: CreatePersonnelBcwsDTO;
 } => {
   const status =
@@ -76,44 +69,15 @@ export const rowData = (
     parQ: true,
     respectfulWorkplacePolicy: true,
     orientation: true,
-    tools: createTools(seededBcwsTools),
-    certifications: createCertifications(seededBcwsCertifications),
-    roles: createRoles(seededBcwsRoles),
+    tools: createTools(tools),
+    certifications: createCertifications(certs),
+    roles: createRoles(roles),
     languages: createLanguages(),
-    division: faker.helpers.arrayElement(seedDivisions).id,
+    division: faker.helpers.arrayElement(divisions).id,
   };
   
   
-  const emcrData: CreatePersonnelEmcrDTO = {
-    homeLocation: faker.helpers.arrayElement(locations),
-    workLocation: faker.helpers.arrayElement(locations),
-    dateApplied: dateApplied,
-    logisticsNotes: faker.lorem.paragraph(),
-    coordinatorNotes: faker.lorem.sentence(),
-    firstAidLevel: faker.helpers.arrayElement(Object.values(FirstAid)),
-    firstAidExpiry: faker.date.past(),
-    psychologicalFirstAid: faker.datatype.boolean({ probability: 0.2 }),
-    firstNationExperienceLiving: faker.datatype.boolean({ probability: 0.2 }),
-    firstNationExperienceWorking: faker.datatype.boolean({ probability: 0.2 }),
-    peccExperience: faker.datatype.boolean({ probability: 0.4 }),
-    preocExperience: faker.datatype.boolean({ probability: 0.4 }),
-    emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
-    approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
-    trainings: [status !== Status.PENDING && seededTrainings[0]],
-    dateApproved:
-      status !== Status.PENDING
-        ? faker.date.between({
-            from: dateApplied,
-            to: new Date(),
-          })
-        : undefined,
-    status: status,
-    experiences:
-      status !== Status.PENDING
-        ? (experiences(functions) as EmcrExperienceEntity[])
-        : [],
-  };
-
+  
   const personnelData: CreatePersonnelDTO = {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -133,7 +97,7 @@ export const rowData = (
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };
-  return { personnelData, emcrData, bcwsData };
+  return { personnelData,  bcwsData };
 };
 
 const threeMonthsArray = () => {
@@ -181,25 +145,8 @@ const availability = () => {
   return availabilities;
 };
 
-const experiences = (functions: EmcrFunctionEntity[]) => {
-  const experiences = [];
-  for (let i = 0; i < 5; i++) {
-    const functionEntity: { id: number; name: string; abbreviation: string } =
-      faker.helpers.arrayElement(functions);
 
-    experiences.push({
-      functionId: functionEntity.id,
-      function: functionEntity,
-      experienceType: faker.helpers.arrayElement(Object.values(Experience)),
-    });
-  }
-  const uniqueFunctions = new Set(experiences.map((exp) => exp.functionId));
-  const uniqueFunctionsArray = Array.from(uniqueFunctions);
 
-  return uniqueFunctionsArray.map((uniqueId) =>
-    experiences.find((exp) => exp.functionId === uniqueId),
-  );
-};
 
 export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
   const personnelTools = [];
@@ -296,32 +243,26 @@ export const createLanguages = () => {
 
 export const handler = (
   locations: LocationEntity[],
-  functions: EmcrFunctionEntity[],
-  seededBcwsRoles: BcwsRoleEntity[],
-  seededBcwsTools: BcwsToolsEntity[],
-  seededBcwsCertifications: BcwsCertificationEntity[],
-  seededBcwsDivisions: DivisionEntity[],
-  seededTrainings: EmcrTrainingEntity[],
+  roles: BcwsRoleEntity[],
+  tools: BcwsToolsEntity[],
+  certs: BcwsCertificationEntity[],
+  divisions: DivisionEntity[],
 ): {
-  personnelData: CreatePersonnelDTO;
-  emcrData: CreatePersonnelEmcrDTO;
+  personnelData: CreatePersonnelDTO
   bcwsData: CreatePersonnelBcwsDTO;
 }[] => {
   const people: {
     personnelData: CreatePersonnelDTO;
-    emcrData: CreatePersonnelEmcrDTO;
     bcwsData: CreatePersonnelBcwsDTO;
   }[] = [];
   for (let i = 0; i < 200; i++) {
     people.push(
       rowData(
         locations,
-        functions,
-        seededBcwsRoles,
-        seededBcwsTools,
-        seededBcwsCertifications,
-        seededBcwsDivisions,
-        seededTrainings,
+        roles,
+        tools,
+        certs,
+        divisions,        
       ),
     );
   }
