@@ -13,7 +13,7 @@ export class LocationEntity {
     name: 'location_name',
     type: 'varchar',
     length: 100,
-    nullable: true,
+    nullable: false,
     unique: true,
   })
   locationName: string;
@@ -23,7 +23,7 @@ export class LocationEntity {
     enum: Region,
     enumName: 'region',
     type: 'enum',
-    nullable: true,
+    nullable: false,
   })
   region: Region;
 
@@ -32,7 +32,7 @@ export class LocationEntity {
     enum: FireCentre,
     enumName: 'fire-centre',
     type: 'enum',
-    nullable: true,
+    nullable: false,
   })
   fireCentre: FireCentre;
 
@@ -40,8 +40,8 @@ export class LocationEntity {
     return {
       id: this.id,
       locationName: this.locationName,
-      region: this.region ?? null,
-      fireCentre: this.fireCentre ?? null,
+      region: this.region,
+      fireCentre: this.fireCentre,
     };
   }
 }
