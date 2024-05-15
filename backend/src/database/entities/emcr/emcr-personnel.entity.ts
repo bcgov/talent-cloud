@@ -81,7 +81,7 @@ export class EmcrPersonnelEntity {
     },
     { name: 'home_region', referencedColumnName: 'region' },
   ])
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: true})
   homeLocation: LocationEntity;
 
   @Column({

@@ -1,15 +1,11 @@
 import { personnel } from './data';
 import { datasource } from './datasource';
 import { BcwsPersonnelEntity } from './entities/bcws';
-import { BcwsCertificationEntity } from './entities/bcws/bcws-certifications.entity';
-import { BcwsRoleEntity } from './entities/bcws/bcws-role.entity';
-import { BcwsToolsEntity } from './entities/bcws/bcws-tools.entity';
-import { DivisionEntity } from './entities/division.entity';
+
 import {
-  EmcrFunctionEntity,
-  LocationEntity,
+
   EmcrPersonnelEntity,
-  EmcrTrainingEntity,
+
 } from './entities/emcr';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/utils';
@@ -22,32 +18,22 @@ export const handler = async () => {
   if (!datasource.isInitialized) {
     await datasource.initialize();
   }
-
-  const personnelRepo = datasource.getRepository(PersonnelEntity);
-
-  const locationRepo = datasource.getRepository(LocationEntity);
-  const functionRepo = datasource.getRepository(EmcrFunctionEntity);
-  const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
-  const emcrTrainingRepo = datasource.getRepository(EmcrTrainingEntity);
-  const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
-  const bcwsToolsRepo = datasource.getRepository(BcwsToolsEntity);
-  const bcwsCertificationsRepo = datasource.getRepository(
-    BcwsCertificationEntity,
-  );
-  const bcwsDivisionsRepo = datasource.getRepository(DivisionEntity);
-  const bcwsRolesRepo = datasource.getRepository(BcwsRoleEntity);
-
-  try {
-    const seededDivisions = await bcwsDivisionsRepo.find();
-    const seededLocations = await locationRepo.find();
-    const seededFunctions = await functionRepo.find();
-    const seededTrainings = await emcrTrainingRepo.find();
-    const seededBcwsTools = await bcwsToolsRepo.find();
-    const seededBcwsCertifications = await bcwsCertificationsRepo.find();
-    const seededBcwsRoles = await bcwsRolesRepo.find();
-
+    
+    const locations = await datasource.query('SELECT * FROM location')
+    const functions = await datasource.query('SELECT * FROM emcr_function')
+    const trainings = await datasource.query('SELECT * FROM emcr_training')
+    const tools = await datasource.query('SELECT * FROM bcws_tools')
+    const certs = await datasource.query('SELECT * FROM bcws_certification')
+    const roles = await datasource.query('SELECT * FROM bcws_role')
+    const divisions = await datasource.query('SELECT * FROM division')
+    
+    const personnelRepo = datasource.getRepository(PersonnelEntity);
+    const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
+    const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
+try{
     if (cicd) {
       // await datasource.query(testSql);
+      
       await Promise.all(
         personnel.map(async (person) => {
           const emcr: CreatePersonnelEmcrDTO = person.emcr;
@@ -62,13 +48,14 @@ export const handler = async () => {
       );
     } else if (!cicd) {
       const data = dataHandler(
-        seededLocations,
-        seededFunctions,
-        seededBcwsRoles,
-        seededBcwsTools,
-        seededBcwsCertifications,
-        seededDivisions,
-        seededTrainings,
+        locations,
+        functions,
+        roles,
+        tools,
+        certs,
+        divisions,
+        trainings
+        
       );
 
       await Promise.all(
@@ -88,6 +75,8 @@ export const handler = async () => {
           bcws.roles.forEach((role) => (role.personnelId = person.id));
           bcws.certifications.forEach((cert) => (cert.personnelId = person.id));
           bcws.languages.forEach((lang) => (lang.personnelId = person.id));
+
+          
           await emcrPersonnelRepo.save(emcr);
           await bcwsPersonnelRepo.save(bcws);
         }),

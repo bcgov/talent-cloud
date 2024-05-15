@@ -1,5 +1,5 @@
-# Do not run on production/test
-name: Seed dev dummy data
+# Do not run on production
+name: Seed dev faker data
 
 on:
   workflow_dispatch:  
@@ -13,7 +13,7 @@ env:
 
 jobs:
   run_migrations:
-    name: Seed den dummy data
+    name: Seed dev faker data
     environment: dev
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -48,4 +48,4 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make seed-dummy-data-oc    
+          make seed-faker-data-oc    

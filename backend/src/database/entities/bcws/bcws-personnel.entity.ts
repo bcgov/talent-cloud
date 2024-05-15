@@ -56,7 +56,7 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
 
-  @OneToOne(() => DivisionEntity, (d) => d.id)
+  @ManyToOne(() => DivisionEntity, (d) => d.id)
   @JoinColumn({ name: 'division_id', referencedColumnName: 'id' })
   division: DivisionEntity;
 
