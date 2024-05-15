@@ -10,7 +10,7 @@ env:
   PROJECT: tcloud
 
 jobs:
-  run_migrations:
+  seed_data:
     name: Seed Tables (Test)
     environment: prod
     runs-on: ubuntu-latest

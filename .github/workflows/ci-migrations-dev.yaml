@@ -47,9 +47,4 @@ jobs:
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
           make migration-run-oc
-      - name: Seed Data
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
-          export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make seed-data-oc    
+      

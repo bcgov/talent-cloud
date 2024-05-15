@@ -1,4 +1,4 @@
-name: Run Migrations (Dev)
+name: Seed Tables (Dev)
 
 on:
   workflow_dispatch:  
@@ -10,8 +10,8 @@ env:
   PROJECT: tcloud
 
 jobs:
-  run_migrations:
-    name: Run Migrations (Dev)
+  seed_data:
+    name: Seed Data (Dev)
     environment: dev
     runs-on: ubuntu-latest
     timeout-minutes: 20
