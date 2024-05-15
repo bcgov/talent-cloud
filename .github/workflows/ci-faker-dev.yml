@@ -12,7 +12,7 @@ env:
   ENV: dev
 
 jobs:
-  run_migrations:
+  seed_faker_data:
     name: Seed dev faker data
     environment: dev
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-name: Run Migrations (Test)
+name: Seed Tables (Prod)
 
 on:
   workflow_dispatch:  
@@ -11,12 +11,12 @@ env:
 
 jobs:
   run_migrations:
-    name: Run Migrations (Test)
-    environment: test
+    name: Seed Tables (Test)
+    environment: prod
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      OS_NAMESPACE_SUFFIX: test
+      OS_NAMESPACE_SUFFIX: prod
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
@@ -41,10 +41,9 @@ jobs:
           tar -zxf oc.tar.gz "$FILE"
           sudo mv "$FILE" /usr/local/bin/oc
           rm -rf oc.tar.gz openshift-origin-client-tools-v*
-      - name: Run migrations
+      - name: Seed Data
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
-      
+          make seed-data-oc    
