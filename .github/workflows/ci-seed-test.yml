@@ -1,4 +1,4 @@
-name: Run Migrations (Dev)
+name: Seed Tables (Test)
 
 on:
   workflow_dispatch:  
@@ -10,13 +10,13 @@ env:
   PROJECT: tcloud
 
 jobs:
-  run_migrations:
-    name: Run Migrations (Dev)
-    environment: dev
+  seed_data:
+    name: Seed Tables (Test)
+    environment: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      OS_NAMESPACE_SUFFIX: dev
+      OS_NAMESPACE_SUFFIX: test
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
@@ -41,10 +41,9 @@ jobs:
           tar -zxf oc.tar.gz "$FILE"
           sudo mv "$FILE" /usr/local/bin/oc
           rm -rf oc.tar.gz openshift-origin-client-tools-v*
-      - name: Run migrations
+      - name: Seed Data
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
-      
+          make seed-data-oc    

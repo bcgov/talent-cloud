@@ -1,4 +1,5 @@
-name: Run Migrations (Dev)
+# Do not run on production
+name: Seed EMCR test faker data
 
 on:
   workflow_dispatch:  
@@ -8,15 +9,16 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
+  ENV: test
 
 jobs:
-  run_migrations:
-    name: Run Migrations (Dev)
-    environment: dev
+  seed_faker_data:
+    name: Seed test faker data
+    environment: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      OS_NAMESPACE_SUFFIX: dev
+      OS_NAMESPACE_SUFFIX: test
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
     steps:
       - name: Checkout
@@ -41,10 +43,9 @@ jobs:
           tar -zxf oc.tar.gz "$FILE"
           sudo mv "$FILE" /usr/local/bin/oc
           rm -rf oc.tar.gz openshift-origin-client-tools-v*
-      - name: Run migrations
+      - name: Seed Data
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
-      
+          make seed-emcr-fake-data-oc    

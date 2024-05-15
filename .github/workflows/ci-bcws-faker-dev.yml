@@ -1,4 +1,5 @@
-name: Run Migrations (Dev)
+# Do not run on production
+name: Seed BCWS dev faker data
 
 on:
   workflow_dispatch:  
@@ -8,10 +9,11 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
+  ENV: dev
 
 jobs:
-  run_migrations:
-    name: Run Migrations (Dev)
+  seed_faker_data:
+    name: Seed dev faker data
     environment: dev
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -41,10 +43,9 @@ jobs:
           tar -zxf oc.tar.gz "$FILE"
           sudo mv "$FILE" /usr/local/bin/oc
           rm -rf oc.tar.gz openshift-origin-client-tools-v*
-      - name: Run migrations
+      - name: Seed Data
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
-      
+          make seed-bcws-fake-data-oc    
