@@ -46,9 +46,7 @@ const seedTools = async () => {
   if (data.length === 0) {
     await datasource.query(certsSql);
   }
-
-
-  'Already seeded';
+  
 };
 
 seedTools();
