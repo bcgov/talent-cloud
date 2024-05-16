@@ -37,5 +37,5 @@ export class BcwsPersonnelToolsRO {
     enumName: 'bcws-tools-proficiency',
     enum: ToolsProficiency,
   })
-  proficenyLevel: ToolsProficiency;
+  proficiencyLevel: ToolsProficiency;
 }

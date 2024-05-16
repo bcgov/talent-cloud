@@ -9,7 +9,7 @@ import { datePST, formatPhone } from '@/utils';
 import { useRole } from '@/hooks';
 import { Role, Status } from '@/common';
 
-const ProfileDetails = ({
+const EmcrProfileDetails = ({
   personnel,
   openEditProfilePopUp,
 }: {
@@ -156,4 +156,4 @@ const ProfileDetails = ({
   );
 };
 
-export default ProfileDetails;
+export default EmcrProfileDetails;

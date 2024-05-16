@@ -30,7 +30,7 @@ export class BcwsPersonnelTools {
   toResponseObject() {
     return {
       tool: this.tool.name,
-      proficenyLevel: this.proficenyLevel,
+      proficiencyLevel: this.proficenyLevel,
     };
   }
 }
