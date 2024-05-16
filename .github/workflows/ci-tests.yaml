@@ -45,7 +45,7 @@ jobs:
         run: make build-test
 
       - name: Seed Test Data
-        run: make seed-local
+        run: make seed-local-emcr
       
       - name: Run Frontend Tests
         run: make test-frontend-pipeline
