@@ -20,6 +20,8 @@ export const handler = async () => {
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
+    
+
 
     for (let i = 0; i < 50; i++) {
       const { personnelData, emcrData } = dataHandler(locations.map(itm=> ({locationName: itm.locationName, region: itm.region, id: itm.id})),

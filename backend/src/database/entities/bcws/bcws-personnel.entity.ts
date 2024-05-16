@@ -144,7 +144,7 @@ export class BcwsPersonnelEntity {
   })
   roles?: BcwsSectionsAndRolesEntity[];
 
-  @OneToMany(() => LanguageEntity, (l) => l.personnel, { cascade: true })
+  @OneToMany(() => LanguageEntity, (l) => l.id, { cascade: true })
   languages?: LanguageEntity[];
 
   @OneToMany(() => BcwsPersonnelCertificationEntity, (c) => c.personnel, {

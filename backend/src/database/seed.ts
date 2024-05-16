@@ -6,8 +6,6 @@ const seed = async () => {
   await datasource.initialize();
 
 
-  await datasource.query(functionSqlPrior);
-  await datasource.query(functionSqlAfter);
 
   const roles = await datasource.query(`SELECT * FROM public.bcws_role`);
 
@@ -31,6 +29,11 @@ const seed = async () => {
   if (functions.length === 0) {
     await datasource.query(functionSql);
   }
+
+
+  await datasource.query(functionSqlPrior);
+  await datasource.query(functionSqlAfter);
+  
   const tools = await datasource.query(`SELECT * FROM public.bcws_tools`);
   if (tools.length === 0) {
     await datasource.query(toolsSql);
