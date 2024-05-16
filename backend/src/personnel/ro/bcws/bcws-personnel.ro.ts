@@ -132,15 +132,33 @@ export class BcwsRO extends PersonnelRO {
   })
   orientation: boolean;
 
+  @ApiProperty({
+    description: 'Emergency Contact First Name',
+    required: false,
+  })
+  emergencyContactFirstName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Last Name',
+    required: false,
+  })
+  emergencyContactLastName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Phone Number',
+    required: false,
+  })
+  emergencyContactPhoneNumber: string;
+
   //TODO: Add the following properties
   @ApiProperty()
-  tools?: BcwsPersonnelToolsRO;
+  tools?: BcwsPersonnelToolsRO[];
 
   @ApiProperty()
-  certifications?: BcwsPersonnelCertificationRO;
+  certifications?: BcwsPersonnelCertificationRO[];
 
   @ApiProperty()
-  languages?: BcwsPersonnelLanguagesRO;
+  languages?: BcwsPersonnelLanguagesRO[];
 
   @ApiProperty()
   roles?: BcwsPersonnelRoleRO;

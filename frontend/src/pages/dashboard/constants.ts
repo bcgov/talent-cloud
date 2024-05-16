@@ -85,6 +85,11 @@ export interface BcwsRoleInterface {
   section: Section;
 }
 
+export interface BcwsPersonnelTool {
+  tool: string;
+  proficiencyLevel: string;
+}
+
 export interface Personnel {
   id: string;
   firstName: string;
@@ -120,6 +125,7 @@ export interface Personnel {
   coordinatorNotes?: string;
   lastDeployed?: string;
   homeFireCentre: Location;
+  workFireCentre: Location;
   division: string;
   orientation: boolean;
   willingnessStatement: boolean;
@@ -135,6 +141,11 @@ export interface Personnel {
   liaisonPhoneNumber: string;
   liaisonEmail: string;
   purchaseCardHolder: boolean;
+  driverLicense?: string[];
+  emergencyContactFirstName?: string;
+  emergencyContactLastName?: string;
+  emergencyContactPhoneNumber?: string;
+
 }
 
 export interface AvailabilityRange {

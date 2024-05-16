@@ -157,4 +157,10 @@ export class PersonnelRO {
     required: false,
   })
   lastDeployed?: string;
+
+  @ApiProperty({
+    description: 'Driver Licenses',
+    required: false,
+  })
+  driverLicense?: string[];
 }

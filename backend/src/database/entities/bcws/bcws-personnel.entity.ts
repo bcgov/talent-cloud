@@ -184,6 +184,7 @@ export class BcwsPersonnelEntity {
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
+      certifications: this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

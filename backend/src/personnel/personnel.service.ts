@@ -33,6 +33,7 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
+import { BcwsRO } from './ro/bcws';
 
 @Injectable()
 export class PersonnelService {
@@ -92,7 +93,7 @@ export class PersonnelService {
       await this.personnelRepository.save(person);
       await this.emcrPersonnelRepository.save(emcr);
 
-      return this.getPersonnelById(role, id);
+      return this.getPersonnelById(role, Program.EMCR, id);
     } catch (e) {
       console.log(e);
     }
@@ -118,7 +119,7 @@ export class PersonnelService {
     try {
       await this.experiencesRepository.delete({ personnelId: id });
       await this.experiencesRepository.save(experienceEntities);
-      return this.getPersonnelById(role, id);
+      return this.getPersonnelById(role, Program.EMCR, id);
     } catch (e) {
       console.log(e);
     }
@@ -436,17 +437,24 @@ export class PersonnelService {
    */
   async getPersonnelById(
     role: Role,
+    program: Program,
     id: string,
-  ): Promise<Record<string, EmcrRO>> {
-    const person = await this.emcrPersonnelRepository.findOne({
+  ): Promise<Record<string, EmcrRO | BcwsRO>> {
+    const repository = program === Program.EMCR ? this.emcrPersonnelRepository : this.bcwsPersonnelRepository;
+    const relations = program === Program.EMCR
+      ? ['experiences', 'experiences.function', 'training']
+      : ['personnel', 'roles', 'roles.role', 'division', 'languages', 'certifications', 'certifications.certification', 'tools', 'tools.tool'];
+    const person = await repository.findOne({
       where: { personnel: { id } },
-      relations: ['experiences', 'experiences.function', 'training'],
+      relations,
     });
     const lastDeployed = await this.getLastDeployedDate(id);
     const personnel = person.toResponseObject(role, lastDeployed);
 
+    console.log(personnel);
     return personnel;
   }
+
   /**
    * Get the availability of a personnel for a specific date range
    * @param id
