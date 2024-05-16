@@ -37,7 +37,7 @@ export const handler = (
 const dateApplied = faker.date.past();
 const homeLocation =  faker.helpers.arrayElement(locations)
 const workLocation =  faker.helpers.arrayElement(locations)
-console.log(homeLocation)
+
 const emcrData: CreatePersonnelEmcrDTO = {
   homeLocation: homeLocation,
   workLocation: workLocation, 
