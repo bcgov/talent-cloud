@@ -2,7 +2,7 @@ import { functionSqlAfter, functionSqlPrior } from './create-availability-functi
 import { datasource } from './datasource';
 import { certsSql, divisionsSql, functionSql, insertPersonnelTrainingSql, insertTrainingSql, joinedLocationsSql, rolesSql, toolsSql } from './queries';
 
-const seedTools = async () => {
+const seed = async () => {
   await datasource.initialize();
 
 
@@ -10,6 +10,7 @@ const seedTools = async () => {
   await datasource.query(functionSqlAfter);
 
   const roles = await datasource.query(`SELECT * FROM public.bcws_role`);
+
   if (roles.length === 0) {
     await datasource.query(rolesSql);
   }
@@ -49,4 +50,4 @@ const seedTools = async () => {
   
 };
 
-seedTools();
+seed();

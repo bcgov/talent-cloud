@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import {
   LanguageLevelType,
@@ -13,6 +13,9 @@ export class LanguageEntity {
 
   @PrimaryColumn({ name: 'personnel_id', type: 'uuid' })
   personnelId: string;
+
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({ name: 'language', type: 'varchar', length: 50 })
   language: string;
