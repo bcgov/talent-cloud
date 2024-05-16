@@ -16,10 +16,7 @@ export const renderName = (name: string) => {
         <>
           {name.split(' ')[0]}
           <br />
-          <span className="text-nowrap">
-            {' '}
-            {name.split(' ')[1] + ' ' + name.split(' ')[2]}
-          </span>
+          {`${name.split(' ')[1]} ${name.split(' ')[2]}`}
         </>
       );
 

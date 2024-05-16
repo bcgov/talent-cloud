@@ -11,7 +11,7 @@ const DetailsSection = ({
 }) => {
   return (
     <div className="py-5">
-      <h3 className="font-bold text-info">{title}</h3>
+      <h5 className="font-bold text-info">{title}</h5>
       <div
         className={`grid ${numColumns === 2 ? 'grid grid-cols-1 lg:grid-cols-2' : 'grid-cols-1 lg:grid-cols-3'} pt-4`}
       >

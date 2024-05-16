@@ -12,7 +12,7 @@ const Detail = ({
   return (
     <div className="py-2">
       <div className="flex flex-row items-center space-x-2">
-        <h4>{title}</h4>
+        <p className="subtext-sm">{title}</p>
         {icon}
       </div>
       <p>{content}</p>

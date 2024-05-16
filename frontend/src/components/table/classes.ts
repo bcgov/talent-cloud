@@ -27,11 +27,15 @@ export const getAvailabilityClass = (value: AvailabilityTypeName) => {
     case AvailabilityTypeName.UNAVAILABLE:
       return 'text-error';
     case AvailabilityTypeName.DEPLOYED:
-      return 'text-warning';
+      return 'text-info';
     default:
-      return '';
+      return 'text-warning';
   }
 };
 export const iconClass = (value: boolean) => {
   return value ? 'h-4 w-4 text-success mr-1' : 'h-4 w-4 text-error mr-1';
+};
+
+export const pendingIconClass = (value: boolean) => {
+  return value ? 'h-4 w-4 text-success mr-1' : 'h-4 w-4 text-warning mr-1';
 };
