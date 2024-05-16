@@ -14,8 +14,7 @@ export class LanguageEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  
 
   @Column({ name: 'language', type: 'varchar', length: 50 })
   language: string;
