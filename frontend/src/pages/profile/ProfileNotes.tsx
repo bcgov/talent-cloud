@@ -55,7 +55,7 @@ const ProfileNotes = ({
                 <div>
                   <div className="py-2">
                     <div className="flex flex-row items-center space-x-2">
-                      <h5>Notes</h5>
+                      <p className="subtext ml-2">Notes</p>
                       <button
                         aria-label="open logistics notes"
                         onClick={handleOpenEditNotes}
@@ -76,7 +76,7 @@ const ProfileNotes = ({
                   <div>
                     <div className="py-2">
                       <div className="flex flex-row items-center space-x-2">
-                        <h5>Coordinator Notes</h5>
+                        <p className="ml-2 subtext">Coordinator Notes</p>
                         <button
                           aria-label="open coordinator notes"
                           onClick={handleOpenEditCoordinatorNotes}

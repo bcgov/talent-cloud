@@ -101,7 +101,7 @@ export const Filters = ({
       </div>
 
       {/** lg - column 2 start */}
-      <div className="col-span-1 lg:col-span-2">
+      <div className="col-span-1 md:col-span-3">
         <CascadingMenu
           field={route === Route.BCWS ? filters.section : filters.function}
           nestedField={route === Route.BCWS ? filters.role : filters.experience}
@@ -115,7 +115,7 @@ export const Filters = ({
           value={route === Route.BCWS ? filterValues.section : filterValues.function}
         />
       </div>
-      <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-4">
+      <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-3">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3">
           <div className="col-span-1">
             <SingleSelect

@@ -47,18 +47,18 @@ export const Header = ({
                 <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
-            {program === Program.ADMIN && (
-              <Toggle
-                label={route}
-                value={route === Route.BCWS}
-                handleToggle={handleToggle}
-              />
-            )}
+
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {username && (
                 <UserMenu username={username} logout={() => logout(keycloak)} />
               )}
             </div>
+            {program === Program.ADMIN && (
+              <span>
+                <span className="mr-2">{route}</span>
+                <Toggle value={route === Route.BCWS} handleToggle={handleToggle} />
+              </span>
+            )}
           </>
         )}
       </div>

@@ -43,13 +43,10 @@ export const Table = ({
   const { rows, totalRows } = tableData;
 
   return (
-    <div className="mx-auto max-w-[1388px]">
-      <table className="table-auto w-full max-w-[1388px] overflow-x-hidden border-separate border border-slate-500">
+    <div className="mx-auto max-w-[1388px] overflow-x-scroll">
+      <table className="table-auto w-full max-w-[1388px] border-collapse border border-slate-500">
         <thead>
-          <th
-            colSpan={columns.length}
-            className="mt-2 sticky   top-[80px] bg-white w-full  border-2 border-slate-500"
-          >
+          <th colSpan={columns.length} className="mt-2  bg-white w-full">
             <div className="text-left py-8  caption-top bg-white">
               <h4 className="font-bold px-4">Search Results</h4>
             </div>
@@ -70,35 +67,31 @@ export const Table = ({
               <th
                 key={name}
                 scope="col"
-                className={`sticky ml-4 bg-white  h-[48px] ${role === Role.COORDINATOR ? ' top-[225px]' : ' top-40'}  text-dark text-left  `}
+                className={`px-4 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left  py-2 border-b-2 border-b-primaryBlue`}
               >
-                <td className="flex flex-row  flex-nowrap text-nowrap pl-4">
-                  {renderName(name)}
-                </td>
+                <td>{renderName(name)}</td>
               </th>
             ))}
           </tr>
-          <tr>
-            <th
-              className={`sticky ${role === Role.COORDINATOR ? ' top-[280px]' : ' top-[210px]'} border-b-2 border-primaryBlue`}
-              colSpan={columns.length}
-            ></th>
-          </tr>
         </thead>
         <tbody>
-          {rows.map((row: Row) => (
+          {rows.map((row: Row, index: number) => (
             <>
               <th className="hidden"></th>
-              <tr
-                key={row.key}
-                id={row.key}
-                className="divide divide-y-2 h-[58px] max-w-[1388px]"
-              >
+              {index !== 0 && (
+                <tr>
+                  <td
+                    className={`border-b-2 border-slate-500`}
+                    colSpan={columns.length}
+                  ></td>
+                </tr>
+              )}
+              <tr key={row.key} id={row.key}>
                 {row.cells.map((itm: Cell) => (
                   <>
                     <td
                       scope="row"
-                      className="py-2 text-nowrap pl-2 truncate max-w-[250px]"
+                      className="py-4 px-4 text-nowrap truncate max-w-[250px]"
                     >
                       <TableBodyCell
                         key={itm.key}
@@ -114,6 +107,12 @@ export const Table = ({
           ))}
         </tbody>
         <tfoot className="py-4 px-8 ">
+          <tr>
+            <td
+              className={`border-b-2 border-slate-500`}
+              colSpan={columns.length}
+            ></td>
+          </tr>
           <tr>
             <th colSpan={columns.length - 2} scope="row" className="px-8 h-[80px]">
               <TableFooterPageSelect

@@ -4,6 +4,7 @@ import {
   getAvailabilityClass,
   getUnionMembershipClass,
   iconClass,
+  pendingIconClass,
   tableClass,
 } from '@/components/table/classes';
 import {
@@ -73,12 +74,12 @@ export const TableBodyCell = ({
       return (
         <>
           {cell.value ? (
-            <span className={`${tableClass.rowClass} text-success`}>
+            <span className={tableClass.rowClass}>
               <CheckCircleIcon className={iconClass(cell.value)} />
               YES
             </span>
           ) : (
-            <span className={`${tableClass.rowClass} text-error`}>
+            <span className={tableClass.rowClass}>
               <XCircleIcon className={iconClass(cell.value)} />
               NO
             </span>
@@ -124,11 +125,11 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <span className={tableClass.rowClass}>
-              <CheckCircleIcon className={iconClass(cell.value)} /> Recieved
+              <CheckCircleIcon className={pendingIconClass(cell.value)} /> Recieved
             </span>
           ) : (
             <>
-              <MinusCircleIcon className={iconClass(cell.value)} /> Pending
+              <MinusCircleIcon className={pendingIconClass(cell.value)} /> Pending
             </>
           )}
         </>
@@ -138,11 +139,11 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <span className={tableClass.rowClass}>
-              <CheckCircleIcon className={iconClass(cell.value)} /> Completed
+              <CheckCircleIcon className={pendingIconClass(cell.value)} /> Completed
             </span>
           ) : (
             <>
-              <XCircleIcon className={iconClass(cell.value)} /> Incomplete
+              <XCircleIcon className={pendingIconClass(cell.value)} /> Incomplete
             </>
           )}
         </>
@@ -163,11 +164,11 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <span className={tableClass.rowClass}>
-              <CheckIcon className={iconClass(cell.value)} /> Recieved
+              <CheckIcon className={pendingIconClass(cell.value)} /> Recieved
             </span>
           ) : (
             <>
-              <MinusIcon className={iconClass(cell.value)} /> Pending
+              <MinusIcon className={pendingIconClass(cell.value)} /> Pending
             </>
           )}
         </>
