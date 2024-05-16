@@ -7,10 +7,9 @@ import {
 
 @Entity('bcws_personnel_language')
 export class LanguageEntity {
-  @ManyToOne(() => BcwsPersonnelEntity)
-  @JoinColumn({ name: 'personnel_id' })
-  personnelId: BcwsPersonnelEntity;
-
+  @ManyToOne(() => BcwsPersonnelEntity, b => b.personnelId)
+  @JoinColumn({ name: 'personnel_id', referencedColumnName: 'personnelId' })
+  personnel: BcwsPersonnelEntity;
 
   @PrimaryGeneratedColumn('increment')
   id: number;
