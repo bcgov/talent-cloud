@@ -12,6 +12,7 @@ const Dashboard = () => {
     loading,
     counts,
     tabs,
+    rows,
     selectedTab,
     changeHandlers,
   } = useTable(route);
@@ -30,6 +31,7 @@ const Dashboard = () => {
         handlePageParams={changeHandlers.handlePageParams}
         handleChangeRowsPerPage={changeHandlers.handleChangeRowsPerPage}
         columns={columns}
+        rows={rows}
         onChangeTab={changeHandlers.onChangeTab}
         tabs={tabs}
         selectedTab={selectedTab}

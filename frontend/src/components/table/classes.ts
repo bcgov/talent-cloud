@@ -1,10 +1,10 @@
 import { AvailabilityTypeName, UnionMembership } from '@/common';
 
 export const tableClass = {
-  rowClass: 'flex flex-row items-center justify-center text-sm',
+  rowClass: 'flex flex-row items-center justify-start text-sm',
   tdClass: 'text-dark-700 text-sm px-6 py-4 whitespace-nowrap',
   classificationClass:
-    'block font-bold border border-gray rounded-md  mx-8 text-center ',
+    'block font-bold border border-gray rounded-md  mr-8 text-center ',
 };
 
 export const getUnionMembershipClass = (value?: string) => {

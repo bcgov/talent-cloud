@@ -16,8 +16,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
-import { ExperienceName } from '@/common/enums/experience.enum';
-import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const TableBodyCell = ({
   cell,
@@ -47,20 +45,6 @@ export const TableBodyCell = ({
           )}
         </span>
       );
-    case DashboardColumns.FUNCTION:
-      return (
-        <div>
-          <div className="text-sm font-bold">{cell.value?.functionName}</div>
-          <div className="text-sm">
-            {
-              ExperienceName[
-                cell.value?.experienceType as keyof typeof ExperienceName
-              ]
-            }
-          </div>
-        </div>
-      );
-
     case DashboardColumns.AVAILABILITY:
       return (
         <>
@@ -102,17 +86,7 @@ export const TableBodyCell = ({
           )}
         </>
       );
-    case DashboardColumns.ROLE:
-      return (
-        <>
-          <div className="text-sm font-bold">
-            {BcwsRoleName[cell.value?.role as keyof typeof BcwsRoleName]}
-          </div>
-          <div className="text-sm">
-            {SectionName[cell.value?.section as keyof typeof SectionName]}
-          </div>
-        </>
-      );
+
     case DashboardColumns.UNION_MEMBERSHIP:
       return (
         <>

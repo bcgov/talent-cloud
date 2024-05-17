@@ -1,14 +1,14 @@
+import { Status } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard';
 import { Route } from '@/providers';
 
 export const cols = {
-  active: {
+  [Status.ACTIVE]: {
     [Route.BCWS]: [
       DashboardColumns.NAME,
       DashboardColumns.DATE_APPROVED,
       DashboardColumns.FIRE_CENTRE,
       DashboardColumns.LOCATION,
-      DashboardColumns.ROLE,
       DashboardColumns.AVAILABILITY,
       DashboardColumns.TRAVEL,
       DashboardColumns.UNION_MEMBERSHIP,
@@ -18,7 +18,6 @@ export const cols = {
       DashboardColumns.DATE_APPROVED,
       DashboardColumns.REGION,
       DashboardColumns.LOCATION,
-      DashboardColumns.FUNCTION,
       DashboardColumns.AVAILABILITY,
       DashboardColumns.TRAVEL,
       DashboardColumns.REMOTE,
@@ -26,7 +25,7 @@ export const cols = {
       DashboardColumns.MINISTRY,
     ],
   },
-  pending: {
+  [Status.PENDING]: {
     [Route.BCWS]: [
       DashboardColumns.NAME,
       DashboardColumns.FIRE_CENTRE,
@@ -44,7 +43,6 @@ export const cols = {
       DashboardColumns.LOCATION,
       DashboardColumns.ICS,
       DashboardColumns.SUPERVISOR_APPROVAL,
-      DashboardColumns.FUNCTION,
       DashboardColumns.UNION_MEMBERSHIP,
       DashboardColumns.MINISTRY,
     ],

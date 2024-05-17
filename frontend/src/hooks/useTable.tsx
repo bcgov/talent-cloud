@@ -3,11 +3,8 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { type TableData, handleSearchParams } from '@/components';
 import { truncatePageRange } from './utils';
-import {
-  DashboardColumns,
-  type DashboardFilters,
-  type Personnel,
-} from '@/pages/dashboard';
+import type { DashboardColumns } from '@/pages/dashboard';
+import { type DashboardFilters, type Personnel } from '@/pages/dashboard';
 
 import { useDebounce } from './useDebounce';
 import type { DateRange } from 'react-day-picker';
@@ -22,11 +19,14 @@ export const useTable = (route?: Route) => {
 
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<TableData>({
-    rows: [],
     pageRange: [],
     totalRows: 0,
     totalPages: 1,
   });
+
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState<DashboardColumns[]>([]);
+
   const [counts, setCounts] = useState<any>({
     [Status.ACTIVE]: 0,
     [Status.INACTIVE]: 0,
@@ -39,7 +39,8 @@ export const useTable = (route?: Route) => {
     { index: 2, label: 'Pending Approval', value: Status.PENDING },
   ];
 
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
   const initialFilterValues =
     route === Route.BCWS
       ? {
@@ -74,8 +75,6 @@ export const useTable = (route?: Route) => {
         };
   const [filterValues, setFilterValues] = useState<any>(initialFilterValues);
 
-  const [columns, setColumns] = useState<DashboardColumns[]>([]);
-
   const [defaultDebounceValue, setDefaultDebounceValue] = useState(100);
   const [searchParamsUrl] = useSearchParams(encodeURI('?page=1&rows=25'));
   const debouncedFilters = useDebounce<{ [key: string]: unknown }>(
@@ -88,27 +87,12 @@ export const useTable = (route?: Route) => {
    * @param columns
    * @returns
    */
-  const renderColumns = (columns: DashboardColumns[]) => {
-    return filterValues.function || filterValues.section
-      ? columns
-      : columns
-          .filter((itm) => itm !== DashboardColumns.FUNCTION)
-          .filter((itm) => itm !== DashboardColumns.ROLE);
-  };
 
   // This function is used to fetch the data from the backend and uses debounce to ensure requests have a slight delay
   const debouncedFiltersAsync = async (route: Route) => {
     // format the query params
     handleSearchParams(searchParamsUrl, filterValues);
     // set the columns based on the route, and then by filter values
-    setColumns(
-      renderColumns(
-        filterValues.status === Status.PENDING
-          ? cols.pending[route]
-          : cols.active[route],
-      ),
-    );
-
     try {
       const {
         data: { personnel, count },
@@ -129,21 +113,30 @@ export const useTable = (route?: Route) => {
         totalPages,
         pageRange: truncatePageRange(totalPages, currentPage, pageRange),
         totalRows: count[filterValues.status],
-        rows: personnel.map(
-          ({ id, status, newMember, ...personnel }: Personnel) => ({
-            key: id,
-            status: newMember ? Status.NEW : status,
-            cells:
-              route &&
-              renderCells(
-                { id, status, newMember, ...personnel },
-                filterValues,
-                route,
-              ),
-          }),
-        ),
       });
+      const columnStatus =
+        filterValues.status === Status.PENDING ? Status.PENDING : Status.ACTIVE;
+
+      const rows = personnel.map(
+        ({ id, status, newMember, ...personnel }: Personnel) => ({
+          key: id,
+          status: newMember ? Status.NEW : status,
+          cells:
+            route &&
+            renderCells(
+              { id, status, newMember, ...personnel },
+              filterValues,
+              columnStatus,
+              route,
+            ),
+        }),
+      );
+      setSelectedTabIndex(
+        tabs.findIndex((tab) => tab.value === filterValues.status),
+      );
       setCounts(count);
+      setColumns(cols[columnStatus][route]);
+      setRows(rows);
     } catch (e) {
       console.error(e);
     } finally {
@@ -257,7 +250,6 @@ export const useTable = (route?: Route) => {
   };
 
   const onChangeTab = (index: number) => {
-    setSelectedTab(index);
     setFilterValues((prev: any) => ({
       ...prev,
       currentPage: 1,
@@ -268,11 +260,11 @@ export const useTable = (route?: Route) => {
   return {
     tableData,
     filterValues,
-
+    rows,
     loading,
     counts,
     tabs,
-    selectedTab,
+    selectedTab: selectedTabIndex,
     columns,
     changeHandlers: {
       handlePageParams,
