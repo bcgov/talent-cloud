@@ -3,10 +3,8 @@ import { datasource } from './datasource';
 import { certsSql, divisionsSql, functionSql, insertPersonnelTrainingSql, insertTrainingSql, joinedLocationsSql, rolesSql, toolsSql } from './queries';
 
 const seed = async () => {
+  
   await datasource.initialize();
-
-
-
   const roles = await datasource.query(`SELECT * FROM public.bcws_role`);
 
   if (roles.length === 0) {
@@ -30,10 +28,6 @@ const seed = async () => {
     await datasource.query(functionSql);
   }
 
-
-  await datasource.query(functionSqlPrior);
-  await datasource.query(functionSqlAfter);
-  
   const tools = await datasource.query(`SELECT * FROM public.bcws_tools`);
   if (tools.length === 0) {
     await datasource.query(toolsSql);
@@ -50,7 +44,7 @@ const seed = async () => {
   if (data.length === 0) {
     await datasource.query(certsSql);
   }
-  
+
 };
 
 seed();
