@@ -18,37 +18,22 @@ export const handler = async () => {
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
     
-    try {
-      const data = dataHandler(
-        locations,
-        roles,
-        tools,
-        certs,
-        divisions,
-      );
 
-      await Promise.all(
+      try {
 
-        data.map(async (personnel) => {
-          const { personnelData, bcwsData } = personnel;
+        for (let i = 0; i < 50; i++) {
+          const { personnelData, bcwsData } = dataHandler(locations,
+            roles,
+            tools,
+            certs,
+            divisions)
+          
+          const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
+          
+          bcwsData.personnelId = person.id;
 
-
-          const bcws = new BcwsPersonnelEntity(bcwsData);
-
-          const person = await personnelRepo.save(
-            personnelRepo.create(new PersonnelEntity(personnelData)),
-          );
-
-          bcws.personnelId = person.id;
-
-          bcws.tools.forEach((tool) => (tool.personnelId = person.id));
-          bcws.roles.forEach((role) => (role.personnelId = person.id));
-          bcws.certifications.forEach((cert) => (cert.personnelId = person.id));
-          bcws.languages.forEach((lang) => (lang.personnelId = person.id));
-
-          await bcwsPersonnelRepo.save(bcws);
-        }));
-
+          await bcwsPersonnelRepo.save(bcwsPersonnelRepo.create(new BcwsPersonnelEntity((bcwsData))));
+          }
 
       console.log('...complete...');
 
@@ -59,6 +44,6 @@ export const handler = async () => {
       console.log('Seeder failed.');
       return 'failure';
     }
-  };
+  }
 
   handler();

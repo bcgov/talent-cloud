@@ -144,7 +144,7 @@ export class PersonnelController {
     @Query() query?: GetBcwsPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    console.log('GET');
+    
     const { personnel, count } = await this.personnelService.getBcwsPersonnel(query);
 
     return {

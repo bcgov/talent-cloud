@@ -1,6 +1,6 @@
 import { datasource } from './datasource';
 import {
-  EmcrPersonnelEntity,
+  EmcrPersonnelEntity, LocationEntity,
 } from './entities/emcr';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/emcr-seed';
@@ -11,8 +11,8 @@ export const handler = async () => {
   if (!datasource.isInitialized) {
     await datasource.initialize();
   }
-
-  const locations = await datasource.query('SELECT * FROM location')
+  const locationRepo = datasource.getRepository(LocationEntity);  
+  const locations = await locationRepo.find()
   const functions = await datasource.query('SELECT * FROM emcr_function')
   const trainings = await datasource.query('SELECT * FROM emcr_training')
 
@@ -20,27 +20,20 @@ export const handler = async () => {
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-    const data = dataHandler(
-      locations,
-      functions,
-      trainings
-    );
+    
 
-    await Promise.all(
 
-      data.map(async (personnel) => {
-        const { personnelData, emcrData } = personnel;
+    for (let i = 0; i < 50; i++) {
+      const { personnelData, emcrData } = dataHandler(locations.map(itm=> ({locationName: itm.locationName, region: itm.region, id: itm.id})),
+        functions,
+        trainings)
+      
+      const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
 
-        const emcr = new EmcrPersonnelEntity(emcrData);
+      await emcrPersonnelRepo.save(emcrPersonnelRepo.create(new EmcrPersonnelEntity(({ ...emcrData, personnelId: person.id }))));
+    }
 
-        const person = await personnelRepo.save(
-          personnelRepo.create(new PersonnelEntity(personnelData)),
-        );
 
-        emcr.personnelId = person.id;
-
-        await emcrPersonnelRepo.save(emcr);
-      }))
 
 
     console.log('...complete...');

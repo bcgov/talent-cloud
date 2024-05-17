@@ -12,12 +12,15 @@ import { EmcrPersonnelExperienceDTO } from './experiences.dto';
 import { Region } from '../../../common/enums/emcr';
 import { Status } from '../../../common/enums/status.enum';
 import { EmcrTrainingEntity } from '../../../database/entities/emcr/emcr-training.entity';
+import { LocationEntity } from '../../../database/entities/location.entity';
 
-class EmcrLocationDTO {
+export class EmcrLocationDTO {
   @IsOptional()
+  @ApiProperty()
   id?: number;
 
   @IsString()
+  @ApiProperty()
   locationName?: string;
 
   @ApiProperty({
@@ -26,7 +29,7 @@ class EmcrLocationDTO {
     example: Region.SWE,
   })
   @IsEnum(Region)
-  region?: Region;
+  region: Region
 }
 
 export class CreatePersonnelEmcrDTO {

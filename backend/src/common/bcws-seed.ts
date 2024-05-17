@@ -22,7 +22,7 @@ import {
 import { CreatePersonnelDTO } from '../personnel';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
 
-export const rowData = (
+export const handler = (
   locations: LocationEntity[],
   roles: BcwsRoleEntity[],
   tools: BcwsToolsEntity[],
@@ -72,7 +72,7 @@ export const rowData = (
     tools: createTools(tools),
     certifications: createCertifications(certs),
     roles: createRoles(roles),
-    languages: createLanguages(),
+    languages: Array.from(new Set(createLanguages())),
     division: faker.helpers.arrayElement(divisions).id,
   };
   
@@ -241,30 +241,3 @@ export const createLanguages = () => {
   );
 };
 
-export const handler = (
-  locations: LocationEntity[],
-  roles: BcwsRoleEntity[],
-  tools: BcwsToolsEntity[],
-  certs: BcwsCertificationEntity[],
-  divisions: DivisionEntity[],
-): {
-  personnelData: CreatePersonnelDTO
-  bcwsData: CreatePersonnelBcwsDTO;
-}[] => {
-  const people: {
-    personnelData: CreatePersonnelDTO;
-    bcwsData: CreatePersonnelBcwsDTO;
-  }[] = [];
-  for (let i = 0; i < 200; i++) {
-    people.push(
-      rowData(
-        locations,
-        roles,
-        tools,
-        certs,
-        divisions,        
-      ),
-    );
-  }
-  return people;
-};
