@@ -225,7 +225,7 @@ seed-local-emcr:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-emcr.ts")'
 
 seed-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-function.js")'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed.js")'
 	
 seed-oc-bcws:
