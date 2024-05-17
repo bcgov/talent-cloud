@@ -21,6 +21,7 @@ import {
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
+import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
 
 export const handler = (
   locations: LocationEntity[],
@@ -155,7 +156,8 @@ export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
     const tool = faker.helpers.arrayElement(bcwsTools);
 
     personnelTools.push({
-      toolId: tool.id,
+      tool, 
+      toolId: tool.id,  
       proficenyLevel: faker.helpers.arrayElement(
         Object.values(ToolsProficiency),
       ),
@@ -213,8 +215,8 @@ export const createRoles = (bcwsRoles: BcwsRoleEntity[]) => {
   );
 };
 
-export const createLanguages = () => {
-  const personnelLang = [];
+export const createLanguages = (): CreateBcwsPersonnelLanguagesDTO[] => {
+  const personnelLang: CreateBcwsPersonnelLanguagesDTO[] = [];
 
   for (let i = 0; i < 2; i++) {
     personnelLang.push({

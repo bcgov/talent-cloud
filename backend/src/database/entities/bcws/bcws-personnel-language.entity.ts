@@ -4,6 +4,7 @@ import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../../common/enums/bcws/language.enum';
+import { BcwsPersonnelLanguagesRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_language')
 export class LanguageEntity {
@@ -35,7 +36,7 @@ export class LanguageEntity {
   })
   type: LanguageLevelType;
 
-  toResponseObject() {
+  toResponseObject(): BcwsPersonnelLanguagesRO {
     return {
       language: this.language,
       level: this.level,

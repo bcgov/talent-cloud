@@ -28,7 +28,7 @@ function HorizontalLine() {
   );
 }
 
-const EmcrProfileHeader = ({
+const ProfileHeader = ({
   personnel,
   role,
   handleOpenReviewApplicant,
@@ -178,4 +178,4 @@ const EmcrProfileHeader = ({
   );
 };
 
-export default EmcrProfileHeader;
+export default ProfileHeader;

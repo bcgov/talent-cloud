@@ -5,8 +5,8 @@ const Detail = ({
   content,
   icon,
 }: {
-  title: string;
-  content: string | JSX.Element;
+  title?: string;
+  content?: string;
   icon?: ReactElement;
 }) => {
   return (

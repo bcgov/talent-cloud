@@ -158,8 +158,8 @@ export class BcwsPersonnelEntity {
     const personnelData = this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
-      homeFireCentre: this?.homeFireCentre?.toResponseObject() ?? {},
-      workFireCentre: this?.workFireCentre?.toResponseObject() ?? {},
+      homeLocation: this?.homeFireCentre?.toResponseObject() ?? {},
+      workLocation: this?.workFireCentre?.toResponseObject() ?? {},
       employeeId: this.employeeId,
       paylistId: this.paylistId,
       dateApplied: this.dateApplied,

@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../../common/enums/bcws';
 
 export class CreateBcwsPersonnelLanguagesDTO {
+@ApiProperty({
+    description: 'Personnel ID',
+    required: false,
+    example: '123e4567-e'
+})
+@IsOptional()
+personnelId?: string;
+
   @ApiProperty({
     description: 'Language',
     required: true,
@@ -23,7 +31,7 @@ export class CreateBcwsPersonnelLanguagesDTO {
       LanguageProficiency,
     )}`,
   })
-  proficiency: LanguageProficiency;
+  level: LanguageProficiency;
 
   @ApiProperty({
     description: 'Language level type',

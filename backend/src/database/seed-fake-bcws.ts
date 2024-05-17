@@ -1,5 +1,5 @@
 import { datasource } from './datasource';
-import { BcwsPersonnelEntity } from './entities/bcws';
+import { BcwsPersonnelEntity, LanguageEntity } from './entities/bcws';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/bcws-seed';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,7 +31,8 @@ export const handler = async () => {
           const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
           
           bcwsData.personnelId = person.id;
-
+          
+          bcwsData.languages.forEach(itm => itm.personnelId = person.id)
           await bcwsPersonnelRepo.save(bcwsPersonnelRepo.create(new BcwsPersonnelEntity((bcwsData))));
           }
 
