@@ -16,6 +16,7 @@ import {
 import type { DashboardFilters } from '@/pages/dashboard';
 import type { DashboardColumns } from '@/pages/dashboard';
 import { renderName } from './helpers';
+import type { Route } from '@/providers';
 
 export const Table = ({
   pageParams,
@@ -41,6 +42,7 @@ export const Table = ({
   counts: TabCount;
   role?: Role;
   rows: Row[];
+  route?: Route;
 }) => {
   const { totalRows } = tableData;
 

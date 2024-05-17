@@ -7,7 +7,16 @@ import type {
   Status,
 } from '@/common';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
-import type { BcwsRole, Section } from '@/common/enums/sections.enum';
+import type {
+  LanguageLevelType,
+  LanguageProficiency,
+} from '@/common/enums/language.enum';
+import type {
+  BcwsRole,
+  ExperienceLevel,
+  Section,
+} from '@/common/enums/sections.enum';
+import type { ToolsName, ToolsProficiency } from '@/common/enums/tools.enum';
 import type { DateRange } from 'react-day-picker';
 
 export enum DashboardFilterNames {
@@ -83,11 +92,23 @@ export interface Availability {
 export interface BcwsRoleInterface {
   role: BcwsRole;
   section: Section;
+  expLevel?: ExperienceLevel;
 }
 
 export interface BcwsPersonnelTool {
-  tool: string;
-  proficiencyLevel: string;
+  tool: ToolsName;
+  proficiencyLevel: ToolsProficiency;
+}
+
+export interface BcwsCertification {
+  name: string;
+  expiry?: string;
+}
+
+export interface BcwsLanguages {
+  language: string;
+  type: LanguageLevelType;
+  level: LanguageProficiency;
 }
 
 export interface Personnel {
@@ -131,8 +152,8 @@ export interface Personnel {
   willingnessStatement: boolean;
   parQ: boolean;
   respectfulWorkplacePolicy: boolean;
-  tools: string[];
-  languages: string[];
+  tools: BcwsPersonnelTool[];
+  languages: BcwsLanguages[];
   roles: BcwsRoleInterface[];
   employeeId: string;
   paylistId: string;
@@ -145,7 +166,7 @@ export interface Personnel {
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
-
+  certifications: BcwsCertification[];
 }
 
 export interface AvailabilityRange {

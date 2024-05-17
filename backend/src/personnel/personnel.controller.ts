@@ -33,6 +33,7 @@ import { ICS_TRAINING_NAME } from '../common/const';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { BcwsRO } from './ro/bcws';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -98,7 +99,7 @@ export class PersonnelController {
     } else if (Object.keys(details).length > 0) {
       return this.personnelService.updatePersonnel(id, details, req.role);
     } else {
-      return this.personnelService.getPersonnelById(req.role, Program.EMCR, id);
+      return this.personnelService.getEmcrPersonnelById(req.role,  id);
     }
   }
 
@@ -144,7 +145,7 @@ export class PersonnelController {
     @Query() query?: GetBcwsPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    
+
     const { personnel, count } = await this.personnelService.getBcwsPersonnel(query);
 
     return {
@@ -173,7 +174,7 @@ export class PersonnelController {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const personnelRO: Record<'Personnel', PersonnelRO> =
-      await this.personnelService.getPersonnelById(req.role, Program.EMCR, id);
+      await this.personnelService.getEmcrPersonnelById(req.role, id);
 
     return personnelRO;
   }
@@ -190,15 +191,15 @@ export class PersonnelController {
   async getBcwsPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
-  ): Promise<Record<'Personnel', PersonnelRO>> {
-    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-
-    const personnelRO: Record<'Personnel', PersonnelRO> =
-      await this.personnelService.getPersonnelById(req.role, Program.BCWS, id);
-
-    return personnelRO;
-  }
-
+    ): Promise<Record<'Personnel', PersonnelRO>> {
+      this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+  
+      const personnelRO: Record<'Personnel', PersonnelRO> =
+        await this.personnelService.getBcwsPersonnelById(req.role,  id);
+  
+      return personnelRO;
+    }
+  
   @ApiOperation({
     summary: 'Update personnel availability',
     description: 'Update availability',

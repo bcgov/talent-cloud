@@ -25,7 +25,7 @@ export class BcwsRO extends PersonnelRO {
       fireCentre: 'COASTAL',
     },
   })
-  homeFireCentre: BcwsLocationRO;
+  homeLocation: BcwsLocationRO;
 
   @ApiProperty({
     description: "Personnel's work firecentre and location",
@@ -37,7 +37,7 @@ export class BcwsRO extends PersonnelRO {
     },
   })
   @IsOptional()
-  workFireCentre?: BcwsLocationRO;
+  workLocation?: BcwsLocationRO;
 
   @ApiProperty({
     description: 'Date applied',
