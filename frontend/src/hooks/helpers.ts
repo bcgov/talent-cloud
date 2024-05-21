@@ -77,6 +77,7 @@ const renderAvailability = (
 export const renderCells = (
   personnel: Personnel,
   filterValues: DashboardFilters,
+  status: Status.PENDING | Status.ACTIVE,
   route: Route,
 ) => {
   const cells = {
@@ -104,7 +105,6 @@ export const renderCells = (
         personnel?.homeFireCentre?.locationName ??
         personnel.homeLocation.locationName,
     },
-
     ics: {
       key: DashboardColumns.ICS,
       columnName: DashboardColumns.ICS,
@@ -114,11 +114,6 @@ export const renderCells = (
       key: DashboardColumns.SUPERVISOR_APPROVAL,
       columnName: DashboardColumns.SUPERVISOR_APPROVAL,
       value: personnel?.approvedBySupervisor ? 'Yes' : 'No',
-    },
-    function: {
-      key: DashboardColumns.FUNCTION,
-      columnName: DashboardColumns.FUNCTION,
-      value: personnel?.experiences?.[0],
     },
     unionMembership: {
       key: DashboardColumns.UNION_MEMBERSHIP,
@@ -177,78 +172,54 @@ export const renderCells = (
       columnName: DashboardColumns.ORIENTATION,
       value: personnel.orientation,
     },
-    role: {
-      key: DashboardColumns.ROLE,
-      columnName: DashboardColumns.ROLE,
-      value: personnel.roles?.[0],
+  };
+
+  const cellsPerRoute = {
+    [Status.ACTIVE]: {
+      [Route.EMCR]: [
+        cells.name,
+        cells.dateApproved,
+        cells.region,
+        cells.location,
+        cells.availability,
+        cells.willingToTravel,
+        cells.remoteOnly,
+        cells.unionMembership,
+        cells.ministry,
+      ],
+      [Route.BCWS]: [
+        cells.name,
+        cells.dateApproved,
+        cells.fireCentre,
+        cells.location,
+        cells.availability,
+        cells.willingToTravel,
+        cells.unionMembership,
+      ],
+    },
+    [Status.PENDING]: {
+      [Route.EMCR]: [
+        cells.name,
+        cells.dateApplied,
+        cells.region,
+        cells.location,
+        cells.ics,
+        cells.supervisorApproval,
+        cells.unionMembership,
+        cells.ministry,
+      ],
+      [Route.BCWS]: [
+        cells.name,
+        cells.fireCentre,
+        cells.location,
+        cells.willingnessStatement,
+        cells.respectfulWorkplacePolicy,
+        cells.parQ,
+        cells.orientation,
+        cells.ministry,
+      ],
     },
   };
 
-  const pendingCells = {
-    [Route.EMCR]: [
-      cells.name,
-      cells.dateApplied,
-      cells.region,
-      cells.location,
-      cells.ics,
-      cells.supervisorApproval,
-      cells.function,
-      cells.unionMembership,
-      cells.ministry,
-    ],
-    [Route.BCWS]: [
-      cells.name,
-      cells.fireCentre,
-      cells.location,
-      cells.willingnessStatement,
-      cells.respectfulWorkplacePolicy,
-      cells.parQ,
-      cells.orientation,
-      cells.ministry,
-    ],
-  };
-  const activeAndInactiveCells = {
-    [Route.EMCR]: [
-      cells.name,
-      cells.dateApproved,
-      cells.region,
-      cells.location,
-      cells.function,
-      cells.availability,
-      cells.willingToTravel,
-      cells.remoteOnly,
-      cells.unionMembership,
-      cells.ministry,
-    ],
-    [Route.BCWS]: [
-      cells.name,
-      cells.dateApproved,
-      cells.fireCentre,
-      cells.location,
-      cells.role,
-      cells.availability,
-      cells.willingToTravel,
-      cells.unionMembership,
-    ],
-  };
-
-  if (filterValues.status === Status.PENDING) {
-    if (filterValues.section || filterValues.function) {
-      return pendingCells[route];
-    } else
-      return pendingCells[route].filter(
-        (cell) =>
-          cell.key !== DashboardColumns.ROLE &&
-          cell.key !== DashboardColumns.FUNCTION,
-      );
-  } else {
-    if (filterValues.section || filterValues.function) {
-      return activeAndInactiveCells[route];
-    } else
-      return activeAndInactiveCells[route].filter(
-        (cell) =>
-          cell.key !== DashboardColumns.ROLE &&
-          cell.key !== DashboardColumns.FUNCTION,
-      );
-  }
+  return cellsPerRoute[status][route];
 };

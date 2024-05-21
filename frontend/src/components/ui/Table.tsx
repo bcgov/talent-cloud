@@ -28,6 +28,7 @@ export const Table = ({
   selectedTab,
   counts,
   role,
+  rows,
 }: {
   pageParams: PageParams;
   handlePageParams: (data: Partial<DashboardFilters>) => void;
@@ -39,28 +40,33 @@ export const Table = ({
   selectedTab: number;
   counts: TabCount;
   role?: Role;
+  rows: Row[];
 }) => {
-  const { rows, totalRows } = tableData;
+  const { totalRows } = tableData;
 
   return (
     <div className="mx-auto max-w-[1388px] overflow-x-scroll">
       <table className="table-auto w-full max-w-[1388px] border-collapse border border-slate-500">
         <thead>
-          <th colSpan={columns.length} className="mt-2  bg-white w-full">
-            <div className="text-left py-8  caption-top bg-white">
-              <h4 className="font-bold px-4">Search Results</h4>
-            </div>
-            {role === Role.COORDINATOR && (
-              <Tabs
-                onChangeTab={onChangeTab}
-                tabs={tabs}
-                selectedTab={selectedTab}
-                counts={counts}
-              />
-            )}
-          </th>
-        </thead>
-        <thead>
+          <tr>
+            <th colSpan={columns.length} className="mt-2  bg-white w-full">
+              <div className="text-left py-8  caption-top bg-white">
+                <h4 className="font-bold px-4">Search Results</h4>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th colSpan={columns.length} className="mt-2  bg-white w-full">
+              {role === Role.COORDINATOR && (
+                <Tabs
+                  onChangeTab={onChangeTab}
+                  tabs={tabs}
+                  selectedTab={selectedTab}
+                  counts={counts}
+                />
+              )}
+            </th>
+          </tr>
           <tr>
             <th className="hidden"></th>
             {columns.map((name: DashboardColumns) => (
