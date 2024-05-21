@@ -84,12 +84,14 @@ export const bcwsData = (personnel?: Personnel) => {
       },
       {
         title: 'Home Location, Fire Centre',
-        content: `${personnel?.homeFireCentre?.locationName}, ${personnel?.homeFireCentre?.region}`,
+        content: personnel?.homeLocation
+          ? `${personnel.homeLocation.locationName}, ${personnel.homeLocation.fireCentre}`
+          : 'Not Listed',
       },
       {
         title: 'Work Location, Region',
-        content: personnel?.workFireCentre
-          ? `${personnel?.workFireCentre?.locationName}, ${personnel?.workFireCentre?.region}`
+        content: personnel?.workLocation
+          ? `${personnel.workLocation.locationName}, ${personnel.workLocation.fireCentre}`
           : 'Not Listed',
       },
       {
@@ -169,7 +171,7 @@ export const bcwsData = (personnel?: Personnel) => {
         header: 'Skill',
         subheader: 'Proficiency Level',
         itms: personnel?.tools?.map((t) => ({
-          label: t.tool,
+          label: t.toolName,
           value: ToolsProficiencyName[t.proficiencyLevel],
         })),
       },

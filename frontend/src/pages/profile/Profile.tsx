@@ -155,6 +155,7 @@ const Profile = () => {
           <div className="pt-12">
             <ProfileHeader
               personnel={personnel}
+              route={route}
               role={role}
               handleOpenReviewApplicant={handleOpenReviewApplicant}
               updatePersonnel={updatePersonnel}
@@ -173,12 +174,6 @@ const Profile = () => {
                 openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
               />
             )}
-            {route === Route.BCWS && (
-              <>
-                <SectionsAndRoles roles={personnel?.roles} />
-                <SkillsAndCertifications skills={skills ?? []} />{' '}
-              </>
-            )}
             <Scheduler
               name={personnel?.firstName}
               availability={availability}
@@ -186,6 +181,13 @@ const Profile = () => {
               openSchedulerDialog={openSchedulerDialog}
             />
 
+            {route === Route.BCWS && (
+              <>
+                <SectionsAndRoles roles={personnel?.roles} />
+                <SkillsAndCertifications skills={skills ?? []} />{' '}
+              </>
+            )}
+            
             <ProfileNotes
               personnel={personnel}
               handleOpenEditNotes={handleOpenEditNotes}

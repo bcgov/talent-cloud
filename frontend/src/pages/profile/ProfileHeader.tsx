@@ -13,6 +13,7 @@ import { BannerType } from '@/common/enums/banner-enum';
 import { Toggle } from '@/components/toggle/Toggle';
 import { differenceInDays, format } from 'date-fns';
 import { offsetTimezoneDate } from '@/utils';
+import { Route } from '../../providers';
 
 function HorizontalLine() {
   return (
@@ -31,11 +32,13 @@ function HorizontalLine() {
 const ProfileHeader = ({
   personnel,
   role,
+  route,
   handleOpenReviewApplicant,
   updatePersonnel,
 }: {
   personnel: Personnel;
   handleOpenReviewApplicant: () => void;
+  route?: Route;
   role?: Role;
   updatePersonnel: (personnel: Partial<Personnel>) => void;
 }) => {
@@ -60,49 +63,52 @@ const ProfileHeader = ({
           </h1>
         </div>
       </div>
-      <div className="flex flex-col items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
-        <h2 className="font-semibold px-2">
-          {personnel.firstName} {personnel.lastName}
-        </h2>
-        {role === Role.COORDINATOR && (
-          <span>
-            <PersonnelStatus status={personnel?.status} />
-          </span>
-        )}
+      <div className="flex flex-col">
+        {personnel.employeeId && <p className="px-2 text-xs text-gray-600">Employee #{personnel.employeeId}</p>}
+        <div className="flex flex-row content-center items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
+            <h2 className="font-semibold px-2">
+              {personnel.firstName} {personnel.lastName}
+            </h2>
+          {role === Role.COORDINATOR && (
+            <span>
+              <PersonnelStatus status={personnel?.status} />
+            </span>
+          )}
 
-        <div className="hidden lg:flex lg:px-6 xl:px-12">
-          <HorizontalLine />
-        </div>
-
-        <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-16 xl:space-x-24">
-          <div className="flex flex-row">
-            <ClockIcon className="h-7 w-7 text-defaultGray" />
-            <div className="px-2">
-              <p className="subtext">Last Deployed</p>
-              <p>{getLastDeployed()}</p>
-            </div>
-          </div>
-          <div className="flex flex-row">
-            <MapPinIcon className="text-defaultGray h-7 w-7" />
-            <div className="pl-2">
-              <p className="subtext">Work Location</p>
-              <p>
-                {personnel.workLocation?.locationName
-                  ? `${personnel.workLocation?.locationName},
-                ${personnel.workLocation?.region}`
-                  : '-'}
-              </p>
-            </div>
+          <div className="hidden lg:flex lg:px-6 xl:px-12">
+            <HorizontalLine />
           </div>
 
-          <div className="flex flex-row">
-            <HomeIcon className="h-7 w-7 text-defaultGray" />
-            <div className="pl-2">
-              <p className="subtext">Home Location</p>
-              <p>
-                {personnel.homeLocation.locationName},{' '}
-                {personnel.homeLocation.region}
-              </p>
+          <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-16 xl:space-x-24">
+            <div className="flex flex-row">
+              <ClockIcon className="h-7 w-7 text-defaultGray" />
+              <div className="px-2">
+                <p className="subtext">Last Deployed</p>
+                <p>{getLastDeployed()}</p>
+              </div>
+            </div>
+            <div className="flex flex-row">
+              <MapPinIcon className="text-defaultGray h-7 w-7" />
+              <div className="pl-2">
+                <p className="subtext">Work Location</p>
+                <p>
+                  {personnel.workLocation
+                    ? `${personnel.workLocation?.locationName},
+                  ${route === Route.EMCR ? personnel.workLocation?.region : personnel.workLocation.fireCentre}`
+                    : '-'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-row">
+              <HomeIcon className="h-7 w-7 text-defaultGray" />
+              <div className="pl-2">
+                <p className="subtext">Home Location</p>
+                <p>
+                  {personnel.homeLocation.locationName},{' '}
+                  {route === Route.EMCR ? personnel.homeLocation?.region : personnel.homeLocation.fireCentre}
+                </p>
+              </div>
             </div>
           </div>
         </div>
