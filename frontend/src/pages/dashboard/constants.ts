@@ -96,7 +96,7 @@ export interface BcwsRoleInterface {
 }
 
 export interface BcwsPersonnelTool {
-  tool: ToolsName;
+  toolName: ToolsName;
   proficiencyLevel: ToolsProficiency;
 }
 
