@@ -10,7 +10,13 @@ import {
 import { Accordion } from '@/components/ui/Accordion';
 import { chipClass } from './helpers';
 
-export const SectionsAndRoles = ({ roles }: { roles: BcwsRoleInterface[] }) => {
+export const SectionsAndRoles = (
+    { roles, firstChoiceSection, secondChoiceSection }:
+    {
+      roles: BcwsRoleInterface[],
+      firstChoiceSection?: Section,
+      secondChoiceSection?: Section,
+    }) => {
   const title = 'Sections & Roles';
   const onClick = () => {};
 
@@ -48,7 +54,19 @@ export const SectionsAndRoles = ({ roles }: { roles: BcwsRoleInterface[] }) => {
                 {sections[section].map((itm, i) => (
                   <div key={itm.role} className="flex flex-row py-2 items-center justify-between">
                     <div className="basis-1/3 text-darkGray px-8">
-                      {i === 0 && <p>{SectionName[section as keyof typeof Section]}</p>}
+                      {i === 0 &&
+                        <p className="flex flex-row gap-2">
+                          {SectionName[section as keyof typeof Section]}
+                          {section === firstChoiceSection && <Chip
+                            value="1st Choice"
+                            className="rounded-full capitalize"
+                          />}
+                          {section === secondChoiceSection && <Chip
+                            value="2nd Choice"
+                            className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                          />}
+                        </p>
+                      }
                     </div>{' '}
                     <div className="basis-1/3 text-darkGray px-4">
                       <p>{BcwsRoleName[itm.role]}</p>

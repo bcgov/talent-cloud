@@ -162,11 +162,13 @@ export interface Personnel {
   liaisonPhoneNumber: string;
   liaisonEmail: string;
   purchaseCardHolder: boolean;
-  driverLicense?: string[];
+  driverLicense?: string;
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
   certifications: BcwsCertification[];
+  firstChoiceSection?: Section;
+  secondChoiceSection?: Section;
 }
 
 export interface AvailabilityRange {

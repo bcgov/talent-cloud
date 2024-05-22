@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import Detail from './Detail';
 
 const DetailsSection = ({
@@ -5,7 +6,7 @@ const DetailsSection = ({
   columns,
 }: {
   title: string;
-  columns: { title?: string; content?: string }[];
+  columns: { title?: string; content?: string | ReactElement }[];
 }) => {
   return (
     <div className="py-5 px-16">

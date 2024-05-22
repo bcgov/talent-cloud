@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactElement } from 'react';
 import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
@@ -8,9 +8,11 @@ import { useRole } from '@/hooks';
 import { Role } from '@/common';
 
 type DetailProps = {
-  generalInformation: { title?: string; content?: string }[];
-  contact: { title?: string; content?: string }[];
-  organizational: { title?: string; content?: string }[];
+  generalInformation: { title?: string; content?: string | ReactElement }[];
+  contact: { title?: string; content?: string | ReactElement }[];
+  organizational: { title?: string; content?: string | ReactElement }[];
+  pending: boolean;
+  intakeRequirements?: { title?: string; content?: string | ReactElement }[];
   openEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
 };
 
@@ -18,6 +20,8 @@ const ProfileDetails = ({
   generalInformation,
   contact,
   organizational,
+  pending,
+  intakeRequirements,
   openEditProfilePopUp,
 }: DetailProps) => {
   const [open, setOpen] = useState(1);
@@ -38,6 +42,11 @@ const ProfileDetails = ({
       columns: organizational,
     },
   ];
+
+  if (intakeRequirements) sections.unshift({
+    title: 'Intake Requirements',
+    columns: intakeRequirements,
+  });
   return (
     <section className="bg-white">
       <div className="pt-6 lg:px-10">
@@ -59,7 +68,7 @@ const ProfileDetails = ({
             onClick={() => handleOpen(1)}
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
-              <span>Member Details</span>
+              <span>{pending ? 'Applicant' : 'Member'} Details</span>
               {role && role === Role.COORDINATOR && (
                 <button
                   aria-label="edit profile"

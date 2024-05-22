@@ -1,17 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
+import { ReactElement, useContext, useEffect, useState } from 'react';
 import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { RoleContext, Route } from '@/providers';
-import { bcwsData, emcrData } from './profile-data';
+import { bcwsData, emcrData } from './profileData';
 import type { ExperienceLevel } from '@/common/enums/sections.enum';
 import type { ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { LanguageProficiencyName } from '@/common/enums/language.enum';
 
 export type ProfileData = {
-  generalInformation: { title?: string; content?: string }[];
-  contact: { title?: string; content?: string }[];
-  organizational: { title?: string; content?: string }[];
+  intakeRequirements?: { title?: string; content?: string | ReactElement }[];
+  generalInformation: { title?: string; content?: string | ReactElement }[];
+  contact: { title?: string; content?: string | ReactElement }[];
+  organizational: { title?: string; content?: string | ReactElement }[];
   skills?: {
     title?: string;
     header?: string;

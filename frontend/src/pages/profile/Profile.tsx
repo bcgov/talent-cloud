@@ -40,7 +40,7 @@ const Profile = () => {
       personnelId,
     });
 
-  const { generalInformation, contact, organizational, skills } = profileData;
+  const { generalInformation, contact, organizational, skills, intakeRequirements } = profileData;
 
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
@@ -163,9 +163,11 @@ const Profile = () => {
 
             <ProfileDetails
               openEditProfilePopUp={handleOpenEditProfilePopUp}
+              intakeRequirements={intakeRequirements}
               generalInformation={generalInformation}
               contact={contact}
               organizational={organizational}
+              pending={personnel.status === Status.PENDING}
             />
             {personnel?.experiences && (
               <ProfileFunctions
@@ -183,7 +185,11 @@ const Profile = () => {
 
             {route === Route.BCWS && (
               <>
-                <SectionsAndRoles roles={personnel?.roles} />
+                <SectionsAndRoles
+                  roles={personnel?.roles}
+                  firstChoiceSection={personnel.firstChoiceSection}
+                  secondChoiceSection={personnel.secondChoiceSection}
+                />
                 <SkillsAndCertifications skills={skills ?? []} />{' '}
               </>
             )}

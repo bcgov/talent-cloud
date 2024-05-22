@@ -3,6 +3,8 @@ import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { Personnel } from '@/pages/dashboard';
 import { datePST, formatPhone } from '@/utils';
+import { FireCentreName } from '../common/enums/firecentre.enum';
+import { DriverLicense, DriverLicenseName } from '../common/enums/driver-license.enum';
 
 export const emcrData = (personnel?: Personnel) => {
   return {
@@ -74,24 +76,50 @@ export const emcrData = (personnel?: Personnel) => {
   };
 };
 export const bcwsData = (personnel?: Personnel) => {
+  const formatDriversLicenses = (driverLicenses: string): string => {
+    const licenseArray = driverLicenses.replace(/{|}|\"/g, '').split(',');
+    const licensesFormatted = licenseArray.map(l => DriverLicenseName[l as keyof typeof DriverLicense]);
+    return licensesFormatted.join(', ');
+  }
+
   return {
+    intakeRequirements: personnel?.status === Status.PENDING ? [
+      {
+        title: 'Willingness Statement',
+        content: personnel?.willingnessStatement === true
+          ? <span className="text-success">Received</span>
+          : <span className="text-errorRed">Not yet Received</span>,
+      },
+      {
+        title: 'ParQ',
+        content: personnel?.parQ === true
+          ? <span className="text-success">Received</span>
+          : <span className="text-errorRed">Not yet Received</span>,
+      },
+      {
+        title: 'TEAMS Orientation',
+        content: personnel?.orientation === true
+          ? <span className="text-success">Completed</span>
+          : <span className="text-errorRed">Not yet Completed</span>,
+      },
+    ] : undefined,
     generalInformation: [
       {
         title: 'Date Applied',
         content: personnel?.dateApplied
-          ? datePST(personnel?.dateApplied as Date)
+          ? datePST(personnel?.dateApplied as Date, true)
           : '-',
       },
       {
         title: 'Home Location, Fire Centre',
         content: personnel?.homeLocation
-          ? `${personnel.homeLocation.locationName}, ${personnel.homeLocation.fireCentre}`
+          ? `${personnel.homeLocation.locationName}, ${FireCentreName[personnel.homeLocation.fireCentre]}`
           : 'Not Listed',
       },
       {
         title: 'Work Location, Region',
         content: personnel?.workLocation
-          ? `${personnel.workLocation.locationName}, ${personnel.workLocation.fireCentre}`
+          ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
           : 'Not Listed',
       },
       {
@@ -104,11 +132,13 @@ export const bcwsData = (personnel?: Personnel) => {
       },
       {
         title: 'Purchase Card Holder',
-        content: `${personnel?.purchaseCardHolder === true ? 'Yes' : 'No'}`,
+        content: personnel?.purchaseCardHolder === true
+          ? <span className="text-success">Yes</span>
+          : <span className="text-errorRed">No</span>,
       },
       {
         title: "Driver's License",
-        content: `${personnel?.driverLicense ? personnel?.driverLicense : '-'}`,
+        content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
       },
     ],
     contact: [
@@ -143,11 +173,14 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Supervisor Email', content: personnel?.supervisorEmail ?? '-' },
       {
         title: 'Supervisor Approval',
-        content: personnel?.approvedBySupervisor ? 'Recieved' : 'Not Recieved',
+        content: personnel?.approvedBySupervisor === true
+          ? <span className="text-success">Received</span>
+          : <span className="text-errorRed">Not yet Received</span>,
       },
       { title: 'Ministry/Branch', content: personnel?.ministry },
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },
+      {},
       { title: 'Liason First Name', content: personnel?.liaisonFirstName },
       { title: 'Liason Last Name', content: personnel?.liaisonLastName },
       {
