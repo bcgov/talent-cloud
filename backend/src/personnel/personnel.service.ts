@@ -19,6 +19,7 @@ import {
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
+import { BcwsRO } from './ro/bcws';
 import { EmcrRO } from './ro/emcr';
 import { Program, Role } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
@@ -33,7 +34,6 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
-import { BcwsRO } from './ro/bcws';
 
 @Injectable()
 export class PersonnelService {

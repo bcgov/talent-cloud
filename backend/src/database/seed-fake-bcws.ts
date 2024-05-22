@@ -1,5 +1,5 @@
 import { datasource } from './datasource';
-import { BcwsPersonnelEntity, LanguageEntity } from './entities/bcws';
+import { BcwsPersonnelEntity } from './entities/bcws';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/bcws-seed';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -33,7 +33,6 @@ import { ICS_TRAINING_NAME } from '../common/const';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { BcwsRO } from './ro/bcws';
 
 @Controller('personnel')
 @ApiTags('Personnel API')

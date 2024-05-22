@@ -20,8 +20,8 @@ import {
   LocationEntity,
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
-import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
 import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
+import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
 
 export const handler = (
   locations: LocationEntity[],
