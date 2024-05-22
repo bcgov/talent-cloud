@@ -44,6 +44,14 @@ export const handler = (
     ];
   const dateApplied = faker.date.past();
 
+  const personnelRoles = createRoles(roles);
+  const firstChoiceSection = roles.find(r => r.id === personnelRoles[0].roleId)?.section;
+  const secondRoleSection = roles.find(r => r.id === personnelRoles[1].roleId)?.section;
+  let secondChoiceSection = undefined;
+  if (secondRoleSection !== firstChoiceSection) {
+    secondChoiceSection = secondRoleSection;
+  }
+
   const bcwsData: CreatePersonnelBcwsDTO = {
     homeFireCentre: faker.helpers.arrayElement(locations),
     workFireCentre: faker.helpers.arrayElement(locations),
@@ -67,12 +75,14 @@ export const handler = (
     liaisonPhoneNumber: faker.string.numeric('##########'),
     liaisonEmail: faker.internet.email(),
     willingnessStatement: true,
+    firstChoiceSection,
+    secondChoiceSection,
     parQ: true,
     respectfulWorkplacePolicy: true,
     orientation: true,
     tools: createTools(tools),
     certifications: createCertifications(certs),
-    roles: createRoles(roles),
+    roles: personnelRoles,
     languages: Array.from(new Set(createLanguages())),
     division: faker.helpers.arrayElement(divisions).id,
   };
@@ -203,7 +213,6 @@ export const createRoles = (bcwsRoles: BcwsRoleEntity[]) => {
     personnelRoles.push({
       roleId: role.id,
       expLevel: faker.helpers.arrayElement(Object.values(ExperienceLevel)),
-      rank: i + 1,
     });
   }
   const uniqueRoles = new Set(personnelRoles.map((role) => role.roleId));

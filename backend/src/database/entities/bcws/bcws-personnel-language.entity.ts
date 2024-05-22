@@ -8,14 +8,15 @@ import { BcwsPersonnelLanguagesRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_language')
 export class LanguageEntity {
-  @ManyToOne(() => BcwsPersonnelEntity, b => b.personnelId)
-  @JoinColumn({ name: 'personnel_id', referencedColumnName: 'personnelId' })
+  @ManyToOne(() => BcwsPersonnelEntity, { nullable: false })
+  @JoinColumn({ name: 'personnel_id' })
   personnel: BcwsPersonnelEntity;
+
+  @Column({ name: 'personnel_id', type: 'uuid' })
+  personnelId: string;
 
   @PrimaryGeneratedColumn('increment')
   id: number;
-
-  
 
   @Column({ name: 'language', type: 'varchar', length: 50 })
   language: string;

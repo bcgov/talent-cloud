@@ -28,19 +28,11 @@ export class BcwsSectionsAndRolesEntity {
   })
   expLevel: ExperienceLevel;
 
-  @Column({
-    name: 'rank',
-    type: 'int',
-    nullable: true,
-  })
-  rank?: number;
-
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
       role: this.role.name,
       section: this.role.section,
       expLevel: this.expLevel,
-      rank: this.rank,
     };
   }
 }

@@ -20,6 +20,7 @@ import { Role } from '../../../auth/interface';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
+import { Section } from '../../../common/enums';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {
@@ -135,6 +136,12 @@ export class BcwsPersonnelEntity {
 
   @Column({ name: 'orientation', type: 'boolean', default: false })
   orientation: boolean;
+
+  @Column({ name: 'first_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  firstChoiceSection?: Section;
+
+  @Column({ name: 'second_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  secondChoiceSection?: Section;
 
   @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
   tools?: BcwsPersonnelTools[];
