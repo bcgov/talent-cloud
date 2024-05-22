@@ -6,7 +6,7 @@ import {
   RegionName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
-import type { FunctionType, Location, SectionType } from '@/pages/dashboard';
+import type { DivisionType, FunctionType, Location, SectionType } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
 import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
@@ -20,6 +20,7 @@ export const useGetFilters = () => {
   const [regions, setRegions] = useState<Region[]>([]);
   const [sections, setSections] = useState<SectionType[]>([]);
   const [fireCentre, setFireCentre] = useState<FireCentre[]>([]);
+  const [divisions, setDivisions] = useState<DivisionType[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
   const { route } = useRole();
   const { AxiosPrivate } = useAxios();
@@ -32,13 +33,13 @@ export const useGetFilters = () => {
     return centre.sort((a: FireCentre, b: FireCentre) => a.localeCompare(b));
   };
 
-  const setBcwsData = (data: { locations: []; functions: SectionType[] }) => {
+  const setBcwsData = (data: { locations: []; functions: SectionType[], divisions: DivisionType[] }) => {
     setLocations(data.locations);
     const reg = Array.from(
       new Set(data.locations.map((itm: Location) => itm.fireCentre)),
     ) as FireCentre[];
     setFireCentre(sortFireCentre(reg));
-
+    setDivisions(data.divisions)
     setSections(data.functions);
   };
 
@@ -156,6 +157,8 @@ export const useGetFilters = () => {
     filters,
     locations,
     regions,
+    fireCentre, 
+    divisions,
     functions,
   };
 };

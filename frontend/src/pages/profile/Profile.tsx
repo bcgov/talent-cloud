@@ -17,7 +17,7 @@ import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
-import { ProfileEditForm } from './ProfileEditForm';
+import { ProfileEditForm } from './ProfileEditForm/ProfileEditForm';
 import { Status, type AvailabilityType } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
@@ -183,7 +183,7 @@ const Profile = () => {
 
             {route === Route.BCWS && (
               <>
-                <SectionsAndRoles roles={personnel?.roles} />
+                <SectionsAndRoles roles={personnel?.roles??[]} />
                 <SkillsAndCertifications skills={skills ?? []} />{' '}
               </>
             )}
@@ -208,6 +208,7 @@ const Profile = () => {
               open={openEditProfilePopUp}
               handleOpenEditProfilePopUp={handleOpenEditProfilePopUp}
               updatePersonnel={updatePersonnel}
+              route={route}
             />
           </DialogUI>
 

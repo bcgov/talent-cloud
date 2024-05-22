@@ -77,6 +77,7 @@ export class AppController {
       locations: (await this.locationService.getRegionsAndLocations()).filter(
         (itm) => itm.fireCentre !== null,
       ),
+      divisions: await this.locationService.getDivisions(),
     };
   }
 }

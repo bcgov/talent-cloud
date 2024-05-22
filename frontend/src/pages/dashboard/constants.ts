@@ -54,6 +54,10 @@ export enum DashboardColumns {
   ORIENTATION = 'Orientation',
   RESPECTFUL = 'Respectful Workplace Policy',
 }
+export interface DivisionType {
+  ministry: Ministry;
+  division: string;
+}
 
 export interface FunctionType {
   name: string;
@@ -124,7 +128,7 @@ export interface Personnel {
   willingToTravel: boolean;
   remoteOnly: boolean;
   unionMembership: string;
-  ministry: string;
+  ministry: Ministry;
   dateApplied?: Date | string;
   dateApproved: Date;
   primaryPhone: string;
@@ -152,9 +156,6 @@ export interface Personnel {
   willingnessStatement: boolean;
   parQ: boolean;
   respectfulWorkplacePolicy: boolean;
-  tools: BcwsPersonnelTool[];
-  languages: BcwsLanguages[];
-  roles: BcwsRoleInterface[];
   employeeId: string;
   paylistId: string;
   liaisonFirstName: string;
@@ -166,7 +167,10 @@ export interface Personnel {
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
-  certifications: BcwsCertification[];
+  tools?: BcwsPersonnelTool[];
+  languages?: BcwsLanguages[];
+  roles?: BcwsRoleInterface[];
+  certifications?: BcwsCertification[];
 }
 
 export interface AvailabilityRange {
