@@ -40,7 +40,8 @@ const Profile = () => {
       personnelId,
     });
 
-  const { generalInformation, contact, organizational, skills, intakeRequirements } = profileData;
+  const { generalInformation, contact, organizational, skills, intakeRequirements } =
+    profileData;
 
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
@@ -193,7 +194,7 @@ const Profile = () => {
                 <SkillsAndCertifications skills={skills ?? []} />{' '}
               </>
             )}
-            
+
             <ProfileNotes
               personnel={personnel}
               handleOpenEditNotes={handleOpenEditNotes}

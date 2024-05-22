@@ -1,8 +1,4 @@
-import {
-  ClockIcon,
-  HomeIcon,
-  MapPinIcon,
-} from '@heroicons/react/24/solid';
+import { ClockIcon, HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
 import { Role, Status } from '@/common';
 import { PersonnelStatus } from '@/components';
@@ -52,36 +48,36 @@ const ProfileHeader = ({
     return '-';
   };
 
-  const reviewItems = route === Route.EMCR ?
-    [
-      {
-        key: 'Supervisor Approval',
-        value: personnel.approvedBySupervisor,
-      },
-      {
-        key: 'Completed ICS Training',
-        value: personnel.icsTraining,
-      },
-    ]
-    :
-    [
-      {
-        key: 'Willingness Statement',
-        value: personnel.willingnessStatement,
-      },
-      {
-        key: 'Signed ParQ Questionnaire',
-        value: personnel.parQ,
-      },
-      {
-        key: 'Supervisor Approval',
-        value: personnel.approvedBySupervisor,
-      },
-      {
-        key: 'TEAMS Orientation',
-        value: personnel.orientation,
-      },
-    ];
+  const reviewItems =
+    route === Route.EMCR
+      ? [
+          {
+            key: 'Supervisor Approval',
+            value: personnel.approvedBySupervisor,
+          },
+          {
+            key: 'Completed ICS Training',
+            value: personnel.icsTraining,
+          },
+        ]
+      : [
+          {
+            key: 'Willingness Statement',
+            value: personnel.willingnessStatement,
+          },
+          {
+            key: 'Signed ParQ Questionnaire',
+            value: personnel.parQ,
+          },
+          {
+            key: 'Supervisor Approval',
+            value: personnel.approvedBySupervisor,
+          },
+          {
+            key: 'TEAMS Orientation',
+            value: personnel.orientation,
+          },
+        ];
   return (
     <>
       <div className="px-10 float-left hidden lg:inline-block">
@@ -93,11 +89,15 @@ const ProfileHeader = ({
         </div>
       </div>
       <div className="flex flex-col">
-        {personnel.employeeId && <p className="px-2 text-xs text-gray-600">Employee #{personnel.employeeId}</p>}
+        {personnel.employeeId && (
+          <p className="px-2 text-xs text-gray-600">
+            Employee #{personnel.employeeId}
+          </p>
+        )}
         <div className="flex flex-row content-center items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
-            <h2 className="font-semibold px-2">
-              {personnel.firstName} {personnel.lastName}
-            </h2>
+          <h2 className="font-semibold px-2">
+            {personnel.firstName} {personnel.lastName}
+          </h2>
           {role === Role.COORDINATOR && (
             <span>
               <PersonnelStatus status={personnel?.status} />
@@ -135,89 +135,22 @@ const ProfileHeader = ({
                 <p className="subtext">Home Location</p>
                 <p>
                   {personnel.homeLocation.locationName},{' '}
-                  {route === Route.EMCR ? personnel.homeLocation?.region : FireCentreName[personnel.homeLocation.fireCentre]}
+                  {route === Route.EMCR
+                    ? personnel.homeLocation?.region
+                    : FireCentreName[personnel.homeLocation.fireCentre]}
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-        {personnel.status === Status.PENDING && 
-          <NewApplicantBanner
-            reviewItems={[
-              {
-                key: 'Willingness Statement',
-                value: personnel.willingnessStatement,
-              },
-              {
-                key: 'Signed ParQ Questionnaire',
-                value: personnel.parQ,
-              },
-              {
-                key: 'Supervisor Approval',
-                value: personnel.approvedBySupervisor,
-              },
-              {
-                key: 'TEAMS Orientation',
-                value: personnel.orientation,
-              },
-            ]}
-            route={route}
-            handleOpenReviewApplicant={handleOpenReviewApplicant}
-          />
-        // (
-        //   <Banner
-        //     content={
-        //       <p className="flex flex-col text-sm text-warningDark">
-        //         <span className="font-bold">Complete Review Alert</span>
-        //         <span className="pt-2">
-        //           {personnel.icsTraining === true &&
-        //           personnel.approvedBySupervisor === true
-        //             ? 'This applicant fulfilled the following requirements for profile review:'
-        //             : 'This applicant is missing the following requirements to complete their profile review:'}
-        //         </span>
-        //         <span className="pl-2 flex flex-row">
-        //           {personnel.approvedBySupervisor === true ? (
-        //             <CheckIcon className="h-5 text-calGreenTwo" />
-        //           ) : (
-        //             <XMarkIcon className="h-5 text-errorRed" />
-        //           )}
-        //           Supervisor Approval
-        //         </span>
-        //         <span className="pl-2 flex flex-row">
-        //           {personnel.icsTraining === true ? (
-        //             <CheckIcon className="h-5 text-calGreenTwo" />
-        //           ) : (
-        //             <XMarkIcon className="h-5 text-errorRed" />
-        //           )}
-        //           Completed ICS Training
-        //         </span>
-        //         {personnel.icsTraining === true &&
-        //         personnel.approvedBySupervisor === true ? (
-        //           <span>
-        //             Please Review the following details before clicking
-        //             &apos;Complete Review&apos;.
-        //           </span>
-        //         ) : (
-        //           <span>
-        //             Please make sure to update the information above in{' '}
-        //             <span className="font-bold">Applicant Details</span> before
-        //             changing the applicant&apos;s status to &apos;Active&apos;.
-        //           </span>
-        //         )}
-        //       </p>
-        //     }
-        //     onClick={
-        //       personnel.icsTraining === true &&
-        //       personnel.approvedBySupervisor === true
-        //         ? handleOpenReviewApplicant
-        //         : undefined
-        //     }
-        //     buttonText={'Complete Review'}
-        //     type={BannerType.WARNING}
-        //   />
-        // )
-      }
+      {personnel.status === Status.PENDING && (
+        <NewApplicantBanner
+          reviewItems={reviewItems}
+          route={route}
+          handleOpenReviewApplicant={handleOpenReviewApplicant}
+        />
+      )}
       {role === Role.COORDINATOR && personnel.status !== Status.PENDING && (
         <div className="px-6 pb-12 bg-white w-full pt-4 lg:pl-48 ">
           <div className="flex flex-row justify-start md:items-center md:mr-12">
@@ -230,9 +163,9 @@ const ProfileHeader = ({
               }
               label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
             />
-            </div>
           </div>
-        )}
+        </div>
+      )}
     </>
   );
 };

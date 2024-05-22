@@ -43,10 +43,12 @@ const ProfileDetails = ({
     },
   ];
 
-  if (intakeRequirements) sections.unshift({
-    title: 'Intake Requirements',
-    columns: intakeRequirements,
-  });
+  if (intakeRequirements) {
+    sections.unshift({
+      title: 'Intake Requirements',
+      columns: intakeRequirements,
+    });
+  }
   return (
     <section className="bg-white">
       <div className="pt-6 lg:px-10">

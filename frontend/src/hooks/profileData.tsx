@@ -4,7 +4,8 @@ import { ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { Personnel } from '@/pages/dashboard';
 import { datePST, formatPhone } from '@/utils';
 import { FireCentreName } from '../common/enums/firecentre.enum';
-import { DriverLicense, DriverLicenseName } from '../common/enums/driver-license.enum';
+import type { DriverLicense } from '../common/enums/driver-license.enum';
+import { DriverLicenseName } from '../common/enums/driver-license.enum';
 
 export const emcrData = (personnel?: Personnel) => {
   return {
@@ -77,32 +78,46 @@ export const emcrData = (personnel?: Personnel) => {
 };
 export const bcwsData = (personnel?: Personnel) => {
   const formatDriversLicenses = (driverLicenses: string): string => {
-    const licenseArray = driverLicenses.replace(/{|}|\"/g, '').split(',');
-    const licensesFormatted = licenseArray.map(l => DriverLicenseName[l as keyof typeof DriverLicense]);
+    const licenseArray = driverLicenses.replace(/{|}|"/g, '').split(',');
+    const licensesFormatted = licenseArray.map(
+      (l) => DriverLicenseName[l as keyof typeof DriverLicense],
+    );
     return licensesFormatted.join(', ');
-  }
+  };
 
   return {
-    intakeRequirements: personnel?.status === Status.PENDING ? [
-      {
-        title: 'Willingness Statement',
-        content: personnel?.willingnessStatement === true
-          ? <span className="text-success">Received</span>
-          : <span className="text-errorRed">Not yet Received</span>,
-      },
-      {
-        title: 'ParQ',
-        content: personnel?.parQ === true
-          ? <span className="text-success">Received</span>
-          : <span className="text-errorRed">Not yet Received</span>,
-      },
-      {
-        title: 'TEAMS Orientation',
-        content: personnel?.orientation === true
-          ? <span className="text-success">Completed</span>
-          : <span className="text-errorRed">Not yet Completed</span>,
-      },
-    ] : undefined,
+    intakeRequirements:
+      personnel?.status === Status.PENDING
+        ? [
+            {
+              title: 'Willingness Statement',
+              content:
+                personnel?.willingnessStatement === true ? (
+                  <span className="text-success">Received</span>
+                ) : (
+                  <span className="text-errorRed">Not yet Received</span>
+                ),
+            },
+            {
+              title: 'ParQ',
+              content:
+                personnel?.parQ === true ? (
+                  <span className="text-success">Received</span>
+                ) : (
+                  <span className="text-errorRed">Not yet Received</span>
+                ),
+            },
+            {
+              title: 'TEAMS Orientation',
+              content:
+                personnel?.orientation === true ? (
+                  <span className="text-success">Completed</span>
+                ) : (
+                  <span className="text-errorRed">Not yet Completed</span>
+                ),
+            },
+          ]
+        : undefined,
     generalInformation: [
       {
         title: 'Date Applied',
@@ -132,9 +147,12 @@ export const bcwsData = (personnel?: Personnel) => {
       },
       {
         title: 'Purchase Card Holder',
-        content: personnel?.purchaseCardHolder === true
-          ? <span className="text-success">Yes</span>
-          : <span className="text-errorRed">No</span>,
+        content:
+          personnel?.purchaseCardHolder === true ? (
+            <span className="text-success">Yes</span>
+          ) : (
+            <span className="text-errorRed">No</span>
+          ),
       },
       {
         title: "Driver's License",
@@ -173,9 +191,12 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Supervisor Email', content: personnel?.supervisorEmail ?? '-' },
       {
         title: 'Supervisor Approval',
-        content: personnel?.approvedBySupervisor === true
-          ? <span className="text-success">Received</span>
-          : <span className="text-errorRed">Not yet Received</span>,
+        content:
+          personnel?.approvedBySupervisor === true ? (
+            <span className="text-success">Received</span>
+          ) : (
+            <span className="text-errorRed">Not yet Received</span>
+          ),
       },
       { title: 'Ministry/Branch', content: personnel?.ministry },
       { title: 'Union Membership', content: personnel?.unionMembership },

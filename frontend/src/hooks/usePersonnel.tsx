@@ -1,4 +1,5 @@
-import { ReactElement, useContext, useEffect, useState } from 'react';
+import type { ReactElement } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';

@@ -1,33 +1,38 @@
 import { Chip } from '@material-tailwind/react';
 import type { BcwsRoleInterface } from '../dashboard';
+import type { Section } from '@/common/enums/sections.enum';
 import {
   BcwsRoleName,
   ExperienceLevel,
   ExperienceLevelName,
-  Section,
   SectionName,
 } from '@/common/enums/sections.enum';
 import { Accordion } from '@/components/ui/Accordion';
 import { chipClass } from './helpers';
 
-export const SectionsAndRoles = (
-    { roles, firstChoiceSection, secondChoiceSection }:
-    {
-      roles: BcwsRoleInterface[],
-      firstChoiceSection?: Section,
-      secondChoiceSection?: Section,
-    }) => {
+export const SectionsAndRoles = ({
+  roles,
+  firstChoiceSection,
+  secondChoiceSection,
+}: {
+  roles: BcwsRoleInterface[];
+  firstChoiceSection?: Section;
+  secondChoiceSection?: Section;
+}) => {
   const title = 'Sections & Roles';
   const onClick = () => {};
 
-  const sections = roles.reduce((acc: { [key: string]: BcwsRoleInterface[] }, role) => {
-    const key = role.section;
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(role);
-    return acc;
-  }, {});
+  const sections = roles.reduce(
+    (acc: { [key: string]: BcwsRoleInterface[] }, role) => {
+      const key = role.section;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(role);
+      return acc;
+    },
+    {},
+  );
 
   return (
     <Accordion title={title} onClick={onClick}>
@@ -47,26 +52,30 @@ export const SectionsAndRoles = (
           </div>
           <div>
             {Object.keys(sections).map((section) => (
-              <div
-                key={section}
-                className="border-b-2 border-gray-100"
-              >
+              <div key={section} className="border-b-2 border-gray-100">
                 {sections[section].map((itm, i) => (
-                  <div key={itm.role} className="flex flex-row py-2 items-center justify-between">
+                  <div
+                    key={itm.role}
+                    className="flex flex-row py-2 items-center justify-between"
+                  >
                     <div className="basis-1/3 text-darkGray px-8">
-                      {i === 0 &&
+                      {i === 0 && (
                         <p className="flex flex-row gap-2">
                           {SectionName[section as keyof typeof Section]}
-                          {section === firstChoiceSection && <Chip
-                            value="1st Choice"
-                            className="rounded-full capitalize"
-                          />}
-                          {section === secondChoiceSection && <Chip
-                            value="2nd Choice"
-                            className="rounded-full bg-infoBannerLight text-ministry capitalize"
-                          />}
+                          {section === firstChoiceSection && (
+                            <Chip
+                              value="1st Choice"
+                              className="rounded-full capitalize"
+                            />
+                          )}
+                          {section === secondChoiceSection && (
+                            <Chip
+                              value="2nd Choice"
+                              className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                            />
+                          )}
                         </p>
-                      }
+                      )}
                     </div>{' '}
                     <div className="basis-1/3 text-darkGray px-4">
                       <p>{BcwsRoleName[itm.role]}</p>
@@ -78,7 +87,9 @@ export const SectionsAndRoles = (
                             className={chipClass(
                               ExperienceLevel[itm.expLevel as ExperienceLevel],
                             )}
-                            value={ExperienceLevelName[itm.expLevel as ExperienceLevel]}
+                            value={
+                              ExperienceLevelName[itm.expLevel as ExperienceLevel]
+                            }
                           />
                         </div>
                       </div>
