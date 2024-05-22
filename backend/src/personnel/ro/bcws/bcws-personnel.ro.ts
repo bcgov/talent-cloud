@@ -6,7 +6,7 @@ import { BcwsLocationRO } from './bcws-personnel-location.ro';
 import { BcwsPersonnelRoleRO } from './bcws-personnel-roles.ro';
 import { BcwsPersonnelToolsRO } from './bcws-personnel-tools.ro';
 import { PersonnelRO } from '../personnel.ro';
-import { BcwsRole } from '../../../common/enums/bcws';
+import { Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
 export class BcwsRO extends PersonnelRO {
@@ -162,4 +162,10 @@ export class BcwsRO extends PersonnelRO {
 
   @ApiProperty()
   roles?: BcwsPersonnelRoleRO;
+
+  @ApiProperty()
+  firstChoiceSection?: Section;
+
+  @ApiProperty()
+  secondChoiceSection?: Section;
 }

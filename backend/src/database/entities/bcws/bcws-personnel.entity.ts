@@ -188,6 +188,8 @@ export class BcwsPersonnelEntity {
       ministry: this.division?.toResponseObject().ministry,
       division: this.division?.toResponseObject().division,
       orientation: this.orientation,
+      firstChoiceSection: this.firstChoiceSection,
+      secondChoiceSection: this.secondChoiceSection,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],

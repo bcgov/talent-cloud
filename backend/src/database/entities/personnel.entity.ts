@@ -97,7 +97,7 @@ export class PersonnelEntity extends BaseEntity {
   intakeForm?: Form;
 
   @Column({
-    name: 'driver_license(s)',
+    name: 'driver_licenses',
     type: 'varchar',
     length: 100,
     nullable: true,
