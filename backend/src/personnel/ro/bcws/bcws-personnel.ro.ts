@@ -6,7 +6,7 @@ import { BcwsLocationRO } from './bcws-personnel-location.ro';
 import { BcwsPersonnelRoleRO } from './bcws-personnel-roles.ro';
 import { BcwsPersonnelToolsRO } from './bcws-personnel-tools.ro';
 import { PersonnelRO } from '../personnel.ro';
-import { BcwsRole } from '../../../common/enums/bcws';
+import { Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
 export class BcwsRO extends PersonnelRO {
@@ -25,7 +25,7 @@ export class BcwsRO extends PersonnelRO {
       fireCentre: 'COASTAL',
     },
   })
-  homeFireCentre: BcwsLocationRO;
+  homeLocation: BcwsLocationRO;
 
   @ApiProperty({
     description: "Personnel's work firecentre and location",
@@ -37,7 +37,7 @@ export class BcwsRO extends PersonnelRO {
     },
   })
   @IsOptional()
-  workFireCentre?: BcwsLocationRO;
+  workLocation?: BcwsLocationRO;
 
   @ApiProperty({
     description: 'Date applied',
@@ -132,16 +132,40 @@ export class BcwsRO extends PersonnelRO {
   })
   orientation: boolean;
 
+  @ApiProperty({
+    description: 'Emergency Contact First Name',
+    required: false,
+  })
+  emergencyContactFirstName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Last Name',
+    required: false,
+  })
+  emergencyContactLastName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Phone Number',
+    required: false,
+  })
+  emergencyContactPhoneNumber: string;
+
   //TODO: Add the following properties
   @ApiProperty()
-  tools?: BcwsPersonnelToolsRO;
+  tools?: BcwsPersonnelToolsRO[];
 
   @ApiProperty()
-  certifications?: BcwsPersonnelCertificationRO;
+  certifications?: BcwsPersonnelCertificationRO[];
 
   @ApiProperty()
-  languages?: BcwsPersonnelLanguagesRO;
+  languages?: BcwsPersonnelLanguagesRO[];
 
   @ApiProperty()
   roles?: BcwsPersonnelRoleRO;
+
+  @ApiProperty()
+  firstChoiceSection?: Section;
+
+  @ApiProperty()
+  secondChoiceSection?: Section;
 }

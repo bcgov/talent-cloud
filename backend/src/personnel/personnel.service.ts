@@ -19,13 +19,14 @@ import {
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
+import { BcwsRO } from './ro/bcws';
 import { EmcrRO } from './ro/emcr';
 import { Program, Role } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { BcwsPersonnelEntity } from '../database/entities/bcws';
+import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
 import {
   EmcrPersonnelEntity,
   EmcrExperienceEntity,
@@ -49,6 +50,8 @@ export class PersonnelService {
     private experiencesRepository: Repository<EmcrExperienceEntity>,
     @InjectRepository(EmcrTrainingEntity)
     private trainingRepository: Repository<EmcrTrainingEntity>,
+    @InjectRepository(LanguageEntity)
+    private languageRepository: Repository<LanguageEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -92,7 +95,7 @@ export class PersonnelService {
       await this.personnelRepository.save(person);
       await this.emcrPersonnelRepository.save(emcr);
 
-      return this.getPersonnelById(role, id);
+      return this.getEmcrPersonnelById(role, id);
     } catch (e) {
       console.log(e);
     }
@@ -118,7 +121,8 @@ export class PersonnelService {
     try {
       await this.experiencesRepository.delete({ personnelId: id });
       await this.experiencesRepository.save(experienceEntities);
-      return this.getPersonnelById(role, id);
+      return this.getEmcrPersonnelById(role, id);
+
     } catch (e) {
       console.log(e);
     }
@@ -434,19 +438,43 @@ export class PersonnelService {
    * Returns a default availability range of 31 days for a single personnel
    * @returns {EmcrPersonnelEntity} Single personnel
    */
-  async getPersonnelById(
+  async getBcwsPersonnelById(
     role: Role,
-    id: string,
-  ): Promise<Record<string, EmcrRO>> {
-    const person = await this.emcrPersonnelRepository.findOne({
-      where: { personnel: { id } },
-      relations: ['experiences', 'experiences.function', 'training'],
+    id: string): Promise<Record<string, BcwsRO>> {
+    const person = await this.bcwsPersonnelRepository.findOneOrFail({
+      where: { personnelId: id },
+      relations: ['personnel', 'roles', 'roles.role', 'division', 'certifications', 'certifications.certification',
+        'tools', 'tools.tool'
+      ]
     });
+
+    const languages = await this.languageRepository.find({ where: { personnel: { personnelId: id } } });
+    person.languages = languages;
     const lastDeployed = await this.getLastDeployedDate(id);
     const personnel = person.toResponseObject(role, lastDeployed);
 
-    return personnel;
+    return personnel
   }
+
+  /**
+   * Get Personnel By ID
+   * Returns a default availability range of 31 days for a single personnel
+   * @returns {EmcrPersonnelEntity} Single personnel
+   */
+  async getEmcrPersonnelById(
+    role: Role,
+    id: string): Promise<Record<string, EmcrRO>> {
+
+    const person = await this.emcrPersonnelRepository.findOneOrFail({
+      where: { personnelId: id },
+      relations: ['experiences', 'experiences.function', 'training']
+    });
+
+    const lastDeployed = await this.getLastDeployedDate(id);
+
+    return person.toResponseObject(role, lastDeployed);
+  }
+
   /**
    * Get the availability of a personnel for a specific date range
    * @param id

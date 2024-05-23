@@ -12,7 +12,6 @@ import { EmcrPersonnelExperienceDTO } from './experiences.dto';
 import { Region } from '../../../common/enums/emcr';
 import { Status } from '../../../common/enums/status.enum';
 import { EmcrTrainingEntity } from '../../../database/entities/emcr/emcr-training.entity';
-import { LocationEntity } from '../../../database/entities/location.entity';
 
 export class EmcrLocationDTO {
   @IsOptional()

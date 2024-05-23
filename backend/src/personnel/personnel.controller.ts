@@ -98,7 +98,7 @@ export class PersonnelController {
     } else if (Object.keys(details).length > 0) {
       return this.personnelService.updatePersonnel(id, details, req.role);
     } else {
-      return this.personnelService.getPersonnelById(req.role, id);
+      return this.personnelService.getEmcrPersonnelById(req.role,  id);
     }
   }
 
@@ -144,7 +144,7 @@ export class PersonnelController {
     @Query() query?: GetBcwsPersonnelDTO,
   ): Promise<GetPersonnelRO> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    
+
     const { personnel, count } = await this.personnelService.getBcwsPersonnel(query);
 
     return {
@@ -173,11 +173,32 @@ export class PersonnelController {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const personnelRO: Record<'Personnel', PersonnelRO> =
-      await this.personnelService.getPersonnelById(req.role, id);
+      await this.personnelService.getEmcrPersonnelById(req.role, id);
 
     return personnelRO;
   }
 
+  @ApiOperation({
+    summary: 'Get personnel By Id',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Get('/bcws/:id')
+  async getBcwsPersonnelById(
+    @Param('id') id: string,
+    @Req() req: RequestWithRoles,
+    ): Promise<Record<'Personnel', PersonnelRO>> {
+      this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+  
+      const personnelRO: Record<'Personnel', PersonnelRO> =
+        await this.personnelService.getBcwsPersonnelById(req.role,  id);
+  
+      return personnelRO;
+    }
+  
   @ApiOperation({
     summary: 'Update personnel availability',
     description: 'Update availability',

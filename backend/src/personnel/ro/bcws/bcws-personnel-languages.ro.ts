@@ -5,17 +5,13 @@ import {
 } from '../../../common/enums/bcws';
 
 export class BcwsPersonnelLanguagesRO {
-  @ApiProperty({
-    description: 'Language ID',
-    example: 1,
-  })
-  id: number;
+  
 
   @ApiProperty({
     description: 'Language name',
     example: 'English',
   })
-  name: string;
+  language: string;
 
   @ApiProperty({
     description: 'Language proficiency',
@@ -24,7 +20,7 @@ export class BcwsPersonnelLanguagesRO {
     enumName: 'bcws-languages-proficiency',
     enum: LanguageProficiency,
   })
-  proficiency: LanguageProficiency;
+  level: LanguageProficiency;
 
   @ApiProperty({
     description: 'Language fluency type',

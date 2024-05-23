@@ -31,7 +31,8 @@ export const handler = async () => {
           const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
           
           bcwsData.personnelId = person.id;
-
+          
+          bcwsData.languages.forEach(itm => itm.personnelId = person.id)
           await bcwsPersonnelRepo.save(bcwsPersonnelRepo.create(new BcwsPersonnelEntity((bcwsData))));
           }
 

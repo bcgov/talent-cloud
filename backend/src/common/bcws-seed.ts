@@ -20,6 +20,7 @@ import {
   LocationEntity,
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
+import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
 
 export const handler = (
@@ -42,6 +43,14 @@ export const handler = (
       ])
     ];
   const dateApplied = faker.date.past();
+
+  const personnelRoles = createRoles(roles);
+  const firstChoiceSection = roles.find(r => r.id === personnelRoles[0].roleId)?.section;
+  const secondRoleSection = roles.find(r => r.id === personnelRoles[1].roleId)?.section;
+  let secondChoiceSection = undefined;
+  if (secondRoleSection !== firstChoiceSection) {
+    secondChoiceSection = secondRoleSection;
+  }
 
   const bcwsData: CreatePersonnelBcwsDTO = {
     homeFireCentre: faker.helpers.arrayElement(locations),
@@ -66,12 +75,14 @@ export const handler = (
     liaisonPhoneNumber: faker.string.numeric('##########'),
     liaisonEmail: faker.internet.email(),
     willingnessStatement: true,
+    firstChoiceSection,
+    secondChoiceSection,
     parQ: true,
     respectfulWorkplacePolicy: true,
     orientation: true,
     tools: createTools(tools),
     certifications: createCertifications(certs),
-    roles: createRoles(roles),
+    roles: personnelRoles,
     languages: Array.from(new Set(createLanguages())),
     division: faker.helpers.arrayElement(divisions).id,
   };
@@ -155,7 +166,8 @@ export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
     const tool = faker.helpers.arrayElement(bcwsTools);
 
     personnelTools.push({
-      toolId: tool.id,
+      tool, 
+      toolId: tool.id,  
       proficenyLevel: faker.helpers.arrayElement(
         Object.values(ToolsProficiency),
       ),
@@ -201,7 +213,6 @@ export const createRoles = (bcwsRoles: BcwsRoleEntity[]) => {
     personnelRoles.push({
       roleId: role.id,
       expLevel: faker.helpers.arrayElement(Object.values(ExperienceLevel)),
-      rank: i + 1,
     });
   }
   const uniqueRoles = new Set(personnelRoles.map((role) => role.roleId));
@@ -213,8 +224,8 @@ export const createRoles = (bcwsRoles: BcwsRoleEntity[]) => {
   );
 };
 
-export const createLanguages = () => {
-  const personnelLang = [];
+export const createLanguages = (): CreateBcwsPersonnelLanguagesDTO[] => {
+  const personnelLang: CreateBcwsPersonnelLanguagesDTO[] = [];
 
   for (let i = 0; i < 2; i++) {
     personnelLang.push({

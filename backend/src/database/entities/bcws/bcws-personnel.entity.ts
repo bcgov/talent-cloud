@@ -17,6 +17,7 @@ import { DivisionEntity } from '../division.entity';
 import { LocationEntity } from '../location.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
+import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
@@ -136,6 +137,12 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'orientation', type: 'boolean', default: false })
   orientation: boolean;
 
+  @Column({ name: 'first_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  firstChoiceSection?: Section;
+
+  @Column({ name: 'second_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  secondChoiceSection?: Section;
+
   @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
   tools?: BcwsPersonnelTools[];
 
@@ -158,8 +165,8 @@ export class BcwsPersonnelEntity {
     const personnelData = this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
-      homeFireCentre: this?.homeFireCentre?.toResponseObject() ?? {},
-      workFireCentre: this?.workFireCentre?.toResponseObject() ?? {},
+      homeLocation: this?.homeFireCentre?.toResponseObject() ?? {},
+      workLocation: this?.workFireCentre?.toResponseObject() ?? {},
       employeeId: this.employeeId,
       paylistId: this.paylistId,
       dateApplied: this.dateApplied,
@@ -181,9 +188,12 @@ export class BcwsPersonnelEntity {
       ministry: this.division?.toResponseObject().ministry,
       division: this.division?.toResponseObject().division,
       orientation: this.orientation,
+      firstChoiceSection: this.firstChoiceSection,
+      secondChoiceSection: this.secondChoiceSection,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
+      certifications: this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

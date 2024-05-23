@@ -12,7 +12,7 @@ import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certificati
 import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
-import { FireCentre } from '../../../common/enums/bcws';
+import { FireCentre, Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
 class BcwsLocationDTO {
@@ -171,4 +171,20 @@ export class CreatePersonnelBcwsDTO {
     required: false,
   })
   division: number;
+
+  @ApiProperty({
+    description: 'First Choice Section',
+    required: false,
+    enum: Section,
+    example: Section.AVIATION,
+  })
+  firstChoiceSection: Section;
+
+  @ApiProperty({
+    description: 'Second Choice Section',
+    required: false,
+    enum: Section,
+    example: Section.LOGISTICS,
+  })
+  secondChoiceSection: Section;
 }

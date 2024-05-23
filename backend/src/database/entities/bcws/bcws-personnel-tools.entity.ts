@@ -1,7 +1,8 @@
 import { Entity, ManyToOne, JoinColumn, Column, PrimaryColumn } from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import { BcwsToolsEntity } from './bcws-tools.entity';
-import { ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
+import { ToolsName, ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
+import { BcwsPersonnelToolsRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_tools')
 export class BcwsPersonnelTools {
@@ -12,7 +13,7 @@ export class BcwsPersonnelTools {
   @PrimaryColumn({ name: 'personnel_id', type: 'uuid' })
   personnelId: string;
 
-  @ManyToOne(() => BcwsToolsEntity, (b) => b.id)
+  @ManyToOne(() => BcwsToolsEntity, (b) => b.id, { eager: true })
   @JoinColumn({ name: 'tool_id', referencedColumnName: 'id' })
   tool: BcwsToolsEntity;
 
@@ -27,10 +28,10 @@ export class BcwsPersonnelTools {
   })
   proficenyLevel: ToolsProficiency;
 
-  toResponseObject() {
+  toResponseObject(): BcwsPersonnelToolsRO {
     return {
-      tool: this.tool.name,
-      proficenyLevel: this.proficenyLevel,
+      toolName: ToolsName[this.tool.name] ?? null,
+      proficiencyLevel: this.proficenyLevel,
     };
   }
 }

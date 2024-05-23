@@ -37,6 +37,7 @@ const Dashboard = () => {
         selectedTab={selectedTab}
         counts={counts}
         role={role}
+        route={route}
       />
 
       {loading && (

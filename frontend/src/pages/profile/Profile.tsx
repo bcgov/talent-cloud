@@ -13,8 +13,6 @@ import { Link, useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
 import useFunctions from '@/hooks/useFunctions';
 import useAvailability from '@/hooks/useAvailability';
-import ProfileDetails from './ProfileDetails';
-import ProfileHeader from './ProfileHeader';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
@@ -28,18 +26,29 @@ import { DialogUI } from '@/components';
 import { ReviewApplicant } from '../ReviewApplicant';
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 import { Routes } from '@/routes';
+import ProfileHeader from './ProfileHeader';
+import ProfileDetails from './ProfileDetails';
+import { SectionsAndRoles } from './SectionsAndRoles';
+import { SkillsAndCertifications } from './SkillsAndCertifications';
+import { Route } from '@/providers';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
-  const { personnel, updatePersonnel, updateExperiences } = usePersonnel({
-    personnelId,
-  });
+
+  const { personnel, updatePersonnel, updateExperiences, profileData } =
+    usePersonnel({
+      personnelId,
+    });
+
+  const { generalInformation, contact, organizational, skills, intakeRequirements } =
+    profileData;
+
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
   const { functions } = useFunctions();
 
-  const { role } = useRole();
+  const { role, route } = useRole();
 
   const [openEditNotes, setOpenEditNotes] = useState(false);
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
@@ -147,6 +156,7 @@ const Profile = () => {
           <div className="pt-12">
             <ProfileHeader
               personnel={personnel}
+              route={route}
               role={role}
               handleOpenReviewApplicant={handleOpenReviewApplicant}
               updatePersonnel={updatePersonnel}
@@ -154,20 +164,37 @@ const Profile = () => {
 
             <ProfileDetails
               openEditProfilePopUp={handleOpenEditProfilePopUp}
-              personnel={personnel}
+              intakeRequirements={intakeRequirements}
+              generalInformation={generalInformation}
+              contact={contact}
+              organizational={organizational}
+              pending={personnel.status === Status.PENDING}
             />
-
-            <ProfileFunctions
-              functions={functions}
-              personnel={personnel}
-              openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
-            />
+            {personnel?.experiences && (
+              <ProfileFunctions
+                functions={functions}
+                personnel={personnel}
+                openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+              />
+            )}
             <Scheduler
-              name={personnel.firstName}
+              name={personnel?.firstName}
               availability={availability}
               onChangeAvailabilityDates={onChangeAvailabilityQuery}
               openSchedulerDialog={openSchedulerDialog}
             />
+
+            {route === Route.BCWS && (
+              <>
+                <SectionsAndRoles
+                  roles={personnel?.roles}
+                  firstChoiceSection={personnel.firstChoiceSection}
+                  secondChoiceSection={personnel.secondChoiceSection}
+                />
+                <SkillsAndCertifications skills={skills ?? []} />{' '}
+              </>
+            )}
+
             <ProfileNotes
               personnel={personnel}
               handleOpenEditNotes={handleOpenEditNotes}
