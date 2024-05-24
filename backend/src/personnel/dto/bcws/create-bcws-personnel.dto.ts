@@ -15,21 +15,7 @@ import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
 import { FireCentre, Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 
-class BcwsLocationDTO {
-  @IsOptional()
-  id?: number;
 
-  @IsString()
-  locationName?: string;
-
-  @ApiProperty({
-    description: 'Ministry personnel works in',
-    enum: FireCentre,
-    example: FireCentre.CARIBOO,
-  })
-  @IsEnum(FireCentre)
-  fireCentre?: FireCentre;
-}
 
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
@@ -42,26 +28,6 @@ export class CreatePersonnelBcwsDTO {
 
   @ApiProperty()
   paylistId: string;
-
-  @ApiProperty({
-    description: "Personnel's work fire centre",
-    example: {
-      locationName: 'Victoria',
-      fireCentre: FireCentre.CARIBOO,
-    },
-  })
-  @IsOptional()
-  @ValidateIf((o) => o.workFireCentre && o.workFireCentre?.locationName !== '')
-  workFireCentre?: BcwsLocationDTO;
-
-  @ApiProperty({
-    description: "Personnel's work fire centre",
-    example: {
-      locationName: 'Victoria',
-      fireCentre: FireCentre.CARIBOO,
-    },
-  })
-  homeFireCentre?: BcwsLocationDTO;
 
   @ApiProperty()
   @IsOptional()
@@ -87,36 +53,78 @@ export class CreatePersonnelBcwsDTO {
   @ValidateIf((o) => o.logisticsNotes !== '')
   logisticsNotes: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date approved by coordinator',
+    required: false,
+  })
   @IsOptional()
   dateApproved?: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date applied by personnel',
+    required: false,
+  })
   @IsOptional()
   dateApplied?: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Status of the personnel',
+    enum: Status,
+    example: Status.ACTIVE,
+  })
   status: Status;
 
   @ApiProperty({ default: false })
   purchaseCardHolder: boolean;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Liaison First Name'
+  })
   @IsOptional()
   liaisonFirstName?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Liaison Last Name'
+  })
   @IsOptional()
   liaisonLastName?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Liaison Phone Number'
+  })
   @IsOptional()
   liaisonPhoneNumber?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Liaison Email',
+  })
   @IsEmail()
   @IsOptional()
   liaisonEmail?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact First Name',
+  })
+  @IsOptional()
+  emergencyContactFirstName?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Last Name',
+  })
+  @IsOptional()
+  emergencyContactLastName?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Phone Number',
+  })
+  @IsOptional()
+  emergencyContactPhoneNumber?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Relationship',
+  })
+  @IsOptional()
+  emergencyContactRelationship?: string;
 
   @ApiProperty({
     default: false,

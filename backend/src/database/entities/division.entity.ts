@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Ministry } from '../../common/enums';
+import { DivisionRO } from '../../personnel/ro/bcws/division.ro';
 
 @Entity('division')
 export class DivisionEntity {
@@ -17,10 +18,10 @@ export class DivisionEntity {
   })
   ministry: Ministry;
 
-  toResponseObject() {
+  toResponseObject(): DivisionRO {
     return {
       id: this.id,
-      division: this.divisionName,
+      divisionName: this.divisionName,
       ministry: this.ministry,
     };
   }

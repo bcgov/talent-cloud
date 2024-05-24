@@ -29,10 +29,10 @@ import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
-
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -83,9 +83,11 @@ export class PersonnelController {
       personnel.trainings = await this.personnelService.getTrainingsByNames([
         ICS_TRAINING_NAME,
       ]);
+      delete personnel.icsTraining
     } else if (personnel.icsTraining === false) {
       personnel.trainings = [];
     }
+    
     const { experiences, ...details } = personnel;
 
     // For now, these are distinct and will not be updated at the same time
@@ -101,6 +103,25 @@ export class PersonnelController {
       return this.personnelService.getEmcrPersonnelById(req.role,  id);
     }
   }
+
+
+  @ApiOperation({
+    summary: 'Update personnel',
+    description: 'Update existing personnel data.',
+  })
+  @ApiResponse({
+    status: HttpStatus.ACCEPTED,
+  })
+  @Patch('/bcws/:id')
+  async updateBcwsPersonnel(
+    @Body() personnel: UpdateBcwsPersonnelDTO,
+    @Request() req: RequestWithRoles,
+    @Param('id') id: string,
+  ) {
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    return this.personnelService.updateBcwsPersonnel(id, personnel, req.role);
+  }
+
 
   @ApiOperation({
     summary: 'Get emcr personnel',
@@ -174,6 +195,7 @@ export class PersonnelController {
 
     const personnelRO: Record<'Personnel', PersonnelRO> =
       await this.personnelService.getEmcrPersonnelById(req.role, id);
+      
 
     return personnelRO;
   }
@@ -198,6 +220,7 @@ export class PersonnelController {
   
       return personnelRO;
     }
+  
   
   @ApiOperation({
     summary: 'Update personnel availability',

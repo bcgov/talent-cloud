@@ -53,8 +53,8 @@ export const handler = (
   }
 
   const bcwsData: CreatePersonnelBcwsDTO = {
-    homeFireCentre: faker.helpers.arrayElement(locations),
-    workFireCentre: faker.helpers.arrayElement(locations),
+
+
     dateApplied: dateApplied,
     dateApproved:
       status !== Status.PENDING
@@ -85,25 +85,30 @@ export const handler = (
     roles: personnelRoles,
     languages: Array.from(new Set(createLanguages())),
     division: faker.helpers.arrayElement(divisions).id,
+    emergencyContactFirstName: faker.person.firstName(),
+    emergencyContactLastName: faker.person.lastName(),
+    emergencyContactPhoneNumber: faker.string.numeric('##########'),
+    emergencyContactRelationship: faker.lorem.word(),
   };
   
   
   
   const personnelData: CreatePersonnelDTO = {
+    homeLocation: faker.helpers.arrayElement(locations),
+    workLocation: faker.helpers.arrayElement(locations),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
     workPhone: faker.string.numeric('##########'),
-    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
     unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
-    jobTitle: faker.company.catchPhrase(),
+    jobTitle: faker.company.buzzNoun(),
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
-    driverLicense: [faker.helpers.arrayElement(Object.values(DriverLicense))],
+    driverLicense: Array.from(new Set([faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense))])),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],

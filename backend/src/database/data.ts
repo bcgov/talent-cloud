@@ -18,16 +18,12 @@ export const personnel: CreatePersonnelDTO[] = [
     primaryPhone: '8939179531',
     secondaryPhone: '4462570360',
     workPhone: '3859589684',
-    ministry: Ministry['WLRS'],
+    
     unionMembership: UnionMembership['EXCLUDED'],
     supervisorFirstName: 'Damon',
     supervisorLastName: 'Mraz',
     supervisorEmail: 'Ernestina73@yahoo.com',
-    driverLicense: ['CLASS_3'],
-    emcr: {
-      trainings: [],
-      status: Status.ACTIVE,
-      homeLocation: {
+    homeLocation: {
         id: 29,
         locationName: 'Merritt',
         region: Region['CTL'],
@@ -37,6 +33,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Merritt',
         region: Region['CTL'],
       } as LocationEntity,
+    driverLicense: ['CLASS_3'],
+    emcr: {
+      ministry: Ministry['WLRS'],
+      trainings: [],
+      status: Status.ACTIVE,
+      
       dateApplied: new Date(2024, 1, 10),
       coordinatorNotes: 'Succedo pauci cogo.',
       logisticsNotes:
@@ -104,13 +106,9 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorLastName: 'Rohan',
     supervisorEmail: 'Maegan.Upton@yahoo.com',
     unionMembership: UnionMembership['PEA'],
-    ministry: Ministry['AG'],
+    
     driverLicense: ['CLASS_5'],
-    emcr: {
-      trainings: [],
-      dateApplied: new Date(2023, 11, 9),
-      status: Status.ACTIVE,
-
+    
       homeLocation: {
         id: 23,
         locationName: 'Kimberley',
@@ -121,6 +119,13 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Merritt',
         region: Region['CTL'],
       } as LocationEntity,
+      emcr: {
+        ministry: Ministry['AG'],
+      trainings: [],
+      dateApplied: new Date(2023, 11, 9),
+      status: Status.ACTIVE,
+
+      
 
       coordinatorNotes: 'Condico eaque clamo condico cicuta adhuc uxor patria.',
       logisticsNotes:
@@ -197,11 +202,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Elliot',
     supervisorLastName: 'Swaniawski',
     supervisorEmail: 'Cristina_Hirthe41@yahoo.com',
-    emcr: {
-      trainings: [],
-      coordinatorNotes: 'Termes cunabula depulso canonicus nisi.',
-      dateApplied: new Date(2023, 5, 9),
-      status: Status.ACTIVE,
+    
       homeLocation: {
         id: 16,
         locationName: 'Elkford',
@@ -212,6 +213,13 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Kimberley',
         region: Region['SEA'],
       } as LocationEntity,
+      emcr: {
+        ministry: Ministry['ENV'],
+      trainings: [],
+      coordinatorNotes: 'Termes cunabula depulso canonicus nisi.',
+      dateApplied: new Date(2023, 5, 9),
+      status: Status.ACTIVE,
+      
       dateApproved: new Date('2024-01-04T07:49:41.764Z'),
       logisticsNotes:
         'Accendo tonsor iure dedecor quo spero vinco aperio. Demulceo creber est concido comburo repellendus strenuus ',
@@ -269,7 +277,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
     },
     driverLicense: ['CLASS_2'],
-    ministry: Ministry['ENV'],
+    
     unionMembership: UnionMembership['PEA'],
 
     jobTitle: 'Down-sized asynchronous benchmark',
@@ -290,14 +298,10 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Fatima',
     supervisorLastName: 'Howell',
     supervisorEmail: 'Lauryn63@yahoo.com',
-    ministry: Ministry['EMCR'],
+    
     unionMembership: UnionMembership['BCGEU'],
     driverLicense: ['CLASS_3'],
-    emcr: {
-      trainings: [],
-      status: Status.PENDING,
-      dateApplied: new Date(2023, 4, 24),
-      homeLocation: {
+    homeLocation: {
         id: 40,
         locationName: 'Prince George',
         region: Region['NEA'],
@@ -307,6 +311,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Elkford',
         region: Region['SEA'],
       } as LocationEntity,
+    emcr: {
+      ministry: Ministry['EMCR'],
+      trainings: [],
+      status: Status.PENDING,
+      dateApplied: new Date(2023, 4, 24),
+      
 
       coordinatorNotes: 'Varius quam coruscus attero.',
       logisticsNotes:
@@ -384,13 +394,9 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Brooke',
     supervisorLastName: 'Ward',
     supervisorEmail: 'Breanne17@gmail.com',
-    ministry: Ministry['FOR'],
+    
     unionMembership: UnionMembership['BCGEU'],
-    emcr: {
-      trainings: [],
-      dateApplied: new Date(2024, 1, 2),
-      status: Status.PENDING,
-
+    
       homeLocation: {
         id: 35,
         locationName: 'North Vancouver',
@@ -401,6 +407,13 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Prince George',
         region: Region['NEA'],
       } as LocationEntity,
+      emcr: {
+        ministry: Ministry['FOR'],
+      trainings: [],
+      dateApplied: new Date(2024, 1, 2),
+      status: Status.PENDING,
+
+      
 
       coordinatorNotes:
         'Calco capio trepide approbo unus similique quidem amplitudo.',
@@ -456,11 +469,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Citlalli',
     supervisorLastName: 'Ebert-Schuster',
     supervisorEmail: 'Stacey.Thompson@gmail.com',
-    emcr: {
-      trainings: [],
-      status: Status.PENDING,
-      dateApplied: new Date(2023, 9, 17),
-      homeLocation: {
+    homeLocation: {
         id: 58,
         locationName: 'Whistler',
         region: Region['SWE'],
@@ -470,6 +479,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'North Vancouver',
         region: Region['SWE'],
       } as LocationEntity,
+    emcr: {
+      ministry: Ministry['WLRS'],
+      trainings: [],
+      status: Status.PENDING,
+      dateApplied: new Date(2023, 9, 17),
+      
 
       coordinatorNotes:
         'Ambulo sortitus tenax deserunt ago stips ver voro adduco libero.',
@@ -505,7 +520,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
     },
     driverLicense: ['LL2'],
-    ministry: Ministry['WLRS'],
+    
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Cross-group client-driven encryption',
 
@@ -526,11 +541,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Pasquale',
     supervisorLastName: 'Rolfson',
     supervisorEmail: 'Anastasia48@hotmail.com',
-    emcr: {
-      trainings: [],
-      status: Status.INACTIVE,
-      dateApplied: new Date(2023, 6, 6),
-      homeLocation: {
+    homeLocation: {
         id: 10,
         locationName: 'Cumberland',
         region: Region['VIC'],
@@ -540,6 +551,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Whistler',
         region: Region['SWE'],
       } as LocationEntity,
+    emcr: {
+      ministry: Ministry['HLTH'],
+      trainings: [],
+      status: Status.INACTIVE,
+      dateApplied: new Date(2023, 6, 6),
+      
 
       coordinatorNotes:
         'Tondeo cubicularis angelus tamen desino amplexus officia ceno aurum.',
@@ -592,7 +609,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
     },
     driverLicense: ['CLASS_2'],
-    ministry: Ministry['HLTH'],
+    
     unionMembership: UnionMembership['PEA'],
 
     jobTitle: 'Profound disintermediate concept',
@@ -613,14 +630,10 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Lexus',
     supervisorLastName: 'Koch',
     supervisorEmail: 'Esther_Ebert29@hotmail.com',
-    ministry: Ministry['MUNI'],
+    
     unionMembership: UnionMembership['EXCLUDED'],
     driverLicense: ['LL2'],
-    emcr: {
-      trainings: [],
-      status: Status.INACTIVE,
-      dateApplied: new Date(2024, 3, 15),
-      homeLocation: {
+    homeLocation: {
         id: 59,
         locationName: 'Williams Lake',
         region: Region['NEA'],
@@ -630,6 +643,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Cumberland',
         region: Region['VIC'],
       } as LocationEntity,
+    emcr: {
+      ministry: Ministry['MUNI'],
+      trainings: [],
+      status: Status.INACTIVE,
+      dateApplied: new Date(2024, 3, 15),
+      
 
       coordinatorNotes: 'Perferendis attero sequi voveo sollers.',
       logisticsNotes:
@@ -707,11 +726,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorFirstName: 'Eduardo',
     supervisorLastName: 'Frami',
     supervisorEmail: 'Imani87@hotmail.com',
-    emcr: {
-      trainings: [],
-      status: Status.INACTIVE,
-      dateApplied: new Date(2023, 11, 15),
-      homeLocation: {
+    homeLocation: {
         id: 26,
         locationName: 'Lillooet',
         region: Region['SWE'],
@@ -721,6 +736,12 @@ export const personnel: CreatePersonnelDTO[] = [
         locationName: 'Williams Lake',
         region: Region['NEA'],
       } as LocationEntity,
+    emcr: {
+      ministry: Ministry['PSSG'],
+      trainings: [],
+      status: Status.INACTIVE,
+      dateApplied: new Date(2023, 11, 15),
+      
 
       coordinatorNotes: 'Thymum ars vespillo distinctio.',
       logisticsNotes:
@@ -780,7 +801,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
     },
     driverLicense: ['CLASS_3'],
-    ministry: Ministry['PSSG'],
+    
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Automated attitude-oriented benchmark',
 
