@@ -1,6 +1,7 @@
 import type { FormikErrors } from 'formik';
 
 export type InputProps = {
+  name: string;
   label: string;
   type?: string;
   disabled?: boolean;

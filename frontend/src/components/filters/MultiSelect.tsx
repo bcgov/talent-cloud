@@ -17,6 +17,7 @@ export const MultiSelect = ({
   onChange,
   handleClose,
   handleCloseMany,
+  maxChips,
 }: {
   field: any;
   values: any;
@@ -24,6 +25,7 @@ export const MultiSelect = ({
   label: string;
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
+  maxChips: number;
 }) => {
   return (
     <>
@@ -36,7 +38,7 @@ export const MultiSelect = ({
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
-            maxChips={field.name === 'region' ? 2 : 1}
+            maxChips={maxChips}
           />
           <MenuButton />
         </MenuHandler>

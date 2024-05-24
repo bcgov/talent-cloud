@@ -1,34 +1,10 @@
-import type { ReactElement } from 'react';
 import { useContext, useEffect, useState } from 'react';
 import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { RoleContext, Route } from '@/providers';
 import { bcwsData, emcrData } from './profileData';
-import type { ExperienceLevel } from '@/common/enums/sections.enum';
-import type { ToolsProficiencyName } from '@/common/enums/tools.enum';
-import type { LanguageProficiencyName } from '@/common/enums/language.enum';
-
-export type ProfileData = {
-  intakeRequirements?: { title?: string; content?: string | ReactElement }[];
-  generalInformation: { title?: string; content?: string | ReactElement }[];
-  contact: { title?: string; content?: string | ReactElement }[];
-  organizational: { title?: string; content?: string | ReactElement }[];
-  skills?: {
-    title?: string;
-    header?: string;
-    subheader?: string;
-    itms?: {
-      label?: string;
-      value?:
-        | ToolsProficiencyName
-        | LanguageProficiencyName
-        | ExperienceLevel
-        | string
-        | undefined;
-    }[];
-  }[];
-};
+import type { ProfileData } from '@/pages/profile/types';
 
 const usePersonnel = ({
   personnelId,

@@ -2,17 +2,10 @@ import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
 import { ErrorMessage, useField } from 'formik';
 import { formatPhone } from './helpers';
-import type { InputProps } from './types';
+import type { FieldType } from '@/pages/profile';
 
-export const TextInput = ({
-  type,
-  label,
-  required,
-  disabled,
-  error,
-  autocomplete,
-  ...props
-}: InputProps) => {
+export const TextInput = ({ ...props }: FieldInputProps<string> & FieldType) => {
+  const { name, label, required, disabled, type } = props;
   const [field, meta] = useField(props as any as FieldInputProps<string>);
 
   if (type === 'tel') {
@@ -21,7 +14,7 @@ export const TextInput = ({
   }
 
   const getClass = (): string => {
-    if (error) {
+    if (meta.error) {
       return classes.menu.error;
     } else if (disabled) {
       return classes.menu.disabled;
@@ -30,18 +23,17 @@ export const TextInput = ({
   };
 
   return (
-    <label htmlFor={field.name}>
+    <label htmlFor={name}>
       {label}
       {required && <span className="text-error">*</span>}
       <input
+        {...props}
         {...field}
-        data-lpignore={true}
         disabled={disabled}
         className={getClass()}
         type={type}
-        autoComplete={autocomplete}
       />
-      <ErrorMessage name={field.name}>
+      <ErrorMessage name={name}>
         {(msg) => <div className="font-normal text-errorRed">{msg}</div>}
       </ErrorMessage>
     </label>

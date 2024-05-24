@@ -82,6 +82,7 @@ export const Filters = ({
               onChange={handleMultiSelect}
               handleClose={handleClose}
               handleCloseMany={handleCloseMany}
+              maxChips={1}
             />
           </div>
           <div className="col-span-1 md:col-span-3">
