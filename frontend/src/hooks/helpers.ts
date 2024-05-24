@@ -96,14 +96,12 @@ export const renderCells = (
     fireCentre: {
       key: DashboardColumns.FIRE_CENTRE,
       columnName: DashboardColumns.FIRE_CENTRE,
-      value: FireCentreName[personnel?.homeFireCentre?.fireCentre],
+      value: FireCentreName[personnel?.homeLocation?.fireCentre],
     },
     location: {
       key: DashboardColumns.LOCATION,
       columnName: DashboardColumns.LOCATION,
-      value:
-        personnel?.homeFireCentre?.locationName ??
-        personnel.homeLocation.locationName,
+      value: personnel?.homeLocation?.locationName,
     },
     ics: {
       key: DashboardColumns.ICS,

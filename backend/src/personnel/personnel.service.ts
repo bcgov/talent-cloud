@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
 import {
   EmcrPersonnelExperienceDTO,
   GetEmcrPersonnelDTO,
@@ -75,15 +76,7 @@ export class PersonnelService {
 
     this.logger.log(`${JSON.stringify(personnel)}`);
 
-    if (
-      personnel?.workLocation &&
-      personnel?.workLocation?.locationName === ''
-    ) {
-      personnel.workLocation = {
-        locationName: null,
-        region: null,
-      };
-    }
+    
 
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
@@ -99,6 +92,41 @@ export class PersonnelService {
     } catch (e) {
       console.log(e);
     }
+  }
+
+    /**
+   * update personnel/bcws personnel 
+   * @param id 
+   * @param personnel 
+   * @param role 
+   * @returns 
+   */
+    async updateBcwsPersonnel(id: string,
+      personnel: UpdateBcwsPersonnelDTO,
+      role: Role){
+    
+      this.logger.log(`Updating personnel ${id}`);
+      const person = await this.personnelRepository.findOne({ where: { id } });
+      const bcws = await this.bcwsPersonnelRepository.findOne({
+        where: { personnel: { id } },
+      });
+  
+      this.logger.log(`${JSON.stringify(personnel)}`);
+  
+      Object.keys(personnel).forEach((key) => {
+        person[key] = personnel[key];
+        bcws[key] = personnel[key];
+      });
+  
+      try {
+        // This is a 'save' rather than 'update' to allow for updating many-to-many relations
+        await this.personnelRepository.save(person);
+        await this.bcwsPersonnelRepository.save(bcws);
+  
+        return this.getBcwsPersonnelById(role, id);
+      } catch (e) {
+        console.log(e);
+      }
   }
 
   /**
@@ -168,7 +196,7 @@ export class PersonnelService {
     qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('emcr_personnel.experiences', 'experiences');
     qb.leftJoinAndSelect('experiences.function', 'function');
-    qb.leftJoinAndSelect('emcr_personnel.homeLocation', 'location');
+    qb.leftJoinAndSelect('personnel.homeLocation', 'location');
 
     this.addQueryBuilderCommonFilters(
       qb,
@@ -179,13 +207,13 @@ export class PersonnelService {
     );
 
     if (query.region?.length) {
-      qb.andWhere('emcr_personnel.homeLocation.region IN (:...regions)', {
+      qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
       qb.andWhere(
-        'emcr_personnel.homeLocation.locationName IN (:...homeLocations)',
+        'personnel.homeLocation.locationName IN (:...homeLocations)',
         {
           homeLocations: query.location,
         },
@@ -236,7 +264,7 @@ export class PersonnelService {
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
-    qb.leftJoinAndSelect('bcws_personnel.homeFireCentre', 'location');
+    qb.leftJoinAndSelect('personnel.homeLocation', 'location');
     qb.leftJoinAndSelect('bcws_personnel.division', 'division');
 
     this.addQueryBuilderCommonFilters(
@@ -467,7 +495,7 @@ export class PersonnelService {
 
     const person = await this.emcrPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
-      relations: ['experiences', 'experiences.function', 'training']
+      relations: ['experiences', 'experiences.function', 'trainings']
     });
 
     const lastDeployed = await this.getLastDeployedDate(id);

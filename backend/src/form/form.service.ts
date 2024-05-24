@@ -112,7 +112,6 @@ export class FormService {
     const createPersonnelDTO: CreatePersonnelDTO = {
       firstName: personalDetails.firstName,
       lastName: personalDetails.lastName,
-      ministry: Object.values(Ministry)[0],
       primaryPhone: personalDetails.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
       secondaryPhone:
         personalDetails?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '') ?? '',
@@ -144,7 +143,8 @@ export class FormService {
       trainings: [],
       experiences: functionsArray,
       homeLocation,
-      workLocation,
+      workLocation
+      
     };
     // TODO create EMCR personnel + BCWS personnel
     // TODO remove console.log when the above TODO is complete

@@ -10,16 +10,14 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
-  EmcrPersonnelEntity,
   EmcrTrainingEntity,
-  LocationEntity,
 } from '../database/entities/emcr';
-import { CreatePersonnelDTO } from '../personnel';
-import { CreatePersonnelEmcrDTO, EmcrLocationDTO } from '../personnel/dto/emcr';
+import { CreatePersonnelDTO, LocationDTO } from '../personnel';
+import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 
 
 export const handler = (
-  locations: EmcrLocationDTO[],
+  locations: LocationDTO[],
   functions: EmcrFunctionEntity[],
   seededTrainings: EmcrTrainingEntity[],
 ): {
@@ -38,8 +36,7 @@ const dateApplied = faker.date.past();
 const homeLocation =  faker.helpers.arrayElement(locations)
 const workLocation =  faker.helpers.arrayElement(locations)
 const emcrData: CreatePersonnelEmcrDTO = {
-  homeLocation: homeLocation,
-  workLocation: workLocation, 
+  
   dateApplied: dateApplied,
   logisticsNotes: faker.lorem.paragraph(),
   coordinatorNotes: faker.lorem.sentence(),
@@ -52,6 +49,7 @@ const emcrData: CreatePersonnelEmcrDTO = {
   preocExperience: faker.datatype.boolean({ probability: 0.4 }),
   emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
   approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
+  ministry: faker.helpers.arrayElement(Object.values(Ministry)),
   trainings: [status !== Status.PENDING && seededTrainings[0]],
   dateApproved:
     status !== Status.PENDING
@@ -68,20 +66,21 @@ const emcrData: CreatePersonnelEmcrDTO = {
 };
 
 const personnelData: CreatePersonnelDTO = {
+  homeLocation: homeLocation,
+  workLocation: workLocation, 
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
   email: faker.internet.email(),
   primaryPhone: faker.string.numeric('##########'),
   secondaryPhone: faker.string.numeric('##########'),
   workPhone: faker.string.numeric('##########'),
-  ministry: faker.helpers.arrayElement(Object.values(Ministry)),
   unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
   jobTitle: faker.company.catchPhrase(),
   supervisorEmail: faker.internet.email(),
   supervisorLastName: faker.person.lastName(),
   supervisorFirstName: faker.person.firstName(),
   remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
-  driverLicense: [faker.helpers.arrayElement(Object.values(DriverLicense))],
+  driverLicense: Array.from(new Set([faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense))])),
   willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
   availability:
     status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],

@@ -12,11 +12,35 @@ import {
 
 import { CreatePersonnelEmcrDTO } from './emcr';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
-import { Ministry } from '../../common/enums/ministry.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { Form } from '../../database/entities/form.entity';
+import { FireCentre, Region } from '../../common/enums';
+import {  CreatePersonnelBcwsDTO } from './bcws';
 
+export class LocationDTO {
+  @IsOptional()
+  id?: number;
+
+  @IsString()
+  locationName?: string;
+
+  @ApiProperty({
+    description: 'Region personnel works in',
+    enum: Region,
+    example: Region.SWE
+  })
+  @IsEnum(Region)
+  region: Region;
+
+  @ApiProperty({
+    description: 'Fire centre personnel works in',
+    enum: FireCentre,
+    example: FireCentre.CARIBOO,
+  })
+  @IsEnum(FireCentre)
+  fireCentre?: FireCentre;
+}
 export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'First Name of Personnel - Possibly taken from IDIR',
@@ -34,14 +58,28 @@ export class CreatePersonnelDTO {
   @Length(2, 50)
   lastName: string;
 
+  
   @ApiProperty({
-    description: 'Ministry personnel works in',
-    enum: Ministry,
-    example: Ministry.EMCR,
+    description: "Personnel's work fire centre",
+    example: {
+      locationName: 'Victoria',
+      fireCentre: FireCentre.CARIBOO,
+    },
   })
-  @IsEnum(Ministry)
-  ministry: Ministry;
+  @IsOptional()
+  @ValidateIf((o) => o.workFireCentre && o.workFireCentre?.locationName !== '')
+  workLocation?: LocationDTO;
 
+  @ApiProperty({
+    description: "Personnel's work fire centre",
+    example: {
+      locationName: 'Victoria',
+      fireCentre: FireCentre.CARIBOO,
+      region: Region.SWE,
+    },
+  })
+  homeLocation?: LocationDTO;
+  
   @ApiProperty({
     description: 'Primary phone number to contact personnel',
     example: '2501112222',
@@ -162,4 +200,7 @@ export class CreatePersonnelDTO {
 
   @IsOptional()
   emcr?: CreatePersonnelEmcrDTO;
+
+  @IsOptional()
+  bcws?: CreatePersonnelBcwsDTO
 }

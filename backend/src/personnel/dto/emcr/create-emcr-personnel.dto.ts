@@ -6,55 +6,18 @@ import {
   Length,
   ValidateIf,
 } from 'class-validator';
-
 import { EmcrPersonnelExperienceDTO } from './experiences.dto';
-
-import { Region } from '../../../common/enums/emcr';
 import { Status } from '../../../common/enums/status.enum';
 import { EmcrTrainingEntity } from '../../../database/entities/emcr/emcr-training.entity';
+import {  Ministry } from '../../../common/enums';
 
-export class EmcrLocationDTO {
-  @IsOptional()
-  @ApiProperty()
-  id?: number;
-
-  @IsString()
-  @ApiProperty()
-  locationName?: string;
-
-  @ApiProperty({
-    description: 'Ministry personnel works in',
-    enum: Region,
-    example: Region.SWE,
-  })
-  @IsEnum(Region)
-  region: Region
-}
 
 export class CreatePersonnelEmcrDTO {
   @ApiProperty({})
   @IsOptional()
   personnelId?: string;
 
-  @ApiProperty({
-    description: "Personnel's work location",
-    example: {
-      locationName: 'Victoria',
-      region: Region.SWE,
-    },
-  })
-  @IsOptional()
-  @ValidateIf((o) => o.workLocation && o.workLocation?.locationName !== '')
-  workLocation?: EmcrLocationDTO;
-
-  @ApiProperty({
-    description: "Personnel's home location",
-    example: {
-      locationName: 'Victoria',
-      region: Region.SWE,
-    },
-  })
-  homeLocation: EmcrLocationDTO;
+  
 
   @ApiProperty()
   @IsOptional()
@@ -86,7 +49,7 @@ export class CreatePersonnelEmcrDTO {
   })
   @IsOptional()
   trainings: EmcrTrainingEntity[];
-
+  
   @ApiProperty({
     description: 'Experiences this personnel has had in specific functions',
     example: [
@@ -106,6 +69,14 @@ export class CreatePersonnelEmcrDTO {
   })
   @IsOptional()
   experiences?: EmcrPersonnelExperienceDTO[];
+
+  @ApiProperty({
+    description: 'Ministry personnel works in',
+    enum: Ministry,
+    example: Ministry.EMCR,
+  })
+  @IsEnum(Ministry)
+  ministry: Ministry;
 
   @ApiProperty({
     description: 'First Nation Experience Living',

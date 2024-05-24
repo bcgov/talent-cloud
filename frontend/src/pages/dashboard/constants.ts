@@ -54,6 +54,11 @@ export enum DashboardColumns {
   ORIENTATION = 'Orientation',
   RESPECTFUL = 'Respectful Workplace Policy',
 }
+export interface DivisionType {
+  id: number;
+  ministry: Ministry;
+  divisionName: string;
+}
 
 export interface FunctionType {
   name: string;
@@ -70,7 +75,7 @@ export const dashboardToggle = {
   label: 'Show Inactive',
 };
 export interface Location {
-  id: number;
+  id?: number;
   locationName: string;
   region: Region;
   fireCentre: FireCentre;
@@ -111,6 +116,22 @@ export interface BcwsLanguages {
   level: LanguageProficiency;
 }
 
+export interface BcwsPersonnelTool {
+  tool: ToolsName;
+  proficiencyLevel: ToolsProficiency;
+}
+
+export interface BcwsCertification {
+  name: string;
+  expiry?: string;
+}
+
+export interface BcwsLanguages {
+  language: string;
+  type: LanguageLevelType;
+  level: LanguageProficiency;
+}
+
 export interface Personnel {
   id: string;
   firstName: string;
@@ -124,9 +145,9 @@ export interface Personnel {
   willingToTravel: boolean;
   remoteOnly: boolean;
   unionMembership: string;
-  ministry: string;
+  ministry: Ministry;
   dateApplied?: Date | string;
-  dateApproved: Date;
+  dateApproved?: Date | string;
   primaryPhone: string;
   secondaryPhone?: string;
   workPhone?: string;
@@ -135,7 +156,7 @@ export interface Personnel {
   supervisorLastName: string;
   supervisorEmail?: string;
   approvedBySupervisor: boolean;
-  icsTraining: boolean;
+  icsTraining?: boolean;
   reviewed: boolean;
   date: string;
   availabilityType: AvailabilityType;
@@ -145,30 +166,29 @@ export interface Personnel {
   logisticsNotes?: string;
   coordinatorNotes?: string;
   lastDeployed?: string;
-  homeFireCentre: Location;
-  workFireCentre: Location;
-  division: string;
-  orientation: boolean;
-  willingnessStatement: boolean;
-  parQ: boolean;
-  respectfulWorkplacePolicy: boolean;
-  tools: BcwsPersonnelTool[];
-  languages: BcwsLanguages[];
-  roles: BcwsRoleInterface[];
-  employeeId: string;
-  paylistId: string;
-  liaisonFirstName: string;
-  liaisonLastName: string;
-  liaisonPhoneNumber: string;
-  liaisonEmail: string;
-  purchaseCardHolder: boolean;
-  driverLicense?: string;
+  firstChoiceSection?: Section;
+  secondChoiceSection?: Section;
+  division?: DivisionType;
+  orientation?: boolean;
+  willingnessStatement?: boolean;
+  parQ?: boolean;
+  respectfulWorkplacePolicy?: boolean;
+  employeeId?: string;
+  paylistId?: string;
+  liaisonFirstName?: string;
+  liaisonLastName?: string;
+  liaisonPhoneNumber?: string;
+  liaisonEmail?: string;
+  purchaseCardHolder?: boolean;
+  driverLicense?: string[];
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
-  certifications: BcwsCertification[];
-  firstChoiceSection?: Section;
-  secondChoiceSection?: Section;
+  emergencyContactRelationship?: string;
+  tools?: BcwsPersonnelTool[];
+  languages?: BcwsLanguages[];
+  roles?: BcwsRoleInterface[];
+  certifications?: BcwsCertification[];
 }
 
 export interface AvailabilityRange {

@@ -46,13 +46,7 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
   approvedBySupervisor: boolean;
 
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
-  @JoinColumn({ name: 'work_fire_centre', referencedColumnName: 'id' })
-  workFireCentre?: LocationEntity;
-
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
-  @JoinColumn({ name: 'home_fire_centre', referencedColumnName: 'id' })
-  homeFireCentre: LocationEntity;
+  
 
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
@@ -62,7 +56,7 @@ export class BcwsPersonnelEntity {
   division: DivisionEntity;
 
   //TODO confirm length of paylist_id
-  @Column({ name: 'paylist_id', type: 'varchar', length: 6 })
+  @Column({ name: 'paylist_id', type: 'varchar', length: 50 })
   paylistId: number;
 
   @Column({
@@ -106,7 +100,7 @@ export class BcwsPersonnelEntity {
     length: 50,
     nullable: true,
   })
-  emergencyContactlastName?: string;
+  emergencyContactLastName?: string;
 
   @Column({
     name: 'emergency_contact_phone_number',
@@ -165,8 +159,6 @@ export class BcwsPersonnelEntity {
     const personnelData = this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
-      homeLocation: this?.homeFireCentre?.toResponseObject() ?? {},
-      workLocation: this?.workFireCentre?.toResponseObject() ?? {},
       employeeId: this.employeeId,
       paylistId: this.paylistId,
       dateApplied: this.dateApplied,
@@ -185,8 +177,7 @@ export class BcwsPersonnelEntity {
       willingnessStatement: this.willingnessStatement,
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
-      ministry: this.division?.toResponseObject().ministry,
-      division: this.division?.toResponseObject().division,
+      division: this.division?.toResponseObject(),
       orientation: this.orientation,
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,
@@ -194,6 +185,10 @@ export class BcwsPersonnelEntity {
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
       certifications: this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
+      emergencyContactFirstName: this.emergencyContactFirstName,
+      emergencyContactLastName: this.emergencyContactLastName,
+      emergencyContactPhoneNumber: this.emergencyContactPhoneNumber,
+      emergencyContactRelationship: this.emergencyContactRelationship,
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

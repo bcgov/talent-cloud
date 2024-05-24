@@ -216,6 +216,7 @@ migration-run:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./src/database/datasource.ts
 
 seed-local:
+	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts")'
 
 seed-local-bcws:

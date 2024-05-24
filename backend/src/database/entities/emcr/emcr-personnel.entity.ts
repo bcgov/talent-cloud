@@ -20,6 +20,7 @@ import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelEmcrDTO } from '../../../personnel/dto/emcr';
 import { EmcrRO } from '../../../personnel/ro/emcr';
+import { Ministry } from '../../../common/enums';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
@@ -64,25 +65,6 @@ export class EmcrPersonnelEntity {
   })
   status: Status;
 
-  @JoinColumn([
-    {
-      name: 'work_location',
-      referencedColumnName: 'locationName',
-    },
-    { name: 'work_region', referencedColumnName: 'region' },
-  ])
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
-  workLocation?: LocationEntity;
-
-  @JoinColumn([
-    {
-      name: 'home_location',
-      referencedColumnName: 'locationName',
-    },
-    { name: 'home_region', referencedColumnName: 'region' },
-  ])
-  @ManyToOne(() => LocationEntity, { eager: true, nullable: true})
-  homeLocation: LocationEntity;
 
   @Column({
     name: 'first_aid_level',
@@ -109,13 +91,13 @@ export class EmcrPersonnelEntity {
   })
   experiences: EmcrExperienceEntity[];
 
-  @ManyToMany(() => EmcrTrainingEntity)
+  @ManyToMany(() => EmcrTrainingEntity,t=> t.id,  {cascade: true})
   @JoinTable({
     name: 'emcr_personnel_training',
     joinColumn: { name: 'personnel_id' },
     inverseJoinColumn: { name: 'training_id', referencedColumnName: 'id' },
   })
-  training: EmcrTrainingEntity[];
+  trainings: EmcrTrainingEntity[];
 
   @Column({ name: 'emergency_exp', type: 'boolean', nullable: true })
   emergencyExperience?: boolean;
@@ -126,14 +108,23 @@ export class EmcrPersonnelEntity {
   @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
   preocExperience?: boolean;
 
+  @Column({
+    name: 'ministry',
+    type: 'enum',
+    enum: Ministry,
+    enumName: 'ministry',
+  })
+  ministry: Ministry;
+
+  
+  
   toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
     const response = new EmcrRO();
 
     const personnelData = this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
-      homeLocation: this?.homeLocation?.toResponseObject() ?? {},
-      workLocation: this?.workLocation?.toResponseObject() ?? {},
+      ministry: this.ministry,
       dateApplied: this.dateApplied ?? '',
       dateApproved: this.dateApproved ?? '',
       coordinatorNotes: this.coordinatorNotes,
@@ -151,10 +142,11 @@ export class EmcrPersonnelEntity {
       newMember:
         Status.ACTIVE && differenceInDays(new Date(), this.dateApproved) < 31,
       icsTraining:
-        this.training?.some((t) => t.name === ICS_TRAINING_NAME) || false,
+        this.trainings?.some((t) => t.name === ICS_TRAINING_NAME) || false,
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ??
         [],
+        
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

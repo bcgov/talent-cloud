@@ -7,15 +7,15 @@ import {
   OneToMany,
   JoinColumn,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
 import { AvailabilityEntity } from './availability.entity';
 import { BaseEntity } from './base.entity';
 import { BcwsPersonnelEntity } from './bcws';
-import { EmcrPersonnelEntity } from './emcr';
+import { EmcrPersonnelEntity, LocationEntity } from './emcr';
 import { Form } from './form.entity';
 import { Role } from '../../auth/interface';
-import { AvailabilityType } from '../../common/enums';
-import { Ministry } from '../../common/enums/ministry.enum';
+import { AvailabilityType, DriverLicense } from '../../common/enums';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
@@ -32,13 +32,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
 
-  @Column({
-    name: 'ministry',
-    type: 'enum',
-    enum: Ministry,
-    enumName: 'ministry',
-  })
-  ministry: Ministry;
+  
 
   @Column({
     name: 'primary_phone',
@@ -98,11 +92,10 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({
     name: 'driver_licenses',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
+    type: 'simple-array',
+    nullable: true
   })
-  driverLicense?: string[];
+  driverLicense?: DriverLicense[];
 
   @Column({ name: 'jobTitle', type: 'varchar', length: 100, nullable: true })
   jobTitle?: string;
@@ -116,6 +109,14 @@ export class PersonnelEntity extends BaseEntity {
     cascade: true,
   })
   bcws?: BcwsPersonnelEntity;
+  
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
+  @JoinColumn({ name: 'work_location', referencedColumnName: 'id' })
+  workLocation?: LocationEntity;
+
+  @ManyToOne(() => LocationEntity, { eager: true, nullable: false })
+  @JoinColumn({ name: 'home_location', referencedColumnName: 'id' })
+  homeLocation: LocationEntity;
 
   toResponseObject(
     role: Role,
@@ -132,18 +133,18 @@ export class PersonnelEntity extends BaseEntity {
       secondaryPhone: this.secondaryPhone,
       workPhone: this.workPhone,
 
-      ministry: this.ministry,
       unionMembership: this.unionMembership,
 
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail ?? '',
 
-      driverLicense: this.driverLicense ?? '',
+      driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
 
       lastDeployed: lastDeployed ?? null,
-
+      homeLocation: this.homeLocation.toResponseObject(),
+      workLocation: this.workLocation?.toResponseObject() ?? {},
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
 

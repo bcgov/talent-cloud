@@ -6,6 +6,7 @@ import { datePST, formatPhone } from '@/utils';
 import { FireCentreName } from '../common/enums/firecentre.enum';
 import type { DriverLicense } from '../common/enums/driver-license.enum';
 import { DriverLicenseName } from '../common/enums/driver-license.enum';
+import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
 export const emcrData = (personnel?: Personnel) => {
   return {
@@ -42,7 +43,7 @@ export const emcrData = (personnel?: Personnel) => {
         : {
             title: 'Reviewed Date',
             content: personnel?.dateApproved
-              ? datePST(personnel?.dateApproved)
+              ? datePST(personnel?.dateApproved as Date)
               : '-',
           },
     ],
@@ -76,10 +77,10 @@ export const emcrData = (personnel?: Personnel) => {
     skills: [],
   };
 };
+
 export const bcwsData = (personnel?: Personnel) => {
-  const formatDriversLicenses = (driverLicenses: string): string => {
-    const licenseArray = driverLicenses.replace(/{|}|"/g, '').split(',');
-    const licensesFormatted = licenseArray.map(
+  const formatDriversLicenses = (driverLicenses: string[]): string => {
+    const licensesFormatted = driverLicenses.map(
       (l) => DriverLicenseName[l as keyof typeof DriverLicense],
     );
     return licensesFormatted.join(', ');
@@ -93,27 +94,42 @@ export const bcwsData = (personnel?: Personnel) => {
               title: 'Willingness Statement',
               content:
                 personnel?.willingnessStatement === true ? (
-                  <span className="text-success">Received</span>
+                  <span className="flex flex-row items-center space-x-2 text-success">
+                    <CheckCircleIcon className="w-6 h-6" /> <span>Received</span>
+                  </span>
                 ) : (
-                  <span className="text-errorRed">Not yet Received</span>
+                  <span className="flex flex-row items-center space-x-2 text-error">
+                    <ExclamationTriangleIcon className="w-6 h-6" />
+                    <span>Not yet received</span>
+                  </span>
                 ),
             },
             {
               title: 'ParQ',
               content:
                 personnel?.parQ === true ? (
-                  <span className="text-success">Received</span>
+                  <span className="flex flex-row items-center space-x-2 text-success">
+                    <CheckCircleIcon className="w-6 h-6" /> <span>Received</span>
+                  </span>
                 ) : (
-                  <span className="text-errorRed">Not yet Received</span>
+                  <span className="flex flex-row items-center space-x-2 text-error">
+                    <ExclamationTriangleIcon className="w-6 h-6" />
+                    <span>Not yet received</span>
+                  </span>
                 ),
             },
             {
               title: 'TEAMS Orientation',
               content:
                 personnel?.orientation === true ? (
-                  <span className="text-success">Completed</span>
+                  <span className="flex flex-row items-center space-x-2 text-success">
+                    <CheckCircleIcon className="w-6 h-6" /> <span>Completed</span>
+                  </span>
                 ) : (
-                  <span className="text-errorRed">Not yet Completed</span>
+                  <span className="flex flex-row items-center space-x-2 text-error">
+                    <ExclamationTriangleIcon className="w-6 h-6" />
+                    <span>Incomplete</span>
+                  </span>
                 ),
             },
           ]
@@ -132,7 +148,7 @@ export const bcwsData = (personnel?: Personnel) => {
           : 'Not Listed',
       },
       {
-        title: 'Work Location, Region',
+        title: 'Work Location, Fire Centre',
         content: personnel?.workLocation
           ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
           : 'Not Listed',
@@ -175,10 +191,7 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Govt Email', content: personnel?.email },
       {
         title: 'Emergency Contactee',
-        content:
-          personnel?.emergencyContactFirstName && personnel?.emergencyContactLastName
-            ? `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`
-            : '-',
+        content: `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`,
       },
       {
         title: 'Emergency Phone Number',
@@ -198,7 +211,10 @@ export const bcwsData = (personnel?: Personnel) => {
             <span className="text-errorRed">Not yet Received</span>
           ),
       },
-      { title: 'Ministry/Branch', content: personnel?.ministry },
+      {
+        title: 'Ministry/Division',
+        content: `${personnel?.division?.ministry} / ${personnel?.division?.divisionName}`,
+      },
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },
       {},
