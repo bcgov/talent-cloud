@@ -1,4 +1,3 @@
-import type { MouseEvent, ReactElement } from 'react';
 import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
@@ -6,15 +5,7 @@ import DetailsSection from './DetailsSection';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRole } from '@/hooks';
 import { Role } from '@/common';
-
-type DetailProps = {
-  generalInformation: { title?: string; content?: string | ReactElement }[];
-  contact: { title?: string; content?: string | ReactElement }[];
-  organizational: { title?: string; content?: string | ReactElement }[];
-  pending: boolean;
-  intakeRequirements?: { title?: string; content?: string | ReactElement }[];
-  openEditProfilePopUp: (e: MouseEvent<HTMLElement>) => void;
-};
+import type { DetailProps } from './types';
 
 const ProfileDetails = ({
   generalInformation,

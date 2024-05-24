@@ -1,12 +1,10 @@
 import { ClockIcon, HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
-import { Role, Status } from '@/common';
+import { Role } from '@/common';
 import { PersonnelStatus } from '@/components';
-import { Toggle } from '@/components/toggle/Toggle';
 import { differenceInDays, format } from 'date-fns';
 import { offsetTimezoneDate } from '@/utils';
 import { Route } from '../../providers';
-import { NewApplicantBanner } from './NewApplicantBanner';
 import { FireCentreName } from '../../common/enums/firecentre.enum';
 
 function HorizontalLine() {
@@ -27,14 +25,10 @@ const ProfileHeader = ({
   personnel,
   role,
   route,
-  handleOpenReviewApplicant,
-  updatePersonnel,
 }: {
   personnel: Personnel;
-  handleOpenReviewApplicant: () => void;
   route?: Route;
   role?: Role;
-  updatePersonnel: (personnel: Partial<Personnel>) => void;
 }) => {
   const getLastDeployed = () => {
     if (personnel?.lastDeployed) {
@@ -48,36 +42,6 @@ const ProfileHeader = ({
     return '-';
   };
 
-  const reviewItems =
-    route === Route.EMCR
-      ? [
-          {
-            key: 'Supervisor Approval',
-            value: personnel.approvedBySupervisor,
-          },
-          {
-            key: 'Completed ICS Training',
-            value: personnel.icsTraining,
-          },
-        ]
-      : [
-          {
-            key: 'Willingness Statement',
-            value: personnel.willingnessStatement,
-          },
-          {
-            key: 'Signed ParQ Questionnaire',
-            value: personnel.parQ,
-          },
-          {
-            key: 'Supervisor Approval',
-            value: personnel.approvedBySupervisor,
-          },
-          {
-            key: 'TEAMS Orientation',
-            value: personnel.orientation,
-          },
-        ];
   return (
     <>
       <div className="px-10 float-left hidden lg:inline-block">
@@ -144,28 +108,6 @@ const ProfileHeader = ({
           </div>
         </div>
       </div>
-      {personnel.status === Status.PENDING && (
-        <NewApplicantBanner
-          reviewItems={reviewItems}
-          route={route}
-          handleOpenReviewApplicant={handleOpenReviewApplicant}
-        />
-      )}
-      {role === Role.COORDINATOR && personnel.status !== Status.PENDING && (
-        <div className="px-6 pb-12 bg-white w-full pt-4 lg:pl-48 ">
-          <div className="flex flex-row justify-start md:items-center md:mr-12">
-            <Toggle
-              value={personnel.status === Status.ACTIVE}
-              handleToggle={(checked: boolean) =>
-                updatePersonnel({
-                  status: checked ? Status.ACTIVE : Status.INACTIVE,
-                })
-              }
-              label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

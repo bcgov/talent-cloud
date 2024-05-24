@@ -4,7 +4,7 @@ import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Route } from '../../providers';
 
 type BannerProps = {
-  reviewItems: { key: string; value: boolean }[];
+  reviewItems: { key: string; value: boolean | undefined }[];
   route?: Route;
   handleOpenReviewApplicant?: () => void;
 };

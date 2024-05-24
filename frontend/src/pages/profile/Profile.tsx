@@ -17,8 +17,8 @@ import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
-import { ProfileEditForm } from './ProfileEditForm';
-import { Status, type AvailabilityType } from '@/common';
+import { ProfileEditForm } from './ProfileEditForm/ProfileEditForm';
+import { Status, type AvailabilityType, Role } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
@@ -26,11 +26,14 @@ import { DialogUI } from '@/components';
 import { ReviewApplicant } from '../ReviewApplicant';
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 import { Routes } from '@/routes';
-import ProfileHeader from './ProfileHeader';
-import ProfileDetails from './ProfileDetails';
+
 import { SectionsAndRoles } from './SectionsAndRoles';
 import { SkillsAndCertifications } from './SkillsAndCertifications';
 import { Route } from '@/providers';
+import { NewApplicantBanner } from './NewApplicantBanner';
+import { Toggle } from '@/components/toggle/Toggle';
+import ProfileDetails from './ProfileDetails';
+import ProfileHeader from './ProfileHeader';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -125,7 +128,36 @@ const Profile = () => {
     }
     setOpenEditFunctionsPopUp(!openEditFunctionsPopUp);
   };
-
+  const reviewItems =
+    route === Route.EMCR
+      ? [
+          {
+            key: 'Supervisor Approval',
+            value: personnel?.approvedBySupervisor,
+          },
+          {
+            key: 'Completed ICS Training',
+            value: personnel?.icsTraining,
+          },
+        ]
+      : [
+          {
+            key: 'Willingness Statement',
+            value: personnel?.willingnessStatement,
+          },
+          {
+            key: 'Signed ParQ Questionnaire',
+            value: personnel?.parQ,
+          },
+          {
+            key: 'Supervisor Approval',
+            value: personnel?.approvedBySupervisor,
+          },
+          {
+            key: 'TEAMS Orientation',
+            value: personnel?.orientation,
+          },
+        ];
   const getBackground =
     personnel?.status === Status.PENDING ? 'inactive' : 'grayBackground';
   return (
@@ -153,176 +185,196 @@ const Profile = () => {
 
       {personnel && (
         <div>
-          <div className="pt-12">
-            <ProfileHeader
-              personnel={personnel}
-              route={route}
-              role={role}
-              handleOpenReviewApplicant={handleOpenReviewApplicant}
-              updatePersonnel={updatePersonnel}
-            />
-
-            <ProfileDetails
-              openEditProfilePopUp={handleOpenEditProfilePopUp}
-              intakeRequirements={intakeRequirements}
-              generalInformation={generalInformation}
-              contact={contact}
-              organizational={organizational}
-              pending={personnel.status === Status.PENDING}
-            />
-            {personnel?.experiences && (
-              <ProfileFunctions
-                functions={functions}
-                personnel={personnel}
-                openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
-              />
-            )}
-            <Scheduler
-              name={personnel?.firstName}
-              availability={availability}
-              onChangeAvailabilityDates={onChangeAvailabilityQuery}
-              openSchedulerDialog={openSchedulerDialog}
-            />
-
-            {route === Route.BCWS && (
-              <>
-                <SectionsAndRoles
-                  roles={personnel?.roles}
-                  firstChoiceSection={personnel.firstChoiceSection}
-                  secondChoiceSection={personnel.secondChoiceSection}
-                />
-                <SkillsAndCertifications skills={skills ?? []} />{' '}
-              </>
-            )}
-
-            <ProfileNotes
-              personnel={personnel}
-              handleOpenEditNotes={handleOpenEditNotes}
-              handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}
-            />
+          <div className="pt-12 max-w-[1388px] mx-auto">
+            <ProfileHeader personnel={personnel} route={route} role={role} />
           </div>
-
-          {/* Edit Profile */}
-          <DialogUI
-            open={openEditProfilePopUp}
-            onClose={updatePersonnel}
-            handleOpen={handleOpenEditProfilePopUp}
-            title={'Edit Member Details'}
-            style={'lg:w-2/3 xl:w-1/2'}
-          >
-            <ProfileEditForm
-              personnel={personnel}
-              open={openEditProfilePopUp}
-              handleOpenEditProfilePopUp={handleOpenEditProfilePopUp}
-              updatePersonnel={updatePersonnel}
-            />
-          </DialogUI>
-
-          {/* Functions */}
-          <DialogUI
-            open={openEditFunctionsPopUp}
-            onClose={() => {}}
-            handleOpen={handleOpenEditFunctionsPopUp}
-            title={'Edit Experience Levels'}
-            style={'lg:w-2/3 xl:w-1/2'}
-          >
-            <ProfileFunctionEdit
-              personnel={personnel}
-              open={openEditFunctionsPopUp}
-              allFunctions={functions}
-              handleOpenEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
-              updatePersonnelExperiences={savePersonnelExperiences}
-            />
-          </DialogUI>
-
-          {/* Notes */}
-          <DialogUI
-            open={openEditNotes}
-            onClose={handleOpenEditNotes}
-            handleOpen={handleOpenEditNotes}
-            title={'Edit Notes'}
-            style={'lg:w-2/3 xl:w-1/2'}
-          >
-            <EditNotes
-              name={'logisticsNotes'}
-              label="Notes"
-              notes={{ logisticsNotes: personnel?.logisticsNotes ?? '' }}
-              onSubmit={updatePersonnel}
-              handleClose={handleOpenEditNotes}
-            />
-          </DialogUI>
-
-          {/* Coordinator Notes */}
-          <DialogUI
-            open={openEditCoordinatorNotes}
-            onClose={handleOpenEditCoordinatorNotes}
-            handleOpen={handleOpenEditCoordinatorNotes}
-            title={'Edit Coordinator Notes'}
-            style={'lg:w-2/3 xl:w-1/2'}
-          >
-            <EditNotes
-              name={'coordinatorNotes'}
-              label="Coordinator Notes"
-              notes={{ coordinatorNotes: personnel?.coordinatorNotes ?? '' }}
-              onSubmit={updatePersonnel}
-              handleClose={handleOpenEditCoordinatorNotes}
-            />
-          </DialogUI>
-          <DialogUI
-            open={openReviewApplicant}
-            onClose={handleOpenReviewApplicant}
-            handleOpen={handleOpenReviewApplicant}
-            title={'Confirm Review'}
-            style={'w-3/4 lg:w-1/3 xl:w-1/4'}
-          >
-            <ReviewApplicant
-              onClose={handleOpenReviewApplicant}
-              onClick={() => {
-                updatePersonnel({
-                  status: Status.ACTIVE,
-                  dateApproved: dayjs(new Date()),
-                });
-                handleOpenReviewApplicant();
-              }}
-            />
-          </DialogUI>
-
-          {/* Scheduler */}
-          <Dialog
-            open={schedulerDialogOpen}
-            handler={handleSchedulerOpen}
-            placeholder={''}
-            size="md"
-          >
-            <DialogHeader
-              placeholder={''}
-              className="flex flex-row align-middle bg-grayBackground"
-            >
-              <h4 className="grow font-bold">
-                {editCell?.availabilityType
-                  ? 'Edit Availability'
-                  : 'Add Availability'}
-              </h4>
-              <Button
-                placeholder={''}
-                variant="text"
-                className="text-sm"
-                onClick={() => setSchedulerDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-            </DialogHeader>
-            <DialogBody placeholder={''}>
-              <SchedulerPopUp
-                editedFrom={editCell?.from}
-                editedTo={editCell?.to}
-                editedAvailabilityType={editCell?.availabilityType}
-                editedDeploymentCode={editCell?.deploymentCode}
-                editMode={!!editCell?.availabilityType}
-                onSave={saveAvailabilityDates}
+          <div className="bg-white w-full">
+            <div className="max-w-[1388px] mx-auto">
+              {personnel.status === Status.PENDING && (
+                <NewApplicantBanner
+                  reviewItems={reviewItems}
+                  route={route}
+                  handleOpenReviewApplicant={handleOpenReviewApplicant}
+                />
+              )}
+              {role === Role.COORDINATOR && personnel.status !== Status.PENDING && (
+                <div className=" pb-12 bg-white w-full pt-4  ">
+                  <div className="flex flex-row justify-start md:items-center md:mr-12 lg:ml-48">
+                    <Toggle
+                      value={personnel.status === Status.ACTIVE}
+                      handleToggle={(checked: boolean) =>
+                        updatePersonnel({
+                          status: checked ? Status.ACTIVE : Status.INACTIVE,
+                        })
+                      }
+                      label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
+                    />
+                  </div>
+                </div>
+              )}
+              <ProfileDetails
+                openEditProfilePopUp={handleOpenEditProfilePopUp}
+                intakeRequirements={intakeRequirements}
+                generalInformation={generalInformation}
+                contact={contact}
+                organizational={organizational}
+                pending={personnel.status === Status.PENDING}
               />
-            </DialogBody>
-          </Dialog>
+              {personnel?.experiences && (
+                <ProfileFunctions
+                  functions={functions}
+                  personnel={personnel}
+                  openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+                />
+              )}
+              <Scheduler
+                name={personnel?.firstName}
+                availability={availability}
+                onChangeAvailabilityDates={onChangeAvailabilityQuery}
+                openSchedulerDialog={openSchedulerDialog}
+              />
+
+              {route === Route.BCWS && (
+                <>
+                  <SectionsAndRoles
+                    roles={personnel?.roles ?? []}
+                    firstChoiceSection={personnel.firstChoiceSection}
+                    secondChoiceSection={personnel.secondChoiceSection}
+                  />
+                  <SkillsAndCertifications skills={skills ?? []} />{' '}
+                </>
+              )}
+
+              <ProfileNotes
+                personnel={personnel}
+                handleOpenEditNotes={handleOpenEditNotes}
+                handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}
+              />
+            </div>
+
+            {/* Edit Profile */}
+            <DialogUI
+              open={openEditProfilePopUp}
+              onClose={updatePersonnel}
+              handleOpen={handleOpenEditProfilePopUp}
+              title={'Edit Member Details'}
+              style={'lg:w-2/3 xl:w-1/2'}
+            >
+              <ProfileEditForm
+                personnel={personnel}
+                open={openEditProfilePopUp}
+                handleClose={handleOpenEditProfilePopUp}
+                updatePersonnel={updatePersonnel}
+                route={route}
+              />
+            </DialogUI>
+
+            {/* Functions */}
+            <DialogUI
+              open={openEditFunctionsPopUp}
+              onClose={() => {}}
+              handleOpen={handleOpenEditFunctionsPopUp}
+              title={'Edit Experience Levels'}
+              style={'lg:w-2/3 xl:w-1/2'}
+            >
+              <ProfileFunctionEdit
+                personnel={personnel}
+                open={openEditFunctionsPopUp}
+                allFunctions={functions}
+                handleOpenEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+                updatePersonnelExperiences={savePersonnelExperiences}
+              />
+            </DialogUI>
+
+            {/* Notes */}
+            <DialogUI
+              open={openEditNotes}
+              onClose={handleOpenEditNotes}
+              handleOpen={handleOpenEditNotes}
+              title={'Edit Notes'}
+              style={'lg:w-2/3 xl:w-1/2'}
+            >
+              <EditNotes
+                name={'logisticsNotes'}
+                label="Notes"
+                notes={{ logisticsNotes: personnel?.logisticsNotes ?? '' }}
+                onSubmit={updatePersonnel}
+                handleClose={handleOpenEditNotes}
+              />
+            </DialogUI>
+
+            {/* Coordinator Notes */}
+            <DialogUI
+              open={openEditCoordinatorNotes}
+              onClose={handleOpenEditCoordinatorNotes}
+              handleOpen={handleOpenEditCoordinatorNotes}
+              title={'Edit Coordinator Notes'}
+              style={'lg:w-2/3 xl:w-1/2'}
+            >
+              <EditNotes
+                name={'coordinatorNotes'}
+                label="Coordinator Notes"
+                notes={{ coordinatorNotes: personnel?.coordinatorNotes ?? '' }}
+                onSubmit={updatePersonnel}
+                handleClose={handleOpenEditCoordinatorNotes}
+              />
+            </DialogUI>
+            <DialogUI
+              open={openReviewApplicant}
+              onClose={handleOpenReviewApplicant}
+              handleOpen={handleOpenReviewApplicant}
+              title={'Confirm Review'}
+              style={'w-3/4 lg:w-1/3 xl:w-1/4'}
+            >
+              <ReviewApplicant
+                onClose={handleOpenReviewApplicant}
+                onClick={() => {
+                  updatePersonnel({
+                    status: Status.ACTIVE,
+                    dateApproved: dayjs(new Date()),
+                  });
+                  handleOpenReviewApplicant();
+                }}
+              />
+            </DialogUI>
+
+            {/* Scheduler */}
+            <Dialog
+              open={schedulerDialogOpen}
+              handler={handleSchedulerOpen}
+              placeholder={''}
+              size="md"
+            >
+              <DialogHeader
+                placeholder={''}
+                className="flex flex-row align-middle bg-grayBackground"
+              >
+                <h4 className="grow font-bold">
+                  {editCell?.availabilityType
+                    ? 'Edit Availability'
+                    : 'Add Availability'}
+                </h4>
+                <Button
+                  placeholder={''}
+                  variant="text"
+                  className="text-sm"
+                  onClick={() => setSchedulerDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+              </DialogHeader>
+              <DialogBody placeholder={''}>
+                <SchedulerPopUp
+                  editedFrom={editCell?.from}
+                  editedTo={editCell?.to}
+                  editedAvailabilityType={editCell?.availabilityType}
+                  editedDeploymentCode={editCell?.deploymentCode}
+                  editMode={!!editCell?.availabilityType}
+                  onSave={saveAvailabilityDates}
+                />
+              </DialogBody>
+            </Dialog>
+          </div>
         </div>
       )}
     </div>

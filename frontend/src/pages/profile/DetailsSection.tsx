@@ -1,12 +1,12 @@
-import type { ReactElement } from 'react';
 import Detail from './Detail';
+import type { ProfileDetail } from './types';
 
 const DetailsSection = ({
   title,
   columns,
 }: {
   title: string;
-  columns: { title?: string; content?: string | ReactElement }[];
+  columns: ProfileDetail[];
 }) => {
   return (
     <div className="py-5 px-16">
