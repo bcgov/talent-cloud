@@ -16,7 +16,7 @@ import type {
   ExperienceLevel,
   Section,
 } from '@/common/enums/sections.enum';
-import type { ToolsName, ToolsProficiency } from '@/common/enums/tools.enum';
+import type { Tools, ToolsName, ToolsProficiency } from '@/common/enums/tools.enum';
 import type { DateRange } from 'react-day-picker';
 
 export enum DashboardFilterNames {
@@ -101,7 +101,7 @@ export interface BcwsRoleInterface {
 }
 
 export interface BcwsPersonnelTool {
-  toolName: ToolsName;
+  toolName: Tools;
   proficiencyLevel: ToolsProficiency;
 }
 

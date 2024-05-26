@@ -1,5 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import type { ReactElement } from 'react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 type DialogProps = {
   open: boolean;
@@ -40,7 +41,7 @@ export const DialogUI = ({
                 className="text-sm text-primaryBlue underline font-normal"
                 onClick={handleOpen}
               >
-                Close
+                <XMarkIcon className="h-6 w-6" />
               </button>
             </Dialog.Title>
 

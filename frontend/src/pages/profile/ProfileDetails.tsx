@@ -49,7 +49,7 @@ const ProfileDetails = ({
           open={open === 1}
           icon={
             open ? (
-              <ChevronUpIcon className="cursor-pointer  h-8 w-5 fill-[#606060]" />
+              <ChevronUpIcon className="cursor-pointer h-8 w-5 fill-[#606060]" />
             ) : (
               <ChevronDownIcon className="cursor-pointer h-8 w-5 fill-[#606060]" />
             )

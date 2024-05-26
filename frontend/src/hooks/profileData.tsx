@@ -1,6 +1,7 @@
 import { Status } from '@/common';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
-import { ToolsProficiencyName } from '@/common/enums/tools.enum';
+import type { Tools } from '@/common/enums/tools.enum';
+import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { Personnel } from '@/pages/dashboard';
 import { datePST, formatPhone } from '@/utils';
 import { FireCentreName } from '../common/enums/firecentre.enum';
@@ -241,7 +242,7 @@ export const bcwsData = (personnel?: Personnel) => {
         header: 'Skill',
         subheader: 'Proficiency Level',
         itms: personnel?.tools?.map((t) => ({
-          label: t.toolName,
+          label: ToolsName[t.toolName as keyof typeof Tools],
           value: ToolsProficiencyName[t.proficiencyLevel],
         })),
       },

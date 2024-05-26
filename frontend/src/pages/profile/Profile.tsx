@@ -34,6 +34,7 @@ import { NewApplicantBanner } from './NewApplicantBanner';
 import { Toggle } from '@/components/toggle/Toggle';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
+import { ProfileEditSkills } from './ProfileEditSkills';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -57,6 +58,7 @@ const Profile = () => {
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
   const [openEditFunctionsPopUp, setOpenEditFunctionsPopUp] = useState(false);
+  const [openEditSkillsPopUp, setOpenEditSkillsPopUp] = useState(false);
 
   const handleOpenEditNotes = () => {
     setOpenEditNotes(!openEditNotes);
@@ -64,6 +66,10 @@ const Profile = () => {
 
   const handleOpenEditCoordinatorNotes = () => {
     setOpenEditCoordinatorNotes(!openEditCoordinatorNotes);
+  };
+
+  const handleOpenEditSkills = () => {
+    setOpenEditSkillsPopUp(!openEditSkillsPopUp);
   };
 
   const [availabilityQuery, setAvailabilityQuery] = useState<{
@@ -241,7 +247,10 @@ const Profile = () => {
                     firstChoiceSection={personnel.firstChoiceSection}
                     secondChoiceSection={personnel.secondChoiceSection}
                   />
-                  <SkillsAndCertifications skills={skills ?? []} />{' '}
+                  <SkillsAndCertifications
+                    skills={skills ?? []}
+                    onClick={() => setOpenEditSkillsPopUp(true)}
+                  />{' '}
                 </>
               )}
 
@@ -283,6 +292,22 @@ const Profile = () => {
                 allFunctions={functions}
                 handleOpenEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
                 updatePersonnelExperiences={savePersonnelExperiences}
+              />
+            </DialogUI>
+
+            {/* Skills and Certs */}
+            <DialogUI
+              open={openEditSkillsPopUp}
+              onClose={handleOpenEditSkills}
+              handleOpen={handleOpenEditSkills}
+              title={'Edit Skills & Certifications'}
+              style={'w-5/6'}
+            >
+              <ProfileEditSkills
+                originalLanguages={personnel.languages || []}
+                originalTools={personnel.tools || []}
+                handleClose={handleOpenEditSkills}
+                handleSave={() => {}}
               />
             </DialogUI>
 

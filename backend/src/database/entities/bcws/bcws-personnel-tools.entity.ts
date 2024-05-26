@@ -30,7 +30,7 @@ export class BcwsPersonnelTools {
 
   toResponseObject(): BcwsPersonnelToolsRO {
     return {
-      toolName: ToolsName[this.tool.name] ?? null,
+      toolName: this.tool.name ?? null,
       proficiencyLevel: this.proficenyLevel,
     };
   }

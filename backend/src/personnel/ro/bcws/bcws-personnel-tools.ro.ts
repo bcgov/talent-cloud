@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  ToolsName,
+  Tools,
   ToolsProficiency,
 } from '../../../common/enums/bcws/tools.enum';
 
@@ -10,12 +10,12 @@ export class BcwsPersonnelToolsRO {
   @ApiProperty({
     description: 'Tool name',
     required: true,
-    example: ToolsName.ADOBE,
+    example: Tools.ADOBE,
     type: 'enum',
     enumName: 'bcws-tools',
-    enum: ToolsName,
+    enum: Tools,
   })
-  toolName: ToolsName;
+  toolName: Tools;
 
   
 

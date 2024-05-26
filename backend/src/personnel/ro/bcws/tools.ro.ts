@@ -16,7 +16,7 @@ export class BcwsToolsRO {
   @ApiProperty({
     description: 'Tool name',
     required: true,
-    example: ToolsName.ADOBE,
+    example: Tools.ADOBE,
   })
   toolName: ToolsName;
   @ApiProperty({
