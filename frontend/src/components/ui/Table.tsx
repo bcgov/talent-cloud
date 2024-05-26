@@ -1,11 +1,5 @@
 import { Role, Status } from '@/common';
-import {
-  Loading,
-  TableBody,
-  TableFooterNav,
-  TableFooterPageSelect,
-  Tabs,
-} from '@/components';
+import { TableBody, Tabs } from '@/components';
 import type { DashboardColumns } from '@/pages/dashboard';
 import { renderName } from './helpers';
 import type { Route } from '@/providers';
@@ -13,7 +7,7 @@ import { useTable } from '@/hooks/useTable';
 import { useFilters } from '@/hooks/useFilters';
 
 export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
-  const { handleChangeRowsPerPage, searchParamsUrl, handleChange } = useFilters();
+  const { searchParamsUrl, handleChange } = useFilters();
 
   const {
     loading,
@@ -24,10 +18,6 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
     tabs,
     selectedTab,
     changeTab,
-
-    currentPage,
-    rowsPerPage,
-    totalRows,
   } = useTable(searchParamsUrl, route);
 
   return (
@@ -35,14 +25,14 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
       <table className="table-auto w-full max-w-[1388px] border-collapse border border-slate-500">
         <thead>
           <tr>
-            <th colSpan={columns.length} className="mt-2  bg-white w-full">
+            <th colSpan={columns?.length} className="mt-2  bg-white w-full">
               <div className="text-left py-8  caption-top bg-white">
                 <h4 className="font-bold px-4">Search Results</h4>
               </div>
             </th>
           </tr>
           <tr>
-            <th colSpan={columns.length} className="mt-2  bg-white w-full">
+            <th colSpan={columns?.length} className="mt-2  bg-white w-full">
               {role === Role.COORDINATOR && (
                 <Tabs
                   onChangeTab={(index) => {
@@ -60,8 +50,7 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
             </th>
           </tr>
           <tr>
-            <th className="hidden"></th>
-            {columns.map((name: DashboardColumns) => (
+            {columns?.map((name: DashboardColumns) => (
               <th
                 key={name}
                 scope="col"
@@ -72,23 +61,18 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
             ))}
           </tr>
         </thead>
-        {loading ? (
-          <th colSpan={columns.length}>
-            <div className="w-full py-64 flex flex-row justify-center items-center">
-              <Loading height="[1/4]" />
-            </div>
-          </th>
-        ) : (
-          <TableBody rows={rows} columns={columns} />
-        )}{' '}
+
+        <TableBody rows={rows} columns={columns} loading={loading} />
+
         <tfoot className="py-4 px-8 ">
           <tr>
             <td
               className={`border-b-2 border-slate-500`}
-              colSpan={columns.length}
+              colSpan={columns?.length}
             ></td>
           </tr>
-          <tr>
+          {/* TODO uncomment (changes on the next PR for pagination) */}
+          {/* <tr>
             <th colSpan={columns.length - 2} scope="row" className="px-8 h-[80px]">
               <TableFooterPageSelect
                 totalRows={totalRows ?? 0}
@@ -106,7 +90,7 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
                 handleChangePage={(page) => handleChange('page', page.toString())}
               />
             </td>
-          </tr>
+          </tr> */}
         </tfoot>
       </table>
     </div>

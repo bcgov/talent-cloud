@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import type { DashboardColumns } from '@/pages/dashboard';
 import { type Personnel } from '@/pages/dashboard';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
@@ -11,7 +10,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
   const { AxiosPrivate } = useAxios();
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState<DashboardColumns[]>([]);
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const [tabCount, setTabCount] = useState();
@@ -23,14 +22,13 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
    */
 
   const applyFilters = async (route: Route) => {
+    const status = searchParamsUrl.get('status') ?? Status.ACTIVE;
+    const isPending = status === Status.PENDING;
     try {
       const {
         data: { personnel, count },
       } = await AxiosPrivate.get(`/personnel/${route}?${searchParamsUrl}`);
-
-      const status = searchParamsUrl.get('status') ?? Status.ACTIVE;
-      const isPending = status === Status.PENDING;
-
+      setLoading(true);
       const rows = personnel.map(
         ({ id, status, newMember, ...personnel }: Personnel) => ({
           key: id,
@@ -47,7 +45,6 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
       );
 
       count !== tabCount && setTabCount(count);
-      setColumns(isPending ? pendingColumns[route] : activeCols[route]);
       setRows(rows);
     } catch (e) {
       console.error(e);
@@ -62,25 +59,38 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
     }
   }, [searchParamsUrl]);
 
-  const tabs = useMemo(() => {
-    return [
-      {
-        label: StatusNames.ACTIVE,
-        value: Status.ACTIVE,
-        count: tabCount?.[Status.ACTIVE],
-      },
-      {
-        label: StatusNames.INACTIVE,
-        value: Status.INACTIVE,
-        count: tabCount?.[Status.INACTIVE],
-      },
-      {
-        label: 'Pending Approval',
-        value: Status.PENDING,
-        count: tabCount?.[Status.PENDING],
-      },
-    ];
-  }, [tabCount]);
+  const status = searchParamsUrl.get('status');
+
+  const { columns } = useMemo(() => {
+    return {
+      columns:
+        status === Status.PENDING
+          ? route && pendingColumns[route]
+          : route && activeCols[route],
+    };
+  }, [status]);
+
+  const { tabs } = useMemo(() => {
+    return {
+      tabs: [
+        {
+          label: StatusNames.ACTIVE,
+          value: Status.ACTIVE,
+          count: tabCount?.[Status.ACTIVE],
+        },
+        {
+          label: StatusNames.INACTIVE,
+          value: Status.INACTIVE,
+          count: tabCount?.[Status.INACTIVE],
+        },
+        {
+          label: 'Pending Approval',
+          value: Status.PENDING,
+          count: tabCount?.[Status.PENDING],
+        },
+      ],
+    };
+  }, [tabCount, searchParamsUrl.get('status'), route]);
 
   return {
     changeTab: (index: number) => setSelectedTabIndex(index),

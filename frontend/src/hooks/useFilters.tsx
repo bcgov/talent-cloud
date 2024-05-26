@@ -1,5 +1,4 @@
 import { Status } from '@/common';
-import type { DashboardFilters } from '@/pages/dashboard';
 import { Route } from '@/providers';
 import { datePST } from '@/utils';
 import type { ChangeEvent } from 'react';
@@ -13,30 +12,18 @@ export const useFilters = () => {
     page: '1',
     status: Status.ACTIVE,
   });
+
   const [searchValue, setSearchValue] = useState<string>(
     searchParamsUrl.get('name') ?? '',
   );
+
   const [availabilityDates, setAvailabilityDates] = useState<DateRange | undefined>(
     undefined,
   );
-  const handlePageParams = (change: Partial<DashboardFilters>) => {
-    setSearchUrlParams((prev: URLSearchParams) => ({
-      ...Object.fromEntries([...prev]),
-      page: change,
-    }));
-  };
 
   const clearSearchParams = (name: string) => {
     searchParamsUrl.delete(name);
     setSearchUrlParams(searchParamsUrl);
-  };
-
-  const handleChangeRowsPerPage = (row: string) => {
-    setSearchUrlParams((prev: URLSearchParams) => ({
-      ...Object.fromEntries([...prev]),
-      page: 1,
-      rows: row,
-    }));
   };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -108,16 +95,6 @@ export const useFilters = () => {
       }));
     }
   };
-  const resetType = () => {
-    clearSearchParams('availabilityType');
-  };
-
-  const onChangeTab = (status: Status) => {
-    setSearchUrlParams((prev: URLSearchParams) => ({
-      ...Object.fromEntries([...prev]),
-      status: status,
-    }));
-  };
 
   const handleChange = (name: string, value: string | number) => {
     setSearchUrlParams((prev: URLSearchParams) => ({
@@ -125,6 +102,7 @@ export const useFilters = () => {
       [name]: value,
     }));
   };
+
   const filterValues = useMemo(() => {
     return {
       name: searchParamsUrl.get('name') ?? '',
@@ -140,13 +118,13 @@ export const useFilters = () => {
       availabilityDates: searchParamsUrl.get('availabilityDates') ?? '',
     };
   }, [searchParamsUrl]);
+
   return {
     handleChange,
     clearSearchParams,
     searchParamsUrl,
     filterValues,
     searchValue,
-    handleChangeRowsPerPage,
     setSearchValue: (value: string) => setSearchValue(value),
     availabilityDates,
     setAvailabilityDates: (value: DateRange | undefined) =>
@@ -166,9 +144,7 @@ export const useFilters = () => {
           : fields?.location?.groupedOptions;
       }
     },
-    handlePageParams,
     handleMultiSelect,
-
     handleNestedChange: (
       value: { name: string; value: string },
       nestedValue: { name: string; value: string },
@@ -182,9 +158,6 @@ export const useFilters = () => {
     handleSearch,
     handleClose,
     handleSetDates,
-    resetType,
-
-    onChangeTab,
     onClear: () => {
       setSearchValue('');
       const range: DateRange | undefined = { from: undefined, to: undefined };
