@@ -1,38 +1,26 @@
-import { type ChangeEvent, Fragment } from 'react';
+import { Fragment } from 'react';
 import { classes, menuItemClass } from './classes';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { Menu, Transition } from '@headlessui/react';
 import { Chip } from '../ui';
-import type { DateRange } from 'react-day-picker';
+import type { AvailabilityType } from '@/common';
+import { AvailabilityTypeName } from '@/common';
 
 export const SingleSelect = ({
   onChange,
   label,
   field,
-
-  resetDates,
+  handleClose,
   value,
 }: {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => any;
+  onChange: (name: string, value: string) => any;
   label: string;
   field: any;
-
-  resetDates: (dates: DateRange) => void;
+  handleClose: () => void;
   value?: string;
 }) => {
-  const handleChange = (name: string, value: string) => {
-    const event = {
-      target: { name: name, value: value },
-    } as unknown as ChangeEvent<HTMLInputElement>;
-    onChange(event);
-  };
   const placeholder = 'Select availability type';
-
-  const handleClose = () => {
-    resetDates({ from: undefined, to: undefined });
-    handleChange(field.name, '');
-  };
 
   return (
     <>
@@ -42,7 +30,12 @@ export const SingleSelect = ({
           <>
             {value ? (
               <div className={menuItemClass[field.name]}>
-                <Chip value={value} name={field.name} handleClose={handleClose} />
+                <Chip
+                  value={value}
+                  label={AvailabilityTypeName[value as AvailabilityType]}
+                  name={field.name}
+                  handleClose={handleClose}
+                />
                 <Menu.Button aria-label="Single Select Menu Button" id={field.name}>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
@@ -89,7 +82,7 @@ export const SingleSelect = ({
                     <Menu.Item key={itm.value}>
                       <button
                         aria-label="Single Select Menu Button"
-                        onClick={() => handleChange(field.name, itm.value)}
+                        onClick={() => onChange(field.name, itm.value)}
                         className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                       >
                         {itm.label}

@@ -2,14 +2,14 @@ import { classes } from '../filters/classes';
 import { Chip } from './Chip';
 
 export const MenuChips = ({
-  values,
+  chips,
   handleClose,
   handleCloseMany,
   placeholder,
   name,
   maxChips,
 }: {
-  values: any[];
+  chips: { value: any; label: string }[];
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
   placeholder: string;
@@ -17,17 +17,24 @@ export const MenuChips = ({
   maxChips: number;
 }) => (
   <>
-    {values?.length ? (
+    {chips?.length ? (
       <div className={classes.menu.chipsContainer}>
-        {values.length > maxChips ? (
+        {chips.length > maxChips ? (
           <Chip
-            value={`${values?.length} selected`}
+            value={''}
             name={name}
+            label={`${chips?.length} selected`}
             handleClose={handleCloseMany}
           />
         ) : (
-          values?.map((value: any) => (
-            <Chip key={value} value={value} name={name} handleClose={handleClose} />
+          chips?.map((chip: { label: string; value: any }) => (
+            <Chip
+              key={chip.label}
+              value={chip.value}
+              name={name}
+              handleClose={handleClose}
+              label={chip.label}
+            />
           ))
         )}
       </div>

@@ -19,7 +19,7 @@ export const DatePicker = ({
   onChange: (range: DateRange | undefined) => void;
   label: string;
   field: any;
-  value: DateRange;
+  value: DateRange | undefined;
   disabled?: boolean;
   reset?: () => void;
 }) => {
@@ -59,7 +59,7 @@ export const DatePicker = ({
                     mode="range"
                     selected={value}
                     onSelect={onChange}
-                    defaultMonth={value.from}
+                    defaultMonth={value?.from}
                     showOutsideDays
                     captionLayout="dropdown-buttons"
                     className="border-0"

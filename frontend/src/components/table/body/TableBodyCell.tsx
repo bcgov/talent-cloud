@@ -90,7 +90,9 @@ export const TableBodyCell = ({
     case DashboardColumns.UNION_MEMBERSHIP:
       return (
         <>
-          <span className={getUnionMembershipClass(cell.value)}>{cell.value}</span>
+          <div className="max-w-40">
+            <span className={getUnionMembershipClass(cell.value)}>{cell.value}</span>
+          </div>
         </>
       );
 

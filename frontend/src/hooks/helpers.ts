@@ -1,7 +1,7 @@
 import type { AvailabilityType } from '@/common';
-import { AvailabilityTypeName, Status } from '@/common';
+import { AvailabilityTypeName } from '@/common';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { Availability, Personnel, DashboardFilters } from '@/pages/dashboard';
+import type { Availability, Personnel } from '@/pages/dashboard';
 import { DashboardColumns } from '@/pages/dashboard';
 import { Route } from '@/providers';
 import { datePST } from '@/utils';
@@ -48,18 +48,18 @@ export const getAvailabilityValue = (
   };
 };
 
-const renderAvailability = (
-  personnel: Personnel,
-  filterValues: DashboardFilters,
-) => {
+const renderAvailability = (personnel: Personnel, filterValues: URLSearchParams) => {
   if (
-    filterValues.availabilityType &&
+    filterValues?.get('availabilityType') &&
     personnel?.availability &&
     personnel?.availability?.length > 0
   ) {
     return getAvailabilityValue(
-      filterValues.availabilityType,
-      filterValues.availabilityDates,
+      filterValues.get('availabilityType') as AvailabilityType,
+      {
+        from: new Date(filterValues.get('availbilityDateFrom') ?? ''),
+        to: new Date(filterValues.get('availabilityDateTo') ?? ''),
+      },
       personnel.availability,
     );
   } else if (!personnel.availability) {
@@ -76,8 +76,8 @@ const renderAvailability = (
 
 export const renderCells = (
   personnel: Personnel,
-  filterValues: DashboardFilters,
-  status: Status.PENDING | Status.ACTIVE,
+  searchParms: URLSearchParams,
+  isPending: boolean,
   route: Route,
 ) => {
   const cells = {
@@ -121,13 +121,14 @@ export const renderCells = (
     ministry: {
       key: DashboardColumns.MINISTRY,
       columnName: DashboardColumns.MINISTRY,
-      value: personnel?.ministry,
+      value:
+        route === Route.BCWS ? personnel?.division?.ministry : personnel.ministry,
     },
     availability: {
       key: DashboardColumns.AVAILABILITY,
       columnName: DashboardColumns.AVAILABILITY,
       // value will be the status type and/or the number of days available
-      value: renderAvailability(personnel, filterValues),
+      value: renderAvailability(personnel, searchParms),
     },
     willingToTravel: {
       key: DashboardColumns.TRAVEL,
@@ -147,7 +148,7 @@ export const renderCells = (
     dateApproved: {
       key: DashboardColumns.DATE_APPROVED,
       columnName: DashboardColumns.DATE_APPROVED,
-      value: personnel.dateApproved && datePST(personnel.dateApproved, true),
+      value: personnel.dateApproved && datePST(personnel.dateApproved as Date, true),
     },
 
     willingnessStatement: {
@@ -172,52 +173,54 @@ export const renderCells = (
     },
   };
 
-  const cellsPerRoute = {
-    [Status.ACTIVE]: {
-      [Route.EMCR]: [
-        cells.name,
-        cells.dateApproved,
-        cells.region,
-        cells.location,
-        cells.availability,
-        cells.willingToTravel,
-        cells.remoteOnly,
-        cells.unionMembership,
-        cells.ministry,
-      ],
-      [Route.BCWS]: [
-        cells.name,
-        cells.dateApproved,
-        cells.fireCentre,
-        cells.location,
-        cells.availability,
-        cells.willingToTravel,
-        cells.unionMembership,
-      ],
-    },
-    [Status.PENDING]: {
-      [Route.EMCR]: [
-        cells.name,
-        cells.dateApplied,
-        cells.region,
-        cells.location,
-        cells.ics,
-        cells.supervisorApproval,
-        cells.unionMembership,
-        cells.ministry,
-      ],
-      [Route.BCWS]: [
-        cells.name,
-        cells.fireCentre,
-        cells.location,
-        cells.willingnessStatement,
-        cells.respectfulWorkplacePolicy,
-        cells.parQ,
-        cells.orientation,
-        cells.ministry,
-      ],
-    },
+  const activeCells = {
+    [Route.EMCR]: [
+      cells.name,
+      cells.dateApproved,
+      cells.region,
+      cells.location,
+      cells.availability,
+      cells.willingToTravel,
+      cells.remoteOnly,
+      cells.unionMembership,
+      cells.ministry,
+    ],
+    [Route.BCWS]: [
+      cells.name,
+      cells.dateApproved,
+      cells.fireCentre,
+      cells.location,
+      cells.availability,
+      cells.willingToTravel,
+      cells.unionMembership,
+    ],
   };
 
-  return cellsPerRoute[status][route];
+  const pendingCells = {
+    [Route.EMCR]: [
+      cells.name,
+      cells.dateApplied,
+      cells.region,
+      cells.location,
+      cells.ics,
+      cells.supervisorApproval,
+      cells.unionMembership,
+      cells.ministry,
+    ],
+    [Route.BCWS]: [
+      cells.name,
+      cells.fireCentre,
+      cells.location,
+      cells.willingnessStatement,
+      cells.respectfulWorkplacePolicy,
+      cells.parQ,
+      cells.orientation,
+      cells.ministry,
+    ],
+  };
+  if (isPending) {
+    return pendingCells[route];
+  } else {
+    return activeCells[route];
+  }
 };

@@ -1,73 +1,49 @@
-import { ButtonTypes } from '@/common';
 import {
   MultiSelectGroup,
-  Button,
   CascadingMenu,
   MultiSelect,
   Search,
   DatePicker,
+  Button,
 } from '@/components';
 import { SingleSelect } from '@/components/filters/SingleSelect';
-import type { DateRange } from 'react-day-picker';
 import { useGetFilters } from '@/hooks/useGetFilters';
-import type { DashboardFilters } from './constants';
 import { Route } from '@/providers';
-import type { ChangeEvent } from 'react';
+import { ButtonTypes } from '@/common';
+import { useFilters } from '@/hooks/useFilters';
+import type { DateRange } from 'react-day-picker';
 
-export const Filters = ({
-  filterValues,
-  changeHandlers,
-  route,
-}: {
-  filterValues: DashboardFilters;
-  changeHandlers: {
-    handleMultiSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleSingleSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-    onClear: () => void;
-    handleClose: (name: string, value: string) => void;
-    handleCloseMany: (name: string) => void;
-    handleSetDates: (range: DateRange | undefined) => void;
-    resetType: () => void;
-  };
-  route?: Route;
-}) => {
+export const DashboardFilters = ({ route }: { route?: Route }) => {
   const { filters } = useGetFilters();
-
   const {
+    filterValues,
     handleMultiSelect,
-    handleSingleSelect,
-    handleSearch,
+
+    availabilityDates,
+    setAvailabilityDates,
     onClear,
     handleClose,
-    handleCloseMany,
-    handleSetDates,
-    resetType,
-  } = changeHandlers;
-  const getOptions = () => {
-    if (route === Route.BCWS) {
-      return filterValues.fireCentre && filterValues.fireCentre.length > 0
-        ? filters.location?.groupedOptions?.filter((itm) =>
-            filterValues?.fireCentre?.includes(itm.label),
-          )
-        : filters?.location?.groupedOptions;
-    } else {
-      return filterValues.region && filterValues.region.length > 0
-        ? filters.location?.groupedOptions?.filter((itm) =>
-            filterValues?.region?.includes(itm.label),
-          )
-        : filters?.location?.groupedOptions;
-    }
-  };
 
+    handleSetDates,
+    clearSearchParams,
+    handleNestedChange,
+
+    handleChange,
+    searchValue,
+    setSearchValue,
+    getOptions,
+    disabled,
+  } = useFilters();
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
       <div className="col-span-1 lg:col-span-2">
         <Search
           field={filters.name}
-          handleSearchInput={handleSearch}
-          value={filterValues.name}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          handleChange={handleChange}
+          handleClose={clearSearchParams}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
@@ -81,7 +57,7 @@ export const Filters = ({
               label={route === Route.BCWS ? 'Fire Centre' : 'Region'}
               onChange={handleMultiSelect}
               handleClose={handleClose}
-              handleCloseMany={handleCloseMany}
+              handleCloseMany={clearSearchParams}
               maxChips={1}
             />
           </div>
@@ -89,13 +65,14 @@ export const Filters = ({
             <MultiSelectGroup
               onChange={handleMultiSelect}
               handleClose={handleClose}
-              handleCloseMany={handleCloseMany}
+              handleCloseMany={clearSearchParams}
               field={{
                 ...filters.location,
-                groupedOptions: getOptions(),
+                groupedOptions: getOptions(filters, route),
               }}
               label="Home Location"
               values={filterValues.location}
+              route={route}
             />
           </div>
         </div>
@@ -112,7 +89,11 @@ export const Filters = ({
           label={
             route === Route.BCWS ? 'Section/Role' : 'Function & Experience Level'
           }
-          onChange={handleSingleSelect}
+          onChange={handleNestedChange}
+          handleClose={(name, nestedName) => {
+            clearSearchParams(name);
+            clearSearchParams(nestedName);
+          }}
           value={route === Route.BCWS ? filterValues.section : filterValues.function}
         />
       </div>
@@ -123,18 +104,36 @@ export const Filters = ({
               field={filters.availabilityType}
               label="Availability"
               value={filterValues.availabilityType}
-              onChange={handleSingleSelect}
-              resetDates={handleSetDates}
+              onChange={handleChange}
+              handleClose={() => {
+                const range: DateRange | undefined = {
+                  from: undefined,
+                  to: undefined,
+                };
+                clearSearchParams('availabilityType');
+                clearSearchParams('availabilityFromDate');
+                clearSearchParams('availabilityToDate');
+                setAvailabilityDates(range);
+              }}
             />
           </div>
           <div className="col-span-1 md:col-span-2">
             <DatePicker
               field={filters.availabilityDates}
               label="Availability Date Range"
-              value={filterValues.availabilityDates}
+              value={availabilityDates}
               onChange={handleSetDates}
               disabled={!filterValues.availabilityType}
-              reset={resetType}
+              reset={() => {
+                const range: DateRange | undefined = {
+                  from: undefined,
+                  to: undefined,
+                };
+                clearSearchParams('availabilityFromDate');
+                clearSearchParams('availabilityToDate');
+                clearSearchParams('availabilityType');
+                setAvailabilityDates(range);
+              }}
             />
           </div>
         </div>
@@ -144,18 +143,7 @@ export const Filters = ({
           variant={ButtonTypes.SECONDARY}
           text="Clear All"
           onClick={onClear}
-          disabled={
-            [
-              filterValues.name,
-              filterValues.experience,
-              filterValues.function,
-              filterValues.availabilityType,
-              filterValues.availabilityDates.from,
-              filterValues.availabilityDates.to,
-            ].filter((itm) => itm).length === 0 &&
-            filterValues?.region?.length === 0 &&
-            filterValues?.location?.length === 0
-          }
+          disabled={disabled}
         />
       </div>
     </div>

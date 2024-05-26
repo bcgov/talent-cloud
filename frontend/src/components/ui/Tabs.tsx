@@ -1,28 +1,32 @@
 import type { Status } from '@/common';
 import { Tab } from '@headlessui/react';
-import type { TabCount } from '../table';
+
+export type Tabs = {
+  label: string;
+  value: string;
+  count: number | undefined;
+}[];
 
 export type TabData = {
   label: string;
   value: Status;
-  index: number;
+  count: number | string;
 };
 
 export type TabProps = {
   onChangeTab: (index: number) => void;
-  tabs: TabData[];
+  tabs: Tabs;
   selectedTab: number;
-  counts: TabCount;
 };
 
-export const Tabs = ({ onChangeTab, tabs, selectedTab, counts }: TabProps) => {
+export const Tabs = ({ onChangeTab, tabs, selectedTab }: TabProps) => {
   return (
     <Tab.Group selectedIndex={selectedTab} onChange={onChangeTab}>
       <Tab.List
         className={`flex flex-row bg-white sticky top-24 md:px-6 px-0`}
         as="div"
       >
-        {tabs.map(({ label, value }, index) => (
+        {tabs.map(({ label, value, count }, index) => (
           <Tab key={value}>
             {({ selected }) => (
               <>
@@ -34,7 +38,7 @@ export const Tabs = ({ onChangeTab, tabs, selectedTab, counts }: TabProps) => {
                   <span
                     className={`mx-4 px-1.5 border border-gray-400 rounded-md py-1 ${selected ? 'bg-primaryBlue text-white' : 'text-defaultGray '}`}
                   >
-                    {counts[value]}
+                    {count}
                   </span>
                 </button>
                 {selected && (
