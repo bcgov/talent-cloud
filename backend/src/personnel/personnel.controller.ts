@@ -70,8 +70,8 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Programs([Program.EMCR, Program.ADMIN])
-  @Patch('/emcr/:id')
+  @Programs([Program.EMCR])
+  @Patch('/emcr/id/:id')
   async updatePersonnel(
     @Body() personnel: UpdateEmcrPersonnelDTO,
     @Request() req: RequestWithRoles,
@@ -112,7 +112,8 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Patch('/bcws/:id')
+  @Programs([Program.BCWS])
+  @Patch('/bcws/id/:id')
   async updateBcwsPersonnel(
     @Body() personnel: UpdateBcwsPersonnelDTO,
     @Request() req: RequestWithRoles,
@@ -132,7 +133,7 @@ export class PersonnelController {
     type: GetPersonnelRO,
   })
   
-  @Programs([Program.EMCR, Program.ADMIN])
+  @Programs([Program.EMCR])
   @Get('/emcr')
   @UsePipes(new QueryTransformPipe())
   async getEmcrPersonnel(
@@ -160,8 +161,8 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.OK,
   })
+  @Programs([Program.BCWS])
   @Get('/bcws')
-  @Programs([Program.BCWS, Program.ADMIN])
   @UsePipes(new QueryTransformPipe())
   async getBcwsPersonnel(
     @Request() req: RequestWithRoles,
@@ -189,7 +190,8 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Get('/emcr/:id')
+  @Programs([Program.EMCR])
+  @Get('/emcr/id/:id')
   async getPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
@@ -211,7 +213,8 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Get('/bcws/:id')
+  @Programs([Program.BCWS])
+  @Get('/bcws/id/:id')
   async getBcwsPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
@@ -233,6 +236,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
+  @Programs([Program.EMCR, Program.BCWS])
   @Patch(':id/availability')
   async updatePersonnelAvailability(
     @Param('id') id: string,
@@ -255,6 +259,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
   })
   @Get(':id/availability')
+  @Programs([Program.EMCR, Program.BCWS])
   async getPersonnelAvailability(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
@@ -296,7 +301,7 @@ export class PersonnelController {
     return dateROs;
   }
   @Get('/bcws/approved')
-  @Token(TokenType.BCWS)
+  @Token([TokenType.BCWS])
   async getApprovedApplicants(): Promise<
     { employeeId: number; firstName: string; lastName: string }[]
   > {

@@ -26,7 +26,7 @@ export class FormSubmissionController {
   }
 
   @Post()
-  @Token(TokenType.CHEFS)
+  @Token([TokenType.CHEFS])
   async handleIncomingEvents(@Req() req: RawBodyRequest<Request>) {
     this.logger.log('Received form submission event');
     // console.log(req.rawBody.toString());
