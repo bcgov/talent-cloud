@@ -1,5 +1,10 @@
 import { Role, Status } from '@/common';
-import { TableBody, Tabs } from '@/components';
+import {
+  TableBody,
+  TableFooterNav,
+  TableFooterPageSelect,
+  Tabs,
+} from '@/components';
 import type { DashboardColumns } from '@/pages/dashboard';
 import { renderName } from './helpers';
 import type { Route } from '@/providers';
@@ -18,6 +23,10 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
     tabs,
     selectedTab,
     changeTab,
+
+    currentPage,
+    rowsPerPage,
+    totalRows,
   } = useTable(searchParamsUrl, route);
 
   return (
@@ -71,13 +80,16 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
               colSpan={columns?.length}
             ></td>
           </tr>
-          {/* TODO uncomment (changes on the next PR for pagination) */}
-          {/* <tr>
-            <th colSpan={columns.length - 2} scope="row" className="px-8 h-[80px]">
+          <tr>
+            <th
+              colSpan={columns && columns?.length - 2}
+              scope="row"
+              className="px-8 h-[80px]"
+            >
               <TableFooterPageSelect
                 totalRows={totalRows ?? 0}
                 rowsPerPage={rowsPerPage}
-                handleChangeNumRows={(e) => handleChangeRowsPerPage(e.target.value)}
+                handleChangeNumRows={(e) => handleChange('rows', e.target.value)}
               />
             </th>
             <td colSpan={2} className="align-right">
@@ -90,7 +102,7 @@ export const Table = ({ role, route }: { role?: Role; route?: Route }) => {
                 handleChangePage={(page) => handleChange('page', page.toString())}
               />
             </td>
-          </tr> */}
+          </tr>
         </tfoot>
       </table>
     </div>
