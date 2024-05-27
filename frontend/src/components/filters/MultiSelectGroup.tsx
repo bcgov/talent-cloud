@@ -10,7 +10,8 @@ import {
   MenuList,
 } from '@/components';
 import { classes } from './classes';
-import { FireCentreName } from '@/common/enums/firecentre.enum';
+import { FireCentre, FireCentreName } from '@/common/enums/firecentre.enum';
+import { Route } from '@/providers';
 
 export const MultiSelectGroup = ({
   field,
@@ -19,6 +20,7 @@ export const MultiSelectGroup = ({
   label,
   handleClose,
   handleCloseMany,
+  route,
 }: {
   field: any;
   values: any;
@@ -26,6 +28,7 @@ export const MultiSelectGroup = ({
   label: string;
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
+  route?: Route;
 }) => {
   const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.split(',');
@@ -47,7 +50,7 @@ export const MultiSelectGroup = ({
       <Menu dismiss={{ outsidePress: true, itemPress: false }}>
         <MenuHandler field={field} id={field.name}>
           <MenuChips
-            values={values}
+            chips={values.map((itm: string) => ({ label: itm, value: itm }))}
             placeholder={field.placeholder}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
@@ -63,7 +66,7 @@ export const MultiSelectGroup = ({
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div
                   key={group.label}
-                  className={`${group.label === FireCentreName.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
+                  className={`${group.label === FireCentre.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
                 >
                   <div className="col-span-2">
                     <MenuItem>
@@ -78,7 +81,9 @@ export const MultiSelectGroup = ({
                             values?.find((itm: any) => itm === option),
                           )}
                         />
-                        {group.label}
+                        {route === Route.BCWS
+                          ? FireCentreName[group.label as FireCentre]
+                          : group.label}
                         {values?.filter((itm: string) =>
                           group?.options?.find((option) => option === itm),
                         ).length > 0

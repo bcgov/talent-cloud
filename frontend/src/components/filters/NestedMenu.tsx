@@ -4,7 +4,7 @@ import { classes } from './classes';
 import { Menu } from '../ui';
 import { MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
 import { DashboardFilterNames } from '@/pages/dashboard';
-import type { BcwsRole, Section } from '@/common/enums/sections.enum';
+import { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const NestedMenu = ({
@@ -55,8 +55,8 @@ export const NestedMenu = ({
                 placeholder={itm}
                 key={itm}
                 onClick={() => {
-                  handleChange(field.name, option);
-                  handleChange(nestedField.name, itm);
+                  handleChange(field.name, Section[option as Section]);
+                  handleChange(nestedField.name, BcwsRole[itm as BcwsRole]);
                 }}
               >
                 <span className={classes.menu.listItem}>

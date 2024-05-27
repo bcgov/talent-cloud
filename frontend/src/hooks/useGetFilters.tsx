@@ -13,7 +13,7 @@ import type {
   SectionType,
 } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAxios } from './useAxios';
 import { useRole } from './useRole';
 import { Route } from '@/providers';
@@ -68,100 +68,106 @@ export const useGetFilters = () => {
     })();
   }, [AxiosPrivate, route]);
 
-  const filters = {
-    name: {
-      name: DashboardFilterNames.NAME,
-    },
-    fireCentre: {
-      name: DashboardFilterNames.FIRE_CENTRE,
-      options: fireCentre.map((itm) => ({ label: FireCentreName[itm], value: itm })),
-      placeholder: 'Select fire centre(s)',
-    },
-    region: {
-      name: DashboardFilterNames.REGION,
-      options: regions.map((itm) => ({ label: RegionName[itm], value: itm })),
-      placeholder: 'Select region(s)',
-    },
-    location: {
-      name: DashboardFilterNames.LOCATION,
-      placeholder: 'Select home location(s)',
-      groupedOptions:
-        route === Route.BCWS
-          ? fireCentre.map((itm: FireCentre) => ({
-              label: itm,
-              options: locations
-                .filter((loc: Location) => {
-                  return loc.fireCentre === itm;
-                })
-                .flatMap((itm) => itm.locationName),
-            }))
-          : regions.map((itm: Region) => ({
-              label: itm,
-              options: locations
-                .filter((loc: Location) => {
-                  return loc.region === itm;
-                })
-                .flatMap((itm) => itm.locationName),
-            })),
-    },
-    function: {
-      placeholder: 'Select function and experience levels',
-      name: DashboardFilterNames.FUNCTION,
-      options: functions.map((itm: FunctionType) => itm.name),
-    },
-    experience: {
-      name: DashboardFilterNames.EXPERIENCE,
-      options: [
-        {
-          label: ExperienceName.INTERESTED,
-          value: Experience.INTERESTED,
-        },
-        { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
-        {
-          label: ExperienceName.CHIEF_EXPERIENCED,
-          value: Experience.CHIEF_EXPERIENCED,
-        },
-        {
-          label: ExperienceName.OUTSIDE_EXPERIENCED,
-          value: Experience.OUTSIDE_EXPERIENCED,
-        },
-      ],
-    },
-    section: {
-      name: DashboardFilterNames.SECTION,
-      options: Object.keys(sections),
-      label: 'Select section and role',
-    },
-    role: {
-      name: DashboardFilterNames.ROLE,
-      label: '',
-      options: sections,
-    },
+  const filters = useMemo(() => {
+    return {
+      name: {
+        name: DashboardFilterNames.NAME,
+      },
+      fireCentre: {
+        name: DashboardFilterNames.FIRE_CENTRE,
+        options: fireCentre.map((itm) => ({
+          label: FireCentreName[itm],
+          value: itm,
+        })),
+        placeholder: 'Select fire centre(s)',
+      },
+      region: {
+        name: DashboardFilterNames.REGION,
+        options: regions.map((itm) => ({ label: RegionName[itm], value: itm })),
+        placeholder: 'Select region(s)',
+      },
+      location: {
+        name: DashboardFilterNames.LOCATION,
+        placeholder: 'Select home location(s)',
+        groupedOptions:
+          route === Route.BCWS
+            ? fireCentre.map((itm: FireCentre) => ({
+                label: itm,
+                options: locations
+                  .filter((loc: Location) => {
+                    return loc.fireCentre === itm;
+                  })
+                  .flatMap((itm) => itm.locationName),
+              }))
+            : regions.map((itm: Region) => ({
+                label: itm,
+                options: locations
+                  .filter((loc: Location) => {
+                    return loc.region === itm;
+                  })
+                  .flatMap((itm) => itm.locationName),
+              })),
+      },
+      function: {
+        placeholder: 'Select function and experience levels',
+        name: DashboardFilterNames.FUNCTION,
+        options: functions.map((itm: FunctionType) => itm.name),
+      },
+      experience: {
+        name: DashboardFilterNames.EXPERIENCE,
+        options: [
+          {
+            label: ExperienceName.INTERESTED,
+            value: Experience.INTERESTED,
+          },
+          { label: ExperienceName.EXPERIENCED, value: Experience.EXPERIENCED },
+          {
+            label: ExperienceName.CHIEF_EXPERIENCED,
+            value: Experience.CHIEF_EXPERIENCED,
+          },
+          {
+            label: ExperienceName.OUTSIDE_EXPERIENCED,
+            value: Experience.OUTSIDE_EXPERIENCED,
+          },
+        ],
+      },
+      section: {
+        name: DashboardFilterNames.SECTION,
+        options: Object.keys(sections),
+        label: 'Select section and role',
+      },
+      role: {
+        name: DashboardFilterNames.ROLE,
+        label: '',
+        options: sections,
+      },
 
-    availabilityType: {
-      placeholder: 'Select availability type',
-      name: DashboardFilterNames.AVAILABILITY_TYPE,
-      options: [
-        {
-          label: AvailabilityTypeName.AVAILABLE,
-          value: AvailabilityType.AVAILABLE,
-        },
-        {
-          label: AvailabilityTypeName.UNAVAILABLE,
-          value: AvailabilityType.UNAVAILABLE,
-        },
-        {
-          label: AvailabilityTypeName.DEPLOYED,
-          value: AvailabilityType.DEPLOYED,
-        },
-      ],
-    },
-    availabilityDates: {
-      name: 'availabilityDates',
-      label: 'Availability Date Range',
-      value: { from: '', to: '' },
-    },
-  };
+      availabilityType: {
+        placeholder: 'Select availability type',
+        name: DashboardFilterNames.AVAILABILITY_TYPE,
+        options: [
+          {
+            label: AvailabilityTypeName.AVAILABLE,
+            value: AvailabilityType.AVAILABLE,
+          },
+          {
+            label: AvailabilityTypeName.UNAVAILABLE,
+            value: AvailabilityType.UNAVAILABLE,
+          },
+          {
+            label: AvailabilityTypeName.DEPLOYED,
+            value: AvailabilityType.DEPLOYED,
+          },
+        ],
+      },
+      availabilityDates: {
+        name: 'availabilityDates',
+        label: 'Availability Date Range',
+        value: { from: '', to: '' },
+      },
+    };
+  }, [locations, regions, fireCentre, sections, functions]);
+
   return {
     filters,
     locations,

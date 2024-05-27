@@ -3,14 +3,27 @@ import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
 
 export const Search = ({
+  searchValue,
+  setSearchValue,
   field,
-  handleSearchInput,
-  value,
+  handleChange,
+  handleClose,
 }: {
+  searchValue: string;
   field: FieldInterface;
-  handleSearchInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  setSearchValue: (value: string) => void;
+  handleChange: (name: string, value: string) => void;
+  handleClose: (name: string) => void;
 }) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    if (e.target.value === '') {
+      handleClose(e.target.name);
+    } else {
+      setTimeout(() => handleChange(e.target.name, e.target.value), 1000);
+    }
+  };
+
   return (
     <div className="relative w-full">
       <label>
@@ -20,12 +33,12 @@ export const Search = ({
           <input
             id={field.name}
             autoComplete="name"
-            value={value}
+            value={searchValue}
             type="text"
             className={classes.menu.container}
             name={field.name}
             placeholder={'Search for a member by name'}
-            onChange={handleSearchInput}
+            onChange={onChange}
           />
         </div>
       </label>
