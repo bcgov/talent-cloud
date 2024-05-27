@@ -9,6 +9,11 @@ import { ButtonTypes } from '../../common';
 import { useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
+export interface SkillsKeyVal {
+  key: string | undefined;
+  value: string | undefined;
+}
+
 export const ProfileEditListSection = ({
   existingData,
   keyName,
@@ -98,7 +103,7 @@ export const ProfileEditListSection = ({
                 {keyOptions ? (
                   <select
                     value={data.key}
-                    className="rounded-md w-full"
+                    className="rounded-md w-full font-normal"
                     onChange={(e) =>
                       onChange(i, e.target.value, existingData[i].value)
                     }
@@ -139,7 +144,7 @@ export const ProfileEditListSection = ({
                 {valueOptions ? (
                   <select
                     value={data.value}
-                    className="rounded-md w-full"
+                    className="rounded-md w-full font-normal"
                     onChange={(e) => onChange(i, data.key, e.target.value)}
                   >
                     {valueOptions.map((option) => (

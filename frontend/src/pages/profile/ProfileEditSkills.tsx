@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { SkillsKeyVal } from './ProfileEditListSection';
 import { ProfileEditListSection } from './ProfileEditListSection';
 import {
   CertificationName,
@@ -19,11 +20,6 @@ import type {
   BcwsPersonnelTool,
 } from '../dashboard';
 import { isValid, parse } from 'date-fns';
-
-interface skillsKeyVal {
-  key: string | undefined;
-  value: string | undefined;
-}
 
 export const ProfileEditSkills = ({
   originalLanguages,
@@ -46,21 +42,21 @@ export const ProfileEditSkills = ({
     newCertifications: BcwsCertification[];
   }) => void;
 }) => {
-  const [languages, setLanguages] = useState<skillsKeyVal[]>(
+  const [languages, setLanguages] = useState<SkillsKeyVal[]>(
     originalLanguages.map((l) => ({
       key: l.language,
       value: `${l.level}-${l.type}`,
     })),
   );
 
-  const [tools, setTools] = useState<skillsKeyVal[]>(
+  const [tools, setTools] = useState<SkillsKeyVal[]>(
     originalTools.map((t) => ({
       key: t.tool,
       value: t.proficiencyLevel,
     })),
   );
 
-  const [certifications, setCertifications] = useState<skillsKeyVal[]>(
+  const [certifications, setCertifications] = useState<SkillsKeyVal[]>(
     originalCerts.map((c) => ({
       key: c.name,
       value: c.expiry,
