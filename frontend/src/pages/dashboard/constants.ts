@@ -100,11 +100,6 @@ export interface BcwsRoleInterface {
   expLevel?: ExperienceLevel;
 }
 
-export interface BcwsCertification {
-  name: string;
-  expiry?: string;
-}
-
 export interface BcwsLanguages {
   language: string;
   type: LanguageLevelType;

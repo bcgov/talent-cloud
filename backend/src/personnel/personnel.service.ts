@@ -37,6 +37,7 @@ import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { LanguageLevelType, LanguageProficiency } from '../common/enums';
+import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 
 @Injectable()
 export class PersonnelService {
@@ -57,6 +58,8 @@ export class PersonnelService {
     private toolsRepository: Repository<BcwsToolsEntity>,
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
+    @InjectRepository(BcwsCertificationEntity)
+    private cetificationRepository: Repository<BcwsCertificationEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -121,7 +124,6 @@ export class PersonnelService {
           toolId: allTools.find((at) => at.name === t.tool).id,
           proficenyLevel: t.proficiencyLevel,
         }));
-        console.log(personnelTools);
         personnel.tools = personnelTools;
       }
 
@@ -141,6 +143,17 @@ export class PersonnelService {
         await this.languageRepository.save(newLanguages);
         delete personnel.languages;
       }
+
+      if (personnel.certifications && personnel.certifications[0].hasOwnProperty('name')) {
+        const allCertifications = await this.cetificationRepository.find();
+        const personnelCerts = personnel.certifications.map((c) => ({
+          certificationId: allCertifications.find((ac) => ac.name === c.name).id,
+          expiry: c.expiry,
+        }));
+        personnel.certifications = personnelCerts;
+      }
+
+      console.log(personnel.certifications)
 
       Object.keys(personnel).forEach((key) => {
         person[key] = personnel[key];

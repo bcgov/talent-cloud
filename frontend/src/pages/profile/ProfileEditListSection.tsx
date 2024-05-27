@@ -17,6 +17,7 @@ export const ProfileEditListSection = ({
   valueName,
   valueOptions,
   keyOptions,
+  error,
   onSet,
 }: {
   existingData: { key: string | undefined; value: string | undefined }[];
@@ -24,8 +25,9 @@ export const ProfileEditListSection = ({
   title: string;
   type: string;
   valueName: string;
-  valueOptions: { val: string; text: string }[];
+  valueOptions?: { val: string; text: string }[];
   keyOptions?: { val: string; text: string }[];
+  error?: string;
   onSet: (value: { key: string | undefined; value: string | undefined }[]) => void;
 }) => {
   const [accordionOpen, setAccordionOpen] = useState(true);
@@ -41,12 +43,21 @@ export const ProfileEditListSection = ({
       key,
       value,
     };
-    console.log(newArray);
     onSet(newArray);
   };
 
   const onAdd = () => {
-    const newArray = [...existingData, { key: '', value: valueOptions[0].val }];
+    const newArray = [
+      ...existingData,
+      {
+        key: keyOptions
+          ? keyOptions.filter(
+              (ko) => !existingData.map((ed) => ed.key).includes(ko.val),
+            )[0].val
+          : '',
+        value: valueOptions ? valueOptions[0].val : undefined,
+      },
+    ];
     onSet(newArray);
   };
 
@@ -72,69 +83,95 @@ export const ProfileEditListSection = ({
         {title}
       </AccordionHeader>
       <AccordionBody>
-        {existingData.map((data, i) => (
-          <div className="flex flex-row gap-20 py-3 items-end" key={`language-${i}`}>
-            <div className="basis-1/2 flex flex-col">
-              <p className="font-bold text-sm">
-                {keyName}
-                <span className="text-red-300">*</span>
-              </p>
-              {keyOptions ? (
-                <select
-                  value={data.key}
-                  className="rounded-md w-full"
-                  onChange={(e) =>
-                    onChange(i, e.target.value, existingData[i].value)
-                  }
-                >
-                  {keyOptions.map((option) => (
-                    <option value={option.val} key={option.val}>
-                      {option.text}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <Input
-                  size="lg"
-                  placeholder={keyName}
-                  className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full"
-                  labelProps={{
-                    className: 'before:content-none after:content-none',
-                  }}
-                  value={data.key}
-                  onChange={(e) =>
-                    onChange(i, e.target.value, existingData[i].value)
-                  }
-                  crossOrigin={''}
+        <>
+          {error && <p className="text-errorRed text-sm">{error}</p>}
+          {existingData.map((data, i) => (
+            <div
+              className="flex flex-row gap-20 py-3 items-end"
+              key={`${type}-${i}`}
+            >
+              <div className="basis-1/2 flex flex-col">
+                <p className="font-bold text-sm">
+                  {keyName}
+                  <span className="text-red-300">*</span>
+                </p>
+                {keyOptions ? (
+                  <select
+                    value={data.key}
+                    className="rounded-md w-full"
+                    onChange={(e) =>
+                      onChange(i, e.target.value, existingData[i].value)
+                    }
+                  >
+                    {keyOptions.map((option) => (
+                      <option
+                        value={option.val}
+                        key={option.val}
+                        disabled={existingData
+                          .map((ed) => ed.key)
+                          .includes(option.val)}
+                      >
+                        {option.text}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    size="lg"
+                    placeholder={keyName}
+                    className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full"
+                    labelProps={{
+                      className: 'before:content-none after:content-none',
+                    }}
+                    value={data.key}
+                    onChange={(e) =>
+                      onChange(i, e.target.value, existingData[i].value)
+                    }
+                    crossOrigin={''}
+                  />
+                )}
+              </div>
+              <div className="basis-1/3">
+                <p className="font-bold text-sm">
+                  {valueName}
+                  {valueOptions && <span className="text-red-300">*</span>}
+                </p>
+                {valueOptions ? (
+                  <select
+                    value={data.value}
+                    className="rounded-md w-full"
+                    onChange={(e) => onChange(i, data.key, e.target.value)}
+                  >
+                    {valueOptions.map((option) => (
+                      <option value={option.val} key={option.val}>
+                        {option.text}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    size="lg"
+                    placeholder={'YYYY-MM-DD'}
+                    className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full"
+                    labelProps={{
+                      className: 'before:content-none after:content-none',
+                    }}
+                    value={data.value}
+                    onChange={(e) => onChange(i, data.key, e.target.value)}
+                    crossOrigin={''}
+                  />
+                )}
+              </div>
+              <div className="basis-1/6">
+                <Button
+                  variant={ButtonTypes.PRIMARY}
+                  text="Delete"
+                  onClick={() => onDelete(i)}
                 />
-              )}
+              </div>
             </div>
-            <div className="basis-1/3">
-              <p className="font-bold text-sm">
-                {valueName}
-                <span className="text-red-300">*</span>
-              </p>
-              <select
-                value={data.value}
-                className="rounded-md w-full"
-                onChange={(e) => onChange(i, data.key, e.target.value)}
-              >
-                {valueOptions.map((option) => (
-                  <option value={option.val} key={option.val}>
-                    {option.text}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="basis-1/6">
-              <Button
-                variant={ButtonTypes.PRIMARY}
-                text="Delete"
-                onClick={() => onDelete(i)}
-              />
-            </div>
-          </div>
-        ))}
+          ))}
+        </>
       </AccordionBody>
       <div className="py-3">
         <Button
@@ -142,7 +179,6 @@ export const ProfileEditListSection = ({
           onClick={onAdd}
           text={`Add ${type}`}
         />
-        {/* <Button placeholder={''} onClick={() => console.log(existingData)}>View</Button> */}
       </div>
     </Accordion>
   );

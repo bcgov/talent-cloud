@@ -31,7 +31,7 @@ export class BcwsToolsRO {
     example: '2022-10-10',
   })
   @IsOptional()
-  expiryDate?: Date;
+  expiry?: Date;
   @ApiProperty({
     description: 'Proficiency level',
     required: true,

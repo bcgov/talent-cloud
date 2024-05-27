@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ProfileEditListSection } from './ProfileEditListSection';
 import {
+  CertificationName,
   Tools,
   ToolsName,
   ToolsProficiency,
@@ -12,7 +13,12 @@ import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../common/enums/language.enum';
-import type { BcwsLanguages, BcwsPersonnelTool } from '../dashboard';
+import type {
+  BcwsCertification,
+  BcwsLanguages,
+  BcwsPersonnelTool,
+} from '../dashboard';
+import { isValid, parse } from 'date-fns';
 
 interface skillsKeyVal {
   key: string | undefined;
@@ -23,6 +29,7 @@ interface skillsKeyVal {
 export const ProfileEditSkills = ({
   originalLanguages,
   originalTools,
+  originalCerts,
   handleClose,
   handleSave,
 }: {
@@ -32,10 +39,12 @@ export const ProfileEditSkills = ({
     type: LanguageLevelType;
   }[];
   originalTools: { tool: Tools; proficiencyLevel: ToolsProficiency }[];
+  originalCerts: { name: string; expiry?: string }[];
   handleClose: () => void;
   handleSave: (skills: {
     newLanguages: BcwsLanguages[];
     newTools: BcwsPersonnelTool[];
+    newCertifications: BcwsCertification[];
   }) => void;
 }) => {
   const [languages, setLanguages] = useState<skillsKeyVal[]>(
@@ -49,6 +58,13 @@ export const ProfileEditSkills = ({
     originalTools.map((t) => ({
       key: t.tool,
       value: t.proficiencyLevel,
+    })),
+  );
+
+  const [certifications, setCertifications] = useState<skillsKeyVal[]>(
+    originalCerts.map((c) => ({
+      key: c.name,
+      value: c.expiry,
     })),
   );
 
@@ -66,7 +82,12 @@ export const ProfileEditSkills = ({
         tool: t.key,
         proficiencyLevel: t.value,
       })) as BcwsPersonnelTool[];
-    handleSave({ newLanguages, newTools });
+    const newCertifications = certifications.map((c) => ({
+      name: c.key as CertificationName,
+      expiry: c.value,
+    }));
+    console.log(newCertifications);
+    handleSave({ newLanguages, newTools, newCertifications });
   };
 
   return (
@@ -134,6 +155,25 @@ export const ProfileEditSkills = ({
           }))}
           onSet={setTools}
         />
+        <ProfileEditListSection
+          existingData={certifications}
+          keyName="Certification"
+          title="Certifications"
+          type="Certification"
+          valueName="Expiry"
+          keyOptions={Object.values(CertificationName).map((key) => ({
+            val: key,
+            text: key,
+          }))}
+          error={
+            !certifications.every(
+              (c) => !c.value || isValid(parse(c.value, 'yyyy-MM-dd', new Date())),
+            )
+              ? 'Please ensure expiries are either empty or are formated "YYYY-MM-DD"'
+              : undefined
+          }
+          onSet={setCertifications}
+        />
       </div>
       <div className="flex flex-row content-end pt-6 px-6 border-t-4 justify-end gap-2">
         <Button
@@ -142,7 +182,16 @@ export const ProfileEditSkills = ({
           onClick={handleClose}
           text="Cancel"
         />
-        <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={onSave} />
+        <Button
+          variant={ButtonTypes.TERTIARY}
+          text="Save"
+          disabled={
+            !certifications.every(
+              (c) => !c.value || isValid(parse(c.value, 'yyyy-MM-dd', new Date())),
+            )
+          }
+          onClick={onSave}
+        />
       </div>
     </div>
   );

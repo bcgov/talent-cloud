@@ -45,8 +45,6 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
   approvedBySupervisor: boolean;
 
-  
-
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
 

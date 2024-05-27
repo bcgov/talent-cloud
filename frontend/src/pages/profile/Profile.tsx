@@ -18,6 +18,7 @@ import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type {
   AvailabilityRange,
+  BcwsCertification,
   BcwsLanguages,
   BcwsPersonnelTool,
   ExperienceInterface,
@@ -313,16 +314,20 @@ const Profile = () => {
               <ProfileEditSkills
                 originalLanguages={personnel.languages || []}
                 originalTools={personnel.tools || []}
+                originalCerts={personnel.certifications || []}
                 handleClose={handleOpenEditSkills}
                 handleSave={(skills: {
                   newLanguages: BcwsLanguages[];
                   newTools: BcwsPersonnelTool[];
-                }) =>
+                  newCertifications: BcwsCertification[];
+                }) => {
                   updatePersonnelRelations({
                     languages: skills.newLanguages,
                     tools: skills.newTools,
-                  })
-                }
+                    certifications: skills.newCertifications,
+                  });
+                  setOpenEditSkillsPopUp(false);
+                }}
               />
             </DialogUI>
 
