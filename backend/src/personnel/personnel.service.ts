@@ -117,7 +117,7 @@ export class PersonnelService {
         where: { personnel: { id } },
       });
   
-      // this.logger.log(`${JSON.stringify(personnel)}`);
+      this.logger.log(`${JSON.stringify(personnel)}`);
       if (personnel.tools && personnel.tools[0].hasOwnProperty('tool')) {
         const allTools = await this.toolsRepository.find();
         const personnelTools = personnel.tools.map((t) => ({
