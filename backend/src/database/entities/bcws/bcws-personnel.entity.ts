@@ -14,7 +14,6 @@ import { LanguageEntity } from './bcws-personnel-language.entity';
 import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
 import { DivisionEntity } from '../division.entity';
-import { LocationEntity } from '../location.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { Section } from '../../../common/enums';

@@ -242,7 +242,7 @@ export const bcwsData = (personnel?: Personnel) => {
         header: 'Skill',
         subheader: 'Proficiency Level',
         itms: personnel?.tools?.map((t) => ({
-          label: ToolsName[t.toolName as keyof typeof Tools],
+          label: ToolsName[t.tool as keyof typeof Tools],
           value: ToolsProficiencyName[t.proficiencyLevel],
         })),
       },

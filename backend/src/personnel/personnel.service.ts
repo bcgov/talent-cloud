@@ -35,6 +35,8 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
+import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
+import { LanguageLevelType, LanguageProficiency } from '../common/enums';
 
 @Injectable()
 export class PersonnelService {
@@ -51,6 +53,8 @@ export class PersonnelService {
     private experiencesRepository: Repository<EmcrExperienceEntity>,
     @InjectRepository(EmcrTrainingEntity)
     private trainingRepository: Repository<EmcrTrainingEntity>,
+    @InjectRepository(BcwsToolsEntity)
+    private toolsRepository: Repository<BcwsToolsEntity>,
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
     private readonly logger: AppLogger,
@@ -76,8 +80,6 @@ export class PersonnelService {
 
     this.logger.log(`${JSON.stringify(personnel)}`);
 
-    
-
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
       emcr[key] = personnel[key];
@@ -101,18 +103,45 @@ export class PersonnelService {
    * @param role 
    * @returns 
    */
-    async updateBcwsPersonnel(id: string,
+    async updateBcwsPersonnel(
+      id: string,
       personnel: UpdateBcwsPersonnelDTO,
-      role: Role){
-    
+      role: Role
+    ){
       this.logger.log(`Updating personnel ${id}`);
       const person = await this.personnelRepository.findOne({ where: { id } });
       const bcws = await this.bcwsPersonnelRepository.findOne({
         where: { personnel: { id } },
       });
   
-      this.logger.log(`${JSON.stringify(personnel)}`);
-  
+      // this.logger.log(`${JSON.stringify(personnel)}`);
+      if (personnel.tools && personnel.tools[0].hasOwnProperty('tool')) {
+        const allTools = await this.toolsRepository.find();
+        const personnelTools = personnel.tools.map((t) => ({
+          toolId: allTools.find((at) => at.name === t.tool).id,
+          proficenyLevel: t.proficiencyLevel,
+        }));
+        console.log(personnelTools);
+        personnel.tools = personnelTools;
+      }
+
+      if (personnel.languages) {
+        const currentLanguages = await this.languageRepository.find({ where: { personnel: { personnelId: id } } });
+        const updatedLanguageNames = personnel.languages.map((l) => l.language);
+        const deletedLanguagesIds = currentLanguages.filter((cl) => !updatedLanguageNames.includes(cl.language)).map((cl) => cl.id);
+        if (deletedLanguagesIds.length) {
+          await this.languageRepository.delete(deletedLanguagesIds);
+        }
+
+        const currentLanguagesNames = currentLanguages.map((cl) => cl.language);
+        const newLanguages = personnel.languages.filter((l) => !currentLanguagesNames.includes(l.language)).map((l) => ({
+          personnelId: bcws.personnelId,
+          ...l,
+        }));
+        await this.languageRepository.save(newLanguages);
+        delete personnel.languages;
+      }
+
       Object.keys(personnel).forEach((key) => {
         person[key] = personnel[key];
         bcws[key] = personnel[key];

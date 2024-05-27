@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import type { ExperienceInterface, Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { RoleContext, Route } from '@/providers';
@@ -13,7 +13,7 @@ const usePersonnel = ({
 }): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues) => Promise<void>;
-  updateExperiences: (experiences: ExperienceInterface[]) => Promise<void>;
+  updatePersonnelRelations: (personnel: Partial<Personnel>) => Promise<void>;
   profileData: ProfileData;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
@@ -45,13 +45,11 @@ const usePersonnel = ({
     }
   };
 
-  const updateExperiences = async (experiences: ExperienceInterface[]) => {
+  const updatePersonnelRelations = async (personnel: Partial<Personnel>) => {
     try {
       const res = await AxiosPrivate.patch(
         encodeURI(`/personnel/${route}/id/${personnelId}`),
-        {
-          experiences,
-        },
+        personnel,
       );
       setPersonnel(res.data);
     } catch (e) {
@@ -62,7 +60,7 @@ const usePersonnel = ({
   return {
     personnel,
     updatePersonnel,
-    updateExperiences,
+    updatePersonnelRelations,
     profileData: route === Route.BCWS ? bcwsData(personnel) : emcrData(personnel),
   };
 };

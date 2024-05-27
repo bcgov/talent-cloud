@@ -6,7 +6,7 @@ import { BcwsPersonnelToolsRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_tools')
 export class BcwsPersonnelTools {
-  @ManyToOne(() => BcwsPersonnelEntity)
+  @ManyToOne(() => BcwsPersonnelEntity, { orphanedRowAction: 'delete' })
   @JoinColumn({ name: 'personnel_id' })
   personnel: BcwsPersonnelEntity;
 
@@ -30,7 +30,7 @@ export class BcwsPersonnelTools {
 
   toResponseObject(): BcwsPersonnelToolsRO {
     return {
-      toolName: this.tool.name ?? null,
+      tool: this.tool.name ?? null,
       proficiencyLevel: this.proficenyLevel,
     };
   }

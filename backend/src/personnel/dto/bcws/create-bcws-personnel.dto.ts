@@ -14,6 +14,7 @@ import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
 import { FireCentre, Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
+import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 
 
 
@@ -151,7 +152,7 @@ export class CreatePersonnelBcwsDTO {
     required: false,
   })
   @IsArray()
-  tools: CreateBcwsPersonnelToolsDTO[];
+  tools: CreateBcwsPersonnelToolsDTO[] | UpdateBcwsPersonnelToolsDTO[];
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',

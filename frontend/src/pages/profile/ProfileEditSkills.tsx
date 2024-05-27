@@ -12,6 +12,13 @@ import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../common/enums/language.enum';
+import type { BcwsLanguages, BcwsPersonnelTool } from '../dashboard';
+
+interface skillsKeyVal {
+  key: string | undefined;
+  value: string | undefined;
+}
+[];
 
 export const ProfileEditSkills = ({
   originalLanguages,
@@ -24,27 +31,43 @@ export const ProfileEditSkills = ({
     level: LanguageProficiency;
     type: LanguageLevelType;
   }[];
-  originalTools: { toolName: Tools; proficiencyLevel: ToolsProficiency }[];
+  originalTools: { tool: Tools; proficiencyLevel: ToolsProficiency }[];
   handleClose: () => void;
-  handleSave: () => void;
+  handleSave: (skills: {
+    newLanguages: BcwsLanguages[];
+    newTools: BcwsPersonnelTool[];
+  }) => void;
 }) => {
-  const [languages, setLanguages] = useState<
-    { key: string | undefined; value: string | undefined }[]
-  >(
+  const [languages, setLanguages] = useState<skillsKeyVal[]>(
     originalLanguages.map((l) => ({
       key: l.language,
       value: `${l.level}-${l.type}`,
     })),
   );
 
-  const [tools, setTools] = useState<
-    { key: string | undefined; value: string | undefined }[]
-  >(
+  const [tools, setTools] = useState<skillsKeyVal[]>(
     originalTools.map((t) => ({
-      key: t.toolName,
+      key: t.tool,
       value: t.proficiencyLevel,
     })),
   );
+
+  const onSave = () => {
+    const newLanguages = languages
+      .filter((l) => !!l.key && l.key.length > 1 && !!l.value)
+      .map((l) => ({
+        language: l.key,
+        level: l.value!.split('-')[0],
+        type: l.value!.split('-')[1],
+      })) as BcwsLanguages[];
+    const newTools = tools
+      .filter((t) => !!t.key && !!t.value)
+      .map((t) => ({
+        tool: t.key,
+        proficiencyLevel: t.value,
+      })) as BcwsPersonnelTool[];
+    handleSave({ newLanguages, newTools });
+  };
 
   return (
     <div className="pb-6">
@@ -119,7 +142,7 @@ export const ProfileEditSkills = ({
           onClick={handleClose}
           text="Cancel"
         />
-        <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={handleSave} />
+        <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={onSave} />
       </div>
     </div>
   );

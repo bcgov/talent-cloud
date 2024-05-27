@@ -41,11 +41,12 @@ export const ProfileEditListSection = ({
       key,
       value,
     };
+    console.log(newArray);
     onSet(newArray);
   };
 
   const onAdd = () => {
-    const newArray = [...existingData, { key: '', value: undefined }];
+    const newArray = [...existingData, { key: '', value: valueOptions[0].val }];
     onSet(newArray);
   };
 
@@ -72,7 +73,7 @@ export const ProfileEditListSection = ({
       </AccordionHeader>
       <AccordionBody>
         {existingData.map((data, i) => (
-          <div className="flex flex-row gap-20 py-3 items-end" key={data.key}>
+          <div className="flex flex-row gap-20 py-3 items-end" key={`language-${i}`}>
             <div className="basis-1/2 flex flex-col">
               <p className="font-bold text-sm">
                 {keyName}

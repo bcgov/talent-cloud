@@ -16,7 +16,12 @@ import useAvailability from '@/hooks/useAvailability';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
-import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
+import type {
+  AvailabilityRange,
+  BcwsLanguages,
+  BcwsPersonnelTool,
+  ExperienceInterface,
+} from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm/ProfileEditForm';
 import { Status, type AvailabilityType, Role } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
@@ -39,7 +44,7 @@ import { ProfileEditSkills } from './ProfileEditSkills';
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
 
-  const { personnel, updatePersonnel, updateExperiences, profileData } =
+  const { personnel, updatePersonnel, updatePersonnelRelations, profileData } =
     usePersonnel({
       personnelId,
     });
@@ -99,8 +104,10 @@ const Profile = () => {
     getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
+  // const savePersonnelSkills = async (skills: any[])
+
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
-    await updateExperiences(experiences);
+    await updatePersonnelRelations({ experiences });
     setOpenEditFunctionsPopUp(false);
   };
 
@@ -307,7 +314,15 @@ const Profile = () => {
                 originalLanguages={personnel.languages || []}
                 originalTools={personnel.tools || []}
                 handleClose={handleOpenEditSkills}
-                handleSave={() => {}}
+                handleSave={(skills: {
+                  newLanguages: BcwsLanguages[];
+                  newTools: BcwsPersonnelTool[];
+                }) =>
+                  updatePersonnelRelations({
+                    languages: skills.newLanguages,
+                    tools: skills.newTools,
+                  })
+                }
               />
             </DialogUI>
 
