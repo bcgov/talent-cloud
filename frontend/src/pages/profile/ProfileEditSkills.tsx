@@ -85,7 +85,6 @@ export const ProfileEditSkills = ({
       name: c.key as CertificationName,
       expiry: c.value,
     }));
-    console.log(newCertifications);
     handleSave({ newLanguages, newTools, newCertifications });
   };
 
