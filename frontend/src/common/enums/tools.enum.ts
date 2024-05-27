@@ -31,3 +31,16 @@ export enum ToolsProficiencyName {
   INTERMEDIATE = 'Intermediate',
   ADVANCED = 'Advanced',
 }
+
+export enum CertificationName {
+  OFA_I = 'OFA I',
+  OFA_II = 'OFA II',
+  OFA_III = 'OFA III',
+  FOODSAFE_I = 'Food Safe Level I',
+  FOODSAFE_II = 'Food Safe Level II',
+  QUAD_ATV = 'Quad/ATV',
+  RADIO_OPERATOR = 'Radio Operator',
+  VOLUNTEER_FIRE_DEPT = 'Volunteer Fire Dept',
+  FORKLIFT = 'Forklift - Certified',
+  PSYCHOLOGICAL_FIRST_AID = 'Psychological First Aid (PFA)',
+}

@@ -22,5 +22,4 @@ export enum CertificationName {
   VOLUNTEER_FIRE_DEPT = 'Volunteer Fire Dept',
   FORKLIFT = 'Forklift - Certified',
   PSYCHOLOGICAL_FIRST_AID = 'Psychological First Aid (PFA)',
-  RRT = 'Resource RequestTracking',
 }

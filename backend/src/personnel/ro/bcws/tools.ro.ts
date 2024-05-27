@@ -16,7 +16,7 @@ export class BcwsToolsRO {
   @ApiProperty({
     description: 'Tool name',
     required: true,
-    example: ToolsName.ADOBE,
+    example: Tools.ADOBE,
   })
   toolName: ToolsName;
   @ApiProperty({
@@ -31,7 +31,7 @@ export class BcwsToolsRO {
     example: '2022-10-10',
   })
   @IsOptional()
-  expiryDate?: Date;
+  expiry?: Date;
   @ApiProperty({
     description: 'Proficiency level',
     required: true,

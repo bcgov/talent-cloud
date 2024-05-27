@@ -14,6 +14,8 @@ import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
 import { FireCentre, Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
+import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
+import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
 
 
 
@@ -151,7 +153,7 @@ export class CreatePersonnelBcwsDTO {
     required: false,
   })
   @IsArray()
-  tools: CreateBcwsPersonnelToolsDTO[];
+  tools: CreateBcwsPersonnelToolsDTO[] | UpdateBcwsPersonnelToolsDTO[];
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',
@@ -172,7 +174,7 @@ export class CreatePersonnelBcwsDTO {
     required: false,
   })
   @IsArray()
-  certifications: CreateBcwsCertificationsDTO[];
+  certifications: CreateBcwsCertificationsDTO[] | UpdateBcwsCertificationsDTO[];
 
   @ApiProperty({
     description: 'Division and Ministry',

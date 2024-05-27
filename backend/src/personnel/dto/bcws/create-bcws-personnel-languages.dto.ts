@@ -6,13 +6,13 @@ import {
 } from '../../../common/enums/bcws';
 
 export class CreateBcwsPersonnelLanguagesDTO {
-@ApiProperty({
-    description: 'Personnel ID',
-    required: false,
-    example: '123e4567-e'
-})
-@IsOptional()
-personnelId?: string;
+  @ApiProperty({
+      description: 'Personnel ID',
+      required: false,
+      example: '123e4567-e'
+  })
+  @IsOptional()
+  personnelId?: string;
 
   @ApiProperty({
     description: 'Language',

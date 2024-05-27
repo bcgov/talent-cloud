@@ -16,7 +16,13 @@ import useAvailability from '@/hooks/useAvailability';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
-import type { AvailabilityRange, ExperienceInterface } from '../dashboard';
+import type {
+  AvailabilityRange,
+  BcwsCertification,
+  BcwsLanguages,
+  BcwsPersonnelTool,
+  ExperienceInterface,
+} from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm/ProfileEditForm';
 import { Status, type AvailabilityType, Role } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
@@ -34,14 +40,14 @@ import { NewApplicantBanner } from './NewApplicantBanner';
 import { Toggle } from '@/components/toggle/Toggle';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
+import { ProfileEditSkills } from './ProfileEditSkills';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
 
-  const { personnel, updatePersonnel, updateExperiences, profileData } =
-    usePersonnel({
-      personnelId,
-    });
+  const { personnel, updatePersonnel, profileData } = usePersonnel({
+    personnelId,
+  });
 
   const { generalInformation, contact, organizational, skills, intakeRequirements } =
     profileData;
@@ -57,6 +63,7 @@ const Profile = () => {
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
   const [openEditFunctionsPopUp, setOpenEditFunctionsPopUp] = useState(false);
+  const [openEditSkillsPopUp, setOpenEditSkillsPopUp] = useState(false);
 
   const handleOpenEditNotes = () => {
     setOpenEditNotes(!openEditNotes);
@@ -64,6 +71,10 @@ const Profile = () => {
 
   const handleOpenEditCoordinatorNotes = () => {
     setOpenEditCoordinatorNotes(!openEditCoordinatorNotes);
+  };
+
+  const handleOpenEditSkills = () => {
+    setOpenEditSkillsPopUp(!openEditSkillsPopUp);
   };
 
   const [availabilityQuery, setAvailabilityQuery] = useState<{
@@ -94,7 +105,7 @@ const Profile = () => {
   };
 
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
-    await updateExperiences(experiences);
+    await updatePersonnel({ experiences });
     setOpenEditFunctionsPopUp(false);
   };
 
@@ -241,7 +252,10 @@ const Profile = () => {
                     firstChoiceSection={personnel.firstChoiceSection}
                     secondChoiceSection={personnel.secondChoiceSection}
                   />
-                  <SkillsAndCertifications skills={skills ?? []} />{' '}
+                  <SkillsAndCertifications
+                    skills={skills ?? []}
+                    onClick={() => setOpenEditSkillsPopUp(true)}
+                  />{' '}
                 </>
               )}
 
@@ -283,6 +297,34 @@ const Profile = () => {
                 allFunctions={functions}
                 handleOpenEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
                 updatePersonnelExperiences={savePersonnelExperiences}
+              />
+            </DialogUI>
+
+            {/* Skills and Certs */}
+            <DialogUI
+              open={openEditSkillsPopUp}
+              onClose={handleOpenEditSkills}
+              handleOpen={handleOpenEditSkills}
+              title={'Edit Skills & Certifications'}
+              style={'w-5/6'}
+            >
+              <ProfileEditSkills
+                originalLanguages={personnel.languages || []}
+                originalTools={personnel.tools || []}
+                originalCerts={personnel.certifications || []}
+                handleClose={handleOpenEditSkills}
+                handleSave={(skills: {
+                  newLanguages: BcwsLanguages[];
+                  newTools: BcwsPersonnelTool[];
+                  newCertifications: BcwsCertification[];
+                }) => {
+                  updatePersonnel({
+                    languages: skills.newLanguages,
+                    tools: skills.newTools,
+                    certifications: skills.newCertifications,
+                  });
+                  setOpenEditSkillsPopUp(false);
+                }}
               />
             </DialogUI>
 

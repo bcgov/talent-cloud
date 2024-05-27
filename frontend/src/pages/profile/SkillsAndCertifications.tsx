@@ -20,11 +20,14 @@ export type SkillsProps = {
   }[];
 };
 
-export const SkillsAndCertifications = ({ skills }: { skills: SkillsProps[] }) => {
+export const SkillsAndCertifications = ({
+  skills,
+  onClick,
+}: {
+  skills: SkillsProps[];
+  onClick: () => void;
+}) => {
   const title = 'Skills & Certifications';
-
-  //TODO
-  const onClick = () => {};
 
   return (
     <Accordion title={title} onClick={onClick}>

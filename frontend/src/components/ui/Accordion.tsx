@@ -45,7 +45,10 @@ export const Accordion = ({
               <span>{title}</span>
               <button
                 aria-label="edit functions"
-                onClick={onClick}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClick();
+                }}
                 className="z-20 flex text-primaryBlue flex-row items-center"
               >
                 <PencilSquareIcon className="h-6 w-6" />
