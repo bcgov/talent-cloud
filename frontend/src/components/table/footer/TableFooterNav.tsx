@@ -5,21 +5,26 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/24/solid';
 import { TableFooterNavButton } from './TableFooterNavButton';
-import type { PageParams, TableData } from '../interface';
+import type { PageParams } from '../interface';
+import { usePagination } from '@/hooks/usePagination';
 
 export const TableFooterNav = ({
   pageParams,
-  onChange,
-  tableData,
+  handleChangePage,
 }: {
   pageParams: PageParams;
-  onChange: (pageParams: Partial<PageParams>) => void;
-  tableData: TableData;
+  handleChangePage: (page: number) => void;
 }) => {
   const iconButtonClass = 'text-dark h-4 w-4';
-  const { pageRange, totalPages } = tableData;
-  const { currentPage } = pageParams;
 
+  const { totalRows, rowsPerPage, currentPage } = pageParams;
+  const pageRange = usePagination({ currentPage, totalRows, rowsPerPage });
+  if (!pageRange) return null;
+  const totalPages = Math.ceil(pageParams.totalRows / pageParams.rowsPerPage);
+  const lastPage = totalPages;
+
+  const truncateLeft = currentPage > 3;
+  const truncateRight = currentPage < lastPage - 2;
   return (
     <nav
       className="isolate inline-flex -space-x-px rounded-md shadow-sm"
@@ -28,72 +33,72 @@ export const TableFooterNav = ({
       <TableFooterNavButton
         ariaLabel="navigate to first page"
         disabled={currentPage === 1}
-        onClick={() => onChange({ currentPage: 1 })}
+        onClick={() => handleChangePage(1)}
         icon={<ChevronDoubleLeftIcon className={iconButtonClass} />}
       />
       <TableFooterNavButton
         ariaLabel="navigate to previous page"
         disabled={currentPage === 1}
-        onClick={() => onChange({ currentPage: currentPage - 1 })}
+        onClick={() => handleChangePage(currentPage - 1)}
         icon={<ChevronLeftIcon className={iconButtonClass} />}
       />
-
-      {currentPage > 3 && totalPages > 5 && (
-        <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ">
-          ...
-        </span>
-      )}
-      {pageRange.map((itm) => (
-        <button
-          aria-label={`navigate to page ${itm}`}
-          key={itm}
-          onClick={() => onChange({ currentPage: itm })}
-          className={
-            currentPage === itm
-              ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
-              : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
-          }
-        >
-          {itm}
-        </button>
-      ))}
-
-      {currentPage < totalPages - 2 && totalPages > 5 && (
-        <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ">
-          ...
-        </span>
-      )}
       <button
-        aria-label={`navigate to last page`}
-        disabled={currentPage === totalPages}
-        key={pageRange.length - 1}
-        onClick={() => onChange({ currentPage: totalPages })}
+        aria-label={`navigate to page 1`}
+        disabled={currentPage === 1}
+        onClick={() => handleChangePage(1)}
         className={
-          currentPage === totalPages
+          currentPage === 1
             ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
             : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
         }
       >
-        {totalPages}
+        1
       </button>
+      {truncateLeft && <span>...</span>}
+
+      {pageRange?.map((itm) => {
+        return (
+          <button
+            aria-label={`navigate to page ${itm}`}
+            key={itm}
+            disabled={currentPage === itm}
+            onClick={() => handleChangePage(itm)}
+            className={
+              currentPage === itm
+                ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
+                : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
+            }
+          >
+            {itm}
+          </button>
+        );
+      })}
+
+      {truncateRight && <span>...</span>}
+      {lastPage !== 1 && (
+        <button
+          aria-label={`navigate to page ${lastPage}`}
+          disabled={currentPage === lastPage}
+          onClick={() => handleChangePage(lastPage)}
+          className={
+            currentPage === lastPage
+              ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
+              : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
+          }
+        >
+          {lastPage}
+        </button>
+      )}
       <TableFooterNavButton
         ariaLabel="navigate to next page"
-        disabled={currentPage === totalPages}
-        onClick={() =>
-          onChange({
-            currentPage: currentPage + 1,
-          })
-        }
+        disabled={currentPage === lastPage}
+        onClick={() => handleChangePage(currentPage + 1)}
         icon={<ChevronRightIcon className={iconButtonClass} />}
       />
       <TableFooterNavButton
         ariaLabel="navigate to last page"
-        disabled={currentPage === totalPages}
-        onClick={() =>
-          onChange({
-            currentPage: totalPages,
-          })
-        }
+        disabled={currentPage === lastPage}
+        onClick={() => handleChangePage(pageRange[pageRange?.length - 1] as number)}
         icon={<ChevronDoubleRightIcon className={iconButtonClass} />}
       />
     </nav>

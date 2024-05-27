@@ -18,16 +18,10 @@ export interface TabCount {
   [key: string]: number;
 }
 
-export interface TableData {
-  pageRange: number[];
-  totalRows: number;
-  totalPages: number;
-}
-
 export interface PageParams {
+  totalRows: number;
   rowsPerPage: number;
   currentPage: number;
-  showInactive: boolean;
 }
 export interface FieldInterface {
   name: string;
