@@ -24,7 +24,6 @@ interface skillsKeyVal {
   key: string | undefined;
   value: string | undefined;
 }
-[];
 
 export const ProfileEditSkills = ({
   originalLanguages,
