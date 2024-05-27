@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
+import { CertificationName } from '../../../common/enums';
 
 export class UpdateBcwsCertificationsDTO {
   @ApiProperty({
     description: 'Certification name',
     required: true,
+    enum: CertificationName,
   })
-  name: string;
+  name: CertificationName;
 
   @ApiProperty({
     description: 'Certification expiry date',

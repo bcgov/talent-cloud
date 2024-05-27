@@ -104,8 +104,6 @@ const Profile = () => {
     getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
-  // const savePersonnelSkills = async (skills: any[])
-
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
     await updatePersonnel({ experiences });
     setOpenEditFunctionsPopUp(false);
