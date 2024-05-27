@@ -26,18 +26,17 @@ import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { Program, RequestWithRoles, TokenType } from '../auth/interface';
-import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
+import {Programs} from '../auth/program.decorator';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
 @UseInterceptors(ClassSerializerInterceptor)
-@Programs([Program.BCWS, Program.EMCR, Program.ADMIN])
 export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
@@ -71,6 +70,7 @@ export class PersonnelController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
+  @Programs([Program.EMCR, Program.ADMIN])
   @Patch('/emcr/:id')
   async updatePersonnel(
     @Body() personnel: UpdateEmcrPersonnelDTO,
@@ -131,6 +131,8 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
+  
+  @Programs([Program.EMCR, Program.ADMIN])
   @Get('/emcr')
   @UsePipes(new QueryTransformPipe())
   async getEmcrPersonnel(
@@ -159,6 +161,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
   })
   @Get('/bcws')
+  @Programs([Program.BCWS, Program.ADMIN])
   @UsePipes(new QueryTransformPipe())
   async getBcwsPersonnel(
     @Request() req: RequestWithRoles,

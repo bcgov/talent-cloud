@@ -283,7 +283,7 @@ const SchedulerPopUp = ({
               }
               onClick={() => setSelectedStatus(AvailabilityType.UNAVAILABLE)}
             >
-              Unvailable
+              Unavailable
             </Button>
             <Button
               placeholder={''}

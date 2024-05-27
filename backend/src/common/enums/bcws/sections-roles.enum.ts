@@ -44,11 +44,11 @@ export enum BcwsRole {
   TASK_FORCE_LEADER = 'TASK_FORCE_LEADER',
   INFORMATION_ASSISTANT = 'INFORMATION_ASSISTANT',
   INFORMATION_OFFICER = 'INFORMATION_OFFICER',
-  LIAISON_OFFICER = 'LIAISON_OFFICER',
   SAFETY_OFFICER = 'SAFETY_OFFICER',
   AVIATION_ASSISTANT = 'AVIATION_ASSISTANT',
   HELI_COORDINATOR = 'HELI_COORDINATOR',
   HELIBASE_MANAGER = 'HELIBASE_MANAGER',
+  LIAISON_OFFICER = 'LIAISON_OFFICER',
 }
 
 export enum BcwsRoleName {
@@ -62,7 +62,7 @@ export enum BcwsRoleName {
   REHAB_SPECIALIST = 'Rehab Specialist',
   RESOURCE_UNIT_LEADER = 'Resource Unit Leader',
   SITUATION_UNIT_LEADER = 'Situation Unit Leader',
-  ASSET_MANAGEMENT = 'Asset management',
+  ASSET_MANAGEMENT = 'Asset Management',
   CAMP_MANAGER = 'Camp Manager',
   COMMUNICATION_UNIT_LEADER = 'Communication Unit Leader',
   CONTRACT_MONITOR = 'Contract Monitor',
@@ -97,11 +97,11 @@ export enum BcwsRoleName {
   TASK_FORCE_LEADER = 'Task Force Leader',
   INFORMATION_ASSISTANT = 'Information Assistant',
   INFORMATION_OFFICER = 'Information  Officer',
-  LIAISON_OFFICER = 'Liaison Officer',
   SAFETY_OFFICER = 'Safety Officer',
   AVIATION_ASSISTANT = 'Aviation Assistant',
   HELI_COORDINATOR = 'Heli Coordinator',
   HELIBASE_MANAGER = 'Helibase Manager',
+  LIAISON_OFFICER = 'Liaison Officer',
 }
 
 export enum Section {
