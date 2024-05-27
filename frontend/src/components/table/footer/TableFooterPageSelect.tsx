@@ -3,7 +3,7 @@ export const TableFooterPageSelect = ({
   rowsPerPage,
   handleChangeNumRows,
 }: {
-  totalRows: number;
+  totalRows?: number;
   rowsPerPage: number;
   handleChangeNumRows: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {

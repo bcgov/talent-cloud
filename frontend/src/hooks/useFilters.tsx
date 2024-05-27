@@ -96,7 +96,7 @@ export const useFilters = () => {
     }
   };
 
-  const handleChange = (name: string, value: string | number) => {
+  const handleChange = (name: string, value: string | number | string[]) => {
     setSearchUrlParams((prev: URLSearchParams) => ({
       ...Object.fromEntries([...prev]),
       [name]: value,
