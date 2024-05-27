@@ -35,6 +35,7 @@ export const handler = (
 const dateApplied = faker.date.past();
 const homeLocation =  faker.helpers.arrayElement(locations)
 const workLocation =  faker.helpers.arrayElement(locations)
+console.log(seededTrainings, "SEEDED")
 const emcrData: CreatePersonnelEmcrDTO = {
   
   dateApplied: dateApplied,
@@ -50,7 +51,7 @@ const emcrData: CreatePersonnelEmcrDTO = {
   emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
   approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
   ministry: faker.helpers.arrayElement(Object.values(Ministry)),
-  trainings: [status !== Status.PENDING && seededTrainings[0]],
+  trainings: seededTrainings,
   dateApproved:
     status !== Status.PENDING
       ? faker.date.between({
