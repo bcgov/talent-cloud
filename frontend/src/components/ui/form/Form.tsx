@@ -41,7 +41,6 @@ export default function Form({
       {({
         isSubmitting,
         isValid,
-        errors,
       }: FormikState<any> & FormikProps<any> & FormikProps<any>) => (
         <FormikForm>
           <div className="w-full min-h-full px-8 pt-8 items-center justify-center">
@@ -71,7 +70,6 @@ export default function Form({
               disabled={isSubmitting || !isValid}
             />
           </div>
-          {JSON.stringify(errors)}
         </FormikForm>
       )}
     </Formik>
