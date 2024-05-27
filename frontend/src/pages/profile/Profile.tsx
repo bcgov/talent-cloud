@@ -45,10 +45,9 @@ import { ProfileEditSkills } from './ProfileEditSkills';
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
 
-  const { personnel, updatePersonnel, updatePersonnelRelations, profileData } =
-    usePersonnel({
-      personnelId,
-    });
+  const { personnel, updatePersonnel, profileData } = usePersonnel({
+    personnelId,
+  });
 
   const { generalInformation, contact, organizational, skills, intakeRequirements } =
     profileData;
@@ -108,7 +107,7 @@ const Profile = () => {
   // const savePersonnelSkills = async (skills: any[])
 
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
-    await updatePersonnelRelations({ experiences });
+    await updatePersonnel({ experiences });
     setOpenEditFunctionsPopUp(false);
   };
 
@@ -321,7 +320,7 @@ const Profile = () => {
                   newTools: BcwsPersonnelTool[];
                   newCertifications: BcwsCertification[];
                 }) => {
-                  updatePersonnelRelations({
+                  updatePersonnel({
                     languages: skills.newLanguages,
                     tools: skills.newTools,
                     certifications: skills.newCertifications,

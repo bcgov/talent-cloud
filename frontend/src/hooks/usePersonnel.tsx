@@ -12,8 +12,7 @@ const usePersonnel = ({
   personnelId: string;
 }): {
   personnel: Personnel | undefined;
-  updatePersonnel: (person: FormikValues) => Promise<void>;
-  updatePersonnelRelations: (personnel: Partial<Personnel>) => Promise<void>;
+  updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
   profileData: ProfileData;
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
@@ -33,7 +32,7 @@ const usePersonnel = ({
     })();
   }, [personnelId, AxiosPrivate]);
 
-  const updatePersonnel = async (personnel: FormikValues) => {
+  const updatePersonnel = async (personnel: FormikValues | Personnel) => {
     try {
       const res = await AxiosPrivate.patch(
         encodeURI(`/personnel/${route}/id/${personnelId}`),
@@ -45,22 +44,9 @@ const usePersonnel = ({
     }
   };
 
-  const updatePersonnelRelations = async (personnel: Partial<Personnel>) => {
-    try {
-      const res = await AxiosPrivate.patch(
-        encodeURI(`/personnel/${route}/id/${personnelId}`),
-        personnel,
-      );
-      setPersonnel(res.data);
-    } catch (e) {
-      // TODO error toast
-    }
-  };
-
   return {
     personnel,
     updatePersonnel,
-    updatePersonnelRelations,
     profileData: route === Route.BCWS ? bcwsData(personnel) : emcrData(personnel),
   };
 };

@@ -36,7 +36,6 @@ import {
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { LanguageLevelType, LanguageProficiency } from '../common/enums';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 
 @Injectable()
@@ -118,7 +117,7 @@ export class PersonnelService {
       });
   
       this.logger.log(`${JSON.stringify(personnel)}`);
-      if (personnel.tools && personnel.tools[0].hasOwnProperty('tool')) {
+      if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
         const allTools = await this.toolsRepository.find();
         const personnelTools = personnel.tools.map((t) => ({
           toolId: allTools.find((at) => at.name === t.tool).id,
@@ -144,7 +143,7 @@ export class PersonnelService {
         delete personnel.languages;
       }
 
-      if (personnel.certifications && personnel.certifications[0].hasOwnProperty('name')) {
+      if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
         const allCertifications = await this.cetificationRepository.find();
         const personnelCerts = personnel.certifications.map((c) => ({
           certificationId: allCertifications.find((ac) => ac.name === c.name).id,

@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, JoinColumn, Column, PrimaryColumn } from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import { BcwsToolsEntity } from './bcws-tools.entity';
-import { ToolsName, ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
+import { ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
 import { BcwsPersonnelToolsRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_tools')
