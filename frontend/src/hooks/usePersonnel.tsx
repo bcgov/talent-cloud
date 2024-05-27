@@ -24,7 +24,7 @@ const usePersonnel = ({
     (async () => {
       try {
         const response = await AxiosPrivate.get(
-          `/personnel/${route}/${personnelId}`,
+          `/personnel/${route}/id/${personnelId}`,
         );
         setPersonnel(response.data);
       } catch (e) {
@@ -36,7 +36,7 @@ const usePersonnel = ({
   const updatePersonnel = async (personnel: FormikValues) => {
     try {
       const res = await AxiosPrivate.patch(
-        encodeURI(`/personnel/${route}/${personnelId}`),
+        encodeURI(`/personnel/${route}/id/${personnelId}`),
         personnel,
       );
       setPersonnel(res.data);
@@ -48,7 +48,7 @@ const usePersonnel = ({
   const updateExperiences = async (experiences: ExperienceInterface[]) => {
     try {
       const res = await AxiosPrivate.patch(
-        encodeURI(`/personnel/${route}/${personnelId}`),
+        encodeURI(`/personnel/${route}/id/${personnelId}`),
         {
           experiences,
         },

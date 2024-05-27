@@ -48,7 +48,7 @@ export class RolesGuard implements CanActivate {
       Metadata.PROGRAM,
       context.getHandler(),
     );
-
+    
     const request = context.switchToHttp().getRequest();
 
     // if this route does not specify any required program then allow passthrough
@@ -68,30 +68,21 @@ export class RolesGuard implements CanActivate {
     return true;
   }
 
-  async validateRoles(currentUserRole: Role, requiredRoles: Role[]) {
-    try {
-      // if the current user roles match the required roles for the route allow access
-      if (requiredRoles.includes(currentUserRole)) {
-        return true;
-      }
-    } catch {
-      throw new UnauthorizedException();
+  validateRoles(currentUserRole: Role, requiredRoles: Role[]) {
+    if (requiredRoles.includes(currentUserRole)) {
+      return true;
     }
-    return false;
+
+    throw new UnauthorizedException();
   }
 
-  async validateProgram(
+  validateProgram(
     currentUserProgram: Program,
     requiredProgramRoles: Program[],
   ) {
-    try {
-      //  current request.user.program must be listed in the endpoints required programs
-      if (requiredProgramRoles.includes(currentUserProgram)) {
-        return true;
-      }
-    } catch {
-      throw new UnauthorizedException();
+    if (requiredProgramRoles.includes(currentUserProgram) || currentUserProgram === Program.ADMIN) {
+      return true;
     }
-    return false;
+    throw new UnauthorizedException();
   }
 }
