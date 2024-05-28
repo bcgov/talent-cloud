@@ -85,7 +85,7 @@ export const ProfileEditListSection = ({
       }
     >
       <AccordionHeader placeholder={title} onClick={handleAccordionOpen}>
-        {title}
+        <span className="text-primaryBlue">{title}</span>
       </AccordionHeader>
       <AccordionBody>
         <>
