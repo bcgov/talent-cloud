@@ -41,6 +41,8 @@ import { Toggle } from '@/components/toggle/Toggle';
 import ProfileDetails from './ProfileDetails';
 import ProfileHeader from './ProfileHeader';
 import { ProfileEditSkills } from './ProfileEditSkills';
+import { ProfileEditRoles } from './ProfileEditRoles';
+import type { Section } from '../../common/enums/sections.enum';
 
 const Profile = () => {
   const { personnelId } = useParams() as { personnelId: string };
@@ -55,7 +57,7 @@ const Profile = () => {
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
-  const { functions } = useFunctions();
+  const { functions, bcwsRoles } = useFunctions();
 
   const { role, route } = useRole();
 
@@ -63,6 +65,7 @@ const Profile = () => {
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
   const [openEditFunctionsPopUp, setOpenEditFunctionsPopUp] = useState(false);
+  const [openEditRolesPopUp, setOpenEditRolesPopUp] = useState(false);
   const [openEditSkillsPopUp, setOpenEditSkillsPopUp] = useState(false);
 
   const handleOpenEditNotes = () => {
@@ -75,6 +78,10 @@ const Profile = () => {
 
   const handleOpenEditSkills = () => {
     setOpenEditSkillsPopUp(!openEditSkillsPopUp);
+  };
+
+  const handleOpenEditRoles = () => {
+    setOpenEditRolesPopUp(!openEditRolesPopUp);
   };
 
   const [availabilityQuery, setAvailabilityQuery] = useState<{
@@ -251,10 +258,11 @@ const Profile = () => {
                     roles={personnel?.roles ?? []}
                     firstChoiceSection={personnel.firstChoiceSection}
                     secondChoiceSection={personnel.secondChoiceSection}
+                    onClick={handleOpenEditRoles}
                   />
                   <SkillsAndCertifications
                     skills={skills ?? []}
-                    onClick={() => setOpenEditSkillsPopUp(true)}
+                    onClick={handleOpenEditSkills}
                   />{' '}
                 </>
               )}
@@ -300,13 +308,44 @@ const Profile = () => {
               />
             </DialogUI>
 
+            {/* Roles */}
+            <DialogUI
+              open={openEditRolesPopUp}
+              onClose={handleOpenEditRoles}
+              handleOpen={handleOpenEditRoles}
+              title="Edit Roles"
+              style="w-5/6"
+            >
+              <ProfileEditRoles
+                allRoles={bcwsRoles}
+                originalRoles={personnel.roles || []}
+                sectionChoices={{
+                  firstChoiceSection: personnel.firstChoiceSection,
+                  secondChoiceSection: personnel.secondChoiceSection,
+                }}
+                handleClose={handleOpenEditRoles}
+                handleSave={(roles: {
+                  newRoles: { roleId: number; expLevel: string }[];
+                  firstChoiceSection?: Section;
+                  secondChoiceSection?: Section | null;
+                }) => {
+                  updatePersonnel({
+                    firstChoiceSection: roles.firstChoiceSection,
+                    secondChoiceSection: roles.secondChoiceSection,
+                    roles: roles.newRoles,
+                  });
+                  setOpenEditRolesPopUp(false);
+                }}
+              />
+            </DialogUI>
+
             {/* Skills and Certs */}
             <DialogUI
               open={openEditSkillsPopUp}
               onClose={handleOpenEditSkills}
               handleOpen={handleOpenEditSkills}
-              title={'Edit Skills & Certifications'}
-              style={'w-5/6'}
+              title="Edit Skills & Certifications"
+              style="w-5/6"
             >
               <ProfileEditSkills
                 originalLanguages={personnel.languages || []}

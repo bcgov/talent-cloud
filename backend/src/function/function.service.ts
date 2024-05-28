@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { BcwsRoleName } from '../common/enums';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { EmcrFunctionEntity } from '../database/entities/emcr';
+import { RolesRO } from './ro/role.ro';
 
 @Injectable()
 export class FunctionService {
@@ -21,6 +22,10 @@ export class FunctionService {
    */
   async getFunctions(): Promise<EmcrFunctionEntity[]> {
     return this.functionRepository.find();
+  }
+
+  async getAllRoles(): Promise<BcwsRoleEntity[]> {
+    return this.roleRepository.find();
   }
 
   async getRoles(): Promise<{ [key: string]: BcwsRoleName[] }> {

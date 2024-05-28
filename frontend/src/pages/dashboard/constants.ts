@@ -94,10 +94,16 @@ export interface Availability {
   deploymentCode?: string;
 }
 
-export interface BcwsRoleInterface {
+export interface BcwsPersonnelRoleInterface {
   role: BcwsRole;
   section: Section;
   expLevel?: ExperienceLevel;
+}
+
+export interface BcwsRoleInterface {
+  id: number;
+  name: BcwsRole;
+  section: Section;
 }
 
 export interface BcwsLanguages {
@@ -177,7 +183,7 @@ export interface Personnel {
   emergencyContactRelationship?: string;
   tools?: BcwsPersonnelTool[];
   languages?: BcwsLanguages[];
-  roles?: BcwsRoleInterface[];
+  roles?: BcwsPersonnelRoleInterface[];
   certifications?: BcwsCertification[];
 }
 

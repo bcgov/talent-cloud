@@ -17,8 +17,6 @@ import { Status } from '../../../common/enums/status.enum';
 import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
 
-
-
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
   @IsOptional()
