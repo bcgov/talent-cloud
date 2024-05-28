@@ -189,9 +189,9 @@ export const bcwsData = (personnel?: Personnel) => {
         title: 'Work Number',
         content: formatPhone(personnel?.workPhone) ?? 'Not Listed',
       },
-      { title: 'Govt Email', content: personnel?.email },
+      { title: 'Govt. Email', content: personnel?.email },
       {
-        title: 'Emergency Contactee',
+        title: 'Emergency Contact',
         content: `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`,
       },
       {
@@ -219,13 +219,13 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },
       {},
-      { title: 'Liason First Name', content: personnel?.liaisonFirstName },
-      { title: 'Liason Last Name', content: personnel?.liaisonLastName },
+      { title: 'Liaison First Name', content: personnel?.liaisonFirstName },
+      { title: 'Liaison Last Name', content: personnel?.liaisonLastName },
       {
-        title: 'Liason Phone Number',
+        title: 'Liaison Phone Number',
         content: formatPhone(personnel?.liaisonPhoneNumber) ?? 'Not Listed',
       },
-      { title: 'Liason Email', content: personnel?.liaisonEmail ?? '-' },
+      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '-' },
     ],
     skills: [
       {
