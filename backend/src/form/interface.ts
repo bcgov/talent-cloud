@@ -23,7 +23,7 @@ export interface Roles {
   DDir: boolean;
   Logs: boolean;
   Plans: boolean;
-  Liason: boolean;
+  Liaison: boolean;
   Recovery: boolean;
 }
 export interface FirstNationExperience {

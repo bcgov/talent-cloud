@@ -2,6 +2,8 @@ import { DashboardColumns } from '@/pages/dashboard';
 
 export const renderName = (name: string) => {
   switch (name) {
+    case DashboardColumns.NAME:
+      return <div className="w-56">{name}</div>;
     case DashboardColumns.SUPERVISOR_APPROVAL:
       return (
         <>

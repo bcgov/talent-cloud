@@ -25,11 +25,11 @@ const ProfileDetails = ({
       columns: generalInformation,
     },
     {
-      title: 'Contact',
+      title: 'Contact Information',
       columns: contact,
     },
     {
-      title: 'Organizational',
+      title: 'Organization Information',
       columns: organizational,
     },
   ];
