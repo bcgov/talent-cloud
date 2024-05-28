@@ -8,10 +8,16 @@ import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components
 const Dashboard = () => {
   const { route, role } = useRole();
   const { searchParamsUrl, handleChange } = useFilters();
-  const { totalRows, rowsPerPage, currentPage, tabs, rows, columns } = useTable(
-    searchParamsUrl,
-    route,
-  );
+  const {
+    totalRows,
+    rowsPerPage,
+    currentPage,
+    tabs,
+    rows,
+    columns,
+    loading,
+    setLoading,
+  } = useTable(searchParamsUrl, route);
 
   return (
     <div className="mx-auto max-w-[1388px]  pt-32 pb-24">
@@ -29,12 +35,13 @@ const Dashboard = () => {
             tabs={tabs}
             changeTab={(value: unknown) => {
               handleChange('status', value as Status);
+              !loading && setLoading(true);
             }}
           />
         )}
         <div className="mx-auto max-w-[1388px] overflow-x-scroll">
           <div className="min-h-[500px]">
-            <Table rows={rows} columns={columns} />
+            <Table rows={rows} columns={columns} loading={loading} />
           </div>
           <div className="flex flex-row justify-between p-4">
             <TableFooterPageSelect

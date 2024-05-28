@@ -23,6 +23,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
 
   const applyFilters = async (route: Route) => {
     const isPending = status === Status.PENDING;
+
     try {
       const {
         data: { personnel, count },
@@ -44,9 +45,9 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
 
       const columns = isPending ? pendingColumns[route] : activeCols[route];
 
-      setColumns(columns);
-      setTabCount(count);
       setRows(rows);
+      setTabCount(count);
+      setColumns(columns);
     } catch (e) {
       console.error(e);
     } finally {
