@@ -1,31 +1,25 @@
-import type { Status } from '@/common';
 import { Tab } from '@headlessui/react';
 
-export type Tabs = {
+export type Tab = {
   label: string;
   value: string;
-  count: number | undefined;
-}[];
-
-export type TabData = {
-  label: string;
-  value: Status;
-  count: number | string;
+  count?: number | string;
+  selected: boolean;
 };
-
 export type TabProps = {
-  onChangeTab: (index: number) => void;
-  tabs: Tabs;
-  selectedTab: number;
+  tabs: Tab[];
+  changeTab: (value: unknown) => void;
 };
 
-export const Tabs = ({ onChangeTab, tabs, selectedTab }: TabProps) => {
+export const Tabs = ({ tabs, changeTab }: TabProps) => {
   return (
-    <Tab.Group selectedIndex={selectedTab} onChange={onChangeTab}>
-      <Tab.List
-        className={`flex flex-row bg-white sticky top-24 md:px-6 px-0`}
-        as="div"
-      >
+    <Tab.Group
+      selectedIndex={tabs?.indexOf(
+        tabs?.find((itm) => itm.selected === true) ?? tabs[0],
+      )}
+      onChange={(index) => changeTab(tabs[index].value ?? tabs[0].value)}
+    >
+      <Tab.List className={`flex flex-row bg-white md:px-6 px-0`} as="div">
         {tabs.map(({ label, value, count }, index) => (
           <Tab key={value}>
             {({ selected }) => (
@@ -49,11 +43,6 @@ export const Tabs = ({ onChangeTab, tabs, selectedTab }: TabProps) => {
           </Tab>
         ))}
       </Tab.List>
-      <Tab.Panels>
-        {tabs.map(({ value }) => (
-          <Tab.Panel key={value} className="w-full p-0 m-0" />
-        ))}
-      </Tab.Panels>
     </Tab.Group>
   );
 };

@@ -5,22 +5,24 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/24/solid';
 import { TableFooterNavButton } from './TableFooterNavButton';
-import type { PageParams } from '../interface';
 import { usePagination } from '@/hooks/usePagination';
 
 export const TableFooterNav = ({
-  pageParams,
+  totalRows,
+  rowsPerPage,
+  currentPage,
   handleChangePage,
 }: {
-  pageParams: PageParams;
+  totalRows: number;
+  rowsPerPage: number;
+  currentPage: number;
   handleChangePage: (page: number) => void;
 }) => {
   const iconButtonClass = 'text-dark h-4 w-4';
 
-  const { totalRows, rowsPerPage, currentPage } = pageParams;
   const pageRange = usePagination({ currentPage, totalRows, rowsPerPage });
   if (!pageRange) return null;
-  const totalPages = Math.ceil(pageParams.totalRows / pageParams.rowsPerPage);
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
   const lastPage = totalPages;
 
   const truncateLeft = currentPage > 3;
