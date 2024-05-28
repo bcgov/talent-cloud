@@ -116,7 +116,7 @@ export enum Section {
 export enum SectionName {
   PLANNING = 'Planning',
   LOGISTICS = 'Logistics',
-  FINANCE_ADMIN = 'FinanceAdmin',
+  FINANCE_ADMIN = 'Finance Admin',
   OPERATIONS = 'Operations',
   COMMAND = 'Command',
   AVIATION = 'Aviation',
@@ -128,6 +128,6 @@ export enum ExperienceLevel {
 }
 
 export enum ExperienceLevelName {
-  PREVIOUSLY_DEPLOYED = 'PreviouslyDeployed',
+  PREVIOUSLY_DEPLOYED = 'Previously Deployed',
   INTERESTED = 'Interested',
 }

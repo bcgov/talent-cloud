@@ -6,7 +6,7 @@ import { BcwsPersonnelRoleRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_roles')
 export class BcwsSectionsAndRolesEntity {
-  @ManyToOne(() => BcwsPersonnelEntity)
+  @ManyToOne(() => BcwsPersonnelEntity, { orphanedRowAction: 'delete' })
   @JoinColumn({ name: 'personnel_id' })
   personnel: BcwsPersonnelEntity;
 

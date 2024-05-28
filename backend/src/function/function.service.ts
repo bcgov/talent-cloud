@@ -23,6 +23,10 @@ export class FunctionService {
     return this.functionRepository.find();
   }
 
+  async getAllRoles(): Promise<BcwsRoleEntity[]> {
+    return this.roleRepository.find();
+  }
+
   async getRoles(): Promise<{ [key: string]: BcwsRoleName[] }> {
     const roles = await this.roleRepository.find();
 

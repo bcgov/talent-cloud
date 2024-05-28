@@ -1,5 +1,5 @@
 import { Chip } from '@material-tailwind/react';
-import type { BcwsRoleInterface } from '../dashboard';
+import type { BcwsPersonnelRoleInterface } from '../dashboard';
 import type { Section } from '@/common/enums/sections.enum';
 import {
   BcwsRoleName,
@@ -14,16 +14,17 @@ export const SectionsAndRoles = ({
   roles,
   firstChoiceSection,
   secondChoiceSection,
+  onClick,
 }: {
-  roles: BcwsRoleInterface[];
+  roles: BcwsPersonnelRoleInterface[];
   firstChoiceSection?: Section;
   secondChoiceSection?: Section;
+  onClick: () => void;
 }) => {
   const title = 'Sections & Roles';
-  const onClick = () => {};
 
   const sections = roles.reduce(
-    (acc: { [key: string]: BcwsRoleInterface[] }, role) => {
+    (acc: { [key: string]: BcwsPersonnelRoleInterface[] }, role) => {
       const key = role.section;
       if (!acc[key]) {
         acc[key] = [];
