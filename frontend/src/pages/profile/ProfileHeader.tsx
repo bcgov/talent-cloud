@@ -44,7 +44,7 @@ const ProfileHeader = ({
 
   return (
     <>
-      <div className="px-10 float-left hidden lg:inline-block">
+      <div className="px-8 float-left hidden lg:inline-block">
         <div className="w-32 h-32 grid rounded-full bg-primaryBlue justify-center content-center">
           <h1 className="text-white font-bold text-5xl">
             {personnel.firstName?.charAt(0)}
@@ -58,7 +58,7 @@ const ProfileHeader = ({
             Employee #{personnel.employeeId}
           </p>
         )}
-        <div className="flex flex-row content-center items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
+        <div className="flex flex-col content-center items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
           <h2 className="font-semibold px-2">
             {personnel.firstName} {personnel.lastName}
           </h2>
@@ -68,11 +68,11 @@ const ProfileHeader = ({
             </span>
           )}
 
-          <div className="hidden lg:flex lg:px-6 xl:px-12">
+          <div className="hidden lg:flex lg:px-6">
             <HorizontalLine />
           </div>
 
-          <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-16 xl:space-x-24">
+          <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-12">
             <div className="flex flex-row">
               <ClockIcon className="h-7 w-7 text-defaultGray" />
               <div className="px-2">

@@ -44,8 +44,8 @@ const WarningBanner = ({
   buttonText?: string;
 }) => (
   <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2  text-sm xl:w-4/5 space-y-8 lg:space-y-0">
-    <span className="flex flex-col md:flex-row text-sm grow">
-      <ExclamationTriangleIcon className="text-warning  h-6 hidden sm:inline-block sm:mr-2" />
+    <span className="flex flex-col md:flex-row items-start">
+      <ExclamationTriangleIcon className="text-warning  h-10  " />
       {content}
     </span>
     {onClick ? (
