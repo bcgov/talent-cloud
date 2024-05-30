@@ -88,7 +88,7 @@ export const useFilters = () => {
       setSearchUrlParams({
         rows: '25',
         page: '1',
-        status: Status.ACTIVE,
+        status: searchParamsUrl.get('status') ?? Status.ACTIVE,
       });
     },
     disabled: [
