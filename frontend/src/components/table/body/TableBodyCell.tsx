@@ -104,9 +104,9 @@ export const TableBodyCell = ({
               <CheckCircleIcon className={pendingIconClass(cell.value)} /> Recieved
             </span>
           ) : (
-            <>
+            <span className={tableClass.rowClass}>
               <MinusCircleIcon className={pendingIconClass(cell.value)} /> Pending
-            </>
+            </span>
           )}
         </>
       );
@@ -118,9 +118,9 @@ export const TableBodyCell = ({
               <CheckCircleIcon className={pendingIconClass(cell.value)} /> Completed
             </span>
           ) : (
-            <>
+            <span className={tableClass.rowClass}>
               <XCircleIcon className={pendingIconClass(cell.value)} /> Incomplete
-            </>
+            </span>
           )}
         </>
       );
@@ -143,9 +143,9 @@ export const TableBodyCell = ({
               <CheckIcon className={pendingIconClass(cell.value)} /> Recieved
             </span>
           ) : (
-            <>
+            <span className={tableClass.rowClass}>
               <MinusIcon className={pendingIconClass(cell.value)} /> Pending
-            </>
+            </span>
           )}
         </>
       );

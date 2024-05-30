@@ -176,15 +176,14 @@ const Profile = () => {
             value: personnel?.orientation,
           },
         ];
-  const getBackground =
-    personnel?.status === Status.PENDING ? 'inactive' : 'grayBackground';
+
   return (
     <div
-      className={`min-h-screen pt-12 pb-24 bg-${getBackground} w-full overflow-x-hidden`}
+      className={`min-h-screen pt-12 pb-24 ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
     >
       <Breadcrumbs
         placeholder={'Breadcrumbs'}
-        className="px-12 bg-grayBackground max-w-full"
+        className={`px-12 max-w-full ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'}`}
       >
         <Link to={Routes.Dashboard} className="text-linkBlue">
           <div className="flex flex-row items-center">
