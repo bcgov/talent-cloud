@@ -1,6 +1,6 @@
 export const main = {
   title: 'Welcome to CORE Team',
-  banner: 'CORE applications are now open for 2024. Access intake form ',
+  banner: '',
   bannerLink: {
     name: 'here ',
     url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',

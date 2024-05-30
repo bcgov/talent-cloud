@@ -80,4 +80,14 @@ export class AppController {
       divisions: await this.locationService.getDivisions(),
     };
   }
+
+  @Get('/form-info')
+  @Public()
+  async getFormInfo() {
+    return {
+      formId: process.env.CHEFS_FORM_ID,
+      formEnabled: !process.env.CHEFS_FORM_DISABLED,
+ 
+    };
+  }
 }

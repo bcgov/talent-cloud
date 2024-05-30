@@ -26,6 +26,12 @@ parameters:
     generate: expression
     from: '[a-zA-Z0-9]{32}'
     required: true
+  - name: FORM_ENABLED
+    description: Used to enable or disable the form on the frontend
+    required: true
+  - name: FORM_ID
+    description: Form ID specific to the environment
+    required: true
 objects:
   - kind: Secret
     apiVersion: v1
@@ -44,7 +50,7 @@ objects:
       api_key: ${CHEFS_API_KEY}
       token: ${CHEFS_WS_TOKEN}
       form_id: ${CHEFS_FORM_ID}
-      disabled: ${CHEFS_FORM_DISABLED}
+      disabled: ${CHEFS_FORM_ENABLED}
   - kind: Secret
     apiVersion: v1
     metadata:

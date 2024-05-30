@@ -5,15 +5,28 @@ import { Button } from '@/components';
 import { BcGovLogoHorizontal, SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
+import { AxiosPublic } from '@/utils';
 import { createCustomLoginUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
+import { useEffect, useState } from 'react';
 
 export const SplashMain = ({ content }: { content: any }) => {
   const { keycloak } = useKeycloak();
   const login = () => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
   };
+  const [formId, setFormId] = useState<string>();
+  const [formEnabled, setFormEnabled] = useState<boolean>(false);
 
+  useEffect(() => {
+    (async () => {
+      const { data } = await AxiosPublic.get('/form-info');
+
+      setFormId(data.formId);
+      setFormEnabled(data.formEnabled);
+    })();
+  }, []);
+  console.log(formId, formEnabled);
   return (
     <div>
       <header className="relative w-full border-b z-40 py-0">
@@ -32,26 +45,33 @@ export const SplashMain = ({ content }: { content: any }) => {
       </header>
       <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:pl-12 md:pr-0  xl:pl-32 2xl:px-64">
         <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start   lg:py-24 text-left">
-          {/* TODO - uncomment when we want to allow access to the form*/}
-          {/* <Banner
-            type={BannerType.INFO}
-            content={content.banner}
-            link={{
-              name: 'here ',
-              url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${process.env.FORM_ID}`
-            }}
-          /> */}
           <div className="lg:pr-12 xl:pr-32">
-            <Banner
-              type={BannerType.INFO}
-              content={
-                <>
-                  <span className="font-bold mr-2">CORE</span>
-                  {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are not yet open for ${new Date().getFullYear()}. Please stay tuned. Details coming soon.`}
-                </>
-              }
-            />
-
+            {/* Update env vars to change form url and to enable/disable form*/}
+            {formId && formEnabled ? (
+              <Banner
+                type={BannerType.INFO}
+                content={
+                  <>
+                    <span className="font-bold mr-2">CORE</span>
+                    <span className="pb-12">{`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}</span>
+                  </>
+                }
+                link={{
+                  name: 'here ',
+                  url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${import.meta.env.VITE_FORM_ID}`,
+                }}
+              />
+            ) : (
+              <Banner
+                type={BannerType.INFO}
+                content={
+                  <>
+                    <span className="font-bold mr-2">CORE</span>
+                    {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are not yet open for ${new Date().getFullYear()}. Please stay tuned. Details coming soon.`}
+                  </>
+                }
+              />
+            )}
             <div className="pt-16">
               <span className="text-info lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
