@@ -26,7 +26,7 @@ export const SplashMain = ({ content }: { content: any }) => {
       setFormEnabled(data.formEnabled);
     })();
   }, []);
-  console.log(formId, formEnabled);
+
   return (
     <div>
       <header className="relative w-full border-b z-40 py-0">
