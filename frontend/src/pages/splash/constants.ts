@@ -1,20 +1,17 @@
 export const main = {
   title: 'Welcome to CORE Team',
-  banner: 'TEAMS applications are now open for 2024. Access intake form ',
+  banner: 'CORE applications are now open for 2024. Access intake form ',
   bannerLink: {
     name: 'here ',
     url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',
   },
-  subtitle: 'Temporary Emergency Assignment Management System',
+  subtitle: 'Coordinated Operation Response in Emergencies',
   description: {
-    pt1: 'This is the staffing system (previously known as TEAMS) that maintains a resource pool of highly-qualified employees from various ministries that have appropriate skills to work in emergency operations centres.',
-    pt2: 'Members temporarily leave their regular employment and can be deployed to either a Provincial Regional Emergency Operations Centre (PREOC) or Provincial Emergency Coordination Centre (PECC) for ',
-    bold: 'up to 10 days at a time ',
-    pt3: 'followed by adequate rest and a return to regular work.',
+    pt1: 'This is the staffing system (previously known as TEAMS – Temporary Emergency Assignment Management System) that maintains a roster of employees from numerous ministries in the BC Government who have a combination of interest, skills, and experience to work within EMCR operation centres and BCWS fire centres to support communities in emergency management and wildfire response across the province.',
   },
   login: {
     title: 'Login',
-    description: 'Use your IDIR to access the TEAMS member database.',
+    description: 'Use your IDIR to access the CORE member database.',
   },
 };
 

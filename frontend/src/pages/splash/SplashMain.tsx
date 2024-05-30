@@ -30,8 +30,8 @@ export const SplashMain = ({ content }: { content: any }) => {
           </div>
         </div>
       </header>
-      <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-16 lg:px-0 lg:pr-0 2xl:px-64">
-        <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start space-y-16  lg:px-24  xl:px-32 lg:py-24 text-left">
+      <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:pl-12 md:pr-0  xl:pl-32 2xl:px-64">
+        <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start   lg:py-24 text-left">
           {/* TODO - uncomment when we want to allow access to the form*/}
           {/* <Banner
             type={BannerType.INFO}
@@ -41,25 +41,31 @@ export const SplashMain = ({ content }: { content: any }) => {
               url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${process.env.FORM_ID}`
             }}
           /> */}
-          <Banner
-            type={BannerType.INFO}
-            content="TEAMS applications are not yet open for 2024. Please stay tuned. Details coming soon."
-          />
-          <span className="text-info">{content.subtitle}</span>
-          <h1 className="font-bold">{content.title}</h1>
-          <div className="space-y-12">
-            <p>{content.description.pt1}</p>
-            <p>
-              {content.description.pt2}
-              <span className="font-bold">{content.description.bold}</span>
-              {content.description.pt3}
-            </p>
+          <div className="lg:pr-12 xl:pr-32">
+            <Banner
+              type={BannerType.INFO}
+              content={
+                <>
+                  <span className="font-bold mr-2">CORE</span>
+                  {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are not yet open for ${new Date().getFullYear()}. Please stay tuned. Details coming soon.`}
+                </>
+              }
+            />
+
+            <div className="pt-16">
+              <span className="text-info lg:mt-32">{content.subtitle}</span>
+              <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
+            </div>
+            <div>
+              <p>{content.description.pt1}</p>
+            </div>
           </div>
-          <div className="flex lg:hidden">
+          {/* Small Screen Login in Section */}
+          <div className="flex py-24 lg:hidden">
             <div className="bg-[#013366]  rounded-md border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 ">
               <h3 className="text-white">Login</h3>
               <p className="text-white">
-                Use your IDIR to access the TEAMS member database.
+                Use your IDIR to access the CORE member database.
               </p>
               <Button
                 id={'login-button-mobile'}
@@ -77,7 +83,7 @@ export const SplashMain = ({ content }: { content: any }) => {
           <div className="absolute inset-0 top-1/3  border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
             <h3 className="text-white">Login</h3>
             <p className="text-white">
-              Use your IDIR to access the TEAMS member database.
+              Use your IDIR to access the CORE member database.
             </p>
             <Button
               id={'login-button-main'}
