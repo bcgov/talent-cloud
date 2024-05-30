@@ -5,6 +5,7 @@ import { classes } from './classes';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 import { DashboardFilterNames } from '@/pages/dashboard';
+import { Route } from '@/providers';
 
 export const CascadingMenu = ({
   value,
@@ -14,17 +15,16 @@ export const CascadingMenu = ({
   field,
   nestedField,
   nestedValue,
+  route,
 }: {
-  onChange: (
-    value: { name: string; value: string },
-    nestedValue: { name: string; value: string },
-  ) => any;
+  onChange: (name: string, value: string) => void;
   handleClose: (name: string, nestedName: string) => any;
   label: string;
   field: any;
   nestedField: any;
   value?: string;
   nestedValue?: string | BcwsRole;
+  route?: Route;
 }) => {
   const displayValue = (value: string) => {
     if (value === FunctionName.EMERGENCY_SUPPORT_SERVICES) {
@@ -69,20 +69,23 @@ export const CascadingMenu = ({
         </MenuHandler>
         <MenuList>
           <div className="w-full">
-            {field.options?.map((option: any) => (
-              <NestedMenu
-                field={field}
-                handleChange={(nestedName, nestedValue) =>
-                  onChange(
-                    { name: field.name, value: option },
-                    { name: nestedName, value: nestedValue },
-                  )
-                }
-                nestedField={nestedField}
-                option={option}
-                key={option}
-              />
-            ))}
+            {field.options?.map(
+              (option: { label: string; value: string }, index: number) => (
+                <NestedMenu
+                  field={field}
+                  handleChange={onChange}
+                  nestedField={{
+                    ...nestedField,
+                    options:
+                      route === Route.BCWS
+                        ? nestedField.options[index]
+                        : nestedField.options,
+                  }}
+                  option={option}
+                  key={option.value}
+                />
+              ),
+            )}
           </div>
         </MenuList>
       </Menu>

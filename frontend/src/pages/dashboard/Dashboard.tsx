@@ -7,7 +7,7 @@ import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components
 
 const Dashboard = () => {
   const { route, role } = useRole();
-  const { searchParamsUrl, handleChange } = useFilters();
+  const { searchParamsUrl, handleChangeOne } = useFilters();
   const {
     totalRows,
     rowsPerPage,
@@ -34,7 +34,7 @@ const Dashboard = () => {
           <Tabs
             tabs={tabs}
             changeTab={(value: unknown) => {
-              handleChange('status', value as Status);
+              handleChangeOne('status', value as Status);
               !loading && setLoading(true);
             }}
           />
@@ -48,7 +48,7 @@ const Dashboard = () => {
               totalRows={totalRows}
               rowsPerPage={rowsPerPage}
               handleChangeNumRows={(e: React.ChangeEvent<any>) =>
-                handleChange('rows', e.target.value)
+                handleChangeOne('rows', e.target.value)
               }
             />
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
               totalRows={totalRows}
               rowsPerPage={rowsPerPage}
               currentPage={currentPage}
-              handleChangePage={(page: number) => handleChange('page', page)}
+              handleChangePage={(page: number) => handleChangeOne('page', page)}
             />
           </div>
         </div>

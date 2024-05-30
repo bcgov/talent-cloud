@@ -15,25 +15,22 @@ import type { DateRange } from 'react-day-picker';
 
 export const DashboardFilters = ({ route }: { route?: Route }) => {
   const { filters } = useGetFilters();
+
   const {
     filterValues,
-    handleMultiSelect,
-
     availabilityDates,
     setAvailabilityDates,
     onClear,
-    handleClose,
-
+    handleRemove,
     handleSetDates,
+    handleChangeOne,
     clearSearchParams,
-    handleNestedChange,
-
     handleChange,
     searchValue,
     setSearchValue,
-    getOptions,
     disabled,
   } = useFilters();
+
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
@@ -42,7 +39,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           field={filters.name}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
-          handleChange={handleChange}
+          handleChange={handleChangeOne}
           handleClose={clearSearchParams}
         />
       </div>
@@ -55,20 +52,28 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
                 route === Route.BCWS ? filterValues.fireCentre : filterValues.region
               }
               label={route === Route.BCWS ? 'Fire Centre' : 'Region'}
-              onChange={handleMultiSelect}
-              handleClose={handleClose}
+              handleChange={handleChange}
+              handleClose={handleRemove}
               handleCloseMany={clearSearchParams}
               maxChips={1}
             />
           </div>
           <div className="col-span-1 md:col-span-3">
             <MultiSelectGroup
-              onChange={handleMultiSelect}
-              handleClose={handleClose}
+              onChange={handleChange}
+              handleClose={handleRemove}
               handleCloseMany={clearSearchParams}
               field={{
                 ...filters.location,
-                groupedOptions: getOptions(filters, route),
+                groupedOptions:
+                  filterValues[route === Route.BCWS ? 'fireCentre' : 'region']
+                    .length > 0
+                    ? filters.location.groupedOptions?.filter((itm: any) =>
+                        filterValues[
+                          route === Route.BCWS ? 'fireCentre' : 'region'
+                        ]?.includes(itm.value.toString()),
+                      )
+                    : filters.location.groupedOptions,
               }}
               label="Home Location"
               values={filterValues.location}
@@ -89,12 +94,13 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           label={
             route === Route.BCWS ? 'Section/Role' : 'Function & Experience Level'
           }
-          onChange={handleNestedChange}
+          onChange={handleChangeOne}
           handleClose={(name, nestedName) => {
             clearSearchParams(name);
             clearSearchParams(nestedName);
           }}
           value={route === Route.BCWS ? filterValues.section : filterValues.function}
+          route={route}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-3">
@@ -104,7 +110,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
               field={filters.availabilityType}
               label="Availability"
               value={filterValues.availabilityType}
-              onChange={handleChange}
+              onChange={handleChangeOne}
               handleClose={() => {
                 const range: DateRange | undefined = {
                   from: undefined,

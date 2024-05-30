@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import type { FieldGroupedOption } from '@/components';
 import {
   MenuItem,
@@ -10,8 +9,8 @@ import {
   MenuList,
 } from '@/components';
 import { classes } from './classes';
-import { FireCentre, FireCentreName } from '@/common/enums/firecentre.enum';
-import { Route } from '@/providers';
+import { FireCentreName } from '@/common/enums/firecentre.enum';
+import type { Route } from '@/providers';
 
 export const MultiSelectGroup = ({
   field,
@@ -20,29 +19,30 @@ export const MultiSelectGroup = ({
   label,
   handleClose,
   handleCloseMany,
-  route,
 }: {
   field: any;
   values: any;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (name: string, values: string) => void;
   label: string;
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
   route?: Route;
 }) => {
-  const onChangeGroup = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.split(',');
-    const valueSet = value.filter((itm) => !values.includes(itm));
+  const onChangeGroup = (options: string[]) => {
+    const valueSet = options.filter((itm) => !values.includes(itm));
 
-    const event = {
-      target: {
-        name: field.name,
-        value: valueSet.length > 0 ? valueSet : value,
-      },
-    } as unknown as ChangeEvent<HTMLInputElement>;
-
-    onChange(event);
+    if (valueSet.length === 0) {
+      values.forEach((itm: string) => handleClose(field.name, itm));
+    } else {
+      const finalValues = valueSet.length > 0 ? valueSet : options;
+      finalValues.forEach((itm) => onChange(field.name, itm));
+    }
   };
+
+  const onChangeOne = (option: string) =>
+    values?.includes(option)
+      ? handleClose(field.name, option)
+      : onChange(field.name, option);
 
   return (
     <>
@@ -66,14 +66,14 @@ export const MultiSelectGroup = ({
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div
                   key={group.label}
-                  className={`${group.label === FireCentre.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
+                  className={`${group.label === FireCentreName.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
                 >
                   <div className="col-span-2">
                     <MenuItem>
                       <label className={classes.menu.listLabel}>
                         <Checkbox
                           id={group.label}
-                          onChange={onChangeGroup}
+                          onChange={() => onChangeGroup(group.options)}
                           name={field.name}
                           value={group.options}
                           multiple
@@ -81,9 +81,7 @@ export const MultiSelectGroup = ({
                             values?.find((itm: any) => itm === option),
                           )}
                         />
-                        {route === Route.BCWS
-                          ? FireCentreName[group.label as FireCentre]
-                          : group.label}
+                        {group.label}
                         {values?.filter((itm: string) =>
                           group?.options?.find((option) => option === itm),
                         ).length > 0
@@ -102,7 +100,7 @@ export const MultiSelectGroup = ({
                         <label className={classes.menu.listItem} htmlFor={option}>
                           <Checkbox
                             id={option.name}
-                            onChange={onChange}
+                            onChange={() => onChangeOne(option)}
                             checked={values?.includes(option)}
                             name={field.name}
                             value={option}
@@ -120,7 +118,7 @@ export const MultiSelectGroup = ({
                           <label className={classes.menu.listItem} htmlFor={option}>
                             <Checkbox
                               id={option.name}
-                              onChange={onChange}
+                              onChange={() => onChangeOne(option)}
                               checked={values?.includes(option)}
                               name={field.name}
                               value={option}

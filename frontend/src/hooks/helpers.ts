@@ -21,7 +21,6 @@ export const getAvailabilityValue = (
   const totalAvailableDays = availability.filter(
     (itm) => itm.availabilityType === availabilityType,
   ).length;
-
   const totalDaysSearched =
     differenceInDays(
       availabilityDates.to ?? new Date(),
@@ -57,8 +56,8 @@ const renderAvailability = (personnel: Personnel, filterValues: URLSearchParams)
     return getAvailabilityValue(
       filterValues.get('availabilityType') as AvailabilityType,
       {
-        from: new Date(filterValues.get('availbilityDateFrom') ?? ''),
-        to: new Date(filterValues.get('availabilityDateTo') ?? ''),
+        from: new Date(filterValues.get('availabilityFromDate') ?? ''),
+        to: new Date(filterValues.get('availabilityToDate') ?? ''),
       },
       personnel.availability,
     );

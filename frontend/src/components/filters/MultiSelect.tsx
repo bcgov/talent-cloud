@@ -5,13 +5,12 @@ import type { Region } from '@/common';
 import { RegionName } from '@/common';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { ChangeEvent } from 'react';
 
 export const MultiSelect = ({
   field,
   values,
   label,
-  onChange,
+  handleChange,
   handleClose,
   handleCloseMany,
   maxChips,
@@ -22,7 +21,7 @@ export const MultiSelect = ({
     options: { label: string; value: string }[];
   };
   values: string[];
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (name: string, values: string) => void;
   label: string;
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
@@ -59,7 +58,11 @@ export const MultiSelect = ({
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <Checkbox
                   id={option.label}
-                  onChange={onChange}
+                  onChange={() =>
+                    values?.includes(option.value)
+                      ? handleClose(field.name, option.value)
+                      : handleChange(field.name, option.value)
+                  }
                   checked={values?.includes(option.value)}
                   name={field.name}
                   value={option.value}

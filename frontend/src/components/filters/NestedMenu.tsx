@@ -3,9 +3,6 @@ import { useState } from 'react';
 import { classes } from './classes';
 import { Menu } from '../ui';
 import { MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
-import { DashboardFilterNames } from '@/pages/dashboard';
-import { BcwsRole, Section } from '@/common/enums/sections.enum';
-import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const NestedMenu = ({
   field,
@@ -14,15 +11,15 @@ export const NestedMenu = ({
   handleChange,
 }: {
   field: any;
-  option: string | Section;
+  option: { label: string; value: string };
   nestedField: any;
-  handleChange: (nestedField: any, nestedValue: any) => void;
+  handleChange: (name: string, value: string) => void;
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
     <Menu
-      key={option}
+      key={option.value}
       placement="right-start"
       open={openMenu}
       handler={setOpenMenu}
@@ -33,10 +30,8 @@ export const NestedMenu = ({
       <MenuHandler className="w-full" id={option}>
         <MenuItem placeholder={option} className="w-full">
           <div className="flex items-center justify-between w-full space-x-24">
-            <span id={option} className={classes.menu.listItem}>
-              {field.name === DashboardFilterNames.SECTION
-                ? SectionName[option as Section]
-                : option}
+            <span id={option.value} className={classes.menu.listItem}>
+              {option.label}
             </span>
             <ChevronRightIcon
               strokeWidth={2.5}
@@ -48,35 +43,24 @@ export const NestedMenu = ({
         </MenuItem>
       </MenuHandler>
       <MenuList placeholder={option}>
-        {field.name === DashboardFilterNames.SECTION
-          ? nestedField.options[option].map((itm: any) => (
-              <MenuItem
-                id={itm}
-                placeholder={itm}
-                key={itm}
-                onClick={() => {
-                  handleChange(field.name, Section[option as Section]);
-                  handleChange(nestedField.name, BcwsRole[itm as BcwsRole]);
-                }}
-              >
-                <span className={classes.menu.listItem}>
-                  {BcwsRoleName[itm as BcwsRole]}
-                </span>
-              </MenuItem>
-            ))
-          : nestedField.options.map((itm: any) => (
-              <MenuItem
-                id={itm.label}
-                placeholder={itm.label}
-                key={itm.value}
-                onClick={() => {
-                  handleChange(field.name, option);
-                  handleChange(nestedField.name, itm.value);
-                }}
-              >
-                <span className={classes.menu.listItem}>{itm.label}</span>
-              </MenuItem>
-            ))}
+        {nestedField.options.map(
+          (nestedOption: { label: string; value: string }) => (
+            <MenuItem key={option.value} placeholder={undefined}>
+              <label className={classes.menu.listItem} htmlFor={option.label}>
+                <button
+                  onClick={() =>
+                    [
+                      { name: field.name, value: option.value },
+                      { name: nestedField.name, value: nestedOption.value },
+                    ].forEach((itm) => handleChange(itm.name, itm.value))
+                  }
+                >
+                  {nestedOption.label}
+                </button>
+              </label>
+            </MenuItem>
+          ),
+        )}
       </MenuList>
     </Menu>
   );

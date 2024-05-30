@@ -42,7 +42,6 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
             ),
         }),
       );
-
       const columns = isPending ? pendingColumns[route] : activeCols[route];
 
       setRows(rows);
