@@ -39,6 +39,11 @@ export const MultiSelectGroup = ({
     }
   };
 
+  const onChangeOne = (option: string) =>
+    values?.includes(option)
+      ? handleClose(field.name, option)
+      : onChange(field.name, option);
+
   return (
     <>
       <span className="label">{label}</span>
@@ -95,11 +100,7 @@ export const MultiSelectGroup = ({
                         <label className={classes.menu.listItem} htmlFor={option}>
                           <Checkbox
                             id={option.name}
-                            onChange={() =>
-                              values?.includes(option)
-                                ? handleClose(field.name, option)
-                                : onChange(field.name, option)
-                            }
+                            onChange={() => onChangeOne(option)}
                             checked={values?.includes(option)}
                             name={field.name}
                             value={option}
@@ -117,11 +118,7 @@ export const MultiSelectGroup = ({
                           <label className={classes.menu.listItem} htmlFor={option}>
                             <Checkbox
                               id={option.name}
-                              onChange={() =>
-                                values?.includes(option)
-                                  ? handleClose(field.name, option)
-                                  : onChange(field.name, option)
-                              }
+                              onChange={() => onChangeOne(option)}
                               checked={values?.includes(option)}
                               name={field.name}
                               value={option}

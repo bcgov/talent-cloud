@@ -248,13 +248,13 @@ export class PersonnelService {
     );
 
     if (query.region?.length) {
-      qb.andWhere('personnel.homeLocation.region IN (:...regions)', {
+      qb.andWhere('location.region IN (:...regions)', {
         regions: query.region,
       });
     }
     if (query.location?.length) {
       qb.andWhere(
-        'personnel.homeLocation.locationName IN (:...homeLocations)',
+        'location.locationName IN (:...homeLocations)',
         {
           homeLocations: query.location,
         },
