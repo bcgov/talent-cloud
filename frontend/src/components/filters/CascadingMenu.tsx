@@ -15,10 +15,7 @@ export const CascadingMenu = ({
   nestedField,
   nestedValue,
 }: {
-  onChange: (
-    value: { name: string; value: string },
-    nestedValue: { name: string; value: string },
-  ) => any;
+  onChange: (name: string, value: string) => void;
   handleClose: (name: string, nestedName: string) => any;
   label: string;
   field: any;
@@ -69,20 +66,18 @@ export const CascadingMenu = ({
         </MenuHandler>
         <MenuList>
           <div className="w-full">
-            {field.options?.map((option: any) => (
-              <NestedMenu
-                field={field}
-                handleChange={(nestedName, nestedValue) =>
-                  onChange(
-                    { name: field.name, value: option },
-                    { name: nestedName, value: nestedValue },
-                  )
-                }
-                nestedField={nestedField}
-                option={option}
-                key={option}
-              />
-            ))}
+            {field.options?.map(
+              (option: { label: string; value: string }, index: number) => (
+                <NestedMenu
+                  field={field}
+                  handleChange={onChange}
+                  nestedField={nestedField}
+                  option={option}
+                  key={option.value}
+                  index={index}
+                />
+              ),
+            )}
           </div>
         </MenuList>
       </Menu>

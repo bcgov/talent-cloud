@@ -19,6 +19,8 @@ import { useRole } from './useRole';
 import { Route } from '@/providers';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
+import type { BcwsRole, Section } from '@/common/enums/sections.enum';
+import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const useGetFilters = () => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -92,7 +94,8 @@ export const useGetFilters = () => {
         groupedOptions:
           route === Route.BCWS
             ? fireCentre.map((itm: FireCentre) => ({
-                label: itm,
+                label: FireCentreName[itm],
+                value: itm,
                 options: locations
                   .filter((loc: Location) => {
                     return loc.fireCentre === itm;
@@ -101,6 +104,7 @@ export const useGetFilters = () => {
               }))
             : regions.map((itm: Region) => ({
                 label: itm,
+                value: itm,
                 options: locations
                   .filter((loc: Location) => {
                     return loc.region === itm;
@@ -133,15 +137,22 @@ export const useGetFilters = () => {
       },
       section: {
         name: DashboardFilterNames.SECTION,
-        options: Object.keys(sections),
+        options: Object.keys(sections).map((itm) => ({
+          label: SectionName[itm as Section],
+          value: itm,
+        })),
         label: 'Select section and role',
       },
       role: {
         name: DashboardFilterNames.ROLE,
         label: '',
-        options: sections,
+        options: Object.keys(sections).map((itm) =>
+          Object.values(sections[itm as keyof typeof sections]).map((role) => ({
+            label: BcwsRoleName[role as BcwsRole],
+            value: role,
+          })),
+        ),
       },
-
       availabilityType: {
         placeholder: 'Select availability type',
         name: DashboardFilterNames.AVAILABILITY_TYPE,
