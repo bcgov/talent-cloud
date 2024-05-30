@@ -122,7 +122,7 @@ export class CreatePersonnelEmcrDTO {
 
   @ApiProperty()
   @IsOptional()
-  icsTraining?: boolean;
+  icsTraining?: boolean | string;
 
   @ApiProperty({
     description: 'First Aid Level',

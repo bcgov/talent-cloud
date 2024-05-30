@@ -91,7 +91,7 @@ export class EmcrPersonnelEntity {
   })
   experiences: EmcrExperienceEntity[];
 
-  @ManyToMany(() => EmcrTrainingEntity,t=> t.id,  {cascade: true})
+  @ManyToMany(() => EmcrTrainingEntity,t=> t.id,  { cascade: true })
   @JoinTable({
     name: 'emcr_personnel_training',
     joinColumn: { name: 'personnel_id' },

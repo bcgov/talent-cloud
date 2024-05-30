@@ -79,12 +79,12 @@ export class PersonnelController {
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    if (personnel.icsTraining === true) {
+    if (personnel.icsTraining === "true" || personnel.icsTraining === true) {
       personnel.trainings = await this.personnelService.getTrainingsByNames([
         ICS_TRAINING_NAME,
       ]);
-      delete personnel.icsTraining
-    } else if (personnel.icsTraining === false) {
+      delete personnel.icsTraining;
+    } else if (personnel.icsTraining === "false" || personnel.icsTraining === false) {
       personnel.trainings = [];
     }
     
