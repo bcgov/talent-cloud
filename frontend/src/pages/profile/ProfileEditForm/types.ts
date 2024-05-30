@@ -7,6 +7,7 @@ export type FieldType = {
   autoComplete?: string;
   multiple?: boolean;
   break?: boolean;
+  placeholder?: string;
   handleChange?: boolean;
   options?: { label: string; value: number | string | string[] }[];
   onChange?: (e: React.ChangeEvent<any>) => void;
