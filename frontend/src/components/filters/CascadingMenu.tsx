@@ -5,6 +5,7 @@ import { classes } from './classes';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 import { DashboardFilterNames } from '@/pages/dashboard';
+import { Route } from '@/providers';
 
 export const CascadingMenu = ({
   value,
@@ -14,6 +15,7 @@ export const CascadingMenu = ({
   field,
   nestedField,
   nestedValue,
+  route,
 }: {
   onChange: (name: string, value: string) => void;
   handleClose: (name: string, nestedName: string) => any;
@@ -22,6 +24,7 @@ export const CascadingMenu = ({
   nestedField: any;
   value?: string;
   nestedValue?: string | BcwsRole;
+  route?: Route;
 }) => {
   const displayValue = (value: string) => {
     if (value === FunctionName.EMERGENCY_SUPPORT_SERVICES) {
@@ -71,10 +74,15 @@ export const CascadingMenu = ({
                 <NestedMenu
                   field={field}
                   handleChange={onChange}
-                  nestedField={nestedField}
+                  nestedField={{
+                    ...nestedField,
+                    options:
+                      route === Route.BCWS
+                        ? nestedField.options[index]
+                        : nestedField.options,
+                  }}
                   option={option}
                   key={option.value}
-                  index={index}
                 />
               ),
             )}

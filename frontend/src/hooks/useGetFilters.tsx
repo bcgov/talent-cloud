@@ -115,7 +115,11 @@ export const useGetFilters = () => {
       function: {
         placeholder: 'Select function and experience levels',
         name: DashboardFilterNames.FUNCTION,
-        options: functions.map((itm: FunctionType) => itm.name),
+        label: 'Function & Experience Level',
+        options: functions.map((itm: FunctionType) => ({
+          label: itm.name,
+          value: itm.name,
+        })),
       },
       experience: {
         name: DashboardFilterNames.EXPERIENCE,

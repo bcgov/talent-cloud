@@ -100,6 +100,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
             clearSearchParams(nestedName);
           }}
           value={route === Route.BCWS ? filterValues.section : filterValues.function}
+          route={route}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-3">
