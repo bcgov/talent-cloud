@@ -43,29 +43,31 @@ const WarningBanner = ({
   onClick?: () => void;
   buttonText?: string;
 }) => (
-  <div className="flex flex-col lg:flex-row py-2 px-4 rounded-sm bg-warningBannerLight items-center space-x-2  text-sm xl:w-4/5 space-y-8 lg:space-y-0">
-    <span className="flex flex-col md:flex-row items-start">
-      <ExclamationTriangleIcon className="text-warning  h-10  " />
-      {content}
-    </span>
-    {onClick ? (
-      <button
-        aria-label="banner button"
-        className="bg-warningBannerDark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm"
-        onClick={onClick}
-      >
-        {buttonText}
-      </button>
-    ) : (
-      <a
-        className="font-bold inline"
-        href={link?.url}
-        target={'_blank'}
-        rel={'noopener noreferrer'}
-      >
-        {link?.name}
-      </a>
-    )}
+  <div className="p-4 rounded-sm bg-warningBannerLight text-sm  flex flex-row justify-start space-x-4  w-auto">
+    <div className="">
+      <ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />
+    </div>
+    <div className="flex flex-col justify-baseline">{content}</div>
+    <div className="flex flex-col justify-start mx-4">
+      {onClick ? (
+        <button
+          aria-label="banner button"
+          className="bg-warningBannerDark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm h-12"
+          onClick={onClick}
+        >
+          {buttonText}
+        </button>
+      ) : (
+        <a
+          className="font-bold inline"
+          href={link?.url}
+          target={'_blank'}
+          rel={'noopener noreferrer'}
+        >
+          {link?.name}
+        </a>
+      )}
+    </div>
   </div>
 );
 

@@ -21,7 +21,7 @@ const ProfileNotes = ({
 
   return (
     <section className="bg-white pb-32 ">
-      <div className="pt-6 lg:px-10">
+      <div className="pt-6">
         <Accordion
           className="border-2 border-slate-950"
           placeholder={'Notes'}

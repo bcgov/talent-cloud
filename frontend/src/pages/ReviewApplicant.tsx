@@ -12,7 +12,7 @@ export const ReviewApplicant = ({
     <div className="text-center flex flex-col items-center justify-center gap-y-8 p-12">
       <div>
         Are you sure you have reviewed this applicant and want to change their member
-        status to active?{' '}
+        status to <span className="font-bold">Active</span>?{' '}
       </div>
       <div>Once confirmed you cannot undo this action.</div>
 

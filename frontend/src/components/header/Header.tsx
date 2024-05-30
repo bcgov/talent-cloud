@@ -27,8 +27,8 @@ export const Header = ({
   };
   const { keycloak } = useKeycloak();
   return (
-    <header className="relative w-full border-b z-40 py-0">
-      <div className="hidden w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
+    <header className="relative w-full border-b z-40">
+      <div className="hidden w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm md:px-12 lg:px-24  2xl:px-64">
         <div className="lg:flex">
           <a
             href={headerLink}
