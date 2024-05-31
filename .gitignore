@@ -41,3 +41,4 @@ chefs-response.json
 *.sql
 ministries.json
 frontend/cypress/screenshots/*
+notes.md
