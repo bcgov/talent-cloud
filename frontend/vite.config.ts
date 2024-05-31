@@ -73,7 +73,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Split external library from transpiled code.
-          '@headlessui/react': ['@headlessui/react'],
 
           '@material-tailwind/react': ['@material-tailwind/react'],
           '@react-keycloak/web': ['@react-keycloak/web'],
