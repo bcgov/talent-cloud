@@ -152,7 +152,7 @@ const Scheduler = ({
 
   return (
     <section className="bg-white">
-      <div className="pt-6 px-10">
+      <div className="pt-6">
         <Accordion
           className="border-2 border-slate-950"
           placeholder={'Schedule'}

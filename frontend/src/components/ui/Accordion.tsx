@@ -23,7 +23,7 @@ export const Accordion = ({
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   return (
     <section className="bg-white">
-      <div className="pt-6 px-10">
+      <div className="pt-6">
         <MuiAccordion
           className="border-2 border-slate-950"
           placeholder={'Schedule'}
@@ -39,9 +39,9 @@ export const Accordion = ({
           <AccordionHeader
             placeholder={'Schedule'}
             onClick={() => handleOpen(1)}
-            className="bg-grayBackground px-8"
+            className="bg-grayBackground"
           >
-            <div className=" w-full justify-between items-center flex lg:flex-row">
+            <div className=" w-full justify-between items-center flex lg:flex-row px-8">
               <span>{title}</span>
               <button
                 aria-label="edit functions"

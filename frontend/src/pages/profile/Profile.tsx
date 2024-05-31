@@ -183,7 +183,7 @@ const Profile = () => {
     >
       <Breadcrumbs
         placeholder={'Breadcrumbs'}
-        className={`px-12 max-w-full ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'}`}
+        className={`md:px-12 xl:px-24 2xl:px-64 max-w-full ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'}`}
       >
         <Link to={Routes.Dashboard} className="text-linkBlue">
           <div className="flex flex-row items-center">
@@ -202,33 +202,38 @@ const Profile = () => {
 
       {personnel && (
         <div>
-          <div className="pt-12 max-w-[1388px] mx-auto">
+          <div className="pt-12 md:px-12 xl:px-24 2xl:px-64 mx-auto">
             <ProfileHeader personnel={personnel} route={route} role={role} />
           </div>
           <div className="bg-white w-full">
-            <div className="max-w-[1388px] mx-auto">
-              {personnel.status === Status.PENDING && (
-                <NewApplicantBanner
-                  reviewItems={reviewItems}
-                  route={route}
-                  handleOpenReviewApplicant={handleOpenReviewApplicant}
-                />
-              )}
-              {role === Role.COORDINATOR && personnel.status !== Status.PENDING && (
-                <div className=" pb-12 bg-white w-full pt-4  ">
-                  <div className="flex flex-row justify-start md:items-center md:mr-12 lg:ml-48">
-                    <Toggle
-                      value={personnel.status === Status.ACTIVE}
-                      handleToggle={(checked: boolean) =>
-                        updatePersonnel({
-                          status: checked ? Status.ACTIVE : Status.INACTIVE,
-                        })
-                      }
-                      label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
-                    />
-                  </div>
+            <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
+              <div className="xl:mr-12">
+                {personnel.status === Status.PENDING && (
+                  <NewApplicantBanner
+                    reviewItems={reviewItems}
+                    route={route}
+                    handleOpenReviewApplicant={handleOpenReviewApplicant}
+                  />
+                )}
+              </div>
+
+              <div className=" pb-12 bg-white w-full pt-4  ">
+                <div className="flex flex-row justify-start md:items-center md:mr-12 lg:ml-48">
+                  {role === Role.COORDINATOR &&
+                    personnel.status !== Status.PENDING && (
+                      <Toggle
+                        value={personnel.status === Status.ACTIVE}
+                        handleToggle={(checked: boolean) =>
+                          updatePersonnel({
+                            status: checked ? Status.ACTIVE : Status.INACTIVE,
+                          })
+                        }
+                        label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
+                      />
+                    )}
                 </div>
-              )}
+              </div>
+
               <ProfileDetails
                 openEditProfilePopUp={handleOpenEditProfilePopUp}
                 intakeRequirements={intakeRequirements}
