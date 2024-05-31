@@ -141,7 +141,7 @@ export interface Personnel {
   willingToTravel: boolean;
   remoteOnly: boolean;
   unionMembership: string;
-  ministry: Ministry;
+  ministry?: Ministry;
   dateApplied?: Date | string;
   dateApproved?: Date | string;
   primaryPhone: string;

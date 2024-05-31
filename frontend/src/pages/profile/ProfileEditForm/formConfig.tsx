@@ -1,3 +1,4 @@
+import type { Ministry } from '@/common';
 import { Status } from '@/common';
 import type { Personnel, Location, DivisionType } from '@/pages/dashboard';
 import {
@@ -51,10 +52,22 @@ export const formConfig = (
     label: itm.locationName,
     value: itm.locationName,
   }));
-  fields.division.division.options = divisions.map((itm: DivisionType) => ({
-    label: itm.divisionName,
-    value: itm.divisionName,
-  }));
+
+  const ministries = Array.from(new Set(divisions.map((itm) => itm.ministry)));
+
+  (fields.division.divisionName.groupedOptions = ministries.map((itm: Ministry) => ({
+    groupOption: itm as string,
+    options: divisions
+      .filter((div: DivisionType) => div.ministry === itm)
+      .map((div: DivisionType) => ({
+        label: div.divisionName,
+        value: div.divisionName,
+      })),
+  }))),
+    (fields.division.ministry.options = ministries.map((itm: Ministry) => ({
+      label: itm,
+      value: itm,
+    })));
 
   const bcwsSections = [
     {
@@ -104,7 +117,7 @@ export const formConfig = (
         fields.approvedBySupervisor,
         fields.paylistId,
         fields.unionMembership,
-        fields.division.division,
+        fields.division.divisionName,
         fields.division.ministry,
         fields.liaisonFirstName,
         fields.liaisonLastName,

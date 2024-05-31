@@ -79,16 +79,16 @@ export const ProfileEditForm = ({
             region: location?.region,
           },
         });
-    } else if (field.name === 'division.division') {
+    } else if (field.name === 'division.divisionName') {
       const division = divisions.find((itm) => itm.divisionName === e.target.value);
       const fieldName = field.name.split('.')[0];
-      console.log(fieldName, division);
+
       division &&
         setValues({
           ...values,
           [fieldName]: {
             id: division.id,
-            division: division.divisionName,
+            divisionName: division.divisionName,
             ministry: Ministry[division?.ministry],
           },
         });

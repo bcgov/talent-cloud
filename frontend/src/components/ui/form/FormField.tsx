@@ -3,6 +3,7 @@ import type { Personnel } from '@/pages/dashboard';
 import type { FieldType } from '@/pages/profile';
 import { useFormikContext } from 'formik';
 import type { ChangeEvent } from 'react';
+import { GroupedSelect } from '../inputs/GroupedSelect';
 
 export const FormField = ({
   field,
@@ -50,7 +51,14 @@ export const FormField = ({
           label={field.label}
         />
       ) : (
-        <Select {...fieldProps} {...field} onChange={handleChange} />
+        <>
+          {field.type === 'select' && (
+            <Select {...fieldProps} {...field} onChange={handleChange} />
+          )}
+          {field.type === 'groupedSelect' && (
+            <GroupedSelect {...fieldProps} {...field} onChange={handleChange} />
+          )}
+        </>
       )}
     </>
   );

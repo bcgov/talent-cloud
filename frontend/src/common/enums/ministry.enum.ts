@@ -1,5 +1,6 @@
 export enum Ministry {
   AGRI = 'AGRI',
+  AF = 'AF',
   AG = 'AG',
   MCF = 'MCF',
   CITZ = 'CITZ',
@@ -19,7 +20,7 @@ export enum Ministry {
   PSFS = 'PSFS',
   PSSG = 'PSSG',
   SDPR = 'SDPR',
-  TAC = 'TAC',
+  TACS = 'TACS',
   MOTI = 'MOTI',
   WLRS = 'WLRS',
 }
