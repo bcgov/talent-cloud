@@ -69,28 +69,5 @@ export default defineConfig({
     minify: 'esbuild',
     // Rollup Options
     // https://vitejs.dev/config/build-options.html#build-rollupoptions
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Split external library from transpiled code.
-          '@headlessui/react': ['@headlessui/react'],
-
-          '@material-tailwind/react': ['@material-tailwind/react'],
-          '@react-keycloak/web': ['@react-keycloak/web'],
-
-          autoprefixer: ['autoprefixer'],
-          'date-fns': ['date-fns'],
-          dayjs: ['dayjs'],
-          formik: ['formik'],
-
-          'react-day-picker': ['react-day-picker'],
-
-          uuid: ['uuid'],
-          yup: ['yup'],
-          react: ['react', 'react-dom', 'react-router-dom', 'react-router'],
-          axios: ['axios'],
-        },
-      },
-    },
   },
 });
