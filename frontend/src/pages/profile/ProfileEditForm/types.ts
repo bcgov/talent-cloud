@@ -10,6 +10,10 @@ export type FieldType = {
   placeholder?: string;
   handleChange?: boolean;
   options?: { label: string; value: number | string | string[] }[];
+  groupedOptions?: {
+    groupOption: string;
+    options: { label: string; value: string }[];
+  }[];
   onChange?: (e: React.ChangeEvent<any>) => void;
 };
 

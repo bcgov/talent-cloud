@@ -15,11 +15,21 @@ export const Select = ({ ...props }: FieldInputProps<string> & FieldType) => {
         className={props.disabled ? classes.menu.disabled : classes.menu.container}
       >
         {!props.required && <option value={undefined}></option>}
-        {props.options?.map((itm, index) => (
-          <option key={itm.value + index.toString()} value={itm.value}>
-            {itm.label}
-          </option>
-        ))}
+        {props.type === 'groupedSelect'
+          ? props.groupedOptions?.map((groupItem, index) => (
+              <optgroup key={groupItem.groupOption} label={groupItem.groupOption}>
+                {groupItem.options.map((itm) => (
+                  <option key={itm.value + index.toString()} value={itm.value}>
+                    {itm.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))
+          : props.options?.map((itm, index) => (
+              <option key={itm.value + index.toString()} value={itm.value}>
+                {itm.label}
+              </option>
+            ))}
       </select>
       <ErrorMessage name={props.name}>
         {(msg) => <div className="text-errorRed font-normal">{msg}</div>}

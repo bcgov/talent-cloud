@@ -202,6 +202,30 @@ export const homeLocationField = {
   },
 };
 
+const divisionField = {
+  divisionName: {
+    name: 'division.divisionName',
+    label: 'Division',
+    autoComplete: 'off',
+    disabled: false,
+    handleChange: true,
+    required: true,
+    type: 'groupedSelect',
+    program: Route.BCWS,
+    groupedOptions: [{ groupOption: '', options: [{ label: '', value: '' }] }],
+  },
+  ministry: {
+    name: 'division.ministry',
+    label: 'Ministry',
+    required: false,
+    break: true,
+    type: 'select',
+    autoComplete: 'off',
+    disabled: true,
+    options: [{ label: '', value: '' }],
+  },
+};
+
 export const fields = {
   icsTraining: {
     name: 'icsTraining',
@@ -472,30 +496,6 @@ export const fields = {
     options: Object.values(Ministry).map((itm) => ({ label: itm, value: itm })),
   },
 
-  division: {
-    division: {
-      name: 'division.division',
-      label: 'Division',
-      autoComplete: 'off',
-      disabled: false,
-      handleChange: true,
-      required: true,
-      type: 'select',
-      program: Route.BCWS,
-      options: [{ label: '', value: '' }],
-    },
-    ministry: {
-      name: 'division.ministry',
-      label: 'Ministry',
-      required: false,
-      break: true,
-      type: 'select',
-      autoComplete: 'off',
-      disabled: true,
-      options: Object.values(Ministry).map((itm) => ({ label: itm, value: itm })),
-    },
-  },
-
   liaisonFirstName: {
     name: 'liaisonFirstName',
     label: 'Liaison First Name',
@@ -535,4 +535,5 @@ export const fields = {
   },
   homeLocation: homeLocationField,
   workLocation: workLocationField,
+  division: divisionField,
 };
