@@ -72,7 +72,7 @@ export const emcrData = (personnel?: Personnel) => {
       {
         title: 'Supervisor Approval',
         content:
-          personnel?.approvedBySupervisor === true ? 'Received' : 'Not Recieved',
+          personnel?.approvedBySupervisor === true ? 'Received' : 'Not Received',
       },
     ],
     skills: [],
