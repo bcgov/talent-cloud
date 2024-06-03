@@ -38,7 +38,7 @@ export const FormSection = ({
                 }
               />
             </div>
-            {field.break && <div className="col-span-1"></div>}
+            {field.break && <div className="hidden lg:flex lg:col-span-1"></div>}
           </>
         ))}
       </div>

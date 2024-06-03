@@ -28,18 +28,27 @@ export const ProfileEditForm = ({
   ) => {
     // trim all the formatted characters out of the phone numbers
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
-    values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
 
+    if (values?.secondaryPhone) {
+      values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+    }
     if (values?.emergencyContactPhoneNumber) {
-      values?.emergencyContactPhoneNumber.replace(/[(]|-|[)]|\s/gi, '');
+      values.emergencyContactPhoneNumber =
+        values?.emergencyContactPhoneNumber.replace(/[(]|-|[)]|\s/gi, '');
     }
     if (values?.liaisonPhoneNumber) {
-      values?.liaisonPhoneNumber?.replace(/[(]|-|[)]|\s/gi, '');
+      values.liaisonPhoneNumber = values?.liaisonPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      );
     }
 
     if (values.supervisorPhone) {
-      values?.supervisorPhone?.replace(/[(]|-|[)]|\s/gi, '');
+      values.supervisorPhone = values?.supervisorPhone?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      );
     }
 
     delete values.dateApplied;
@@ -49,6 +58,9 @@ export const ProfileEditForm = ({
     Object.keys(personnel).forEach((key) => {
       if (values[key as keyof Personnel] === personnel[key as keyof Personnel]) {
         delete values[key as keyof Personnel];
+      }
+      if (values[key as keyof Personnel] === '') {
+        values[key as keyof Personnel] = null;
       }
     });
 

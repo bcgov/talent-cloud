@@ -13,7 +13,7 @@ import { Route } from '@/providers';
 import { DriverLicense, DriverLicenseName } from '@/common/enums';
 
 const phoneNumber = (value: any) => {
-  if (value === '' || !value) {
+  if (value === '' || !value || value === null) {
     return true;
   } else return value?.toString().replace(/[^\d]/g, '').length === 10;
 };
@@ -39,6 +39,8 @@ export const editProfileValidationSchema = Yup.object().shape({
       phoneNumber,
     ),
   secondaryPhone: Yup.string()
+    .nullable()
+    .optional()
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
@@ -59,9 +61,10 @@ export const editProfileValidationSchema = Yup.object().shape({
     .min(2, 'Max length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
-  supervisorEmail: Yup.string().optional().email('Invalid email format.'),
+  supervisorEmail: Yup.string().optional().nullable().email('Invalid email format.'),
   supervisorPhone: Yup.string()
     .optional()
+    .nullable()
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
@@ -70,7 +73,7 @@ export const editProfileValidationSchema = Yup.object().shape({
     .optional(),
   approvedBySupervisor: Yup.boolean().required('This field is required.'),
   ministry: Yup.string().required('This field is required.'),
-  division: Yup.string().optional(),
+  division: Yup.string().optional().nullable(),
   unionMembership: Yup.string().required('This field is required.'),
   driversLicense: Yup.array().optional(),
   // conditional for pending status for both
@@ -87,18 +90,20 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
   paylistId: Yup.string().required('This field is required.'),
   liaisonFirstName: Yup.string().optional(),
   liaisonLastName: Yup.string().optional(),
-  liaisonNumber: Yup.string()
-    .optional()
+  liaisonPhoneNumber: Yup.string()
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
       phoneNumber,
     )
-    .optional(),
+    .optional()
+    .nullable(),
   liaisonEmail: Yup.string().optional(),
   emergencyContactFirstName: Yup.string().optional(),
   emergencyContactLastName: Yup.string().optional(),
-  emergencyContactNumber: Yup.string()
+  emergencyContactPhoneNumber: Yup.string()
+    .optional()
+    .nullable()
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
@@ -246,6 +251,7 @@ export const fields = {
     required: true,
     type: 'select',
     autoComplete: 'off',
+
     disabled: false,
     options: [
       { label: 'Not Yet Received', value: 'false' },
