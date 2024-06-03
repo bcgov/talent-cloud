@@ -69,6 +69,14 @@ export class PersonnelEntity extends BaseEntity {
   supervisorEmail?: string;
 
   @Column({
+    name: 'supervisor_phone',
+    type: 'varchar',
+    length: 10,
+    nullable: true,
+  })
+  supervisorPhone?: string;
+
+  @Column({
     name: 'union_membership',
     type: 'enum',
     enum: UnionMembership,
@@ -147,7 +155,7 @@ export class PersonnelEntity extends BaseEntity {
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail,
-
+      supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
 
