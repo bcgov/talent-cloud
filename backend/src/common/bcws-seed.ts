@@ -21,6 +21,7 @@ import {
 import { CreatePersonnelDTO } from '../personnel';
 import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
+import { divisionsAndMinistries } from './const';
 
 export const handler = (
   locations: LocationEntity[],
@@ -41,7 +42,7 @@ export const handler = (
       ])
     ];
   const dateApplied = faker.date.past();
-
+const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
   const personnelRoles = createRoles(roles);
   const firstChoiceSection = roles.find(r => r.id === personnelRoles[0].roleId)?.section;
   const secondRoleSection = roles.find(r => r.id === personnelRoles[1].roleId)?.section;
@@ -94,8 +95,8 @@ export const handler = (
     homeLocation: faker.helpers.arrayElement(locations),
     workLocation: faker.helpers.arrayElement(locations),
     firstName: faker.person.firstName(),
-    division: faker.company.name(),
-    ministry: faker.helpers.arrayElement(Object.values(Ministry)),
+    division: divisionAndMinistry.division,
+    ministry: Ministry[divisionAndMinistry.ministry],
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
     primaryPhone: faker.string.numeric('##########'),

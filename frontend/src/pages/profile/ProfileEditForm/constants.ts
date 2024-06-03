@@ -35,7 +35,7 @@ export const editProfileValidationSchema = Yup.object().shape({
     .required('This field is required.')
     .test(
       'phone number',
-      'Invalid phone number format. Please enter ten digits.',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     ),
   secondaryPhone: Yup.string()
@@ -43,13 +43,13 @@ export const editProfileValidationSchema = Yup.object().shape({
     .optional()
     .test(
       'phone number',
-      'Invalid phone number format. Please enter ten digits.',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     )
     .optional(),
   workPhone: Yup.string().test(
     'phone number',
-    'Invalid phone number format. Please enter ten digits.',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
     phoneNumber,
   ),
 
@@ -93,7 +93,7 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
   liaisonPhoneNumber: Yup.string()
     .test(
       'phone number',
-      'Invalid phone number format. Please enter ten digits.',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     )
     .optional()
@@ -106,7 +106,7 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
     .nullable()
     .test(
       'phone number',
-      'Invalid phone number format. Please enter ten digits.',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     )
     .optional(),

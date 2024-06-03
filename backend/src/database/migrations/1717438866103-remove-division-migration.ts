@@ -36,10 +36,13 @@ export class RemoveDivisionMigration1717438866103 implements MigrationInterface 
 `);
         await queryRunner.query(`alter table emcr_personnel drop column ministry;`)
         await queryRunner.query(`alter table bcws_personnel drop column division_id;`)
-
+        await queryRunner.query(`ALTER TABLE "personnel" ADD "supervisor_phone" character varying(10)`);
+        await queryRunner.query(`ALTER TABLE "personnel" ALTER COLUMN "ministry" SET NOT NULL`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+      await queryRunner.query(`ALTER TABLE "personnel" ALTER COLUMN "ministry" DROP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "personnel" DROP COLUMN "supervisor_phone"`);
         await queryRunner.query(`ALTER TABLE "bcws_personnel" ADD "division_id" int`);
 
         await queryRunner.query(`ALTER TABLE "emcr_personnel" ADD "ministry" "public"."ministry" NOT NULL`);
