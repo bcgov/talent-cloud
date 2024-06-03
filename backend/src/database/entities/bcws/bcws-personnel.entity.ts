@@ -4,7 +4,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryColumn,
@@ -13,13 +12,13 @@ import { BcwsPersonnelCertificationEntity } from './bcws-personnel-certification
 import { LanguageEntity } from './bcws-personnel-language.entity';
 import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
-import { DivisionEntity } from '../division.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
+import { PersonnelRO } from '../../../personnel';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {
@@ -47,10 +46,6 @@ export class BcwsPersonnelEntity {
 
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
-
-  @ManyToOne(() => DivisionEntity, (d) => d.id)
-  @JoinColumn({ name: 'division_id', referencedColumnName: 'id' })
-  division: DivisionEntity;
 
   //TODO confirm length of paylist_id
   @Column({ name: 'paylist_id', type: 'varchar', length: 50 })
@@ -153,7 +148,7 @@ export class BcwsPersonnelEntity {
   toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
     const response = new BcwsRO();
 
-    const personnelData = this.personnel.toResponseObject(role, lastDeployed);
+    const personnelData:  Record<string, PersonnelRO> = this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
       employeeId: this.employeeId,
@@ -174,7 +169,6 @@ export class BcwsPersonnelEntity {
       willingnessStatement: this.willingnessStatement,
       parQ: this.parQ,
       respectfulWorkplacePolicy: this.respectfulWorkplacePolicy,
-      division: this.division?.toResponseObject(),
       orientation: this.orientation,
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,

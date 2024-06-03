@@ -110,6 +110,7 @@ export class FormService {
         experienceType: Experience.INTERESTED,
       }));
     const createPersonnelDTO: CreatePersonnelDTO = {
+      ministry: personalDetails.ministry,
       firstName: personalDetails.firstName,
       lastName: personalDetails.lastName,
       primaryPhone: personalDetails.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),

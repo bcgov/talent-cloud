@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEnum,
   IsOptional,
   IsString,
   Length,
@@ -9,7 +8,6 @@ import {
 import { EmcrPersonnelExperienceDTO } from './experiences.dto';
 import { Status } from '../../../common/enums/status.enum';
 import { EmcrTrainingEntity } from '../../../database/entities/emcr/emcr-training.entity';
-import {  Ministry } from '../../../common/enums';
 
 
 export class CreatePersonnelEmcrDTO {
@@ -69,14 +67,6 @@ export class CreatePersonnelEmcrDTO {
   })
   @IsOptional()
   experiences?: EmcrPersonnelExperienceDTO[];
-
-  @ApiProperty({
-    description: 'Ministry personnel works in',
-    enum: Ministry,
-    example: Ministry.EMCR,
-  })
-  @IsEnum(Ministry)
-  ministry: Ministry;
 
   @ApiProperty({
     description: 'First Nation Experience Living',

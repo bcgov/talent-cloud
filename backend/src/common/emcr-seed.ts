@@ -50,7 +50,6 @@ const emcrData: CreatePersonnelEmcrDTO = {
   preocExperience: faker.datatype.boolean({ probability: 0.4 }),
   emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
   approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
-  ministry: faker.helpers.arrayElement(Object.values(Ministry)),
   trainings: seededTrainings,
   dateApproved:
     status !== Status.PENDING
@@ -67,6 +66,8 @@ const emcrData: CreatePersonnelEmcrDTO = {
 };
 
 const personnelData: CreatePersonnelDTO = {
+  division: faker.company.name(),
+  ministry: faker.helpers.arrayElement(Object.values(Ministry)),
   homeLocation: homeLocation,
   workLocation: workLocation, 
   firstName: faker.person.firstName(),

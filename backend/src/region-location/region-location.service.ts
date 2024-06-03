@@ -3,16 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LocationRO } from './region-location.ro';
 import { LocationEntity } from '../database/entities/location.entity';
-import { DivisionEntity } from '../database/entities/division.entity';
-import { DivisionRO } from '../personnel/ro/bcws/division.ro';
+
 
 @Injectable()
 export class RegionsAndLocationsService {
   constructor(
     @InjectRepository(LocationEntity)
     private locationRepository: Repository<LocationEntity>,
-    @InjectRepository(DivisionEntity)
-    private divisionRepository: Repository<DivisionEntity>,
+    
   ) {}
 
   /**
@@ -38,12 +36,5 @@ export class RegionsAndLocationsService {
     return location.toResponseObject();
   }
 
-  /**
-   * Get list of divisions 
-   * @returns division and ministry
-   */
-  async getDivisions(): Promise<DivisionRO[]> {
-    const divisions = await this.divisionRepository.find();
-    return divisions.map(itm => itm.toResponseObject());
-  }
+  
 }

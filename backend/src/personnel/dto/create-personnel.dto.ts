@@ -15,7 +15,7 @@ import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { Form } from '../../database/entities/form.entity';
-import { FireCentre, Region } from '../../common/enums';
+import { FireCentre, Ministry, Region } from '../../common/enums';
 import {  CreatePersonnelBcwsDTO } from './bcws';
 
 export class LocationDTO {
@@ -132,6 +132,17 @@ export class CreatePersonnelDTO {
   @Length(2, 50)
   supervisorLastName: string;
 
+
+  @ApiProperty({
+    description: 'Supervisor phone number',
+    example: '2503334444',
+  })
+  @IsAlphanumeric()
+  @Length(10, 10)
+  @IsOptional()
+  @ValidateIf((o) => o.supervisorPhone !== '')
+  supervisorPhone?: string;
+
   @ApiProperty({
     description: "Name of personnel's supervisor",
     example: 'River Cartwright',
@@ -197,6 +208,19 @@ export class CreatePersonnelDTO {
   @ApiProperty()
   @IsOptional()
   intakeForm?: Form;
+
+  @ApiProperty({
+    enum: Ministry,
+    example: Ministry.AGRI,
+  })
+  ministry: Ministry;
+
+
+  @ApiProperty({
+    description: 'Division',
+    required: false,
+  })
+  division?: string;
 
   @IsOptional()
   emcr?: CreatePersonnelEmcrDTO;

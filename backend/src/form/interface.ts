@@ -1,3 +1,5 @@
+import { Ministry } from "../common/enums";
+
 export interface FormSubmissionEventPayload {
   formId: string;
   formVersion: string;
@@ -38,7 +40,7 @@ export interface Experience {
 }
 export interface WorkDetails {
   jobTitle: string;
-  ministry: string;
+  ministry: Ministry;
   workEmail: string;
   workPhone: string;
   workLocation: string;
@@ -56,6 +58,7 @@ export interface PersonalDetails {
   homeLocation: string;
   primaryPhone: string;
   secondaryPhone?: string;
+  ministry: Ministry;
 }
 export interface DeploymentPreferences {
   remoteOnly: boolean;

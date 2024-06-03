@@ -60,9 +60,17 @@ export const editProfileValidationSchema = Yup.object().shape({
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
   supervisorEmail: Yup.string().optional().email('Invalid email format.'),
-
+  supervisorPhone: Yup.string()
+    .optional()
+    .test(
+      'phone number',
+      'Invalid phone number format. Please enter ten digits.',
+      phoneNumber,
+    )
+    .optional(),
   approvedBySupervisor: Yup.boolean().required('This field is required.'),
-
+  ministry: Yup.string().required('This field is required.'),
+  division: Yup.string().optional(),
   unionMembership: Yup.string().required('This field is required.'),
   driversLicense: Yup.array().optional(),
   // conditional for pending status for both
@@ -80,6 +88,7 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
   liaisonFirstName: Yup.string().optional(),
   liaisonLastName: Yup.string().optional(),
   liaisonNumber: Yup.string()
+    .optional()
     .test(
       'phone number',
       'Invalid phone number format. Please enter ten digits.',
@@ -87,10 +96,6 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
     )
     .optional(),
   liaisonEmail: Yup.string().optional(),
-  division: Yup.object().shape({
-    division: Yup.string().optional(),
-    ministry: Yup.string().optional(),
-  }),
   emergencyContactFirstName: Yup.string().optional(),
   emergencyContactLastName: Yup.string().optional(),
   emergencyContactNumber: Yup.string()
@@ -112,7 +117,6 @@ export const bcwsPendingValidationSchema = Yup.object().shape({
 
 export const emcrValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
-  ministry: Yup.string().required('This field is required.'),
 });
 
 export type SectionType = {
@@ -136,8 +140,8 @@ export const workLocationField = {
     label: 'Work Fire Centre',
     type: 'select',
     autoComplete: 'off',
-    break: true,
     disabled: true,
+    break: true,
     required: false,
     program: Route.BCWS,
     options: Object.keys(FireCentre).map((itm) => ({
@@ -189,7 +193,7 @@ export const homeLocationField = {
   region: {
     name: 'homeLocation.region',
     label: 'Home Region',
-    required: true,
+    required: false,
     type: 'select',
     autoComplete: 'off',
     break: true,
@@ -202,31 +206,27 @@ export const homeLocationField = {
   },
 };
 
-const divisionField = {
-  divisionName: {
-    name: 'division.divisionName',
+export const fields = {
+  division: {
+    name: 'division',
     label: 'Division',
     autoComplete: 'off',
     disabled: false,
-    handleChange: true,
-    required: true,
-    type: 'groupedSelect',
-    program: Route.BCWS,
-    groupedOptions: [{ groupOption: '', options: [{ label: '', value: '' }] }],
+    required: false,
+    type: 'text',
   },
   ministry: {
-    name: 'division.ministry',
+    name: 'ministry',
     label: 'Ministry',
-    required: false,
-    break: true,
+    required: true,
     type: 'select',
     autoComplete: 'off',
-    disabled: true,
-    options: [{ label: '', value: '' }],
+    disabled: false,
+    options: Object.values(Ministry).map((itm) => ({
+      label: itm.toString(),
+      value: itm,
+    })),
   },
-};
-
-export const fields = {
   icsTraining: {
     name: 'icsTraining',
     label: 'ICS Training',
@@ -258,6 +258,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: true,
+
     type: 'select',
     program: Route.BCWS,
     options: [
@@ -329,6 +330,7 @@ export const fields = {
     type: 'select',
     autoComplete: 'off',
     disabled: false,
+
     options: [
       { label: 'Yes', value: 'true' },
       { label: 'No', value: 'false' },
@@ -419,9 +421,9 @@ export const fields = {
     program: Route.BCWS,
   },
 
-  emergencyContactNumber: {
+  emergencyContactPhoneNumber: {
     label: 'Emergency Contact Number',
-    name: 'emergencyContactNumber',
+    name: 'emergencyContactPhoneNumber',
     autoComplete: 'off',
     disabled: false,
     required: false,
@@ -438,7 +440,14 @@ export const fields = {
     type: 'text',
     program: Route.BCWS,
   },
-
+  supervisorPhone: {
+    name: 'supervisorPhone',
+    label: 'Supervisor Phone Number',
+    required: false,
+    type: 'tel',
+    autoComplete: 'off',
+    disabled: false,
+  },
   supervisorFirstName: {
     name: 'supervisorFirstName',
     label: 'Supervisor First Name',
@@ -486,15 +495,6 @@ export const fields = {
       value: itm.toString(),
     })),
   },
-  ministry: {
-    name: 'ministry',
-    label: 'Ministry',
-    required: false,
-    type: 'select',
-    autoComplete: 'off',
-    disabled: false,
-    options: Object.values(Ministry).map((itm) => ({ label: itm, value: itm })),
-  },
 
   liaisonFirstName: {
     name: 'liaisonFirstName',
@@ -515,8 +515,8 @@ export const fields = {
     program: Route.BCWS,
   },
 
-  liaisonNumber: {
-    name: 'liaisonNumber',
+  liaisonPhoneNumber: {
+    name: 'liaisonPhoneNumber',
     label: 'Liaison Number',
     type: 'tel',
     autoComplete: 'off',
@@ -535,5 +535,4 @@ export const fields = {
   },
   homeLocation: homeLocationField,
   workLocation: workLocationField,
-  division: divisionField,
 };

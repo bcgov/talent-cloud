@@ -14,7 +14,6 @@ export const handler = async () => {
   const tools = await datasource.query('SELECT * FROM bcws_tools')
   const certs = await datasource.query('SELECT * FROM bcws_certification')
   const roles = await datasource.query('SELECT * FROM bcws_role')
-  const divisions = await datasource.query('SELECT * FROM division')
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
     
@@ -26,7 +25,7 @@ export const handler = async () => {
             roles,
             tools,
             certs,
-            divisions)
+            )
           
           const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
           

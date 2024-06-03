@@ -1,6 +1,6 @@
-import { functionSqlAfter, functionSqlPrior } from './create-availability-functions';
+
 import { datasource } from './datasource';
-import { certsSql, divisionsSql, functionSql, insertPersonnelTrainingSql, insertTrainingSql, joinedLocationsSql, rolesSql, toolsSql } from './queries';
+import { certsSql,  functionSql, insertPersonnelTrainingSql, insertTrainingSql, joinedLocationsSql, rolesSql, toolsSql } from './queries';
 
 const seed = async () => {
   
@@ -33,10 +33,7 @@ const seed = async () => {
     await datasource.query(toolsSql);
   }
 
-  const divisions = await datasource.query(`SELECT * FROM public.division`);
-  if (divisions.length === 0) {
-    await datasource.query(divisionsSql);
-  }
+  
 
   const data = await datasource.query(
     `SELECT * FROM public.bcws_certification`,

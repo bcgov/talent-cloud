@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 import { BcwsPersonnelCertificationRO } from './bcws-personnel-certitifications.ro';
 import { BcwsPersonnelLanguagesRO } from './bcws-personnel-languages.ro';
-import { BcwsLocationRO } from './bcws-personnel-location.ro';
 import { BcwsPersonnelRoleRO } from './bcws-personnel-roles.ro';
 import { BcwsPersonnelToolsRO } from './bcws-personnel-tools.ro';
 import { PersonnelRO } from '../personnel.ro';
@@ -16,28 +15,7 @@ export class BcwsRO extends PersonnelRO {
   })
   personnelId: string;
 
-  @ApiProperty({
-    description: "Personnel's work firecentre and location",
-    required: true,
-    example: {
-      id: 1,
-      locationName: 'Victoria',
-      fireCentre: 'COASTAL',
-    },
-  })
-  homeLocation: BcwsLocationRO;
-
-  @ApiProperty({
-    description: "Personnel's work firecentre and location",
-
-    example: {
-      id: 1,
-      locationName: 'Victoria',
-      fireCentre: 'COASTAL',
-    },
-  })
-  @IsOptional()
-  workLocation?: BcwsLocationRO;
+  
 
   @ApiProperty({
     description: 'Date applied',

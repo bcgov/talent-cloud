@@ -33,6 +33,7 @@ import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
 import {Programs} from '../auth/program.decorator';
+import { UpdatePersonnelDTO } from './dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -73,7 +74,7 @@ export class PersonnelController {
   @Programs([Program.EMCR])
   @Patch('/emcr/id/:id')
   async updatePersonnel(
-    @Body() personnel: UpdateEmcrPersonnelDTO,
+    @Body() personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ) {
@@ -115,7 +116,7 @@ export class PersonnelController {
   @Programs([Program.BCWS])
   @Patch('/bcws/id/:id')
   async updateBcwsPersonnel(
-    @Body() personnel: UpdateBcwsPersonnelDTO,
+    @Body() personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ) {

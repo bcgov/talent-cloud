@@ -1,12 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsOptional } from 'class-validator';
 import { AvailabilityRO } from './availability.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
-import { Status } from '../../common/enums/status.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
+import { LocationRO } from '../../region-location/region-location.ro';
 
 export class PersonnelRO {
+  @ApiProperty({
+    description: "Personnel's work region and location",
+    required: false,
+    example: {
+      id: 1,
+      locationName: 'Victoria',
+      region: 'SWE',
+      fireCentre: 'CARIBOO'
+    },
+  })
+  workLocation?: LocationRO;
+
+  @ApiProperty({
+    description: "Personnel's home region and location",
+    required: true,
+    example: {
+      id: 1,
+      locationName: 'Victoria',
+      regionName: 'SWE',
+      fireCentre: 'CARIBOO'
+    },
+  })
+  homeLocation: LocationRO;
   @ApiProperty({
     description: 'Personnel id',
     required: true,
@@ -78,6 +99,12 @@ export class PersonnelRO {
   supervisorFirstName: string;
 
   @ApiProperty({
+    description: 'Supervisor phone',
+    required: false,
+  })
+  supervisorPhone?: string;
+
+  @ApiProperty({
     description: 'Supervisor of Personnel Last Name',
     required: true,
     example: 'Andrews',
@@ -113,54 +140,19 @@ export class PersonnelRO {
   })
   availability?: AvailabilityRO[];
 
-  @ApiProperty({
-    description: 'Notes about Personnel - Only vieweable by coordinators',
-    required: false,
-    example: 'MOTI Area Roads Mgr R24',
-  })
-  @IsOptional()
-  @Expose({ groups: ['coordinator'] })
-  coordinatorNotes: string;
 
-  @ApiProperty({
-    description: 'Notes about Personnel',
-    required: false,
-    example: 'MOTI Area Roads Mgr R24',
-  })
-  @IsOptional()
-  logisticsNotes: string;
 
-  @ApiProperty({
-    description: 'Has member been approved by supervisor',
-    required: true,
-    example: false,
-  })
-  approvedBySupervisor: boolean;
-
-  @ApiProperty({
-    description: 'Is Personnel active in the roster',
-    required: true,
-    example: true,
-  })
-  status: Status;
-
-  @ApiProperty({
-    description: 'Is Personnel newly approved',
-    required: false,
-    example: true,
-    default: false,
-  })
-  newMember: boolean;
-
-  @ApiProperty({
-    description: 'Date of last deployment (last date of the deployment)',
-    required: false,
-  })
-  lastDeployed?: string;
+  
 
   @ApiProperty({
     description: 'Driver Licenses',
     required: false,
   })
   driverLicense?: string[];
+
+  @ApiProperty({
+    description: 'Division',
+    required: false,
+  })
+  division?: string;
 }
