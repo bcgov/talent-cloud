@@ -16,6 +16,7 @@ export class RemoveDivisionMigration1717438866103 implements MigrationInterface 
         join  bcws_personnel on division.id = bcws_personnel.division_id
           
       where bcws_personnel.personnel_id = personnel.id)      
+      where ministry is null
   `);
 
         await queryRunner.query(`Update personnel set division = (select
@@ -31,6 +32,7 @@ export class RemoveDivisionMigration1717438866103 implements MigrationInterface 
   from
       emcr_personnel
   where emcr_personnel.personnel_id = personnel.id)      
+  where ministry is null
 `);
         await queryRunner.query(`alter table emcr_personnel drop column ministry;`)
         await queryRunner.query(`alter table bcws_personnel drop column division_id;`)
