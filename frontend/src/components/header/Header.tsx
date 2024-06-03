@@ -43,7 +43,7 @@ export const Header = ({
           <>
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2">
               <CloudIcon />
-              <Link to={Routes.Dashboard} className="hover:underline">
+              <Link to={Routes.Dashboard} reloadDocument className="hover:underline">
                 <h3>{appName.toUpperCase()}</h3>
               </Link>
             </div>
