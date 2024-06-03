@@ -101,7 +101,7 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <span className={tableClass.rowClass}>
-              <CheckCircleIcon className={pendingIconClass(cell.value)} /> Recieved
+              <CheckCircleIcon className={pendingIconClass(cell.value)} /> Received
             </span>
           ) : (
             <span className={tableClass.rowClass}>
@@ -140,7 +140,7 @@ export const TableBodyCell = ({
         <>
           {cell.value ? (
             <span className={tableClass.rowClass}>
-              <CheckIcon className={pendingIconClass(cell.value)} /> Recieved
+              <CheckIcon className={pendingIconClass(cell.value)} /> Received
             </span>
           ) : (
             <span className={tableClass.rowClass}>
