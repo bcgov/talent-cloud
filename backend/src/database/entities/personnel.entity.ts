@@ -129,22 +129,22 @@ export class PersonnelEntity extends BaseEntity {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
-      primaryPhone: this.primaryPhone,
-      secondaryPhone: this.secondaryPhone,
-      workPhone: this.workPhone,
+      primaryPhone: this.primaryPhone ?? '',
+      secondaryPhone: this.secondaryPhone ?? '',
+      workPhone: this.workPhone ?? '',
 
       unionMembership: this.unionMembership,
 
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
-      supervisorEmail: this.supervisorEmail ?? '',
+      supervisorEmail: this.supervisorEmail,
 
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
 
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation.toResponseObject(),
-      workLocation: this.workLocation?.toResponseObject() ?? {},
+      workLocation: this.workLocation?.toResponseObject(),
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
 

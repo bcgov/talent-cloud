@@ -66,7 +66,10 @@ export const emcrData = (personnel?: Personnel) => {
     organizational: [
       { title: 'Supervisor First Name', content: personnel?.supervisorFirstName },
       { title: 'Supervisor Last Name', content: personnel?.supervisorLastName },
-      { title: 'Supervisor Email', content: personnel?.supervisorEmail ?? '-' },
+      {
+        title: 'Supervisor Email',
+        content: personnel?.supervisorEmail ?? 'Not Listed',
+      },
       { title: 'Ministry', content: personnel?.ministry },
       { title: 'Union Membership', content: personnel?.unionMembership },
       {
@@ -192,7 +195,10 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Govt. Email', content: personnel?.email },
       {
         title: 'Emergency Contact',
-        content: `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`,
+        content:
+          personnel?.emergencyContactFirstName && personnel?.emergencyContactLastName
+            ? `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`
+            : 'Not Listed',
       },
       {
         title: 'Emergency Phone Number',
@@ -202,7 +208,10 @@ export const bcwsData = (personnel?: Personnel) => {
     organizational: [
       { title: 'Supervisor First Name', content: personnel?.supervisorFirstName },
       { title: 'Supervisor Last Name', content: personnel?.supervisorLastName },
-      { title: 'Supervisor Email', content: personnel?.supervisorEmail ?? '-' },
+      {
+        title: 'Supervisor Email',
+        content: personnel?.supervisorEmail ?? 'Not Listed',
+      },
       {
         title: 'Supervisor Approval',
         content:
@@ -219,13 +228,19 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },
       {},
-      { title: 'Liaison First Name', content: personnel?.liaisonFirstName },
-      { title: 'Liaison Last Name', content: personnel?.liaisonLastName },
+      {
+        title: 'Liaison First Name',
+        content: personnel?.liaisonFirstName ?? 'Not Listed',
+      },
+      {
+        title: 'Liaison Last Name',
+        content: personnel?.liaisonLastName ?? 'Not Listed',
+      },
       {
         title: 'Liaison Phone Number',
         content: formatPhone(personnel?.liaisonPhoneNumber) ?? 'Not Listed',
       },
-      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '-' },
+      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? 'Not Listed' },
     ],
     skills: [
       {
