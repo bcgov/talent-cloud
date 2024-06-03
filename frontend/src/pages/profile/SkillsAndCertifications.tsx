@@ -64,9 +64,10 @@ export const SkillsAndCertifications = ({
                   </div>{' '}
                   <div className="basis-1/2">
                     <div className="flex flex-row justify-start">
-                      {itm?.title === 'Certifications' && value ? (
-                        <p>{format(value, 'PPP')}</p>
-                      ) : (
+                      {itm.title === 'Certifications' && value && (
+                        <p>{format(value ?? '', 'PPP')}</p>
+                      )}
+                      {itm.title !== 'Certifications' && value && (
                         <div className="flex flex-shrink ">
                           <Chip className={chipClass(value)} value={value} />
                         </div>
