@@ -53,7 +53,7 @@ export const NewApplicantBanner = ({
 
             {reviewComplete ? (
               <span className="pt-2">
-                Please Review the following details before clicking &apos;Complete
+                Please review the following details before clicking &apos;Complete
                 Review&apos;.
               </span>
             ) : (
