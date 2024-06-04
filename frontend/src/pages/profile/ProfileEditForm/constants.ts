@@ -67,7 +67,7 @@ export const editProfileValidationSchema = Yup.object().shape({
     .nullable()
     .test(
       'phone number',
-      'Invalid phone number format. Please enter ten digits.',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     )
     .optional(),
