@@ -14,7 +14,7 @@ import { useFilters } from '@/hooks/useFilters';
 import type { DateRange } from 'react-day-picker';
 
 export const DashboardFilters = ({ route }: { route?: Route }) => {
-  const { filters } = useGetFilters();
+  const { filters } = useGetFilters(route);
 
   const {
     filterValues,

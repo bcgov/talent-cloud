@@ -33,7 +33,7 @@ export class FunctionController {
     type: [FunctionRO],
   })
   @Get()
-  @Programs([Program.EMCR, Program.ADMIN])
+  @Programs([Program.EMCR])
   @UsePipes(new QueryTransformPipe())
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();
@@ -49,7 +49,7 @@ export class FunctionController {
     type: [RolesRO],
   })
   @Get('bcws/roles')
-  @Programs([Program.BCWS, Program.ADMIN])
+  @Programs([Program.BCWS])
   @UsePipes(new QueryTransformPipe())
   async getRoles(): Promise<RolesRO[]> {
     const allRoles = await this.functionService.getAllRoles();

@@ -137,12 +137,7 @@ export class AuthGuard implements CanActivate {
   }
 
   setDevProgramRoles(payload: JwtPayload, request: Request): void {
-    if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR) &&
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
-    ) {
-      request['program'] = Program.ADMIN;
-    } else if (
+     if (
       payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR)
     ) {
       request['program'] = Program.EMCR;
@@ -159,23 +154,19 @@ export class AuthGuard implements CanActivate {
     this.setDevRoles(payload, request);
   }
 
-  setProdProgramRoles(payload: JwtPayload, request: Request): void {
-    if (
-      payload.client_roles.includes(Program.EMCR) &&
-      payload.client_roles.includes(Program.BCWS)
-    ) {
-      request['program'] = Program.ADMIN;
-    } else if (payload.client_roles.includes(Program.EMCR)) {
+  setProdProgramRoles(payload: JwtPayload, request: Request): void {   
+    if (payload.client_roles.includes(Program.EMCR)) {
       request['program'] = Program.EMCR;
     } else if (payload.client_roles.includes(Program.BCWS)) {
       request['program'] = Program.BCWS;
     } else {
-      {
+      
         this.logger.error(
           'Unauthorized user - no valid program is listed in the cient roles',
         );
-      }
+      throw new UnauthorizedException();
     }
+    
     this.setProdRoles(payload, request);
   }
 

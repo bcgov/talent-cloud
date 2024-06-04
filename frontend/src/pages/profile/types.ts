@@ -1,3 +1,4 @@
+import type { Role } from '@/common';
 import type { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { ExperienceLevel } from '@/common/enums/sections.enum';
 import type { ToolsProficiencyName } from '@/common/enums/tools.enum';
@@ -29,6 +30,7 @@ export type ProfileData = {
 };
 
 export type DetailProps = {
+  role?: Role;
   generalInformation: ProfileDetail[];
   contact: ProfileDetail[];
   organizational: ProfileDetail[];

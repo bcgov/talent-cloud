@@ -3,7 +3,6 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import { useRole } from '@/hooks';
 import { Role } from '@/common';
 import type { DetailProps } from './types';
 
@@ -14,9 +13,9 @@ const ProfileDetails = ({
   pending,
   intakeRequirements,
   openEditProfilePopUp,
+  role,
 }: DetailProps) => {
   const [open, setOpen] = useState(1);
-  const { role } = useRole();
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const sections = [

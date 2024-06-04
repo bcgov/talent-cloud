@@ -80,7 +80,7 @@ export class RolesGuard implements CanActivate {
     currentUserProgram: Program,
     requiredProgramRoles: Program[],
   ) {
-    if (requiredProgramRoles.includes(currentUserProgram) || currentUserProgram === Program.ADMIN) {
+    if (requiredProgramRoles.includes(currentUserProgram)) {
       return true;
     }
     throw new UnauthorizedException();
