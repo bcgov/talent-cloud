@@ -16,9 +16,9 @@ import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
+import { PersonnelRO } from '../../../personnel';
 import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../personnel/ro/bcws';
-import { PersonnelRO } from '../../../personnel';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {

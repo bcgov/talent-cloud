@@ -9,9 +9,10 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
+import { UpdatePersonnelDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
-import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
+import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import {
   EmcrPersonnelExperienceDTO,
   GetEmcrPersonnelDTO,
@@ -28,6 +29,8 @@ import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
+import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import {
   EmcrPersonnelEntity,
   EmcrExperienceEntity,
@@ -35,9 +38,6 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
-import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
-import { UpdatePersonnelDTO } from './dto';
 
 @Injectable()
 export class PersonnelService {

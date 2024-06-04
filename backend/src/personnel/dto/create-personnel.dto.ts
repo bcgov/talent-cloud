@@ -10,13 +10,13 @@ import {
   ValidateIf,
 } from 'class-validator';
 
+import {  CreatePersonnelBcwsDTO } from './bcws';
 import { CreatePersonnelEmcrDTO } from './emcr';
+import { FireCentre, Ministry, Region } from '../../common/enums';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
 import { Form } from '../../database/entities/form.entity';
-import { FireCentre, Ministry, Region } from '../../common/enums';
-import {  CreatePersonnelBcwsDTO } from './bcws';
 
 export class LocationDTO {
   @IsOptional()

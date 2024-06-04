@@ -16,7 +16,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { UpdatePersonnelDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
+import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto/emcr';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
@@ -26,14 +28,12 @@ import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { PersonnelRO } from './ro/personnel.ro';
 import { Program, RequestWithRoles, TokenType } from '../auth/interface';
+import {Programs} from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
-import {Programs} from '../auth/program.decorator';
-import { UpdatePersonnelDTO } from './dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')

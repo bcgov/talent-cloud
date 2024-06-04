@@ -17,9 +17,9 @@ import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
+import { PersonnelRO } from '../../../personnel';
 import { CreatePersonnelEmcrDTO } from '../../../personnel/dto/emcr';
 import { EmcrRO } from '../../../personnel/ro/emcr';
-import { PersonnelRO } from '../../../personnel';
 
 
 @Entity('emcr_personnel')

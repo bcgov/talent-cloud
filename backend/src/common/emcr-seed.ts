@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { format } from 'date-fns';
+import { divisionsAndMinistries } from './const';
 import { AvailabilityType } from './enums/availability-type.enum';
 import { DriverLicense } from './enums/driver-license.enum';
-import { FirstAid, Experience, Region } from './enums/emcr';
+import { FirstAid, Experience } from './enums/emcr';
 import { Ministry } from './enums/ministry.enum';
 import { Status } from './enums/status.enum';
 import { UnionMembership } from './enums/union-membership.enum';
@@ -14,7 +15,6 @@ import {
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO, LocationDTO } from '../personnel';
 import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
-import { divisionsAndMinistries } from './const';
 
 
 export const handler = (

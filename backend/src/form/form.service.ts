@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateFormDTO } from './form.dto';
 import { FormSubmissionEventPayload, IntakeFormData } from './interface';
-import { Experience, Ministry, UnionMembership } from '../common/enums';
+import { Experience,  UnionMembership } from '../common/enums';
 import { Form } from '../database/entities/form.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { FunctionService } from '../function/function.service';
