@@ -19,28 +19,10 @@ import { AvailabilityEntity } from '../../database/entities/availability.entity'
 import { Form } from '../../database/entities/form.entity';
 
 export class LocationDTO {
-  @IsOptional()
+  @ApiProperty()
   id?: number;
-
-  @IsString()
-  locationName?: string;
-
-  @ApiProperty({
-    description: 'Region personnel works in',
-    enum: Region,
-    example: Region.SWE
-  })
-  @IsEnum(Region)
-  region: Region;
-
-  @ApiProperty({
-    description: 'Fire centre personnel works in',
-    enum: FireCentre,
-    example: FireCentre.CARIBOO,
-  })
-  @IsEnum(FireCentre)
-  fireCentre?: FireCentre;
 }
+
 export class CreatePersonnelDTO {
   @ApiProperty({
     description: 'First Name of Personnel - Possibly taken from IDIR',

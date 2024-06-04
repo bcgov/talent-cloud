@@ -26,12 +26,12 @@ export class BcwsPersonnelTools {
     enumName: 'tools-proficiency',
     enum: ToolsProficiency,
   })
-  proficenyLevel: ToolsProficiency;
+  proficiencyLevel: ToolsProficiency;
 
   toResponseObject(): BcwsPersonnelToolsRO {
     return {
       tool: this.tool.name ?? null,
-      proficiencyLevel: this.proficenyLevel,
+      proficiencyLevel: this.proficiencyLevel,
     };
   }
 }

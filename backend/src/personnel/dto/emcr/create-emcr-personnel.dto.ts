@@ -29,7 +29,7 @@ export class CreatePersonnelEmcrDTO {
   @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.coordinatorNotes !== '')
-  coordinatorNotes: string;
+  coordinatorNotes?: string;
 
   @ApiProperty({
     description: 'Any other notes for this personnel',
@@ -39,7 +39,7 @@ export class CreatePersonnelEmcrDTO {
   @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.logisticsNotes !== '')
-  logisticsNotes: string;
+  logisticsNotes?: string;
 
   @ApiProperty({
     description: 'What trainings this personnel has had',

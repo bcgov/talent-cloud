@@ -129,22 +129,22 @@ export class CreatePersonnelBcwsDTO {
   @ApiProperty({
     default: false,
   })
-  willingnessStatement: boolean;
+  willingnessStatement?: boolean;
 
   @ApiProperty({
     default: false,
   })
-  parQ: boolean;
+  parQ?: boolean;
 
   @ApiProperty({
     default: false,
   })
-  respectfulWorkplacePolicy: boolean;
+  respectfulWorkplacePolicy?: boolean;
 
   @ApiProperty({
     default: false,
   })
-  orientation: boolean;
+  orientation?: boolean;
 
   @ApiProperty({
     description: 'Tools used by the personnel',
