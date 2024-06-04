@@ -19,7 +19,7 @@ export const ProfileEditForm = ({
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
   route?: Route;
 }) => {
-  const { locations } = useGetFilters();
+  const { locations } = useGetFilters(route);
 
   const handleSubmit = async (
     values: FormikValues,
