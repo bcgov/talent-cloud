@@ -77,7 +77,6 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
               }}
               label="Home Location"
               values={filterValues.location}
-              route={route}
             />
           </div>
         </div>
