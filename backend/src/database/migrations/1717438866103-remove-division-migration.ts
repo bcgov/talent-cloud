@@ -224,11 +224,10 @@ export class RemoveDivisionMigration1717438866103 implements MigrationInterface 
                 (156,'Strategic and Corporate Priorities Division','MOTI'),
                 (157,'Finance and Risk Management Division','MOTI');
       `);
-      await queryRunner.query(`ALTER TABLE "personnel" DROP COLUMN "division"`);
-      await queryRunner.query(`ALTER TABLE "personnel" ALTER COLUMN "ministry" DROP NOT NULL`);
+      
       await queryRunner.query(`ALTER TABLE "personnel" DROP COLUMN "supervisor_phone"`);
       await queryRunner.query(`ALTER TABLE "bcws_personnel" ADD "division_id" int`);
-      await queryRunner.query(`ALTER TABLE "emcr_personnel" ADD "ministry" "public"."ministry" NOT NULL`);
+      await queryRunner.query(`ALTER TABLE "emcr_personnel" ADD "ministry" "public"."ministry" `);
 
       await queryRunner.query(`Update emcr_personnel set ministry = (select
             ministry
