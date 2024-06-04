@@ -35,6 +35,26 @@ export const SectionsAndRoles = ({
     {},
   );
 
+  const EmptyChoiceSection = ({ section }: { section: Section }) => (
+    <div className="border-b-2 border-gray-100">
+      <div className="flex flex-row py-2 items-center justify-between">
+        <div className="basis-1/3 text-darkGray px-8">
+          <p className="flex flex-row gap-2">
+            {SectionName[section]}
+            <Chip
+              value={section === firstChoiceSection ? '1st Choice' : '2nd Choice'}
+              className={
+                section === firstChoiceSection
+                  ? 'rounded-full capitalize'
+                  : 'rounded-full capitalize bg-infoBannerLight text-ministry'
+              }
+            />
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <Accordion title={title} onClick={onClick}>
       <div>
@@ -52,6 +72,14 @@ export const SectionsAndRoles = ({
             </div>
           </div>
           <div>
+            {firstChoiceSection &&
+              !Object.keys(sections).includes(firstChoiceSection) && (
+                <EmptyChoiceSection section={firstChoiceSection} />
+              )}
+            {secondChoiceSection &&
+              !Object.keys(sections).includes(secondChoiceSection) && (
+                <EmptyChoiceSection section={secondChoiceSection} />
+              )}
             {Object.keys(sections).map((section) => (
               <div key={section} className="border-b-2 border-gray-100">
                 {sections[section].map((itm, i) => (

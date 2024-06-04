@@ -164,7 +164,12 @@ export const ProfileEditRoles = ({
           onClick={handleClose}
           text="Cancel"
         />
-        <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={onSave} />
+        <Button
+          variant={ButtonTypes.TERTIARY}
+          text="Save"
+          disabled={!Object.values(currentRoles).find((s) => s.length > 0)}
+          onClick={onSave}
+        />
       </div>
     </div>
   );
