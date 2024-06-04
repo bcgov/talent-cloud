@@ -17,6 +17,7 @@ export enum Ministry {
   LBR = 'LBR',
   MMHA = 'MMHA',
   MUNI = 'MUNI',
+  PREM = 'PREM',
   PSFS = 'PSFS',
   PSSG = 'PSSG',
   SDPR = 'SDPR',
