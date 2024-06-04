@@ -45,10 +45,13 @@ import { ProfileEditRoles } from './ProfileEditRoles';
 import type { Section } from '../../common/enums/sections.enum';
 
 const Profile = () => {
+  const { role, route } = useRole();
+
   const { personnelId } = useParams() as { personnelId: string };
 
   const { personnel, updatePersonnel, profileData } = usePersonnel({
     personnelId,
+    route,
   });
 
   const { generalInformation, contact, organizational, skills, intakeRequirements } =
@@ -57,9 +60,8 @@ const Profile = () => {
   const { availability, getAvailability, saveAvailability } = useAvailability({
     personnelId,
   });
-  const { functions, bcwsRoles } = useFunctions();
 
-  const { role, route } = useRole();
+  const { functions, bcwsRoles } = useFunctions(route);
 
   const [openEditNotes, setOpenEditNotes] = useState(false);
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
@@ -235,6 +237,7 @@ const Profile = () => {
               </div>
 
               <ProfileDetails
+                role={role}
                 openEditProfilePopUp={handleOpenEditProfilePopUp}
                 intakeRequirements={intakeRequirements}
                 generalInformation={generalInformation}
@@ -272,6 +275,7 @@ const Profile = () => {
               )}
 
               <ProfileNotes
+                role={role}
                 personnel={personnel}
                 handleOpenEditNotes={handleOpenEditNotes}
                 handleOpenEditCoordinatorNotes={handleOpenEditCoordinatorNotes}

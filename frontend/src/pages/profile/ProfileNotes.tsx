@@ -3,7 +3,6 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
 import { Role } from '@/common';
-import { useRole } from '@/hooks';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { classes } from '@/components/filters/classes';
 
@@ -11,12 +10,13 @@ const ProfileNotes = ({
   personnel,
   handleOpenEditNotes,
   handleOpenEditCoordinatorNotes,
+  role,
 }: {
+  role?: Role;
   personnel: Personnel;
   handleOpenEditNotes: () => void;
   handleOpenEditCoordinatorNotes: () => void;
 }) => {
-  const { role } = useRole();
   const [open, setOpen] = useState(true);
 
   return (

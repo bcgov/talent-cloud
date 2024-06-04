@@ -1,8 +1,9 @@
 import type { Role } from '@/common';
+import { AxiosPrivate } from '@/hooks/useAxios';
 
 import type { Dispatch, ReactElement, SetStateAction } from 'react';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 export enum Program {
   BCWS = 'bcws',
   EMCR = 'emcr',
@@ -36,24 +37,36 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
   const [program, setProgram] = useState<Program>();
-  const [route, setRoute] = useState<Route | undefined>(
-    (localStorage.getItem('route') as Route) ?? Route.BCWS,
-  );
+  const [route, setRoute] = useState<Route | undefined>();
 
-  return (
-    <RoleContext.Provider
-      value={{
-        role,
-        setRole,
-        username,
-        setUsername,
-        program,
-        setProgram,
-        route,
-        setRoute,
-      }}
-    >
-      {children}
-    </RoleContext.Provider>
+  useEffect(() => {
+    (async () => {
+      try {
+        const {
+          data: { username, role, program },
+        } = await AxiosPrivate.get('/auth/userInfo');
+        setUsername(username);
+        setRole(role);
+        setProgram(program);
+        setRoute(program);
+      } catch (e: unknown) {
+        console.log(e);
+      }
+    })();
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      role,
+      setRole,
+      program,
+      setProgram,
+      username,
+      setUsername,
+      route,
+      setRoute,
+    }),
+    [role, program, username, route],
   );
+  return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
 };
