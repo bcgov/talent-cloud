@@ -76,8 +76,7 @@ export class AppController {
       functions: await this.functionService.getRoles(),
       locations: (await this.locationService.getRegionsAndLocations()).filter(
         (itm) => itm.fireCentre !== null,
-      ),
-      divisions: await this.locationService.getDivisions(),
+      )
     };
   }
 

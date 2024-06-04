@@ -1,6 +1,5 @@
-import type { Ministry } from '@/common';
 import { Status } from '@/common';
-import type { Personnel, Location, DivisionType } from '@/pages/dashboard';
+import type { Personnel, Location } from '@/pages/dashboard';
 import {
   fields,
   bcwsProfileValidationSchema,
@@ -14,7 +13,6 @@ import { Route } from '@/providers';
 export const formConfig = (
   personnelData: Partial<Personnel>,
   locations: Location[],
-  divisions: DivisionType[],
   route: Route,
 ) => {
   delete personnelData?.availability;
@@ -25,24 +23,27 @@ export const formConfig = (
     primaryPhone:
       personnelData?.primaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
       '',
-    secondaryPhone:
-      personnelData.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ??
-      '',
     workPhone:
       personnelData.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
     dateApproved: datePST(personnelData.dateApproved as Date, true),
-    liaisonPhoneNumber:
-      personnelData.liaisonPhoneNumber?.replace(
-        /(\d{3})(\d{3})(\d{4})/,
-        '($1) $2-$3',
-      ) ?? '',
-    emergencyContactPhoneNumber:
-      personnelData.emergencyContactPhoneNumber?.replace(
-        /(\d{3})(\d{3})(\d{4})/,
-        '($1) $2-$3',
-      ) ?? '',
     dateApplied: datePST(personnelData.dateApplied as Date, true),
   };
+
+  if (personnelData.secondaryPhone) {
+    personnelData.secondaryPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+  }
+  if (personnelData.supervisorPhone) {
+    personnelData.supervisorPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+  }
+  if (personnelData.liaisonPhoneNumber) {
+    personnelData.liaisonPhoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+  }
+  if (personnel.emergencyContactPhoneNumber) {
+    personnelData.emergencyContactPhoneNumber?.replace(
+      /(\d{3})(\d{3})(\d{4})/,
+      '($1) $2-$3',
+    );
+  }
 
   fields.homeLocation.locationName.options = locations.map((itm: Location) => ({
     label: itm.locationName,
@@ -52,22 +53,6 @@ export const formConfig = (
     label: itm.locationName,
     value: itm.locationName,
   }));
-
-  const ministries = Array.from(new Set(divisions.map((itm) => itm.ministry)));
-
-  (fields.division.divisionName.groupedOptions = ministries.map((itm: Ministry) => ({
-    groupOption: itm as string,
-    options: divisions
-      .filter((div: DivisionType) => div.ministry === itm)
-      .map((div: DivisionType) => ({
-        label: div.divisionName,
-        value: div.divisionName,
-      })),
-  }))),
-    (fields.division.ministry.options = ministries.map((itm: Ministry) => ({
-      label: itm,
-      value: itm,
-    })));
 
   const bcwsSections = [
     {
@@ -105,7 +90,7 @@ export const formConfig = (
         fields.emergencyContactFirstName,
         fields.emergencyContactLastName,
         fields.emergencyContactRelationship,
-        fields.emergencyContactNumber,
+        fields.emergencyContactPhoneNumber,
       ],
     },
     {
@@ -114,14 +99,15 @@ export const formConfig = (
         fields.supervisorFirstName,
         fields.supervisorLastName,
         fields.supervisorEmail,
+        fields.supervisorPhone,
         fields.approvedBySupervisor,
         fields.paylistId,
         fields.unionMembership,
-        fields.division.divisionName,
-        fields.division.ministry,
+        fields.division,
+        fields.ministry,
         fields.liaisonFirstName,
         fields.liaisonLastName,
-        fields.liaisonNumber,
+        fields.liaisonPhoneNumber,
         fields.liaisonEmail,
       ],
     },
@@ -153,7 +139,12 @@ export const formConfig = (
     },
     {
       header: 'Contact Information',
-      fields: [fields.primaryPhone, fields.secondaryPhone, fields.email],
+      fields: [
+        fields.primaryPhone,
+        fields.secondaryPhone,
+        fields.workPhone,
+        fields.email,
+      ],
     },
     {
       header: 'Organization Information',
@@ -162,13 +153,13 @@ export const formConfig = (
         fields.supervisorLastName,
         fields.supervisorEmail,
         fields.unionMembership,
+        fields.division,
         fields.ministry,
       ],
     },
   ];
 
   const initialFormValues = {
-    dateApproved: personnel.dateApproved,
     homeLocation: personnel.homeLocation,
     workLocation: personnel.workLocation,
     remoteOnly: personnel.remoteOnly,
@@ -179,27 +170,29 @@ export const formConfig = (
     supervisorFirstName: personnel.supervisorFirstName,
     supervisorLastName: personnel.supervisorLastName,
     supervisorEmail: personnel.supervisorEmail,
+    supervisorPhone: personnel.supervisorPhone,
+    ministry: personnel.ministry,
+    division: personnel.division ?? '',
     unionMembership: personnel.unionMembership,
-    driverLicense: personnel?.driverLicense,
+    driverLicense: personnel?.driverLicense ?? [],
     status: personnel.status,
-    approvedBySupervisor: personnel.approvedBySupervisor,
     email: personnel.email,
+    approvedBySupervisor: personnel.approvedBySupervisor,
   };
 
   const bcwsValues = {
     ...initialFormValues,
     purchaseCardHolder: personnel.purchaseCardHolder,
     paylistId: personnel.paylistId,
-    liaisonFirstName: personnel.liaisonFirstName,
-    liaisonLastName: personnel.liaisonLastName,
-    liaisonNumber: personnel.liaisonPhoneNumber,
-    liaisonEmail: personnel.liaisonEmail,
-    division: personnel?.division,
-    emergencyContactFirstName: personnel.emergencyContactFirstName,
-    emergencyContactLastName: personnel.emergencyContactLastName,
-    emergencyContactNumber: personnel.emergencyContactPhoneNumber,
-    emergencyContactRelationship: personnel.emergencyContactRelationship,
-    dateApplied: personnel.dateApplied,
+    liaisonFirstName: personnel.liaisonFirstName ?? '',
+    liaisonLastName: personnel.liaisonLastName ?? '',
+    liaisonPhoneNumber: personnel.liaisonPhoneNumber,
+    liaisonEmail: personnel.liaisonEmail ?? '',
+    emergencyContactFirstName: personnel.emergencyContactFirstName ?? '',
+    emergencyContactLastName: personnel.emergencyContactLastName ?? '',
+    emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
+    emergencyContactRelationship: personnel.emergencyContactRelationship ?? '',
+    dateApproved: personnel.dateApproved,
   };
 
   const emcrPendingValues = {
@@ -212,7 +205,6 @@ export const formConfig = (
     parQ: personnel.parQ,
     willingnessStatement: personnel.willingnessStatement,
     orientation: personnel.orientation,
-
     dateApplied: personnel.dateApplied,
   };
   if (route === Route.BCWS) {
@@ -234,13 +226,16 @@ export const formConfig = (
       return {
         sections: emcrSections,
         validationSchema: emcrPendingValidationSchema,
-        initialValues: { ...emcrPendingValues, ministry: personnel.ministry },
+        initialValues: { ...emcrPendingValues },
       };
     } else {
       return {
         sections: emcrSections.filter((itm) => itm.header !== 'Intake Requirements'),
         validationSchema: emcrValidationSchema,
-        initialValues: { ...initialFormValues, ministry: personnel.ministry },
+        initialValues: {
+          ...initialFormValues,
+          dateApproved: personnel.dateApproved,
+        },
       };
     }
   }

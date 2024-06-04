@@ -15,20 +15,19 @@ import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { DivisionEntity } from '../database/entities/division.entity';
 import {
   LocationEntity,
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
 import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
+import { divisionsAndMinistries } from './const';
 
 export const handler = (
   locations: LocationEntity[],
   roles: BcwsRoleEntity[],
   tools: BcwsToolsEntity[],
   certs: BcwsCertificationEntity[],
-  divisions: DivisionEntity[],
   
 ): {
   personnelData: CreatePersonnelDTO;
@@ -43,7 +42,7 @@ export const handler = (
       ])
     ];
   const dateApplied = faker.date.past();
-
+const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
   const personnelRoles = createRoles(roles);
   const firstChoiceSection = roles.find(r => r.id === personnelRoles[0].roleId)?.section;
   const secondRoleSection = roles.find(r => r.id === personnelRoles[1].roleId)?.section;
@@ -83,8 +82,7 @@ export const handler = (
     tools: createTools(tools),
     certifications: createCertifications(certs),
     roles: personnelRoles,
-    languages: Array.from(new Set(createLanguages())),
-    division: faker.helpers.arrayElement(divisions).id,
+    languages: Array.from(new Set(createLanguages())),  
     emergencyContactFirstName: faker.person.firstName(),
     emergencyContactLastName: faker.person.lastName(),
     emergencyContactPhoneNumber: faker.string.numeric('##########'),
@@ -97,6 +95,8 @@ export const handler = (
     homeLocation: faker.helpers.arrayElement(locations),
     workLocation: faker.helpers.arrayElement(locations),
     firstName: faker.person.firstName(),
+    division: divisionAndMinistry.division,
+    ministry: Ministry[divisionAndMinistry.ministry],
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
     primaryPhone: faker.string.numeric('##########'),
@@ -107,6 +107,7 @@ export const handler = (
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
+    supervisorPhone: faker.string.numeric('##########'),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     driverLicense: Array.from(new Set([faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense))])),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),

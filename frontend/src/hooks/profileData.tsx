@@ -223,7 +223,7 @@ export const bcwsData = (personnel?: Personnel) => {
       },
       {
         title: 'Ministry/Division',
-        content: `${personnel?.division?.ministry} / ${personnel?.division?.divisionName}`,
+        content: `${personnel?.ministry} / ${personnel?.division}`,
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },

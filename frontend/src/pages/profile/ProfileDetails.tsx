@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
@@ -77,10 +77,10 @@ const ProfileDetails = ({
 
           <AccordionBody>
             {sections.map((itm) => (
-              <>
+              <Fragment key={itm.title}>
                 <DetailsSection title={itm.title} columns={itm.columns} />
                 <div className="w-full border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
-              </>
+              </Fragment>
             ))}
           </AccordionBody>
         </Accordion>

@@ -15,7 +15,7 @@ import { BcwsPersonnelEntity } from './bcws';
 import { EmcrPersonnelEntity, LocationEntity } from './emcr';
 import { Form } from './form.entity';
 import { Role } from '../../auth/interface';
-import { AvailabilityType, DriverLicense } from '../../common/enums';
+import { AvailabilityType, DriverLicense, Ministry } from '../../common/enums';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
@@ -31,8 +31,6 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({ name: 'last_name', type: 'varchar', length: '50' })
   lastName: string;
-
-  
 
   @Column({
     name: 'primary_phone',
@@ -69,6 +67,14 @@ export class PersonnelEntity extends BaseEntity {
     nullable: true,
   })
   supervisorEmail?: string;
+
+  @Column({
+    name: 'supervisor_phone',
+    type: 'varchar',
+    length: 10,
+    nullable: true,
+  })
+  supervisorPhone?: string;
 
   @Column({
     name: 'union_membership',
@@ -118,6 +124,17 @@ export class PersonnelEntity extends BaseEntity {
   @JoinColumn({ name: 'home_location', referencedColumnName: 'id' })
   homeLocation: LocationEntity;
 
+  @Column({
+    name: 'ministry',
+    type: 'enum',
+    enum: Ministry,
+    enumName: 'ministry',
+  })
+  ministry: Ministry;
+
+  @Column({name: 'division', type: 'varchar', length: 100, nullable: true})
+  division?: string;
+
   toResponseObject(
     role: Role,
     lastDeployed?: string,
@@ -138,7 +155,7 @@ export class PersonnelEntity extends BaseEntity {
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail,
-
+      supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
 
@@ -147,7 +164,8 @@ export class PersonnelEntity extends BaseEntity {
       workLocation: this.workLocation?.toResponseObject(),
       remoteOnly: this.remoteOnly,
       willingToTravel: this.willingToTravel,
-
+      ministry: this.ministry,
+      division: this?.division ?? '',
       // trainings will not be returned until we have a more robust system
       availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],

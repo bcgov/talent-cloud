@@ -37,6 +37,7 @@ import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { UpdatePersonnelDTO } from './dto';
 
 @Injectable()
 export class PersonnelService {
@@ -71,7 +72,7 @@ export class PersonnelService {
    */
   async updatePersonnel(
     id: string,
-    personnel: UpdateEmcrPersonnelDTO,
+    personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
     role: Role,
   ) {
     this.logger.log(`Updating personnel ${id}`);
@@ -107,7 +108,7 @@ export class PersonnelService {
    */
     async updateBcwsPersonnel(
       id: string,
-      personnel: UpdateBcwsPersonnelDTO,
+      personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
       role: Role
     ){
       this.logger.log(`Updating personnel ${id}`);
@@ -152,7 +153,7 @@ export class PersonnelService {
         personnel.certifications = personnelCerts;
       }
 
-      console.log(personnel.certifications)
+      
 
       Object.keys(personnel).forEach((key) => {
         person[key] = personnel[key];
@@ -306,7 +307,6 @@ export class PersonnelService {
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
-    qb.leftJoinAndSelect('bcws_personnel.division', 'division');
 
     this.addQueryBuilderCommonFilters(
       qb,
@@ -512,7 +512,7 @@ export class PersonnelService {
     id: string): Promise<Record<string, BcwsRO>> {
     const person = await this.bcwsPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
-      relations: ['personnel', 'roles', 'roles.role', 'division', 'certifications', 'certifications.certification',
+      relations: ['personnel', 'roles', 'roles.role',  'certifications', 'certifications.certification',
         'tools', 'tools.tool'
       ]
     });

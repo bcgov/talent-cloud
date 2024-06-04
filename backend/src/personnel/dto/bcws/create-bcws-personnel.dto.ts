@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEmail,
-  IsEnum,
   IsOptional,
   IsString,
   Length,
@@ -12,10 +11,11 @@ import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certificati
 import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
-import { FireCentre, Section } from '../../../common/enums/bcws';
+import { Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
 import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
+
 
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
@@ -174,11 +174,7 @@ export class CreatePersonnelBcwsDTO {
   @IsArray()
   certifications: CreateBcwsCertificationsDTO[] | UpdateBcwsCertificationsDTO[];
 
-  @ApiProperty({
-    description: 'Division and Ministry',
-    required: false,
-  })
-  division: number;
+
 
   @ApiProperty({
     description: 'First Choice Section',

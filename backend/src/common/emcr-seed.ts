@@ -14,6 +14,7 @@ import {
 } from '../database/entities/emcr';
 import { CreatePersonnelDTO, LocationDTO } from '../personnel';
 import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
+import { divisionsAndMinistries } from './const';
 
 
 export const handler = (
@@ -35,7 +36,7 @@ export const handler = (
 const dateApplied = faker.date.past();
 const homeLocation =  faker.helpers.arrayElement(locations)
 const workLocation =  faker.helpers.arrayElement(locations)
-console.log(seededTrainings, "SEEDED")
+const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
 const emcrData: CreatePersonnelEmcrDTO = {
   
   dateApplied: dateApplied,
@@ -50,7 +51,6 @@ const emcrData: CreatePersonnelEmcrDTO = {
   preocExperience: faker.datatype.boolean({ probability: 0.4 }),
   emergencyExperience: faker.datatype.boolean({ probability: 0.4 }),
   approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
-  ministry: faker.helpers.arrayElement(Object.values(Ministry)),
   trainings: seededTrainings,
   dateApproved:
     status !== Status.PENDING
@@ -67,6 +67,8 @@ const emcrData: CreatePersonnelEmcrDTO = {
 };
 
 const personnelData: CreatePersonnelDTO = {
+  division: divisionAndMinistry.division,
+  ministry: Ministry[divisionAndMinistry.ministry],
   homeLocation: homeLocation,
   workLocation: workLocation, 
   firstName: faker.person.firstName(),

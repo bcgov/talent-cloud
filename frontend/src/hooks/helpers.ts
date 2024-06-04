@@ -120,8 +120,7 @@ export const renderCells = (
     ministry: {
       key: DashboardColumns.MINISTRY,
       columnName: DashboardColumns.MINISTRY,
-      value:
-        route === Route.BCWS ? personnel?.division?.ministry : personnel.ministry,
+      value: personnel.ministry,
     },
     availability: {
       key: DashboardColumns.AVAILABILITY,

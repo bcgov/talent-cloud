@@ -54,11 +54,6 @@ export enum DashboardColumns {
   ORIENTATION = 'Orientation',
   RESPECTFUL = 'Respectful Workplace Policy',
 }
-export interface DivisionType {
-  id: number;
-  ministry: Ministry;
-  divisionName: string;
-}
 
 export interface FunctionType {
   name: string;
@@ -151,6 +146,7 @@ export interface Personnel {
   supervisorFirstName: string;
   supervisorLastName: string;
   supervisorEmail?: string;
+  supervisorPhone?: string;
   approvedBySupervisor: boolean;
   icsTraining?: boolean;
   reviewed: boolean;
@@ -164,7 +160,7 @@ export interface Personnel {
   lastDeployed?: string;
   firstChoiceSection?: Section;
   secondChoiceSection?: Section;
-  division?: DivisionType;
+  division?: string;
   orientation?: boolean;
   willingnessStatement?: boolean;
   parQ?: boolean;

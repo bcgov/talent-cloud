@@ -13,6 +13,7 @@ import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
 export const personnel: CreatePersonnelDTO[] = [
   {
     firstName: 'Brandyn',
+    ministry: Ministry.AGRI,
     lastName: 'Bartell',
     email: 'Kacie25@hotmail.com',
     primaryPhone: '8939179531',
@@ -35,7 +36,7 @@ export const personnel: CreatePersonnelDTO[] = [
       } as LocationEntity,
     driverLicense: ['CLASS_3'],
     emcr: {
-      ministry: Ministry['WLRS'],
+      
       trainings: [],
       status: Status.ACTIVE,
       
@@ -96,6 +97,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Zachary',
+    ministry: Ministry.AGRI,
     lastName: 'Bartoletti',
     email: 'Briana75@hotmail.com',
     primaryPhone: '8529416283',
@@ -103,6 +105,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '7523110457',
 
     supervisorFirstName: 'Harry',
+    
     supervisorLastName: 'Rohan',
     supervisorEmail: 'Maegan.Upton@yahoo.com',
     unionMembership: UnionMembership['PEA'],
@@ -120,7 +123,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['CTL'],
       } as LocationEntity,
       emcr: {
-        ministry: Ministry['AG'],
+        
       trainings: [],
       dateApplied: new Date(2023, 11, 9),
       status: Status.ACTIVE,
@@ -194,12 +197,14 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Heather',
+    ministry: Ministry.AGRI,
     lastName: 'Botsford',
     email: 'Blake_Stamm-Steuber12@hotmail.com',
     primaryPhone: '5600351973',
     secondaryPhone: '8409072412',
     workPhone: '5929269241',
     supervisorFirstName: 'Elliot',
+    
     supervisorLastName: 'Swaniawski',
     supervisorEmail: 'Cristina_Hirthe41@yahoo.com',
     
@@ -214,7 +219,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['SEA'],
       } as LocationEntity,
       emcr: {
-        ministry: Ministry['ENV'],
+        
       trainings: [],
       coordinatorNotes: 'Termes cunabula depulso canonicus nisi.',
       dateApplied: new Date(2023, 5, 9),
@@ -289,6 +294,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Liana',
+    ministry: Ministry.AGRI,
     lastName: 'Brown',
     email: 'Dillon.OHara@gmail.com',
     primaryPhone: '3880637094',
@@ -296,6 +302,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '6382495637',
 
     supervisorFirstName: 'Fatima',
+    
     supervisorLastName: 'Howell',
     supervisorEmail: 'Lauryn63@yahoo.com',
     
@@ -312,7 +319,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['SEA'],
       } as LocationEntity,
     emcr: {
-      ministry: Ministry['EMCR'],
+      
       trainings: [],
       status: Status.PENDING,
       dateApplied: new Date(2023, 4, 24),
@@ -385,6 +392,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Percy',
+    ministry: Ministry.AGRI,
     lastName: 'Buckridge',
     email: 'Mylene_Morissette@hotmail.com',
     primaryPhone: '5847361071',
@@ -392,6 +400,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '3422536265',
 
     supervisorFirstName: 'Brooke',
+    
     supervisorLastName: 'Ward',
     supervisorEmail: 'Breanne17@gmail.com',
     
@@ -408,7 +417,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['NEA'],
       } as LocationEntity,
       emcr: {
-        ministry: Ministry['FOR'],
+        
       trainings: [],
       dateApplied: new Date(2024, 1, 2),
       status: Status.PENDING,
@@ -460,6 +469,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Alanis',
+    ministry: Ministry.AGRI,
     lastName: 'Barton',
     email: 'Otho_Olson@hotmail.com',
     primaryPhone: '0210476197',
@@ -467,6 +477,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '7469424252',
 
     supervisorFirstName: 'Citlalli',
+    
     supervisorLastName: 'Ebert-Schuster',
     supervisorEmail: 'Stacey.Thompson@gmail.com',
     homeLocation: {
@@ -480,7 +491,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['SWE'],
       } as LocationEntity,
     emcr: {
-      ministry: Ministry['WLRS'],
+      
       trainings: [],
       status: Status.PENDING,
       dateApplied: new Date(2023, 9, 17),
@@ -532,6 +543,7 @@ export const personnel: CreatePersonnelDTO[] = [
 
   {
     firstName: 'Esta',
+    ministry: Ministry.AGRI,
     lastName: 'Paucek',
     email: 'Nikko92@hotmail.com',
     primaryPhone: '4589472927',
@@ -539,6 +551,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '9685539627',
 
     supervisorFirstName: 'Pasquale',
+    
     supervisorLastName: 'Rolfson',
     supervisorEmail: 'Anastasia48@hotmail.com',
     homeLocation: {
@@ -552,7 +565,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['SWE'],
       } as LocationEntity,
     emcr: {
-      ministry: Ministry['HLTH'],
+      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2023, 6, 6),
@@ -621,6 +634,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Hayden',
+    ministry: Ministry.AGRI,
     lastName: 'Pouros',
     email: 'Anthony.Hintz@gmail.com',
     primaryPhone: '1209243030',
@@ -628,6 +642,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '6542825199',
 
     supervisorFirstName: 'Lexus',
+    
     supervisorLastName: 'Koch',
     supervisorEmail: 'Esther_Ebert29@hotmail.com',
     
@@ -644,7 +659,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['VIC'],
       } as LocationEntity,
     emcr: {
-      ministry: Ministry['MUNI'],
+      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2024, 3, 15),
@@ -717,6 +732,7 @@ export const personnel: CreatePersonnelDTO[] = [
 
   {
     firstName: 'Roberto',
+    ministry: Ministry.AGRI,
     lastName: 'Quitzon',
     email: 'Winfield.Rogahn@yahoo.com',
     primaryPhone: '3195542339',
@@ -724,6 +740,7 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '3100550523',
 
     supervisorFirstName: 'Eduardo',
+    
     supervisorLastName: 'Frami',
     supervisorEmail: 'Imani87@hotmail.com',
     homeLocation: {
@@ -737,7 +754,7 @@ export const personnel: CreatePersonnelDTO[] = [
         region: Region['NEA'],
       } as LocationEntity,
     emcr: {
-      ministry: Ministry['PSSG'],
+      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2023, 11, 15),
