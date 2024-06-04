@@ -10,7 +10,6 @@ import {
 } from '@/components';
 import { classes } from './classes';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { Route } from '@/providers';
 
 export const MultiSelectGroup = ({
   field,
@@ -26,7 +25,6 @@ export const MultiSelectGroup = ({
   label: string;
   handleClose: (name: string, value: string) => void;
   handleCloseMany: (name: string) => void;
-  route?: Route;
 }) => {
   const onChangeGroup = (options: string[]) => {
     const valueSet = options.filter((itm) => !values.includes(itm));
