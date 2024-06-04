@@ -17,6 +17,7 @@ export enum Ministry {
   LBR = 'LBR',
   MMHA = 'MMHA',
   MUNI = 'MUNI',
+  PREM = 'PREM',
   PSFS = 'PSFS',
   PSSG = 'PSSG',
   SDPR = 'SDPR',
@@ -26,8 +27,8 @@ export enum Ministry {
 }
 
 export enum MinistryName {
-  AF = 'Agriculture and Food',
-  MMHA = 'Mental Health and Addictions',
+  AF = 'Agriculture and Food',  
+  
   AG = 'Attorney General',
   MCF = 'Children and Family Development',
   CITZ = "Citizens' Services",
@@ -42,7 +43,9 @@ export enum MinistryName {
   IRR = 'Indigenous Relations & Reconciliation',
   JEDI = 'Jobs, Economic Development and Innovation',
   LBR = 'Labour',
+  MMHA = 'Mental Health and Addictions',
   MUNI = 'Municipal Affairs',
+  PREM = 'Office of the Premier',
   PSFS = 'Post-Secondary Education and Future Skills',
   PSSG = 'Public Safety and Solicitor General',
   SDPR = 'Social Development and Poverty Reduction',
