@@ -10,20 +10,18 @@ import type { FunctionType, Location, SectionType } from '@/pages/dashboard';
 import { DashboardFilterNames } from '@/pages/dashboard';
 import { useEffect, useMemo, useState } from 'react';
 import { useAxios } from './useAxios';
-import { useRole } from './useRole';
 import { Route } from '@/providers';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
-export const useGetFilters = () => {
+export const useGetFilters = (route?: Route) => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [sections, setSections] = useState<SectionType[]>([]);
   const [fireCentre, setFireCentre] = useState<FireCentre[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
-  const { route } = useRole();
   const { AxiosPrivate } = useAxios();
 
   const sortRegion = (reg: Region[]) => {
@@ -55,10 +53,12 @@ export const useGetFilters = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await AxiosPrivate.get(`/${route}/filters`);
-      route === Route.EMCR ? setEmcrData(data) : setBcwsData(data);
+      const res = route && (await AxiosPrivate.get(`/${route}/filters`));
+      res && route === Route.EMCR
+        ? setEmcrData(res.data)
+        : res && setBcwsData(res.data);
     })();
-  }, [AxiosPrivate, route]);
+  }, [route]);
 
   const filters = useMemo(() => {
     return {

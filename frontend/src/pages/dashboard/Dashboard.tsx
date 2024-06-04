@@ -56,7 +56,9 @@ const Dashboard = () => {
               totalRows={totalRows}
               rowsPerPage={rowsPerPage}
               currentPage={currentPage}
-              handleChangePage={(page: number) => handleChangeOne('page', page)}
+              handleChangePage={(page: number) =>
+                handleChangeOne('page', page.toString())
+              }
             />
           </div>
         </div>

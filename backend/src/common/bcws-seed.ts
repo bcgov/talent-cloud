@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { format } from 'date-fns';
+import { divisionsAndMinistries } from './const';
 import { AvailabilityType } from './enums/availability-type.enum';
 import {
   ExperienceLevel,
@@ -21,7 +22,6 @@ import {
 import { CreatePersonnelDTO } from '../personnel';
 import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
-import { divisionsAndMinistries } from './const';
 
 export const handler = (
   locations: LocationEntity[],

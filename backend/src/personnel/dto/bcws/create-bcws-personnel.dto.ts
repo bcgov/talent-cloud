@@ -11,10 +11,10 @@ import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certificati
 import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
+import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
+import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 import { Section } from '../../../common/enums/bcws';
 import { Status } from '../../../common/enums/status.enum';
-import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
-import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
 
 
 export class CreatePersonnelBcwsDTO {

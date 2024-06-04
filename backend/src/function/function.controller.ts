@@ -10,10 +10,10 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FunctionService } from './function.service';
 import { FunctionRO } from './ro/function.ro';
+import { RolesRO } from './ro/role.ro';
 import { Program } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { QueryTransformPipe } from '../query-validation.pipe';
-import { RolesRO } from './ro/role.ro';
 
 @Controller('function')
 @ApiTags('Functions API')
@@ -33,7 +33,7 @@ export class FunctionController {
     type: [FunctionRO],
   })
   @Get()
-  @Programs([Program.EMCR, Program.ADMIN])
+  @Programs([Program.EMCR])
   @UsePipes(new QueryTransformPipe())
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();
@@ -49,7 +49,7 @@ export class FunctionController {
     type: [RolesRO],
   })
   @Get('bcws/roles')
-  @Programs([Program.BCWS, Program.ADMIN])
+  @Programs([Program.BCWS])
   @UsePipes(new QueryTransformPipe())
   async getRoles(): Promise<RolesRO[]> {
     const allRoles = await this.functionService.getAllRoles();

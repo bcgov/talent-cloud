@@ -5,6 +5,8 @@ import { PersonnelService } from './personnel.service';
 
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { BcwsPersonnelEntity, BcwsSectionsAndRolesEntity, LanguageEntity } from '../database/entities/bcws';
+import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
@@ -14,8 +16,6 @@ import {
 } from '../database/entities/emcr';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
 import { LoggerModule } from '../logger/logger.module';
-import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 
 @Module({
   imports: [

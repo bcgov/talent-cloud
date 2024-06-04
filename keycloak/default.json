@@ -246,17 +246,23 @@
       } ],
       "security-admin-console" : [ ],
       "local-client" : [ {
-        "id" : "e3876943-74ed-4cc0-b836-3d942c47c7e8",
-        "name" : "Coordinator",
+        "id" : "f82404aa-b379-48c4-8610-b2e99b1b4dea",
+        "name" : "logistics",
         "description" : "",
         "composite" : false,
         "clientRole" : true,
         "containerId" : "a0c11add-51f1-46b4-ad80-fee782550ab8",
         "attributes" : { }
       }, {
-        "id" : "f82404aa-b379-48c4-8610-b2e99b1b4dea",
-        "name" : "logistics",
-        "description" : "",
+        "id" : "151c7897-9276-491b-9dd6-0346249ea0c9",
+        "name" : "emcr",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "a0c11add-51f1-46b4-ad80-fee782550ab8",
+        "attributes" : { }
+      }, {
+        "id" : "dfa0b645-f279-42e3-9b25-cf3e8ca7d962",
+        "name" : "bcws",
         "composite" : false,
         "clientRole" : true,
         "containerId" : "a0c11add-51f1-46b4-ad80-fee782550ab8",
@@ -399,78 +405,107 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids" : [ ],
   "webAuthnPolicyPasswordlessExtraOrigins" : [ ],
   "users" : [ {
-    "id" : "94fc713d-7e21-46a2-9ce7-38283910df27",
-    "createdTimestamp" : 1702658995463,
-    "username" : "local-coordinator",
+    "id" : "345af9f8-e8f2-4227-96c5-da77cecb4d3c",
+    "createdTimestamp" : 1717530733975,
+    "username" : "bcws-coordinator",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
-    "firstName" : "Local",
+    "firstName" : "BCWS",
     "lastName" : "Coordinator",
-    "email" : "coordinator@gov.bc.ca",
+    "email" : "bcws-coordinator@gov.bc.ca",
     "credentials" : [ {
-      "id" : "a01db8d2-8299-4be7-83a0-daa93e576707",
+      "id" : "eb11de19-eccb-48c0-a248-b07821454a33",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1702660853337,
-      "secretData" : "{\"value\":\"8JPkA7LMzwxbnclZTCVjKXeapnhGWB98wFTeecLDvDw=\",\"salt\":\"5br983/IAXbZEYIQW9D2LA==\",\"additionalParameters\":{}}",
+      "createdDate" : 1717530767603,
+      "secretData" : "{\"value\":\"dMXNqGpmwgCtncwZvrvJCSnxArAeHTSXrRlTuhqlan4=\",\"salt\":\"rzSgYuDXowh2SdCdqiSsoA==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-local" ],
     "clientRoles" : {
-      "local-client" : [ "emcr", "bcws", "coordinator" ]
+      "local-client" : [ "bcws", "coordinator" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
   }, {
-    "id" : "a9023eef-6ff0-4b64-878e-14941d3c9d25",
-    "createdTimestamp" : 1707433742221,
-    "username" : "local-logistics",
+    "id" : "6f605d76-6f71-40d1-ad8c-b005212e61f6",
+    "createdTimestamp" : 1717530612263,
+    "username" : "bcws-logistics",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
-    "firstName" : "Logistics ",
-    "lastName" : "Officer",
-    "email" : "logistics@gov.bc.ca",
+    "firstName" : "BCWS ",
+    "lastName" : "Logistics",
+    "email" : "bcws-logistics@gov.bc.ca",
     "credentials" : [ {
-      "id" : "4aaa129f-fd75-4b16-91de-95e302afa5b2",
+      "id" : "bb324181-805d-477e-9b4e-876b5b004cf5",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1707433768029,
-      "secretData" : "{\"value\":\"zZpGuBlPHznCcJ/OrHN5VZ+jJUuJ3hLGfnaIxIWacbc=\",\"salt\":\"9sXaV2StYdC5SXAfwdsqLg==\",\"additionalParameters\":{}}",
+      "createdDate" : 1717530626792,
+      "secretData" : "{\"value\":\"dUo2eNDvqWCmLEITT4wrDtahr3p89aor38Rhi6UQnjk=\",\"salt\":\"kVDGe9cX628Md9M0LSY6Zg==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-local" ],
     "clientRoles" : {
-      "local-client" : [ "emcr", "bcws", "logistics" ]
+      "local-client" : [ "logistics", "bcws" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
   }, {
-    "id" : "1fc0e8d5-6902-417c-9b4d-56885681e4f3",
-    "createdTimestamp" : 1702238762006,
-    "username" : "local-user",
+    "id" : "1838dc6c-ef87-4cd0-94f0-b0089a2e9f5c",
+    "createdTimestamp" : 1717530871876,
+    "username" : "emcr-coordinator",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
-    "firstName" : "Local",
-    "lastName" : "User",
-    "email" : "local.user@gov.bc.ca",
+    "firstName" : "EMCR",
+    "lastName" : "Coordinator",
+    "email" : "emcr-coordinator@gov.bc.ca",
     "credentials" : [ {
-      "id" : "6aa7732c-f2d9-4bd6-9d10-0d114a26a141",
+      "id" : "03fb2944-8829-41ac-8b86-c60c3b3aaf2c",
       "type" : "password",
       "userLabel" : "My password",
-      "createdDate" : 1702238773757,
-      "secretData" : "{\"value\":\"oK8FjRCeJx43h5iFpY8CFWs5bgS4ZdWy3waPj8B4lGU=\",\"salt\":\"jom0QqyNJAd6A7kkPGPpiQ==\",\"additionalParameters\":{}}",
+      "createdDate" : 1717530882637,
+      "secretData" : "{\"value\":\"LCYcTBrFQvJdjtbpdurkt8lh6ExLjJLy/sf6ia57XaA=\",\"salt\":\"aJM3gcjm9G59lbYUaqhExQ==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-local" ],
+    "clientRoles" : {
+      "local-client" : [ "emcr", "coordinator" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "0140e9f6-39fb-4fec-8568-d4b10fbb3faa",
+    "createdTimestamp" : 1717530798791,
+    "username" : "emcr-logistics",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "EMCR",
+    "lastName" : "Logistics",
+    "email" : "emcr-logistics@gov.bc.ca",
+    "credentials" : [ {
+      "id" : "84d02c6e-52c5-48f2-a6d6-c7a8308c7aa7",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1717530809432,
+      "secretData" : "{\"value\":\"j7/xqHrM9SckLXVod1kl3cjo8koD1Bb6ol7DUM7pWA4=\",\"salt\":\"mak3Hoq4pvhsrTUCgB7pSg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-local" ],
+    "clientRoles" : {
+      "local-client" : [ "logistics", "emcr" ]
+    },
     "notBefore" : 0,
     "groups" : [ ]
   } ],
@@ -1269,7 +1304,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-address-mapper", "oidc-full-name-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "oidc-full-name-mapper" ]
       }
     }, {
       "id" : "c8eee09a-9f1b-49c2-a4ba-44222471846d",
@@ -1303,7 +1338,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-role-list-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-property-mapper", "saml-user-attribute-mapper", "oidc-usermodel-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-full-name-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {
@@ -1895,7 +1930,7 @@
     "cibaInterval" : "5",
     "realmReusableOtpCode" : "false"
   },
-  "keycloakVersion" : "23.0.6",
+  "keycloakVersion" : "23.0.7",
   "userManagedAccessAllowed" : false,
   "clientProfiles" : {
     "profiles" : [ ]
