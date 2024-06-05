@@ -10,6 +10,7 @@ import { Public } from './auth/public.decorator';
 import { FunctionService } from './function/function.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
+import { Ministry, MinistryName } from './common/enums';
 
 @ApiTags('Application API')
 @Controller()
@@ -58,6 +59,13 @@ export class AppController {
       realm: process.env.KEYCLOAK_REALM,
     };
   }
+
+  /**
+   * Return lists of values used by frontend for filtering emcr personnel
+   * @param req 
+   * @returns 
+   */
+  @Public()
   @Get('/emcr/filters')
   async getEmcrFilters(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url} ${req.role}`);
@@ -68,6 +76,11 @@ export class AppController {
       ),
     };
   }
+  /**
+   * Return lists of values used by frontend for filtering bcws personnel
+   * @param req 
+   * @returns 
+   */
   @Get('/bcws/filters')
   async getBcwsFilters(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url} ${req.role}`);
@@ -80,6 +93,10 @@ export class AppController {
     };
   }
 
+  /**
+   * Public endpoint with form ID and form enabled status
+   * @returns {Object} Form info
+   */
   @Get('/form-info')
   @Public()
   async getFormInfo() {
@@ -88,5 +105,16 @@ export class AppController {
       formEnabled: !process.env.CHEFS_FORM_DISABLED,
  
     };
+  }
+
+  /**
+   * Public endpoint to get list of ministries
+   * Used by CHEFS form
+   * @returns {Ministry[]} List of ministries
+   */
+  @Public()
+  @Get('/ministries')
+  getMinistries() {
+    return { data: Object.values(Ministry).map((ministry) => ({ value: ministry, label: MinistryName[ministry] })) }
   }
 }

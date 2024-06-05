@@ -1,3 +1,4 @@
+import { CertificationRO } from '../../../personnel/ro/bcws/bcws-certification.ro';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('bcws_certification')
@@ -12,4 +13,8 @@ export class BcwsCertificationEntity {
     unique: true,
   })
   name: string;
+
+  toResponseObject(): CertificationRO {
+    return { id: this.id, name: this.name };
+  }
 }

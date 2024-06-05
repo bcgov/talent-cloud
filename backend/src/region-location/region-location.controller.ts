@@ -10,6 +10,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegionsAndLocationsService } from './region-location.service';
 import { RequestWithRoles } from '../auth/interface';
 import { AppLogger } from '../logger/logger.service';
+import { Public } from '../auth/public.decorator';
 
 @Controller('regions-locations')
 @ApiTags('RegionsAndLocations API')
@@ -26,6 +27,7 @@ export class RegionsAndLocationsController {
     summary: 'Get list of regions and locations',
     description: 'Used by the frontend for the dashbaord filters',
   })
+  @Public()
   @Get()
   async getRegionsAndLocations(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url}, ${req.username}, ${req.role}`);
