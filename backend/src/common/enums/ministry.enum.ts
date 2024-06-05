@@ -10,6 +10,7 @@ export enum Ministry {
   ENV = 'ENV',
   FIN = 'FIN',
   FOR = 'FOR',
+  GCPE = 'GCPE',
   HLTH = 'HLTH',
   HOUS = 'HOUS',
   IRR = 'IRR',
@@ -17,6 +18,8 @@ export enum Ministry {
   LBR = 'LBR',
   MMHA = 'MMHA',
   MUNI = 'MUNI',
+  PREM = 'PREM',
+  PSA = 'PSA',
   PSFS = 'PSFS',
   PSSG = 'PSSG',
   SDPR = 'SDPR',
@@ -26,9 +29,9 @@ export enum Ministry {
 }
 
 export enum MinistryName {
-  AF = 'Agriculture and Food',
-  MMHA = 'Mental Health and Addictions',
+  AF = 'Agriculture and Food',  
   AG = 'Attorney General',
+  AGRI = 'Agriculture',
   MCF = 'Children and Family Development',
   CITZ = "Citizens' Services",
   ECC = 'Education and Child Care',
@@ -36,17 +39,23 @@ export enum MinistryName {
   EMLI = 'Energy, Mines and Low Carbon Innovation',
   ENV = 'Environment and Climate Change Strategy',
   FIN = 'Finance',
+  GCPE = 'Government Communications and Public Engagement',
   FOR = 'Forests',
   HLTH = 'Health',
   HOUS = 'Housing',
   IRR = 'Indigenous Relations & Reconciliation',
   JEDI = 'Jobs, Economic Development and Innovation',
   LBR = 'Labour',
+  MMHA = 'Mental Health and Addictions',
   MUNI = 'Municipal Affairs',
+  PREM = 'Office of the Premier',
+  PSA = 'Public Service Agency',
   PSFS = 'Post-Secondary Education and Future Skills',
   PSSG = 'Public Safety and Solicitor General',
   SDPR = 'Social Development and Poverty Reduction',
   TACS = 'Tourism, Arts, Culture and Sport',
   MOTI = 'Transportation and Infrastructure',
   WLRS = 'Water, Land and Resource Stewardship',
+
+  
 }
