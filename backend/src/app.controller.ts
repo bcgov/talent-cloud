@@ -102,7 +102,7 @@ export class AppController {
   async getFormInfo() {
     return {
       formId: process.env.CHEFS_FORM_ID,
-      formEnabled: !process.env.CHEFS_FORM_DISABLED,
+      formEnabled: process.env.CHEFS_FORM_ENABLED === 'true',
  
     };
   }

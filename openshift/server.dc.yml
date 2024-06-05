@@ -141,10 +141,10 @@ objects:
                     secretKeyRef:
                       key: form_id
                       name: ${APP_NAME}-chefs
-                - name: CHEFS_FORM_DISABLED
+                - name: CHEFS_FORM_ENABLED
                   valueFrom:
                     secretKeyRef:
-                      key: disabled
+                      key: enabled
                       name: ${APP_NAME}-chefs
                 - name: BCWS_TOKEN
                   valueFrom:

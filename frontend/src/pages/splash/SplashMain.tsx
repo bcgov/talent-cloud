@@ -58,7 +58,7 @@ export const SplashMain = ({ content }: { content: any }) => {
                 }
                 link={{
                   name: 'here ',
-                  url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${import.meta.env.VITE_FORM_ID}`,
+                  url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`,
                 }}
               />
             ) : (

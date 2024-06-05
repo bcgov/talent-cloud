@@ -50,7 +50,7 @@ objects:
       api_key: ${CHEFS_API_KEY}
       token: ${CHEFS_WS_TOKEN}
       form_id: ${CHEFS_FORM_ID}
-      disabled: ${CHEFS_FORM_ENABLED}
+      enabled: ${CHEFS_FORM_ENABLED}
   - kind: Secret
     apiVersion: v1
     metadata:

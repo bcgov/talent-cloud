@@ -22,5 +22,5 @@ export class CreateBcwsPersonnelToolsDTO {
       ToolsProficiency,
     )}`,
   })
-  proficenyLevel: ToolsProficiency;
+  proficiencyLevel: ToolsProficiency;
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
 import {
@@ -10,10 +10,12 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { UpdatePersonnelDTO } from './dto';
+import { CreateBcwsPersonnelLanguagesDTO, CreatePersonnelBcwsDTO } from './dto/bcws';
 import { GetBcwsPersonnelDTO } from './dto/bcws/get-bcws-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/bcws/update-bcws-personnel.dto';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import {
+  CreatePersonnelEmcrDTO,
   EmcrPersonnelExperienceDTO,
   GetEmcrPersonnelDTO,
   UpdateEmcrPersonnelDTO,
@@ -122,7 +124,7 @@ export class PersonnelService {
         const allTools = await this.toolsRepository.find();
         const personnelTools = personnel.tools.map((t) => ({
           toolId: allTools.find((at) => at.name === t.tool).id,
-          proficenyLevel: t.proficiencyLevel,
+          proficiencyLevel: t.proficiencyLevel,
         }));
         personnel.tools = personnelTools;
       }
@@ -217,6 +219,83 @@ export class PersonnelService {
     }
   }
 
+  /**
+   * create a personnel entity
+   * @param personnel
+   * @returns
+   */
+  async createOnePerson(personnel: CreatePersonnelDTO, emcrPersonnel?: CreatePersonnelEmcrDTO, bcwsPersonnel?: CreatePersonnelBcwsDTO): Promise<{ id: string }> {
+    try {
+      const alreadyExists = await this.personnelRepository.findOne({ where: { email: personnel.email } });
+
+      if (alreadyExists) {
+        throw new BadRequestException('Personnel with this email already exists');
+      }
+
+      const person = await this.personnelRepository.save(this.personnelRepository.create(new PersonnelEntity(personnel)))
+
+      if(emcrPersonnel){
+        await this.createEmcerPersonnel(emcrPersonnel, person.id)
+      }
+
+      if(bcwsPersonnel){
+          await this.createBcwsPersonnel(bcwsPersonnel, person.id)
+        }
+
+
+      return {
+        id: person.id
+      }
+
+
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+/**
+ * Create EMCR personnel data
+ * @param emcrPersonnel 
+ * @param id 
+ * @returns 
+ */
+  async createEmcerPersonnel(emcrPersonnel: CreatePersonnelEmcrDTO, id: string): Promise<EmcrPersonnelEntity> {
+
+    emcrPersonnel.personnelId = id
+
+    return await this.emcrPersonnelRepository.save(this.emcrPersonnelRepository.create(new EmcrPersonnelEntity((emcrPersonnel))));
+  }
+
+/**
+ * Create BCWS Personnel Data
+ * @param bcwsPersonnel 
+ * @param id 
+ * @returns 
+ */
+  async createBcwsPersonnel(bcwsPersonnel: CreatePersonnelBcwsDTO, id: string): Promise<BcwsPersonnelEntity> {
+
+    bcwsPersonnel.personnelId = id;
+
+    const languages = this.parseLanguages(bcwsPersonnel.languages, id);
+
+    bcwsPersonnel.languages = languages;
+
+    return await this.bcwsPersonnelRepository.save(this.bcwsPersonnelRepository.create(new BcwsPersonnelEntity((bcwsPersonnel))));
+  }
+
+/**
+ * Format Languages for saving in the database
+ * @param languages 
+ * @param personnelId 
+ * @returns 
+ */
+  parseLanguages(languages: Partial<CreateBcwsPersonnelLanguagesDTO>[], personnelId: string): CreateBcwsPersonnelLanguagesDTO[] {
+    return languages.map(itm => ({
+      personnelId,
+      language: itm.language,
+      level: itm.level,
+      type: itm.type,
+    }))
+  }
   /**
    * Get EMCR Personnel
    * Given specific queries, get associated personnel and their function experiences

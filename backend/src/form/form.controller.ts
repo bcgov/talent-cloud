@@ -6,9 +6,12 @@ import {
   Req,
   RawBodyRequest,
   Get,
+  Body
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation,  ApiTags } from '@nestjs/swagger';
+import { CreateFormDTO } from './form.dto';
 import { FormService } from './form.service';
+import { FormSubmissionEventPayload } from './interface';
 import { TokenType } from '../auth/interface';
 import { Public } from '../auth/public.decorator';
 import { Token } from '../auth/token.decorator';
@@ -29,8 +32,8 @@ export class FormSubmissionController {
   @Token([TokenType.CHEFS])
   async handleIncomingEvents(@Req() req: RawBodyRequest<Request>) {
     this.logger.log('Received form submission event');
-    // console.log(req.rawBody.toString());
-    const rawBody = JSON.parse(req.rawBody.toString());
+
+    const rawBody: FormSubmissionEventPayload= JSON.parse(req.rawBody.toString());
     await this.formService.processEventPayload(rawBody);
   }
 
