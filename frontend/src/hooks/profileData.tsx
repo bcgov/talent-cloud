@@ -195,11 +195,11 @@ export const bcwsData = (personnel?: Personnel) => {
       { title: 'Govt. Email', content: personnel?.email },
       {
         title: 'Emergency Contact First Name',
-        content: `${personnel?.emergencyContactFirstName ?? 'Not Listed'}`,
+        content: personnel?.emergencyContactFirstName ?? 'Not Listed',
       },
       {
         title: 'Emergency Contact Last Name',
-        content: `${personnel?.emergencyContactLastName ?? 'Not Listed'}`,
+        content: personnel?.emergencyContactLastName ?? 'Not Listed',
       },
       {
         title: 'Emergency Phone Number',
