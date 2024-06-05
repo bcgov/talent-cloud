@@ -32,9 +32,9 @@ export class FormSubmissionController {
   @Token([TokenType.CHEFS])
   async handleIncomingEvents(@Req() req: RawBodyRequest<Request>) {
     this.logger.log('Received form submission event');
-
+    this.logger.log(req.rawBody.toString())
     const rawBody: FormSubmissionEventPayload= JSON.parse(req.rawBody.toString());
-    await this.formService.processEventPayload(rawBody);
+    return await this.formService.processEventPayload(rawBody);
   }
 
   /**

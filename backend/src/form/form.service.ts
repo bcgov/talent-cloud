@@ -11,6 +11,7 @@ import { CreatePersonnelDTO } from '../personnel';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 import { PersonnelService } from '../personnel/personnel.service';
+import { PersonnelEntity } from 'src/database/entities/personnel.entity';
 
 
 @Injectable()
@@ -26,11 +27,13 @@ export class FormService {
    * process form submission event payload
    * @param eventPayload
    */
-  public async processEventPayload(eventPayload: FormSubmissionEventPayload) {
-    this.logger.log(
-      `${this.processEventPayload.name}, Submission ID: ${eventPayload.submissionId}, form ID: ${eventPayload.formId}`,
-    );
+  public async processEventPayload(eventPayload: FormSubmissionEventPayload): Promise<Form>{
     const { submissionId, formId } = eventPayload;
+    
+    this.logger.log(`Requesting form data from submission event`);
+    this.logger.log(`Submission ID: ${submissionId}`);
+    this.logger.log(`Form ID: ${formId}`);
+
     const requestFormData = await axios.get(
       `${process.env.CHEFS_API}/app/api/v1/submissions/${submissionId}`,
       {
@@ -40,22 +43,39 @@ export class FormService {
         },
       },
     );
+    
     this.logger.log(`Received form data from submission event`);
-    requestFormData &&
-      this.processFormData({
+    this.logger.log(`Parsing form data for: ${requestFormData?.data?.submission?.submission?.data?.personnel?.program} program(s)`);
+    this.logger.log(`Personnel Data:`)
+    this.logger.log(requestFormData?.data?.submission?.submission?.data?.personnel)
+    this.logger.log(`EMCR Data:`)
+    this.logger.log(requestFormData?.data?.submission?.submission?.data?.emcr)
+    this.logger.log(`BCWS Data: `)
+    this.logger.log(requestFormData?.data?.submission?.submission?.data?.bcws)
+
+    
+      const form = requestFormData && await this.processFormData({
         submissionId,
         formId,
         data: requestFormData.data.submission.submission.data,
       });
+      this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
+      return form
   }
   //TODO PROD: unique constraint on email address
   /**
    * Create a new form entity, and passes the form id and submission id to createPersonnel function
    * @param submission
    */
-  async processFormData(submission: CreateFormDTO): Promise<void> {
+  async processFormData(submission: CreateFormDTO): Promise<Form> {
     const form = await this.saveForm(submission);
-    await this.createPersonnelEntities(submission.data, form);
+    const personnel = await this.createPersonnelEntities(submission.data, form.id);
+
+    
+      this.logger.log(`Personnel entities created successfully. Personnel id: ${personnel.id}`);
+      return form
+    
+      
   }
   /**
    * Saves the form id and submission id
@@ -64,7 +84,6 @@ export class FormService {
    */
   async saveForm(data: CreateFormDTO): Promise<Form> {
     try {
-      this.logger.log(`Form data saved successfully`);
       return await this.formRepo.save(this.formRepo.create(data));
     } catch (e) {
       this.logger.error(`Error saving form data: ${e}`);
@@ -79,26 +98,39 @@ export class FormService {
    */
   async createPersonnelEntities(
     data: IntakeFormData,
-    form: Form,
-  ): Promise<void> {
+    formId: number
     
-      const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr) : undefined
+  ): Promise<PersonnelEntity> {
     
+      const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr) : undefined;
       const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws) : undefined;
     
-      const personnel = this.parsePersonnel(data.personnel, form);
+      if(data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
+      this.logger.error(`Error saving form data: Both programs selected but no data found for either program`);
+      throw new BadRequestException(`Both programs selected but no data found for either program`);
+    } else if( data.personnel.program === 'EMCR' && !emcrPersonnel) {
+      this.logger.error(`Error saving form data: EMCR program selected but no data found for EMCR program`);
+      throw new BadRequestException(`EMCR program selected but no data found for EMCR program`);
+    } else if (
+      data.personnel.program === 'BCWS' && !bcwsPersonnel) {
+      this.logger.error(`Error saving form data: BCWS program selected but no data found for BCWS program`);
+      throw new BadRequestException(`BCWS program selected but no data found for BCWS program`);
+    } 
+    const personnel = this.parsePersonnel(data.personnel, formId);
+    
 
     try {
-      await this.personnelService.createOnePerson(personnel, emcrPersonnel, bcwsPersonnel);
+      return await this.personnelService.createOnePerson(personnel, emcrPersonnel, bcwsPersonnel);
     } catch (e) {
       this.logger.error(`Error saving form data: ${e}`);
       throw new BadRequestException(e);
     }
   }
 
-  parsePersonnel(data: PersonnelFormData, form: Form): CreatePersonnelDTO {
+  parsePersonnel(data: PersonnelFormData, formId: number): CreatePersonnelDTO {
+    
     const personnelData: CreatePersonnelDTO = {
-      intakeForm: form,
+      intakeForm: formId,
       unionMembership: UnionMembership[data.unionMembership],
       ministry: data.ministry.value,
       division: data.division,
