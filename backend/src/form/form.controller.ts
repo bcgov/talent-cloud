@@ -49,17 +49,4 @@ export class FormSubmissionController {
       disabled: process.env.CHEFS_FORM_DISABLED === 'true',
     };
   }
-  
-  //TODO REMOVE
-  @ApiOperation({
-    summary: 'Get personnel availability for specific dates',
-    description: 'Returns the personnel data to the profile view',
-  })
-  @Post('/test')
-  @Public()
-  async testFormSubmission(@Body() body: CreateFormDTO) {
-    this.logger.log('Received test form submission');
-    await this.formService.processFormData(body);
-    
-  }
 }
