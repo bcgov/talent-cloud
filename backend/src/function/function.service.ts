@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BcwsRoleName, CertificationName, SectionName } from '../common/enums';
+import { BcwsRole, BcwsRoleName, CertificationName, SectionName } from '../common/enums';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { EmcrFunctionEntity } from '../database/entities/emcr';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
@@ -64,7 +64,7 @@ export class FunctionService {
       if (!acc[key]) {
         acc[key] = [];
       }
-      acc[key].push({ name: BcwsRoleName[role.name], id: role.id, section: SectionName[role.section] });
+      acc[key].push({ name: BcwsRoleName[role.name], enumName: BcwsRole[role.name], id: role.id, section: SectionName[role.section] });
       return acc;
     }, {});
 

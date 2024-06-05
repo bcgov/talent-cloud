@@ -194,11 +194,12 @@ export const bcwsData = (personnel?: Personnel) => {
       },
       { title: 'Govt. Email', content: personnel?.email },
       {
-        title: 'Emergency Contact',
-        content:
-          personnel?.emergencyContactFirstName && personnel?.emergencyContactLastName
-            ? `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`
-            : 'Not Listed',
+        title: 'Emergency Contact First Name',
+        content: personnel?.emergencyContactFirstName ?? 'Not Listed',
+      },
+      {
+        title: 'Emergency Contact Last Name',
+        content: personnel?.emergencyContactLastName ?? 'Not Listed',
       },
       {
         title: 'Emergency Phone Number',
@@ -222,12 +223,15 @@ export const bcwsData = (personnel?: Personnel) => {
           ),
       },
       {
-        title: 'Ministry/Division',
-        content: `${personnel?.ministry} / ${personnel?.division}`,
+        title: 'Ministry',
+        content: `${personnel?.ministry}`,
+      },
+      {
+        title: 'Division',
+        content: `${personnel?.division ?? 'Not Listed'}`,
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
       { title: 'Paylist', content: personnel?.paylistId },
-      {},
       {
         title: 'Liaison First Name',
         content: personnel?.liaisonFirstName ?? 'Not Listed',
