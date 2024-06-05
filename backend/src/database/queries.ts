@@ -184,4 +184,7 @@ export const joinedLocationsSql = `INSERT INTO public."location" (id,location_na
 (39,'Port McNeil','VIC','COASTAL'),
 (41,'Qualicum Beach','VIC','COASTAL'),
 (61,'Sooke','VIC','COASTAL'),
-(54,'Ucluelet','VIC','COASTAL');`
+(54,'Ucluelet','VIC','COASTAL'),
+(89, 'Telkwa', 'NWE', 'NORTHWEST'),
+(90,'Anahim Lake', 'NWE', 'CARIBOO')
+;`
