@@ -230,7 +230,7 @@ export class PersonnelService {
 
       if (alreadyExists) {
         this.logger.log(`Personnel with email ${personnel.email} already exists`);
-        return 
+        throw new BadRequestException(`Personnel with email ${personnel.email} already exists`);
       }
 
       const person = await this.personnelRepository.save(this.personnelRepository.create(new PersonnelEntity(personnel)))
