@@ -10,6 +10,7 @@ export enum Ministry {
   ENV = 'ENV',
   FIN = 'FIN',
   FOR = 'FOR',
+  GCPE = 'GCPE',
   HLTH = 'HLTH',
   HOUS = 'HOUS',
   IRR = 'IRR',
@@ -18,6 +19,7 @@ export enum Ministry {
   MMHA = 'MMHA',
   MUNI = 'MUNI',
   PREM = 'PREM',
+  PSA = 'PSA',
   PSFS = 'PSFS',
   PSSG = 'PSSG',
   SDPR = 'SDPR',
@@ -37,6 +39,7 @@ export enum MinistryName {
   EMLI = 'Energy, Mines and Low Carbon Innovation',
   ENV = 'Environment and Climate Change Strategy',
   FIN = 'Finance',
+  GCPE = 'Government Communications and Public Engagement',
   FOR = 'Forests',
   HLTH = 'Health',
   HOUS = 'Housing',
@@ -46,10 +49,13 @@ export enum MinistryName {
   MMHA = 'Mental Health and Addictions',
   MUNI = 'Municipal Affairs',
   PREM = 'Office of the Premier',
+  PSA = 'Public Service Agency',
   PSFS = 'Post-Secondary Education and Future Skills',
   PSSG = 'Public Safety and Solicitor General',
   SDPR = 'Social Development and Poverty Reduction',
   TACS = 'Tourism, Arts, Culture and Sport',
   MOTI = 'Transportation and Infrastructure',
   WLRS = 'Water, Land and Resource Stewardship',
+
+  
 }
