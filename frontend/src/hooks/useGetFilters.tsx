@@ -13,8 +13,8 @@ import { useAxios } from './useAxios';
 import { Route } from '@/providers';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { BcwsRole, Section } from '@/common/enums/sections.enum';
-import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
+import type { Section } from '@/common/enums/sections.enum';
+import { SectionName } from '@/common/enums/sections.enum';
 
 export const useGetFilters = (route?: Route) => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -142,8 +142,8 @@ export const useGetFilters = (route?: Route) => {
         label: '',
         options: Object.keys(sections).map((itm) =>
           Object.values(sections[itm as keyof typeof sections]).map((role) => ({
-            label: BcwsRoleName[role as BcwsRole],
-            value: role,
+            label: role.name,
+            value: role.enumName,
           })),
         ),
       },

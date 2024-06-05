@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { BcwsRoleName, SectionName } from "../../../common/enums"
+import { BcwsRole, BcwsRoleName, SectionName } from "../../../common/enums"
 
 export class RoleNamesRO {
 
@@ -14,6 +14,12 @@ export class RoleNamesRO {
     required: true,
   })
   name: BcwsRoleName;
+
+  @ApiProperty({
+    description: 'Section name',
+    required: true,
+  })
+  enumName: BcwsRole;
 
   @ApiProperty({
     description: 'Section name',
