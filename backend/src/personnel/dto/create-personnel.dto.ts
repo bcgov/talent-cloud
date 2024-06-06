@@ -189,7 +189,7 @@ export class CreatePersonnelDTO {
 
   @ApiProperty()
   @IsOptional()
-  intakeForm?: Form;
+  intakeForm?: number;
 
   @ApiProperty({
     enum: Ministry,

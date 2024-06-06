@@ -224,28 +224,33 @@ export class PersonnelService {
    * @param personnel
    * @returns
    */
-  async createOnePerson(personnel: CreatePersonnelDTO, emcrPersonnel?: CreatePersonnelEmcrDTO, bcwsPersonnel?: CreatePersonnelBcwsDTO): Promise<{ id: string }> {
+  async createOnePerson(personnel: CreatePersonnelDTO, emcrPersonnel?: CreatePersonnelEmcrDTO, bcwsPersonnel?: CreatePersonnelBcwsDTO): Promise<PersonnelEntity> {
     try {
       const alreadyExists = await this.personnelRepository.findOne({ where: { email: personnel.email } });
 
       if (alreadyExists) {
-        throw new BadRequestException('Personnel with this email already exists');
+        this.logger.log(`Personnel with email ${personnel.email} already exists`);
+        throw new BadRequestException(`Personnel with email ${personnel.email} already exists`);
       }
 
       const person = await this.personnelRepository.save(this.personnelRepository.create(new PersonnelEntity(personnel)))
 
       if(emcrPersonnel){
-        await this.createEmcerPersonnel(emcrPersonnel, person.id)
+        const emcr = await this.createEmcerPersonnel(emcrPersonnel, person.id)
+        if (emcr){
+          this.logger.log(`EMCR Personnel created successfully. Personnel id: ${emcr.personnelId}`);
+        }
       }
 
       if(bcwsPersonnel){
-          await this.createBcwsPersonnel(bcwsPersonnel, person.id)
+          const bcws  = await this.createBcwsPersonnel(bcwsPersonnel, person.id)
+          if(bcws){
+            this.logger.log(`BCWS Personnel created successfully. Personnel id: ${bcws.personnelId}`);
+          }
         }
 
 
-      return {
-        id: person.id
-      }
+      return person;
 
 
     } catch (e) {
@@ -276,6 +281,7 @@ export class PersonnelService {
     bcwsPersonnel.personnelId = id;
 
     const languages = this.parseLanguages(bcwsPersonnel.languages, id);
+    this.logger.log(`Languages: ${JSON.stringify(languages)}`);
 
     bcwsPersonnel.languages = languages;
 
