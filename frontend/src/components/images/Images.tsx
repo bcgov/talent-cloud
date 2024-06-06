@@ -22,6 +22,25 @@ export const BcGovLogoHorizontal = () => (
     alt="bc government logo"
   />
 );
+
+export const CoreLogo = () => (
+  <img
+    width={100}
+    className="-my-2"
+    src={new URL('/assets/images/CORE_Logo_R_RGB_pos.png', import.meta.url).href}
+    alt="core logo"
+  />
+);
+
+export const CoreLogoHorizontal = () => (
+  <img
+    width={262}
+    className="-my-2"
+    src={new URL('/assets/images/CORE_Logo_H_RGB_pos.png', import.meta.url).href}
+    alt="core logo"
+  />
+);
+
 export const UserIcon = () => (
   <img
     src={new URL('/assets/images/profile-icon.svg', import.meta.url).href}

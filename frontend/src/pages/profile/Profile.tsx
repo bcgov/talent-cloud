@@ -181,7 +181,7 @@ const Profile = () => {
 
   return (
     <div
-      className={`min-h-screen pt-12 pb-24 ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
+      className={`min-h-screen pt-24  ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
     >
       <Breadcrumbs
         placeholder={'Breadcrumbs'}
