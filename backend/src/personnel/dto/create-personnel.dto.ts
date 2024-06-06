@@ -193,7 +193,7 @@ export class CreatePersonnelDTO {
 
   @ApiProperty({
     enum: Ministry,
-    example: Ministry.AGRI,
+    example: Ministry.AF,
   })
   ministry: Ministry;
 

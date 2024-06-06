@@ -1,5 +1,4 @@
 export enum Ministry {
-  AGRI = 'AGRI',
   AF = 'AF',
   AG = 'AG',
   MCF = 'MCF',
@@ -31,7 +30,6 @@ export enum Ministry {
 export enum MinistryName {
   AF = 'Agriculture and Food',  
   AG = 'Attorney General',
-  AGRI = 'Agriculture',
   MCF = 'Children and Family Development',
   CITZ = "Citizens' Services",
   ECC = 'Education and Child Care',
