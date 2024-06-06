@@ -116,12 +116,12 @@ export interface DivisionSection {
 }
 export interface BcwsFormData {
 
-  certificationContainer: {
+  certificationContainer?: {
     bcws: {
       foodSafe1Expiry?: Date;
       foodSafe2Expiry?: Date;
     }, 
-    certificates: CertsFormSection[]
+    certificates?: CertsFormSection[]
   };
   sections: SectionsFormSection;
   
@@ -134,8 +134,8 @@ export interface BcwsFormData {
   paylistId: string;
   firstChoiceSection: Section;
   secondChoiceSection: Section;
-  languages: LanguagesFormSection[];
-  tools: ToolsFormSection[];
+  languages?: LanguagesFormSection[];
+  tools?: ToolsFormSection[];
   purchaseCard: boolean;
   liaisonFirstName?: string;
   liaisonLastName?: string;
