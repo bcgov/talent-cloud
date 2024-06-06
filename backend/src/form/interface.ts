@@ -60,7 +60,7 @@ export interface PersonnelFormData {
   firstAidLevel: FirstAid
   dl: string[];
   pfa: boolean;
-  ministry: {label: string; value: Ministry};
+  ministry: {label: string; value: string};
   division?: string;
 }
 
@@ -68,7 +68,7 @@ export interface ToolsFormSection {
 
   name: {
     id: number,
-    name: Tools,
+    name: string,
     label: string
   },
   proficiency: {
@@ -86,20 +86,20 @@ export interface CertsFormSection {
 
 interface RolesFormSection {
   id: number
-  name: BcwsRole
+  name: string;
   label: string;
-  section: Section
+  section: string;
 }
 
 
 
 export interface SectionsFormSection {
-  PLANNING?: { role: RolesFormSection, experience: ExperienceLevel }[];
-  LOGISTICS: { role: RolesFormSection, experience: ExperienceLevel }[];
-  FINANCE_ADMIN: { role: RolesFormSection, experience: ExperienceLevel }[];
-  OPERATIONS: { role: RolesFormSection, experience: ExperienceLevel }[];
-  COMMAND: { role: RolesFormSection, experience: ExperienceLevel }[];
-  AVIATION: { role: RolesFormSection, experience: ExperienceLevel }[];
+  PLANNING?: { role: RolesFormSection, experience: string }[];
+  LOGISTICS: { role: RolesFormSection, experience: string }[];
+  FINANCE_ADMIN: { role: RolesFormSection, experience: string }[];
+  OPERATIONS: { role: RolesFormSection, experience: string }[];
+  COMMAND: { role: RolesFormSection, experience: string }[];
+  AVIATION: { role: RolesFormSection, experience: string }[];
 }
 
 export interface LanguagesFormSection {
@@ -115,16 +115,10 @@ export interface DivisionSection {
   division_name: string;
 }
 export interface BcwsFormData {
-
-  certificationContainer?: {
-    bcws: {
-      foodSafe1Expiry?: Date;
+  sections?: SectionsFormSection;
+  certificates?: CertsFormSection[]
+  foodSafe1Expiry?: Date;
       foodSafe2Expiry?: Date;
-    }, 
-    certificates?: CertsFormSection[]
-  };
-  sections: SectionsFormSection;
-  
   emergencyContactFirstName: string;
   emergencyContactLastName: string;
   emergencyContactPhoneNumber: string;
@@ -132,8 +126,8 @@ export interface BcwsFormData {
   employeeId: string;
   division: DivisionSection;
   paylistId: string;
-  firstChoiceSection: Section;
-  secondChoiceSection: Section;
+  firstChoiceSection: string;
+  secondChoiceSection?: string;
   languages?: LanguagesFormSection[];
   tools?: ToolsFormSection[];
   purchaseCard: boolean;

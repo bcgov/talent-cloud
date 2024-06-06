@@ -41,7 +41,7 @@ export class CreatePersonnelBcwsDTO {
   @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.coordinatorNotes !== '')
-  coordinatorNotes: string;
+  coordinatorNotes?: string;
 
   @ApiProperty({
     description: 'Any other notes for this personnel',
@@ -51,7 +51,7 @@ export class CreatePersonnelBcwsDTO {
   @Length(2, 1000)
   @IsOptional()
   @ValidateIf((o) => o.logisticsNotes !== '')
-  logisticsNotes: string;
+  logisticsNotes?: string;
 
   @ApiProperty({
     description: 'Date approved by coordinator',
@@ -151,28 +151,32 @@ export class CreatePersonnelBcwsDTO {
     required: false,
   })
   @IsArray()
-  tools: CreateBcwsPersonnelToolsDTO[] | UpdateBcwsPersonnelToolsDTO[];
+  @IsOptional()
+  tools?: CreateBcwsPersonnelToolsDTO[] | UpdateBcwsPersonnelToolsDTO[];
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',
     required: false,
   })
   @IsArray()
-  languages: CreateBcwsPersonnelLanguagesDTO[];
+  @IsOptional()
+  languages?: CreateBcwsPersonnelLanguagesDTO[];
 
   @ApiProperty({
     description: 'Roles and sections for the personnel',
     required: false,
   })
   @IsArray()
-  roles: CreateBcwsPersonnelRolesDTO[];
+  @IsOptional()
+  roles?: CreateBcwsPersonnelRolesDTO[];
 
   @ApiProperty({
     description: 'Certifications for the personnel',
     required: false,
   })
   @IsArray()
-  certifications: CreateBcwsCertificationsDTO[] | UpdateBcwsCertificationsDTO[];
+  @IsOptional()
+  certifications?: CreateBcwsCertificationsDTO[] | UpdateBcwsCertificationsDTO[];
 
 
 
@@ -190,5 +194,6 @@ export class CreatePersonnelBcwsDTO {
     enum: Section,
     example: Section.LOGISTICS,
   })
-  secondChoiceSection: Section;
+  @IsOptional()
+  secondChoiceSection?: Section;
 }
