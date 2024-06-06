@@ -5,7 +5,7 @@ import { SplashBanner } from './SplashBanner';
 
 const SplashPage = () => {
   return (
-    <div className="bg-white h-screen pt-2">
+    <div className="bg-white h-screen">
       <SplashMain content={main} />
       <SplashBanner content={landAcknowledgement} />
       <SplashFooter content={footer} />

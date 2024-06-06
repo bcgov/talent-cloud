@@ -2,7 +2,7 @@ import { ButtonTypes } from '@/common';
 import { BannerType } from '@/common/enums/banner-enum';
 import { headerLink } from '@/common/links';
 import { Button } from '@/components';
-import { BcGovLogoHorizontal, SplashImage } from '@/components/images';
+import { CoreLogoHorizontal, SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { Routes } from '@/routes';
 import { AxiosPublic } from '@/utils';
@@ -30,22 +30,22 @@ export const SplashMain = ({ content }: { content: any }) => {
   return (
     <div>
       <header className="relative w-full border-b z-40 py-0">
-        <div className="w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-24 py-0">
+        <div className="w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-12 xl:px-24 py-0 2xl:pl-64">
           <div className="lg:flex">
             <a
               href={headerLink}
-              className="py-0 my-0"
+              className="p-2"
               target={'_blank'}
               rel={'noopener noreferrer'}
             >
-              <BcGovLogoHorizontal />
+              <CoreLogoHorizontal />
             </a>
           </div>
         </div>
       </header>
-      <div className="grid pt-24 lg:pt-6 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:pl-12 md:pr-0  xl:pl-32 2xl:px-64">
-        <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start   lg:py-24 text-left">
-          <div className="lg:pr-12 xl:pr-32">
+      <div className="grid pt-24 lg:pt-0 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:pl-12 md:pr-0  xl:pl-32 2xl:px-64 lg:mt-16">
+        <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start text-left">
+          <div className="lg:pr-12 lg:py-24 xl:pr-32">
             {/* Update env vars to change form url and to enable/disable form*/}
             {formId && formEnabled ? (
               <Banner
@@ -72,12 +72,12 @@ export const SplashMain = ({ content }: { content: any }) => {
                 }
               />
             )}
-            <div className="pt-16">
+            <div className="pt-16 lg:pt-24">
               <span className="text-info lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
             </div>
-            <div>
-              <p>{content.description.pt1}</p>
+            <div className="xl:pr-32">
+              <p className="leading-loose">{content.description.pt1}</p>
             </div>
           </div>
           {/* Small Screen Login in Section */}

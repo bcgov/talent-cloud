@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
-import { BcGovLogoHorizontal, CloudIcon } from '../images';
+import { CloudIcon, CoreLogoHorizontal } from '../images';
 import { Routes } from '@/routes';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
@@ -30,11 +30,11 @@ export const Header = ({
         <div className="lg:flex">
           <a
             href={headerLink}
-            className="py-0 my-0"
+            className="p-2 my-0"
             target={'_blank'}
             rel={'noopener noreferrer'}
           >
-            <BcGovLogoHorizontal />
+            <CoreLogoHorizontal />
           </a>
         </div>
         {authenticated && (
