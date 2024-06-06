@@ -174,7 +174,7 @@ export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
     personnelTools.push({
       tool, 
       toolId: tool.id,  
-      proficenyLevel: faker.helpers.arrayElement(
+      proficiencyLevel: faker.helpers.arrayElement(
         Object.values(ToolsProficiency),
       ),
     });
