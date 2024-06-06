@@ -26,10 +26,9 @@ export const activeCols = {
 export const pendingColumns = {
   [Route.BCWS]: [
     DashboardColumns.NAME,
+    DashboardColumns.DATE_APPLIED,
     DashboardColumns.FIRE_CENTRE,
     DashboardColumns.LOCATION,
-    DashboardColumns.WILLINGNESS,
-    DashboardColumns.RESPECTFUL,
     DashboardColumns.PARQ,
     DashboardColumns.ORIENTATION,
     DashboardColumns.MINISTRY,

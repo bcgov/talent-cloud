@@ -148,17 +148,6 @@ export const renderCells = (
       columnName: DashboardColumns.DATE_APPROVED,
       value: personnel.dateApproved && datePST(personnel.dateApproved as Date, true),
     },
-
-    willingnessStatement: {
-      key: DashboardColumns.WILLINGNESS,
-      columnName: DashboardColumns.WILLINGNESS,
-      value: personnel.willingnessStatement,
-    },
-    respectfulWorkplacePolicy: {
-      key: DashboardColumns.RESPECTFUL,
-      columnName: DashboardColumns.RESPECTFUL,
-      value: personnel.respectfulWorkplacePolicy,
-    },
     parQ: {
       key: DashboardColumns.PARQ,
       columnName: DashboardColumns.PARQ,
@@ -207,10 +196,9 @@ export const renderCells = (
     ],
     [Route.BCWS]: [
       cells.name,
+      cells.dateApplied,
       cells.fireCentre,
       cells.location,
-      cells.willingnessStatement,
-      cells.respectfulWorkplacePolicy,
       cells.parQ,
       cells.orientation,
       cells.ministry,
