@@ -11,10 +11,9 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FunctionService } from './function.service';
 import { FunctionRO } from './ro/function.ro';
 import { Public } from '../auth/public.decorator';
-
 import { BcwsToolsRO } from '../personnel/ro/bcws/tools.ro';
-import { RolesDataRO } from 'src/personnel/ro/bcws/roles-data.ro';
-import { CertificationRO } from 'src/personnel/ro/bcws/bcws-certification.ro';
+import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
+import { CertificationRO } from '../personnel/ro/bcws/bcws-certification.ro';
 
 @Controller('function')
 @ApiTags('Functions API')

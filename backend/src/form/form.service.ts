@@ -11,7 +11,7 @@ import { CreatePersonnelDTO } from '../personnel';
 import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 import { PersonnelService } from '../personnel/personnel.service';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
+import { PersonnelEntity } from '../database/entities/personnel.entity';
 
 
 @Injectable()
@@ -149,7 +149,6 @@ export class FormService {
       remoteOnly: data.deployment === 'remoteOnly',
       driverLicense: data.dl,
       willingToTravel: data.deployment === "willingToTravel",
-      availability: [],
       jobTitle: data.jobTitle,
     };
     return personnelData

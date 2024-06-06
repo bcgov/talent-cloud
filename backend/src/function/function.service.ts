@@ -6,7 +6,7 @@ import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { EmcrFunctionEntity } from '../database/entities/emcr';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { RolesDataRO } from 'src/personnel/ro/bcws/roles-data.ro';
+import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
 
 @Injectable()
 export class FunctionService {
