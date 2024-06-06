@@ -13,7 +13,7 @@ import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
 export const personnel: CreatePersonnelDTO[] = [
   {
     firstName: 'Brandyn',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Bartell',
     email: 'Kacie25@hotmail.com',
     primaryPhone: '8939179531',
@@ -97,7 +97,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Zachary',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Bartoletti',
     email: 'Briana75@hotmail.com',
     primaryPhone: '8529416283',
@@ -197,7 +197,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Heather',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Botsford',
     email: 'Blake_Stamm-Steuber12@hotmail.com',
     primaryPhone: '5600351973',
@@ -294,7 +294,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Liana',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Brown',
     email: 'Dillon.OHara@gmail.com',
     primaryPhone: '3880637094',
@@ -392,7 +392,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Percy',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Buckridge',
     email: 'Mylene_Morissette@hotmail.com',
     primaryPhone: '5847361071',
@@ -469,7 +469,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Alanis',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Barton',
     email: 'Otho_Olson@hotmail.com',
     primaryPhone: '0210476197',
@@ -543,7 +543,7 @@ export const personnel: CreatePersonnelDTO[] = [
 
   {
     firstName: 'Esta',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Paucek',
     email: 'Nikko92@hotmail.com',
     primaryPhone: '4589472927',
@@ -634,7 +634,7 @@ export const personnel: CreatePersonnelDTO[] = [
   },
   {
     firstName: 'Hayden',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Pouros',
     email: 'Anthony.Hintz@gmail.com',
     primaryPhone: '1209243030',
@@ -732,7 +732,7 @@ export const personnel: CreatePersonnelDTO[] = [
 
   {
     firstName: 'Roberto',
-    ministry: Ministry.AGRI,
+    ministry: Ministry.AF,
     lastName: 'Quitzon',
     email: 'Winfield.Rogahn@yahoo.com',
     primaryPhone: '3195542339',
