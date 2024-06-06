@@ -1,5 +1,4 @@
 export enum Ministry {
-  AGRI = 'AGRI',
   AF = 'AF',
   AG = 'AG',
   MCF = 'MCF',
