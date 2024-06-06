@@ -13,14 +13,14 @@ export const Table = ({
   columns?: DashboardColumns[];
 }) => {
   return (
-    <table className="table-auto w-full max-w-[1388px] border-collapse border border-slate-500">
+    <table className="table-auto w-full border-collapse border border-slate-500">
       <thead>
         <tr>
           {columns?.map((name: string) => (
             <th
               key={name}
               scope="col"
-              className={`px-4 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue w-40`}
+              className={`px-4 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue`}
             >
               {renderName(name)}
             </th>
