@@ -39,7 +39,7 @@ export class FunctionService {
    */
   async getCertificates(): Promise<BcwsCertificationEntity[]> {
     const certificates = await this.certRepository.find();
-    return certificates.filter(itm => ![CertificationName.OFA_I.toString(), CertificationName.OFA_II.toString(), CertificationName.OFA_III.toString()].includes(itm.name));
+    return certificates.filter(itm => ![CertificationName.OFA_I.toString(), CertificationName.OFA_II.toString(), CertificationName.OFA_III.toString(), CertificationName.PSYCHOLOGICAL_FIRST_AID].includes(itm.name));
   }
 
   /**
