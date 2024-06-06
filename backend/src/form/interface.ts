@@ -7,10 +7,6 @@ export interface FormSubmissionEventPayload {
   submissionId: string;
 }
 
-export interface FirstAid {
-  expiryDate?: string;
-  level: string;
-}
 
 export interface Roles {
   Ops: boolean;
@@ -57,9 +53,9 @@ export interface PersonnelFormData {
   workLocation: LocationData,
   deployment: 'remoteOnly' | 'willingToTravel';
   willingToTravel: boolean;
-  firstAidLevel: FirstAid
+  firstAidLevel: string;
   dl: string[];
-  pfa: boolean;
+  pfa: string;
   ministry: {label: string; value: string};
   division?: string;
 }
@@ -150,11 +146,15 @@ export interface EmcrFormData {
     9: boolean;
     10: boolean;
   },
+  firstAidLevel: string;
+  firstAidExpiry: Date;
+  pfa: boolean;
   experience: {
     emergencyExperience: boolean;
     preocExperience: boolean;
     peccExperience: boolean;
     firstNationsWorking: boolean;
+    
   }
 }
 

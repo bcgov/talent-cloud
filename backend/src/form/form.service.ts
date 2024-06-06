@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateFormDTO } from './form.dto';
 import { BcwsFormData, EmcrFormData, FormSubmissionEventPayload, IntakeFormData, PersonnelFormData } from './interface';
-import { Experience, ExperienceLevel, LanguageLevelType, LanguageProficiency, Ministry, Section, Status, ToolsProficiency, UnionMembership } from '../common/enums';
+import { CertificationName, Experience, ExperienceLevel, LanguageLevelType, LanguageProficiency, Ministry, Section, Status, ToolsProficiency, UnionMembership } from '../common/enums';
 import { Form } from '../database/entities/form.entity';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
@@ -27,9 +27,9 @@ export class FormService {
    * process form submission event payload
    * @param eventPayload
    */
-  public async processEventPayload(eventPayload: FormSubmissionEventPayload): Promise<Form>{
+  public async processEventPayload(eventPayload: FormSubmissionEventPayload): Promise<Form> {
     const { submissionId, formId } = eventPayload;
-    
+
     this.logger.log(`Requesting form data from submission event`);
     this.logger.log(`Submission ID: ${submissionId}`);
     this.logger.log(`Form ID: ${formId}`);
@@ -43,7 +43,7 @@ export class FormService {
         },
       },
     );
-    
+
     this.logger.log(`Received form data from submission event`);
     this.logger.log(`Parsing form data for: ${requestFormData?.data?.submission?.submission?.data?.personnel?.program} program(s)`);
     this.logger.log(`Personnel Data:`)
@@ -53,14 +53,14 @@ export class FormService {
     this.logger.log(`BCWS Data: `)
     this.logger.log(requestFormData?.data?.submission?.submission?.data?.bcws)
 
-    
-      const form = requestFormData && await this.processFormData({
-        submissionId,
-        formId,
-        data: requestFormData.data.submission.submission.data,
-      });
-      this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
-      return form
+
+    const form = requestFormData && await this.processFormData({
+      submissionId,
+      formId,
+      data: requestFormData.data.submission.submission.data,
+    });
+    this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
+    return form
   }
   //TODO PROD: unique constraint on email address
   /**
@@ -71,11 +71,11 @@ export class FormService {
     const form = await this.saveForm(submission);
     const personnel = await this.createPersonnelEntities(submission.data, form.id);
 
-    
-      this.logger.log(`Personnel entities created successfully. Personnel id: ${personnel.id}`);
-      return form
-    
-      
+
+    this.logger.log(`Personnel entities created successfully. Personnel id: ${personnel.id}`);
+    return form
+
+
   }
   /**
    * Saves the form id and submission id
@@ -99,25 +99,27 @@ export class FormService {
   async createPersonnelEntities(
     data: IntakeFormData,
     formId: number
-    
+
   ): Promise<PersonnelEntity> {
-    
-      const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr) : undefined;
-      const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws) : undefined;
-    
-      if(data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
+
+    const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr,data.personnel.pfa, data.personnel.firstAidLevel, data.personnel.firstAidExpiry) : undefined;
+
+    const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws, data.personnel.pfa,  
+      data.personnel.firstAidLevel, data.personnel.firstAidExpiry, ) : undefined;
+
+    if (data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
       this.logger.error(`Error saving form data: Both programs selected but no data found for either program`);
       throw new BadRequestException(`Both programs selected but no data found for either program`);
-    } else if( data.personnel.program === 'EMCR' && !emcrPersonnel) {
+    } else if ( data.personnel.program === 'EMCR' && !emcrPersonnel) {
       this.logger.error(`Error saving form data: EMCR program selected but no data found for EMCR program`);
       throw new BadRequestException(`EMCR program selected but no data found for EMCR program`);
     } else if (
       data.personnel.program === 'BCWS' && !bcwsPersonnel) {
       this.logger.error(`Error saving form data: BCWS program selected but no data found for BCWS program`);
       throw new BadRequestException(`BCWS program selected but no data found for BCWS program`);
-    } 
+    }
     const personnel = this.parsePersonnel(data.personnel, formId);
-    
+
 
     try {
       return await this.personnelService.createOnePerson(personnel, emcrPersonnel, bcwsPersonnel);
@@ -128,7 +130,7 @@ export class FormService {
   }
 
   parsePersonnel(data: PersonnelFormData, formId: number): CreatePersonnelDTO {
-    
+
     const personnelData: CreatePersonnelDTO = {
       intakeForm: formId,
       unionMembership: UnionMembership[data.unionMembership],
@@ -155,7 +157,7 @@ export class FormService {
 
   }
 
-  parseEmcrPersonnel(data: EmcrFormData): CreatePersonnelEmcrDTO {
+  parseEmcrPersonnel(data: EmcrFormData, pfa: string, firstAidLevel?: string, firstAidExpiry?: Date ): CreatePersonnelEmcrDTO {
     const functions = Object.keys(data.functions).filter(itm => data.functions[itm] === true)
 
     const emcrData: CreatePersonnelEmcrDTO = {
@@ -165,6 +167,9 @@ export class FormService {
       preocExperience: data.experience?.preocExperience,
       emergencyExperience: data.experience?.emergencyExperience,
       trainings: [],
+      firstAidLevel: firstAidLevel ?? undefined,
+      firstAidExpiry: firstAidExpiry ?? undefined,
+      psychologicalFirstAid: pfa === 'true',
       experiences: functions.map(itm => ({
         functionId: parseInt(itm),
         experienceType: Experience.INTERESTED
@@ -175,8 +180,8 @@ export class FormService {
     return emcrData
   }
 
-  parseBcwsPersonnel(data: BcwsFormData): CreatePersonnelBcwsDTO {
-
+  parseBcwsPersonnel(data: BcwsFormData, pfa: string, firstAidLevel?: string, firstAidExpiry?: Date, ): CreatePersonnelBcwsDTO {
+   
     //TODO prevent duplicate tools to be submitted and then remove this:      
     const uniqueToolIds = Array.from(new Set(data?.tools?.map(itm => itm.name.id)))
 
@@ -204,7 +209,25 @@ export class FormService {
 
     const uniqueRoles = uniqueRoleIds?.map(itm => roles?.find(role => role?.roleId === itm))
 
-    
+    const parsedCertifications = data.certificates?.map(itm => ({ certificationId: itm?.id, expiry: itm?.id === 6 ? data?.foodSafe1Expiry : itm?.id === 7 ? data?.foodSafe2Expiry : undefined })) ?? []
+
+    if (pfa === 'true') {
+      parsedCertifications.push({ certificationId: 2, expiry: undefined })
+    }
+
+    if (firstAidLevel) {
+      if (CertificationName[firstAidLevel] === CertificationName.OFA_I) {
+        parsedCertifications.push({ certificationId: 8, expiry: firstAidExpiry })
+      } else if (CertificationName[firstAidLevel] === CertificationName.OFA_II) {
+        parsedCertifications.push({ certificationId: 9, expiry: firstAidExpiry })
+      }
+      else if (CertificationName[firstAidLevel] === CertificationName.OFA_III) {
+        parsedCertifications.push({ certificationId: 10, expiry: firstAidExpiry })
+      }
+
+
+    }
+
 
     const bcwsData: CreatePersonnelBcwsDTO = {
       dateApplied: new Date(),
@@ -227,7 +250,7 @@ export class FormService {
       })))),
       roles: uniqueRoles ?? [],
       tools: tools ?? [],
-      certifications: data.certificates?.map(itm => ({ certificationId: itm?.id, expiry: itm.id === 6 ? data.foodSafe1Expiry : itm.id === 7 ? data.foodSafe2Expiry : undefined })) ?? [],
+      certifications: parsedCertifications ?? [],
       emergencyContactFirstName: data.emergencyContactFirstName,
       emergencyContactLastName: data.emergencyContactLastName,
       emergencyContactPhoneNumber: data.emergencyContactPhoneNumber?.replace(/[(]|-|[)]|\s/gi, ''),
