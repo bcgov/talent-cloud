@@ -169,7 +169,7 @@ export class FormService {
       trainings: [],
       firstAidLevel: firstAidLevel ?? undefined,
       firstAidExpiry: firstAidExpiry ?? undefined,
-      psychologicalFirstAid: pfa === 'true',
+      psychologicalFirstAid: pfa === 'yes',
       experiences: functions.map(itm => ({
         functionId: parseInt(itm),
         experienceType: Experience.INTERESTED
@@ -211,7 +211,7 @@ export class FormService {
 
     const parsedCertifications = data.certificates?.map(itm => ({ certificationId: itm?.id, expiry: itm?.id === 6 ? data?.foodSafe1Expiry : itm?.id === 7 ? data?.foodSafe2Expiry : undefined })) ?? []
 
-    if (pfa === 'true') {
+    if (pfa === 'yes') {
       parsedCertifications.push({ certificationId: 2, expiry: undefined })
     }
 
