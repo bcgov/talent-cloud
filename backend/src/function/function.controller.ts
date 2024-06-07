@@ -14,6 +14,7 @@ import { Public } from '../auth/public.decorator';
 import { BcwsToolsRO } from '../personnel/ro/bcws/tools.ro';
 import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
 import { CertificationRO } from '../personnel/ro/bcws/bcws-certification.ro';
+import { RolesRO } from './ro/role.ro';
 
 @Controller('function')
 @ApiTags('Functions API')
@@ -37,7 +38,7 @@ export class FunctionController {
   async getFunctions(): Promise<FunctionRO[]> {
     const functions = await this.functionService.getFunctions();
     console.log(functions);
-    return  functions.map((fn) => fn.toResponseObject()) ;
+    return functions.map((fn) => fn.toResponseObject());
   }
 
   @ApiOperation({
@@ -46,17 +47,29 @@ export class FunctionController {
   })
   @Get('/bcws')
   @Public()
-  async getBcwsFieldData(): Promise< { roles: RolesDataRO, certs: CertificationRO[], tools: BcwsToolsRO[] } > {
+  async getBcwsFieldData(): Promise<{ roles: RolesDataRO, certs: CertificationRO[], tools: BcwsToolsRO[] }> {
     const roles = await this.functionService.getRoles();
     const certificates = await this.functionService.getCertificates()
     const tools = await this.functionService.getTools();
 
     return {
-      
-        roles: roles,
-        certs: certificates.map((c) => c.toResponseObject()),
-        tools: tools.map((t) => t.toResponseObject())
-      }
+
+      roles: roles,
+      certs: certificates.map((c) => c.toResponseObject()),
+      tools: tools.map((t) => t.toResponseObject())
+    }
+
+  }
+
+  @ApiOperation({
+    summary: 'Get bcws roles',
+    description: 'Returns all available roles',
+  })
+  @Get('/roles')
+  @Public()
+  async getBCWSRole(): Promise<RolesRO[]> {
+    const roles = await this.functionService.getAllRoles();
+    return roles.map(itm => itm.toResponseObject())
 
   }
 }
