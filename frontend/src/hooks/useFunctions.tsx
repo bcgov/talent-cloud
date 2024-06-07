@@ -1,11 +1,11 @@
-import type { FunctionType } from '@/pages/dashboard';
+import type { BcwsRoleInterface, FunctionType } from '@/pages/dashboard';
 import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
 import { Route } from '../providers';
 
 const useFunctions = (route?: Route) => {
   const [functions, setFunctions] = useState<FunctionType[]>([]);
-  const [bcwsRoles, setBcwsRoles] = useState<any[]>([]);
+  const [bcwsRoles, setBcwsRoles] = useState<BcwsRoleInterface[]>([]);
   const { AxiosPrivate } = useAxios();
 
   useEffect(() => {
@@ -14,8 +14,8 @@ const useFunctions = (route?: Route) => {
         const { data } = await AxiosPrivate.get('/function');
         setFunctions(data);
       } else if (route && route === Route.BCWS) {
-        const { data } = await AxiosPrivate.get('/function/bcws');
-        setBcwsRoles(data.roles);
+        const { data } = await AxiosPrivate.get('/function/roles');
+        setBcwsRoles(data);
       }
     })();
   }, [route]);

@@ -105,7 +105,7 @@ export const renderCells = (
     ics: {
       key: DashboardColumns.ICS,
       columnName: DashboardColumns.ICS,
-      value: personnel?.icsTraining ? 'Yes' : 'No',
+      value: personnel?.icsTraining,
     },
     supervisorApproval: {
       key: DashboardColumns.SUPERVISOR_APPROVAL,

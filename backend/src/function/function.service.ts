@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BcwsRole, BcwsRoleName, CertificationName, SectionName } from '../common/enums';
+import { BcwsRole, BcwsRoleName, SectionName } from '../common/enums';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { EmcrFunctionEntity } from '../database/entities/emcr';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
+
 
 @Injectable()
 export class FunctionService {
@@ -30,7 +31,13 @@ export class FunctionService {
     return this.functionRepository.find();
   }
 
-
+  /**
+   * Get all roles
+   * @returns 
+   */
+  async getAllRoles(): Promise<BcwsRoleEntity[]>{
+    return this.roleRepository.find();
+  }
   /**
    * Returns certifications that are not OFA I, II, or III
    * Used by CHEFS form
