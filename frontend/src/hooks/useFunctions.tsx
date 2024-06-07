@@ -14,8 +14,8 @@ const useFunctions = (route?: Route) => {
         const { data } = await AxiosPrivate.get('/function');
         setFunctions(data);
       } else if (route && route === Route.BCWS) {
-        const { data } = await AxiosPrivate.get('/function/bcws/roles');
-        setBcwsRoles(data);
+        const { data } = await AxiosPrivate.get('/function/bcws');
+        setBcwsRoles(data.roles);
       }
     })();
   }, [route]);
