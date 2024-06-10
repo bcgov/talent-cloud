@@ -1,16 +1,15 @@
+import { useKeycloak } from '@react-keycloak/web';
+import { createCustomLoginUrl } from '@/utils/keycloak';
+import { useEffect, useState } from 'react';
 import { ButtonTypes } from '@/common';
 import { BannerType } from '@/common/enums/banner-enum';
-import { headerLink } from '@/common/links';
-import { Button } from '@/components';
-import { CoreLogoHorizontal, SplashImage } from '@/components/images';
+import { Button, PublicLayout } from '@/components';
+import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
-import { Routes } from '@/routes';
 import { AxiosPublic } from '@/utils';
-import { createCustomLoginUrl } from '@/utils/keycloak';
-import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useState } from 'react';
+import { Routes } from '@/routes';
 
-export const SplashMain = ({ content }: { content: any }) => {
+const SplashPage = () => {
   const { keycloak } = useKeycloak();
   const login = () => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
@@ -27,22 +26,25 @@ export const SplashMain = ({ content }: { content: any }) => {
     })();
   }, []);
 
+  const content = {
+    title: 'Welcome to CORE Team',
+    banner: '',
+    bannerLink: {
+      name: 'here ',
+      url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',
+    },
+    subtitle: 'Coordinated Operation Response in Emergencies',
+    description: {
+      pt1: 'This is the staffing system (previously known as TEAMS – Temporary Emergency Assignment Management System) that maintains a roster of employees from numerous ministries in the BC Government who have a combination of interest, skills, and experience to work within EMCR operation centres and BCWS fire centres to support communities in emergency management and wildfire response across the province.',
+    },
+    login: {
+      title: 'Login',
+      description: 'Use your IDIR to access the CORE member database.',
+    },
+  };
+
   return (
-    <div>
-      <header className="relative w-full border-b z-40 py-0">
-        <div className="w-full md:flex justify-start md:justify-between items-start md:items-center fixed top-0 mt-0 bg-white border-b border-[#D9D9D9] shadow-sm lg:px-12 xl:px-24 py-0 2xl:pl-64">
-          <div className="lg:flex">
-            <a
-              href={headerLink}
-              className="p-2"
-              target={'_blank'}
-              rel={'noopener noreferrer'}
-            >
-              <CoreLogoHorizontal />
-            </a>
-          </div>
-        </div>
-      </header>
+    <PublicLayout>
       <div className="grid pt-24 lg:pt-0 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:pl-12 md:pr-0  xl:pl-32 2xl:px-64 lg:mt-16">
         <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start text-left">
           <div className="lg:pr-12 lg:py-24 xl:pr-32">
@@ -76,7 +78,7 @@ export const SplashMain = ({ content }: { content: any }) => {
               <span className="text-info lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
             </div>
-            <div className="xl:pr-32">
+            <div>
               <p className="leading-loose">{content.description.pt1}</p>
             </div>
           </div>
@@ -114,6 +116,8 @@ export const SplashMain = ({ content }: { content: any }) => {
           </div>
         </div>
       </div>
-    </div>
+    </PublicLayout>
   );
 };
+
+export default SplashPage;

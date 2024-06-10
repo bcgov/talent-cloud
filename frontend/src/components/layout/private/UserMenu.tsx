@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { UserIcon } from '../images';
+import { UserIcon } from '../../images';
 
 export const UserMenu = ({
   username,

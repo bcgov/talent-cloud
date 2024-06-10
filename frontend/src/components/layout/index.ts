@@ -1,2 +1,2 @@
-export * from './Footer';
-export * from './Layout';
+export * from './private';
+export * from './public';
