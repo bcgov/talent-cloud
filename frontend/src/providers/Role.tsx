@@ -1,56 +1,57 @@
-import type { Role } from '@/common';
-import { AxiosPrivate } from '@/hooks/useAxios';
-
-import type { Dispatch, ReactElement, SetStateAction } from 'react';
-
+import { Role } from '@/common';
+import { useKeycloak } from '@react-keycloak/web';
+import type { ReactElement } from 'react';
 import { createContext, useEffect, useMemo, useState } from 'react';
+
 export enum Program {
   BCWS = 'bcws',
   EMCR = 'emcr',
-  ADMIN = 'admin',
 }
+
 export enum Route {
   BCWS = 'bcws',
   EMCR = 'emcr',
 }
+
+type UserInfo = {
+  given_name: string;
+  family_name: string;
+  client_roles: string[];
+};
+
 export const RoleContext = createContext<{
   role: Role | undefined;
-  setRole: (role: Role | undefined) => void;
-  program: Program | undefined;
-  setProgram: (program: Program | undefined) => void;
   route: Route | undefined;
-  setRoute: Dispatch<SetStateAction<Route | undefined>>;
+
   username: string;
-  setUsername: (username: string) => void;
 }>({
   role: undefined,
-  program: undefined,
   username: '',
-  setRole: () => {},
-  setProgram: () => {},
-  setUsername: () => {},
   route: undefined,
-  setRoute: () => {},
 });
 
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
+  const { keycloak } = useKeycloak();
   const [role, setRole] = useState<Role>();
   const [username, setUsername] = useState<string>('');
-  const [program, setProgram] = useState<Program>();
   const [route, setRoute] = useState<Route | undefined>();
 
   useEffect(() => {
     (async () => {
-      try {
-        const {
-          data: { username, role, program },
-        } = await AxiosPrivate.get('/auth/userInfo');
-        setUsername(username);
-        setRole(role);
-        setProgram(program);
-        setRoute(program);
-      } catch (e: unknown) {
-        console.log(e);
+      if (!keycloak.authenticated) {
+        return;
+      }
+      const userInfo = (await keycloak.loadUserInfo()) as UserInfo;
+      setUsername(`${userInfo.given_name} ${userInfo.family_name}`);
+      if (userInfo?.client_roles?.includes('emcr')) {
+        setRoute(Route.EMCR);
+      } else if (userInfo?.client_roles?.includes('bcws')) {
+        setRoute(Route.BCWS);
+      }
+      if (userInfo?.client_roles?.includes('coordinator')) {
+        setRole(Role.COORDINATOR);
+      } else if (userInfo?.client_roles?.includes('logistics')) {
+        setRole(Role.LOGISTICS);
       }
     })();
   }, []);
@@ -59,14 +60,12 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     () => ({
       role,
       setRole,
-      program,
-      setProgram,
       username,
       setUsername,
       route,
       setRoute,
     }),
-    [role, program, username, route],
+    [role, username, route],
   );
   return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
 };

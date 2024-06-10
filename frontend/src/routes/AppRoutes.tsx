@@ -7,7 +7,8 @@ import { AuthProvider } from '@/providers';
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
-const SplashPage = lazy(() => import('../pages/splash/SplashPage'));
+const SplashPage = lazy(() => import('../pages/SplashPage'));
+const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 
 export default () => {
   return (
@@ -17,6 +18,7 @@ export default () => {
           <Routes>
             <Route path={AppRoutes.Home} element={<SplashPage />} />
             <Route path={AppRoutes.NotFound} element={<NotFound />} />
+            <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
             <Route element={<PrivateRoute />}>
               <Route path={AppRoutes.Dashboard} element={<Dashboard />} />
               <Route path={AppRoutes.Profile}>
