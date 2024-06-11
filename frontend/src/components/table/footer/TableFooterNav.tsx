@@ -100,7 +100,7 @@ export const TableFooterNav = ({
       <TableFooterNavButton
         ariaLabel="navigate to last page"
         disabled={currentPage === lastPage}
-        onClick={() => handleChangePage(pageRange[pageRange?.length - 1] as number)}
+        onClick={() => handleChangePage(lastPage)}
         icon={<ChevronDoubleRightIcon className={iconButtonClass} />}
       />
     </nav>
