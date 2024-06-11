@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
-import { CloudIcon, CoreLogoHorizontal } from '../images';
+import { CloudIcon, CoreLogoHorizontal } from '../../images';
 import { Routes } from '@/routes';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { headerLink } from '@/common/links';
-import { logout } from '@/utils/keycloak';
+import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
 import { useRole } from '@/hooks';
 
@@ -48,7 +48,10 @@ export const Header = ({
 
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {username && (
-                <UserMenu username={username} logout={() => logout(keycloak)} />
+                <UserMenu
+                  username={username}
+                  logout={() => window.location.replace(logoutUrl(keycloak))}
+                />
               )}
             </div>
           </>
@@ -81,7 +84,7 @@ export const Header = ({
                   <button
                     aria-label="logout"
                     className="text-normal font-normal"
-                    onClick={() => logout(keycloak)}
+                    onClick={() => window.location.replace(logoutUrl(keycloak))}
                   >
                     Logout
                   </button>

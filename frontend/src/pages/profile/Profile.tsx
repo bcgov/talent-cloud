@@ -29,7 +29,7 @@ import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
 import { DialogUI } from '@/components';
-import { ReviewApplicant } from '../ReviewApplicant';
+
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 import { Routes } from '@/routes';
 
@@ -43,6 +43,7 @@ import ProfileHeader from './ProfileHeader';
 import { ProfileEditSkills } from './ProfileEditSkills';
 import { ProfileEditRoles } from './ProfileEditRoles';
 import type { Section } from '../../common/enums/sections.enum';
+import { ReviewApplicant } from './ReviewApplicant';
 
 const Profile = () => {
   const { role, route } = useRole();
@@ -245,7 +246,7 @@ const Profile = () => {
                 organizational={organizational}
                 pending={personnel.status === Status.PENDING}
               />
-              {personnel?.experiences && (
+              {route === Route.EMCR && (
                 <ProfileFunctions
                   functions={functions}
                   personnel={personnel}

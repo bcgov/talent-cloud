@@ -94,6 +94,8 @@ module.exports = withMT({
       },
       textColor: {
         defaultGray: "#606060",
+        backgroundBlue: '#003366',
+        blue700: "#004D99",
         info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
