@@ -322,6 +322,7 @@ export class PersonnelService {
     this.logger.log(`Query: ${JSON.stringify(query)}`);
     qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('emcr_personnel.experiences', 'experiences');
+    qb.leftJoinAndSelect('emcr_personnel.trainings', 'trainings');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
 
