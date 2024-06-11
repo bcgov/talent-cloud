@@ -8,6 +8,7 @@ const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const SplashPage = lazy(() => import('../pages/SplashPage'));
+const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 
 export default () => {
   return (
@@ -23,6 +24,7 @@ export default () => {
                 <Route path=":personnelId" element={<Profile />} />
               </Route>
             </Route>
+            <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
