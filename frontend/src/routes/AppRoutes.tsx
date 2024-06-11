@@ -7,7 +7,7 @@ import { AuthProvider } from '@/providers';
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
-const SplashPage = lazy(() => import('../pages/splash/SplashPage'));
+const SplashPage = lazy(() => import('../pages/SplashPage'));
 
 export default () => {
   return (

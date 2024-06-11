@@ -23,13 +23,10 @@ export const createCustomLoginUrl = (
   return fullLoginUrl;
 };
 
-export const logout = (keycloak: Keycloak) => {
-  window.location.replace(
-    `https://logon7.gov.bc.ca/clp-cgi/logoff.cgi?retnow=1&returl=${encodeURIComponent(
-      `${keycloak.authServerUrl}/realms/${keycloak.realm}/protocol/openid-connect/logout?post_logout_redirect_uri=` +
-        `${window.location.origin}` +
-        '&id_token_hint=' +
-        keycloak.idToken,
-    )}`,
-  );
-};
+export const logoutUrl = (keycloak: Keycloak) =>
+  `https://logon7.gov.bc.ca/clp-cgi/logoff.cgi?retnow=1&returl=${encodeURIComponent(
+    `${keycloak.authServerUrl}/realms/${keycloak.realm}/protocol/openid-connect/logout?post_logout_redirect_uri=` +
+      `${window.location.origin}` +
+      '&id_token_hint=' +
+      keycloak.idToken,
+  )}`;

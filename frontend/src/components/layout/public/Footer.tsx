@@ -1,7 +1,7 @@
 import { footerLinks } from '@/common/links';
 import { BcGovLogo } from '@/components/images';
 
-export const SplashFooter = ({ content }: { content: any }) => {
+export const Footer = ({ content }: { content: any }) => {
   return (
     <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 pl-6 lg:pt-16 sm:pt-8 sm:px-6  md:px-16 lg:px-32 2xl:px-64">
       {/* column 1 start */}
