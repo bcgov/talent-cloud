@@ -1,8 +1,6 @@
 import { classes } from './classes';
 import { Checkbox } from '../ui/Checkbox';
 import { Menu, MenuButton, MenuChips, MenuHandler, MenuItem, MenuList } from '../ui';
-import type { Region } from '@/common';
-import { RegionName } from '@/common';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 
@@ -36,7 +34,7 @@ export const MultiSelect = ({
             chips={
               field.name === 'region'
                 ? values.map((itm) => ({
-                    label: RegionName[itm as Region],
+                    label: itm,
                     value: itm,
                   }))
                 : values.map((itm) => ({
