@@ -3,7 +3,6 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import { Role } from '@/common';
 import type { DetailProps } from './types';
 
 const ProfileDetails = ({
@@ -13,7 +12,7 @@ const ProfileDetails = ({
   pending,
   intakeRequirements,
   openEditProfilePopUp,
-  role,
+  allowEditing,
 }: DetailProps) => {
   const [open, setOpen] = useState(1);
 
@@ -61,7 +60,7 @@ const ProfileDetails = ({
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>{pending ? 'Applicant' : 'Member'} Details</span>
-              {role && role === Role.COORDINATOR && (
+              {allowEditing && (
                 <button
                   aria-label="edit profile"
                   onClick={openEditProfilePopUp}
