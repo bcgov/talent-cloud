@@ -238,7 +238,7 @@ const Profile = () => {
               </div>
 
               <ProfileDetails
-                role={role}
+                allowEditing={role === Role.COORDINATOR}
                 openEditProfilePopUp={handleOpenEditProfilePopUp}
                 intakeRequirements={intakeRequirements}
                 generalInformation={generalInformation}
@@ -251,6 +251,7 @@ const Profile = () => {
                   functions={functions}
                   personnel={personnel}
                   openEditFunctionsPopUp={handleOpenEditFunctionsPopUp}
+                  allowEditing={role === Role.COORDINATOR}
                 />
               )}
               <Scheduler

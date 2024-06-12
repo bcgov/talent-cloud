@@ -18,10 +18,12 @@ const ProfileFunctions = ({
   functions,
   personnel,
   openEditFunctionsPopUp,
+  allowEditing,
 }: {
   functions: FunctionType[];
   personnel: Personnel;
   openEditFunctionsPopUp: (e: MouseEvent<HTMLElement>) => void;
+  allowEditing: boolean;
 }) => {
   const [open, setOpen] = useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -83,14 +85,16 @@ const ProfileFunctions = ({
           >
             <div className=" w-full justify-between items-center flex lg:flex-row">
               <span>Function & Experience Levels</span>
-              <button
-                aria-label="edit functions"
-                onClick={openEditFunctionsPopUp}
-                className="z-20 flex text-primaryBlue flex-row items-center"
-              >
-                <PencilSquareIcon className="h-6 w-6" />
-                <span className="pl-2 font-normal underline text-sm">Edit</span>
-              </button>
+              {allowEditing && (
+                <button
+                  aria-label="edit functions"
+                  onClick={openEditFunctionsPopUp}
+                  className="z-20 flex text-primaryBlue flex-row items-center"
+                >
+                  <PencilSquareIcon className="h-6 w-6" />
+                  <span className="pl-2 font-normal underline text-sm">Edit</span>
+                </button>
+              )}
             </div>
           </AccordionHeader>
           <AccordionBody className="px-8">
