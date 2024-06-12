@@ -43,16 +43,19 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     (async () => {
       const userInfo = (await keycloak.loadUserInfo()) as UserInfo;
       setUsername(`${userInfo.given_name} ${userInfo.family_name}`);
-      if (userInfo.client_roles.includes('emcr'))
+
+      if (userInfo.client_roles?.includes('emcr'))
         setUserRole((prev) => ({ ...prev, program: Program.EMCR }));
-      else if (userInfo.client_roles.includes('bcws'))
+      else if (userInfo.client_roles?.includes('bcws'))
         setUserRole((prev) => ({ ...prev, program: Program.BCWS }));
       else navigate('/unauthorized');
-      if (userInfo.client_roles.includes('logistics'))
+
+      if (userInfo.client_roles?.includes('logistics'))
         setUserRole((prev) => ({ ...prev, role: Role.LOGISTICS }));
-      else if (userInfo.client_roles.includes('coordinator'))
+      else if (userInfo.client_roles?.includes('coordinator'))
         setUserRole((prev) => ({ ...prev, role: Role.COORDINATOR }));
       else navigate('/unauthorized');
+
       setLoading(false);
     })();
   }, []);
