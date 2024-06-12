@@ -1,9 +1,9 @@
 import type { LinkProps } from '@/common';
 export const headerLink =
-  'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams';
+  'https://www2.gov.bc.ca/gov/content/careers-myhr/about-the-bc-public-service/corporate-social-responsibility/core-team';
 export const footerLinks: LinkProps[] = [
   {
-    href: 'https://intranet.gov.bc.ca/emcr/employees-workplace/hr/teams',
+    href: 'https://www2.gov.bc.ca/gov/content/careers-myhr/about-the-bc-public-service/corporate-social-responsibility/core-team',
     label: 'Home',
   },
   {
