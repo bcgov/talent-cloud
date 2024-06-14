@@ -11,7 +11,9 @@ export class SubmissionDataDTO {
 }
 
 export class FormSubmissionDTO {
-    submission: CreateFormSubmissionDTO
+    data: {
+      submission: CreateFormSubmissionDTO
+    }
 }
 
 export class CreateFormSubmissionDTO {

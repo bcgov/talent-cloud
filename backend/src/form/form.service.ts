@@ -47,12 +47,12 @@ export class FormService {
 
     this.logger.log(`Received form data from submission event`);
 
-    if (requestFormData.submission.draft === true) {
+    if (requestFormData.data.submission.draft === true) {
       this.logger.error(`Error saving form data: Draft submission received`);
       throw new BadRequestException(`Draft submission received`);
     }
 
-    const form = requestFormData && await this.processFormData({ submissionId: requestFormData.submission.id, formId: formId, data: requestFormData.submission.submission.data });
+    const form = requestFormData && await this.processFormData({ submissionId: requestFormData.data.submission.id, formId: formId, data: requestFormData.data.submission.submission.data });
     return form
   }
   //TODO PROD: unique constraint on email address
