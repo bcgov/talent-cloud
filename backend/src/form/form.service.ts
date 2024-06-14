@@ -12,6 +12,7 @@ import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws';
 import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 import { PersonnelService } from '../personnel/personnel.service';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { FormSubmissionDTO } from './submission.dto';
 
 
 @Injectable()
@@ -34,7 +35,7 @@ export class FormService {
     this.logger.log(`Submission ID: ${submissionId}`);
     this.logger.log(`Form ID: ${formId}`);
 
-    const requestFormData = await axios.get(
+    const requestFormData: FormSubmissionDTO = await axios.get(
       `${process.env.CHEFS_API}/app/api/v1/submissions/${submissionId}`,
       {
         auth: {
@@ -45,21 +46,13 @@ export class FormService {
     );
 
     this.logger.log(`Received form data from submission event`);
-    this.logger.log(`Parsing form data for: ${requestFormData?.data?.submission?.submission?.data?.personnel?.program} program(s)`);
-    this.logger.log(`Personnel Data:`)
-    this.logger.log(requestFormData?.data?.submission?.submission?.data?.personnel)
-    this.logger.log(`EMCR Data:`)
-    this.logger.log(requestFormData?.data?.submission?.submission?.data?.emcr)
-    this.logger.log(`BCWS Data: `)
-    this.logger.log(requestFormData?.data?.submission?.submission?.data?.bcws)
 
+    if (requestFormData.submission.draft === true) {
+      this.logger.error(`Error saving form data: Draft submission received`);
+      throw new BadRequestException(`Draft submission received`);
+    }
 
-    const form = requestFormData && await this.processFormData({
-      submissionId,
-      formId,
-      data: requestFormData.data.submission.submission.data,
-    });
-    this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
+    const form = requestFormData && await this.processFormData({ submissionId: requestFormData.submission.id, formId: formId, data: requestFormData.submission.submission.data });
     return form
   }
   //TODO PROD: unique constraint on email address
@@ -68,7 +61,11 @@ export class FormService {
    * @param submission
    */
   async processFormData(submission: CreateFormDTO): Promise<Form> {
+    this.logger.log(`Parsing form data for: ${submission.data.personnel?.program} program(s)`);
+
     const form = await this.saveForm(submission);
+    this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
+
     const personnel = await this.createPersonnelEntities(submission.data, form.id);
 
 
@@ -104,7 +101,7 @@ export class FormService {
 
     const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr,data.personnel.pfa, data.personnel.firstAidLevel, data.personnel.firstAidExpiry) : undefined;
 
-    const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws, data.personnel.pfa,  
+    const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws, data.personnel.pfa,
       data.personnel.firstAidLevel, data.personnel.firstAidExpiry, ) : undefined;
 
     if (data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
@@ -181,7 +178,7 @@ export class FormService {
   }
 
   parseBcwsPersonnel(data: BcwsFormData, pfa: string, firstAidLevel?: string, firstAidExpiry?: Date, ): CreatePersonnelBcwsDTO {
-   
+
     //TODO prevent duplicate tools to be submitted and then remove this:      
     const uniqueToolIds = Array.from(new Set(data?.tools?.map(itm => itm.name.id)))
 
