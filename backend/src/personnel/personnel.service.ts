@@ -281,8 +281,6 @@ export class PersonnelService {
     bcwsPersonnel.personnelId = id;
 
     const languages = this.parseLanguages(bcwsPersonnel.languages, id);
-    this.logger.log(`Languages: ${JSON.stringify(languages)}`);
-
     bcwsPersonnel.languages = languages;
 
     return await this.bcwsPersonnelRepository.save(this.bcwsPersonnelRepository.create(new BcwsPersonnelEntity((bcwsPersonnel))));

@@ -1,4 +1,4 @@
-import { BcwsRole, ExperienceLevel, FireCentre, LanguageProficiency, Ministry, Region, Section, Tools } from "../common/enums";
+import { FireCentre, LanguageProficiency, Ministry, Region } from "../common/enums";
 
 export interface FormSubmissionEventPayload {
   formId: string;
