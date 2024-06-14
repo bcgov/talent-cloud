@@ -29,31 +29,35 @@ export class FormService {
    * @param eventPayload
    */
   public async processEventPayload(eventPayload: FormSubmissionEventPayload): Promise<Form> {
-    const { submissionId, formId } = eventPayload;
+    const { submissionId, formId, subscriptionEvent } = eventPayload;
 
-    this.logger.log(`Requesting form data from submission event`);
-    this.logger.log(`Submission ID: ${submissionId}`);
-    this.logger.log(`Form ID: ${formId}`);
+    this.logger.log(`Event: ${subscriptionEvent}`);
 
-    const requestFormData: FormSubmissionDTO = await axios.get(
-      `${process.env.CHEFS_API}/app/api/v1/submissions/${submissionId}`,
-      {
-        auth: {
-          username: `${formId}`,
-          password: `${process.env.CHEFS_API_KEY}`,
+    if (subscriptionEvent === 'eventSubmission') {
+      this.logger.log(`Requesting form data from submission event`);
+      this.logger.log(`Submission ID: ${submissionId}`);
+      this.logger.log(`Form ID: ${formId}`);
+
+      const requestFormData: FormSubmissionDTO = await axios.get(
+        `${process.env.CHEFS_API}/app/api/v1/submissions/${submissionId}`,
+        {
+          auth: {
+            username: `${formId}`,
+            password: `${process.env.CHEFS_API_KEY}`,
+          },
         },
-      },
-    );
+      );
 
-    this.logger.log(`Received form data from submission event`);
+      this.logger.log(`Received form data from submission event`);
 
-    if (requestFormData.data.submission.draft === true) {
-      this.logger.error(`Error saving form data: Draft submission received`);
-      throw new BadRequestException(`Draft submission received`);
+      if (requestFormData.data.submission.draft === true) {
+        this.logger.error(`Error saving form data: Draft submission received`);
+        throw new BadRequestException(`Draft submission received`);
+      }
+
+      const form = requestFormData && await this.processFormData({ submissionId: requestFormData.data.submission.id, formId: formId, data: requestFormData.data.submission.submission.data });
+      return form
     }
-
-    const form = requestFormData && await this.processFormData({ submissionId: requestFormData.data.submission.id, formId: formId, data: requestFormData.data.submission.submission.data });
-    return form
   }
   //TODO PROD: unique constraint on email address
   /**
