@@ -1201,10 +1201,11 @@
       "consentRequired" : false,
       "config" : {
         "introspection.token.claim" : "true",
+        "userinfo.token.claim": "true",
         "multivalued" : "true",
         "user.attribute" : "foo",
         "access.token.claim" : "true",
-        "claim.name" : "resource_access.${client_id}.roles",
+        "claim.name": "client_roles",
         "jsonType.label" : "String"
       }
     } ]

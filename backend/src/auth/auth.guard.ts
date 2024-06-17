@@ -120,15 +120,7 @@ export class AuthGuard implements CanActivate {
    * @param request
    */
   setRequestUserInfo(payload: JwtPayload, request: Request): void {
-    // the local keycloak instance includes the key "resource_access" instead of  the key "client roles" so we need to check for both in order to use this locally.
-    // sometimes on local we use the actual keycloak instance instead of containerized local keycloak instance so we need to check for client roles on local as well.
-    const useDevProgramRoles =
-      process.env.NODE_ENV !== 'production' && !payload.client_roles;
-    if (useDevProgramRoles) {
-      this.setDevProgramRoles(payload, request);
-    } else {
-      this.setProdProgramRoles(payload, request);
-    }
+    this.setProgramRoles(payload, request);
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
@@ -136,25 +128,8 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  setDevProgramRoles(payload: JwtPayload, request: Request): void {
-     if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.EMCR)
-    ) {
-      request['program'] = Program.EMCR;
-    } else if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Program.BCWS)
-    ) {
-      request['program'] = Program.BCWS;
-    } else {
-      this.logger.error(
-        'Unauthorized user - no valid program is listed in the client roles',
-      );
-      throw new UnauthorizedException();
-    }
-    this.setDevRoles(payload, request);
-  }
-
-  setProdProgramRoles(payload: JwtPayload, request: Request): void {   
+  setProgramRoles(payload: JwtPayload, request: Request): void {   
+    console.log(payload.client_roles);
     if (payload.client_roles.includes(Program.EMCR)) {
       request['program'] = Program.EMCR;
     } else if (payload.client_roles.includes(Program.BCWS)) {
