@@ -77,6 +77,8 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
               }}
               label="Home Location"
               values={filterValues.location}
+              groupValues={filterValues[route === Route.BCWS ? 'fireCentre' : 'region']}
+              groupField={route === Route.BCWS ? filters.fireCentre : filters.region}
             />
           </div>
         </div>

@@ -23,13 +23,21 @@ export interface PageParams {
   rowsPerPage: number;
   currentPage: number;
 }
+
+export interface Option {
+  label: string;
+  value: string;
+}
+
 export interface FieldInterface {
   name: string;
-  options?: string[];
+  options?: Option[]|Option[][]|string[];
+  placeholder?: string;
   groupedOptions?: FieldGroupedOption[];
 }
 
 export interface FieldGroupedOption {
-  label: any;
+  label: string;
+  value: string;
   options: string[];
 }
