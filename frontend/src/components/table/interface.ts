@@ -31,7 +31,7 @@ export interface Option {
 
 export interface FieldInterface {
   name: string;
-  options?: Option[]|Option[][]|string[];
+  options?: Option[] | Option[][] | string[];
   placeholder?: string;
   groupedOptions?: FieldGroupedOption[];
 }

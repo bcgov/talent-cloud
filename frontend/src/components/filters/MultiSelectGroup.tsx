@@ -15,7 +15,7 @@ export const MultiSelectGroup = ({
   field,
   values,
   groupValues,
-  groupField, 
+  groupField,
   onChange,
   label,
   handleClose,
@@ -45,10 +45,9 @@ export const MultiSelectGroup = ({
     values?.includes(option)
       ? handleClose(field.name, option)
       : onChange(field.name, option);
-  
-      !groupValues?.includes(group) && onChange(groupField.name, group)
-    
-  }
+
+    !groupValues?.includes(group) && onChange(groupField.name, group);
+  };
 
   return (
     <>
@@ -57,7 +56,7 @@ export const MultiSelectGroup = ({
         <MenuHandler field={field} id={field.name}>
           <MenuChips
             chips={values.map((itm: string) => ({ label: itm, value: itm }))}
-            placeholder={field.placeholder ?? ""}
+            placeholder={field.placeholder ?? ''}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}

@@ -10,13 +10,12 @@ import {
   ValidateIf,
 } from 'class-validator';
 
-import {  CreatePersonnelBcwsDTO } from './bcws';
+import { CreatePersonnelBcwsDTO } from './bcws';
 import { CreatePersonnelEmcrDTO } from './emcr';
 import { FireCentre, Ministry, Region } from '../../common/enums';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
-import { Form } from '../../database/entities/form.entity';
 
 export class LocationDTO {
   @ApiProperty()
@@ -40,7 +39,6 @@ export class CreatePersonnelDTO {
   @Length(2, 50)
   lastName: string;
 
-  
   @ApiProperty({
     description: "Personnel's work fire centre",
     example: {
@@ -61,7 +59,7 @@ export class CreatePersonnelDTO {
     },
   })
   homeLocation?: LocationDTO;
-  
+
   @ApiProperty({
     description: 'Primary phone number to contact personnel',
     example: '2501112222',
@@ -113,7 +111,6 @@ export class CreatePersonnelDTO {
   @IsString()
   @Length(2, 50)
   supervisorLastName: string;
-
 
   @ApiProperty({
     description: 'Supervisor phone number',
@@ -197,7 +194,6 @@ export class CreatePersonnelDTO {
   })
   ministry: Ministry;
 
-
   @ApiProperty({
     description: 'Division',
     required: false,
@@ -208,5 +204,5 @@ export class CreatePersonnelDTO {
   emcr?: CreatePersonnelEmcrDTO;
 
   @IsOptional()
-  bcws?: CreatePersonnelBcwsDTO
+  bcws?: CreatePersonnelBcwsDTO;
 }

@@ -1,5 +1,5 @@
-import { CertificationRO } from '../../../personnel/ro/bcws/bcws-certification.ro';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CertificationRO } from '../../../personnel/ro/bcws/bcws-certification.ro';
 
 @Entity('bcws_certification')
 export class BcwsCertificationEntity {

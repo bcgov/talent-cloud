@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
-import { CloudIcon, CoreLogoHorizontal } from '../../images';
-import { Routes } from '@/routes';
+import { CoreLogoHorizontal } from '../../images';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { Menu } from '@headlessui/react';
@@ -10,13 +8,7 @@ import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
 import { useRole } from '@/hooks';
 
-export const Header = ({
-  appName,
-  authenticated,
-}: {
-  appName: string;
-  authenticated?: boolean;
-}) => {
+export const Header = ({ authenticated }: { authenticated?: boolean }) => {
   const [open, setOpen] = useState(false);
   const { username } = useRole();
 
@@ -39,8 +31,7 @@ export const Header = ({
         </div>
         {authenticated && (
           <>
-            <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2">
-            </div>
+            <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2"></div>
 
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
               {username && (

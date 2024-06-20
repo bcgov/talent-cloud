@@ -7,10 +7,10 @@ import {
 } from '@nestjs/terminus';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
+import { Ministry, MinistryName } from './common/enums';
 import { FunctionService } from './function/function.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
-import { Ministry, MinistryName } from './common/enums';
 
 @ApiTags('Application API')
 @Controller()
@@ -62,8 +62,8 @@ export class AppController {
 
   /**
    * Return lists of values used by frontend for filtering emcr personnel
-   * @param req 
-   * @returns 
+   * @param req
+   * @returns
    */
   @Public()
   @Get('/emcr/filters')
@@ -78,8 +78,8 @@ export class AppController {
   }
   /**
    * Return lists of values used by frontend for filtering bcws personnel
-   * @param req 
-   * @returns 
+   * @param req
+   * @returns
    */
   @Get('/bcws/filters')
   async getBcwsFilters(@Request() req: RequestWithRoles) {
@@ -89,7 +89,7 @@ export class AppController {
       functions: await this.functionService.getRoles(),
       locations: (await this.locationService.getRegionsAndLocations()).filter(
         (itm) => itm.fireCentre !== null,
-      )
+      ),
     };
   }
 
@@ -103,7 +103,6 @@ export class AppController {
     return {
       formId: process.env.CHEFS_FORM_ID,
       formEnabled: process.env.CHEFS_FORM_ENABLED === 'true',
- 
     };
   }
 
@@ -115,6 +114,11 @@ export class AppController {
   @Public()
   @Get('/ministries')
   getMinistries() {
-    return { data: Object.values(Ministry).map((ministry) => ({ value: ministry, label: MinistryName[ministry] })) }
+    return {
+      data: Object.values(Ministry).map((ministry) => ({
+        value: ministry,
+        label: MinistryName[ministry],
+      })),
+    };
   }
 }

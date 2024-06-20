@@ -15,7 +15,7 @@ import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { Section } from '@/common/enums/sections.enum';
 import { SectionName } from '@/common/enums/sections.enum';
-import { FieldInterface } from '@/components';
+import type { FieldInterface } from '@/components';
 
 export const useGetFilters = (route?: Route) => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -61,7 +61,7 @@ export const useGetFilters = (route?: Route) => {
     })();
   }, [route]);
 
-  const filters: {[key:string]: FieldInterface} = useMemo(() => {
+  const filters: { [key: string]: FieldInterface } = useMemo(() => {
     return {
       name: {
         name: DashboardFilterNames.NAME,
