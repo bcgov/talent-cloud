@@ -40,10 +40,6 @@ export const Header = ({
         {authenticated && (
           <>
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2">
-              <CloudIcon />
-              <Link to={Routes.Dashboard} reloadDocument className="hover:underline">
-                <h3>{appName.toUpperCase()}</h3>
-              </Link>
             </div>
 
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
@@ -72,14 +68,6 @@ export const Header = ({
             </Menu.Button>
             <Menu.Items>
               <div className="text-left flex-col items-start justify-start w-full  border border-t-1 border-300">
-                <div className="px-8 py-8 hover:bg-grayBackground ">
-                  <Link
-                    to={Routes.Dashboard}
-                    className="hover:bg-grayBackground text-normal font-normal"
-                  >
-                    Dashboard
-                  </Link>
-                </div>
                 <div className="hover:bg-grayBackground  px-8 py-8 w-full  border border-t-1 border-300">
                   <button
                     aria-label="logout"
