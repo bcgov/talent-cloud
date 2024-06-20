@@ -14,11 +14,11 @@ import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
 import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
 import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
+import { CreatePersonnelBcwsDTO } from '../../../bcws/dto/create-bcws-personnel.dto';
+import { BcwsRO } from '../../../bcws/ro';
 import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
 import { PersonnelRO } from '../../../personnel';
-import { CreatePersonnelBcwsDTO } from '../../../personnel/dto/bcws/create-bcws-personnel.dto';
-import { BcwsRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {
@@ -102,7 +102,12 @@ export class BcwsPersonnelEntity {
   })
   emergencyContactPhoneNumber?: string;
 
-  @Column({ name: 'emergency_contact_relationship', type: 'varchar', length: 50, nullable: true })
+  @Column({
+    name: 'emergency_contact_relationship',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
   emergencyContactRelationship?: string;
 
   @Column({ name: 'coordinator_notes', type: 'text', nullable: true })
@@ -123,10 +128,22 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'orientation', type: 'boolean', default: false })
   orientation: boolean;
 
-  @Column({ name: 'first_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  @Column({
+    name: 'first_choice_section',
+    type: 'enum',
+    enum: Section,
+    enumName: 'section',
+    nullable: true,
+  })
   firstChoiceSection?: Section;
 
-  @Column({ name: 'second_choice_section', type: 'enum', enum: Section, enumName: 'section', nullable: true })
+  @Column({
+    name: 'second_choice_section',
+    type: 'enum',
+    enum: Section,
+    enumName: 'section',
+    nullable: true,
+  })
   secondChoiceSection?: Section;
 
   @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
@@ -148,7 +165,8 @@ export class BcwsPersonnelEntity {
   toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
     const response = new BcwsRO();
 
-    const personnelData:  Record<string, PersonnelRO> = this.personnel.toResponseObject(role, lastDeployed);
+    const personnelData: Record<string, PersonnelRO> =
+      this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
       employeeId: this.employeeId,
@@ -175,7 +193,8 @@ export class BcwsPersonnelEntity {
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
-      certifications: this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
+      certifications:
+        this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
       emergencyContactFirstName: this.emergencyContactFirstName,
       emergencyContactLastName: this.emergencyContactLastName,
       emergencyContactPhoneNumber: this.emergencyContactPhoneNumber,

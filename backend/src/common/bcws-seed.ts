@@ -12,23 +12,20 @@ import { DriverLicense } from './enums/driver-license.enum';
 import { Ministry } from './enums/ministry.enum';
 import { Status } from './enums/status.enum';
 import { UnionMembership } from './enums/union-membership.enum';
+import { CreateBcwsPersonnelLanguagesDTO } from '../bcws/dto';
+import { CreatePersonnelBcwsDTO } from '../bcws/dto/create-bcws-personnel.dto';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import {
-  LocationEntity,
-} from '../database/entities/emcr';
+import { LocationEntity } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
-import { CreateBcwsPersonnelLanguagesDTO } from '../personnel/dto/bcws';
-import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws/create-bcws-personnel.dto';
 
 export const handler = (
   locations: LocationEntity[],
   roles: BcwsRoleEntity[],
   tools: BcwsToolsEntity[],
   certs: BcwsCertificationEntity[],
-  
 ): {
   personnelData: CreatePersonnelDTO;
   bcwsData: CreatePersonnelBcwsDTO;
@@ -42,18 +39,21 @@ export const handler = (
       ])
     ];
   const dateApplied = faker.date.past();
-const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
+  const divisionAndMinistry = faker.helpers.arrayElement(
+    divisionsAndMinistries,
+  );
   const personnelRoles = createRoles(roles);
-  const firstChoiceSection = roles.find(r => r.id === personnelRoles[0].roleId)?.section;
-  const secondRoleSection = roles.find(r => r.id === personnelRoles[1].roleId)?.section;
+  const firstChoiceSection = roles.find(
+    (r) => r.id === personnelRoles[0].roleId,
+  )?.section;
+  const secondRoleSection = roles.find((r) => r.id === personnelRoles[1].roleId)
+    ?.section;
   let secondChoiceSection = undefined;
   if (secondRoleSection !== firstChoiceSection) {
     secondChoiceSection = secondRoleSection;
   }
 
   const bcwsData: CreatePersonnelBcwsDTO = {
-
-
     dateApplied: dateApplied,
     dateApproved:
       status !== Status.PENDING
@@ -82,15 +82,13 @@ const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
     tools: createTools(tools),
     certifications: createCertifications(certs),
     roles: personnelRoles,
-    languages: Array.from(new Set(createLanguages())),  
+    languages: Array.from(new Set(createLanguages())),
     emergencyContactFirstName: faker.person.firstName(),
     emergencyContactLastName: faker.person.lastName(),
     emergencyContactPhoneNumber: faker.string.numeric('##########'),
     emergencyContactRelationship: faker.lorem.word(),
   };
-  
-  
-  
+
   const personnelData: CreatePersonnelDTO = {
     homeLocation: faker.helpers.arrayElement(locations),
     workLocation: faker.helpers.arrayElement(locations),
@@ -109,12 +107,19 @@ const divisionAndMinistry = faker.helpers.arrayElement(divisionsAndMinistries);
     supervisorFirstName: faker.person.firstName(),
     supervisorPhone: faker.string.numeric('##########'),
     remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
-    driverLicense: Array.from(new Set([faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense)), faker.helpers.arrayElement(Object.values(DriverLicense))])),
+    driverLicense: Array.from(
+      new Set([
+        faker.helpers.arrayElement(Object.values(DriverLicense)),
+        faker.helpers.arrayElement(Object.values(DriverLicense)),
+        faker.helpers.arrayElement(Object.values(DriverLicense)),
+        faker.helpers.arrayElement(Object.values(DriverLicense)),
+      ]),
+    ),
     willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };
-  return { personnelData,  bcwsData };
+  return { personnelData, bcwsData };
 };
 
 const threeMonthsArray = () => {
@@ -162,9 +167,6 @@ const availability = () => {
   return availabilities;
 };
 
-
-
-
 export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
   const personnelTools = [];
 
@@ -172,8 +174,8 @@ export const createTools = (bcwsTools: BcwsToolsEntity[]) => {
     const tool = faker.helpers.arrayElement(bcwsTools);
 
     personnelTools.push({
-      tool, 
-      toolId: tool.id,  
+      tool,
+      toolId: tool.id,
       proficiencyLevel: faker.helpers.arrayElement(
         Object.values(ToolsProficiency),
       ),
@@ -257,4 +259,3 @@ export const createLanguages = (): CreateBcwsPersonnelLanguagesDTO[] => {
     personnelLang.find((lang) => lang.language === uniqueLanguge),
   );
 };
-

@@ -27,7 +27,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
     try {
       const {
         data: { personnel, count },
-      } = await AxiosPrivate.get(`/personnel/${route}?${searchParamsUrl}`);
+      } = await AxiosPrivate.get(`/${route}?${searchParamsUrl}`);
       const rows = personnel.map(
         ({ id, status, newMember, ...personnel }: Personnel) => ({
           key: id,

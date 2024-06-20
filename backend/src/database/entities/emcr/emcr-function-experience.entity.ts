@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { EmcrFunctionEntity } from './emcr-function.entity';
 import { EmcrPersonnelEntity } from './emcr-personnel.entity';
 import { Experience } from '../../../common/enums/emcr/experience.enum';
-import { EmcrExperienceRO } from '../../../personnel/ro/emcr';
+import { EmcrExperienceRO } from '../../../emcr/ro';
 
 @Entity('emcr_function_experience')
 export class EmcrExperienceEntity {

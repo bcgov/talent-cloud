@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { BcwsCertificationEntity } from './bcws-certifications.entity';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
-import { BcwsPersonnelCertificationRO } from '../../../personnel/ro/bcws';
+import { BcwsPersonnelCertificationRO } from '../../../bcws/ro';
 
 @Entity('bcws_personnel_certifications')
 export class BcwsPersonnelCertificationEntity {

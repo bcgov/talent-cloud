@@ -24,7 +24,7 @@ const usePersonnel = ({
     (async () => {
       try {
         const response =
-          route && (await AxiosPrivate.get(`/personnel/${route}/id/${personnelId}`));
+          route && (await AxiosPrivate.get(`/${route}/${personnelId}`));
         response && setPersonnel(response.data);
       } catch (e) {
         console.log(e);
@@ -37,7 +37,7 @@ const usePersonnel = ({
       const res =
         route &&
         (await AxiosPrivate.patch(
-          encodeURI(`/personnel/${route}/id/${personnelId}`),
+          encodeURI(`/${route}/${personnelId}`),
           personnel,
         ));
       res && setPersonnel(res.data);

@@ -2,6 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AuthModule } from './auth/auth.module';
+import { BcwsModule } from './bcws/bcws.module';
+import { EmcrModule } from './emcr/emcr.module';
 import { FormModule } from './form/form.module';
 import { FunctionModule } from './function/function.module';
 import { PersonnelModule } from './personnel/personnel.module';
@@ -20,6 +22,8 @@ export const Documentation = (app: INestApplication) => {
       AppModule,
       AuthModule,
       PersonnelModule,
+      BcwsModule,
+      EmcrModule,
       FunctionModule,
       FormModule,
       RegionsAndLocationsModule,

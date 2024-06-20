@@ -4,7 +4,9 @@ import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
+import { BcwsModule } from './bcws/bcws.module';
 import { DatabaseModule } from './database/database.module';
+import { EmcrModule } from './emcr/emcr.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { FormModule } from './form/form.module';
 import { FunctionModule } from './function/function.module';
@@ -25,6 +27,8 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     TerminusModule,
     AuthModule,
     PersonnelModule,
+    BcwsModule,
+    EmcrModule,
     FunctionModule,
     FormModule,
     RegionsAndLocationsModule,

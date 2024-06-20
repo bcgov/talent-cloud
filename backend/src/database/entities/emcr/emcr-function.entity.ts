@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { EmcrExperienceEntity } from './emcr-function-experience.entity';
-import { EmcrFunctionRO } from '../../../personnel/ro/emcr';
+import { EmcrFunctionRO } from '../../../emcr/ro';
 
 @Entity('emcr_function')
 export class EmcrFunctionEntity {

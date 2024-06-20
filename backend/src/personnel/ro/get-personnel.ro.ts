@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BcwsRO } from './bcws';
-import { EmcrRO } from './emcr';
 import { PersonnelRO } from './personnel.ro';
+import { BcwsRO } from '../../bcws/ro';
 import { Status } from '../../common/enums/status.enum';
+import { EmcrRO } from '../../emcr/ro';
 
 export class GetPersonnelRO {
   @ApiProperty({

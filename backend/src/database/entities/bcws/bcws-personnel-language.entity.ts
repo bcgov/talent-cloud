@@ -1,10 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
+import { BcwsPersonnelLanguagesRO } from '../../../bcws/ro';
 import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../../common/enums/bcws/language.enum';
-import { BcwsPersonnelLanguagesRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_language')
 export class LanguageEntity {

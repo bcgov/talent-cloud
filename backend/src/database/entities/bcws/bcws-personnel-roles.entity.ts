@@ -1,8 +1,8 @@
 import { Entity, ManyToOne, JoinColumn, Column, PrimaryColumn } from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import { BcwsRoleEntity } from './bcws-role.entity';
+import { BcwsPersonnelRoleRO } from '../../../bcws/ro';
 import { ExperienceLevel } from '../../../common/enums/bcws';
-import { BcwsPersonnelRoleRO } from '../../../personnel/ro/bcws';
 
 @Entity('bcws_personnel_roles')
 export class BcwsSectionsAndRolesEntity {

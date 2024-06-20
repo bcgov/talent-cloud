@@ -11,9 +11,9 @@ import { FunctionService } from './function.service';
 import { FunctionRO } from './ro/function.ro';
 import { RolesRO } from './ro/role.ro';
 import { Public } from '../auth/public.decorator';
-import { CertificationRO } from '../personnel/ro/bcws/bcws-certification.ro';
-import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
-import { BcwsToolsRO } from '../personnel/ro/bcws/tools.ro';
+import { CertificationRO } from '../bcws/ro/bcws-certification.ro';
+import { RolesDataRO } from '../bcws/ro/roles-data.ro';
+import { BcwsToolsRO } from '../bcws/ro/tools.ro';
 
 @Controller('function')
 @ApiTags('Functions API')
