@@ -1,6 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PersonnelService } from 'src/personnel/personnel.service';
 import { Repository, In } from 'typeorm';
 import {
   UpdateEmcrPersonnelDTO,
@@ -18,6 +17,7 @@ import {
 } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
+import { PersonnelService } from '../personnel/personnel.service';
 
 @Injectable()
 export class EmcrService {

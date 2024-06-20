@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppLogger } from 'src/logger/logger.service';
-import { PersonnelModule } from 'src/personnel/personnel.module';
 import { EmcrController } from './emcr.controller';
 import { EmcrService } from './emcr.service';
 import {
@@ -11,6 +9,8 @@ import {
   EmcrPersonnelEntity,
   EmcrTrainingEntity,
 } from '../database/entities/emcr';
+import { AppLogger } from '../logger/logger.service';
+import { PersonnelModule } from '../personnel/personnel.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([

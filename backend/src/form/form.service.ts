@@ -1,8 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { BcwsService } from 'src/bcws/bcws.service';
-import { EmcrService } from 'src/emcr/emcr.service';
 import { Repository } from 'typeorm';
 import { CreateFormDTO } from './form.dto';
 import {
@@ -13,6 +11,7 @@ import {
   PersonnelFormData,
 } from './interface';
 import { FormSubmissionDTO } from './submission.dto';
+import { BcwsService } from '../bcws/bcws.service';
 import { CreatePersonnelBcwsDTO } from '../bcws/dto';
 import {
   CertificationName,
@@ -28,6 +27,7 @@ import {
 } from '../common/enums';
 import { Form } from '../database/entities/form.entity';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
+import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';

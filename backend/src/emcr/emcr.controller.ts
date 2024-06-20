@@ -12,14 +12,14 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Program, RequestWithRoles } from 'src/auth/interface';
-import { Programs } from 'src/auth/program.decorator';
-import { ICS_TRAINING_NAME } from 'src/common/const';
-import { AppLogger } from 'src/logger/logger.service';
-import { GetPersonnelRO, PersonnelRO, UpdatePersonnelDTO } from 'src/personnel';
-import { QueryTransformPipe } from 'src/query-validation.pipe';
 import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto';
 import { EmcrService } from './emcr.service';
+import { Program, RequestWithRoles } from '../auth/interface';
+import { Programs } from '../auth/program.decorator';
+import { ICS_TRAINING_NAME } from '../common/const';
+import { AppLogger } from '../logger/logger.service';
+import { GetPersonnelRO, PersonnelRO, UpdatePersonnelDTO } from '../personnel';
+import { QueryTransformPipe } from '../query-validation.pipe';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
