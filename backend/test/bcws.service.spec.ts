@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BcwsService } from './bcws.service';
+import { BcwsService } from '../src/bcws/bcws.service';
 
 describe('BcwsService', () => {
   let service: BcwsService;
