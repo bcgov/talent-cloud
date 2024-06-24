@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BcwsRole, BcwsRoleName, SectionName } from '../common/enums';
-import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
-import { EmcrFunctionEntity } from '../database/entities/emcr';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
+import { EmcrFunctionEntity } from '../database/entities/emcr';
 import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
-
 
 @Injectable()
 export class FunctionService {
@@ -20,7 +19,7 @@ export class FunctionService {
     private certRepository: Repository<BcwsCertificationEntity>,
     @InjectRepository(BcwsToolsEntity)
     private toolsRepository: Repository<BcwsToolsEntity>,
-  ) { }
+  ) {}
 
   /**
    * Get all functions
@@ -33,20 +32,20 @@ export class FunctionService {
 
   /**
    * Get all roles
-   * @returns 
+   * @returns
    */
-  async getAllRoles(): Promise<BcwsRoleEntity[]>{
+  async getAllRoles(): Promise<BcwsRoleEntity[]> {
     return this.roleRepository.find();
   }
   /**
    * Returns certifications that are not OFA I, II, or III
    * Used by CHEFS form
    * @returns {BcwsCertificationEntity[]} List of certifications
-   * 
+   *
    */
   async getCertificates(): Promise<BcwsCertificationEntity[]> {
     const certificates = await this.certRepository.find();
-    return certificates.filter(itm => ![2,8,9,10].includes(itm.id));
+    return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
   }
 
   /**
@@ -71,7 +70,12 @@ export class FunctionService {
       if (!acc[key]) {
         acc[key] = [];
       }
-      acc[key].push({ name: BcwsRoleName[role.name], enumName: BcwsRole[role.name], id: role.id, section: SectionName[role.section] });
+      acc[key].push({
+        name: BcwsRoleName[role.name],
+        enumName: BcwsRole[role.name],
+        id: role.id,
+        section: SectionName[role.section],
+      });
       return acc;
     }, {});
 

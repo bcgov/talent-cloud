@@ -1,4 +1,4 @@
-import type { FieldGroupedOption } from '@/components';
+import type { FieldGroupedOption, FieldInterface } from '@/components';
 import {
   MenuItem,
   Checkbox,
@@ -14,13 +14,17 @@ import { FireCentreName } from '@/common/enums/firecentre.enum';
 export const MultiSelectGroup = ({
   field,
   values,
+  groupValues,
+  groupField,
   onChange,
   label,
   handleClose,
   handleCloseMany,
 }: {
-  field: any;
-  values: any;
+  field: FieldInterface;
+  values: string[];
+  groupValues: string[];
+  groupField: FieldInterface;
   onChange: (name: string, values: string) => void;
   label: string;
   handleClose: (name: string, value: string) => void;
@@ -37,10 +41,13 @@ export const MultiSelectGroup = ({
     }
   };
 
-  const onChangeOne = (option: string) =>
+  const onChangeOne = (option: string, group: string) => {
     values?.includes(option)
       ? handleClose(field.name, option)
       : onChange(field.name, option);
+
+    !groupValues?.includes(group) && onChange(groupField.name, group);
+  };
 
   return (
     <>
@@ -49,7 +56,7 @@ export const MultiSelectGroup = ({
         <MenuHandler field={field} id={field.name}>
           <MenuChips
             chips={values.map((itm: string) => ({ label: itm, value: itm }))}
-            placeholder={field.placeholder}
+            placeholder={field.placeholder ?? ''}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
@@ -98,7 +105,7 @@ export const MultiSelectGroup = ({
                         <label className={classes.menu.listItem} htmlFor={option}>
                           <Checkbox
                             id={option.name}
-                            onChange={() => onChangeOne(option)}
+                            onChange={() => onChangeOne(option, group.value)}
                             checked={values?.includes(option)}
                             name={field.name}
                             value={option}
@@ -116,7 +123,7 @@ export const MultiSelectGroup = ({
                           <label className={classes.menu.listItem} htmlFor={option}>
                             <Checkbox
                               id={option.name}
-                              onChange={() => onChangeOne(option)}
+                              onChange={() => onChangeOne(option, group.value)}
                               checked={values?.includes(option)}
                               name={field.name}
                               value={option}

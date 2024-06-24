@@ -3,6 +3,7 @@ import { Checkbox } from '../ui/Checkbox';
 import { Menu, MenuButton, MenuChips, MenuHandler, MenuItem, MenuList } from '../ui';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
+import type { FieldInterface, Option } from '../table';
 
 export const MultiSelect = ({
   field,
@@ -13,11 +14,7 @@ export const MultiSelect = ({
   handleCloseMany,
   maxChips,
 }: {
-  field: {
-    name: string;
-    placeholder: string;
-    options: { label: string; value: string }[];
-  };
+  field: FieldInterface;
   values: string[];
   handleChange: (name: string, values: string) => void;
   label: string;
@@ -42,7 +39,7 @@ export const MultiSelect = ({
                     label: FireCentreName[itm as FireCentre],
                   }))
             }
-            placeholder={field.placeholder}
+            placeholder={field.placeholder ?? ''}
             handleClose={handleClose}
             handleCloseMany={handleCloseMany}
             name={field.name}
@@ -51,9 +48,9 @@ export const MultiSelect = ({
           <MenuButton />
         </MenuHandler>
         <MenuList className={field.name}>
-          {field.options?.map((option: { label: string; value: string }) => (
+          {(field.options as Option[])?.map((option: Option) => (
             <MenuItem key={option.value}>
-              <label className={classes.menu.listItem} htmlFor={option.label}>
+              <label className={classes.menu.listItem} htmlFor={label}>
                 <Checkbox
                   id={option.label}
                   onChange={() =>

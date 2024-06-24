@@ -9,8 +9,8 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegionsAndLocationsService } from './region-location.service';
 import { RequestWithRoles } from '../auth/interface';
-import { AppLogger } from '../logger/logger.service';
 import { Public } from '../auth/public.decorator';
+import { AppLogger } from '../logger/logger.service';
 
 @Controller('regions-locations')
 @ApiTags('RegionsAndLocations API')
