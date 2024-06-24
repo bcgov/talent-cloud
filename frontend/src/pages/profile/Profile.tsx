@@ -268,10 +268,12 @@ const Profile = () => {
                     firstChoiceSection={personnel.firstChoiceSection}
                     secondChoiceSection={personnel.secondChoiceSection}
                     onClick={handleOpenEditRoles}
+                    allowEditing={role === Role.COORDINATOR}
                   />
                   <SkillsAndCertifications
                     skills={skills ?? []}
                     onClick={handleOpenEditSkills}
+                    allowEditing={role === Role.COORDINATOR}
                   />{' '}
                 </>
               )}

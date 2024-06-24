@@ -12,10 +12,12 @@ import type { ReactElement } from 'react';
 import { useState } from 'react';
 export const Accordion = ({
   title,
+  allowEditing,
   onClick,
   children,
 }: {
   title: string;
+  allowEditing?: boolean;
   onClick: () => void;
   children: ReactElement;
 }) => {
@@ -43,17 +45,19 @@ export const Accordion = ({
           >
             <div className=" w-full justify-between items-center flex lg:flex-row px-8">
               <span>{title}</span>
-              <button
-                aria-label="edit functions"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClick();
-                }}
-                className="z-20 flex text-primaryBlue flex-row items-center"
-              >
-                <PencilSquareIcon className="h-6 w-6" />
-                <span className="pl-2 font-normal underline text-sm">Edit</span>
-              </button>
+              {allowEditing === true && (
+                <button
+                  aria-label="edit functions"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClick();
+                  }}
+                  className="z-20 flex text-primaryBlue flex-row items-center"
+                >
+                  <PencilSquareIcon className="h-6 w-6" />
+                  <span className="pl-2 font-normal underline text-sm">Edit</span>
+                </button>
+              )}
             </div>
           </AccordionHeader>
           <AccordionBody>{children}</AccordionBody>

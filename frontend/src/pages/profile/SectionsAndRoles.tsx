@@ -14,11 +14,13 @@ export const SectionsAndRoles = ({
   roles,
   firstChoiceSection,
   secondChoiceSection,
+  allowEditing,
   onClick,
 }: {
   roles: BcwsPersonnelRoleInterface[];
   firstChoiceSection?: Section;
   secondChoiceSection?: Section;
+  allowEditing: boolean;
   onClick: () => void;
 }) => {
   const title = 'Sections & Roles';
@@ -56,7 +58,7 @@ export const SectionsAndRoles = ({
   );
 
   return (
-    <Accordion title={title} onClick={onClick}>
+    <Accordion title={title} onClick={onClick} allowEditing={allowEditing}>
       <div>
         <div>
           <h5 className="pl-8 py-6 font-bold text-primaryBlue">Sections & Roles</h5>
