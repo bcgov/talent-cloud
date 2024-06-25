@@ -22,15 +22,17 @@ export type SkillsProps = {
 
 export const SkillsAndCertifications = ({
   skills,
+  allowEditing,
   onClick,
 }: {
   skills: SkillsProps[];
+  allowEditing: boolean;
   onClick: () => void;
 }) => {
   const title = 'Skills & Certifications';
 
   return (
-    <Accordion title={title} onClick={onClick}>
+    <Accordion title={title} onClick={onClick} allowEditing={allowEditing}>
       <div>
         {skills.map((itm) => (
           <div key={itm.title}>
