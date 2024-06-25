@@ -32,8 +32,8 @@ const SchedulerPopUp = ({
   onSave: (dates: AvailabilityRange) => void;
 }) => {
   const [range, setRange] = useState<DateRange | undefined>({
-    from: editedFrom ? offsetTimezoneDate(editedFrom) : new Date(),
-    to: editedTo ? offsetTimezoneDate(editedTo) : new Date(),
+    from: editedFrom ? offsetTimezoneDate(editedFrom) : undefined,
+    to: editedTo ? offsetTimezoneDate(editedTo) : undefined,
   });
   const [selectedStatus, setSelectedStatus] = useState<AvailabilityType>(
     editedAvailabilityType ?? AvailabilityType.AVAILABLE,
