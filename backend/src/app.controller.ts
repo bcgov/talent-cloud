@@ -7,8 +7,9 @@ import {
 } from '@nestjs/terminus';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
+import { BcwsService } from './bcws/bcws.service';
 import { Ministry, MinistryName } from './common/enums';
-import { FunctionService } from './function/function.service';
+import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
 
@@ -19,7 +20,8 @@ export class AppController {
   constructor(
     private health: HealthCheckService,
     private db: TypeOrmHealthIndicator,
-    @Inject(FunctionService) private functionService: FunctionService,
+    @Inject(BcwsService) private bcwsService: BcwsService,
+    @Inject(EmcrService) private emcrService: EmcrService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
@@ -61,44 +63,11 @@ export class AppController {
   }
 
   /**
-   * Return lists of values used by frontend for filtering emcr personnel
-   * @param req
-   * @returns
-   */
-  @Public()
-  @Get('/emcr/filters')
-  async getEmcrFilters(@Request() req: RequestWithRoles) {
-    this.logger.log(`${req.url} ${req.role}`);
-    return {
-      functions: await this.functionService.getFunctions(),
-      locations: (await this.locationService.getRegionsAndLocations()).filter(
-        (itm) => itm.region !== null,
-      ),
-    };
-  }
-  /**
-   * Return lists of values used by frontend for filtering bcws personnel
-   * @param req
-   * @returns
-   */
-  @Get('/bcws/filters')
-  async getBcwsFilters(@Request() req: RequestWithRoles) {
-    this.logger.log(`${req.url} ${req.role}`);
-
-    return {
-      functions: await this.functionService.getRoles(),
-      locations: (await this.locationService.getRegionsAndLocations()).filter(
-        (itm) => itm.fireCentre !== null,
-      ),
-    };
-  }
-
-  /**
    * Public endpoint with form ID and form enabled status
    * @returns {Object} Form info
    */
-  @Get('/form-info')
   @Public()
+  @Get('/form-info')
   async getFormInfo() {
     return {
       formId: process.env.CHEFS_FORM_ID,
@@ -107,18 +76,38 @@ export class AppController {
   }
 
   /**
-   * Public endpoint to get list of ministries
-   * Used by CHEFS form
-   * @returns {Ministry[]} List of ministries
+   * Return lists of values used by frontend and CHEFS form
+   * @param req
+   * @returns
    */
   @Public()
-  @Get('/ministries')
-  getMinistries() {
+  @Get('program-field-data')
+  async getBcwsFilters(@Request() req: RequestWithRoles) {
+    this.logger.log(`${req.url} ${req.role}`);
+
+    const sections = await this.bcwsService.getRoles();
+    const certificates = await this.bcwsService.getCertificates();
+    const tools = await this.bcwsService.getTools();
+    const roles = await this.bcwsService.getAllRoles();
+    const functions = await this.emcrService.getFunctions();
+    /**
+     * !! IMPORANT - ensure any changes made to this endpoint are reflected in the CHEFS form !!
+     */
     return {
-      data: Object.values(Ministry).map((ministry) => ({
+      ministries: Object.values(Ministry).map((ministry) => ({
         value: ministry,
         label: MinistryName[ministry],
       })),
+
+      locations: (await this.locationService.getRegionsAndLocations()).filter(
+        (itm) => itm.fireCentre !== null,
+      ),
+      sections,
+      roles: roles.map((itm) => itm.toResponseObject()),
+      bcwsRoles: await this.bcwsService.getRoles(),
+      certs: certificates.map((c) => c.toResponseObject()),
+      tools: tools.map((t) => t.toResponseObject()),
+      functions: functions.map((f) => f.toResponseObject()),
     };
   }
 }

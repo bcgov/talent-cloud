@@ -40,7 +40,7 @@ export const useFilters = () => {
         ['availabilityFromDate']: range.from ? datePST(range.from, true) : undefined,
         ['availabilityToDate']: range?.to
           ? datePST(range.to, true)
-          : datePST(range.from, true),
+          : range.from && datePST(range.from, true),
       }));
     }
   };

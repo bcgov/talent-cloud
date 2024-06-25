@@ -1,7 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BcwsRole, ExperienceLevel, Section } from '../../common/enums/bcws';
+import { IsOptional } from 'class-validator';
+import {
+  BcwsRole,
+  BcwsRoleName,
+  ExperienceLevel,
+  Section,
+} from '../../common/enums/bcws';
 
 export class BcwsPersonnelRoleRO {
+  @ApiProperty()
+  @IsOptional()
+  personnel_id?: string;
+
   @ApiProperty({
     description: 'Role name',
     required: true,
@@ -11,6 +21,16 @@ export class BcwsPersonnelRoleRO {
     enum: BcwsRole,
   })
   role: BcwsRole;
+
+  @ApiProperty({
+    description: 'Role name',
+    required: true,
+    example: BcwsRoleName.ACCOUNTS_PAYABLE,
+    type: 'enum',
+    enumName: 'bcws-role',
+    enum: BcwsRole,
+  })
+  roleName: BcwsRoleName;
 
   @ApiProperty({
     description: 'Section',
@@ -31,12 +51,4 @@ export class BcwsPersonnelRoleRO {
     enum: ExperienceLevel,
   })
   expLevel: ExperienceLevel;
-
-  @ApiProperty({
-    description: 'Rank of choice for role (first, second, etc.)',
-    required: true,
-    example: 1,
-    type: 'number',
-  })
-  rank?: number;
 }

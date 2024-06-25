@@ -14,6 +14,7 @@ import {
   EmcrPersonnelEntity,
   EmcrExperienceEntity,
   EmcrTrainingEntity,
+  EmcrFunctionEntity,
 } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
@@ -30,6 +31,8 @@ export class EmcrService {
     private readonly experiencesRepository: Repository<EmcrExperienceEntity>,
     @InjectRepository(EmcrTrainingEntity)
     private readonly trainingRepository: Repository<EmcrTrainingEntity>,
+    @InjectRepository(EmcrFunctionEntity)
+    private readonly functionRepository: Repository<EmcrFunctionEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(EmcrService.name);
@@ -207,5 +210,14 @@ export class EmcrService {
       });
     }
     return trainings;
+  }
+
+  /**
+   * Get all functions
+   * No query parameters for now
+   * @returns {EmcrFunctionEntity[]} List of functions
+   */
+  async getFunctions(): Promise<EmcrFunctionEntity[]> {
+    return this.functionRepository.find();
   }
 }

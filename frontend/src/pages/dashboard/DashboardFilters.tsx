@@ -7,14 +7,14 @@ import {
   Button,
 } from '@/components';
 import { SingleSelect } from '@/components/filters/SingleSelect';
-import { useGetFilters } from '@/hooks/useGetFilters';
+import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { Route } from '@/providers';
 import { ButtonTypes } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import type { DateRange } from 'react-day-picker';
 
 export const DashboardFilters = ({ route }: { route?: Route }) => {
-  const { filters } = useGetFilters(route);
+  const { filters } = useProgramFieldData(route);
 
   const {
     filterValues,

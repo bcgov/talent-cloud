@@ -9,7 +9,6 @@ import { DatabaseModule } from './database/database.module';
 import { EmcrModule } from './emcr/emcr.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { FormModule } from './form/form.module';
-import { FunctionModule } from './function/function.module';
 import { LoggerModule } from './logger/logger.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
@@ -29,7 +28,6 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     PersonnelModule,
     BcwsModule,
     EmcrModule,
-    FunctionModule,
     FormModule,
     RegionsAndLocationsModule,
   ],

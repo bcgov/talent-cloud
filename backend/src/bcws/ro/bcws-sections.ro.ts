@@ -27,6 +27,6 @@ export class RoleNamesRO {
   section: SectionName;
 }
 
-export class RolesDataRO {
+export class BcwsSectionsRO {
   [key: string]: RoleNamesRO[];
 }

@@ -2,7 +2,7 @@ import { type ChangeEvent, type MouseEvent } from 'react';
 import type { Personnel } from '../../dashboard';
 import type { FormikHelpers, FormikValues } from 'formik';
 import { Route } from '@/providers';
-import { useGetFilters } from '@/hooks/useGetFilters';
+import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { formConfig } from '@/pages/profile/ProfileEditForm/formConfig';
 import { Form } from '@/components';
 import type { FieldType } from '@/pages/profile';
@@ -19,7 +19,7 @@ export const ProfileEditForm = ({
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
   route?: Route;
 }) => {
-  const { locations } = useGetFilters(route);
+  const { locations } = useProgramFieldData(route);
 
   const handleSubmit = async (
     values: FormikValues,
