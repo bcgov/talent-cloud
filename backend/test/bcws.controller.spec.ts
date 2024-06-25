@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BcwsController } from './bcws.controller';
+import { BcwsController } from '../src/bcws/bcws.controller';
 
 describe('BcwsController', () => {
   let controller: BcwsController;
