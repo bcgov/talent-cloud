@@ -606,7 +606,11 @@ export class PersonnelService {
     const lastDeployed = await this.getLastDeployedDate(id);
     const personnel = person.toResponseObject(role, lastDeployed);
 
-    return personnel
+    if (role === Role.LOGISTICS) {
+      delete personnel.coordinatorNotes;
+    }
+
+    return personnel;
   }
 
   /**
@@ -625,7 +629,11 @@ export class PersonnelService {
 
     const lastDeployed = await this.getLastDeployedDate(id);
 
-    return person.toResponseObject(role, lastDeployed);
+    const personnel = person.toResponseObject(role, lastDeployed);
+    if (role === Role.LOGISTICS) {
+      delete personnel.coordinatorNotes;
+    }
+    return personnel;
   }
 
   /**
