@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { RolesDataRO } from '../bcws/ro/roles-data.ro';
 import { BcwsRole, BcwsRoleName, SectionName } from '../common/enums';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { EmcrFunctionEntity } from '../database/entities/emcr';
-import { RolesDataRO } from '../personnel/ro/bcws/roles-data.ro';
 
 @Injectable()
 export class FunctionService {

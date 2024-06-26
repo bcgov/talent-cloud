@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Tools, ToolsName } from '../../../common/enums';
-
+import { Tools, ToolsName } from '../../common/enums';
 
 export class BcwsToolsRO {
   @ApiProperty({
@@ -19,5 +18,5 @@ export class BcwsToolsRO {
     description: 'Tool name',
     required: true,
   })
-  fullName: ToolsName
+  fullName: ToolsName;
 }

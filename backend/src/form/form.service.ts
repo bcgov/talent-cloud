@@ -3,23 +3,42 @@ import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateFormDTO } from './form.dto';
-import { BcwsFormData, EmcrFormData, FormSubmissionEventPayload, IntakeFormData, PersonnelFormData } from './interface';
-import { CertificationName, Experience, ExperienceLevel, LanguageLevelType, LanguageProficiency, Ministry, Section, Status, ToolsProficiency, UnionMembership } from '../common/enums';
+import {
+  BcwsFormData,
+  EmcrFormData,
+  FormSubmissionEventPayload,
+  IntakeFormData,
+  PersonnelFormData,
+} from './interface';
+import { FormSubmissionDTO } from './submission.dto';
+import { BcwsService } from '../bcws/bcws.service';
+import { CreatePersonnelBcwsDTO } from '../bcws/dto';
+import {
+  CertificationName,
+  Experience,
+  ExperienceLevel,
+  LanguageLevelType,
+  LanguageProficiency,
+  Ministry,
+  Section,
+  Status,
+  ToolsProficiency,
+  UnionMembership,
+} from '../common/enums';
 import { Form } from '../database/entities/form.entity';
+import { CreatePersonnelEmcrDTO } from '../emcr/dto';
+import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
-import { CreatePersonnelBcwsDTO } from '../personnel/dto/bcws';
-import { CreatePersonnelEmcrDTO } from '../personnel/dto/emcr';
 import { PersonnelService } from '../personnel/personnel.service';
-import { PersonnelEntity } from '../database/entities/personnel.entity';
-import { FormSubmissionDTO } from './submission.dto';
-
 
 @Injectable()
 export class FormService {
   constructor(
     @InjectRepository(Form) private formRepo: Repository<Form>,
     @Inject(PersonnelService) private personnelService: PersonnelService,
+    @Inject(EmcrService) private emcrService: EmcrService,
+    @Inject(BcwsService) private bcwsService: BcwsService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(FormService.name);
@@ -28,7 +47,9 @@ export class FormService {
    * process form submission event payload
    * @param eventPayload
    */
-  public async processEventPayload(eventPayload: FormSubmissionEventPayload): Promise<Form> {
+  public async processEventPayload(
+    eventPayload: FormSubmissionEventPayload,
+  ): Promise<Form> {
     const { submissionId, formId, subscriptionEvent } = eventPayload;
 
     this.logger.log(`Event: ${subscriptionEvent}`);
@@ -55,8 +76,14 @@ export class FormService {
         throw new BadRequestException(`Draft submission received`);
       }
 
-      const form = requestFormData && await this.processFormData({ submissionId: requestFormData.data.submission.id, formId: formId, data: requestFormData.data.submission.submission.data });
-      return form
+      const form =
+        requestFormData &&
+        (await this.processFormData({
+          submissionId: requestFormData.data.submission.id,
+          formId: formId,
+          data: requestFormData.data.submission.submission.data,
+        }));
+      return form;
     }
   }
   //TODO PROD: unique constraint on email address
@@ -65,18 +92,20 @@ export class FormService {
    * @param submission
    */
   async processFormData(submission: CreateFormDTO): Promise<Form> {
-    this.logger.log(`Parsing form data for: ${submission.data.personnel?.program} program(s)`);
+    this.logger.log(
+      `Parsing form data for: ${submission.data.personnel?.program} program(s)`,
+    );
 
     const form = await this.saveForm(submission);
     this.logger.log(`Form data saved successfully. Form id: ${form.id}`);
 
-    const personnel = await this.createPersonnelEntities(submission.data, form.id);
+    const successMessage = await this.createPersonnelEntities(
+      submission.data,
+      form.id,
+    );
 
-
-    this.logger.log(`Personnel entities created successfully. Personnel id: ${personnel.id}`);
-    return form
-
-
+    this.logger.log(`${successMessage}`);
+    return form;
   }
   /**
    * Saves the form id and submission id
@@ -99,31 +128,60 @@ export class FormService {
    */
   async createPersonnelEntities(
     data: IntakeFormData,
-    formId: number
+    formId: number,
+  ): Promise<string> {
+    const emcrPersonnel =
+      data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH'
+        ? this.parseEmcrPersonnel(
+            data.emcr,
+            data.personnel.pfa,
+            data.personnel.firstAidLevel,
+            data.personnel.firstAidExpiry,
+          )
+        : undefined;
 
-  ): Promise<PersonnelEntity> {
-
-    const emcrPersonnel = data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH' ? this.parseEmcrPersonnel(data.emcr,data.personnel.pfa, data.personnel.firstAidLevel, data.personnel.firstAidExpiry) : undefined;
-
-    const bcwsPersonnel = data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH' ? this.parseBcwsPersonnel(data.bcws, data.personnel.pfa,
-      data.personnel.firstAidLevel, data.personnel.firstAidExpiry, ) : undefined;
+    const bcwsPersonnel =
+      data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH'
+        ? this.parseBcwsPersonnel(
+            data.bcws,
+            data.personnel.pfa,
+            data.personnel.firstAidLevel,
+            data.personnel.firstAidExpiry,
+          )
+        : undefined;
 
     if (data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
-      this.logger.error(`Error saving form data: Both programs selected but no data found for either program`);
-      throw new BadRequestException(`Both programs selected but no data found for either program`);
-    } else if ( data.personnel.program === 'EMCR' && !emcrPersonnel) {
-      this.logger.error(`Error saving form data: EMCR program selected but no data found for EMCR program`);
-      throw new BadRequestException(`EMCR program selected but no data found for EMCR program`);
-    } else if (
-      data.personnel.program === 'BCWS' && !bcwsPersonnel) {
-      this.logger.error(`Error saving form data: BCWS program selected but no data found for BCWS program`);
-      throw new BadRequestException(`BCWS program selected but no data found for BCWS program`);
+      this.logger.error(
+        `Error saving form data: Both programs selected but no data found for either program`,
+      );
+      throw new BadRequestException(
+        `Both programs selected but no data found for either program`,
+      );
+    } else if (data.personnel.program === 'EMCR' && !emcrPersonnel) {
+      this.logger.error(
+        `Error saving form data: EMCR program selected but no data found for EMCR program`,
+      );
+      throw new BadRequestException(
+        `EMCR program selected but no data found for EMCR program`,
+      );
+    } else if (data.personnel.program === 'BCWS' && !bcwsPersonnel) {
+      this.logger.error(
+        `Error saving form data: BCWS program selected but no data found for BCWS program`,
+      );
+      throw new BadRequestException(
+        `BCWS program selected but no data found for BCWS program`,
+      );
     }
     const personnel = this.parsePersonnel(data.personnel, formId);
 
-
     try {
-      return await this.personnelService.createOnePerson(personnel, emcrPersonnel, bcwsPersonnel);
+      const person = await this.personnelService.createOnePerson(personnel);
+      emcrPersonnel &&
+        (await this.emcrService.createEmcerPersonnel(emcrPersonnel, person.id));
+      bcwsPersonnel &&
+        (await this.bcwsService.createBcwsPersonnel(bcwsPersonnel, person.id));
+
+      return 'Created Personnel Successfully';
     } catch (e) {
       this.logger.error(`Error saving form data: ${e}`);
       throw new BadRequestException(e);
@@ -131,7 +189,6 @@ export class FormService {
   }
 
   parsePersonnel(data: PersonnelFormData, formId: number): CreatePersonnelDTO {
-
     const personnelData: CreatePersonnelDTO = {
       intakeForm: formId,
       unionMembership: UnionMembership[data.unionMembership],
@@ -148,18 +205,27 @@ export class FormService {
       supervisorEmail: data.supervisorEmail,
       supervisorLastName: data.supervisorLastName,
       supervisorFirstName: data.supervisorFirstName,
-      supervisorPhone: data?.supervisorPhoneNumber?.replace(/[(]|-|[)]|\s/gi, ''),
+      supervisorPhone: data?.supervisorPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      ),
       remoteOnly: data.deployment === 'remoteOnly',
       driverLicense: data.dl,
-      willingToTravel: data.deployment === "willingToTravel",
+      willingToTravel: data.deployment === 'willingToTravel',
       jobTitle: data.jobTitle,
     };
-    return personnelData
-
+    return personnelData;
   }
 
-  parseEmcrPersonnel(data: EmcrFormData, pfa: string, firstAidLevel?: string, firstAidExpiry?: Date ): CreatePersonnelEmcrDTO {
-    const functions = Object.keys(data.functions).filter(itm => data.functions[itm] === true)
+  parseEmcrPersonnel(
+    data: EmcrFormData,
+    pfa: string,
+    firstAidLevel?: string,
+    firstAidExpiry?: Date,
+  ): CreatePersonnelEmcrDTO {
+    const functions = Object.keys(data.functions).filter(
+      (itm) => data.functions[itm] === true,
+    );
 
     const emcrData: CreatePersonnelEmcrDTO = {
       dateApplied: new Date(),
@@ -171,64 +237,98 @@ export class FormService {
       firstAidLevel: firstAidLevel ?? undefined,
       firstAidExpiry: firstAidExpiry ?? undefined,
       psychologicalFirstAid: pfa === 'yes',
-      experiences: functions.map(itm => ({
+      experiences: functions.map((itm) => ({
         functionId: parseInt(itm),
-        experienceType: Experience.INTERESTED
-      }))
-    }
+        experienceType: Experience.INTERESTED,
+      })),
+    };
 
-
-    return emcrData
+    return emcrData;
   }
 
-  parseBcwsPersonnel(data: BcwsFormData, pfa: string, firstAidLevel?: string, firstAidExpiry?: Date, ): CreatePersonnelBcwsDTO {
+  parseBcwsPersonnel(
+    data: BcwsFormData,
+    pfa: string,
+    firstAidLevel?: string,
+    firstAidExpiry?: Date,
+  ): CreatePersonnelBcwsDTO {
+    //TODO prevent duplicate tools to be submitted and then remove this:
+    const uniqueToolIds = Array.from(
+      new Set(data?.tools?.map((itm) => itm.name.id)),
+    );
 
-    //TODO prevent duplicate tools to be submitted and then remove this:      
-    const uniqueToolIds = Array.from(new Set(data?.tools?.map(itm => itm.name.id)))
-
-    const tools = uniqueToolIds?.map(itm =>
-    ({
+    const tools = uniqueToolIds?.map((itm) => ({
       toolId: itm,
-      proficiencyLevel: ToolsProficiency[data.tools.find(tool => tool.name.id === itm).proficiency.name]
-    }))
+      proficiencyLevel:
+        ToolsProficiency[
+          data.tools.find((tool) => tool.name.id === itm).proficiency.name
+        ],
+    }));
 
+    //TODO prevent duplicate tools to be submitted and then remove this:
+    const roles = Object.keys(data?.sections)
+      ?.map((itm) => data?.sections[itm])
+      .filter((itm) => itm?.length > 0)
+      .flatMap(
+        (itm) =>
+          // eslint-disable-next-line
+          itm?.map(
+            ({
+              role,
+              experience,
+            }: {
+              role: { id: number };
+              experience: ExperienceLevel;
+            }) => ({
+              roleId: role?.id,
+              expLevel: experience,
+            }),
+          ),
+      );
 
-    //TODO prevent duplicate tools to be submitted and then remove this:      
-    const roles = Object.keys(data?.sections)?.map(itm =>
-      data?.sections[itm]
-    ).filter(itm =>
-      itm?.length > 0
-    ).flatMap(itm =>
-      // eslint-disable-next-line 
-      itm?.map(({ role, experience }: { role: any; experience: ExperienceLevel }) =>
-      ({
-        roleId: role?.id,
-        expLevel: experience
-      })))
+    const uniqueRoleIds = Array.from(new Set(roles?.map((itm) => itm?.roleId)));
 
-    const uniqueRoleIds = Array.from(new Set(roles?.map(itm => itm?.roleId)))
+    const uniqueRoles = uniqueRoleIds?.map(
+      (itm) => roles?.find((role) => role?.roleId === itm),
+    );
 
-    const uniqueRoles = uniqueRoleIds?.map(itm => roles?.find(role => role?.roleId === itm))
-
-    const parsedCertifications = data.certificates?.map(itm => ({ certificationId: itm?.id, expiry: itm?.id === 6 ? data?.foodSafe1Expiry : itm?.id === 7 ? data?.foodSafe2Expiry : undefined })) ?? []
+    const parsedCertifications =
+      data.certificates?.map((itm) => ({
+        certificationId: itm?.id,
+        expiry:
+          itm?.id === 6
+            ? data?.foodSafe1Expiry
+            : itm?.id === 7
+            ? data?.foodSafe2Expiry
+            : undefined,
+      })) ?? [];
 
     if (pfa === 'yes') {
-      parsedCertifications.push({ certificationId: 2, expiry: undefined })
+      parsedCertifications.push({ certificationId: 2, expiry: undefined });
     }
 
     if (firstAidLevel) {
       if (CertificationName[firstAidLevel] === CertificationName.OFA_I) {
-        parsedCertifications.push({ certificationId: 8, expiry: firstAidExpiry })
-      } else if (CertificationName[firstAidLevel] === CertificationName.OFA_II) {
-        parsedCertifications.push({ certificationId: 9, expiry: firstAidExpiry })
+        parsedCertifications.push({
+          certificationId: 8,
+          expiry: firstAidExpiry,
+        });
+      } else if (
+        CertificationName[firstAidLevel] === CertificationName.OFA_II
+      ) {
+        parsedCertifications.push({
+          certificationId: 9,
+          expiry: firstAidExpiry,
+        });
+      } else if (
+        CertificationName[firstAidLevel] === CertificationName.OFA_III
+      ) {
+        parsedCertifications.push({
+          certificationId: 10,
+          expiry: firstAidExpiry,
+        });
       }
-      else if (CertificationName[firstAidLevel] === CertificationName.OFA_III) {
-        parsedCertifications.push({ certificationId: 10, expiry: firstAidExpiry })
-      }
-
-
     }
-
 
     const bcwsData: CreatePersonnelBcwsDTO = {
       dateApplied: new Date(),
@@ -240,23 +340,39 @@ export class FormService {
       purchaseCardHolder: data.purchaseCard,
       liaisonFirstName: data?.liaisonFirstName,
       liaisonLastName: data?.liaisonLastName,
-      liaisonPhoneNumber: data?.liaisonPhoneNumber?.replace(/[(]|-|[)]|\s/gi, ''),
+      liaisonPhoneNumber: data?.liaisonPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      ),
       liaisonEmail: data.liaisonEmail,
       firstChoiceSection: Section[data.firstChoiceSection],
-      secondChoiceSection: data.secondChoiceSection === '' ? undefined : Section[data.secondChoiceSection],
-      languages: Array.from(new Set(data?.languages?.map(itm => ({
-        language: itm.language,
-        level: LanguageProficiency[itm.proficiency.split('.')[0] ?? itm.proficiency],
-        type: LanguageLevelType[itm.proficiency.split('.')[1] ?? 'BOTH']
-      })))),
+      secondChoiceSection:
+        data.secondChoiceSection === ''
+          ? undefined
+          : Section[data.secondChoiceSection],
+      languages: Array.from(
+        new Set(
+          data?.languages?.map((itm) => ({
+            language: itm.language,
+            level:
+              LanguageProficiency[
+                itm.proficiency.split('.')[0] ?? itm.proficiency
+              ],
+            type: LanguageLevelType[itm.proficiency.split('.')[1] ?? 'BOTH'],
+          })),
+        ),
+      ),
       roles: uniqueRoles ?? [],
       tools: tools ?? [],
       certifications: parsedCertifications ?? [],
       emergencyContactFirstName: data.emergencyContactFirstName,
       emergencyContactLastName: data.emergencyContactLastName,
-      emergencyContactPhoneNumber: data.emergencyContactPhoneNumber?.replace(/[(]|-|[)]|\s/gi, ''),
+      emergencyContactPhoneNumber: data.emergencyContactPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      ),
       emergencyContactRelationship: data.emergencyContactRelationship,
     };
-    return bcwsData
+    return bcwsData;
   }
 }

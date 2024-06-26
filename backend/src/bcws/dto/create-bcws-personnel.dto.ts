@@ -13,9 +13,8 @@ import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
 import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
 import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
-import { Section } from '../../../common/enums/bcws';
-import { Status } from '../../../common/enums/status.enum';
-
+import { Section } from '../../common/enums/bcws';
+import { Status } from '../../common/enums/status.enum';
 
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
@@ -78,19 +77,19 @@ export class CreatePersonnelBcwsDTO {
   purchaseCardHolder: boolean;
 
   @ApiProperty({
-    description: 'Liaison First Name'
+    description: 'Liaison First Name',
   })
   @IsOptional()
   liaisonFirstName?: string;
 
   @ApiProperty({
-    description: 'Liaison Last Name'
+    description: 'Liaison Last Name',
   })
   @IsOptional()
   liaisonLastName?: string;
 
   @ApiProperty({
-    description: 'Liaison Phone Number'
+    description: 'Liaison Phone Number',
   })
   @IsOptional()
   liaisonPhoneNumber?: string;
@@ -176,9 +175,9 @@ export class CreatePersonnelBcwsDTO {
   })
   @IsArray()
   @IsOptional()
-  certifications?: CreateBcwsCertificationsDTO[] | UpdateBcwsCertificationsDTO[];
-
-
+  certifications?:
+    | CreateBcwsCertificationsDTO[]
+    | UpdateBcwsCertificationsDTO[];
 
   @ApiProperty({
     description: 'First Choice Section',

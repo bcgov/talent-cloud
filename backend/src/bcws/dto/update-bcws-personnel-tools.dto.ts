@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { Tools, ToolsProficiency } from '../../../common/enums/bcws';
+import { Tools, ToolsProficiency } from '../../common/enums/bcws';
 
 export class UpdateBcwsPersonnelToolsDTO {
   @ApiProperty({

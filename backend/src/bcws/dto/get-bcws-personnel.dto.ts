@@ -2,26 +2,26 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
-import { GetPersonnelDTO } from '../get-personnel.dto';
-import { Experience, FunctionName, Region } from '../../../common/enums/emcr';
+import { BcwsRole, FireCentre } from '../../common/enums/bcws';
+import { GetPersonnelDTO } from '../../personnel/dto/get-personnel.dto';
 
-export class GetEmcrPersonnelDTO extends GetPersonnelDTO {
+export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
   @ApiPropertyOptional({
-    description: 'Regions to search personnel from',
-    example: `${Region.NEA},${Region.NWE}`,
+    description: 'Fire Centres to search personnel from',
+    example: `${FireCentre.CARIBOO},${FireCentre.COASTAL}`,
   })
   @IsOptional()
   @IsArray()
-  @IsEnum(Region, { each: true })
+  @IsEnum(FireCentre, { each: true })
   @Transform(({ value }) =>
     Array.isArray(value)
       ? value
       : value
           .trim()
           .split(', ')
-          .map((type) => Region[type]),
+          .map((type) => FireCentre[type]),
   )
-  region: Region;
+  fireCentre: FireCentre; // Home Fire Centre
 
   @ApiPropertyOptional({
     description: 'Locations to search personnel from',
@@ -41,19 +41,11 @@ export class GetEmcrPersonnelDTO extends GetPersonnelDTO {
   location: string;
 
   @ApiPropertyOptional({
-    description: 'Function name to search personnel from',
-    type: FunctionName,
-    example: FunctionName.OPERATIONS,
+    description: 'Role to search personnel from',
+    type: BcwsRole,
+    example: BcwsRole.AVIATION_ASSISTANT,
   })
+  @IsEnum(BcwsRole)
   @IsOptional()
-  function: FunctionName;
-
-  @ApiPropertyOptional({
-    description: 'Experience level to search personnel from',
-    type: Experience,
-    example: Experience.INTERESTED,
-  })
-  @IsEnum(Experience)
-  @IsOptional()
-  experience: Experience;
+  role: BcwsRole;
 }

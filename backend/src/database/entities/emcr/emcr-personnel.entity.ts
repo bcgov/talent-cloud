@@ -6,7 +6,6 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
-
   OneToMany,
   OneToOne,
   PrimaryColumn,
@@ -17,10 +16,9 @@ import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
+import { CreatePersonnelEmcrDTO } from '../../../emcr/dto';
+import { EmcrRO } from '../../../emcr/ro';
 import { PersonnelRO } from '../../../personnel';
-import { CreatePersonnelEmcrDTO } from '../../../personnel/dto/emcr';
-import { EmcrRO } from '../../../personnel/ro/emcr';
-
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
@@ -65,7 +63,6 @@ export class EmcrPersonnelEntity {
   })
   status: Status;
 
-
   @Column({
     name: 'first_aid_level',
     type: 'varchar',
@@ -91,7 +88,7 @@ export class EmcrPersonnelEntity {
   })
   experiences: EmcrExperienceEntity[];
 
-  @ManyToMany(() => EmcrTrainingEntity,t=> t.id,  { cascade: true })
+  @ManyToMany(() => EmcrTrainingEntity, (t) => t.id, { cascade: true })
   @JoinTable({
     name: 'emcr_personnel_training',
     joinColumn: { name: 'personnel_id' },
@@ -108,11 +105,11 @@ export class EmcrPersonnelEntity {
   @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
   preocExperience?: boolean;
 
-  
   toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
     const response = new EmcrRO();
 
-    const personnelData:  Record<string, PersonnelRO> = this.personnel.toResponseObject(role, lastDeployed);
+    const personnelData: Record<string, PersonnelRO> =
+      this.personnel.toResponseObject(role, lastDeployed);
     const data = {
       ...personnelData,
       dateApplied: this.dateApplied ?? '',
@@ -136,7 +133,6 @@ export class EmcrPersonnelEntity {
       experiences:
         this.experiences?.map((experience) => experience.toResponseObject()) ??
         [],
-        
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BcwsRole, ExperienceLevel, Section } from '../../../common/enums/bcws';
+import { BcwsRole, ExperienceLevel, Section } from '../../common/enums/bcws';
 
 export class BcwsPersonnelRoleRO {
   @ApiProperty({
@@ -36,7 +36,7 @@ export class BcwsPersonnelRoleRO {
     description: 'Rank of choice for role (first, second, etc.)',
     required: true,
     example: 1,
-    type: 'number'
+    type: 'number',
   })
   rank?: number;
 }

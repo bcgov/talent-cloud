@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { ExperienceLevel } from '../../../common/enums/bcws';
+import { ExperienceLevel } from '../../common/enums/bcws';
 
 export class CreateBcwsPersonnelRolesDTO {
   @ApiProperty({

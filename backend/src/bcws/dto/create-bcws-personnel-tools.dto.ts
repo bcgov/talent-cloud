@@ -1,23 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Tools,
-  ToolsProficiency,
-} from '../../../common/enums/bcws/tools.enum';
+import { IsEnum } from 'class-validator';
+import { ToolsProficiency } from '../../common/enums/bcws';
 
-export class BcwsPersonnelToolsRO {
-  
-
+export class CreateBcwsPersonnelToolsDTO {
   @ApiProperty({
-    description: 'Tool name',
+    description: 'Tool id',
     required: true,
-    example: Tools.ADOBE,
-    type: 'enum',
-    enumName: 'bcws-tools',
-    enum: Tools,
   })
-  tool: Tools;
-
-  
+  toolId: number;
 
   @ApiProperty({
     description: 'Proficiency level',
@@ -26,6 +16,11 @@ export class BcwsPersonnelToolsRO {
     type: 'enum',
     enumName: 'bcws-tools-proficiency',
     enum: ToolsProficiency,
+  })
+  @IsEnum(ToolsProficiency, {
+    message: `Invalid proficiency level. Options are: ${Object.values(
+      ToolsProficiency,
+    )}`,
   })
   proficiencyLevel: ToolsProficiency;
 }

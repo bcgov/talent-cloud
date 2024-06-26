@@ -10,12 +10,12 @@ import {
   ValidateIf,
 } from 'class-validator';
 
-import { CreatePersonnelBcwsDTO } from './bcws';
-import { CreatePersonnelEmcrDTO } from './emcr';
+import { CreatePersonnelBcwsDTO } from '../../bcws/dto';
 import { FireCentre, Ministry, Region } from '../../common/enums';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { AvailabilityEntity } from '../../database/entities/availability.entity';
+import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
 
 export class LocationDTO {
   @ApiProperty()

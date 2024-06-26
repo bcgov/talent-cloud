@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { CertificationName } from '../../../common/enums';
+import { CertificationName } from '../../common/enums';
 
 export class UpdateBcwsCertificationsDTO {
   @ApiProperty({

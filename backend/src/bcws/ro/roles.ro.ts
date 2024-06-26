@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BcwsRole, ExperienceLevel, Section } from '../../../common/enums/bcws';
+import { BcwsRole, ExperienceLevel, Section } from '../../common/enums/bcws';
 
 export class BcwsRoleRO {
   @ApiProperty()

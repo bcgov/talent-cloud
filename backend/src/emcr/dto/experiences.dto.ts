@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Experience } from '../../../common/enums/emcr/experience.enum';
+import { Experience } from '../../common/enums/emcr/experience.enum';
 
 export class EmcrPersonnelExperienceDTO {
   @ApiProperty({

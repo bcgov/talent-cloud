@@ -1,21 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  Length,
-  ValidateIf,
-} from 'class-validator';
+import { IsOptional, IsString, Length, ValidateIf } from 'class-validator';
 import { EmcrPersonnelExperienceDTO } from './experiences.dto';
-import { Status } from '../../../common/enums/status.enum';
-import { EmcrTrainingEntity } from '../../../database/entities/emcr/emcr-training.entity';
-
+import { Status } from '../../common/enums/status.enum';
+import { EmcrTrainingEntity } from '../../database/entities/emcr/emcr-training.entity';
 
 export class CreatePersonnelEmcrDTO {
   @ApiProperty({})
   @IsOptional()
   personnelId?: string;
-
-  
 
   @ApiProperty()
   @IsOptional()
@@ -47,7 +39,7 @@ export class CreatePersonnelEmcrDTO {
   })
   @IsOptional()
   trainings: EmcrTrainingEntity[];
-  
+
   @ApiProperty({
     description: 'Experiences this personnel has had in specific functions',
     example: [

@@ -2,11 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   LanguageLevelType,
   LanguageProficiency,
-} from '../../../common/enums/bcws';
+} from '../../common/enums/bcws';
 
 export class BcwsPersonnelLanguagesRO {
-  
-
   @ApiProperty({
     description: 'Language name',
     example: 'English',

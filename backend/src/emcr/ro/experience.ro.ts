@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Experience } from '../../../common/enums/emcr';
+import { Experience } from '../../common/enums/emcr';
 
 export class EmcrExperienceRO {
   @ApiProperty({

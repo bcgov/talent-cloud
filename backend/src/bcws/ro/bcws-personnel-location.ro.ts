@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FireCentre } from '../../../common/enums/bcws';
+import { FireCentre } from '../../common/enums/bcws';
 
 export class BcwsLocationRO {
   @ApiProperty({

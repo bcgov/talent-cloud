@@ -1,5 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CertificationRO {
   @ApiProperty({
@@ -13,5 +12,4 @@ export class CertificationRO {
     required: true,
   })
   name: string;
-
 }

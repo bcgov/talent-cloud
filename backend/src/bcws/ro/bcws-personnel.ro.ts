@@ -5,9 +5,9 @@ import { BcwsPersonnelCertificationRO } from './bcws-personnel-certitifications.
 import { BcwsPersonnelLanguagesRO } from './bcws-personnel-languages.ro';
 import { BcwsPersonnelRoleRO } from './bcws-personnel-roles.ro';
 import { BcwsPersonnelToolsRO } from './bcws-personnel-tools.ro';
-import { PersonnelRO } from '../personnel.ro';
-import { Section } from '../../../common/enums/bcws';
-import { Status } from '../../../common/enums/status.enum';
+import { Section } from '../../common/enums/bcws';
+import { Status } from '../../common/enums/status.enum';
+import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 
 export class BcwsRO extends PersonnelRO {
   @ApiProperty({
