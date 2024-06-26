@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BcwsRoleEntity } from 'src/database/entities/bcws/bcws-role.entity';
 import { BcwsController } from './bcws.controller';
 import { BcwsService } from './bcws.service';
 import {
@@ -9,6 +8,7 @@ import {
   LanguageEntity,
 } from '../database/entities/bcws';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelModule } from '../personnel/personnel.module';

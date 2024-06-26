@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BcwsRoleEntity } from 'src/database/entities/bcws/bcws-role.entity';
 import { Repository } from 'typeorm';
 import { CreatePersonnelBcwsDTO, CreateBcwsPersonnelLanguagesDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
@@ -11,6 +10,7 @@ import { Role, Program } from '../auth/interface';
 import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
 import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
