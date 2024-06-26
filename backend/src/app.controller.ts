@@ -63,19 +63,6 @@ export class AppController {
   }
 
   /**
-   * Public endpoint with form ID and form enabled status
-   * @returns {Object} Form info
-   */
-  @Public()
-  @Get('/form-info')
-  async getFormInfo() {
-    return {
-      formId: process.env.CHEFS_FORM_ID,
-      formEnabled: process.env.CHEFS_FORM_ENABLED === 'true',
-    };
-  }
-
-  /**
    * Return lists of values used by frontend and CHEFS form
    * @param req
    * @returns

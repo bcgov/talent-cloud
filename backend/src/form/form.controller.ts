@@ -38,15 +38,15 @@ export class FormSubmissionController {
   }
 
   /**
-   * Returns the formId for the chefs form based on the current env
-   * @returns
+   * Public endpoint with form ID and form enabled status
+   * @returns {Object} Form info
    */
-  @Get()
   @Public()
-  getFormId(): { formId: string; disabled: boolean } {
+  @Get()
+  async getFormInfo() {
     return {
-      formId: `${process.env.CHEFS_FORM_ID}`,
-      disabled: process.env.CHEFS_FORM_DISABLED === 'true',
+      formId: process.env.CHEFS_FORM_ID,
+      formEnabled: process.env.CHEFS_FORM_ENABLED === 'true',
     };
   }
 }
