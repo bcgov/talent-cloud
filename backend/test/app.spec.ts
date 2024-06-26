@@ -4,7 +4,6 @@ import { AppController } from '../src/app.controller';
 import { AuthModule } from '../src/auth/auth.module';
 import { DatabaseModule } from '../src/database/database.module';
 import { FormModule } from '../src/form/form.module';
-import { FunctionModule } from '../src/function/function.module';
 import { LoggerModule } from '../src/logger/logger.module';
 import { PersonnelModule } from '../src/personnel/personnel.module';
 import { RegionsAndLocationsModule } from '../src/region-location/region-location.module';
@@ -21,7 +20,6 @@ describe('AppController', () => {
         TerminusModule,
         AuthModule,
         PersonnelModule,
-        FunctionModule,
         FormModule,
         RegionsAndLocationsModule,
       ],
