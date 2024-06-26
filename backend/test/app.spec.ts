@@ -2,7 +2,9 @@ import { TerminusModule } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../src/app.controller';
 import { AuthModule } from '../src/auth/auth.module';
+import { BcwsModule } from '../src/bcws/bcws.module';
 import { DatabaseModule } from '../src/database/database.module';
+import { EmcrModule } from '../src/emcr/emcr.module';
 import { FormModule } from '../src/form/form.module';
 import { LoggerModule } from '../src/logger/logger.module';
 import { PersonnelModule } from '../src/personnel/personnel.module';
@@ -20,6 +22,8 @@ describe('AppController', () => {
         TerminusModule,
         AuthModule,
         PersonnelModule,
+        BcwsModule,
+        EmcrModule,
         FormModule,
         RegionsAndLocationsModule,
       ],
