@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 import { BcwsPersonnelCertificationRO } from './bcws-personnel-certitifications.ro';
 import { BcwsPersonnelLanguagesRO } from './bcws-personnel-languages.ro';
@@ -14,8 +15,6 @@ export class BcwsRO extends PersonnelRO {
     example: '123456',
   })
   personnelId: string;
-
-  
 
   @ApiProperty({
     description: 'Date applied',
@@ -146,4 +145,19 @@ export class BcwsRO extends PersonnelRO {
 
   @ApiProperty()
   secondChoiceSection?: Section;
+
+  @ApiProperty({
+    description: 'Notes about Personnel - Only vieweable by coordinators',
+    required: false,
+    example: 'MOTI Area Roads Mgr R24',
+  })
+  @Expose({ groups: ['coordinator'] })
+  coordinatorNotes: string;
+
+  @ApiProperty({
+    description: 'Notes about Personnel',
+    required: false,
+    example: 'MOTI Area Roads Mgr R24',
+  })
+  logisticsNotes: string;
 }
