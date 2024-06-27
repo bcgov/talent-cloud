@@ -19,7 +19,7 @@ const SplashPage = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await AxiosPublic.get('/form-info');
+      const { data } = await AxiosPublic.get('/form');
 
       setFormId(data.formId);
       setFormEnabled(data.formEnabled);

@@ -5,10 +5,12 @@ import { CreatePersonnelBcwsDTO, CreateBcwsPersonnelLanguagesDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { BcwsRO } from './ro';
+import { BcwsSectionsRO } from './ro/bcws-sections.ro';
 import { Role, Program } from '../auth/interface';
-import { Status } from '../common/enums';
+import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
 import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
@@ -26,7 +28,9 @@ export class BcwsService {
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
     @InjectRepository(BcwsCertificationEntity)
-    private cetificationRepository: Repository<BcwsCertificationEntity>,
+    private certificationRepository: Repository<BcwsCertificationEntity>,
+    @InjectRepository(BcwsRoleEntity)
+    private roleRepository: Repository<BcwsRoleEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -84,7 +88,7 @@ export class BcwsService {
     }
 
     if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
-      const allCertifications = await this.cetificationRepository.find();
+      const allCertifications = await this.certificationRepository.find();
       const personnelCerts = personnel.certifications.map((c) => ({
         certificationId: allCertifications.find((ac) => ac.name === c.name).id,
         expiry: c.expiry,
@@ -237,5 +241,64 @@ export class BcwsService {
     const personnel = person.toResponseObject(role, lastDeployed);
 
     return personnel;
+  }
+
+  /**
+   * Get all roles
+   * @returns
+   */
+  async getAllRoles(): Promise<BcwsRoleEntity[]> {
+    return this.roleRepository.find();
+  }
+  /**
+   * Returns certifications that are not OFA I, II, or III
+   * Used by CHEFS form
+   * @returns {BcwsCertificationEntity[]} List of certifications
+   *
+   */
+  async getCertificates(
+    filterCommonCerts: boolean,
+  ): Promise<BcwsCertificationEntity[]> {
+    const certificates = await this.certificationRepository.find();
+    if (!filterCommonCerts) {
+      return certificates;
+    } else {
+      // filter out the OFA I, II, and III certifications and the PFA certification as these are listed separately on the CHEFS form
+      return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
+    }
+  }
+
+  /**
+   * Returns all tools
+   * Used by CHEFS form
+   * @returns {BcwsToolsEntity[]} List of tools
+   */
+  async getTools(): Promise<BcwsToolsEntity[]> {
+    return this.toolsRepository.find();
+  }
+
+  /**
+   * Returns all roles with readable role/section names and id  grouped by sections
+   * Used by CHEFS form and front end to display list of roles
+   * @returns {RolesDataRO} List of roles
+   */
+  async getRoles(): Promise<BcwsSectionsRO> {
+    const roles = await this.roleRepository.find();
+
+    const sectionsAndRoles = roles.reduce((acc, role) => {
+      const key = role.section;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push({
+        name: BcwsRoleName[role.name],
+        enumName: BcwsRole[role.name],
+        id: role.id,
+        section: SectionName[role.section],
+      });
+      return acc;
+    }, {});
+
+    return sectionsAndRoles;
   }
 }

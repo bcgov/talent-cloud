@@ -11,7 +11,6 @@ import {
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { Link, useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
-import useFunctions from '@/hooks/useFunctions';
 import useAvailability from '@/hooks/useAvailability';
 import { useRole } from '@/hooks';
 import Scheduler from './Scheduler';
@@ -44,6 +43,7 @@ import { ProfileEditSkills } from './ProfileEditSkills';
 import { ProfileEditRoles } from './ProfileEditRoles';
 import type { Section } from '../../common/enums/sections.enum';
 import { ReviewApplicant } from './ReviewApplicant';
+import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 
 const Profile = () => {
   const { role, route } = useRole();
@@ -62,7 +62,7 @@ const Profile = () => {
     personnelId,
   });
 
-  const { functions, bcwsRoles } = useFunctions(route);
+  const { functions, bcwsRoles } = useProgramFieldData(route);
 
   const [openEditNotes, setOpenEditNotes] = useState(false);
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);

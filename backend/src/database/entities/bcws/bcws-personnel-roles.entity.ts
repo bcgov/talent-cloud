@@ -2,7 +2,7 @@ import { Entity, ManyToOne, JoinColumn, Column, PrimaryColumn } from 'typeorm';
 import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import { BcwsRoleEntity } from './bcws-role.entity';
 import { BcwsPersonnelRoleRO } from '../../../bcws/ro';
-import { ExperienceLevel } from '../../../common/enums/bcws';
+import { BcwsRoleName, ExperienceLevel } from '../../../common/enums/bcws';
 
 @Entity('bcws_personnel_roles')
 export class BcwsSectionsAndRolesEntity {
@@ -30,7 +30,9 @@ export class BcwsSectionsAndRolesEntity {
 
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
+      personnel_id: this.personnelId,
       role: this.role.name,
+      roleName: BcwsRoleName[this.role.name],
       section: this.role.section,
       expLevel: this.expLevel,
     };

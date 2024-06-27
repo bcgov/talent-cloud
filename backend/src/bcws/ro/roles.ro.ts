@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BcwsRole, ExperienceLevel, Section } from '../../common/enums/bcws';
+import { IsOptional } from 'class-validator';
+import { BcwsRole, Section } from '../../common/enums/bcws';
 
-export class BcwsRoleRO {
+export class RolesRO {
   @ApiProperty()
-  personnel_id: number;
+  @IsOptional()
+  id: number;
 
   @ApiProperty({
     description: 'Section',
@@ -17,12 +19,5 @@ export class BcwsRoleRO {
     required: true,
     example: BcwsRole.ACCOUNTS_PAYABLE,
   })
-  roleName: BcwsRole;
-
-  @ApiProperty({
-    description: 'Experience level',
-    required: true,
-    example: ExperienceLevel.PREVIOUSLY_DEPLOYED,
-  })
-  expLevel: ExperienceLevel;
+  name: BcwsRole;
 }

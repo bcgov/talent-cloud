@@ -5,7 +5,6 @@ import { FormService } from './form.service';
 import { BcwsModule } from '../bcws/bcws.module';
 import { Form } from '../database/entities/form.entity';
 import { EmcrModule } from '../emcr/emcr.module';
-import { FunctionModule } from '../function/function.module';
 import { LoggerModule } from '../logger/logger.module';
 import { PersonnelModule } from '../personnel/personnel.module';
 import { RegionsAndLocationsModule } from '../region-location/region-location.module';
@@ -14,7 +13,6 @@ import { RegionsAndLocationsModule } from '../region-location/region-location.mo
   imports: [
     BcwsModule,
     EmcrModule,
-    FunctionModule,
     LoggerModule,
     RegionsAndLocationsModule,
     PersonnelModule,
