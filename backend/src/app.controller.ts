@@ -68,12 +68,12 @@ export class AppController {
    * @returns
    */
   @Public()
-  @Get('program-field-data')
+  @Get('/field/data')
   async getBcwsFilters(@Request() req: RequestWithRoles) {
     this.logger.log(`${req.url} ${req.role}`);
 
     const sections = await this.bcwsService.getRoles();
-    const certificates = await this.bcwsService.getCertificates();
+    const certificates = await this.bcwsService.getCertificates(true);
     const tools = await this.bcwsService.getTools();
     const roles = await this.bcwsService.getAllRoles();
     const functions = await this.emcrService.getFunctions();

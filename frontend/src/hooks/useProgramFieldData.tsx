@@ -56,7 +56,7 @@ export const useProgramFieldData = (route?: Route) => {
 
   useEffect(() => {
     (async () => {
-      const res = route && (await AxiosPrivate.get(`/program-field-data`));
+      const res = route && (await AxiosPrivate.get(`/field/data`));
       res && route === Route.EMCR
         ? setEmcrData(res.data)
         : res && setBcwsData(res.data);

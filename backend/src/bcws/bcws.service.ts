@@ -256,9 +256,16 @@ export class BcwsService {
    * @returns {BcwsCertificationEntity[]} List of certifications
    *
    */
-  async getCertificates(): Promise<BcwsCertificationEntity[]> {
+  async getCertificates(
+    filterCommonCerts: boolean,
+  ): Promise<BcwsCertificationEntity[]> {
     const certificates = await this.certificationRepository.find();
-    return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
+    if (!filterCommonCerts) {
+      return certificates;
+    } else {
+      // filter out the OFA I, II, and III certifications and the PFA certification as these are listed separately on the CHEFS form
+      return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
+    }
   }
 
   /**
