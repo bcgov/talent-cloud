@@ -91,10 +91,10 @@ objects:
                   protocol: TCP
               resources:
                 limits:
-                  cpu: 75m
+                  cpu: 40m
                   memory: 256Mi
                 requests:
-                  cpu: 30m
+                  cpu: 20m
                   memory: 128Mi
               securityContext:
                 capabilities:
