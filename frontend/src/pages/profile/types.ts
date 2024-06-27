@@ -36,5 +36,5 @@ export type DetailProps = {
   pending: boolean;
   intakeRequirements?: ProfileDetail[];
   openEditProfilePopUp: (e: React.MouseEvent<HTMLElement>) => void;
-  allowEditing: boolean;
+  
 };
