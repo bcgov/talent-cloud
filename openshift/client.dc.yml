@@ -22,7 +22,7 @@ parameters:
     value: default
   - name: REPLICAS
     description: The number of replicas of deployments
-    value: '2'
+    value: '3'
 objects:
   - apiVersion: v1
     kind: Route
@@ -91,11 +91,11 @@ objects:
                   protocol: TCP
               resources:
                 limits:
-                  cpu: 50m
-                  memory: 64Mi
+                  cpu: 75m
+                  memory: 256Mi
                 requests:
-                  cpu: 15m
-                  memory: 48Mi
+                  cpu: 30m
+                  memory: 128Mi
               securityContext:
                 capabilities:
                   add:
