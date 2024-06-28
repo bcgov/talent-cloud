@@ -1,5 +1,5 @@
+import { data } from './data';
 import { FormAdapter } from '../src/form/adapter';
-import { data } from '../src/form/data';
 import { FormSubmissionDTO } from '../src/form/submission.dto';
 import { CreatePersonnelDTO } from '../src/personnel';
 
