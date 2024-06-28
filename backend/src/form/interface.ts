@@ -1,4 +1,4 @@
-import { FireCentre, LanguageProficiency, Ministry, Region } from "../common/enums";
+import { Ministry } from '../common/enums';
 
 export interface FormSubmissionEventPayload {
   formId: string;
@@ -6,7 +6,6 @@ export interface FormSubmissionEventPayload {
   subscriptionEvent: string;
   submissionId: string;
 }
-
 
 export interface Roles {
   Ops: boolean;
@@ -27,16 +26,13 @@ export interface FirstNationExperience {
 
 interface LocationData {
   id: number;
-  region: Region
-  fire_centre: FireCentre
-  location_name: string;
 }
 
 export interface PersonnelFormData {
   program: string;
   jobTitle: string;
   email: string;
-  firstAidExpiry?: Date;
+  firstAidExpiry?: string;
   lastName: string;
   firstName: string;
   primaryPhone: string;
@@ -46,33 +42,30 @@ export interface PersonnelFormData {
   supervisorEmail: string;
   supervisorPhone?: string;
   supervisorLastName: string;
-  supervisorPhoneNumber: string
+  supervisorPhoneNumber: string;
   supervisorFirstName: string;
-  workEmail: string;
-  homeLocation: LocationData
-  workLocation: LocationData,
-  deployment: 'remoteOnly' | 'willingToTravel';
-  willingToTravel: boolean;
+  homeLocation: LocationData;
+  workLocation: LocationData;
+  // 'remoteOnly' | 'willingToTravel'
+  deployment: string;
+
   firstAidLevel: string;
   dl: string[];
   pfa: string;
-  ministry: {label: string; value: string};
+  ministry: { label: string; value: string };
   division?: string;
 }
 
 export interface ToolsFormSection {
-
   name: {
-    id: number,
-    name: string,
-    label: string
-  },
+    id: number;
+    name: string;
+  };
   proficiency: {
-    name: string,
-    label: string,
-    value: string
-  }
-
+    name: string;
+    label: string;
+    value: string;
+  };
 }
 
 export interface CertsFormSection {
@@ -81,29 +74,24 @@ export interface CertsFormSection {
 }
 
 interface RolesFormSection {
-  id: number
+  id: number;
   name: string;
-  label: string;
   section: string;
 }
 
-
-
 export interface SectionsFormSection {
-  PLANNING?: { role: RolesFormSection, experience: string }[];
-  LOGISTICS: { role: RolesFormSection, experience: string }[];
-  FINANCE_ADMIN: { role: RolesFormSection, experience: string }[];
-  OPERATIONS: { role: RolesFormSection, experience: string }[];
-  COMMAND: { role: RolesFormSection, experience: string }[];
-  AVIATION: { role: RolesFormSection, experience: string }[];
+  PLANNING?: { role: RolesFormSection; experience: string }[];
+  LOGISTICS: { role: RolesFormSection; experience: string }[];
+  FINANCE_ADMIN: { role: RolesFormSection; experience: string }[];
+  OPERATIONS: { role: RolesFormSection; experience: string }[];
+  COMMAND: { role: RolesFormSection; experience: string }[];
+  AVIATION: { role: RolesFormSection; experience: string }[];
 }
 
 export interface LanguagesFormSection {
   language: string;
-  proficiency: LanguageProficiency;
-
+  proficiency: string;
 }
-
 
 export interface DivisionSection {
   id: number;
@@ -112,21 +100,20 @@ export interface DivisionSection {
 }
 export interface BcwsFormData {
   sections?: SectionsFormSection;
-  certificates?: CertsFormSection[]
-  foodSafe1Expiry?: Date;
-      foodSafe2Expiry?: Date;
+  certificates?: CertsFormSection[];
+  foodSafe1Expiry?: string;
+  foodSafe2Expiry?: string;
   emergencyContactFirstName: string;
   emergencyContactLastName: string;
   emergencyContactPhoneNumber: string;
   emergencyContactRelationship: string;
   employeeId: string;
-  division: DivisionSection;
   paylistId: string;
   firstChoiceSection: string;
   secondChoiceSection?: string;
   languages?: LanguagesFormSection[];
   tools?: ToolsFormSection[];
-  purchaseCard: boolean;
+  purchaseCard?: boolean;
   liaisonFirstName?: string;
   liaisonLastName?: string;
   liaisonEmail?: string;
@@ -145,21 +132,17 @@ export interface EmcrFormData {
     8: boolean;
     9: boolean;
     10: boolean;
-  },
-  firstAidLevel: string;
-  firstAidExpiry: Date;
-  pfa: boolean;
+  };
   experience: {
     emergencyExperience: boolean;
     preocExperience: boolean;
     peccExperience: boolean;
     firstNationsWorking: boolean;
-    
-  }
+  };
 }
 
 export interface IntakeFormData {
   personnel: PersonnelFormData;
-  bcws?: BcwsFormData
+  bcws?: BcwsFormData;
   emcr?: EmcrFormData;
 }
