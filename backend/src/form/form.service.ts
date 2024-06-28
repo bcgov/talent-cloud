@@ -4,10 +4,7 @@ import axios from 'axios';
 import { Repository } from 'typeorm';
 import { FormAdapter } from './adapter';
 import { CreateFormDTO } from './form.dto';
-import {
-  FormSubmissionEventPayload,
-  IntakeFormData,
-} from './interface';
+import { FormSubmissionEventPayload, IntakeFormData } from './interface';
 import { FormSubmissionDTO } from './submission.dto';
 import { BcwsService } from '../bcws/bcws.service';
 import { Form } from '../database/entities/form.entity';
@@ -116,7 +113,7 @@ export class FormService {
     data: IntakeFormData,
     formId: number,
   ): Promise<string> {
-    const parsedData = new FormAdapter(data);
+    const parsedData = new FormAdapter(data, formId);
     parsedData.formId = formId;
     if (
       data.personnel.program === 'BOTH' &&
