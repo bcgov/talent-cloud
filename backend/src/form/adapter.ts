@@ -92,9 +92,9 @@ export class BcwsAdapter extends CreatePersonnelBcwsDTO {
         certificationId: itm?.id,
         expiry:
           itm?.id === 6
-            ? data?.bcws.foodSafe1Expiry
+            ? new Date(data?.bcws.foodSafe1Expiry)
             : itm?.id === 7
-            ? data?.bcws.foodSafe2Expiry
+            ? new Date(data?.bcws.foodSafe2Expiry)
             : undefined,
       })) ?? [];
 
@@ -109,7 +109,7 @@ export class BcwsAdapter extends CreatePersonnelBcwsDTO {
       ) {
         parsed.push({
           certificationId: 8,
-          expiry: data.personnel.firstAidExpiry,
+          expiry: new Date(data.personnel.firstAidExpiry),
         });
       } else if (
         CertificationName[data.personnel.firstAidLevel] ===
@@ -117,7 +117,7 @@ export class BcwsAdapter extends CreatePersonnelBcwsDTO {
       ) {
         parsed.push({
           certificationId: 9,
-          expiry: data.personnel.firstAidExpiry,
+          expiry: new Date(data.personnel.firstAidExpiry),
         });
       } else if (
         CertificationName[data.personnel.firstAidLevel] ===
@@ -125,7 +125,7 @@ export class BcwsAdapter extends CreatePersonnelBcwsDTO {
       ) {
         parsed.push({
           certificationId: 10,
-          expiry: data.personnel.firstAidExpiry,
+          expiry: new Date(data.personnel.firstAidExpiry),
         });
       }
     }
@@ -177,7 +177,7 @@ export class EmcrAdapter extends CreatePersonnelEmcrDTO {
     this.dateApplied = new Date();
     this.trainings = [];
     this.firstAidLevel = data.personnel.firstAidLevel ?? undefined;
-    this.firstAidExpiry = data.personnel.firstAidExpiry ?? undefined;
+    this.firstAidExpiry = new Date(data.personnel.firstAidExpiry) ?? undefined;
     this.psychologicalFirstAid = data.personnel.pfa === 'yes';
     this.experiences = functions ?? [];
   }

@@ -1,7 +1,4 @@
-import {
-  LanguageProficiency,
-  Ministry,
-} from '../common/enums';
+import { Ministry } from '../common/enums';
 
 export interface FormSubmissionEventPayload {
   formId: string;
@@ -35,7 +32,7 @@ export interface PersonnelFormData {
   program: string;
   jobTitle: string;
   email: string;
-  firstAidExpiry?: Date;
+  firstAidExpiry?: string;
   lastName: string;
   firstName: string;
   primaryPhone: string;
@@ -63,7 +60,6 @@ export interface ToolsFormSection {
   name: {
     id: number;
     name: string;
-    label: string;
   };
   proficiency: {
     name: string;
@@ -94,7 +90,7 @@ export interface SectionsFormSection {
 
 export interface LanguagesFormSection {
   language: string;
-  proficiency: LanguageProficiency;
+  proficiency: string;
 }
 
 export interface DivisionSection {
@@ -105,8 +101,8 @@ export interface DivisionSection {
 export interface BcwsFormData {
   sections?: SectionsFormSection;
   certificates?: CertsFormSection[];
-  foodSafe1Expiry?: Date;
-  foodSafe2Expiry?: Date;
+  foodSafe1Expiry?: string;
+  foodSafe2Expiry?: string;
   emergencyContactFirstName: string;
   emergencyContactLastName: string;
   emergencyContactPhoneNumber: string;
