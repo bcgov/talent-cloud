@@ -1,4 +1,6 @@
-import { data } from './data';
+import { data } from './form-submission-data';
+import { CreatePersonnelBcwsDTO } from '../src/bcws/dto';
+import { CreatePersonnelEmcrDTO } from '../src/emcr/dto';
 import { FormAdapter } from '../src/form/adapter';
 import { FormSubmissionDTO } from '../src/form/submission.dto';
 import { CreatePersonnelDTO } from '../src/personnel';
@@ -8,10 +10,14 @@ describe('Form Parser', () => {
     it('should parse the form', async () => {
       // INSERT API CALL TO GET CHEFS DATA HERE TO REPLACE HARDCODED FORM DATA
 
-      const compareFormDataWithParsedData = (target: CreatePersonnelDTO) => {
-        expect(target).toBeInstanceOf(CreatePersonnelDTO);
-        expect(target).toHaveProperty('emcr');
-        expect(target).toHaveProperty('bcws');
+      const compareFormDataWithParsedData = (
+        personnel: CreatePersonnelDTO,
+        emcr?: CreatePersonnelEmcrDTO,
+        bcws?: CreatePersonnelBcwsDTO,
+      ) => {
+        expect(personnel).toBeInstanceOf(CreatePersonnelDTO);
+        emcr && expect(emcr).toBeInstanceOf(CreatePersonnelEmcrDTO);
+        bcws && expect(bcws).toBeInstanceOf(CreatePersonnelBcwsDTO);
         // INSERT BETTER TESTS HERE
       };
 
@@ -33,12 +39,12 @@ describe('Form Parser', () => {
           },
         },
       };
-      const parsedData = new FormAdapter(
+      const { emcr, bcws, personnel } = new FormAdapter(
         unparsedFormData.data.submission.submission.data,
         1,
       );
 
-      compareFormDataWithParsedData(parsedData);
+      compareFormDataWithParsedData(personnel, emcr, bcws);
     });
   });
 });

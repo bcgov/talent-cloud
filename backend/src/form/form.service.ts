@@ -113,27 +113,23 @@ export class FormService {
     data: IntakeFormData,
     formId: number,
   ): Promise<string> {
-    const parsedData = new FormAdapter(data, formId);
-    parsedData.formId = formId;
-    if (
-      data.personnel.program === 'BOTH' &&
-      !parsedData.emcr &&
-      !parsedData.bcws
-    ) {
+    const { personnel, emcr, bcws } = new FormAdapter(data, formId);
+
+    if (data.personnel.program === 'BOTH' && !emcr && !bcws) {
       this.logger.error(
         `Error saving form data: Both programs selected but no data found for either program`,
       );
       throw new BadRequestException(
         `Both programs selected but no data found for either program`,
       );
-    } else if (data.personnel.program === 'EMCR' && !parsedData.emcr) {
+    } else if (data.personnel.program === 'EMCR' && !emcr) {
       this.logger.error(
         `Error saving form data: EMCR program selected but no data found for EMCR program`,
       );
       throw new BadRequestException(
         `EMCR program selected but no data found for EMCR program`,
       );
-    } else if (data.personnel.program === 'BCWS' && !parsedData.bcws) {
+    } else if (data.personnel.program === 'BCWS' && !bcws) {
       this.logger.error(
         `Error saving form data: BCWS program selected but no data found for BCWS program`,
       );
@@ -143,17 +139,9 @@ export class FormService {
     }
 
     try {
-      const person = await this.personnelService.createOnePerson(parsedData);
-      parsedData.emcr &&
-        (await this.emcrService.createEmcerPersonnel(
-          parsedData.emcr,
-          person.id,
-        ));
-      parsedData.bcws &&
-        (await this.bcwsService.createBcwsPersonnel(
-          parsedData.bcws,
-          person.id,
-        ));
+      const person = await this.personnelService.createOnePerson(personnel);
+      emcr && (await this.emcrService.createEmcerPersonnel(emcr, person.id));
+      bcws && (await this.bcwsService.createBcwsPersonnel(bcws, person.id));
 
       return person.id;
     } catch (e) {

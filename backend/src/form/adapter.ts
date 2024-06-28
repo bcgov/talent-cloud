@@ -183,11 +183,23 @@ export class EmcrAdapter extends CreatePersonnelEmcrDTO {
   }
 }
 
-export class FormAdapter extends CreatePersonnelDTO {
-  formId: number;
+export class PersonnelAdapter extends CreatePersonnelDTO {
   constructor(data: IntakeFormData, formId: number) {
     super();
-    this.formId = formId;
+    Object.assign(this, data.personnel);
+    this.intakeForm = formId;
+    this.willingToTravel = data.personnel.deployment === 'willingToTravel';
+    this.remoteOnly = data.personnel.deployment === 'remoteOnly';
+  }
+}
+
+export class FormAdapter {
+  personnel: CreatePersonnelDTO;
+  emcr?: CreatePersonnelEmcrDTO;
+  bcws?: CreatePersonnelBcwsDTO;
+
+  constructor(data: IntakeFormData, formId: number) {
+    this.personnel = new PersonnelAdapter(data, formId);
     this.emcr = new EmcrAdapter(data);
     this.bcws = new BcwsAdapter(data);
   }
