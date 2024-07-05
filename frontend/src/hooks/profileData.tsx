@@ -9,6 +9,13 @@ import type { DriverLicense } from '../common/enums/driver-license.enum';
 import { DriverLicenseName } from '../common/enums/driver-license.enum';
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
+const formatDriversLicenses = (driverLicenses: string[]): string => {
+  const licensesFormatted = driverLicenses.map(
+    (l) => DriverLicenseName[l as keyof typeof DriverLicense],
+  );
+  return licensesFormatted.join(', ');
+};
+
 export const emcrData = (personnel?: Personnel) => {
   return {
     generalInformation: [
@@ -47,6 +54,10 @@ export const emcrData = (personnel?: Personnel) => {
               ? datePST(personnel?.dateApproved as Date)
               : '-',
           },
+      {
+        title: "Driver's License",
+        content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
+      },
     ],
     contact: [
       {
@@ -83,13 +94,6 @@ export const emcrData = (personnel?: Personnel) => {
 };
 
 export const bcwsData = (personnel?: Personnel) => {
-  const formatDriversLicenses = (driverLicenses: string[]): string => {
-    const licensesFormatted = driverLicenses.map(
-      (l) => DriverLicenseName[l as keyof typeof DriverLicense],
-    );
-    return licensesFormatted.join(', ');
-  };
-
   return {
     intakeRequirements:
       personnel?.status === Status.PENDING
