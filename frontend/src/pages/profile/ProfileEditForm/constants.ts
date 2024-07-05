@@ -19,6 +19,14 @@ const phoneNumber = (value: any) => {
 };
 
 export const editProfileValidationSchema = Yup.object().shape({
+  firstName: Yup.string()
+    .min(2, 'Min length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
+  lastName: Yup.string()
+    .min(2, 'Min length 2 characters.')
+    .max(50, 'Max length 50 characters.')
+    .required('This field is required.'),
   workLocation: Yup.object().shape({
     locationName: Yup.string(),
     region: Yup.string(),
@@ -54,11 +62,11 @@ export const editProfileValidationSchema = Yup.object().shape({
   ),
 
   supervisorFirstName: Yup.string()
-    .min(2, 'Max length 2 characters.')
+    .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
   supervisorLastName: Yup.string()
-    .min(2, 'Max length 2 characters.')
+    .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required('This field is required.'),
   supervisorEmail: Yup.string().optional().nullable().email('Invalid email format.'),
@@ -541,4 +549,22 @@ export const fields = {
   },
   homeLocation: homeLocationField,
   workLocation: workLocationField,
+
+  firstName: {
+    name: 'firstName',
+    label: 'First Name',
+    type: 'text',
+    autoComplete: 'off',
+    disabled: false,
+    required: true,
+  },
+  lastName: {
+    name: 'lastName',
+    label: 'Last Name',
+    type: 'text',
+    autoComplete: 'off',
+    disabled: false,
+    required: true,
+    break: true,
+  },
 };

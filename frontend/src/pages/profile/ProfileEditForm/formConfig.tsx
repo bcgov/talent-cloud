@@ -62,6 +62,8 @@ export const formConfig = (
     {
       header: 'General Information',
       fields: [
+        fields.firstName,
+        fields.lastName,
         fields.dateApplied,
         fields.dateApproved,
         fields.remoteOnly,
@@ -121,6 +123,8 @@ export const formConfig = (
     {
       header: 'General Information',
       fields: [
+        fields.firstName,
+        fields.lastName,
         fields.dateApplied,
         fields.dateApproved,
         fields.remoteOnly,
@@ -160,6 +164,8 @@ export const formConfig = (
   ];
 
   const initialFormValues = {
+    firstName: personnel.firstName,
+    lastName: personnel.lastName,
     homeLocation: personnel.homeLocation,
     workLocation: personnel.workLocation,
     remoteOnly: personnel.remoteOnly,
