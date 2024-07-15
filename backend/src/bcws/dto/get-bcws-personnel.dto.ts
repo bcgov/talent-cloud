@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
-import { BcwsRole, FireCentre } from '../../common/enums/bcws';
+import { BcwsRole, FireCentre, ExperienceLevel } from '../../common/enums/bcws';
 import { GetPersonnelDTO } from '../../personnel/dto/get-personnel.dto';
 
 export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
@@ -48,4 +48,11 @@ export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
   @IsEnum(BcwsRole)
   @IsOptional()
   role: BcwsRole;
+
+  @ApiPropertyOptional({
+    description: 'Experience in role',
+    type: ExperienceLevel,
+  })
+  @IsOptional()
+  experience: ExperienceLevel;
 }
