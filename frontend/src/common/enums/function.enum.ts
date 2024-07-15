@@ -10,4 +10,5 @@ export enum FunctionName {
   RECOVERY = 'Recovery',
   DIRECTOR = 'Director',
   GIS = 'GIS',
+  RESPONSE_INFORMATION = 'Response Information',
 }

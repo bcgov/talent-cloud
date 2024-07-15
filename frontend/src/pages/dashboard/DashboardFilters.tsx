@@ -12,6 +12,8 @@ import { Route } from '@/providers';
 import { ButtonTypes } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import type { DateRange } from 'react-day-picker';
+import { useState } from 'react';
+import { Checkbox } from '@material-tailwind/react';
 
 export const DashboardFilters = ({ route }: { route?: Route }) => {
   const { filters } = useProgramFieldData(route);
@@ -30,6 +32,10 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
     setSearchValue,
     disabled,
   } = useFilters();
+
+  const [experienceCheckbox, setExperienceCheckbox] = useState<
+    'PREVIOUSLY_DEPLOYED' | 'INTERESTED' | null
+  >();
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
@@ -105,6 +111,47 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           value={route === Route.BCWS ? filterValues.section : filterValues.function}
           route={route}
         />
+        {route === Route.BCWS && (
+          <div>
+            <Checkbox
+              crossOrigin=""
+              label="Show experienced only"
+              checked={
+                experienceCheckbox === 'PREVIOUSLY_DEPLOYED' &&
+                !!filterValues.section
+              }
+              name="experience"
+              disabled={!filterValues.role || !filterValues.section}
+              iconProps={{ color: 'primaryBlue' }}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setExperienceCheckbox('PREVIOUSLY_DEPLOYED');
+                  handleChangeOne(e.target.name, 'PREVIOUSLY_DEPLOYED');
+                } else {
+                  setExperienceCheckbox(null);
+                  handleRemove(e.target.name, 'PREVIOUSLY_DEPLOYED');
+                }
+              }}
+            />
+            <Checkbox
+              crossOrigin=""
+              label="Show interested only"
+              checked={experienceCheckbox === 'INTERESTED' && !!filterValues.section}
+              name="experience"
+              disabled={!filterValues.role || !filterValues.section}
+              iconProps={{ color: 'primaryBlue' }}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setExperienceCheckbox('INTERESTED');
+                  handleChangeOne(e.target.name, 'INTERESTED');
+                } else {
+                  setExperienceCheckbox(null);
+                  handleRemove(e.target.name, 'INTERESTED');
+                }
+              }}
+            />
+          </div>
+        )}
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-3">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3">

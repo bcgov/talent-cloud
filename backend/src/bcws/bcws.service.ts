@@ -198,6 +198,11 @@ export class BcwsService {
       qb.andWhere('role.name = :role', {
         role: query.role,
       });
+      if (query.experience) {
+        qb.andWhere('roles.expLevel = :experienceLevel', {
+          experienceLevel: query.experience,
+        });
+      }
     }
 
     const { personnel, count } =
