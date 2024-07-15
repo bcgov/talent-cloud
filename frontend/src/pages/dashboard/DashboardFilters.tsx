@@ -38,7 +38,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
   >();
 
   return (
-    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1  lg:grid-cols-7 gap-12">
+    <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1 lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
       <div className="col-span-1 lg:col-span-2">
         <Search
@@ -112,7 +112,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           route={route}
         />
         {route === Route.BCWS && (
-          <div>
+          <div className="flex flex-row gap-8">
             <Checkbox
               crossOrigin=""
               label="Show experienced only"
@@ -194,7 +194,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           </div>
         </div>
       </div>
-      <div className="text-center  md:col-span-1 flex  flex-nowrap self-end pb-1">
+      <div className="text-center md:col-span-1 flex  flex-nowrap self-end pb-10">
         <Button
           variant={ButtonTypes.SECONDARY}
           text="Clear All"
