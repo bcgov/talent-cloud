@@ -17,7 +17,8 @@ export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviatio
 	 ('Planning','Plans'),
 	 ('Advanced Planning Unit','APU'),
 	 ('Recovery','Recovery'),
-	 ('Deputy Director','DDir');`;
+	 ('Deputy Director','DDir'),
+	 ('Response Information', 'Response');`;
 
 export const rolesSql = `INSERT INTO public.bcws_role (id,"name","section") VALUES
 	 (1,'DEMOBILIZATION_UNIT_LEADER','PLANNING'),
