@@ -3,6 +3,7 @@ import { AvailabilityRO } from './availability.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { LocationRO } from '../../region-location/region-location.ro';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -119,18 +120,11 @@ export class PersonnelRO {
   supervisorEmail: string;
 
   @ApiProperty({
-    description: 'Is Personnel remote only',
+    description: 'Travel preference',
     required: true,
-    example: false,
+    example: TravelPreference.WILLING_TO_TRAVEL_REGION,
   })
-  remoteOnly: boolean;
-
-  @ApiProperty({
-    description: 'Is Personnel willing to travel',
-    required: true,
-    example: true,
-  })
-  willingToTravel: boolean;
+  travelPreference: TravelPreference;
 
   @ApiProperty({
     description: 'Availability',
@@ -139,10 +133,6 @@ export class PersonnelRO {
     required: false,
   })
   availability?: AvailabilityRO[];
-
-
-
-  
 
   @ApiProperty({
     description: 'Driver Licenses',

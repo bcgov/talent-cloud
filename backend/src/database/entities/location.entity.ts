@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { FireCentre } from '../../common/enums';
 import { Region } from '../../common/enums/emcr';
 import { LocationRO } from '../../region-location/region-location.ro';
+import { FireZone } from '../../common/enums/bcws/fire-zone.enum';
 
 @Entity('location')
 @Unique('UQ_location', ['locationName', 'region'])
@@ -35,6 +36,15 @@ export class LocationEntity {
     nullable: false,
   })
   fireCentre: FireCentre;
+
+  @Column({
+    name: 'fire_zone',
+    enum: FireZone,
+    enumName: 'fire-zone',
+    type: 'enum',
+    nullable: true,
+  })
+  fireZone: FireZone;
 
   toResponseObject(): LocationRO {
     return {
