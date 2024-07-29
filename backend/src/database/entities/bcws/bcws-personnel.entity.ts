@@ -19,6 +19,7 @@ import { BcwsRO } from '../../../bcws/ro';
 import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
 import { PersonnelRO } from '../../../personnel';
+import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {
@@ -129,6 +130,14 @@ export class BcwsPersonnelEntity {
   orientation: boolean;
 
   @Column({
+    name: 'travel_preference',
+    type: 'enum',
+    enum: TravelPreference,
+    enumName: 'travel_preference'
+  })
+  travelPreference: TravelPreference;
+
+  @Column({
     name: 'first_choice_section',
     type: 'enum',
     enum: Section,
@@ -190,6 +199,7 @@ export class BcwsPersonnelEntity {
       orientation: this.orientation,
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,
+      travelPreference: this.travelPreference,
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],

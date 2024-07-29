@@ -20,7 +20,6 @@ import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
-import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -84,14 +83,6 @@ export class PersonnelEntity extends BaseEntity {
     enumName: 'union_membership',
   })
   unionMembership: UnionMembership;
-
-  @Column({
-    name: 'travel_preference',
-    type: 'enum',
-    enum: TravelPreference,
-    enumName: 'travel_preference'
-  })
-  travelPreference: TravelPreference;
 
   @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
   availability: AvailabilityEntity[];
@@ -166,7 +157,6 @@ export class PersonnelEntity extends BaseEntity {
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),
-      travelPreference: this.travelPreference,
       ministry: this.ministry,
       division: this?.division ?? '',
       // trainings will not be returned until we have a more robust system
