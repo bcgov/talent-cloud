@@ -6,6 +6,7 @@ import { CreateFormDTO } from './form.dto';
 import {
   BcwsFormData,
   EmcrFormData,
+  FormDeployment,
   FormSubmissionEventPayload,
   IntakeFormData,
   PersonnelFormData,
@@ -31,6 +32,8 @@ import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
+import { Program } from '../auth/interface';
 
 @Injectable()
 export class FormService {
@@ -135,6 +138,7 @@ export class FormService {
         ? this.parseEmcrPersonnel(
             data.emcr,
             data.personnel.pfa,
+            data.personnel.deployment,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
@@ -145,6 +149,7 @@ export class FormService {
         ? this.parseBcwsPersonnel(
             data.bcws,
             data.personnel.pfa,
+            data.personnel.deployment,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
@@ -188,6 +193,28 @@ export class FormService {
     }
   }
 
+  parseTravelPreference(
+    deployment: FormDeployment,
+    route: Program,
+  ) {
+    switch (deployment) {
+      case 'remoteOnly':
+        return TravelPreference.REMOTE_ONLY;
+      case 'travelHome':
+        return TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION;
+      case 'travelFireZone':
+        return route === Program.BCWS ? TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE : TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION;
+      case 'travelFireCentre':
+        return route === Program.BCWS ? TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE : TravelPreference.WILLING_TO_TRAVEL_REGION;
+      case 'travelRegion':
+        return route === Program.EMCR ? TravelPreference.WILLING_TO_TRAVEL_REGION : TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE;
+      case 'travelAnywhere':
+        return TravelPreference.WILLING_TO_TRAVEL_ANYWHERE;
+      default:
+        return TravelPreference.WILLING_TO_TRAVEL_UNKNOWN;
+    }
+  }
+
   parsePersonnel(data: PersonnelFormData, formId: number): CreatePersonnelDTO {
     const personnelData: CreatePersonnelDTO = {
       intakeForm: formId,
@@ -209,9 +236,7 @@ export class FormService {
         /[(]|-|[)]|\s/gi,
         '',
       ),
-      remoteOnly: data.deployment === 'remoteOnly',
       driverLicense: data.dl,
-      willingToTravel: data.deployment === 'willingToTravel',
       jobTitle: data.jobTitle,
     };
     return personnelData;
@@ -220,6 +245,7 @@ export class FormService {
   parseEmcrPersonnel(
     data: EmcrFormData,
     pfa: string,
+    deployment: FormDeployment,
     firstAidLevel?: string,
     firstAidExpiry?: Date,
   ): CreatePersonnelEmcrDTO {
@@ -237,6 +263,7 @@ export class FormService {
       firstAidLevel: firstAidLevel ?? undefined,
       firstAidExpiry: firstAidExpiry ?? undefined,
       psychologicalFirstAid: pfa === 'yes',
+      travelPreference: this.parseTravelPreference(deployment, Program.EMCR),
       experiences: functions.map((itm) => ({
         functionId: parseInt(itm),
         experienceType: Experience.INTERESTED,
@@ -249,6 +276,7 @@ export class FormService {
   parseBcwsPersonnel(
     data: BcwsFormData,
     pfa: string,
+    deployment: FormDeployment,
     firstAidLevel?: string,
     firstAidExpiry?: Date,
   ): CreatePersonnelBcwsDTO {
@@ -350,6 +378,7 @@ export class FormService {
         data.secondChoiceSection === ''
           ? undefined
           : Section[data.secondChoiceSection],
+      travelPreference: this.parseTravelPreference(deployment, Program.EMCR),
       languages: Array.from(
         new Set(
           data?.languages?.map((itm) => ({

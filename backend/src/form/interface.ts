@@ -32,6 +32,8 @@ interface LocationData {
   location_name: string;
 }
 
+export type FormDeployment = 'remoteOnly' | 'travelHome' | 'travelFireZone' | 'travelFireCentre' | 'travelRegion' | 'travelAnywhere';
+
 export interface PersonnelFormData {
   program: string;
   jobTitle: string;
@@ -51,7 +53,7 @@ export interface PersonnelFormData {
   workEmail: string;
   homeLocation: LocationData
   workLocation: LocationData,
-  deployment: 'remoteOnly' | 'willingToTravel';
+  deployment: FormDeployment;
   willingToTravel: boolean;
   firstAidLevel: string;
   dl: string[];
