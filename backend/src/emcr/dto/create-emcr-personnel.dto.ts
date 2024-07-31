@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, Length, ValidateIf } from 'class-validator';
+import { IsEnum, IsOptional, IsString, Length, ValidateIf } from 'class-validator';
 import { EmcrPersonnelExperienceDTO } from './experiences.dto';
 import { Status } from '../../common/enums/status.enum';
 import { EmcrTrainingEntity } from '../../database/entities/emcr/emcr-training.entity';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class CreatePersonnelEmcrDTO {
   @ApiProperty({})
@@ -32,6 +33,13 @@ export class CreatePersonnelEmcrDTO {
   @IsOptional()
   @ValidateIf((o) => o.logisticsNotes !== '')
   logisticsNotes?: string;
+
+  @ApiProperty({
+    description: 'If this personnel is remote only',
+    example: false,
+  })
+  @IsEnum(TravelPreference)
+  travelPreference: TravelPreference;
 
   @ApiProperty({
     description: 'What trainings this personnel has had',

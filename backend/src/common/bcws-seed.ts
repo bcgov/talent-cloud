@@ -20,6 +20,7 @@ import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { LocationEntity } from '../database/entities/emcr';
 import { CreatePersonnelDTO } from '../personnel';
+import { TravelPreference } from './enums/travel-preference.enum';
 
 export const handler = (
   locations: LocationEntity[],
@@ -87,6 +88,13 @@ export const handler = (
     emergencyContactLastName: faker.person.lastName(),
     emergencyContactPhoneNumber: faker.string.numeric('##########'),
     emergencyContactRelationship: faker.lorem.word(),
+    travelPreference: faker.helpers.arrayElement([
+      TravelPreference.REMOTE_ONLY,
+      TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
+      TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+      TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
+      TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
+    ]),
   };
 
   const personnelData: CreatePersonnelDTO = {
@@ -106,7 +114,6 @@ export const handler = (
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
     supervisorPhone: faker.string.numeric('##########'),
-    remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     driverLicense: Array.from(
       new Set([
         faker.helpers.arrayElement(Object.values(DriverLicense)),
@@ -115,7 +122,6 @@ export const handler = (
         faker.helpers.arrayElement(Object.values(DriverLicense)),
       ]),
     ),
-    willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };

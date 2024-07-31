@@ -19,6 +19,7 @@ import { Status } from '../../../common/enums/status.enum';
 import { CreatePersonnelEmcrDTO } from '../../../emcr/dto';
 import { EmcrRO } from '../../../emcr/ro';
 import { PersonnelRO } from '../../../personnel';
+import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
@@ -83,6 +84,14 @@ export class EmcrPersonnelEntity {
   @Column({ name: 'first_nation_exp_working', type: 'boolean', nullable: true })
   firstNationExperienceWorking?: boolean;
 
+  @Column({
+    name: 'travel_preference',
+    type: 'enum',
+    enum: TravelPreference,
+    enumName: 'travel_preference'
+  })
+  travelPreference: TravelPreference;
+
   @OneToMany(() => EmcrExperienceEntity, (e) => e.personnel, {
     cascade: true,
   })
@@ -126,6 +135,7 @@ export class EmcrPersonnelEntity {
       preocExperience: this.preocExperience ?? '',
       emergencyExperience: this.emergencyExperience ?? '',
       status: this.status,
+      travelPreference: this.travelPreference,
       newMember:
         Status.ACTIVE && differenceInDays(new Date(), this.dateApproved) < 31,
       icsTraining:

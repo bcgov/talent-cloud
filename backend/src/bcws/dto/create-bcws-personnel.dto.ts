@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   Length,
@@ -15,6 +16,7 @@ import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certificati
 import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 import { Section } from '../../common/enums/bcws';
 import { Status } from '../../common/enums/status.enum';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class CreatePersonnelBcwsDTO {
   @ApiProperty({})
@@ -144,6 +146,13 @@ export class CreatePersonnelBcwsDTO {
     default: false,
   })
   orientation?: boolean;
+
+  @ApiProperty({
+    description: 'If this personnel is remote only',
+    example: false,
+  })
+  @IsEnum(TravelPreference)
+  travelPreference: TravelPreference;
 
   @ApiProperty({
     description: 'Tools used by the personnel',

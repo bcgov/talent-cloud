@@ -8,7 +8,7 @@ export const activeCols = {
     DashboardColumns.FIRE_CENTRE,
     DashboardColumns.LOCATION,
     DashboardColumns.AVAILABILITY,
-    DashboardColumns.TRAVEL,
+    DashboardColumns.TRAVEL_PREFERENCE,
     DashboardColumns.UNION_MEMBERSHIP,
   ],
   [Route.EMCR]: [
@@ -17,8 +17,7 @@ export const activeCols = {
     DashboardColumns.REGION,
     DashboardColumns.LOCATION,
     DashboardColumns.AVAILABILITY,
-    DashboardColumns.TRAVEL,
-    DashboardColumns.REMOTE,
+    DashboardColumns.TRAVEL_PREFERENCE,
     DashboardColumns.UNION_MEMBERSHIP,
     DashboardColumns.MINISTRY,
   ],

@@ -16,6 +16,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
+import type { TravelPreference } from '../../../common/enums/travel-preference.enum';
+import { TravelPreferenceText } from '../../../common/enums/travel-preference.enum';
 
 export const TableBodyCell = ({
   cell,
@@ -54,18 +56,12 @@ export const TableBodyCell = ({
           <span className="ml-2 text-defaultGray">{cell.value?.days}</span>
         </>
       );
-    case DashboardColumns.TRAVEL:
+    case DashboardColumns.TRAVEL_PREFERENCE:
       return (
         <>
-          {cell.value ? (
+          {cell?.value && (
             <span className={tableClass.rowClass}>
-              <CheckCircleIcon className={iconClass(cell.value)} />
-              YES
-            </span>
-          ) : (
-            <span className={tableClass.rowClass}>
-              <XCircleIcon className={iconClass(cell.value)} />
-              NO
+              {TravelPreferenceText[cell.value as keyof typeof TravelPreference]}
             </span>
           )}
         </>
@@ -121,16 +117,6 @@ export const TableBodyCell = ({
             <span className={tableClass.rowClass}>
               <XCircleIcon className={pendingIconClass(cell.value)} /> Incomplete
             </span>
-          )}
-        </>
-      );
-    case DashboardColumns.REMOTE:
-      return (
-        <>
-          {cell.value ? (
-            <span className={tableClass.rowClass}>Yes</span>
-          ) : (
-            <span className={tableClass.rowClass}>No</span>
           )}
         </>
       );

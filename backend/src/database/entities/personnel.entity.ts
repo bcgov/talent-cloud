@@ -84,11 +84,6 @@ export class PersonnelEntity extends BaseEntity {
   })
   unionMembership: UnionMembership;
 
-  @Column({ name: 'remote_only', type: 'boolean', default: false })
-  remoteOnly: boolean;
-
-  @Column({ name: 'willing_to_travel', type: 'boolean', default: false })
-  willingToTravel: boolean;
   @OneToMany(() => AvailabilityEntity, (ae) => ae.personnel, { cascade: true })
   availability: AvailabilityEntity[];
 
@@ -162,8 +157,6 @@ export class PersonnelEntity extends BaseEntity {
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),
-      remoteOnly: this.remoteOnly,
-      willingToTravel: this.willingToTravel,
       ministry: this.ministry,
       division: this?.division ?? '',
       // trainings will not be returned until we have a more robust system

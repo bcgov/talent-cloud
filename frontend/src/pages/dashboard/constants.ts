@@ -18,6 +18,7 @@ import type {
 } from '@/common/enums/sections.enum';
 import type { Tools, ToolsProficiency } from '@/common/enums/tools.enum';
 import type { DateRange } from 'react-day-picker';
+import type { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -35,11 +36,10 @@ export enum DashboardFilterNames {
 export enum DashboardColumns {
   FUNCTION = 'Function / Experience',
   AVAILABILITY = 'Availability',
-  REMOTE = 'Remote Only',
   UNION_MEMBERSHIP = 'Union Membership',
   REGION = 'Region',
   LOCATION = 'Home Location',
-  TRAVEL = 'Willing To Travel',
+  TRAVEL_PREFERENCE = 'Willingness To Travel',
   MINISTRY = 'Ministry',
   NAME = 'Name',
   STATUS = 'Status',
@@ -133,8 +133,7 @@ export interface Personnel {
   availability?: Availability[];
   status: Status;
   newMember?: boolean;
-  willingToTravel: boolean;
-  remoteOnly: boolean;
+  travelPreference: TravelPreference;
   unionMembership: string;
   ministry?: Ministry;
   dateApplied?: Date | string;
@@ -207,8 +206,6 @@ export interface DashboardRow {
   [DashboardColumns.LOCATION]: string;
   [DashboardColumns.FUNCTION]: string;
   [DashboardColumns.AVAILABILITY]: AvailabilityType;
-  [DashboardColumns.TRAVEL]: boolean;
-  [DashboardColumns.REMOTE]: boolean;
   [DashboardColumns.UNION_MEMBERSHIP]: UnionMembership;
   [DashboardColumns.MINISTRY]: Ministry;
 }

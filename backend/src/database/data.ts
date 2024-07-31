@@ -9,6 +9,7 @@ import { Ministry } from '../common/enums/ministry.enum';
 import { Status } from '../common/enums/status.enum';
 import { UnionMembership } from '../common/enums/union-membership.enum';
 import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 
 export const personnel: CreatePersonnelDTO[] = [
   {
@@ -88,10 +89,9 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['INTERESTED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
     jobTitle: 'Digitized empowering data-warehouse',
-    remoteOnly: true,
-    willingToTravel: true,
 
     availability: [] as AvailabilityEntity[],
   },
@@ -186,12 +186,11 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['CHIEF_EXPERIENCED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
     },
 
     jobTitle: 'Open-architected static knowledge base',
 
-    remoteOnly: true,
-    willingToTravel: true,
 
     availability: [] as AvailabilityEntity[],
   },
@@ -280,6 +279,7 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['EXPERIENCED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_REGION,
     },
     driverLicense: ['CLASS_2'],
     
@@ -287,8 +287,6 @@ export const personnel: CreatePersonnelDTO[] = [
 
     jobTitle: 'Down-sized asynchronous benchmark',
 
-    remoteOnly: false,
-    willingToTravel: true,
 
     availability: [] as AvailabilityEntity[],
   },
@@ -381,12 +379,11 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['INTERESTED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.REMOTE_ONLY,
     },
 
     jobTitle: 'Organized needs-based toolset',
-
-    remoteOnly: false,
-    willingToTravel: true,
+    
 
     availability: [] as AvailabilityEntity[],
   },
@@ -457,13 +454,13 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['INTERESTED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
     driverLicense: ['CLASS_4'],
 
     jobTitle: 'Public-key tangible info-mediaries',
 
-    remoteOnly: false,
-    willingToTravel: true,
+
 
     availability: [] as AvailabilityEntity[],
   },
@@ -529,14 +526,14 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['INTERESTED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
     },
     driverLicense: ['LL2'],
     
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Cross-group client-driven encryption',
 
-    remoteOnly: true,
-    willingToTravel: true,
+
 
     availability: [] as AvailabilityEntity[],
   },
@@ -620,6 +617,7 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['INTERESTED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
     driverLicense: ['CLASS_2'],
     
@@ -627,8 +625,7 @@ export const personnel: CreatePersonnelDTO[] = [
 
     jobTitle: 'Profound disintermediate concept',
 
-    remoteOnly: true,
-    willingToTravel: true,
+
 
     availability: [] as AvailabilityEntity[],
   },
@@ -721,11 +718,11 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['CHIEF_EXPERIENCED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.REMOTE_ONLY,
     },
     jobTitle: 'Monitored encompassing paradigm',
 
-    remoteOnly: false,
-    willingToTravel: true,
+
 
     availability: [] as AvailabilityEntity[],
   },
@@ -816,14 +813,14 @@ export const personnel: CreatePersonnelDTO[] = [
           experienceType: Experience['CHIEF_EXPERIENCED'],
         } as EmcrExperienceEntity,
       ],
+      travelPreference: TravelPreference.WILLING_TO_TRAVEL_UNKNOWN,
     },
     driverLicense: ['CLASS_3'],
     
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Automated attitude-oriented benchmark',
 
-    remoteOnly: true,
-    willingToTravel: true,
+
 
     availability: [] as AvailabilityEntity[],
   },
