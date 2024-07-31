@@ -13,26 +13,6 @@ export const renderName = (name: string) => {
         </>
       );
 
-    case DashboardColumns.TRAVEL:
-      return (
-        <>
-          {name.split(' ')[0]}
-          <br />
-          {`${name.split(' ')[1]} ${name.split(' ')[2]}`}
-        </>
-      );
-
-    case DashboardColumns.REMOTE:
-      return (
-        <>
-          <span>
-            {name.split(' ')[0]}
-            <br />
-            {name.split(' ')[1]}
-          </span>
-        </>
-      );
-
     case DashboardColumns.UNION_MEMBERSHIP:
       return (
         <span>

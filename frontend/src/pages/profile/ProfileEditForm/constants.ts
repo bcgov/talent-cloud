@@ -11,6 +11,12 @@ import * as Yup from 'yup';
 import type { FieldType } from './types';
 import { Route } from '@/providers';
 import { DriverLicense, DriverLicenseName } from '@/common/enums';
+import type { TravelPreference } from '../../../common/enums/travel-preference.enum';
+import {
+  BcwsTravelPreference,
+  EmcrTravelPreference,
+  TravelPreferenceText,
+} from '../../../common/enums/travel-preference.enum';
 
 const phoneNumber = (value: any) => {
   if (value === '' || !value || value === null) {
@@ -37,8 +43,7 @@ export const editProfileValidationSchema = Yup.object().shape({
     region: Yup.string(),
     fireCentre: Yup.string(),
   }),
-  remoteOnly: Yup.boolean().required('This field is required.'),
-  willingToTravel: Yup.boolean().required('This field is required.'),
+  travelPreference: Yup.string().required('This field is required.'),
   primaryPhone: Yup.string()
     .required('This field is required.')
     .test(
@@ -325,30 +330,32 @@ export const fields = {
     status: Status.ACTIVE,
   },
 
-  remoteOnly: {
-    name: 'remoteOnly',
-    label: 'Remote Only',
+  bcwsTravelPreference: {
+    name: 'travelPreference',
+    label: 'Travel Preference',
     required: true,
     type: 'select',
     autoComplete: 'off',
     disabled: false,
-    options: [
-      { label: 'Yes', value: 'true' },
-      { label: 'No', value: 'false' },
-    ],
+    break: true,
+    options: Object.keys(BcwsTravelPreference).map((itm) => ({
+      label: TravelPreferenceText[itm as keyof typeof TravelPreference],
+      value: itm,
+    })),
   },
-  willingToTravel: {
-    name: 'willingToTravel',
-    label: 'Willing to Travel',
+
+  emcrTravelPreference: {
+    name: 'travelPreference',
+    label: 'Travel Preference',
     required: true,
     type: 'select',
     autoComplete: 'off',
     disabled: false,
-
-    options: [
-      { label: 'Yes', value: 'true' },
-      { label: 'No', value: 'false' },
-    ],
+    break: true,
+    options: Object.keys(EmcrTravelPreference).map((itm) => ({
+      label: TravelPreferenceText[itm as keyof typeof TravelPreference],
+      value: itm,
+    })),
   },
 
   purchaseCardHolder: {

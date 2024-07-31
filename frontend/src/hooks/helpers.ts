@@ -128,15 +128,10 @@ export const renderCells = (
       // value will be the status type and/or the number of days available
       value: renderAvailability(personnel, searchParms),
     },
-    willingToTravel: {
-      key: DashboardColumns.TRAVEL,
-      columnName: DashboardColumns.TRAVEL,
-      value: personnel.willingToTravel,
-    },
-    remoteOnly: {
-      key: DashboardColumns.REMOTE,
-      columnName: DashboardColumns.REMOTE,
-      value: personnel.remoteOnly,
+    travelPreference: {
+      key: DashboardColumns.TRAVEL_PREFERENCE,
+      columnName: DashboardColumns.TRAVEL_PREFERENCE,
+      value: personnel.travelPreference,
     },
     dateApplied: {
       key: DashboardColumns.DATE_APPLIED,
@@ -167,8 +162,7 @@ export const renderCells = (
       cells.region,
       cells.location,
       cells.availability,
-      cells.willingToTravel,
-      cells.remoteOnly,
+      cells.travelPreference,
       cells.unionMembership,
       cells.ministry,
     ],
@@ -178,7 +172,7 @@ export const renderCells = (
       cells.fireCentre,
       cells.location,
       cells.availability,
-      cells.willingToTravel,
+      cells.travelPreference,
       cells.unionMembership,
     ],
   };

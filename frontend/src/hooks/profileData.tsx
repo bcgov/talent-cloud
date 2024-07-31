@@ -5,6 +5,8 @@ import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { Personnel } from '@/pages/dashboard';
 import { datePST, formatPhone } from '@/utils';
 import { FireCentreName } from '../common/enums/firecentre.enum';
+import type { TravelPreference } from '../common/enums/travel-preference.enum';
+import { TravelPreferenceText } from '../common/enums/travel-preference.enum';
 import type { DriverLicense } from '../common/enums/driver-license.enum';
 import { DriverLicenseName } from '../common/enums/driver-license.enum';
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
@@ -26,16 +28,19 @@ export const emcrData = (personnel?: Personnel) => {
           : 'Not Listed',
       },
       {
-        title: 'Remote Only',
-        content: `${personnel?.remoteOnly === true ? 'Yes' : 'No'}`,
-      },
-      {
         title: 'Home Location, Region',
         content: `${personnel?.homeLocation.locationName}, ${personnel?.homeLocation.region}`,
       },
       {
-        title: 'Willingness to Travel',
-        content: `${personnel?.willingToTravel === true ? 'Yes' : 'No'}`,
+        title: 'Travel Preference',
+        content:
+          TravelPreferenceText[
+            personnel?.travelPreference as keyof typeof TravelPreference
+          ],
+      },
+      {
+        title: "Driver's License",
+        content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
       },
       {
         title: 'Application Date',
@@ -54,10 +59,6 @@ export const emcrData = (personnel?: Personnel) => {
               ? datePST(personnel?.dateApproved as Date)
               : '-',
           },
-      {
-        title: "Driver's License",
-        content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
-      },
     ],
     contact: [
       {
@@ -162,12 +163,11 @@ export const bcwsData = (personnel?: Personnel) => {
           : 'Not Listed',
       },
       {
-        title: 'Remote Only',
-        content: `${personnel?.remoteOnly === true ? 'Yes' : 'No'}`,
-      },
-      {
-        title: 'Willingness to Travel',
-        content: `${personnel?.willingToTravel === true ? 'Yes' : 'No'}`,
+        title: 'Travel Preference',
+        content:
+          TravelPreferenceText[
+            personnel?.travelPreference as keyof typeof TravelPreference
+          ],
       },
       {
         title: 'Purchase Card Holder',
