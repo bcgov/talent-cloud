@@ -142,20 +142,6 @@ export class CreatePersonnelDTO {
   unionMembership: UnionMembership;
 
   @ApiProperty({
-    description: 'If this personnel is remote only',
-    example: false,
-  })
-  @IsBoolean()
-  remoteOnly: boolean;
-
-  @ApiProperty({
-    description: 'If this personnel is willing to travel',
-    example: false,
-  })
-  @IsBoolean()
-  willingToTravel: boolean;
-
-  @ApiProperty({
     description: 'An array of availability for this personnel',
     example: [
       {

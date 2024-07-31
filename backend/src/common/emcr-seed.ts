@@ -15,6 +15,7 @@ import {
 } from '../database/entities/emcr';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
 import { CreatePersonnelDTO, LocationDTO } from '../personnel';
+import { TravelPreference } from './enums/travel-preference.enum';
 
 export const handler = (
   locations: LocationDTO[],
@@ -64,6 +65,12 @@ export const handler = (
       status !== Status.PENDING
         ? (experiences(functions) as EmcrExperienceEntity[])
         : [],
+    travelPreference: faker.helpers.arrayElement([
+      TravelPreference.REMOTE_ONLY,
+      TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
+      TravelPreference.WILLING_TO_TRAVEL_REGION,
+      TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
+    ]),
   };
 
   const personnelData: CreatePersonnelDTO = {
@@ -82,7 +89,6 @@ export const handler = (
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
-    remoteOnly: faker.datatype.boolean({ probability: 0.4 }),
     driverLicense: Array.from(
       new Set([
         faker.helpers.arrayElement(Object.values(DriverLicense)),
@@ -91,7 +97,6 @@ export const handler = (
         faker.helpers.arrayElement(Object.values(DriverLicense)),
       ]),
     ),
-    willingToTravel: faker.datatype.boolean({ probability: 0.8 }),
     availability:
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };
