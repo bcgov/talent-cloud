@@ -141,7 +141,7 @@ export class FormService {
     } else {
       deployment = data.personnel.deployment.both;
     }
-    
+
     const emcrPersonnel =
       data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH'
         ? this.parseEmcrPersonnel(
@@ -387,7 +387,7 @@ export class FormService {
         data.secondChoiceSection === ''
           ? undefined
           : Section[data.secondChoiceSection],
-      travelPreference: this.parseTravelPreference(deployment, Program.EMCR),
+      travelPreference: this.parseTravelPreference(deployment, Program.BCWS),
       languages: Array.from(
         new Set(
           data?.languages?.map((itm) => ({
