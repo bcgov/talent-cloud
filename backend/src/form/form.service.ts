@@ -138,7 +138,7 @@ export class FormService {
         ? this.parseEmcrPersonnel(
             data.emcr,
             data.personnel.pfa,
-            data.personnel.deployment,
+            data.personnel.deployment.both ? data.personnel.deployment.both : data.personnel.deployment.emcr,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
@@ -149,7 +149,7 @@ export class FormService {
         ? this.parseBcwsPersonnel(
             data.bcws,
             data.personnel.pfa,
-            data.personnel.deployment,
+            data.personnel.deployment.both ? data.personnel.deployment.both : data.personnel.deployment.bcws,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
