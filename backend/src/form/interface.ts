@@ -53,7 +53,11 @@ export interface PersonnelFormData {
   workEmail: string;
   homeLocation: LocationData
   workLocation: LocationData,
-  deployment: FormDeployment;
+  deployment: {
+    bcws?: FormDeployment;
+    emcr?: FormDeployment;
+    both?: FormDeployment;
+  };
   willingToTravel: boolean;
   firstAidLevel: string;
   dl: string[];

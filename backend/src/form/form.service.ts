@@ -133,12 +133,21 @@ export class FormService {
     data: IntakeFormData,
     formId: number,
   ): Promise<string> {
+    let deployment;
+    if (data.personnel.deployment.emcr) {
+      deployment = data.personnel.deployment.emcr;
+    } else if (data.personnel.deployment.bcws) {
+      deployment = data.personnel.deployment.bcws;
+    } else {
+      deployment = data.personnel.deployment.both;
+    }
+    
     const emcrPersonnel =
       data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH'
         ? this.parseEmcrPersonnel(
             data.emcr,
             data.personnel.pfa,
-            data.personnel.deployment,
+            deployment,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
@@ -149,7 +158,7 @@ export class FormService {
         ? this.parseBcwsPersonnel(
             data.bcws,
             data.personnel.pfa,
-            data.personnel.deployment,
+            deployment,
             data.personnel.firstAidLevel,
             data.personnel.firstAidExpiry,
           )
