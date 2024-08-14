@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { CreatePersonnelBcwsDTO, CreateBcwsPersonnelLanguagesDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
@@ -15,6 +15,7 @@ import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 
 @Injectable()
 export class BcwsService {
@@ -183,15 +184,35 @@ export class BcwsService {
       query.availabilityToDate,
     );
 
-    if (query.fireCentre?.length) {
+    if (query.fireCentre?.length && !query.location?.length) {
       qb.andWhere('location.fireCentre IN (:...fireCentres)', {
         fireCentres: query.fireCentre,
       });
-    }
-    if (query.location?.length) {
-      qb.andWhere('location.locationName IN (:...homeLocations)', {
-        homeLocations: query.location,
-      });
+    } else if (query.location?.length) {
+      if (!query.includeTravel) {
+        qb.andWhere('location.locationName IN (:...homeLocations)', {
+          homeLocations: query.location,
+        });
+      } else if (query.includeTravel) {
+        qb.andWhere('bcws_personnel.travelPreference != :remoteOnly', { remoteOnly: TravelPreference.REMOTE_ONLY });
+        qb.andWhere(new Brackets((inner) => {
+          inner.orWhere('location.locationName IN (:...homeLocations)', {
+            homeLocations: query.location,
+          });
+          inner.orWhere('bcws_personnel.travelPreference = :travelAnywhere', { travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE });
+          inner.orWhere(
+            `(bcws_personnel.travelPreference = :travelFireZone
+            AND location.fireZone IN (SELECT fire_zone FROM "location" WHERE location_name IN (:...homeLocations)))`, {
+              travelFireZone: TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+              homeLocations: query.location,
+            });
+            inner.orWhere(
+            '(bcws_personnel.travelPreference = :travelFireCentre AND location.fireCentre IN (:...fireCentres))',{
+              travelFireCentre: TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
+              fireCentres: query.fireCentre,
+            });
+        }));
+      }
     }
 
     if (query.role) {

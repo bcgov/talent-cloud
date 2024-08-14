@@ -36,6 +36,9 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
   const [experienceCheckbox, setExperienceCheckbox] = useState<
     'PREVIOUSLY_DEPLOYED' | 'INTERESTED' | null
   >();
+  const [includeTravel, setIncludeTravel] = useState<boolean>(
+    filterValues.includeTravel === 'true' ?? false,
+  );
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1 lg:grid-cols-7 gap-12">
@@ -87,6 +90,18 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
                 filterValues[route === Route.BCWS ? 'fireCentre' : 'region']
               }
               groupField={route === Route.BCWS ? filters.fireCentre : filters.region}
+            />
+            <Checkbox
+              crossOrigin=""
+              label="Show members willing to travel to the selected location(s)"
+              checked={includeTravel && !!filterValues.location?.length}
+              name="includeTravel"
+              disabled={!filterValues.location?.length}
+              iconProps={{ color: 'primaryBlue' }}
+              onChange={(e) => {
+                setIncludeTravel(e.target.checked);
+                handleChangeOne(e.target.name, e.target.checked ? 'true' : 'false');
+              }}
             />
           </div>
         </div>
@@ -194,7 +209,13 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
           </div>
         </div>
       </div>
-      <div className="text-center md:col-span-1 flex  flex-nowrap self-end pb-10">
+      <div
+        className={
+          route === Route.BCWS
+            ? 'text-center md:col-span-1 flex flex-nowrap self-end pb-10'
+            : 'text-center md:col-span-1 flex flex-nowrap self-end'
+        }
+      >
         <Button
           variant={ButtonTypes.SECONDARY}
           text="Clear All"
