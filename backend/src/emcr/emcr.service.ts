@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Brackets } from 'typeorm';
 import {
   UpdateEmcrPersonnelDTO,
   EmcrPersonnelExperienceDTO,
@@ -19,6 +19,7 @@ import {
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 
 @Injectable()
 export class EmcrService {
@@ -149,15 +150,29 @@ export class EmcrService {
       query.availabilityToDate,
     );
 
-    if (query.region?.length) {
+    if (query.region?.length && !query.location?.length) {
       qb.andWhere('location.region IN (:...regions)', {
         regions: query.region,
       });
-    }
-    if (query.location?.length) {
-      qb.andWhere('location.locationName IN (:...homeLocations)', {
-        homeLocations: query.location,
-      });
+    } else if (query.location?.length) {
+      if (!query.includeTravel) {
+        qb.andWhere('location.locationName IN (:...homeLocations)', {
+          homeLocations: query.location,
+        });
+      } else {
+        qb.andWhere('emcr_personnel.travelPreference != :remoteOnly', { remoteOnly: TravelPreference.REMOTE_ONLY });
+        qb.andWhere(new Brackets((inner) => {
+          inner.orWhere('location.locationName IN (:...homeLocations)', {
+            homeLocations: query.location,
+          });
+          inner.orWhere('emcr_personnel.travelPreference = :travelAnywhere', { travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE });
+          inner.orWhere(
+          '(emcr_personnel.travelPreference = :travelRegion AND location.region IN (:...regions))',{
+            travelRegion: TravelPreference.WILLING_TO_TRAVEL_REGION,
+            regions: query.region,
+          });
+        }));
+      }
     }
 
     if (query.function) {

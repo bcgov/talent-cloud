@@ -1,9 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, Length } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
 import { format } from 'date-fns';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { Status } from '../../common/enums/status.enum';
 import { QueryDTO } from '../../common/query.dto';
+import { Transform } from 'class-transformer';
 
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
@@ -40,4 +41,24 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   availabilityToDate: string;
+
+  @ApiPropertyOptional({
+    description: 'Get all travellers',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value} ) => {
+    if (typeof value === 'boolean') {
+        return value;
+    }
+    if (value?.toString()?.toLowerCase() === 'false') {
+        return false;
+    }
+    if (value?.toString()?.toLowerCase() === 'true') {
+        return true;
+    }
+    return undefined;
+  })
+  includeTravel: boolean;
 }

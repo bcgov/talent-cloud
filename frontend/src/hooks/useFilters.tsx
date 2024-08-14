@@ -61,6 +61,7 @@ export const useFilters = () => {
     region: searchParamsUrl.getAll('region') ?? [],
     fireCentre: searchParamsUrl.getAll('fireCentre') ?? [],
     location: searchParamsUrl.getAll('location') ?? '[]',
+    includeTravel: searchParamsUrl.get('includeTravel') ?? false,
     role: searchParamsUrl.get('role') ?? '',
     section: searchParamsUrl.get('section') ?? '',
     function: searchParamsUrl.get('function') ?? '',

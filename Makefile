@@ -32,10 +32,11 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+# Docker compose v2 for GHA
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
 	@$(shell echo ./scripts/setenv.sh local ci )
-	@docker-compose -f docker-compose.ci.yml up --force-recreate -d --build 
+	@docker compose -f docker-compose.ci.yml up --force-recreate -d --build 
 
 test-backend-pipeline:
 	@docker exec tc-backend-ci npm run test:pipeline
@@ -80,7 +81,12 @@ local-frontend-workspace:
 local-nginx-workspace:
 	@docker exec -it $(PROJECT)-nginx sh
 
+# Docker compose v2 for GHA
 close:
+	@echo "+\n++ Make: Run/Close ...\n+"
+	@docker compose  down -v --remove-orphans
+
+close-local:
 	@echo "+\n++ Make: Run/Close ...\n+"
 	@docker-compose  down -v --remove-orphans
 
