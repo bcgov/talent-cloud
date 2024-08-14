@@ -37,7 +37,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
     'PREVIOUSLY_DEPLOYED' | 'INTERESTED' | null
   >();
   const [includeTravel, setIncludeTravel] = useState<boolean>(
-    filterValues.includeTravel === 'true' ?? false,
+    filterValues.includeTravel === 'true',
   );
 
   return (
