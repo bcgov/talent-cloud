@@ -31,6 +31,6 @@ export enum TravelPreferenceText {
   WILLING_TO_TRAVEL_FIRE_ZONE = 'Within fire zone',
   WILLING_TO_TRAVEL_FIRE_CENTRE = 'Within fire centre',
   WILLING_TO_TRAVEL_REGION = 'Within region',
-  WILLING_TO_TRAVEL_ANYWHERE = 'Anywhere',
+  WILLING_TO_TRAVEL_ANYWHERE = 'Anywhere in BC',
   WILLING_TO_TRAVEL_UNKNOWN = 'Willing to travel - Unspecified',
 }
