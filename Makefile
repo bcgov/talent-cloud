@@ -35,7 +35,7 @@ export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
 	@$(shell echo ./scripts/setenv.sh local ci )
-	@docker-compose -f docker-compose.ci.yml up --force-recreate -d --build 
+	@docker compose -f docker-compose.ci.yml up --force-recreate -d --build 
 
 test-backend-pipeline:
 	@docker exec tc-backend-ci npm run test:pipeline
