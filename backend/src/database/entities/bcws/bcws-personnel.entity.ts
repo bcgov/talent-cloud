@@ -187,7 +187,7 @@ export class BcwsPersonnelEntity {
       approvedBySupervisor: this.approvedBySupervisor,
       status: this.status,
       newMember:
-        Status.ACTIVE && differenceInDays(new Date(), this.dateApproved) < 31,
+        Status.ACTIVE && differenceInDays(new Date(), this.dateApproved) < 6,
       purchaseCardHolder: this.purchaseCardHolder,
       liaisonFirstName: this.liaisonFirstName,
       liaisonLastName: this.liaisonLastName,
