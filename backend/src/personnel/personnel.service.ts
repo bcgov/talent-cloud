@@ -186,6 +186,10 @@ export class PersonnelService {
         queryBuilder.orderBy('bcws_personnel.dateApplied', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      } else if (status === Status.ACTIVE) {
+        queryBuilder.addSelect(`CASE WHEN bcws_personnel.dateApproved > current_date - interval '5' day THEN bcws_personnel.dateApproved ELSE null END`, 'new_member');
+        queryBuilder.addOrderBy('new_member', 'ASC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
       } else {
         queryBuilder.orderBy('bcws_personnel.dateApproved', 'DESC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
@@ -198,6 +202,10 @@ export class PersonnelService {
         queryBuilder.orderBy('emcr_personnel.dateApplied', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
+      } else if (status === Status.ACTIVE) {
+        queryBuilder.addSelect(`CASE WHEN emcr_personnel.dateApproved > current_date - interval '5' day THEN emcr_personnel.dateApproved ELSE null END`, 'new_member');
+        queryBuilder.addOrderBy('new_member', 'ASC');
+        queryBuilder.addOrderBy('personnel.lastName', 'ASC');
       } else {
         queryBuilder.orderBy('emcr_personnel.dateApproved', 'DESC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
