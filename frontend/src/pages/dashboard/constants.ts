@@ -39,7 +39,7 @@ export enum DashboardColumns {
   UNION_MEMBERSHIP = 'Union Membership',
   REGION = 'Region',
   LOCATION = 'Home Location',
-  TRAVEL_PREFERENCE = 'Willingness To Travel',
+  TRAVEL_PREFERENCE = 'Travel Preference',
   MINISTRY = 'Ministry',
   NAME = 'Name',
   STATUS = 'Status',
