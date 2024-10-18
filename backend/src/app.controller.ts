@@ -66,14 +66,18 @@ export class AppController {
   @Public()
   @Get('/chips')
   async chips() {
+    this.logger.log('CHIPS');
     try {
       const response = await axios.get(`${process.env.CHIPS_API}/?$top=100`, {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
         }
       });
+      this.logger.log('SUCCESS');
+      this.logger.log(response);
       return response;
     } catch (e) {
+      this.logger.error("ERROR");
       this.logger.error(e);
       return 'error';
     }
