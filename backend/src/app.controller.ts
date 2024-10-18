@@ -12,6 +12,7 @@ import { Ministry, MinistryName } from './common/enums';
 import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
+import axios from 'axios';
 
 @ApiTags('Application API')
 @Controller()
@@ -60,6 +61,22 @@ export class AppController {
       client: process.env.KEYCLOAK_CLIENT,
       realm: process.env.KEYCLOAK_REALM,
     };
+  }
+
+  @Public()
+  @Get('/chips')
+  async chips() {
+    try {
+      const response = await axios.get(`${process.env.CHIPS_API}/?$top=100`, {
+        headers: {
+          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+        }
+      });
+      return response;
+    } catch (e) {
+      this.logger.error(e);
+      return 'error';
+    }
   }
 
   /**
