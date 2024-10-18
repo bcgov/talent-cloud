@@ -146,6 +146,16 @@ objects:
                     secretKeyRef:
                       key: enabled
                       name: ${APP_NAME}-chefs
+                - name: CHIPS_API
+                  valueFrom:
+                    secretKeyRef:
+                      key: base_url
+                      name: ${APP_NAME}-chips
+                - name: CHIPS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: api_key
+                      name: ${APP_NAME}-chips
                 - name: BCWS_TOKEN
                   valueFrom:
                     secretKeyRef:

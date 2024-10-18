@@ -54,6 +54,13 @@ objects:
   - kind: Secret
     apiVersion: v1
     metadata:
+      name: ${APP_NAME}-chips
+    stringData:
+      base_url: ${CHIPS_API}
+      api_key: ${CHIPS_API_KEY}
+  - kind: Secret
+    apiVersion: v1
+    metadata:
       name: ${APP_NAME}-bcws
     stringData:
       bcws_token: ${BCWS_TOKEN}
