@@ -75,7 +75,27 @@ export class AppController {
       });
       this.logger.log('SUCCESS');
       this.logger.log(response);
-      return response;
+      return response.data;
+    } catch (e) {
+      this.logger.error("ERROR");
+      this.logger.error(e);
+      return 'error';
+    }
+  }
+
+  @Public()
+  @Get('/chipstraining')
+  async training() {
+    this.logger.log('TRAINING');
+    try {
+      const response = await axios.get(`${process.env.CHIPS_API}/?$top=100`, {
+        headers: {
+          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+        }
+      });
+      this.logger.log('SUCCESS');
+      this.logger.log(response);
+      return response.data;
     } catch (e) {
       this.logger.error("ERROR");
       this.logger.error(e);
