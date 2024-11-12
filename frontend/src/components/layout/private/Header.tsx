@@ -6,11 +6,14 @@ import { Menu } from '@headlessui/react';
 import { headerLink } from '@/common/links';
 import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
-import { useRole } from '@/hooks';
+
+import { useNavigate } from 'react-router';
+import { Routes } from '@/routes';
+import { useRoleContext } from '@/providers';
 
 export const Header = ({ authenticated }: { authenticated?: boolean }) => {
   const [open, setOpen] = useState(false);
-  const { username } = useRole();
+  const { username } = useRoleContext();
 
   const showMenu = () => {
     setOpen(!open);

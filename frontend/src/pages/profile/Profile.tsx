@@ -12,7 +12,7 @@ import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { Link, useParams } from 'react-router-dom';
 import usePersonnel from '@/hooks/usePersonnel';
 import useAvailability from '@/hooks/useAvailability';
-import { useRole } from '@/hooks';
+
 import Scheduler from './Scheduler';
 import SchedulerPopUp from './SchedulerPopUp';
 import type {
@@ -34,7 +34,7 @@ import { Routes } from '@/routes';
 
 import { SectionsAndRoles } from './SectionsAndRoles';
 import { SkillsAndCertifications } from './SkillsAndCertifications';
-import { Route } from '@/providers';
+import { Route, useRoleContext } from '@/providers';
 import { NewApplicantBanner } from './NewApplicantBanner';
 import { Toggle } from '@/components/toggle/Toggle';
 import ProfileDetails from './ProfileDetails';
@@ -46,7 +46,7 @@ import { ReviewApplicant } from './ReviewApplicant';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 
 const Profile = () => {
-  const { role, route } = useRole();
+  const { role, program: route  } = useRoleContext();
 
   const { personnelId } = useParams() as { personnelId: string };
 

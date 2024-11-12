@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import type { Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
-import { Route } from '@/providers';
+import { Route, useRoleContext } from '@/providers';
 import { bcwsData, emcrData } from './profileData';
 import type { ProfileData } from '@/pages/profile/types';
+import { Program, Role } from '@/common';
+import { useParams } from 'react-router';
+
 
 const usePersonnel = ({
   personnelId,
@@ -19,6 +22,10 @@ const usePersonnel = ({
 } => {
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
+  const { role, program } = useRoleContext();
+  const {profileId} = useParams()
+  
+    
 
   useEffect(() => {
     (async () => {

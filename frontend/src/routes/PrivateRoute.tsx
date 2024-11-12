@@ -4,12 +4,17 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Layout } from '@/components';
 import { RoleProvider } from '@/providers';
 
-export const PrivateRoute = () => {
+
+
+const PrivateRoute = () => {
   const { keycloak } = useKeycloak();
+
 
   if (!keycloak.authenticated) {
     return <Navigate to={Routes.Home} />;
   }
+
+  
 
   return (
     <RoleProvider>
@@ -19,3 +24,4 @@ export const PrivateRoute = () => {
     </RoleProvider>
   );
 };
+export default PrivateRoute

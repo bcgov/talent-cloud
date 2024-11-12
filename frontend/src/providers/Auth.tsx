@@ -1,4 +1,5 @@
 import { Loading } from '@/components';
+import {  useAxios } from '@/hooks/useAxios';
 import { getKeycloakInfo } from '@/services';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const [keycloakInfo, setKeycloakInfo] = useState<Keycloak>();
+  
   useEffect(() => {
     (async () => {
       try {
@@ -18,6 +20,8 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
             clientId: data.client,
           }),
         );
+        
+
       } catch (e: unknown) {
         // TODO: Need to handle this better if the auth provider is the 'root' component
         // handleError({ status: 500, message: 'Error getting keycloak info' });

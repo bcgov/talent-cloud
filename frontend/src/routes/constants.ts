@@ -3,7 +3,10 @@ export default Object.freeze({
   Unauthorized: '/unauthorized',
   Login: '/login',
   Dashboard: '/dashboard',
-  Profile: '/profile',
-  Home: '/',
+  MemberProfile: '/profile',
+  Profile: '/profile/:profileId',
+  SupervisorDashboard: '/supervisor', 
+  Root: '/',
+  Home: '/home',
   NotFound: '*',
 });
