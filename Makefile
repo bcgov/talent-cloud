@@ -250,3 +250,9 @@ delete-db:
 
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
+
+
+copy-keycloak-realm:
+	@echo "+\n++ Make: Export Keycloak ...\n+"
+	@docker exec $(PROJECT)-keycloak-$(ENV) opt/keycloak/bin/kc.sh export --dir /export/ --users realm_file
+	

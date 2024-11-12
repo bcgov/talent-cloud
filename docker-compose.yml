@@ -102,10 +102,11 @@ services:
     platform: linux/arm64/v8
     volumes:
       - keycloak:/opt/keycloak/data
-      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
+      - ./keycloak/export:/opt/keycloak/data/import
+      - ./keycloak/export:/export
     env_file: .env
     environment:
-      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import
       DB_VENDOR: ${DB_TYPE}
       DB_ADDR: db
       DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}
