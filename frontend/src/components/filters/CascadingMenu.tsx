@@ -1,6 +1,6 @@
 import { NestedMenu } from './NestedMenu';
 import { MenuButton, Chip, Menu, MenuList, MenuHandler } from '../ui';
-import { ExperienceName, FunctionName } from '@/common';
+import { ExperienceName, FunctionName, Program } from '@/common';
 import { classes } from './classes';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
@@ -15,7 +15,7 @@ export const CascadingMenu = ({
   field,
   nestedField,
   nestedValue,
-  route,
+  program,
 }: {
   onChange: (name: string, value: string) => void;
   handleClose: (name: string, nestedName: string) => any;
@@ -24,7 +24,7 @@ export const CascadingMenu = ({
   nestedField: any;
   value?: string;
   nestedValue?: string | BcwsRole;
-  route?: Route;
+  program?: Program;
 }) => {
   const displayValue = (value: string) => {
     if (value === FunctionName.EMERGENCY_SUPPORT_SERVICES) {
@@ -77,7 +77,7 @@ export const CascadingMenu = ({
                   nestedField={{
                     ...nestedField,
                     options:
-                      route === Route.BCWS
+                      program === Program.BCWS
                         ? nestedField.options[index]
                         : nestedField.options,
                   }}

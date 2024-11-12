@@ -9,14 +9,14 @@ import {
 import { SingleSelect } from '@/components/filters/SingleSelect';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { Route } from '@/providers';
-import { ButtonTypes } from '@/common';
+import { ButtonTypes, Program } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import type { DateRange } from 'react-day-picker';
 import { useState } from 'react';
 import { Checkbox } from '@material-tailwind/react';
 
-export const DashboardFilters = ({ route }: { route?: Route }) => {
-  const { filters } = useProgramFieldData(route);
+export const DashboardFilters = ({ program }: { program?: Program }) => {
+  const { filters } = useProgramFieldData(program);
 
   const {
     filterValues,
@@ -56,11 +56,11 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
-              field={route === Route.BCWS ? filters.fireCentre : filters.region}
+              field={program === Program.BCWS ? filters.fireCentre : filters.region}
               values={
-                route === Route.BCWS ? filterValues.fireCentre : filterValues.region
+                program === Program.BCWS ? filterValues.fireCentre : filterValues.region
               }
-              label={route === Route.BCWS ? 'Fire Centre' : 'Region'}
+              label={program === Program.BCWS ? 'Fire Centre' : 'Region'}
               handleChange={handleChange}
               handleClose={handleRemove}
               handleCloseMany={clearSearchParams}
@@ -75,11 +75,11 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
               field={{
                 ...filters.location,
                 groupedOptions:
-                  filterValues[route === Route.BCWS ? 'fireCentre' : 'region']
+                  filterValues[program === Program.BCWS ? 'fireCentre' : 'region']
                     .length > 0
                     ? filters.location.groupedOptions?.filter((itm: any) =>
                         filterValues[
-                          route === Route.BCWS ? 'fireCentre' : 'region'
+                          program === Program.BCWS ? 'fireCentre' : 'region'
                         ]?.includes(itm.value.toString()),
                       )
                     : filters.location.groupedOptions,
@@ -87,9 +87,9 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
               label="Home Location"
               values={filterValues.location}
               groupValues={
-                filterValues[route === Route.BCWS ? 'fireCentre' : 'region']
+                filterValues[program === Program.BCWS ? 'fireCentre' : 'region']
               }
-              groupField={route === Route.BCWS ? filters.fireCentre : filters.region}
+              groupField={program === Program.BCWS ? filters.fireCentre : filters.region}
             />
             <Checkbox
               crossOrigin=""
@@ -110,23 +110,23 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
       {/** lg - column 2 start */}
       <div className="col-span-1 lg:col-span-3">
         <CascadingMenu
-          field={route === Route.BCWS ? filters.section : filters.function}
-          nestedField={route === Route.BCWS ? filters.role : filters.experience}
+          field={program === Program.BCWS ? filters.section : filters.function}
+          nestedField={program === Program.BCWS ? filters.role : filters.experience}
           nestedValue={
-            route === Route.BCWS ? filterValues.role : filterValues.experience
+            program === Program.BCWS ? filterValues.role : filterValues.experience
           }
           label={
-            route === Route.BCWS ? 'Section/Role' : 'Function & Experience Level'
+            program === Program.BCWS ? 'Section/Role' : 'Function & Experience Level'
           }
           onChange={handleChangeOne}
           handleClose={(name, nestedName) => {
             clearSearchParams(name);
             clearSearchParams(nestedName);
           }}
-          value={route === Route.BCWS ? filterValues.section : filterValues.function}
-          route={route}
+          value={program === Program.BCWS ? filterValues.section : filterValues.function}
+          program={program}
         />
-        {route === Route.BCWS && (
+        {program === Program.BCWS && (
           <div className="flex flex-row gap-8">
             <Checkbox
               crossOrigin=""
@@ -211,7 +211,7 @@ export const DashboardFilters = ({ route }: { route?: Route }) => {
       </div>
       <div
         className={
-          route === Route.BCWS
+          program === Program.BCWS
             ? 'text-center md:col-span-1 flex flex-nowrap self-end pb-10'
             : 'text-center md:col-span-1 flex flex-nowrap self-end'
         }

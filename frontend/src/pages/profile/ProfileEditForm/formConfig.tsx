@@ -1,4 +1,4 @@
-import { Status } from '@/common';
+import { Program, Status } from '@/common';
 import type { Personnel, Location } from '@/pages/dashboard';
 import {
   fields,
@@ -13,7 +13,7 @@ import { Route } from '@/providers';
 export const formConfig = (
   personnelData: Partial<Personnel>,
   locations: Location[],
-  route: Route,
+  program: Program,
 ) => {
   delete personnelData?.availability;
   delete personnelData?.experiences;
@@ -210,7 +210,7 @@ export const formConfig = (
     orientation: personnel.orientation,
     dateApplied: personnel.dateApplied,
   };
-  if (route === Route.BCWS) {
+  if (program === Program.BCWS) {
     if (personnel.status === Status.PENDING) {
       return {
         sections: bcwsSections,

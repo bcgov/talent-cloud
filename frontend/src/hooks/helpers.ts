@@ -1,4 +1,4 @@
-import type { AvailabilityType } from '@/common';
+import type { AvailabilityType, Program } from '@/common';
 import { AvailabilityTypeName } from '@/common';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { Availability, Personnel } from '@/pages/dashboard';
@@ -77,7 +77,7 @@ export const renderCells = (
   personnel: Personnel,
   searchParms: URLSearchParams,
   isPending: boolean,
-  route: Route,
+  program: Program,
 ) => {
   const cells = {
     name: {
@@ -199,8 +199,8 @@ export const renderCells = (
     ],
   };
   if (isPending) {
-    return pendingCells[route];
+    return pendingCells[program];
   } else {
-    return activeCells[route];
+    return activeCells[program];
   }
 };

@@ -9,13 +9,7 @@ import { Program, Role } from '@/common';
 import { useParams } from 'react-router';
 
 
-const usePersonnel = ({
-  personnelId,
-  route,
-}: {
-  personnelId: string;
-  route?: Route;
-}): {
+const usePersonnel = (): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
   profileData: ProfileData;
@@ -23,28 +17,28 @@ const usePersonnel = ({
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
   const { role, program } = useRoleContext();
-  const {profileId} = useParams()
-  
-    
+  const { profileId } = useParams()
+
+
 
   useEffect(() => {
     (async () => {
       try {
         const response =
-          route && (await AxiosPrivate.get(`/${route}/${personnelId}`));
+          program && (await AxiosPrivate.get(`/${program}/${profileId}`));
         response && setPersonnel(response.data);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [personnelId, route, AxiosPrivate]);
+  }, [profileId, program, AxiosPrivate]);
 
   const updatePersonnel = async (personnel: FormikValues | Personnel) => {
     try {
       const res =
-        route &&
+        program &&
         (await AxiosPrivate.patch(
-          encodeURI(`/${route}/${personnelId}`),
+          encodeURI(`/${program}/${profileId}`),
           personnel,
         ));
       res && setPersonnel(res.data);
@@ -56,7 +50,7 @@ const usePersonnel = ({
   return {
     personnel,
     updatePersonnel,
-    profileData: route === Route.BCWS ? bcwsData(personnel) : emcrData(personnel),
+    profileData: program === Program.BCWS ? bcwsData(personnel) : emcrData(personnel),
   };
 };
 

@@ -3,6 +3,7 @@ import {
   AvailabilityTypeName,
   Experience,
   ExperienceName,
+  Program,
   RegionName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
@@ -17,7 +18,7 @@ import type { Section } from '@/common/enums/sections.enum';
 import { SectionName } from '@/common/enums/sections.enum';
 import type { FieldInterface } from '@/components';
 
-export const useProgramFieldData = (route?: Route) => {
+export const useProgramFieldData = (program?: Program) => {
   const [bcwsRoles, setBcwsRoles] = useState<BcwsRoleInterface[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
@@ -56,12 +57,12 @@ export const useProgramFieldData = (route?: Route) => {
 
   useEffect(() => {
     (async () => {
-      const res = route && (await AxiosPrivate.get(`/field/data`));
-      res && route === Route.EMCR
+      const res = program && (await AxiosPrivate.get(`/field/data`));
+      res && program === Program.EMCR
         ? setEmcrData(res.data)
         : res && setBcwsData(res.data);
     })();
-  }, [route]);
+  }, [program]);
 
   const filters: { [key: string]: FieldInterface } = useMemo(() => {
     return {
@@ -85,7 +86,7 @@ export const useProgramFieldData = (route?: Route) => {
         name: DashboardFilterNames.LOCATION,
         placeholder: 'Select home location(s)',
         groupedOptions:
-          route === Route.BCWS
+          program === Program.BCWS
             ? fireCentre.map((itm: FireCentre) => ({
                 label: FireCentreName[itm],
                 value: itm,

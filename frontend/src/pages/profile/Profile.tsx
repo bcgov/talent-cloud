@@ -23,7 +23,7 @@ import type {
   ExperienceInterface,
 } from '../dashboard';
 import { ProfileEditForm } from './ProfileEditForm/ProfileEditForm';
-import { Status, type AvailabilityType, Role } from '@/common';
+import { Status, type AvailabilityType, Role, Program } from '@/common';
 import ProfileFunctions from './ProfileFunctions';
 import ProfileNotes from './ProfileNotes';
 import { EditNotes } from './EditNotes';
@@ -46,14 +46,11 @@ import { ReviewApplicant } from './ReviewApplicant';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 
 const Profile = () => {
-  const { role, program: route  } = useRoleContext();
+  const { role, program  } = useRoleContext();
 
   const { personnelId } = useParams() as { personnelId: string };
 
-  const { personnel, updatePersonnel, profileData } = usePersonnel({
-    personnelId,
-    route,
-  });
+  const { personnel, updatePersonnel, profileData } = usePersonnel();
 
   const { generalInformation, contact, organizational, skills, intakeRequirements } =
     profileData;
@@ -62,7 +59,7 @@ const Profile = () => {
     personnelId,
   });
 
-  const { functions, bcwsRoles } = useProgramFieldData(route);
+  const { functions, bcwsRoles } = useProgramFieldData(program);
 
   const [openEditNotes, setOpenEditNotes] = useState(false);
   const [openEditCoordinatorNotes, setOpenEditCoordinatorNotes] = useState(false);
@@ -150,7 +147,7 @@ const Profile = () => {
     setOpenEditFunctionsPopUp(!openEditFunctionsPopUp);
   };
   const reviewItems =
-    route === Route.EMCR
+    program===Program.EMCR
       ? [
           {
             key: 'Supervisor Approval',
@@ -206,7 +203,7 @@ const Profile = () => {
       {personnel && (
         <div>
           <div className="pt-12 md:px-12 xl:px-24 2xl:px-64 mx-auto">
-            <ProfileHeader personnel={personnel} route={route} role={role} />
+            <ProfileHeader personnel={personnel} program={program} role={role} />
           </div>
           <div className="bg-white w-full">
             <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
@@ -214,7 +211,7 @@ const Profile = () => {
                 {personnel.status === Status.PENDING && (
                   <NewApplicantBanner
                     reviewItems={reviewItems}
-                    route={route}
+                    program={program}
                     handleOpenReviewApplicant={handleOpenReviewApplicant}
                   />
                 )}
@@ -246,7 +243,7 @@ const Profile = () => {
                 organizational={organizational}
                 pending={personnel.status === Status.PENDING}
               />
-              {route === Route.EMCR && (
+              {program===Program.EMCR && (
                 <ProfileFunctions
                   functions={functions}
                   personnel={personnel}
@@ -261,7 +258,7 @@ const Profile = () => {
                 openSchedulerDialog={openSchedulerDialog}
               />
 
-              {route === Route.BCWS && (
+              {program===Program.BCWS && (
                 <>
                   <SectionsAndRoles
                     roles={personnel?.roles ?? []}
@@ -299,7 +296,7 @@ const Profile = () => {
                 open={openEditProfilePopUp}
                 handleClose={handleOpenEditProfilePopUp}
                 updatePersonnel={updatePersonnel}
-                route={route}
+                program={program}
               />
             </DialogUI>
 
