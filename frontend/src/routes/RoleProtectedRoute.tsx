@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Routes from './constants';
 import { Role } from '@/common';
 import { ReactElement } from 'react';
@@ -6,7 +6,7 @@ import { Loading } from '@/components';
 import { useRoleContext } from '@/providers';
 
 
-const RoleProtectedRoute = ({ requiredRoles, children }: { requiredRoles: Role[], children: ReactElement }) => {
+const RoleProtectedRoute = ({requiredRoles}:{requiredRoles: Role[]}) => {
     const { role, loading } = useRoleContext()
 
     console.log(role, "ROLE")
@@ -17,17 +17,12 @@ const RoleProtectedRoute = ({ requiredRoles, children }: { requiredRoles: Role[]
     if(loading){
         return <Loading />
     }  
-    if(role && requiredRoles.includes(role)){
-        return (
-            <> {children}</>
-    );
-    }
-    if(!role){
-        return <Navigate to={Routes.Unauthorized} />;
-    }
-    if(role && role===Role.MEMBER){
+    
+    if(!role || !requiredRoles.includes(role)){
         return <Navigate to={Routes.MemberProfile} />;
     }
+
+    return <Outlet/>
 };
 
 export default RoleProtectedRoute;

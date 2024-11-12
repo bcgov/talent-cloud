@@ -7,7 +7,7 @@ import { AuthProvider, RoleProvider } from '@/providers';
 
 const PrivateRoute = lazy(() => import('../routes/PrivateRoute'));
 const RoleProtectedRoute = lazy(() => import('../routes/RoleProtectedRoute'));
-const SupervisorDashboard = lazy(() => import('../pages/supervisor/SupervisorDashboard'));
+const SupervisorDashboard = lazy(() => import('../pages/SupervisorDashboard'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const MemberProfile = lazy(() => import('../pages/profile/MemberProfile'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -20,21 +20,26 @@ export default () => {
     <AuthProvider>
       <RoleProvider>
         <BrowserRouter >
-        
+
           <Suspense fallback={<Loading />}>
             <Routes>
-            <Route path={AppRoutes.Home} element={<SplashPage />} />      
+              <Route path={AppRoutes.Home} element={<SplashPage />} />
               <Route path={AppRoutes.NotFound} element={<NotFound />} />
               <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
-              
+
               <Route element={<PrivateRoute />}>
-                <Route path={AppRoutes.Root} element={
-                  <RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS]}>
-                    <Dashboard />
-                  </RoleProtectedRoute>} />
-                <Route path={AppRoutes.Profile} element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS]}><Profile /></RoleProtectedRoute>} />
-                <Route path={AppRoutes.SupervisorDashboard} element={<RoleProtectedRoute requiredRoles={[Role.SUPERVISOR]}><SupervisorDashboard /></RoleProtectedRoute>} />
-                <Route path={AppRoutes.MemberProfile} element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS, Role.SUPERVISOR, Role.MEMBER]}><MemberProfile /></RoleProtectedRoute>} />
+                <Route element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS]} />}>
+                  <Route element={<Dashboard />} path={AppRoutes.Root} />
+                  <Route element={<Profile />} path={`${AppRoutes.Profile}/:id`} />
+                </Route>
+
+                <Route element={<RoleProtectedRoute requiredRoles={[Role.MEMBER]} />}>
+                  <Route element={<MemberProfile />} path={AppRoutes.MemberProfile} />
+                </Route>
+
+                <Route element={<RoleProtectedRoute requiredRoles={[Role.SUPERVISOR]} />}>
+                  <Route element={<SupervisorDashboard />} path={AppRoutes.SupervisorDashboard} />
+                </Route>
               </Route>
             </Routes>
           </Suspense>

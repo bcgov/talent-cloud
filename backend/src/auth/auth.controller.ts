@@ -34,9 +34,7 @@ export class AuthController {
   async checkUserPermissions(
     @Request() req: RequestWithRoles,
   ): Promise<RolesRequest> {
-    this.logger.log(
-      `${req.method}: ${req.url} - ${req.username} - ${req.role}`,
-    );
+    this.logger.log(`${req.method}: ${req.url} - ${req.role}`);
 
     return {
       role: req?.role,

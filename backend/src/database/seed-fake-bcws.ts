@@ -22,8 +22,9 @@ export const handler = async () => {
           new PersonnelEntity({
             ...personnelData,
             email: 'member@gmail.com',
-            firstName: 'BCWS',
-            lastName: 'Coordinator',
+            firstName: 'Jane',
+            lastName: 'Fonda',
+            supervisorEmail: 'supervisor@gov.bc.ca',
           }),
         ),
       );
