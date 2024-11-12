@@ -12,7 +12,8 @@ import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
-import { Program } from '../auth/interface';
+import { MemberProfileRO } from './ro/member-profile.ro';
+import { Program, RequestWithRoles } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
@@ -187,7 +188,10 @@ export class PersonnelService {
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
       } else if (status === Status.ACTIVE) {
-        queryBuilder.addSelect(`CASE WHEN bcws_personnel.dateApproved > current_date - interval '5' day THEN bcws_personnel.dateApproved ELSE null END`, 'new_member');
+        queryBuilder.addSelect(
+          `CASE WHEN bcws_personnel.dateApproved > current_date - interval '5' day THEN bcws_personnel.dateApproved ELSE null END`,
+          'new_member',
+        );
         queryBuilder.addOrderBy('new_member', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
       } else {
@@ -203,7 +207,10 @@ export class PersonnelService {
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
       } else if (status === Status.ACTIVE) {
-        queryBuilder.addSelect(`CASE WHEN emcr_personnel.dateApproved > current_date - interval '5' day THEN emcr_personnel.dateApproved ELSE null END`, 'new_member');
+        queryBuilder.addSelect(
+          `CASE WHEN emcr_personnel.dateApproved > current_date - interval '5' day THEN emcr_personnel.dateApproved ELSE null END`,
+          'new_member',
+        );
         queryBuilder.addOrderBy('new_member', 'ASC');
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
       } else {
@@ -430,5 +437,36 @@ export class PersonnelService {
       firstName: p.firstName,
       lastName: p.lastName,
     }));
+  }
+
+  async findByEmail(email: string): Promise<PersonnelEntity> {
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    qb.where('personnel.email = :email', { email });
+    return await qb.getOne();
+  }
+
+  async getPersonnel(req: RequestWithRoles): Promise<MemberProfileRO> {
+    const qb = this.personnelRepository
+      .createQueryBuilder('personnel')
+      .leftJoinAndSelect('personnel.bcws', 'bcws')
+      .leftJoinAndSelect('personnel.emcr', 'emcr');
+
+    qb.where('personnel.email = :email', { email: req.idir });
+    const personnelData = await qb.getOne();
+    const memberProfile: MemberProfileRO = new MemberProfileRO(personnelData);
+    return memberProfile;
+  }
+
+  async getPersonnelByEmail(email: string): Promise<PersonnelEntity> {
+    return this.personnelRepository.findOne({ where: { email } });
+  }
+
+  async verifySupervisor(email: string): Promise<boolean> {
+    const supervisor = await this.personnelRepository.find({
+      where: { supervisorEmail: email },
+    });
+    if (supervisor?.length > 0) {
+      return true;
+    }
   }
 }

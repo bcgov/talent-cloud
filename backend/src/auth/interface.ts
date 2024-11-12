@@ -4,12 +4,15 @@ import { JwtPayload } from 'jsonwebtoken';
 export enum Role {
   COORDINATOR = 'coordinator',
   LOGISTICS = 'logistics',
+  SUPERVISOR = 'supervisor',
+  MEMBER = 'member',
 }
 
 export enum Program {
   BCWS = 'bcws',
   EMCR = 'emcr',
   ADMIN = 'admin',
+  ALL = '*',
 }
 
 export enum TokenType {
@@ -50,9 +53,10 @@ interface ResourceAccess {
   account: { roles: Role[] };
   [key: string]: { roles: Role[] };
 }
-
-export interface RequestWithRoles extends Request {
+export interface RolesRequest {
   role?: Role;
   program: Program;
   username: string;
+  idir: string;
 }
+export interface RequestWithRoles extends Request, RolesRequest {}
