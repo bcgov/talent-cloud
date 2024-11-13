@@ -3,7 +3,6 @@ import { AvailabilityRO } from './availability.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { LocationRO } from '../../region-location/region-location.ro';
-import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -13,7 +12,7 @@ export class PersonnelRO {
       id: 1,
       locationName: 'Victoria',
       region: 'SWE',
-      fireCentre: 'CARIBOO'
+      fireCentre: 'CARIBOO',
     },
   })
   workLocation?: LocationRO;
@@ -25,7 +24,7 @@ export class PersonnelRO {
       id: 1,
       locationName: 'Victoria',
       regionName: 'SWE',
-      fireCentre: 'CARIBOO'
+      fireCentre: 'CARIBOO',
     },
   })
   homeLocation: LocationRO;
@@ -119,12 +118,13 @@ export class PersonnelRO {
   })
   supervisorEmail: string;
 
-  @ApiProperty({
-    description: 'Travel preference',
-    required: true,
-    example: TravelPreference.WILLING_TO_TRAVEL_REGION,
-  })
-  travelPreference: TravelPreference;
+  // TODO - confirm if this should be here - I believe this is on the emcr/bcws data? It was throwing an error
+  // @ApiProperty({
+  //   description: 'Travel preference',
+  //   required: true,
+  //   example: TravelPreference.WILLING_TO_TRAVEL_REGION,
+  // })
+  // travelPreference: TravelPreference;
 
   @ApiProperty({
     description: 'Availability',
