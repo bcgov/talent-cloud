@@ -1,5 +1,4 @@
 import useMemberProfile from "@/hooks/useMemberProfile"
-import { useRoleContext } from "@/providers"
 
 
 const MemberProfile = () => {

@@ -1,6 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 import type { ReactElement } from 'react';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect,  useState } from 'react';
 import { User } from './interface';
 import { useAxios } from '@/hooks/useAxios';
 

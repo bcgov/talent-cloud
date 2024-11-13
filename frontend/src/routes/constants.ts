@@ -1,5 +1,3 @@
-import Unauthenticated from "@/pages/Unauthenticated";
-
 export default Object.freeze({
   // Public routes
   Unauthorized: '/unauthorized',

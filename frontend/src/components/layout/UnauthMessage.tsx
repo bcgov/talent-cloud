@@ -1,4 +1,3 @@
-import { PublicLayout } from '@/components';
 import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
 
