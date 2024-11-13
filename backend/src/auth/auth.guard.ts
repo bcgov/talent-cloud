@@ -69,14 +69,14 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      const { role, emcr, bcws } = await this.authService.setRequestUserInfo(
+      const { roles, emcr, bcws } = await this.authService.setRequestUserInfo(
         token,
         request,
       );
-      if (!role) {
+      if (!roles) {
         throw new UnauthorizedException();
       }
-      request['role'] = role;
+      request['role'] = roles;
       if (emcr) {
         request['program'] = Program.EMCR;
       }
@@ -87,7 +87,7 @@ export class AuthGuard implements CanActivate {
         request['program'] = Program.ALL;
       }
       this.logger.log(
-        `Authenticated user*****: ${request?.username}, ${request?.program}, ${role}`,
+        `Authenticated user*****: ${request?.username}, ${request?.program}, ${roles}`,
       );
     } catch {
       throw new UnauthorizedException();
