@@ -94,7 +94,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'driver_licenses',
     type: 'simple-array',
-    nullable: true
+    nullable: true,
   })
   driverLicense?: DriverLicense[];
 
@@ -110,7 +110,7 @@ export class PersonnelEntity extends BaseEntity {
     cascade: true,
   })
   bcws?: BcwsPersonnelEntity;
-  
+
   @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'work_location', referencedColumnName: 'id' })
   workLocation?: LocationEntity;
@@ -127,11 +127,11 @@ export class PersonnelEntity extends BaseEntity {
   })
   ministry: Ministry;
 
-  @Column({name: 'division', type: 'varchar', length: 100, nullable: true})
+  @Column({ name: 'division', type: 'varchar', length: 100, nullable: true })
   division?: string;
 
   toResponseObject(
-    role: Role,
+    role: Role[],
     lastDeployed?: string,
   ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
@@ -177,7 +177,7 @@ export class PersonnelEntity extends BaseEntity {
 
     // this is required in order to conditionally omit certain fields from the response based on the user role
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
 
   constructor(data: CreatePersonnelDTO) {

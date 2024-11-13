@@ -48,7 +48,7 @@ export class RolesGuard implements CanActivate {
       Metadata.PROGRAM,
       context.getHandler(),
     );
-    
+
     const request = context.switchToHttp().getRequest();
 
     // if this route does not specify any required program then allow passthrough
@@ -68,8 +68,11 @@ export class RolesGuard implements CanActivate {
     return true;
   }
 
-  validateRoles(currentUserRole: Role, requiredRoles: Role[]) {
-    if (requiredRoles.includes(currentUserRole)) {
+  validateRoles(currentUserRole: Role[], requiredRoles: Role[]) {
+    requiredRoles.filter((requiredRole) =>
+      currentUserRole.find((currentRole) => currentRole === requiredRole),
+    );
+    if (requiredRoles.length > 0) {
       return true;
     }
 

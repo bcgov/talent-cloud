@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Program, RequestWithRoles, Role, Token } from './interface';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
@@ -21,7 +21,10 @@ export class AuthService {
    * @param payload The token payload
    * @param request The request object
    */
-  async setRequestUserInfo(payload: Token, request: Request): Promise<Role> {
+  async setRequestUserInfo(
+    payload: Token,
+    request: Request,
+  ): Promise<{ roles: Role[]; bcws: boolean; emcr: boolean }> {
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
@@ -32,25 +35,9 @@ export class AuthService {
     } else {
       request['idir'] = '';
     }
-    return await this.setUserRole(payload, request);
+    return await this.getUserRole(payload, request);
   }
-  /**
-   * Set the relevant program to the request object
-   * @param payload
-   * @param request
-   */
-  setProgramRoles(payload: Token, request: Request): void {
-    if (payload.client_roles.includes(Program.EMCR)) {
-      request['program'] = Program.EMCR;
-    } else if (payload.client_roles.includes(Program.BCWS)) {
-      request['program'] = Program.BCWS;
-    } else {
-      this.logger.error(
-        'Unauthorized user - no valid program is listed in the client roles',
-      );
-      throw new UnauthorizedException();
-    }
-  }
+
   /**
    * Set the usersname and the role to the request object
    * The Coordinator role has the highest permissions level, so if the user has the Coordinator role, the role will be set to Coordinator.
@@ -59,34 +46,42 @@ export class AuthService {
    * @param payload The token payload
    * @param request The request object
    */
-  async setUserRole(payload: Token, request: Request): Promise<Role> {
+  async getUserRole(
+    payload: Token,
+    request: Request,
+  ): Promise<{ roles: Role[]; bcws: boolean; emcr: boolean }> {
+    const roles = [];
     const isMember = await this.personnelService.getPersonnelByEmail(
       payload.email,
     );
     if (isMember) {
-      request['role'] = Role.MEMBER;
+      roles.push(Role.MEMBER);
     }
 
     const isSupervisor = await this.personnelService.verifySupervisor(
       payload.email,
     );
     if (isSupervisor) {
-      request['role'] = Role.SUPERVISOR;
+      roles.push(Role.SUPERVISOR);
     }
 
     const logistics = payload.client_roles.includes(Role.LOGISTICS);
     if (logistics) {
-      request['role'] = Role.LOGISTICS;
-      this.setProgramRoles(payload, request);
+      roles.push(Role.LOGISTICS);
     }
     const coordinator = payload.client_roles.includes(Role.COORDINATOR);
 
     if (coordinator) {
-      request['role'] = Role.COORDINATOR;
-      this.setProgramRoles(payload, request);
+      roles.push(Role.COORDINATOR);
     }
 
-    return request['role'];
+    console.log(request['role'], 'ROLE');
+    this.logger.log(roles);
+
+    const isBcws = payload.client_roles.includes(Program.BCWS);
+    const isEmcr = payload.client_roles.includes(Program.EMCR);
+
+    return { roles, bcws: isBcws, emcr: isEmcr };
   }
 
   async getLoggedInUser(request: RequestWithRoles) {

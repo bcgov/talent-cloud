@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 
 import { AuthService } from './auth.service';
 import { AUTH_SERVER, AUTH_REALM } from './const';
-import { Token } from './interface';
+import { Program, Token } from './interface';
 import { Metadata } from './metadata';
 import { AppLogger } from '../logger/logger.service';
 
@@ -69,20 +69,29 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      const role = await this.authService.setRequestUserInfo(token, request);
-      this.logger.log(role);
-
+      const { role, emcr, bcws } = await this.authService.setRequestUserInfo(
+        token,
+        request,
+      );
       if (!role) {
         throw new UnauthorizedException();
       }
+      request['role'] = role;
+      if (emcr) {
+        request['program'] = Program.EMCR;
+      }
+      if (bcws) {
+        request['program'] = Program.BCWS;
+      }
+      if (bcws && emcr) {
+        request['program'] = Program.ALL;
+      }
+      this.logger.log(
+        `Authenticated user*****: ${request?.username}, ${request?.program}, ${role}`,
+      );
     } catch {
       throw new UnauthorizedException();
     }
-
-    this.logger.log(
-      `Authenticated user: ${request?.username}, ${request?.program}, ${request?.role}`,
-    );
-
     return true;
   }
 

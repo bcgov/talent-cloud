@@ -8,6 +8,7 @@ import { BcwsRO } from './ro';
 import { BcwsSectionsRO } from './ro/bcws-sections.ro';
 import { Role, Program } from '../auth/interface';
 import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
 import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
@@ -15,7 +16,6 @@ import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
 
 @Injectable()
 export class BcwsService {
@@ -47,7 +47,7 @@ export class BcwsService {
   async updateBcwsPersonnel(
     id: string,
     personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
-    role: Role,
+    role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelService.findOne(id);
@@ -194,24 +194,35 @@ export class BcwsService {
           homeLocations: query.location,
         });
       } else if (query.includeTravel) {
-        qb.andWhere('bcws_personnel.travelPreference != :remoteOnly', { remoteOnly: TravelPreference.REMOTE_ONLY });
-        qb.andWhere(new Brackets((inner) => {
-          inner.orWhere('location.locationName IN (:...homeLocations)', {
-            homeLocations: query.location,
-          });
-          inner.orWhere('bcws_personnel.travelPreference = :travelAnywhere', { travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE });
-          inner.orWhere(
-            `(bcws_personnel.travelPreference = :travelFireZone
-            AND location.fireZone IN (SELECT fire_zone FROM "location" WHERE location_name IN (:...homeLocations)))`, {
-              travelFireZone: TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+        qb.andWhere('bcws_personnel.travelPreference != :remoteOnly', {
+          remoteOnly: TravelPreference.REMOTE_ONLY,
+        });
+        qb.andWhere(
+          new Brackets((inner) => {
+            inner.orWhere('location.locationName IN (:...homeLocations)', {
               homeLocations: query.location,
             });
-            inner.orWhere(
-            '(bcws_personnel.travelPreference = :travelFireCentre AND location.fireCentre IN (:...fireCentres))',{
-              travelFireCentre: TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
-              fireCentres: query.fireCentre,
+            inner.orWhere('bcws_personnel.travelPreference = :travelAnywhere', {
+              travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
             });
-        }));
+            inner.orWhere(
+              `(bcws_personnel.travelPreference = :travelFireZone
+            AND location.fireZone IN (SELECT fire_zone FROM "location" WHERE location_name IN (:...homeLocations)))`,
+              {
+                travelFireZone: TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+                homeLocations: query.location,
+              },
+            );
+            inner.orWhere(
+              '(bcws_personnel.travelPreference = :travelFireCentre AND location.fireCentre IN (:...fireCentres))',
+              {
+                travelFireCentre:
+                  TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
+                fireCentres: query.fireCentre,
+              },
+            );
+          }),
+        );
       }
     }
 
@@ -243,7 +254,7 @@ export class BcwsService {
    * @returns {EmcrPersonnelEntity} Single personnel
    */
   async getBcwsPersonnelById(
-    role: Role,
+    role: Role[],
     id: string,
   ): Promise<Record<string, BcwsRO>> {
     const person = await this.bcwsPersonnelRepository.findOneOrFail({

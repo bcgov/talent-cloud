@@ -18,8 +18,8 @@ import { CreatePersonnelBcwsDTO } from '../../../bcws/dto/create-bcws-personnel.
 import { BcwsRO } from '../../../bcws/ro';
 import { Section } from '../../../common/enums';
 import { Status } from '../../../common/enums/status.enum';
-import { PersonnelRO } from '../../../personnel';
 import { TravelPreference } from '../../../common/enums/travel-preference.enum';
+import { PersonnelRO } from '../../../personnel';
 
 @Entity('bcws_personnel')
 export class BcwsPersonnelEntity {
@@ -133,7 +133,7 @@ export class BcwsPersonnelEntity {
     name: 'travel_preference',
     type: 'enum',
     enum: TravelPreference,
-    enumName: 'travel_preference'
+    enumName: 'travel_preference',
   })
   travelPreference: TravelPreference;
 
@@ -171,7 +171,10 @@ export class BcwsPersonnelEntity {
   })
   certifications: BcwsPersonnelCertificationEntity[];
 
-  toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
+  toResponseObject(
+    role: Role[],
+    lastDeployed?: string,
+  ): Record<string, BcwsRO> {
     const response = new BcwsRO();
 
     const personnelData: Record<string, PersonnelRO> =
@@ -211,7 +214,7 @@ export class BcwsPersonnelEntity {
       emergencyContactRelationship: this.emergencyContactRelationship,
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
   constructor(data: Partial<CreatePersonnelBcwsDTO>) {
     Object.assign(this, data);

@@ -86,7 +86,7 @@ services:
       CHEFS_FORM_ENABLED: ${CHEFS_FORM_ENABLED} 
       CHEFS_FORM_ID: ${CHEFS_FORM_ID}
       DB_PASSWORD: ${DB_PASSWORD}
-      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_USEPOLLING: true
       ALLOW_EMPTY_PASSWORD: "yes"
     networks:
       - tc

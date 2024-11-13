@@ -54,7 +54,7 @@ interface ResourceAccess {
   [key: string]: { roles: Role[] };
 }
 export interface RolesRequest {
-  role?: Role;
+  role: Role[];
   program: Program;
   username: string;
   idir: string;

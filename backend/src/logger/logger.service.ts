@@ -1,17 +1,19 @@
-import { Injectable, LoggerService, Scope } from '@nestjs/common';
-import { customLogger } from '../common/logger.config';
+import { ConsoleLogger, Injectable, Scope } from '@nestjs/common';
 
 @Injectable({ scope: Scope.TRANSIENT })
-export class AppLogger implements LoggerService {
+export class AppLogger extends ConsoleLogger {
   private logger;
-  private context = 'LOG';
+  context = 'LOG';
 
   setContext(context: string) {
     this.context = context;
   }
 
-  constructor() {
-    this.logger = customLogger;
+  // constructor() {
+  //   this.logger = customLogger;
+  // }
+  debug(message: unknown, context?: string) {
+    this.logger.debug(message, context ?? this.context);
   }
 
   /*eslint-disable @typescript-eslint/no-explicit-any*/

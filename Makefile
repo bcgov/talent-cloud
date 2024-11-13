@@ -58,10 +58,10 @@ run-local:
 	@docker-compose up -d
 
 local-frontend-logs:
-	@docker logs $(PROJECT)-frontend --tail 25 --follow
+	@docker logs $(PROJECT)-frontend-$(ENV) --tail 25 --follow
 
 local-backend-logs:
-	@docker logs $(PROJECT)-backend --tail 25 --follow
+	@docker logs $(PROJECT)-backend-$(ENV) --tail 25 --follow
 
 local-nginx-logs:
 	@docker logs $(PROJECT)-nginx --tail 25 --follow

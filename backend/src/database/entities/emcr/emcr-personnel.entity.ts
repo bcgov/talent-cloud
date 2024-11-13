@@ -16,10 +16,10 @@ import { PersonnelEntity } from '../personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
+import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 import { CreatePersonnelEmcrDTO } from '../../../emcr/dto';
 import { EmcrRO } from '../../../emcr/ro';
 import { PersonnelRO } from '../../../personnel';
-import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
@@ -88,7 +88,7 @@ export class EmcrPersonnelEntity {
     name: 'travel_preference',
     type: 'enum',
     enum: TravelPreference,
-    enumName: 'travel_preference'
+    enumName: 'travel_preference',
   })
   travelPreference: TravelPreference;
 
@@ -114,7 +114,10 @@ export class EmcrPersonnelEntity {
   @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
   preocExperience?: boolean;
 
-  toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
+  toResponseObject(
+    role: Role[],
+    lastDeployed?: string,
+  ): Record<string, EmcrRO> {
     const response = new EmcrRO();
 
     const personnelData: Record<string, PersonnelRO> =
@@ -145,7 +148,7 @@ export class EmcrPersonnelEntity {
         [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
   constructor(data: Partial<CreatePersonnelEmcrDTO>) {
     Object.assign(this, data);
