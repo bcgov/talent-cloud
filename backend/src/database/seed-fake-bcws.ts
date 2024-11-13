@@ -17,7 +17,7 @@ export const handler = async () => {
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
     
-
+console.log('...seeding...');
       try {
 
         for (let i = 0; i < 50; i++) {
