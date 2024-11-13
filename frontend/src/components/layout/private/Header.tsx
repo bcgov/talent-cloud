@@ -6,11 +6,9 @@ import { Menu } from '@headlessui/react';
 import { headerLink } from '@/common/links';
 import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
-import { useRole } from '@/hooks';
 
 export const Header = ({ authenticated }: { authenticated?: boolean }) => {
   const [open, setOpen] = useState(false);
-  const { username } = useRole();
 
   const showMenu = () => {
     setOpen(!open);
@@ -34,12 +32,9 @@ export const Header = ({ authenticated }: { authenticated?: boolean }) => {
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2"></div>
 
             <div className="hidden md:flex text-center  md:flex-row items-center justify-end space-x-2 px-8">
-              {username && (
-                <UserMenu
-                  username={username}
-                  logout={() => window.location.replace(logoutUrl(keycloak))}
-                />
-              )}
+              <UserMenu
+                logout={() => window.location.replace(logoutUrl(keycloak))}
+              />
             </div>
           </>
         )}

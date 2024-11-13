@@ -1,14 +1,17 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { UserIcon } from '../../images';
+import { useNavigate } from 'react-router';
+import { Routes } from '@/routes';
+import { useRoleContext } from '@/providers';
 
 export const UserMenu = ({
-  username,
   logout,
 }: {
-  username?: string;
   logout: () => void;
 }) => {
+  const navigate = useNavigate()
+  const { username, supervisor, member } = useRoleContext()
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
@@ -25,18 +28,36 @@ export const UserMenu = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
-            <Menu.Item>
+        <Menu.Items className="absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col">
+          {member && <Menu.Item>
+            <button
+              aria-label="profile"
+              onClick={() => navigate(Routes.MemberProfile)}
+              className="py-2 px-4 text-sm text-left"
+            >
+              My Profile
+            </button>
+          </Menu.Item>}
+          {
+            supervisor && <Menu.Item>
               <button
-                aria-label="logout"
-                onClick={logout}
-                className="py-2 px-4 text-sm"
+                aria-label="supervisor"
+                onClick={() => navigate(Routes.SupervisorDashboard)}
+                className="py-2 px-4 text-sm text-left text-nowrap"
               >
-                Logout
+                Supervisor Dashboard
               </button>
             </Menu.Item>
-          </div>
+          }
+          <Menu.Item>
+            <button
+              aria-label="logout"
+              onClick={logout}
+              className="py-2 px-4 text-sm text-left"
+            >
+              Logout
+            </button>
+          </Menu.Item>
         </Menu.Items>
       </Transition>
     </Menu>
