@@ -52,16 +52,21 @@ build-local:
 	@$(shell echo ./scripts/setenv.sh ci local )
 	@docker-compose up --force-recreate -d --build 
 
+build-local-be:
+	@echo "+\n++ Make: Run/Build locally ...\n+"
+	@$(shell echo ./scripts/setenv.sh ci local )
+	@docker-compose up backend --force-recreate -d --build 
+
 run-local:
 	@echo "+\n++ Make: Running locally ...\n+"
 	@$(shell echo ./scripts/setenv.sh ci local )
 	@docker-compose up -d
 
 local-frontend-logs:
-	@docker logs $(PROJECT)-frontend --tail 25 --follow
+	@docker logs $(PROJECT)-frontend-$(ENV) --tail 25 --follow
 
 local-backend-logs:
-	@docker logs $(PROJECT)-backend --tail 25 --follow
+	@docker logs $(PROJECT)-backend-$(ENV) --tail 25 --follow
 
 local-nginx-logs:
 	@docker logs $(PROJECT)-nginx --tail 25 --follow
@@ -250,3 +255,17 @@ delete-db:
 
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
+
+
+copy-keycloak-realm:
+	@echo "+\n++ Make: Export Keycloak ...\n+"
+	@docker exec $(PROJECT)-keycloak-$(ENV) opt/keycloak/bin/kc.sh export --dir /export/ --users realm_file
+	
+
+run-nibble-be:
+	@echo "Run lint Backend"
+	@cd backend && npm run nibble
+
+run-nibble-fe:
+	@echo "Run lint Backend"
+	@cd frontend && npm run nibble
