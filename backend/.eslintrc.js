@@ -22,6 +22,7 @@ module.exports = {
     'no-console': 'off',
     '@stylistic/eslint-plugin-ts/comma-dangle': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-unused-expressions': 'warn',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': [
