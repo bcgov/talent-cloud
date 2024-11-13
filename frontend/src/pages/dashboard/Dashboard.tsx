@@ -1,12 +1,13 @@
 import { DashboardFilters } from './DashboardFilters';
-import { useRole, useTable } from '@/hooks';
+import { useTable } from '@/hooks';
+import { useRoleContext } from '@/providers';
 import type { Status } from '@/common';
 import { Role } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components';
 
 const Dashboard = () => {
-  const { route, role } = useRole();
+  const { route, role } = useRoleContext();
   const { searchParamsUrl, handleChangeOne } = useFilters();
   const {
     totalRows,

@@ -18,13 +18,14 @@ const useMemberProfile = (): {
         setIsLoading(true)
         try {
             const response = await AxiosPrivate.get(`/personnel`);
-            response && setPersonnel(response.data.user);
+            response && setPersonnel({ ...response.data });
         } catch (e) {
             console.log(e);
         } finally {
             setIsLoading(false)
         }
-    }
+    };
+
     useEffect(() => {
         getProfileDetails()
     }, []);
