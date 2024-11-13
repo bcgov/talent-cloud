@@ -80,7 +80,7 @@ export class AuthService {
   }
 
   async getLoggedInUser(request: RequestWithRoles): Promise<PersonnelEntity> {
-    return await this.personnelService.findByEmail(request.idir);
+    return await this.personnelService.getPersonnelByEmail(request.idir);
   }
 
   async verifySupervisor(request: RequestWithRoles): Promise<boolean> {

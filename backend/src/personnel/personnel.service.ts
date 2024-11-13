@@ -439,12 +439,6 @@ export class PersonnelService {
     }));
   }
 
-  async findByEmail(email: string): Promise<PersonnelEntity> {
-    const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.where('personnel.email = :email', { email });
-    return await qb.getOne();
-  }
-
   async getPersonnel(req: RequestWithRoles): Promise<MemberProfileRO> {
     const qb = this.personnelRepository
       .createQueryBuilder('personnel')
