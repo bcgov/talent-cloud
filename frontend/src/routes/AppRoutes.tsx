@@ -3,10 +3,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { Role } from '@/common';
-import { AuthProvider, RoleProvider } from '@/providers';
+import { AuthProvider } from '@/providers';
+import RoleProtectedRoute from './RoleProtectedRoute';
+import PrivateRoute from './PrivateRoute';
 
-const PrivateRoute = lazy(() => import('../routes/PrivateRoute'));
-const RoleProtectedRoute = lazy(() => import('../routes/RoleProtectedRoute'));
+
+
 const SupervisorDashboard = lazy(() => import('../pages/SupervisorDashboard'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const MemberProfile = lazy(() => import('../pages/profile/MemberProfile'));
@@ -18,9 +20,7 @@ const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 export default () => {
   return (
     <AuthProvider>
-      <RoleProvider>
-        <BrowserRouter >
-
+        <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route path={AppRoutes.Home} element={<SplashPage />} />
@@ -28,12 +28,12 @@ export default () => {
               <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
 
               <Route element={<PrivateRoute />}>
-                <Route element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS]} />}>
+                <Route element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS]}/>}>
                   <Route element={<Dashboard />} path={AppRoutes.Root} />
                   <Route element={<Profile />} path={`${AppRoutes.Profile}/:id`} />
                 </Route>
 
-                <Route element={<RoleProtectedRoute requiredRoles={[Role.MEMBER]} />}>
+                <Route element={<RoleProtectedRoute requiredRoles={[Role.COORDINATOR, Role.LOGISTICS, Role.SUPERVISOR, Role.MEMBER]} />}>
                   <Route element={<MemberProfile />} path={AppRoutes.MemberProfile} />
                 </Route>
 
@@ -44,7 +44,6 @@ export default () => {
             </Routes>
           </Suspense>
         </BrowserRouter>
-      </RoleProvider>
     </AuthProvider>
   );
 };

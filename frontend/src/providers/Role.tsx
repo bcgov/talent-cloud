@@ -1,11 +1,10 @@
-import { Program, Role } from '@/common';
 import { useKeycloak } from '@react-keycloak/web';
 import type { ReactElement } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { User } from './interface';
 import { useAxios } from '@/hooks/useAxios';
 
-export const RoleContext = createContext<User | undefined>(undefined);
+export const RoleContext = createContext<User>({});
 
 export const useRoleContext = () => {
 
@@ -19,25 +18,19 @@ export const useRoleContext = () => {
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
 
   const { AxiosPrivate } = useAxios();
-
-  const [role, setRole] = useState<Role>();
-  const [program, setProgram] = useState<Program>();
-  const [username, setName] = useState<string>('');
-  const [idir, setIdir] = useState<string>('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User>()
 
   const { keycloak } = useKeycloak()
 
   const getUserPermissions = async () => {
 
     try {
-      setLoading(true)
+
+
       const { data } = await AxiosPrivate.get('/auth')
 
-      setRole(data.role)
-      setName(data.name)
-      setProgram(data.program)
-      setIdir(data.idir)
+      setUser({ role: data.role, program: data.program, username: data.name, idir: data.idir })
 
 
     } catch (e) {
@@ -45,21 +38,22 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     } finally {
       setLoading(false)
     }
-
   }
-
+  console.log(user?.role)
   useEffect(() => {
     getUserPermissions()
   }, [keycloak.idToken])
 
-
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return <RoleContext.Provider value={{
-    role,
-    program,
-    username,
-    idir,
-    loading
+    role: user?.role,
+    program: user?.program,
+    username: user?.username,
+    idir: user?.idir,
+
   }}>{children}</RoleContext.Provider>
 }
 
