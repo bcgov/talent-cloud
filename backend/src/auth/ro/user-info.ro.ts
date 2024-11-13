@@ -7,7 +7,14 @@ export class UserInfoRO {
     description: 'Logged in User Info',
     example: 'John Doe',
   })
-  username: string;
+  name: string;
+
+  @ApiProperty({
+    name: 'idir',
+    description: 'IDIR of the logged in user',
+    example: 'coordinator@gov.bc.ca',
+  })
+  idir: string;
 
   @ApiProperty({
     name: 'roles',

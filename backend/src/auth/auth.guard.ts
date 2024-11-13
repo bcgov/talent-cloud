@@ -5,23 +5,27 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-import { AUTH_CLIENT, AUTH_SERVER, AUTH_REALM } from './const';
-import { Program, Role, Token } from './interface';
+import { AuthService } from './auth.service';
+import { AUTH_SERVER, AUTH_REALM } from './const';
+import { Token } from './interface';
 import { Metadata } from './metadata';
 import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private readonly logger: AppLogger;
   constructor(
     private reflector: Reflector,
-    private readonly logger: AppLogger,
+
+    private readonly authService: AuthService,
   ) {
+    this.logger = new AppLogger();
     this.logger.setContext(AuthGuard.name);
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const publicEndpoint = this.reflector.getAllAndOverride<boolean>(
       Metadata.PUBLIC_ENDPOINT,
       [context.getHandler(), context.getClass()],
@@ -44,12 +48,12 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     const authHeader = request.headers.authorization;
-
+    this.logger.log(`Auth header: ${authHeader}`);
     if (!authHeader) {
       throw new UnauthorizedException();
     }
 
-    const token = this.parseJwt(authHeader);
+    const token: Token = this.parseJwt(authHeader);
 
     if (!authHeader.includes('Bearer ')) {
       this.logger.error('Unauthorized user without credentials');
@@ -60,17 +64,17 @@ export class AuthGuard implements CanActivate {
       this.logger.error('Unauthorized user without token');
       throw new UnauthorizedException();
     }
+
     try {
-      const payload = this.validateToken(token);
-      this.setRequestUserInfo(payload, request);
+      const valid = this.validateToken(token);
+      if (!valid) {
+        throw new UnauthorizedException();
+      }
+
+      await this.authService.setRequestUserInfo(token, request);
     } catch {
       throw new UnauthorizedException();
     }
-
-    this.logger.log(
-      `Authenticated user: ${request?.username}, ${request?.program}, ${request?.role}`,
-    );
-
     return true;
   }
 
@@ -89,7 +93,7 @@ export class AuthGuard implements CanActivate {
     return JSON.parse(jsonPayload);
   }
 
-  validateToken(token: Token) {
+  validateToken(token: Token): boolean {
     if (!token) {
       this.logger.error('Unauthorized user without credentials');
       throw new UnauthorizedException();
@@ -108,68 +112,6 @@ export class AuthGuard implements CanActivate {
       this.logger.error('Unauthorized user - token expired');
       throw new UnauthorizedException();
     }
-
-    return payload;
-  }
-  /**
-   * Set the usersname and the role to the request object
-   * The Coordinator role has the highest permissions level, so if the user has the Coordinator role, the role will be set to Coordinator.
-   * The logistics role has the second highest permissions level, so if the user has the logistics role, the role will be set to logistics.
-   * If a user has both roles the role will be set to Coordinator.
-   * @param payload
-   * @param request
-   */
-  setRequestUserInfo(payload: JwtPayload, request: Request): void {
-    this.setProgramRoles(payload, request);
-    if (payload.given_name && payload.family_name) {
-      request['username'] = `${payload.given_name} ${payload.family_name}`;
-    } else {
-      request['username'] = '';
-    }
-  }
-
-  setProgramRoles(payload: JwtPayload, request: Request): void {   
-    console.log(payload.client_roles);
-    if (payload.client_roles.includes(Program.EMCR)) {
-      request['program'] = Program.EMCR;
-    } else if (payload.client_roles.includes(Program.BCWS)) {
-      request['program'] = Program.BCWS;
-    } else {
-      
-        this.logger.error(
-          'Unauthorized user - no valid program is listed in the cient roles',
-        );
-      throw new UnauthorizedException();
-    }
-    
-    this.setProdRoles(payload, request);
-  }
-
-  setProdRoles(payload: JwtPayload, request: Request): void {
-    // only include a single role in the request object.
-    // include the role with the highest permissions level.
-    if (payload.client_roles.includes(Role.COORDINATOR)) {
-      request['role'] = Role.COORDINATOR;
-    } else if (payload.client_roles.includes(Role.LOGISTICS)) {
-      request['role'] = Role.LOGISTICS;
-    } else {
-      request['role'] = '';
-    }
-  }
-
-  setDevRoles(payload: JwtPayload, request: Request): void {
-    // only include a single role in the request object.
-    // include the role with the highest permissions level.
-    if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.COORDINATOR)
-    ) {
-      request['role'] = Role.COORDINATOR;
-    } else if (
-      payload.resource_access?.[AUTH_CLIENT].roles.includes(Role.LOGISTICS)
-    ) {
-      request['role'] = Role.LOGISTICS;
-    } else {
-      request['role'] = '';
-    }
+    return true;
   }
 }
