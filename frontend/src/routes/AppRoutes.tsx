@@ -31,6 +31,7 @@ export default () => {
               <Route element={<PrivateRoute />}>
                   <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
                 <Route element={<RoleProtectedRoute allowedRoles={[Role.COORDINATOR, Role.LOGISTICS]}/>}>
+              
                   <Route element={<Dashboard />} path={AppRoutes.Root} />
                   <Route element={<Profile />} path={AppRoutes.Profile} />
                 </Route>

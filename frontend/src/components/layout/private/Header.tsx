@@ -7,7 +7,7 @@ import { headerLink } from '@/common/links';
 import { logoutUrl } from '@/utils/keycloak';
 import { useKeycloak } from '@react-keycloak/web';
 
-export const Header = ({ authenticated }: { authenticated?: boolean }) => {
+export const Header = () => {
   const [open, setOpen] = useState(false);
 
   const showMenu = () => {
@@ -27,7 +27,7 @@ export const Header = ({ authenticated }: { authenticated?: boolean }) => {
             <CoreLogoHorizontal />
           </a>
         </div>
-        {authenticated && (
+        
           <>
             <div className="text-center hidden lg:flex flex-row items-center justify-center space-x-2"></div>
 
@@ -37,11 +37,11 @@ export const Header = ({ authenticated }: { authenticated?: boolean }) => {
               />
             </div>
           </>
-        )}
+        
       </div>
 
       <div className="md:hidden">
-        {authenticated && (
+        
           <Menu>
             <Menu.Button>
               {({ open }) =>
@@ -66,7 +66,7 @@ export const Header = ({ authenticated }: { authenticated?: boolean }) => {
               </div>
             </Menu.Items>
           </Menu>
-        )}
+        
       </div>
     </header>
   );

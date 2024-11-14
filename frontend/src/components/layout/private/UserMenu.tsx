@@ -4,6 +4,7 @@ import { UserIcon } from '../../images';
 import { useNavigate } from 'react-router';
 import { Routes } from '@/routes';
 import { useRoleContext } from '@/providers';
+import { useKeycloak } from '@react-keycloak/web';
 
 export const UserMenu = ({
   logout,
@@ -11,11 +12,14 @@ export const UserMenu = ({
   logout: () => void;
 }) => {
   const navigate = useNavigate()
-  const { username, supervisor, member } = useRoleContext()
+  const { supervisor, member, username } = useRoleContext()
+  const keycloak = useKeycloak()
+  const keycloakUsername = keycloak?.keycloak?.idTokenParsed?.preferred_username
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
-        {username && <p className="font-bold">{username}</p>}
+        <p className="font-bold">{username ?? keycloakUsername}</p>
         <UserIcon />
       </Menu.Button>
 
