@@ -71,11 +71,10 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      await this.authService.setRequestUserInfo(token, request);
+      return await this.authService.setRequestUserInfo(token, request);
     } catch {
       throw new UnauthorizedException();
     }
-    return true;
   }
 
   parseJwt(token: string): Token {

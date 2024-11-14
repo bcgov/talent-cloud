@@ -34,9 +34,7 @@ export class AuthService {
       request['idir'] = '';
     }
 
-    const isMember = await this.personnelService.getPersonnelByEmail(
-      payload.email,
-    );
+    const isMember = await this.personnelService.verifyMember(payload.email);
     if (isMember) {
       request['role'] = Role.MEMBER;
     }
@@ -48,27 +46,29 @@ export class AuthService {
       request['role'] = Role.SUPERVISOR;
     }
 
-    const logistics = payload.client_roles.includes(Role.LOGISTICS);
-    if (logistics) {
-      request['role'] = Role.LOGISTICS;
-    }
-    const coordinator = payload.client_roles.includes(Role.COORDINATOR);
+    if (payload.client_roles) {
+      const logistics = payload.client_roles.includes(Role.LOGISTICS);
+      if (logistics) {
+        request['role'] = Role.LOGISTICS;
+      }
+      const coordinator = payload.client_roles.includes(Role.COORDINATOR);
 
-    if (coordinator) {
-      request['role'] = Role.COORDINATOR;
-    }
+      if (coordinator) {
+        request['role'] = Role.COORDINATOR;
+      }
 
-    const isBcws = payload.client_roles.includes(Program.BCWS);
-    const isEmcr = payload.client_roles.includes(Program.EMCR);
+      const isBcws = payload.client_roles.includes(Program.BCWS);
+      const isEmcr = payload.client_roles.includes(Program.EMCR);
 
-    if (isEmcr) {
-      request['program'] = Program.EMCR;
-    }
-    if (isBcws) {
-      request['program'] = Program.BCWS;
-    }
-    if (isBcws && isEmcr) {
-      request['program'] = Program.ALL;
+      if (isEmcr) {
+        request['program'] = Program.EMCR;
+      }
+      if (isBcws) {
+        request['program'] = Program.BCWS;
+      }
+      if (isBcws && isEmcr) {
+        request['program'] = Program.ALL;
+      }
     }
     this.logger.log(`User Info:`);
     this.logger.log(`User: ${request['username']}`);
@@ -80,7 +80,7 @@ export class AuthService {
   }
 
   async getLoggedInUser(request: RequestWithRoles): Promise<PersonnelEntity> {
-    return await this.personnelService.getPersonnelByEmail(request.idir);
+    return await this.personnelService.findOneByEmail(request.idir);
   }
 
   async verifySupervisor(request: RequestWithRoles): Promise<boolean> {
