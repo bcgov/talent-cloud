@@ -56,17 +56,16 @@ services:
       - tc
   backend:
     container_name: ${PROJECT}-backend-${ENV}
-    entrypoint: sh -c "npm i && npm run start:dev"  
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.local
     stdin_open: true
-    image: node:20-bullseye
     ports: 
     - "3001:3000"
+    - 9229:9229 # 9229 is the default node debug port
     volumes: 
-    - "./backend:/usr/src/app"
-    - "/usr/src/app/node_modules"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api"]
-    working_dir: "/usr/src/app"
+      - "./backend:/usr/src/app"
+      - "/usr/src/app/node_modules"
     environment:
       NODE_ENV: ${ENV}
       PORT: 3000
@@ -86,7 +85,7 @@ services:
       CHEFS_FORM_ENABLED: ${CHEFS_FORM_ENABLED} 
       CHEFS_FORM_ID: ${CHEFS_FORM_ID}
       DB_PASSWORD: ${DB_PASSWORD}
-      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_USEPOLLING: true
       ALLOW_EMPTY_PASSWORD: "yes"
     networks:
       - tc
@@ -102,10 +101,11 @@ services:
     platform: linux/arm64/v8
     volumes:
       - keycloak:/opt/keycloak/data
-      - ./keycloak/default.json:/opt/keycloak/data/import/default.json
+      - ./keycloak/export:/opt/keycloak/data/import
+      - ./keycloak/export:/export
     env_file: .env
     environment:
-      KEYCLOAK_IMPORT: /opt/keycloak/data/import/default.json
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import
       DB_VENDOR: ${DB_TYPE}
       DB_ADDR: db
       DB_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}

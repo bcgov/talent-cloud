@@ -1,40 +1,83 @@
 import { datasource } from './datasource';
-import {
-  EmcrPersonnelEntity, LocationEntity,
-} from './entities/emcr';
+import { EmcrPersonnelEntity, LocationEntity } from './entities/emcr';
 import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/emcr-seed';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
-
   if (!datasource.isInitialized) {
     await datasource.initialize();
   }
-  const locationRepo = datasource.getRepository(LocationEntity);  
-  const locations = await locationRepo.find()
-  const functions = await datasource.query('SELECT * FROM emcr_function')
-  const trainings = await datasource.query('SELECT * FROM emcr_training')
+  const locationRepo = datasource.getRepository(LocationEntity);
+  const locations = await locationRepo.find();
+  const functions = await datasource.query('SELECT * FROM emcr_function');
+  const trainings = await datasource.query('SELECT * FROM emcr_training');
 
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-    
+    const { personnelData, emcrData } = dataHandler(
+      locations.map((itm) => ({
+        locationName: itm.locationName,
+        region: itm.region,
+        id: itm.id,
+      })),
+      functions,
+      trainings,
+    );
 
+    const person = await personnelRepo.save(
+      personnelRepo.create(
+        new PersonnelEntity({
+          ...personnelData,
+          email: 'member@gmail.com',
+          supervisorEmail: 'supervisor@gov.bc.ca',
+        }),
+      ),
+    );
 
+    await emcrPersonnelRepo.save(
+      emcrPersonnelRepo.create(
+        new EmcrPersonnelEntity({ ...emcrData, personnelId: person.id }),
+      ),
+    );
+    const personTwo = await personnelRepo.save(
+      personnelRepo.create(
+        new PersonnelEntity({
+          ...personnelData,
+          email: 'emcr-coordinator@gov.bc.ca',
+          supervisorEmail: 'supervisor@gov.bc.ca',
+        }),
+      ),
+    );
+
+    await emcrPersonnelRepo.save(
+      emcrPersonnelRepo.create(
+        new EmcrPersonnelEntity({ ...emcrData, personnelId: personTwo.id }),
+      ),
+    );
     for (let i = 0; i < 50; i++) {
-      const { personnelData, emcrData } = dataHandler(locations.map(itm=> ({locationName: itm.locationName, region: itm.region, id: itm.id})),
+      const { personnelData, emcrData } = dataHandler(
+        locations.map((itm) => ({
+          locationName: itm.locationName,
+          region: itm.region,
+          id: itm.id,
+        })),
         functions,
-        trainings)
-      
-      const person = await personnelRepo.save(personnelRepo.create(new PersonnelEntity(personnelData)))
+        trainings,
+      );
 
-      await emcrPersonnelRepo.save(emcrPersonnelRepo.create(new EmcrPersonnelEntity(({ ...emcrData, personnelId: person.id }))));
+      const person = await personnelRepo.save(
+        personnelRepo.create(new PersonnelEntity(personnelData)),
+      );
+
+      await emcrPersonnelRepo.save(
+        emcrPersonnelRepo.create(
+          new EmcrPersonnelEntity({ ...emcrData, personnelId: person.id }),
+        ),
+      );
     }
-
-
-
 
     console.log('...complete...');
 

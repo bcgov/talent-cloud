@@ -457,6 +457,29 @@
     "notBefore" : 0,
     "groups" : [ ]
   }, {
+    "id" : "942b2bb5-9e71-4319-a962-960e3bdb78ba",
+    "createdTimestamp" : 1730756619490,
+    "username" : "bcws-member",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "bcws",
+    "lastName" : "member",
+    "email" : "bcws-member@gmail.com",
+    "credentials" : [ {
+      "id" : "6034778a-6cfa-438a-8a5c-87b8faced812",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1730756634739,
+      "secretData" : "{\"value\":\"OmfV9EU3KpIyDQcUu2LjpY54UuKs1uqdZBazHMA2TYc=\",\"salt\":\"WkJOt8OnFf2Y8qrpvtJc6g==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-local" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
     "id" : "1838dc6c-ef87-4cd0-94f0-b0089a2e9f5c",
     "createdTimestamp" : 1717530871876,
     "username" : "emcr-coordinator",
@@ -506,6 +529,75 @@
     "clientRoles" : {
       "local-client" : [ "logistics", "emcr" ]
     },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "d2bd78d5-fc1f-40d0-b2cb-ab918f2918b1",
+    "createdTimestamp" : 1730756578310,
+    "username" : "emcr-member",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "emcr",
+    "lastName" : "member",
+    "email" : "emcr-member@gmail.com",
+    "credentials" : [ {
+      "id" : "c6b10702-f578-4569-b4dd-1d2fc3f4ea51",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1730756590423,
+      "secretData" : "{\"value\":\"hxAfEj07H4eoZMvLWl3IwHiQQDdnejwwNmGXXAoDeAQ=\",\"salt\":\"Y7romSOHgbKdAhDHoCZkbg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-local" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "4a2fd464-316e-442d-935e-857c4fae9a0d",
+    "createdTimestamp" : 1730756657668,
+    "username" : "member",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "member",
+    "lastName" : "user",
+    "email" : "member@gmail.com",
+    "credentials" : [ {
+      "id" : "7c092614-a23b-43b7-980a-8ea7983fc8ae",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1730759136330,
+      "secretData" : "{\"value\":\"ZRm+hjRBFiMVgYrQZALgNweM7HtKWNZu8GBWOxYPgag=\",\"salt\":\"pQ0PQZV2P/qdy4afzADJoQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-local" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "e46bd38a-c5b3-436b-b500-fd3dbb967784",
+    "createdTimestamp" : 1730756733529,
+    "username" : "supervisor",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "super",
+    "lastName" : "visor",
+    "email" : "supervisor@gov.bc.ca",
+    "credentials" : [ {
+      "id" : "64cb2a3f-572c-4cfe-8186-3daf509b3ec5",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1730756751352,
+      "secretData" : "{\"value\":\"//EFdWCewxn1K+NSkki4P/z0Bw9yQ4ofLqHthbERmbM=\",\"salt\":\"0idTBzAhJxRoj/oTXHDJXA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-local" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],
@@ -1201,11 +1293,11 @@
       "consentRequired" : false,
       "config" : {
         "introspection.token.claim" : "true",
-        "userinfo.token.claim": "true",
+        "userinfo.token.claim" : "true",
         "multivalued" : "true",
         "user.attribute" : "foo",
         "access.token.claim" : "true",
-        "claim.name": "client_roles",
+        "claim.name" : "client_roles",
         "jsonType.label" : "String"
       }
     } ]
@@ -1305,7 +1397,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "oidc-full-name-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "saml-role-list-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper" ]
       }
     }, {
       "id" : "c8eee09a-9f1b-49c2-a4ba-44222471846d",
@@ -1339,7 +1431,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-full-name-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-usermodel-property-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "saml-role-list-mapper" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {

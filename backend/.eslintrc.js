@@ -10,6 +10,7 @@ module.exports = {
     'import',
     'prettier',
     'unused-imports',
+    '@stylistic/eslint-plugin-ts'
   ],
   extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   root: false,
@@ -19,14 +20,16 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
-    '@typescript-eslint/comma-dangle': ['error', 'only-multiline'],
+    '@stylistic/eslint-plugin-ts/comma-dangle': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-unused-expressions': 'warn',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     ],
+    
     '@typescript-eslint/no-var-requires': 'off',
 
     'import/order': [
@@ -61,7 +64,7 @@ module.exports = {
         },
       },
     ],
-    'comma-dangle': 'off',
+    
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
       'warn',
