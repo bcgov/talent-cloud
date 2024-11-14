@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import { useKeycloak } from '@react-keycloak/web';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
