@@ -42,6 +42,15 @@ export class PersonnelService {
   }
 
   /**
+   * Find personnel by id
+   * @param id
+   * @returns
+   */
+  async findOneByEmail(email: string): Promise<PersonnelEntity> {
+    return this.personnelRepository.findOne({ where: { email } });
+  }
+
+  /**
    * Save personnel data
    * @param person
    * @returns
@@ -451,12 +460,14 @@ export class PersonnelService {
     return memberProfile;
   }
 
-  async getPersonnelByEmail(
-    email: string,
-  ): Promise<PersonnelEntity | undefined> {
-    const person = await this.personnelRepository.findOneBy({ email });
-    this.logger.log(`Person: ${person}`);
-    return person;
+  async verifyMember(email: string): Promise<boolean> {
+    const person = await this.personnelRepository.find({ where: { email } });
+
+    if (person.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async verifySupervisor(email: string): Promise<boolean> {
