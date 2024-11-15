@@ -463,13 +463,20 @@ export class PersonnelService {
   async verifyMemberOrSupervisor(
     email: string,
   ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
-    const people = await this.personnelRepository.find({
-      where: { email: email, supervisorEmail: email },
-    });
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    qb.where('personnel.email = :email', { email: email }).orWhere(
+      'personnel.supervisorEmail = :email',
+      { email: email },
+    );
+    const people = await qb.getMany();
 
-    const isMember = people.find((itm) => itm.email === email) && true;
-    const isSupervisor =
-      people.find((itm) => itm.supervisorEmail === email) && true;
+    this.logger.log(people);
+
+    const isMember = people.map((itm) => itm.email).includes(email);
+    const isSupervisor = people
+      .map((itm) => itm.supervisorEmail)
+      .includes(email);
+
     return {
       isMember,
       isSupervisor,
