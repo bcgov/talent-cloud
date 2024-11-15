@@ -1,8 +1,9 @@
+import { Program } from '@/common';
 import { DashboardColumns } from '@/pages/dashboard';
-import { Route } from '@/providers';
+
 
 export const activeCols = {
-  [Route.BCWS]: [
+  [Program.BCWS]: [
     DashboardColumns.NAME,
     DashboardColumns.DATE_APPROVED,
     DashboardColumns.FIRE_CENTRE,
@@ -11,7 +12,7 @@ export const activeCols = {
     DashboardColumns.TRAVEL_PREFERENCE,
     DashboardColumns.UNION_MEMBERSHIP,
   ],
-  [Route.EMCR]: [
+  [Program.EMCR]: [
     DashboardColumns.NAME,
     DashboardColumns.DATE_APPROVED,
     DashboardColumns.REGION,
@@ -23,7 +24,7 @@ export const activeCols = {
   ],
 };
 export const pendingColumns = {
-  [Route.BCWS]: [
+  [Program.BCWS]: [
     DashboardColumns.NAME,
     DashboardColumns.DATE_APPLIED,
     DashboardColumns.FIRE_CENTRE,
@@ -32,7 +33,7 @@ export const pendingColumns = {
     DashboardColumns.ORIENTATION,
     DashboardColumns.MINISTRY,
   ],
-  [Route.EMCR]: [
+  [Program.EMCR]: [
     DashboardColumns.NAME,
     DashboardColumns.DATE_APPLIED,
     DashboardColumns.REGION,

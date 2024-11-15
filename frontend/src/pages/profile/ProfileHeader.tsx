@@ -1,10 +1,9 @@
 import { ClockIcon, HomeIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import type { Personnel } from '../dashboard';
-import { Role } from '@/common';
+import { Program, Role } from '@/common';
 import { PersonnelStatus } from '@/components';
 import { differenceInDays, format } from 'date-fns';
 import { offsetTimezoneDate } from '@/utils';
-import { Route } from '../../providers';
 import { FireCentreName } from '../../common/enums/firecentre.enum';
 
 function HorizontalLine() {
@@ -24,11 +23,11 @@ function HorizontalLine() {
 const ProfileHeader = ({
   personnel,
   role,
-  route,
+program
 }: {
   personnel: Personnel;
-  route?: Route;
-  role?: Role;
+role?: Role,
+program?: Program;
 }) => {
   const getLastDeployed = () => {
     if (personnel?.lastDeployed) {
@@ -87,7 +86,7 @@ const ProfileHeader = ({
                 <p>
                   {personnel.workLocation
                     ? `${personnel.workLocation?.locationName},
-                  ${route === Route.EMCR ? personnel.workLocation?.region : FireCentreName[personnel.workLocation.fireCentre]}`
+                  ${program===Program.EMCR ? personnel.workLocation?.region : FireCentreName[personnel.workLocation.fireCentre]}`
                     : '-'}
                 </p>
               </div>
@@ -99,7 +98,7 @@ const ProfileHeader = ({
                 <p className="subtext">Home Location</p>
                 <p>
                   {personnel.homeLocation.locationName},{' '}
-                  {route === Route.EMCR
+                  {program===Program.EMCR
                     ? personnel.homeLocation?.region
                     : FireCentreName[personnel.homeLocation.fireCentre]}
                 </p>
