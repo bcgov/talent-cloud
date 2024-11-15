@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Personnel } from '@/pages/dashboard';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
-import {  useRoleContext } from '@/providers';
+import { useRoleContext } from '@/providers';
 import { bcwsData, emcrData } from './profileData';
 import type { ProfileData } from '@/pages/profile/types';
 import { Program } from '@/common';
@@ -18,8 +18,6 @@ const usePersonnel = (): {
   const { AxiosPrivate } = useAxios();
   const { program } = useRoleContext();
   const { profileId } = useParams()
-
-
 
   useEffect(() => {
     (async () => {

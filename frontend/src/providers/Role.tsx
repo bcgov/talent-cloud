@@ -1,6 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 import type { ReactElement } from 'react';
-import { createContext, useContext, useEffect,  useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from './interface';
 import { useAxios } from '@/hooks/useAxios';
 
@@ -27,13 +27,8 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const getUserPermissions = async () => {
 
     try {
-
-
       const { data } = await AxiosPrivate.get('/auth')
-
       setUser({ ...data })
-
-
     } catch (e) {
       console.error(e)
     } finally {
