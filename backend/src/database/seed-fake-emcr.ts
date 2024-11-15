@@ -32,7 +32,7 @@ export const handler = async () => {
         new PersonnelEntity({
           ...personnelData,
           email: 'member@gmail.com',
-          supervisorEmail: 'supervisor@gov.bc.ca',
+          supervisorEmail: 'emcr-coordinator@gov.bc.ca',
         }),
       ),
     );
@@ -55,6 +55,21 @@ export const handler = async () => {
     await emcrPersonnelRepo.save(
       emcrPersonnelRepo.create(
         new EmcrPersonnelEntity({ ...emcrData, personnelId: personTwo.id }),
+      ),
+    );
+
+    const personThree = await personnelRepo.save(
+      personnelRepo.create(
+        new PersonnelEntity({
+          ...personnelData,
+          email: 'EMCR.LogisticsOfficerTest@gov.bc.ca',
+          supervisorEmail: 'BCWS.CoordinatorTest@gov.bc.ca',
+        }),
+      ),
+    );
+    await emcrPersonnelRepo.save(
+      emcrPersonnelRepo.create(
+        new EmcrPersonnelEntity({ ...emcrData, personnelId: personThree.id }),
       ),
     );
     for (let i = 0; i < 50; i++) {

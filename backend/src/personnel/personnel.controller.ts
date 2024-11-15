@@ -18,6 +18,7 @@ import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { PersonnelService } from './personnel.service';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
+import { MemberProfileRO } from './ro/member-profile.ro';
 import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
@@ -34,6 +35,18 @@ export class PersonnelController {
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);
+  }
+  @Get()
+  @ApiOperation({
+    summary: 'Get personnel data',
+    description: 'Returns the personnel data to the profile view',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  async getPersonnel(@Req() req: RequestWithRoles): Promise<MemberProfileRO> {
+    return await this.personnelService.getPersonnel(req);
   }
 
   @ApiOperation({

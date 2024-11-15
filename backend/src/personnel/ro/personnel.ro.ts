@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AvailabilityRO } from './availability.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { LocationRO } from '../../region-location/region-location.ro';
-import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -13,7 +13,7 @@ export class PersonnelRO {
       id: 1,
       locationName: 'Victoria',
       region: 'SWE',
-      fireCentre: 'CARIBOO'
+      fireCentre: 'CARIBOO',
     },
   })
   workLocation?: LocationRO;
@@ -25,7 +25,7 @@ export class PersonnelRO {
       id: 1,
       locationName: 'Victoria',
       regionName: 'SWE',
-      fireCentre: 'CARIBOO'
+      fireCentre: 'CARIBOO',
     },
   })
   homeLocation: LocationRO;

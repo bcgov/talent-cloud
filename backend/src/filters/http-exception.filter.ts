@@ -1,12 +1,17 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppLogger } from '../logger/logger.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(
-    private readonly logger: AppLogger,
-  ) {
+  private readonly logger: AppLogger;
+  constructor() {
+    this.logger = new AppLogger();
     this.logger.setContext(HttpExceptionFilter.name);
   }
 
@@ -24,11 +29,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     if (status !== 404) {
-      this.logger.error(`${new Date().toISOString()}: Error ${status}`, jsonError)
+      this.logger.error(
+        `${new Date().toISOString()}: Error ${status}`,
+        jsonError,
+      );
     }
 
-    response
-      .status(status)
-      .json(jsonError);
+    response.status(status).json(jsonError);
   }
 }
