@@ -471,14 +471,12 @@ export class PersonnelService {
   }
 
   async verifySupervisor(email: string): Promise<boolean> {
-    const supervisor = await this.personnelRepository.findOneBy({
-      supervisorEmail: email,
+    const peopleWithSupervisor = await this.personnelRepository.find({
+      where: { supervisorEmail: email },
     });
-
-    this.logger.log(`Supervisor: ${supervisor}`);
-    if (!supervisor) {
-      return false;
+    if (peopleWithSupervisor.length > 0) {
+      return true;
     }
-    return true;
+    return false;
   }
 }

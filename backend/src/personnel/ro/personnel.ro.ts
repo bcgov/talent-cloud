@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AvailabilityRO } from './availability.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { LocationRO } from '../../region-location/region-location.ro';
 
@@ -118,13 +119,12 @@ export class PersonnelRO {
   })
   supervisorEmail: string;
 
-  // TODO - confirm if this should be here - I believe this is on the emcr/bcws data? It was throwing an error
-  // @ApiProperty({
-  //   description: 'Travel preference',
-  //   required: true,
-  //   example: TravelPreference.WILLING_TO_TRAVEL_REGION,
-  // })
-  // travelPreference: TravelPreference;
+  @ApiProperty({
+    description: 'Travel preference',
+    required: true,
+    example: TravelPreference.WILLING_TO_TRAVEL_REGION,
+  })
+  travelPreference: TravelPreference;
 
   @ApiProperty({
     description: 'Availability',

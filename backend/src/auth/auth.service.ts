@@ -23,6 +23,7 @@ export class AuthService {
    * @param request The request object
    */
   async setRequestUserInfo(payload: Token, request: Request): Promise<boolean> {
+    payload.client_roles.map((role) => this.logger.log(role));
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
@@ -71,10 +72,10 @@ export class AuthService {
       }
     }
     this.logger.log(`User Info:`);
-    this.logger.log(`User: ${request['username']}`);
-    this.logger.log(`IDIR: ${request['idir']}`);
-    this.logger.log(`Role: ${request['role']}`);
-    this.logger.log(`Program: ${request['program']}`);
+    this.logger.log(`name: ${request['username']}`);
+    this.logger.log(`idir: ${request['idir']}`);
+    this.logger.log(`role: ${request['role']}`);
+    this.logger.log(`program: ${request['program']}`);
 
     return true;
   }
