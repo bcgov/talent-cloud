@@ -34,7 +34,7 @@ export const UserMenu = ({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col">
-        {role === Role.COORDINATOR || role === Role.LOGISTICS && <Menu.Item>
+          {role === Role.COORDINATOR || role === Role.LOGISTICS && <Menu.Item>
             <button
               aria-label="profile"
               onClick={() => navigate(Routes.Dashboard)}
@@ -60,6 +60,17 @@ export const UserMenu = ({
                 className="py-2 px-4 text-sm text-left text-nowrap"
               >
                 Supervisor Dashboard
+              </button>
+            </Menu.Item>
+          }
+          {
+            (role === Role.COORDINATOR || role === Role.LOGISTICS) && <Menu.Item>
+              <button
+                aria-label="dashboard"
+                onClick={() => navigate(Routes.Dashboard)}
+                className="py-2 px-4 text-sm text-left text-nowrap"
+              >
+                Dashboard
               </button>
             </Menu.Item>
           }
