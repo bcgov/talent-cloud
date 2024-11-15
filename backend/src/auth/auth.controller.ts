@@ -37,15 +37,17 @@ export class AuthController {
     this.logger.log(
       `${req.method}: ${req.url} - ${req.role} - ${req.username}`,
     );
-    const member = await this.authService.getLoggedInUser(req);
-    const supervisor = await this.authService.verifySupervisor(req);
+
+    const { isMember, isSupervisor } =
+      await this.authService.verifyMemberOrSupervisor(req.idir);
+
     return {
       role: req?.role,
       program: req?.program,
       username: `${req?.username}`,
       idir: req?.idir,
-      member: member !== null,
-      supervisor: supervisor,
+      member: isMember,
+      supervisor: isSupervisor,
     };
   }
 }

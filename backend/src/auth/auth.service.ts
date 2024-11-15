@@ -75,4 +75,9 @@ export class AuthService {
 
     return true;
   }
+  async verifyMemberOrSupervisor(
+    email: string,
+  ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
+    return await this.personnelService.verifyMemberOrSupervisor(email);
+  }
 }
