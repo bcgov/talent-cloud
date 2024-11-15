@@ -460,23 +460,19 @@ export class PersonnelService {
     return memberProfile;
   }
 
-  async verifyMember(email: string): Promise<boolean> {
-    const person = await this.personnelRepository.find({ where: { email } });
-
-    if (person.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  async verifySupervisor(email: string): Promise<boolean> {
-    const peopleWithSupervisor = await this.personnelRepository.find({
-      where: { supervisorEmail: email },
+  async verifyMemberOrSupervisor(
+    email: string,
+  ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
+    const people = await this.personnelRepository.find({
+      where: { email: email, supervisorEmail: email },
     });
-    if (peopleWithSupervisor.length > 0) {
-      return true;
-    }
-    return false;
+
+    const isMember = people.find((itm) => itm.email === email) && true;
+    const isSupervisor =
+      people.find((itm) => itm.supervisorEmail === email) && true;
+    return {
+      isMember,
+      isSupervisor,
+    };
   }
 }

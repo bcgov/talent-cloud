@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PersonnelEntity } from 'src/database/entities/personnel.entity';
-import { Program, RequestWithRoles, Role, Token } from './interface';
+import { Program, Role, Token } from './interface';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 
@@ -35,14 +34,12 @@ export class AuthService {
       request['idir'] = '';
     }
 
-    const isMember = await this.personnelService.verifyMember(payload.email);
+    const { isMember, isSupervisor } =
+      await this.personnelService.verifyMemberOrSupervisor(payload.email);
     if (isMember) {
       request['role'] = Role.MEMBER;
     }
 
-    const isSupervisor = await this.personnelService.verifySupervisor(
-      payload.email,
-    );
     if (isSupervisor) {
       request['role'] = Role.SUPERVISOR;
     }
@@ -78,13 +75,5 @@ export class AuthService {
     this.logger.log(`program: ${request['program']}`);
 
     return true;
-  }
-
-  async getLoggedInUser(request: RequestWithRoles): Promise<PersonnelEntity> {
-    return await this.personnelService.findOneByEmail(request.idir);
-  }
-
-  async verifySupervisor(request: RequestWithRoles): Promise<boolean> {
-    return await this.personnelService.verifySupervisor(request.idir);
   }
 }
