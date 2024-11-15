@@ -22,7 +22,6 @@ export class AuthService {
    * @param request The request object
    */
   async setRequestUserInfo(payload: Token, request: Request): Promise<boolean> {
-    payload.client_roles.map((role) => this.logger.log(role));
     if (payload.given_name && payload.family_name) {
       request['username'] = `${payload.given_name} ${payload.family_name}`;
     } else {
