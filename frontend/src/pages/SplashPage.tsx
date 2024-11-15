@@ -12,7 +12,7 @@ import { Routes } from '@/routes';
 const SplashPage = () => {
   const { keycloak } = useKeycloak();
   const login = () => {
-    window.location.replace(createCustomLoginUrl(keycloak, Routes.Dashboard, ''));
+    window.location.replace(createCustomLoginUrl(keycloak, Routes.Root, ''));
   };
   const [formId, setFormId] = useState<string>();
   const [formEnabled, setFormEnabled] = useState<boolean>(false);

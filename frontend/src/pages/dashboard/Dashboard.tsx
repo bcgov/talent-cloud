@@ -1,12 +1,14 @@
 import { DashboardFilters } from './DashboardFilters';
-import { useRole, useTable } from '@/hooks';
+import { useTable } from '@/hooks';
+import { useRoleContext } from '@/providers';
 import type { Status } from '@/common';
 import { Role } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components';
 
+
 const Dashboard = () => {
-  const { route, role } = useRole();
+  const { program, role } = useRoleContext();
   const { searchParamsUrl, handleChangeOne } = useFilters();
   const {
     totalRows,
@@ -17,12 +19,12 @@ const Dashboard = () => {
     columns,
     loading,
     setLoading,
-  } = useTable(searchParamsUrl, route);
+  } = useTable(searchParamsUrl, program);
 
   return (
     <div className="mx-auto md:px-12 xl:px-32  2xl:px-64   pt-32 pb-24">
       <h1 className="text-left font-bold">Personnel</h1>
-      <DashboardFilters route={route} />
+      <DashboardFilters program={program} />
       <div className="overflow-x-scroll border border-slate-500 rounded-md">
         <div className="mt-2  bg-white w-full">
           <div className="text-left py-8  caption-top bg-white">

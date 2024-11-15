@@ -1,25 +1,25 @@
 import { type ChangeEvent, type MouseEvent } from 'react';
 import type { Personnel } from '../../dashboard';
 import type { FormikHelpers, FormikValues } from 'formik';
-import { Route } from '@/providers';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { formConfig } from '@/pages/profile/ProfileEditForm/formConfig';
 import { Form } from '@/components';
 import type { FieldType } from '@/pages/profile';
+import { Program } from '@/common';
 
 export const ProfileEditForm = ({
   handleClose,
   personnel,
   updatePersonnel,
-  route,
+  program
 }: {
   open: boolean;
   handleClose: (e: MouseEvent<HTMLElement>) => void;
   personnel: Personnel;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
-  route?: Route;
+  program?: Program
 }) => {
-  const { locations } = useProgramFieldData(route);
+  const { locations } = useProgramFieldData(program);
 
   const handleSubmit = async (
     values: FormikValues,
@@ -101,7 +101,7 @@ export const ProfileEditForm = ({
   const { initialValues, validationSchema, sections } = formConfig(
     personnel,
     locations,
-    route ?? Route.BCWS,
+    program ?? Program.BCWS,
   );
 
   return (
