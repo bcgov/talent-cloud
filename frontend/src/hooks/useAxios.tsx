@@ -3,12 +3,16 @@ import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { useKeycloak } from '@react-keycloak/web';
 
-export const AxiosPrivate = axios.create({
+export const AxiosInstance = axios.create({
   baseURL: `/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+AxiosInstance.interceptors.response.use((response) => response);
+
+export const getGenericError = (error: AxiosError) => error?.response?.data;
 
 export const useAxios = () => {
   const { keycloak } = useKeycloak();
@@ -34,24 +38,24 @@ export const useAxios = () => {
   };
 
   useEffect(() => {
-    const reqInterceptor = AxiosPrivate.interceptors.request.use(
+    const reqInterceptor = AxiosInstance.interceptors.request.use(
       RequestResponseInterceptor,
       RequestErrorInterceptor,
     );
 
-    const resInterceptor = AxiosPrivate.interceptors.response.use(
+    const resInterceptor = AxiosInstance.interceptors.response.use(
       ResponseInterceptor,
       ResponseErrorInterceptor,
     );
 
     return () => {
-      AxiosPrivate.interceptors.request.eject(reqInterceptor);
+      AxiosInstance.interceptors.request.eject(reqInterceptor);
 
-      AxiosPrivate.interceptors.response.eject(resInterceptor);
+      AxiosInstance.interceptors.response.eject(resInterceptor);
     };
   }, [keycloak?.token]);
 
   return {
-    AxiosPrivate,
+    AxiosPrivate: AxiosInstance,
   };
 };

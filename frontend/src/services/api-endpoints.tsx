@@ -1,7 +1,10 @@
-import { AxiosPublic } from '@/utils';
+import { AxiosInstance } from '@/hooks/useAxios';
+
 
 export const getKeycloakInfo = async (): Promise<{
   data: { authUrl: string; client: string; realm: string };
 }> => {
-  return AxiosPublic.get('/keycloak');
+  return AxiosInstance.get('/keycloak');
 };
+
+

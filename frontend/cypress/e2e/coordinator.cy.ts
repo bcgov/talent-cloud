@@ -5,7 +5,7 @@ describe('Coordinator Flow', () => {
    * Logs in as coordinator and views the default page load, which should contain three tabs: Active, Inactive, and Pending.
    */
   it('views the default page load', () => {
-    cy.visit('/');
+    cy.visit('/home');
     cy.wait(1000);
     cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
 
