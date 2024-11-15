@@ -24,7 +24,7 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
 
   const { keycloak } = useKeycloak()
 
-  const getUserPermissions = async () => {
+  const getLoggedInUser = async () => {
 
     try {
       const { data } = await AxiosPrivate.get('/auth')
@@ -37,7 +37,7 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
   }
 
   useEffect(() => {
-    getUserPermissions()
+    getLoggedInUser()
   }, [keycloak.idToken])
 
   if (loading) {
