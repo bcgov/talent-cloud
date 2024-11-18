@@ -1,17 +1,17 @@
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { Route } from '../../providers';
+import { Program } from '@/common';
 
 type BannerProps = {
   reviewItems: { key: string; value: boolean | undefined }[];
-  route?: Route;
+  program?: Program;
   handleOpenReviewApplicant?: () => void;
 };
 
 export const NewApplicantBanner = ({
   reviewItems,
-  route,
+  program,
   handleOpenReviewApplicant,
 }: BannerProps) => {
   const reviewComplete = reviewItems.every((itm) => itm.value === true);
@@ -31,7 +31,7 @@ export const NewApplicantBanner = ({
                     'This applicant fulfilled the following requirements for profile review:'
                   }
                 </>
-              ) : route === Route.EMCR ? (
+              ) : program === Program.EMCR ? (
                 <>{emcrText}</>
               ) : (
                 <>

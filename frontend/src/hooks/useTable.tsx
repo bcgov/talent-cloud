@@ -3,11 +3,10 @@ import type { DashboardColumns } from '@/pages/dashboard';
 import { type Personnel } from '@/pages/dashboard';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
-import { Status, StatusNames } from '@/common';
-import type { Route } from '@/providers';
+import { Program, Status, StatusNames } from '@/common';
 import { activeCols, pendingColumns } from '@/pages/dashboard/columns';
 
-export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
+export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) => {
   const { AxiosPrivate } = useAxios();
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
@@ -21,28 +20,28 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
    * @returns
    */
 
-  const applyFilters = async (route: Route) => {
+  const applyFilters = async (program: Program) => {
     const isPending = status === Status.PENDING;
 
     try {
       const {
         data: { personnel, count },
-      } = await AxiosPrivate.get(`/${route}?${searchParamsUrl}`);
+      } = await AxiosPrivate.get(`/${program}?${searchParamsUrl}`);
       const rows = personnel.map(
         ({ id, status, newMember, ...personnel }: Personnel) => ({
           key: id,
           status: newMember ? Status.NEW : status,
           cells:
-            route &&
+            program &&
             renderCells(
               { id, status, newMember, ...personnel },
               searchParamsUrl,
               isPending,
-              route,
+              program,
             ),
         }),
       );
-      const columns = isPending ? pendingColumns[route] : activeCols[route];
+      const columns = isPending ? pendingColumns[program] : activeCols[program];
 
       setRows(rows);
       setTabCount(count);
@@ -55,10 +54,10 @@ export const useTable = (searchParamsUrl: URLSearchParams, route?: Route) => {
   };
 
   useEffect(() => {
-    if (route) {
-      applyFilters(route);
+    if (program) {
+      applyFilters(program);
     }
-  }, [searchParamsUrl, route]);
+  }, [searchParamsUrl, program]);
 
   return {
     totalRows: status && tabCount ? tabCount[status] : 0,
