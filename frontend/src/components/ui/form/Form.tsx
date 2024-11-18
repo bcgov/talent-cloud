@@ -4,8 +4,8 @@ import { Form as FormikForm, Formik } from 'formik';
 import { ButtonTypes } from '@/common';
 import { Button } from '@/components';
 import { FormSection } from './FormSection';
-import type { SectionType } from '@/pages/profile/ProfileEditForm/constants';
-import type { Personnel } from '@/pages/dashboard';
+import type { SectionType } from '@/pages/profile/profile/forms/constants';
+import type { Personnel } from '@/common';
 
 type FormProps = {
   initialValues: any;

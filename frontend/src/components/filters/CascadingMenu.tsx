@@ -4,8 +4,7 @@ import { ExperienceName, FunctionName, Program } from '@/common';
 import { classes } from './classes';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
-import { DashboardFilterNames } from '@/pages/dashboard';
-
+import { DashboardFilterNames } from '@/common';
 
 export const CascadingMenu = ({
   value,

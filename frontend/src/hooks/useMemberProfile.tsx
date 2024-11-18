@@ -1,55 +1,61 @@
 import { useEffect, useState } from 'react';
-import type { Personnel } from '@/pages/dashboard';
+import type { MemberProfile, Personnel } from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
-import { useRoleContext } from '@/providers';
-
+import { Program } from '@/common';
 
 const useMemberProfile = (): {
-    personnel?: Personnel;
-    updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
-    loading: boolean;
+  personnel?: MemberProfile;
+  updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
+  loading: boolean;
+  program?: Program;
 } => {
-    const [personnel, setPersonnel] = useState<Personnel>();
-    const { AxiosPrivate } = useAxios();
-    const { program } = useRoleContext()
-    const [loading, setIsLoading] = useState(false);
-    const getProfileDetails = async () => {
-        setIsLoading(true)
-        try {
-            const response = await AxiosPrivate.get(`/personnel`);
-            response && setPersonnel({ ...response.data });
-        } catch (e) {
-            console.log(e);
-        } finally {
-            setIsLoading(false)
-        }
-    };
+  const [personnel, setPersonnel] = useState<MemberProfile>();
+  const { AxiosPrivate } = useAxios();
 
-    useEffect(() => {
-        getProfileDetails()
-    }, []);
+  const [loading, setIsLoading] = useState(false);
+  const [program, setProgram] = useState<Program>();
 
-    const updatePersonnel = async (personnel: FormikValues | Personnel) => {
-        try {
+  const getProfileDetails = async () => {
+    setIsLoading(true);
+    try {
+      const response = await AxiosPrivate.get(`/personnel`);
+      response && setPersonnel({ ...response.data });
+      if (response?.data?.bcws && response?.data?.emcr) {
+        setProgram(Program.BCWS);
+      } else if (response?.data?.emcr && !response?.data?.bcws) {
+        setProgram(Program.EMCR);
+      } else if (response?.data?.bcws && !response?.data?.emcr) {
+        setProgram(Program.BCWS);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            const res =
-                program &&
-                (await AxiosPrivate.patch(
-                    encodeURI(`/member/${personnel.id}`),
-                    personnel,
-                ));
-            res && setPersonnel(res.data);
-        } catch (e) {
-            console.log(e);
-        }
-    };
+  useEffect(() => {
+    getProfileDetails();
+  }, []);
 
-    return {
-        personnel,
-        loading,
-        updatePersonnel,
-    };
+  const updatePersonnel = async (personnel: FormikValues | MemberProfile) => {
+    try {
+      const res =
+        program &&
+        (await AxiosPrivate.patch(encodeURI(`/member/${personnel.id}`), personnel));
+      res && setPersonnel(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return {
+    personnel,
+    loading,
+    updatePersonnel,
+    program,
+  };
 };
 
 export default useMemberProfile;

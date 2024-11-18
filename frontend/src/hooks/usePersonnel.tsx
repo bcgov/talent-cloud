@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { useRoleContext } from '@/providers';
@@ -7,7 +7,6 @@ import { bcwsData, emcrData } from './profileData';
 import type { ProfileData } from '@/pages/profile/types';
 import { Program } from '@/common';
 import { useParams } from 'react-router';
-
 
 const usePersonnel = (): {
   personnel: Personnel | undefined;
@@ -17,7 +16,7 @@ const usePersonnel = (): {
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
   const { program } = useRoleContext();
-  const { profileId } = useParams()
+  const { profileId } = useParams();
 
   useEffect(() => {
     (async () => {
@@ -35,10 +34,7 @@ const usePersonnel = (): {
     try {
       const res =
         program &&
-        (await AxiosPrivate.patch(
-          encodeURI(`/${program}/${profileId}`),
-          personnel,
-        ));
+        (await AxiosPrivate.patch(encodeURI(`/${program}/${profileId}`), personnel));
       res && setPersonnel(res.data);
     } catch (e) {
       //TODO error toast
@@ -48,7 +44,8 @@ const usePersonnel = (): {
   return {
     personnel,
     updatePersonnel,
-    profileData: program === Program.BCWS ? bcwsData(personnel) : emcrData(personnel),
+    profileData:
+      program === Program.BCWS ? bcwsData(personnel) : emcrData(personnel),
   };
 };
 

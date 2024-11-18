@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { Availability, AvailabilityRange } from '@/pages/dashboard';
+import type { Availability, AvailabilityRange } from '@/common';
 import { useAxios } from './useAxios';
 
 const useAvailability = ({

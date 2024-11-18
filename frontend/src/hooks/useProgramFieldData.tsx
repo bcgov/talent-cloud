@@ -7,8 +7,13 @@ import {
   RegionName,
 } from '@/common';
 import type { Region } from '@/common/enums/region.enum';
-import type { BcwsRoleInterface, FunctionType, Location, SectionType } from '@/pages/dashboard';
-import { DashboardFilterNames } from '@/pages/dashboard';
+import type {
+  BcwsRoleInterface,
+  FunctionType,
+  Location,
+  SectionType,
+} from '@/common';
+import { DashboardFilterNames } from '@/common';
 import { useEffect, useMemo, useState } from 'react';
 import { useAxios } from './useAxios';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
@@ -34,7 +39,11 @@ export const useProgramFieldData = (program?: Program) => {
     return centre.sort((a: FireCentre, b: FireCentre) => a.localeCompare(b));
   };
 
-  const setBcwsData = (data: { roles: BcwsRoleInterface[];locations: []; sections: SectionType[] }) => {
+  const setBcwsData = (data: {
+    roles: BcwsRoleInterface[];
+    locations: [];
+    sections: SectionType[];
+  }) => {
     setLocations(data.locations);
     const reg = Array.from(
       new Set(data.locations.map((itm: Location) => itm.fireCentre)),
@@ -51,7 +60,6 @@ export const useProgramFieldData = (program?: Program) => {
     ) as Region[];
     setRegions(sortRegion(reg));
     setFunctions(data.functions);
-    
   };
 
   useEffect(() => {

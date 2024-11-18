@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import type { DashboardColumns } from '@/pages/dashboard';
-import { type Personnel } from '@/pages/dashboard';
+import type { DashboardColumns, Program } from '@/common';
+import { type Personnel } from '@/common';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
-import { Program, Status, StatusNames } from '@/common';
+import { Status, StatusNames } from '@/common';
 import { activeCols, pendingColumns } from '@/pages/dashboard/columns';
 
 export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) => {

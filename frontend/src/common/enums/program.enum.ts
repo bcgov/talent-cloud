@@ -1,5 +1,5 @@
 export enum Program {
-    BCWS = 'bcws',
-    EMCR = 'emcr',
-    ALL = '*',
-  }  
+  BCWS = 'bcws',
+  EMCR = 'emcr',
+  ALL = '*',
+}
