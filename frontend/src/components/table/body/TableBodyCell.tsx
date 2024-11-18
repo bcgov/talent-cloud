@@ -1,5 +1,5 @@
 import type { Cell } from '@/components';
-import { DashboardColumns } from '@/pages/dashboard/constants';
+import { DashboardColumns } from '@/common';
 import {
   getAvailabilityClass,
   getUnionMembershipClass,

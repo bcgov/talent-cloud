@@ -1,4 +1,4 @@
-import { DashboardColumns } from '@/pages/dashboard';
+import { DashboardColumns } from '@/common';
 
 export const renderName = (name: string) => {
   switch (name) {

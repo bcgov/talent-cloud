@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { FormField } from './FormField';
 import type { FieldType } from '@/pages/profile';
 import { useFormikContext } from 'formik';
-import type { Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/common';
 
 export const FormSection = ({
   fields,

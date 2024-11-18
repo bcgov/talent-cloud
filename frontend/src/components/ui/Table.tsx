@@ -1,7 +1,7 @@
 import type { Cell, Row } from '@/components';
 import { Loading, TableBodyCell } from '@/components';
 import { renderName } from './helpers';
-import type { DashboardColumns } from '@/pages/dashboard';
+import type { DashboardColumns } from '@/common';
 
 export const Table = ({
   loading,

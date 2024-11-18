@@ -1,6 +1,5 @@
 import { Program } from '@/common';
-import { DashboardColumns } from '@/pages/dashboard';
-
+import { DashboardColumns } from '@/common';
 
 export const activeCols = {
   [Program.BCWS]: [

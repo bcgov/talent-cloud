@@ -1,9 +1,8 @@
-import type { AvailabilityType, Program } from '@/common';
+import { Program } from '@/common';
 import { AvailabilityTypeName } from '@/common';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { Availability, Personnel } from '@/pages/dashboard';
-import { DashboardColumns } from '@/pages/dashboard';
-import { Route } from '@/providers';
+import type { Availability, Personnel, AvailabilityType } from '@/common';
+import { DashboardColumns } from '@/common';
 import { datePST } from '@/utils';
 import { differenceInDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
@@ -95,7 +94,10 @@ export const renderCells = (
     fireCentre: {
       key: DashboardColumns.FIRE_CENTRE,
       columnName: DashboardColumns.FIRE_CENTRE,
-      value: FireCentreName[personnel?.homeLocation?.fireCentre],
+      value:
+        FireCentreName[
+          personnel?.homeLocation?.fireCentre as keyof typeof FireCentreName
+        ],
     },
     location: {
       key: DashboardColumns.LOCATION,
@@ -156,7 +158,7 @@ export const renderCells = (
   };
 
   const activeCells = {
-    [Route.EMCR]: [
+    [Program.EMCR]: [
       cells.name,
       cells.dateApproved,
       cells.region,
@@ -166,7 +168,7 @@ export const renderCells = (
       cells.unionMembership,
       cells.ministry,
     ],
-    [Route.BCWS]: [
+    [Program.BCWS]: [
       cells.name,
       cells.dateApproved,
       cells.fireCentre,
@@ -178,7 +180,7 @@ export const renderCells = (
   };
 
   const pendingCells = {
-    [Route.EMCR]: [
+    [Program.EMCR]: [
       cells.name,
       cells.dateApplied,
       cells.region,
@@ -188,7 +190,7 @@ export const renderCells = (
       cells.unionMembership,
       cells.ministry,
     ],
-    [Route.BCWS]: [
+    [Program.BCWS]: [
       cells.name,
       cells.dateApplied,
       cells.fireCentre,
@@ -199,8 +201,8 @@ export const renderCells = (
     ],
   };
   if (isPending) {
-    return pendingCells[program];
+    return pendingCells[program as keyof typeof pendingCells];
   } else {
-    return activeCells[program];
+    return activeCells[program as keyof typeof activeCells];
   }
 };

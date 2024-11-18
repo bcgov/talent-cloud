@@ -2,7 +2,7 @@ import { Status } from '@/common';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { Tools } from '@/common/enums/tools.enum';
 import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
-import type { Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/common';
 import { datePST, formatPhone } from '@/utils';
 import { FireCentreName } from '../common/enums/firecentre.enum';
 import type { TravelPreference } from '../common/enums/travel-preference.enum';

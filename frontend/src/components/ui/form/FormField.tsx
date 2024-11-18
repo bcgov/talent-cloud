@@ -1,5 +1,5 @@
 import { MultiSelect, Select, TextInput } from '@/components';
-import type { Personnel } from '@/pages/dashboard';
+import type { Personnel } from '@/common';
 import type { FieldType } from '@/pages/profile';
 import { useFormikContext } from 'formik';
 import type { ChangeEvent } from 'react';

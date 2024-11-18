@@ -1,4 +1,4 @@
-import type { DashboardFilters } from '@/pages/dashboard';
+import type { DashboardFilters } from '@/common';
 import { format } from 'date-fns';
 
 export const booleanToString = (value: boolean): string => (value ? 'Yes' : 'No');

@@ -451,6 +451,8 @@ export class PersonnelService {
   async getPersonnel(req: RequestWithRoles): Promise<MemberProfileRO> {
     const qb = this.personnelRepository
       .createQueryBuilder('personnel')
+      .leftJoinAndSelect('personnel.workLocation', 'workLocation')
+      .leftJoinAndSelect('personnel.homeLocation', 'homeLocation')
       .leftJoinAndSelect('personnel.bcws', 'bcws')
       .leftJoinAndSelect('personnel.emcr', 'emcr');
 
