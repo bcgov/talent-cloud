@@ -14,21 +14,21 @@ const InfoBanner = ({
   link?: { name: string; url: string };
 }) => (
   <div className="flex flex-row py-2 px-4 rounded-sm bg-infoBannerLight items-center space-x-2 w-full">
-    <p className="text-info ">
-      <InformationCircleIcon className="text-info  h-6 hidden sm:inline-block sm:mr-2" />
-      {content}
-      {link && (
-        <a
-          className="font-bold inline cursor-pointer"
-          href={link.url}
-          target={'_blank'}
-          rel={'noopener noreferrer'}
-        >
-          {link.name}
-          <ArrowRightIcon className="h-4 w-4 inline mb-1" />
-        </a>
-      )}
-    </p>
+    <span>
+      <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />{' '}
+    </span>
+    <p className="text-info ">{content}</p>
+    {link && (
+      <a
+        className="font-bold inline cursor-pointer"
+        href={link.url}
+        target={'_blank'}
+        rel={'noopener noreferrer'}
+      >
+        {link.name}
+        <ArrowRightIcon className="h-4 w-4 inline mb-1" />
+      </a>
+    )}
   </div>
 );
 

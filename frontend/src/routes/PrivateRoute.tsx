@@ -1,7 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Layout } from '@/components';
-import { RoleProvider } from '@/providers';
 import { createCustomLoginUrl } from '@/utils/keycloak';
 import { Routes } from '.';
 
@@ -10,7 +9,7 @@ const PrivateRoute = () => {
   const location = useLocation();
   const { pathname } = location;
   if (pathname === Routes.Root && !keycloak.authenticated) {
-    return <Navigate to ={Routes.Home} />
+    return <Navigate to={Routes.Home} />;
   }
   /**
    * Redirects to login page if user is not authenticated, and then logs in to the current page
@@ -24,11 +23,9 @@ const PrivateRoute = () => {
   }
 
   return (
-    <RoleProvider>
-      <Layout>
-        <Outlet />
-      </Layout>
-    </RoleProvider>
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 };
-export default PrivateRoute
+export default PrivateRoute;
