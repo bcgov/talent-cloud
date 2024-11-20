@@ -13,7 +13,7 @@ const InfoBanner = ({
   content: string | ReactElement;
   link?: { name: string; url: string };
 }) => (
-  <div className="flex flex-row py-2 px-4 rounded-sm bg-infoBannerLight items-center space-x-2 w-full">
+  <div className="flex flex-row py-2 px-4 rounded-sm bg-infoBannerLight items-baseline space-x-2 w-full">
     <span>
       <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />{' '}
     </span>

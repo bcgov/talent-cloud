@@ -213,7 +213,7 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
               onClick={() => handleOpen(1)}
               className="bg-grayBackground px-8"
             >
-              {`${name}'s Schedule`}
+              {`${personnel.firstName}'s Schedule`}
             </AccordionHeader>
             <AccordionBody className="px-8">
               <SchedulerControl

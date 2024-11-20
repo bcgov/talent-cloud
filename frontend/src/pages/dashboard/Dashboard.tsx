@@ -22,7 +22,7 @@ const Dashboard = () => {
     setLoading,
   } = useTable(searchParamsUrl, program);
   const recommitmentCycle = useRecommitmentCycle();
-  console.log(recommitmentCycle);
+
   return (
     <div className="mx-auto md:px-12 xl:px-32  2xl:px-64   pt-32 pb-24">
       {recommitmentCycle && (
