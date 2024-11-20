@@ -37,9 +37,7 @@ const MemberProfile = () => {
     <div
       className={`min-h-screen pt-24  ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
     >
-      {personnel && (
-        <ProfileMemberHeader personnel={personnel} program={program} role={role} />
-      )}
+      {personnel && <ProfileMemberHeader personnel={personnel} role={role} />}
       <div className="bg-white w-full">
         <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
           {personnel && (
