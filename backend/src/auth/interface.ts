@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
+import { RecommitmentCycleRO } from 'src/database/entities/recommitment-cycle.ro';
 
 export enum Role {
   COORDINATOR = 'coordinator',
@@ -11,8 +12,7 @@ export enum Role {
 export enum Program {
   BCWS = 'bcws',
   EMCR = 'emcr',
-  ADMIN = 'admin',
-  ALL = '*',
+  ALL = 'ALL',
 }
 
 export enum TokenType {
@@ -60,5 +60,6 @@ export interface RolesRequest {
   idir: string;
   member: boolean;
   supervisor: boolean;
+  recommitment: RecommitmentCycleRO;
 }
 export interface RequestWithRoles extends Request, RolesRequest {}

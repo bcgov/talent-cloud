@@ -10,6 +10,7 @@ import {
 import { EmcrRO } from './ro';
 import { Role, Program } from '../auth/interface';
 import { Status } from '../common/enums';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 import {
   EmcrPersonnelEntity,
   EmcrExperienceEntity,
@@ -19,7 +20,6 @@ import {
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
 
 @Injectable()
 export class EmcrService {
@@ -141,6 +141,7 @@ export class EmcrService {
     qb.leftJoinAndSelect('emcr_personnel.trainings', 'trainings');
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
 
     this.personnelService.addQueryBuilderCommonFilters(
       qb,
@@ -160,18 +161,26 @@ export class EmcrService {
           homeLocations: query.location,
         });
       } else {
-        qb.andWhere('emcr_personnel.travelPreference != :remoteOnly', { remoteOnly: TravelPreference.REMOTE_ONLY });
-        qb.andWhere(new Brackets((inner) => {
-          inner.orWhere('location.locationName IN (:...homeLocations)', {
-            homeLocations: query.location,
-          });
-          inner.orWhere('emcr_personnel.travelPreference = :travelAnywhere', { travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE });
-          inner.orWhere(
-          '(emcr_personnel.travelPreference = :travelRegion AND location.region IN (:...regions))',{
-            travelRegion: TravelPreference.WILLING_TO_TRAVEL_REGION,
-            regions: query.region,
-          });
-        }));
+        qb.andWhere('emcr_personnel.travelPreference != :remoteOnly', {
+          remoteOnly: TravelPreference.REMOTE_ONLY,
+        });
+        qb.andWhere(
+          new Brackets((inner) => {
+            inner.orWhere('location.locationName IN (:...homeLocations)', {
+              homeLocations: query.location,
+            });
+            inner.orWhere('emcr_personnel.travelPreference = :travelAnywhere', {
+              travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
+            });
+            inner.orWhere(
+              '(emcr_personnel.travelPreference = :travelRegion AND location.region IN (:...regions))',
+              {
+                travelRegion: TravelPreference.WILLING_TO_TRAVEL_REGION,
+                regions: query.region,
+              },
+            );
+          }),
+        );
       }
     }
 
@@ -208,7 +217,13 @@ export class EmcrService {
   ): Promise<Record<string, EmcrRO>> {
     const person = await this.emcrPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
-      relations: ['experiences', 'experiences.function', 'trainings'],
+      relations: [
+        'experiences',
+        'experiences.function',
+        'trainings',
+        'personnel',
+        'personnel.recommitment',
+      ],
     });
 
     const lastDeployed = await this.personnelService.getLastDeployedDate(id);

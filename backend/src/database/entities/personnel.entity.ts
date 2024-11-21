@@ -14,6 +14,7 @@ import { BaseEntity } from './base.entity';
 import { BcwsPersonnelEntity } from './bcws';
 import { EmcrPersonnelEntity, LocationEntity } from './emcr';
 import { Form } from './form.entity';
+import { RecommitmentEntity } from './recommitment.entity';
 import { Role } from '../../auth/interface';
 import { AvailabilityType, DriverLicense, Ministry } from '../../common/enums';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
@@ -94,7 +95,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'driver_licenses',
     type: 'simple-array',
-    nullable: true
+    nullable: true,
   })
   driverLicense?: DriverLicense[];
 
@@ -110,7 +111,7 @@ export class PersonnelEntity extends BaseEntity {
     cascade: true,
   })
   bcws?: BcwsPersonnelEntity;
-  
+
   @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'work_location', referencedColumnName: 'id' })
   workLocation?: LocationEntity;
@@ -127,8 +128,12 @@ export class PersonnelEntity extends BaseEntity {
   })
   ministry: Ministry;
 
-  @Column({name: 'division', type: 'varchar', length: 100, nullable: true})
+  @Column({ name: 'division', type: 'varchar', length: 100, nullable: true })
   division?: string;
+
+  @OneToOne(() => RecommitmentEntity, (r) => r.memberId, { nullable: true })
+  @JoinColumn({ name: 'recommitment', referencedColumnName: 'memberId' })
+  recommitment?: RecommitmentEntity;
 
   toResponseObject(
     role: Role,
@@ -144,16 +149,14 @@ export class PersonnelEntity extends BaseEntity {
       primaryPhone: this.primaryPhone ?? '',
       secondaryPhone: this.secondaryPhone ?? '',
       workPhone: this.workPhone ?? '',
-
       unionMembership: this.unionMembership,
-
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail,
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
-
+      recommitment: this.recommitment?.toResponseObject() ?? null,
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Program, Role, Token } from './interface';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
+import { RecommitmentCycleRO } from 'src/database/entities/recommitment-cycle.ro';
 
 @Injectable()
 export class AuthService {
@@ -77,7 +78,18 @@ export class AuthService {
   }
   async verifyMemberOrSupervisor(
     email: string,
-  ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
-    return await this.personnelService.verifyMemberOrSupervisor(email);
+  ): Promise<{
+    isMember: boolean;
+    isSupervisor: boolean;
+    recommitment: RecommitmentCycleRO;
+  }> {
+    const { isMember, isSupervisor } =
+      await this.personnelService.verifyMemberOrSupervisor(email);
+    const recommitment = await this.personnelService.getRecommitmentPeriod();
+    return {
+      isMember,
+      isSupervisor,
+      recommitment,
+    };
   }
 }

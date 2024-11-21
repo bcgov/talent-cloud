@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AvailabilityRO } from './availability.ro';
+import { RecommitmentRO } from './recommitment.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
@@ -145,4 +146,10 @@ export class PersonnelRO {
     required: false,
   })
   division?: string;
+
+  @ApiProperty({
+    description: 'Recommitment',
+    required: false,
+  })
+  recommitment: RecommitmentRO;
 }
