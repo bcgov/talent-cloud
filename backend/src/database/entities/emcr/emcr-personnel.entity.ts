@@ -88,7 +88,8 @@ export class EmcrPersonnelEntity {
     name: 'travel_preference',
     type: 'enum',
     enum: TravelPreference,
-    enumName: 'travel_preference'
+    enumName: 'travel_preference',
+    default: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
   })
   travelPreference: TravelPreference;
 

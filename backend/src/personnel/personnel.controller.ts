@@ -23,6 +23,7 @@ import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('personnel')

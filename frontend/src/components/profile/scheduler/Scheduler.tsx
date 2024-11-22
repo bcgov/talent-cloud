@@ -12,14 +12,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import { SchedulerHeader } from './SchedulerHeader';
 import { SchedulerRow } from './SchedulerRow';
 import { SchedulerControl } from './SchedulerControl';
-import type { AvailabilityRange, SchedulerRowItem } from '@/common';
+import type { AvailabilityRange, Personnel, SchedulerRowItem } from '@/common';
 import dayjs from 'dayjs';
 import { AvailabilityType } from '@/common';
 import { SchedulerPopUp } from './SchedulerPopUp';
 import useAvailability from '@/hooks/useAvailability';
-import { useParams } from 'react-router';
 
-export const Scheduler = ({ name }: { name: string }) => {
+export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
   const [open, setOpen] = useState(1);
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -50,10 +49,8 @@ export const Scheduler = ({ name }: { name: string }) => {
     setSchedulerDialogOpen(!schedulerDialogOpen);
   };
 
-  const { personnelId } = useParams() as { personnelId: string };
-
   const { availability, getAvailability, saveAvailability } = useAvailability({
-    personnelId,
+    personnelId: personnel.id,
   });
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
@@ -216,7 +213,7 @@ export const Scheduler = ({ name }: { name: string }) => {
               onClick={() => handleOpen(1)}
               className="bg-grayBackground px-8"
             >
-              {`${name}'s Schedule`}
+              {`${personnel.firstName}'s Schedule`}
             </AccordionHeader>
             <AccordionBody className="px-8">
               <SchedulerControl

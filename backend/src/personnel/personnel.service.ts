@@ -19,6 +19,8 @@ import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
 import { PersonnelEntity } from '../database/entities/personnel.entity';
+import { RecommitmentCycleEntity } from '../database/entities/recommitment-cycle.entity';
+import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 
 @Injectable()
@@ -28,6 +30,8 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
+    @InjectRepository(RecommitmentCycleEntity)
+    private recommitmentCycleRepository: Repository<RecommitmentCycleEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -453,6 +457,7 @@ export class PersonnelService {
       .createQueryBuilder('personnel')
       .leftJoinAndSelect('personnel.workLocation', 'workLocation')
       .leftJoinAndSelect('personnel.homeLocation', 'homeLocation')
+      .leftJoinAndSelect('personnel.recommitment', 'recommitment')
       .leftJoinAndSelect('personnel.bcws', 'bcws')
       .leftJoinAndSelect('personnel.emcr', 'emcr');
 
@@ -471,9 +476,6 @@ export class PersonnelService {
       { email: email },
     );
     const people = await qb.getMany();
-
-    this.logger.log(people);
-
     const isMember = people.map((itm) => itm.email).includes(email);
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail)
@@ -483,5 +485,13 @@ export class PersonnelService {
       isMember,
       isSupervisor,
     };
+  }
+
+  async getRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
+    const qb = this.recommitmentCycleRepository.createQueryBuilder();
+    qb.where('start_date <= :date', { date: new Date() });
+    qb.andWhere('end_date >= :date', { date: new Date() });
+    return await qb.getOne();
+    
   }
 }

@@ -38,7 +38,7 @@ export class AuthController {
       `${req.method}: ${req.url} - ${req.role} - ${req.username}`,
     );
 
-    const { isMember, isSupervisor } =
+    const { isMember, isSupervisor, recommitment } =
       await this.authService.verifyMemberOrSupervisor(req.idir);
 
     return {
@@ -48,6 +48,7 @@ export class AuthController {
       idir: req?.idir,
       member: isMember,
       supervisor: isSupervisor,
+      recommitment
     };
   }
 }
