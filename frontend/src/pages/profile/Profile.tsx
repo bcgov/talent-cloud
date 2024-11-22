@@ -9,18 +9,21 @@ import {
   ProfileDetails,
   ProfileHeader,
   ProfileNotes,
+  Loading,
 } from '@/components';
 import { Status, Role, Program } from '@/common';
-import { useRoleContext } from '@/providers';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
+import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 
 const Profile = () => {
-  const { role, program } = useRoleContext();
-
-  const { personnel, updatePersonnel, profileData } = usePersonnel();
-
+  const { loading, program, role, personnel, updatePersonnel, profileData } =
+    usePersonnel();
   const { functions, bcwsRoles } = useProgramFieldData(program);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div
@@ -41,13 +44,15 @@ const Profile = () => {
               updatePersonnel={updatePersonnel}
             />
           )}
-
           {personnel && (
             <ProfileToggle
               personnel={personnel}
               role={role}
               updatePersonnel={updatePersonnel}
             />
+          )}
+          {personnel && (
+            <RecommitmentProfileBanner personnel={personnel} program={program} />
           )}
 
           <ProfileDetails />
@@ -59,7 +64,7 @@ const Profile = () => {
               updatePersonnel={updatePersonnel}
             />
           )}
-          {personnel && <Scheduler name={personnel?.firstName} />}
+          {personnel && <Scheduler personnel={personnel} />}
 
           {personnel && program === Program.BCWS && (
             <>

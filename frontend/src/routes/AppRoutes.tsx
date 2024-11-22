@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { Role } from '@/common';
-import { AuthProvider } from '@/providers';
+import { AuthProvider, RoleProvider } from '@/providers';
 import RoleProtectedRoute from './RoleProtectedRoute';
 import PrivateRoute from './PrivateRoute';
 import Redirect from './Redirect';
@@ -20,33 +20,69 @@ const Unauthenticated = lazy(() => import('../pages/Unauthenticated'));
 export default () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path={AppRoutes.Home} element={<SplashPage />} />
-            <Route path={AppRoutes.NotFound} element={<NotFound />} />
-            <Route path={AppRoutes.Unauthenticated} element={<Unauthenticated />} />
+      <RoleProvider>
+        <BrowserRouter>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path={AppRoutes.Home} element={<SplashPage />} />
+              <Route path={AppRoutes.NotFound} element={<NotFound />} />
+              <Route
+                path={AppRoutes.Unauthenticated}
+                element={<Unauthenticated />}
+              />
 
-            <Route element={<PrivateRoute />}>
-              <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
-              <Route path={AppRoutes.Root} element={<Redirect />} />
-              <Route element={<RoleProtectedRoute allowedRoles={[Role.COORDINATOR, Role.LOGISTICS]} />}>
+              <Route element={<PrivateRoute />}>
+                <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
+                <Route path={AppRoutes.Root} element={<Redirect />} />
+                <Route
+                  element={
+                    <RoleProtectedRoute
+                      allowedRoles={[Role.COORDINATOR, Role.LOGISTICS]}
+                    />
+                  }
+                >
+                  <Route element={<Dashboard />} path={AppRoutes.Dashboard} />
+                  <Route element={<Profile />} path={AppRoutes.Profile} />
+                </Route>
+                <Route
+                  element={
+                    <RoleProtectedRoute
+                      allowedRoles={[
+                        Role.COORDINATOR,
+                        Role.LOGISTICS,
+                        Role.SUPERVISOR,
+                        Role.MEMBER,
+                      ]}
+                    />
+                  }
+                >
+                  <Route
+                    element={<MemberProfile />}
+                    path={AppRoutes.MemberProfile}
+                  />
+                </Route>
 
-                <Route element={<Dashboard />} path={AppRoutes.Dashboard} />
-                <Route element={<Profile />} path={AppRoutes.Profile} />
+                <Route
+                  element={
+                    <RoleProtectedRoute
+                      allowedRoles={[
+                        Role.COORDINATOR,
+                        Role.LOGISTICS,
+                        Role.SUPERVISOR,
+                      ]}
+                    />
+                  }
+                >
+                  <Route
+                    element={<SupervisorDashboard />}
+                    path={AppRoutes.SupervisorDashboard}
+                  />
+                </Route>
               </Route>
-              <Route element={<RoleProtectedRoute allowedRoles={[Role.COORDINATOR, Role.LOGISTICS, Role.SUPERVISOR, Role.MEMBER]} />}>
-                <Route element={<MemberProfile />} path={AppRoutes.MemberProfile} />
-              </Route>
-
-              <Route element={<RoleProtectedRoute allowedRoles={[Role.COORDINATOR, Role.LOGISTICS, Role.SUPERVISOR]} />}>
-                <Route element={<SupervisorDashboard />} path={AppRoutes.SupervisorDashboard} />
-              </Route>
-            </Route>
-
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </RoleProvider>
     </AuthProvider>
   );
 };

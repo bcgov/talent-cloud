@@ -24,6 +24,7 @@ import type {
 import type { Tools, ToolsProficiency } from '@/common/enums/tools.enum';
 import type { DateRange } from 'react-day-picker';
 import type { TravelPreference } from './enums/travel-preference.enum';
+import type { RecommitmentStatus } from './enums/recommitment-status';
 
 export enum DashboardFilterNames {
   REGION = 'region',
@@ -128,6 +129,26 @@ export interface BcwsLanguages {
   level: LanguageProficiency;
 }
 
+export interface RecommitmentCycle {
+  year: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface Recommitment {
+  memberId: string;
+  year: number;
+  emcr?: RecommitmentStatus | null;
+  bcws?: RecommitmentStatus | null;
+  memberDecisionDate?: Date | null;
+  memberReasonEmcr?: string | null;
+  memberReasonBcws?: string | null;
+  supervisorIdir?: string;
+  supervisorDecisionDate?: Date;
+  supervisorReasonEmcr?: string | null;
+  supervisorReasonBcws?: string | null;
+}
+
 export interface Personnel {
   id: string;
   firstName: string;
@@ -137,6 +158,7 @@ export interface Personnel {
   experiences?: ExperienceInterface[];
   availability?: Availability[];
   status: Status;
+  recommitment?: Recommitment;
   newMember?: boolean;
   travelPreference: TravelPreference;
   unionMembership: string;

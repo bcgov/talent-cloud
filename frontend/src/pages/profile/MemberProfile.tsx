@@ -13,6 +13,7 @@ import { ProfileMemberHeader } from '@/components/profile/header';
 import { ProfileToggle } from '@/components/profile/common';
 import { useProgramFieldData } from '@/hooks';
 import { bcwsData, emcrData } from '@/hooks/profileData';
+import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 
 const MemberProfile = () => {
   const { personnel, program, loading, updatePersonnel } = useMemberProfile();
@@ -31,13 +32,12 @@ const MemberProfile = () => {
   if (loading) {
     return <Loading />;
   }
+
   return (
     <div
       className={`min-h-screen pt-24  ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
     >
-      {personnel && (
-        <ProfileMemberHeader personnel={personnel} program={program} role={role} />
-      )}
+      {personnel && <ProfileMemberHeader personnel={personnel} role={role} />}
       <div className="bg-white w-full">
         <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
           {personnel && (
@@ -47,7 +47,10 @@ const MemberProfile = () => {
               updatePersonnel={updatePersonnel}
             />
           )}
-          {personnel && <Scheduler name={personnel?.firstName} />}
+          {personnel && (
+            <RecommitmentProfileBanner personnel={personnel} program={program} />
+          )}
+          {personnel && <Scheduler personnel={personnel} />}
 
           {personnel && program === Program.EMCR && (
             <ProfileFunctions
