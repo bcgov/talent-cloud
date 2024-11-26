@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PersonnelRO } from './personnel.ro';
 import { PersonnelEntity } from '../../database/entities/personnel.entity';
-import { BcwsPersonnelRoleRO } from 'src/bcws/ro';
+import { BcwsPersonnelRoleRO } from '../../bcws/ro';
+import { EmcrExperienceRO } from '../../emcr/ro';
 
 export class MemberProfileRO {
   @ApiProperty({
@@ -26,13 +27,13 @@ export class MemberProfileRO {
     description: 'Roles',
     required: false,
   })
-  roles?: any[];
+  roles?: BcwsPersonnelRoleRO[];
 
   @ApiProperty({
     description: 'Experiences',
     required: false,
   })
-  experiences?: any[];
+  experiences?: EmcrExperienceRO[];
 
   constructor(data: PersonnelEntity) {
     Object.assign(this, data);
