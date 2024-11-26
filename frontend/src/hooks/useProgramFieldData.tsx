@@ -65,9 +65,16 @@ export const useProgramFieldData = (program?: Program) => {
   useEffect(() => {
     (async () => {
       const res = program && (await AxiosPrivate.get(`/field/data`));
-      res && program === Program.EMCR
-        ? setEmcrData(res.data)
-        : res && setBcwsData(res.data);
+      if (res) {
+        if (program === Program.EMCR) {
+          setEmcrData(res.data);
+        } else if (program === Program.BCWS) {
+          setBcwsData(res.data);
+        } else if (program === Program.ALL) {
+          setEmcrData(res.data);
+          setBcwsData(res.data);
+        }
+      }
     })();
   }, [program]);
 

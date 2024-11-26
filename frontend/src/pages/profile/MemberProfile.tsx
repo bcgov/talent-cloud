@@ -1,23 +1,23 @@
+import { useState } from 'react';
+import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
 import type { Personnel } from '@/common';
-import { Program, Role, Status } from '@/common';
-import {
-  Loading,
-  ProfileFunctions,
-  Scheduler,
-  SectionsAndRoles,
-  SkillsAndCertifications,
-} from '@/components';
+import { Program, Status } from '@/common';
+import { Loading } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
-import { ProfileToggle } from '@/components/profile/common';
 import { useProgramFieldData } from '@/hooks';
 import { bcwsData, emcrData } from '@/hooks/profileData';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
+import { MemberAvailabilityTab } from '@/components/tabs/Availability';
+import { MemberProfileTab } from '@/components/tabs/Details';
+import { Tabs as TabIndexes } from '@/common';
 
 const MemberProfile = () => {
-  const { personnel, program, loading, updatePersonnel } = useMemberProfile();
+  const { personnel, program, loading } = useMemberProfile();
   const { role } = useRoleContext();
+  const [activeTab, setActiveTab] = useState('availability');
+
   const bcwsProfileData =
     (program === Program.BCWS || program === Program.ALL) &&
     bcwsData({ ...personnel, ...personnel?.bcws } as Personnel);
@@ -29,6 +29,10 @@ const MemberProfile = () => {
 
   const { functions, bcwsRoles } = useProgramFieldData(program);
 
+  const handleTabChange = (index: string) => {
+    setActiveTab(index);
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -37,48 +41,38 @@ const MemberProfile = () => {
     <div
       className={`min-h-screen pt-24  ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
     >
-      {personnel && <ProfileMemberHeader personnel={personnel} role={role} />}
-      <div className="bg-white w-full">
-        <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
-          {personnel && (
-            <ProfileToggle
-              personnel={personnel}
-              role={role}
-              updatePersonnel={updatePersonnel}
-            />
-          )}
-          {personnel && (
-            <RecommitmentProfileBanner personnel={personnel} program={program} />
-          )}
-          {personnel && <Scheduler personnel={personnel} />}
+      <Tabs value={activeTab} onChange={handleTabChange}>
+        {personnel && (
+          <ProfileMemberHeader
+            personnel={personnel}
+            currentTab={activeTab}
+            role={role}
+          />
+        )}
 
-          {personnel && program === Program.EMCR && (
-            <ProfileFunctions
-              functions={functions}
-              personnel={personnel}
-              allowEditing={role === Role.COORDINATOR}
-              updatePersonnel={updatePersonnel}
-            />
-          )}
-
-          {personnel && program === Program.BCWS && (
-            <>
-              <SectionsAndRoles
-                personnel={personnel}
-                bcwsRoles={bcwsRoles}
-                allowEditing={role === Role.COORDINATOR}
-                updatePersonnel={updatePersonnel}
-              />
-              <SkillsAndCertifications
-                personnel={personnel}
-                profileData={profileData}
-                allowEditing={role === Role.COORDINATOR}
-                updatePersonnel={updatePersonnel}
-              />
-            </>
-          )}
+        <div className="bg-white w-full">
+          <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
+            {personnel && (
+              <RecommitmentProfileBanner personnel={personnel} program={program} />
+            )}
+            <TabsBody>
+              <TabPanel value={TabIndexes.AVAILABILITY}>
+                {personnel && (
+                  <MemberAvailabilityTab
+                    bcwsRoles={bcwsRoles}
+                    functions={functions}
+                    personnel={personnel}
+                    profileData={profileData}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel value={TabIndexes.PROFILE}>
+                {personnel && <MemberProfileTab />}
+              </TabPanel>
+            </TabsBody>
+          </div>
         </div>
-      </div>
+      </Tabs>
     </div>
   );
 };

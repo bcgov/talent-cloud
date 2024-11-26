@@ -281,3 +281,93 @@ export const bcwsData = (personnel?: Personnel) => {
     ],
   };
 };
+
+export const memberData = (personnel?: Personnel) => {
+  return {
+    generalInformation: [
+      {
+        title: 'Home Location',
+        content: personnel?.homeLocation
+          ? `${personnel.homeLocation.locationName}, ${FireCentreName[personnel.homeLocation.fireCentre]}`
+          : 'Not Listed',
+      },
+      {
+        title: 'Work Location',
+        content: personnel?.workLocation
+          ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
+          : 'Not Listed',
+      },
+      {
+        title: 'Travel Preference',
+        content:
+          TravelPreferenceText[
+            personnel?.travelPreference as keyof typeof TravelPreference
+          ],
+      },
+      {
+        title: "Driver's License",
+        content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
+      },
+      {
+        title: 'Employee ID',
+        content: personnel?.employeeId,
+      },
+      { title: 'Paylist', content: personnel?.paylistId },
+    ],
+    contact: [
+      {
+        title: 'Primary Number',
+        content: formatPhone(personnel?.primaryPhone) ?? 'Not Listed',
+      },
+      {
+        title: 'Secondary Number',
+        content: formatPhone(personnel?.secondaryPhone) ?? 'Not Listed',
+      },
+      {
+        title: 'Work Phone',
+        content: formatPhone(personnel?.workPhone) ?? 'Not Listed',
+      },
+      { title: 'Email Address', content: personnel?.email },
+      // {
+      //   title: 'Emergency Contact First Name',
+      //   content: personnel?.emergencyContactFirstName ?? 'Not Listed',
+      // },
+      // {
+      //   title: 'Emergency Contact Last Name',
+      //   content: personnel?.emergencyContactLastName ?? 'Not Listed',
+      // },
+      // {
+      //   title: 'Emergency Phone Number',
+      //   content: formatPhone(personnel?.emergencyContactPhoneNumber) ?? 'Not Listed',
+      // },
+    ],
+    organizational: [
+      {
+        title: 'Supervisor Name',
+        content: `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`,
+      },
+      {
+        title: 'Supervisor Email',
+        content: personnel?.supervisorEmail ?? 'Not Listed',
+      },
+      {
+        title: 'Supervisor Phone',
+        content: personnel?.supervisorPhone ?? 'Not Listed',
+      },
+      { title: 'Union Membership', content: personnel?.unionMembership },
+      {
+        title: 'Liaison Name',
+        content: personnel?.liaisonFirstName ?? 'Not Listed',
+      },
+      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? 'Not Listed' },
+      {
+        title: 'Ministry',
+        content: `${personnel?.ministry}`,
+      },
+      {
+        title: 'Division',
+        content: `${personnel?.division ?? 'Not Listed'}`,
+      },
+    ],
+  };
+};
