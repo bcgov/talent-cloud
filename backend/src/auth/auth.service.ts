@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Program, Role, Token } from './interface';
+import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
-import { RecommitmentCycleRO } from 'src/database/entities/recommitment-cycle.ro';
 
 @Injectable()
 export class AuthService {
@@ -76,9 +76,8 @@ export class AuthService {
 
     return true;
   }
-  async verifyMemberOrSupervisor(
-    email: string,
-  ): Promise<{
+
+  async verifyMemberOrSupervisor(email: string): Promise<{
     isMember: boolean;
     isSupervisor: boolean;
     recommitment: RecommitmentCycleRO;

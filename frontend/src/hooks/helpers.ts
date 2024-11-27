@@ -1,7 +1,8 @@
 import { Program } from '@/common';
 import { AvailabilityTypeName } from '@/common';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
-import type { Availability, Personnel, AvailabilityType } from '@/common';
+import type { Availability, Personnel } from '@/common';
+import { AvailabilityType } from '@/common';
 import { DashboardColumns } from '@/common';
 import { datePST } from '@/utils';
 import { differenceInDays } from 'date-fns';
@@ -52,6 +53,13 @@ const renderAvailability = (personnel: Personnel, filterValues: URLSearchParams)
     personnel?.availability &&
     personnel?.availability?.length > 0
   ) {
+    if (
+      AvailabilityType[
+        filterValues?.get('availabilityType') as keyof typeof AvailabilityType
+      ] === AvailabilityType.AVAILABLE
+    ) {
+      return { availability: AvailabilityTypeName.AVAILABLE };
+    }
     return getAvailabilityValue(
       filterValues.get('availabilityType') as AvailabilityType,
       {

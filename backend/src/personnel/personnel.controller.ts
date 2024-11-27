@@ -23,7 +23,6 @@ import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('personnel')
@@ -88,40 +87,9 @@ export class PersonnelController {
     @Query() query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    const dates = await this.personnelService.getAvailability(id, query);
-
-    const dateROs = dates.map((d) => d.toResponseObject());
-
-    const firstDate = dates[0];
-    if (firstDate.availabilityType !== 'NOT_INDICATED') {
-      const actualStart = await this.personnelService.getEventStartDate(
-        id,
-        firstDate,
-      );
-      const firstEventDateEnd = dates.findIndex(
-        (d) => d.availabilityType !== firstDate.availabilityType,
-      );
-      for (let i = 0; i < firstEventDateEnd; i++) {
-        dateROs[i].actualStartDate = actualStart;
-      }
-    }
-
-    const lastDate = dates[dates.length - 1];
-    if (lastDate.availabilityType !== 'NOT_INDICATED') {
-      const actualEnd = await this.personnelService.getEventEndDate(
-        id,
-        lastDate,
-      );
-      const lastEventDateStart = dates
-        .reverse()
-        .findIndex((d) => d.availabilityType !== lastDate.availabilityType);
-      for (let i = 1; i <= lastEventDateStart; i++) {
-        dateROs[dateROs.length - i].actualEndDate = actualEnd;
-      }
-    }
-
-    return dateROs;
+    return await this.personnelService.getAvailability(id, query);
   }
+
   @Get('/bcws/approved')
   @Token([TokenType.BCWS])
   async getApprovedApplicants(): Promise<

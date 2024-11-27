@@ -6,7 +6,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import {
+  AvailabilityType,
+  AvailabilityTypeLabel,
+} from '../../common/enums/availability-type.enum';
 import { AvailabilityRO } from '../../personnel/ro/availability.ro';
 
 @Entity('availability')
@@ -25,9 +28,10 @@ export class AvailabilityEntity {
     type: 'enum',
     enum: AvailabilityType,
     enumName: 'availability-type',
-    default: AvailabilityType.NOT_INDICATED,
+    nullable: true,
+    default: null,
   })
-  availabilityType: AvailabilityType;
+  availabilityType?: AvailabilityType;
 
   @ManyToOne(() => PersonnelEntity, (pe) => pe.id)
   @JoinColumn({ name: 'personnel', referencedColumnName: 'id' })
@@ -37,9 +41,15 @@ export class AvailabilityEntity {
   deploymentCode?: string;
 
   toResponseObject(): AvailabilityRO {
+    let availabilityType: AvailabilityTypeLabel;
+    if (!this.availabilityType) {
+      availabilityType = AvailabilityTypeLabel.AVAILABLE;
+    } else {
+      availabilityType = AvailabilityTypeLabel[this.availabilityType];
+    }
     return {
       date: this.date,
-      availabilityType: this.availabilityType,
+      availabilityType,
       deploymentCode: this.deploymentCode,
     };
   }

@@ -1,10 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
 import { format } from 'date-fns';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { AvailabilityTypeLabel } from '../../common/enums/availability-type.enum';
 import { Status } from '../../common/enums/status.enum';
 import { QueryDTO } from '../../common/query.dto';
-import { Transform } from 'class-transformer';
 
 export class GetPersonnelDTO extends QueryDTO {
   @ApiPropertyOptional({
@@ -24,9 +24,9 @@ export class GetPersonnelDTO extends QueryDTO {
       'Availability status of personnel. If undefined, this will find all',
     default: '*',
   })
-  @IsEnum(AvailabilityType)
+  @IsEnum(AvailabilityTypeLabel)
   @IsOptional()
-  availabilityType: AvailabilityType;
+  availabilityType: AvailabilityTypeLabel;
 
   @ApiPropertyOptional({
     description: 'Start date-string for a range of availability',
@@ -48,15 +48,15 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value} ) => {
+  @Transform(({ value }) => {
     if (typeof value === 'boolean') {
-        return value;
+      return value;
     }
     if (value?.toString()?.toLowerCase() === 'false') {
-        return false;
+      return false;
     }
     if (value?.toString()?.toLowerCase() === 'true') {
-        return true;
+      return true;
     }
     return undefined;
   })

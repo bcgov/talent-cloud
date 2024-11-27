@@ -16,7 +16,11 @@ import { EmcrPersonnelEntity, LocationEntity } from './emcr';
 import { Form } from './form.entity';
 import { RecommitmentEntity } from './recommitment.entity';
 import { Role } from '../../auth/interface';
-import { AvailabilityType, DriverLicense, Ministry } from '../../common/enums';
+import {
+  AvailabilityTypeLabel,
+  DriverLicense,
+  Ministry,
+} from '../../common/enums';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { datePST } from '../../common/helpers';
 import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
@@ -168,16 +172,19 @@ export class PersonnelEntity extends BaseEntity {
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"
-    if (this.availability && data.availability.length === 0) {
+    if (
+      data.availability.length === 0 ||
+      data.availability === undefined ||
+      !data.availability
+    ) {
       data.availability = [
-        new AvailabilityEntity({
+        {
           date: format(datePST(new Date()), 'yyyy-MM-dd'),
-          availabilityType: AvailabilityType.NOT_INDICATED,
+          availabilityType: AvailabilityTypeLabel.AVAILABLE,
           deploymentCode: '',
-        }),
+        },
       ];
     }
-
     // this is required in order to conditionally omit certain fields from the response based on the user role
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

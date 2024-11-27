@@ -33,7 +33,7 @@ export class UpdateAvailabilityDTO {
   @ApiProperty({
     description: 'Availability type',
     required: true,
-    example: AvailabilityType.AVAILABLE,
+    example: AvailabilityType.UNAVAILABLE,
   })
   type: AvailabilityType;
 
