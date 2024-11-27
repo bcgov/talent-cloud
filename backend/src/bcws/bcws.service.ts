@@ -169,6 +169,7 @@ export class BcwsService {
     };
   }> {
     this.logger.log(`Query: ${JSON.stringify(query)}`);
+
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
@@ -177,7 +178,7 @@ export class BcwsService {
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
 
-    this.personnelService.addQueryBuilderCommonFilters(
+    await this.personnelService.addQueryBuilderCommonFilters(
       qb,
       query.name,
       query.availabilityType,

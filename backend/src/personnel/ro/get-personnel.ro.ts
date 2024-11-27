@@ -37,5 +37,5 @@ export class GetPersonnelRO {
     isArray: true,
     type: () => PersonnelRO,
   })
-  personnel: Record<'Personnel', EmcrRO | BcwsRO>[];
+  personnel: Record<'Personnel', EmcrRO | BcwsRO | PersonnelRO>[];
 }

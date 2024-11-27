@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { AvailabilityTypeLabel } from '../../common/enums';
 
 export class AvailabilityRO {
   @ApiProperty({
@@ -11,10 +11,10 @@ export class AvailabilityRO {
 
   @ApiProperty({
     description: 'Availability type',
-    required: true,
-    example: AvailabilityType.AVAILABLE,
+    required: false,
+    example: AvailabilityTypeLabel.UNAVAILABLE,
   })
-  availabilityType: AvailabilityType;
+  availabilityType?: AvailabilityTypeLabel;
 
   @ApiProperty({
     description: 'Code representing the current deployment',

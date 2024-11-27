@@ -14,7 +14,7 @@ import { SchedulerRow } from './SchedulerRow';
 import { SchedulerControl } from './SchedulerControl';
 import type { AvailabilityRange, Personnel, SchedulerRowItem } from '@/common';
 import dayjs from 'dayjs';
-import { AvailabilityType } from '@/common';
+import type { AvailabilityType } from '@/common';
 import { SchedulerPopUp } from './SchedulerPopUp';
 import useAvailability from '@/hooks/useAvailability';
 
@@ -30,14 +30,14 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
   const [editCell, setEditCell] = useState<{
     from?: string;
     to?: string;
-    availabilityType?: AvailabilityType;
+    availabilityType?: AvailabilityType | null;
     deploymentCode?: string;
   }>();
 
   const openSchedulerDialog = (
     from?: string,
     to?: string,
-    availabilityType?: AvailabilityType,
+    availabilityType?: AvailabilityType | null,
     deploymentCode?: string,
   ) => {
     if (!schedulerDialogOpen) {
@@ -86,12 +86,9 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
     availability.forEach((availDay) => {
       const day = dayjs(availDay.date);
       const month = day.format('MMM');
-      if (
-        availDay.availabilityType === lastStatus &&
-        availDay.availabilityType !== AvailabilityType.NOT_INDICATED
-      ) {
+      if (availDay.availabilityType === lastStatus && availDay.availabilityType) {
         count++;
-      } else if (availDay.availabilityType === AvailabilityType.NOT_INDICATED) {
+      } else if (!availDay.availabilityType) {
         // This is a break in the group of days with one status, so we set numDays and reset
         if (startDates[startDay]) {
           startDates[startDay].numDays = count;
@@ -163,7 +160,7 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
     const statusIndex = availability.findIndex((s) => s.date === date);
     if (statusIndex > -1) {
       const status = availability[statusIndex];
-      if (status.availabilityType === AvailabilityType.NOT_INDICATED) {
+      if (!status.availabilityType) {
         openSchedulerDialog(status.date, status.date);
       } else {
         // For all elements before (including this one), find the first break in availability type

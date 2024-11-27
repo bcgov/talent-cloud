@@ -90,7 +90,7 @@ export interface ExperienceInterface {
 export interface Availability {
   actualEndDate?: string;
   actualStartDate?: string;
-  availabilityType: AvailabilityType;
+  availabilityType: AvailabilityType | null;
   date: string;
   deploymentCode?: string;
 }
@@ -212,7 +212,7 @@ export interface Personnel {
 export interface AvailabilityRange {
   from: string;
   to: string;
-  type: AvailabilityType;
+  type: AvailabilityType | null;
   deploymentCode?: string;
   removeFrom?: string;
   removeTo?: string;
@@ -220,7 +220,7 @@ export interface AvailabilityRange {
 
 export interface SchedulerRowItem {
   date: string;
-  status: AvailabilityType;
+  status: AvailabilityType | null;
   start?: boolean;
   numDays?: number;
   actualStart?: string;

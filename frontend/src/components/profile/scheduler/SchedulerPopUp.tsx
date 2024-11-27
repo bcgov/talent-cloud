@@ -26,7 +26,7 @@ export const SchedulerPopUp = ({
 }: {
   editedFrom?: string;
   editedTo?: string;
-  editedAvailabilityType?: AvailabilityType;
+  editedAvailabilityType?: AvailabilityType | null;
   editedDeploymentCode?: string;
   editMode: boolean;
   onSave: (dates: AvailabilityRange) => void;
@@ -35,8 +35,8 @@ export const SchedulerPopUp = ({
     from: editedFrom ? offsetTimezoneDate(editedFrom) : undefined,
     to: editedTo ? offsetTimezoneDate(editedTo) : undefined,
   });
-  const [selectedStatus, setSelectedStatus] = useState<AvailabilityType>(
-    editedAvailabilityType ?? AvailabilityType.AVAILABLE,
+  const [selectedStatus, setSelectedStatus] = useState<AvailabilityType | null>(
+    editedAvailabilityType ?? null,
   );
   const [deploymentCode, setDeploymentCode] = useState(editedDeploymentCode ?? '');
   const [fromInput, setFromInput] = useState(
@@ -87,7 +87,7 @@ export const SchedulerPopUp = ({
     const availabilityRange: AvailabilityRange = {
       from: dayjs(editedFrom).format('YYYY-MM-DD'),
       to: dayjs(editedTo).format('YYYY-MM-DD'),
-      type: AvailabilityType.NOT_INDICATED,
+      type: null,
     };
     onSave(availabilityRange);
   };
@@ -266,11 +266,11 @@ export const SchedulerPopUp = ({
             <Button
               placeholder={''}
               className={
-                selectedStatus === AvailabilityType.AVAILABLE
+                selectedStatus === null
                   ? BUTTON_GROUP_SELECTED_CLASS
                   : BUTTON_GROUP_UNSELECTED_CLASS
               }
-              onClick={() => setSelectedStatus(AvailabilityType.AVAILABLE)}
+              onClick={() => setSelectedStatus(null)}
             >
               Available
             </Button>

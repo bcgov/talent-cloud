@@ -15,7 +15,7 @@ export const SCHEDULER_UNAVAILABLE_START_CLASS =
 export const SCHEDULER_UNAVAILABLE_CLASS =
   'h-20 border-l border-cyan-950 bg-calRed hover:bg-calRedHover cursor-pointer';
 export const SCHEDULER_UNAVAILABLE_TEXT_CLASS = `text-nowrap font-bold text-calRedTwo text-xs pointer-events-none`;
-export const SCHEDULER_NOT_INDICATED_CLASS =
+export const SCHEDULER_AVAILABLE_MEMBER_CLASS =
   'h-20 border-l border-cyan-950 bg-white hover:bg-gray-200 cursor-pointer';
 export const SCHEDULER_NO_DATE_CLASS =
   'h-20 border-l border-cyan-950 bg-disabledGray';

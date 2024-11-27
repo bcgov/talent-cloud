@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format, eachDayOfInterval, parse } from 'date-fns';
+import {
+  format,
+  eachDayOfInterval,
+  parse,
+} from 'date-fns';
 import {
   Brackets,
   DeleteResult,
@@ -12,9 +16,13 @@ import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
+import { AvailabilityRO } from './ro';
 import { MemberProfileRO } from './ro/member-profile.ro';
 import { Program, RequestWithRoles } from '../auth/interface';
-import { AvailabilityType } from '../common/enums/availability-type.enum';
+import {
+  AvailabilityType,
+  AvailabilityTypeLabel,
+} from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { AvailabilityEntity } from '../database/entities/availability.entity';
@@ -118,13 +126,13 @@ export class PersonnelService {
    * With query builder, add clauses for common fields
    * @returns {SelectQueryBuilder} Query builder with added clauses
    */
-  addQueryBuilderCommonFilters<T>(
+  async addQueryBuilderCommonFilters<T>(
     queryBuilder: SelectQueryBuilder<T>,
     name?: string,
-    availabilityType?: AvailabilityType,
+    availabilityType?: AvailabilityTypeLabel,
     availabilityFromDate?: string,
     availabilityToDate?: string,
-  ): SelectQueryBuilder<T> {
+  ): Promise<SelectQueryBuilder<T>> {
     if (name) {
       queryBuilder.andWhere(
         new Brackets((qb) => {
@@ -136,16 +144,23 @@ export class PersonnelService {
         }),
       );
     }
-
+    this.logger.log(`Availability Type: ${availabilityType}`);
     /**
      * If we have an availability type and a date range, we will use the date range + type
      */
-    if (availabilityType) {
+
+    if (
+      [
+        AvailabilityTypeLabel.UNAVAILABLE,
+        AvailabilityTypeLabel.DEPLOYED,
+      ].includes(availabilityType)
+    ) {
       queryBuilder.leftJoinAndSelect('personnel.availability', 'availability');
       queryBuilder.andWhere(
         'availability.availabilityType = :availabilityType',
         {
-          availabilityType: availabilityType,
+          availabilityType:
+            AvailabilityType[availabilityType as keyof typeof AvailabilityType],
         },
       );
       if (availabilityFromDate && availabilityToDate) {
@@ -165,6 +180,39 @@ export class PersonnelService {
           date: datePST(new Date()),
         });
       }
+    } else if (availabilityType === AvailabilityTypeLabel.AVAILABLE) {
+      this.logger.log(availabilityFromDate, availabilityToDate);
+
+      if (availabilityFromDate && availabilityToDate) {
+        const allAvailable =
+          this.availabilityRepository.createQueryBuilder('availability');
+        allAvailable.select('personnel');
+        allAvailable.where(
+          'availability.date >= :from AND availability.date <= :to',
+          {
+            from: new Date(availabilityFromDate),
+            to: new Date(availabilityToDate),
+          },
+        );
+
+        // // TODO - return partial match
+        queryBuilder.andWhere(
+          `personnel.id not IN (${allAvailable.getQuery()})`,
+          allAvailable.getParameters(),
+        );
+      } else {
+        const allAvailable =
+          this.availabilityRepository.createQueryBuilder('availability');
+        allAvailable.select('personnel');
+        allAvailable.andWhere('availability.date = :date', {
+          date: datePST(new Date()),
+        });
+
+        queryBuilder.where(
+          `personnel.id not IN (${allAvailable.getQuery()})`,
+          allAvailable.getParameters(),
+        );
+      }
     } else {
       queryBuilder.leftJoinAndSelect(
         'personnel.availability',
@@ -173,6 +221,7 @@ export class PersonnelService {
         { date: datePST(new Date()) },
       );
     }
+
     return queryBuilder;
   }
 
@@ -289,7 +338,7 @@ export class PersonnelService {
   async getAvailability(
     id: string,
     query: GetAvailabilityDTO,
-  ): Promise<AvailabilityEntity[]> {
+  ): Promise<AvailabilityRO[]> {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
@@ -311,14 +360,15 @@ export class PersonnelService {
 
     const dates = eachDayOfInterval({ start, end: endDate });
 
-    const availableDates: AvailabilityEntity[] = dates.map(
+    const availableDates: AvailabilityRO[] = dates.map(
       (date) =>
-        availability.find((itm) => itm.date === format(date, 'yyyy-MM-dd')) ??
-        new AvailabilityEntity({
+        availability
+          .find((itm) => itm.date === format(date, 'yyyy-MM-dd'))
+          ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
-          availabilityType: AvailabilityType.NOT_INDICATED,
+          availabilityType: AvailabilityTypeLabel.AVAILABLE,
           deploymentCode: '',
-        }),
+        },
     );
 
     return availableDates;
@@ -326,7 +376,7 @@ export class PersonnelService {
 
   async getEventStartDate(
     personnelId: string,
-    date: AvailabilityEntity,
+    date: AvailabilityRO,
   ): Promise<string> {
     const start = await this.availabilityRepository.query(
       'SELECT get_last_status_date_prior($1, $2, $3) as start_date',
@@ -337,7 +387,7 @@ export class PersonnelService {
 
   async getEventEndDate(
     personnelId: string,
-    date: AvailabilityEntity,
+    date: AvailabilityRO,
   ): Promise<string> {
     const end = await this.availabilityRepository.query(
       'SELECT get_last_status_date_after($1, $2, $3) as end_date',
@@ -373,7 +423,7 @@ export class PersonnelService {
       .addOrderBy('availability.date', 'ASC');
     const existingAvailability = await getQb.getMany();
 
-    if (availability.type !== AvailabilityType.NOT_INDICATED) {
+    if (type) {
       const availabilityDates: Partial<AvailabilityEntity>[] = [];
       for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
         const date = format(i, 'yyyy-MM-dd');
@@ -492,6 +542,5 @@ export class PersonnelService {
     qb.where('start_date <= :date', { date: new Date() });
     qb.andWhere('end_date >= :date', { date: new Date() });
     return await qb.getOne();
-    
   }
 }

@@ -143,7 +143,7 @@ export class EmcrService {
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
 
-    this.personnelService.addQueryBuilderCommonFilters(
+    await this.personnelService.addQueryBuilderCommonFilters(
       qb,
       query.name,
       query.availabilityType,

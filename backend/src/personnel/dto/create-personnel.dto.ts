@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsAlphanumeric,
-  IsBoolean,
   IsEmail,
   IsEnum,
   IsOptional,
@@ -146,7 +145,7 @@ export class CreatePersonnelDTO {
     example: [
       {
         date: '2021-03-01',
-        availabilityType: AvailabilityType.AVAILABLE,
+        availabilityType: AvailabilityType.UNAVAILABLE,
       },
       {
         date: '2021-03-02',
