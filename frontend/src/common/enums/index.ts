@@ -10,3 +10,4 @@ export * from './region.enum';
 export * from './firecentre.enum';
 export * from './driver-license.enum';
 export * from './program.enum';
+export * from './tabs.enum';

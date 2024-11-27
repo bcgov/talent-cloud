@@ -1,14 +1,20 @@
+import { useState } from 'react';
+import { Tab, TabsHeader } from '@material-tailwind/react';
 import type { Personnel } from '@/common';
-import { Role } from '@/common';
+import { Role, Tabs, TabNames } from '@/common';
 import { PersonnelStatus } from '@/components';
 
 export const ProfileMemberHeader = ({
+  currentTab = Tabs.AVAILABILITY,
   personnel,
   role,
 }: {
+  currentTab: string;
   personnel: Personnel;
   role?: Role;
 }) => {
+  const [activeTab, setActiveTab] = useState(currentTab);
+
   return (
     <>
       <div className="px-8 float-left hidden lg:inline-block">
@@ -29,6 +35,39 @@ export const ProfileMemberHeader = ({
               <PersonnelStatus status={personnel?.status} />
             </span>
           )}
+        </div>
+        <div className="w-fit">
+          <TabsHeader
+            className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap gap-6"
+            indicatorProps={{
+              className:
+                'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+            }}
+          >
+            <div className="flex gap-4">
+              <Tab
+                className={`${activeTab === Tabs.AVAILABILITY ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                onClick={() => setActiveTab(Tabs.AVAILABILITY)}
+                value={Tabs.AVAILABILITY}
+              >
+                {TabNames.AVAILABILITY}
+              </Tab>
+              <Tab
+                className={`${activeTab === Tabs.PROFILE ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                onClick={() => setActiveTab(Tabs.PROFILE)}
+                value={Tabs.PROFILE}
+              >
+                {TabNames.PROFILE}
+              </Tab>
+              <Tab
+                className={`${activeTab === Tabs.TRAINING ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                onClick={() => setActiveTab(Tabs.TRAINING)}
+                value={Tabs.TRAINING}
+              >
+                {TabNames.TRAINING}
+              </Tab>
+            </div>
+          </TabsHeader>
         </div>
       </div>
     </>

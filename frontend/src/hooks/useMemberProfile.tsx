@@ -22,7 +22,7 @@ const useMemberProfile = (): {
       const response = await AxiosPrivate.get(`/personnel`);
       response && setPersonnel({ ...response.data });
       if (response?.data?.bcws && response?.data?.emcr) {
-        setProgram(Program.BCWS);
+        setProgram(Program.ALL);
       } else if (response?.data?.emcr && !response?.data?.bcws) {
         setProgram(Program.EMCR);
       } else if (response?.data?.bcws && !response?.data?.emcr) {
@@ -44,7 +44,9 @@ const useMemberProfile = (): {
       const res =
         program &&
         (await AxiosPrivate.patch(encodeURI(`/member/${personnel.id}`), personnel));
-      res && setPersonnel(res.data);
+      if (res) {
+        setPersonnel(res.data);
+      }
     } catch (e) {
       console.log(e);
     }

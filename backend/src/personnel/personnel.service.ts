@@ -459,7 +459,16 @@ export class PersonnelService {
       .leftJoinAndSelect('personnel.homeLocation', 'homeLocation')
       .leftJoinAndSelect('personnel.recommitment', 'recommitment')
       .leftJoinAndSelect('personnel.bcws', 'bcws')
-      .leftJoinAndSelect('personnel.emcr', 'emcr');
+      .leftJoinAndSelect('bcws.roles', 'roles')
+      .leftJoinAndSelect('roles.role', 'role')
+      .leftJoinAndSelect('bcws.tools', 'tools')
+      .leftJoinAndSelect('tools.tool', 'tool')
+      .leftJoinAndSelect('bcws.certifications', 'certifications')
+      .leftJoinAndSelect('certifications.certification', 'certification')
+      // .leftJoinAndSelect('bcws.languages', 'languages')
+      .leftJoinAndSelect('personnel.emcr', 'emcr')
+      .leftJoinAndSelect('emcr.experiences', 'experiences')
+      .leftJoinAndSelect('experiences.function', 'function');
 
     qb.where('personnel.email = :email', { email: req.idir });
     const personnelData = await qb.getOne();
