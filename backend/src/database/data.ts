@@ -1,4 +1,4 @@
-import { AvailabilityEntity } from './entities/availability.entity';
+
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
@@ -10,6 +10,7 @@ import { Status } from '../common/enums/status.enum';
 import { UnionMembership } from '../common/enums/union-membership.enum';
 import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
 import { TravelPreference } from '../common/enums/travel-preference.enum';
+import { AvailabilityEntity } from './entities/personnel/availability.entity';
 
 export const personnel: CreatePersonnelDTO[] = [
   {

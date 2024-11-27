@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { EmcrExperienceEntity } from './emcr-function-experience.entity';
 import { EmcrTrainingEntity } from './emcr-training.entity';
-import { PersonnelEntity } from '../personnel.entity';
+import { PersonnelEntity } from '../personnel/personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
@@ -88,7 +88,8 @@ export class EmcrPersonnelEntity {
     name: 'travel_preference',
     type: 'enum',
     enum: TravelPreference,
-    enumName: 'travel_preference'
+    enumName: 'travel_preference',
+    default: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
   })
   travelPreference: TravelPreference;
 
@@ -115,12 +116,8 @@ export class EmcrPersonnelEntity {
   preocExperience?: boolean;
 
   toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
-    const response = new EmcrRO();
-
-    const personnelData: Record<string, PersonnelRO> =
-      this.personnel.toResponseObject(role, lastDeployed);
+    const response = new EmcrRO();  
     const data = {
-      ...personnelData,
       dateApplied: this.dateApplied ?? '',
       dateApproved: this.dateApproved ?? '',
       coordinatorNotes: this.coordinatorNotes,

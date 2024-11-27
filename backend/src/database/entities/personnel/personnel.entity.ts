@@ -9,17 +9,21 @@ import {
   OneToOne,
   ManyToOne,
 } from 'typeorm';
+
+import { BaseEntity } from '../base.entity';
+import { BcwsPersonnelEntity, LanguageEntity, PersonnelTools} from '../bcws';
+import { EmcrPersonnelEntity, LocationEntity } from '../emcr';
+import { Form } from '../form.entity';
+
+import { Role } from '../../../auth/interface';
+import { AvailabilityType, DriverLicense, Ministry } from '../../../common/enums';
+import { UnionMembership } from '../../../common/enums/union-membership.enum';
+import { datePST } from '../../../common/helpers';
+import { CreatePersonnelDTO } from '../../../personnel/dto/create-personnel.dto';
+import { PersonnelRO } from '../../../personnel/ro/personnel.ro';
+import { PersonnelCertificationEntity } from './personnel-certification.entity';
 import { AvailabilityEntity } from './availability.entity';
-import { BaseEntity } from './base.entity';
-import { BcwsPersonnelEntity } from './bcws';
-import { EmcrPersonnelEntity, LocationEntity } from './emcr';
-import { Form } from './form.entity';
-import { Role } from '../../auth/interface';
-import { AvailabilityType, DriverLicense, Ministry } from '../../common/enums';
-import { UnionMembership } from '../../common/enums/union-membership.enum';
-import { datePST } from '../../common/helpers';
-import { CreatePersonnelDTO } from '../../personnel/dto/create-personnel.dto';
-import { PersonnelRO } from '../../personnel/ro/personnel.ro';
+import { RecommitmentEntity } from '../recommitment/recommitment.entity';
 
 @Entity('personnel')
 export class PersonnelEntity extends BaseEntity {
@@ -94,7 +98,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({
     name: 'driver_licenses',
     type: 'simple-array',
-    nullable: true
+    nullable: true,
   })
   driverLicense?: DriverLicense[];
 
@@ -110,7 +114,7 @@ export class PersonnelEntity extends BaseEntity {
     cascade: true,
   })
   bcws?: BcwsPersonnelEntity;
-  
+
   @ManyToOne(() => LocationEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'work_location', referencedColumnName: 'id' })
   workLocation?: LocationEntity;
@@ -127,12 +131,63 @@ export class PersonnelEntity extends BaseEntity {
   })
   ministry: Ministry;
 
-  @Column({name: 'division', type: 'varchar', length: 100, nullable: true})
+  @Column({ name: 'division', type: 'varchar', length: 100, nullable: true })
   division?: string;
+
+  @OneToOne(() => RecommitmentEntity, (r) => r.memberId, { nullable: true })
+  @JoinColumn({ name: 'recommitment', referencedColumnName: 'memberId' })
+  recommitment?: RecommitmentEntity;
+  
+  @OneToMany(() => LanguageEntity, (l) => l.id, { cascade: true })
+  languages?: LanguageEntity[];
+
+  @OneToMany(() => PersonnelCertificationEntity, (c) => c.personnel, {
+    cascade: true,
+  })
+  certifications?: PersonnelCertificationEntity[];
+
+
+  @OneToMany(() =>PersonnelTools, (b) => b.personnel, { cascade: true })
+  tools?:PersonnelTools[];
+
+
+  @Column({
+    name: 'emergency_contact_first_name',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  emergencyContactFirstName?: string;
+
+  @Column({
+    name: 'emergency_contact_last_name',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  emergencyContactLastName?: string;
+
+  @Column({
+    name: 'emergency_contact_phone_number',
+    type: 'varchar',
+    length: 10,
+    nullable: true,
+  })
+  emergencyContactPhoneNumber?: string;
+
+  @Column({
+    name: 'emergency_contact_relationship',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  emergencyContactRelationship?: string;
 
   toResponseObject(
     role: Role,
     lastDeployed?: string,
+    bcws?: BcwsPersonnelEntity,
+    emcr?: EmcrPersonnelEntity
   ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
 
@@ -144,24 +199,33 @@ export class PersonnelEntity extends BaseEntity {
       primaryPhone: this.primaryPhone ?? '',
       secondaryPhone: this.secondaryPhone ?? '',
       workPhone: this.workPhone ?? '',
-
       unionMembership: this.unionMembership,
-
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
       supervisorEmail: this.supervisorEmail,
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
-
+      recommitment: this.recommitment?.toResponseObject() ?? null,
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),
       ministry: this.ministry,
       division: this?.division ?? '',
+      tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
+      languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
+      
+      certifications:
+        this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
+      emergencyContactFirstName: this.emergencyContactFirstName,
+      emergencyContactLastName: this.emergencyContactLastName,
+      emergencyContactPhoneNumber: this.emergencyContactPhoneNumber,
+      emergencyContactRelationship: this.emergencyContactRelationship,
       // trainings will not be returned until we have a more robust system
       availability:
         this.availability?.map((avail) => avail.toResponseObject()) || [],
+        bcws: bcws?.toResponseObject(role) ?? null,
+        emcr: emcr?.toResponseObject(role) ?? null
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"

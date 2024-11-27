@@ -13,13 +13,20 @@ import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 
 import { MemberProfileRO } from './ro/member-profile.ro';
-import { Program, RequestWithRoles } from '../auth/interface';
+import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { AvailabilityType } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
-import { AvailabilityEntity } from '../database/entities/availability.entity';
-import { PersonnelEntity } from '../database/entities/personnel.entity';
+
 import { AppLogger } from '../logger/logger.service';
+import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
+import { ToolsEntity } from '../database/entities/personnel/tools.entity';
+import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
+import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
+import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
+import { CreatePersonnelLanguagesDTO } from './dto/create-personnel-languages.dto';
+import { LanguageEntity } from '../database/entities/bcws';
 
 @Injectable()
 export class PersonnelService {
@@ -28,6 +35,14 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
+    @InjectRepository(RecommitmentCycleEntity)
+    private recommitmentCycleRepository: Repository<RecommitmentCycleEntity>,
+    @InjectRepository(ToolsEntity)
+    private toolsRepository: Repository<ToolsEntity>,
+    @InjectRepository(CertificationEntity)
+    private certificationRepository: Repository<CertificationEntity>,
+    @InjectRepository(LanguageEntity)
+    private languageRepository: Repository<LanguageEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -37,8 +52,26 @@ export class PersonnelService {
    * @param id
    * @returns
    */
-  async findOne(id: string): Promise<PersonnelEntity> {
-    return this.personnelRepository.findOne({ where: { id } });
+  
+  async findOne(id: string, role: Role): Promise<PersonnelEntity> {
+    
+    const person = await this.personnelRepository.findOneOrFail({
+      where: {  id },
+      relations: [
+        'certifications',
+        'certifications.certification',
+        'tools',
+        'tools.tool',
+      ],
+    });
+
+    const languages = await this.languageRepository.find({
+      where: { personnel: {  id } },
+    });
+    person.languages = languages;
+    
+
+    return person;
   }
 
   /**
@@ -65,19 +98,43 @@ export class PersonnelService {
    * @returns
    */
   async createPersonnel(personnel: CreatePersonnelDTO[]) {
+
+    
     try {
       return await Promise.all(
-        personnel.map((person: CreatePersonnelDTO) =>
-          this.personnelRepository.save(
-            this.personnelRepository.create(new PersonnelEntity(person)),
-          ),
-        ),
+        personnel.map((person: CreatePersonnelDTO) => {
+          const personEntity = this.personnelRepository.create(
+            new PersonnelEntity(person),
+          );
+          const languages = this.parseLanguages(
+            person.languages,
+            personEntity.id,
+          );
+          
+          this.personnelRepository.save({...personEntity, languages});
+        }),
       );
     } catch (e) {
       console.log(e);
     }
   }
-
+  /**
+   * Format Languages for saving in the database
+   * @param languages
+   * @param personnelId
+   * @returns
+   */
+  parseLanguages(
+    languages: Partial<CreatePersonnelLanguagesDTO>[],
+    personnelId: string,
+  ): CreatePersonnelLanguagesDTO[] {
+    return languages.map((itm) => ({
+      personnelId,
+      language: itm.language,
+      level: itm.level,
+      type: itm.type,
+    }));
+  }
   /**
    * create a personnel entity
    * @param personnel
@@ -453,10 +510,17 @@ export class PersonnelService {
       .createQueryBuilder('personnel')
       .leftJoinAndSelect('personnel.workLocation', 'workLocation')
       .leftJoinAndSelect('personnel.homeLocation', 'homeLocation')
+      .leftJoinAndSelect('personnel.recommitment', 'recommitment')
+
+      .leftJoinAndSelect('personnel.certifications', 'certifications')
+      .leftJoinAndSelect('certifications.certification', 'certification')
+      .leftJoinAndSelect('personnel.tools', 'tools')
+      .leftJoinAndSelect('tools.tool', 'tool')
       .leftJoinAndSelect('personnel.bcws', 'bcws')
       .leftJoinAndSelect('personnel.emcr', 'emcr');
 
     qb.where('personnel.email = :email', { email: req.idir });
+
     const personnelData = await qb.getOne();
     const memberProfile: MemberProfileRO = new MemberProfileRO(personnelData);
     return memberProfile;
@@ -471,9 +535,6 @@ export class PersonnelService {
       { email: email },
     );
     const people = await qb.getMany();
-
-    this.logger.log(people);
-
     const isMember = people.map((itm) => itm.email).includes(email);
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail)
@@ -483,5 +544,39 @@ export class PersonnelService {
       isMember,
       isSupervisor,
     };
+  }
+
+  async getRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
+    const qb = this.recommitmentCycleRepository.createQueryBuilder();
+    qb.where('start_date <= :date', { date: new Date() });
+    qb.andWhere('end_date >= :date', { date: new Date() });
+    return await qb.getOne();
+  }
+
+  /**
+   * Returns certifications that are not OFA I, II, or III
+   * Used by CHEFS form
+   * @returns {CertificationEntity[]} List of certifications
+   *
+   */
+  async getCertificates(
+    filterCommonCerts: boolean,
+  ): Promise<CertificationEntity[]> {
+    const certificates = await this.certificationRepository.find();
+    if (!filterCommonCerts) {
+      return certificates;
+    } else {
+      // filter out the OFA I, II, and III certifications and the PFA certification as these are listed separately on the CHEFS form
+      return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
+    }
+  }
+
+  /**
+   * Returns all tools
+   * Used by CHEFS form
+   * @returns {ToolsEntity[]} List of tools
+   */
+  async getTools(): Promise<ToolsEntity[]> {
+    return this.toolsRepository.find();
   }
 }

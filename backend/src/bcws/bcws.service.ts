@@ -1,21 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
-import { CreatePersonnelBcwsDTO, CreateBcwsPersonnelLanguagesDTO } from './dto';
+import { CreatePersonnelBcwsDTO} from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { BcwsRO } from './ro';
 import { BcwsSectionsRO } from './ro/bcws-sections.ro';
 import { Role, Program } from '../auth/interface';
 import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
-import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
-import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
-import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
-import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
-import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO } from '../personnel';
-import { PersonnelService } from '../personnel/personnel.service';
 import { TravelPreference } from '../common/enums/travel-preference.enum';
+import { BcwsPersonnelEntity, LanguageEntity } from '../database/entities/bcws';
+import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
+import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
+import { ToolsEntity } from '../database/entities/personnel/tools.entity';
+import { AppLogger } from '../logger/logger.service';
+import { PersonnelRO, UpdatePersonnelDTO } from '../personnel';
+import { PersonnelService } from '../personnel/personnel.service';
 
 @Injectable()
 export class BcwsService {
@@ -24,12 +24,6 @@ export class BcwsService {
     private readonly personnelService: PersonnelService,
     @InjectRepository(BcwsPersonnelEntity)
     private bcwsPersonnelRepository: Repository<BcwsPersonnelEntity>,
-    @InjectRepository(BcwsToolsEntity)
-    private toolsRepository: Repository<BcwsToolsEntity>,
-    @InjectRepository(LanguageEntity)
-    private languageRepository: Repository<LanguageEntity>,
-    @InjectRepository(BcwsCertificationEntity)
-    private certificationRepository: Repository<BcwsCertificationEntity>,
     @InjectRepository(BcwsRoleEntity)
     private roleRepository: Repository<BcwsRoleEntity>,
     private readonly logger: AppLogger,
@@ -50,52 +44,11 @@ export class BcwsService {
     role: Role,
   ) {
     this.logger.log(`Updating personnel ${id}`);
-    const person = await this.personnelService.findOne(id);
+    const person = await this.personnelService.findOne(id, role);
     const bcws = await this.bcwsPersonnelRepository.findOne({
       where: { personnel: { id } },
     });
 
-    this.logger.log(`${JSON.stringify(personnel)}`);
-    if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
-      const allTools = await this.toolsRepository.find();
-      const personnelTools = personnel.tools.map((t) => ({
-        toolId: allTools.find((at) => at.name === t.tool).id,
-        proficiencyLevel: t.proficiencyLevel,
-      }));
-      personnel.tools = personnelTools;
-    }
-
-    if (personnel.languages) {
-      const currentLanguages = await this.languageRepository.find({
-        where: { personnel: { personnelId: id } },
-      });
-      const updatedLanguageNames = personnel.languages.map((l) => l.language);
-      const deletedLanguagesIds = currentLanguages
-        .filter((cl) => !updatedLanguageNames.includes(cl.language))
-        .map((cl) => cl.id);
-      if (deletedLanguagesIds.length) {
-        await this.languageRepository.delete(deletedLanguagesIds);
-      }
-
-      const currentLanguagesNames = currentLanguages.map((cl) => cl.language);
-      const newLanguages = personnel.languages
-        .filter((l) => !currentLanguagesNames.includes(l.language))
-        .map((l) => ({
-          personnelId: bcws.personnelId,
-          ...l,
-        }));
-      await this.languageRepository.save(newLanguages);
-      delete personnel.languages;
-    }
-
-    if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
-      const allCertifications = await this.certificationRepository.find();
-      const personnelCerts = personnel.certifications.map((c) => ({
-        certificationId: allCertifications.find((ac) => ac.name === c.name).id,
-        expiry: c.expiry,
-      }));
-      personnel.certifications = personnelCerts;
-    }
 
     Object.keys(personnel).forEach((key) => {
       person[key] = personnel[key];
@@ -125,9 +78,6 @@ export class BcwsService {
   ): Promise<BcwsPersonnelEntity> {
     bcwsPersonnel.personnelId = id;
 
-    const languages = this.parseLanguages(bcwsPersonnel.languages, id);
-    bcwsPersonnel.languages = languages;
-
     return await this.bcwsPersonnelRepository.save(
       this.bcwsPersonnelRepository.create(
         new BcwsPersonnelEntity(bcwsPersonnel),
@@ -135,23 +85,7 @@ export class BcwsService {
     );
   }
 
-  /**
-   * Format Languages for saving in the database
-   * @param languages
-   * @param personnelId
-   * @returns
-   */
-  parseLanguages(
-    languages: Partial<CreateBcwsPersonnelLanguagesDTO>[],
-    personnelId: string,
-  ): CreateBcwsPersonnelLanguagesDTO[] {
-    return languages.map((itm) => ({
-      personnelId,
-      language: itm.language,
-      level: itm.level,
-      type: itm.type,
-    }));
-  }
+  
 
   /**
    * Get BCWS Personnel
@@ -175,6 +109,7 @@ export class BcwsService {
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
 
     this.personnelService.addQueryBuilderCommonFilters(
       qb,
@@ -194,24 +129,35 @@ export class BcwsService {
           homeLocations: query.location,
         });
       } else if (query.includeTravel) {
-        qb.andWhere('bcws_personnel.travelPreference != :remoteOnly', { remoteOnly: TravelPreference.REMOTE_ONLY });
-        qb.andWhere(new Brackets((inner) => {
-          inner.orWhere('location.locationName IN (:...homeLocations)', {
-            homeLocations: query.location,
-          });
-          inner.orWhere('bcws_personnel.travelPreference = :travelAnywhere', { travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE });
-          inner.orWhere(
-            `(bcws_personnel.travelPreference = :travelFireZone
-            AND location.fireZone IN (SELECT fire_zone FROM "location" WHERE location_name IN (:...homeLocations)))`, {
-              travelFireZone: TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+        qb.andWhere('bcws_personnel.travelPreference != :remoteOnly', {
+          remoteOnly: TravelPreference.REMOTE_ONLY,
+        });
+        qb.andWhere(
+          new Brackets((inner) => {
+            inner.orWhere('location.locationName IN (:...homeLocations)', {
               homeLocations: query.location,
             });
-            inner.orWhere(
-            '(bcws_personnel.travelPreference = :travelFireCentre AND location.fireCentre IN (:...fireCentres))',{
-              travelFireCentre: TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
-              fireCentres: query.fireCentre,
+            inner.orWhere('bcws_personnel.travelPreference = :travelAnywhere', {
+              travelAnywhere: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
             });
-        }));
+            inner.orWhere(
+              `(bcws_personnel.travelPreference = :travelFireZone
+            AND location.fireZone IN (SELECT fire_zone FROM "location" WHERE location_name IN (:...homeLocations)))`,
+              {
+                travelFireZone: TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE,
+                homeLocations: query.location,
+              },
+            );
+            inner.orWhere(
+              '(bcws_personnel.travelPreference = :travelFireCentre AND location.fireCentre IN (:...fireCentres))',
+              {
+                travelFireCentre:
+                  TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE,
+                fireCentres: query.fireCentre,
+              },
+            );
+          }),
+        );
       }
     }
 
@@ -245,28 +191,21 @@ export class BcwsService {
   async getBcwsPersonnelById(
     role: Role,
     id: string,
-  ): Promise<Record<string, BcwsRO>> {
-    const person = await this.bcwsPersonnelRepository.findOneOrFail({
+  ): Promise<Record<string, PersonnelRO>> {
+    const person = await this.personnelService.findOne(id, role);
+    const bcwsPerson = await this.bcwsPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
       relations: [
         'personnel',
         'roles',
         'roles.role',
-        'certifications',
-        'certifications.certification',
-        'tools',
-        'tools.tool',
       ],
     });
-
-    const languages = await this.languageRepository.find({
-      where: { personnel: { personnelId: id } },
-    });
-    person.languages = languages;
+    
     const lastDeployed = await this.personnelService.getLastDeployedDate(id);
-    const personnel = person.toResponseObject(role, lastDeployed);
-
-    return personnel;
+    
+    return person.toResponseObject(role, lastDeployed, bcwsPerson);
+  
   }
 
   /**
@@ -276,33 +215,7 @@ export class BcwsService {
   async getAllRoles(): Promise<BcwsRoleEntity[]> {
     return this.roleRepository.find();
   }
-  /**
-   * Returns certifications that are not OFA I, II, or III
-   * Used by CHEFS form
-   * @returns {BcwsCertificationEntity[]} List of certifications
-   *
-   */
-  async getCertificates(
-    filterCommonCerts: boolean,
-  ): Promise<BcwsCertificationEntity[]> {
-    const certificates = await this.certificationRepository.find();
-    if (!filterCommonCerts) {
-      return certificates;
-    } else {
-      // filter out the OFA I, II, and III certifications and the PFA certification as these are listed separately on the CHEFS form
-      return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
-    }
-  }
-
-  /**
-   * Returns all tools
-   * Used by CHEFS form
-   * @returns {BcwsToolsEntity[]} List of tools
-   */
-  async getTools(): Promise<BcwsToolsEntity[]> {
-    return this.toolsRepository.find();
-  }
-
+  
   /**
    * Returns all roles with readable role/section names and id  grouped by sections
    * Used by CHEFS form and front end to display list of roles

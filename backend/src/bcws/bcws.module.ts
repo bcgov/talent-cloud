@@ -7,9 +7,9 @@ import {
   BcwsSectionsAndRolesEntity,
   LanguageEntity,
 } from '../database/entities/bcws';
-import { BcwsCertificationEntity } from '../database/entities/bcws/bcws-certifications.entity';
+import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
-import { BcwsToolsEntity } from '../database/entities/bcws/bcws-tools.entity';
+import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelModule } from '../personnel/personnel.module';
 
@@ -18,9 +18,7 @@ import { PersonnelModule } from '../personnel/personnel.module';
     TypeOrmModule.forFeature([
       BcwsPersonnelEntity,
       BcwsSectionsAndRolesEntity,
-      LanguageEntity,
-      BcwsCertificationEntity,
-      BcwsToolsEntity,
+      
       BcwsRoleEntity,
     ]),
     PersonnelModule,

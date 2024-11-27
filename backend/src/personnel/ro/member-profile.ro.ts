@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PersonnelRO } from './personnel.ro';
-import { PersonnelEntity } from '../../database/entities/personnel.entity';
+import { PersonnelEntity } from '../../database/entities/personnel/personnel.entity';
 
 export class MemberProfileRO {
   @ApiProperty({

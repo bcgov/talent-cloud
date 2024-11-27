@@ -5,7 +5,7 @@ import {
   LanguageProficiency,
 } from '../../common/enums/bcws';
 
-export class CreateBcwsPersonnelLanguagesDTO {
+export class CreatePersonnelLanguagesDTO {
   @ApiProperty({
     description: 'Personnel ID',
     required: false,

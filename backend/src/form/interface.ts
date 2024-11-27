@@ -64,6 +64,15 @@ export interface PersonnelFormData {
   pfa: string;
   ministry: {label: string; value: string};
   division?: string;
+  languages?: LanguagesFormSection[];
+  tools?: ToolsFormSection[];
+  certificates?: CertsFormSection[]
+  foodSafe1Expiry?: Date;
+  foodSafe2Expiry?: Date;
+  emergencyContactFirstName: string;
+  emergencyContactLastName: string;
+  emergencyContactPhoneNumber: string;
+  emergencyContactRelationship: string;
 }
 
 export interface ToolsFormSection {
@@ -118,20 +127,11 @@ export interface DivisionSection {
 }
 export interface BcwsFormData {
   sections?: SectionsFormSection;
-  certificates?: CertsFormSection[]
-  foodSafe1Expiry?: Date;
-      foodSafe2Expiry?: Date;
-  emergencyContactFirstName: string;
-  emergencyContactLastName: string;
-  emergencyContactPhoneNumber: string;
-  emergencyContactRelationship: string;
   employeeId: string;
   division: DivisionSection;
   paylistId: string;
   firstChoiceSection: string;
   secondChoiceSection?: string;
-  languages?: LanguagesFormSection[];
-  tools?: ToolsFormSection[];
   purchaseCard: boolean;
   liaisonFirstName?: string;
   liaisonLastName?: string;
@@ -152,9 +152,6 @@ export interface EmcrFormData {
     9: boolean;
     10: boolean;
   },
-  firstAidLevel: string;
-  firstAidExpiry: Date;
-  pfa: boolean;
   experience: {
     emergencyExperience: boolean;
     preocExperience: boolean;

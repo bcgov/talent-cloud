@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CertificationRO } from '../../../bcws/ro/bcws-certification.ro';
+import { CertificationRO } from '../../../personnel/ro/certification.ro';
 
-@Entity('bcws_certification')
-export class BcwsCertificationEntity {
+@Entity('certification')
+export class CertificationEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

@@ -1,15 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
-import { BcwsPersonnelCertificationRO } from './bcws-personnel-certitifications.ro';
-import { BcwsPersonnelLanguagesRO } from './bcws-personnel-languages.ro';
 import { BcwsPersonnelRoleRO } from './bcws-personnel-roles.ro';
-import { BcwsPersonnelToolsRO } from './bcws-personnel-tools.ro';
+
 import { Section } from '../../common/enums/bcws';
 import { Status } from '../../common/enums/status.enum';
 import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 
-export class BcwsRO extends PersonnelRO {
+export class BcwsRO {
   @ApiProperty({
     description: 'Personnel ID',
     example: '123456',
@@ -108,34 +106,6 @@ export class BcwsRO extends PersonnelRO {
     example: true,
   })
   orientation: boolean;
-
-  @ApiProperty({
-    description: 'Emergency Contact First Name',
-    required: false,
-  })
-  emergencyContactFirstName: string;
-
-  @ApiProperty({
-    description: 'Emergency Contact Last Name',
-    required: false,
-  })
-  emergencyContactLastName: string;
-
-  @ApiProperty({
-    description: 'Emergency Contact Phone Number',
-    required: false,
-  })
-  emergencyContactPhoneNumber: string;
-
-  //TODO: Add the following properties
-  @ApiProperty()
-  tools?: BcwsPersonnelToolsRO[];
-
-  @ApiProperty()
-  certifications?: BcwsPersonnelCertificationRO[];
-
-  @ApiProperty()
-  languages?: BcwsPersonnelLanguagesRO[];
 
   @ApiProperty()
   roles?: BcwsPersonnelRoleRO;

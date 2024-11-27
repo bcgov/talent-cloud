@@ -56,12 +56,11 @@ const SplashPage = () => {
                   <>
                     <span className="font-bold mr-2">CORE</span>
                     <span className="pb-12">{`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}</span>
+                    <a href="https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}">
+                      <strong>here</strong>.
+                    </a>
                   </>
                 }
-                link={{
-                  name: 'here ',
-                  url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`,
-                }}
               />
             ) : (
               <Banner

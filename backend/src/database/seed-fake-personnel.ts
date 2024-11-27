@@ -1,7 +1,8 @@
 import { datasource } from './datasource';
 import { EmcrPersonnelEntity, LocationEntity } from './entities/emcr';
-import { PersonnelEntity } from './entities/personnel.entity';
-import { handler as dataHandler } from '../common/emcr-seed';
+import { PersonnelEntity } from './entities/personnel/personnel.entity';
+import { handler as dataHandler } from '../common/personnel-seed';
+import { BcwsPersonnelEntity } from './entities/bcws';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
@@ -12,28 +13,34 @@ export const handler = async () => {
   const locations = await locationRepo.find();
   const functions = await datasource.query('SELECT * FROM emcr_function');
   const trainings = await datasource.query('SELECT * FROM emcr_training');
-
+  
+  const tools = await datasource.query('SELECT * FROM tools');
+  const certs = await datasource.query('SELECT * FROM certification');
+  const roles = await datasource.query('SELECT * FROM bcws_role');
   const personnelRepo = datasource.getRepository(PersonnelEntity);
+  const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
+  
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
     const { personnelData, emcrData } = dataHandler(
-      locations.map((itm) => ({
-        locationName: itm.locationName,
-        region: itm.region,
-        id: itm.id,
-      })),
+      locations,
+      tools,
+      certs,
+      roles,
       functions,
       trainings,
-    );
 
+    );
+const personOne = new PersonnelEntity({
+  ...personnelData,
+  email: 'member@gmail.com',
+  supervisorEmail: 'emcr-coordinator@gov.bc.ca',
+})
     const person = await personnelRepo.save(
       personnelRepo.create(
-        new PersonnelEntity({
-          ...personnelData,
-          email: 'member@gmail.com',
-          supervisorEmail: 'emcr-coordinator@gov.bc.ca',
-        }),
+        {...personOne},
+
       ),
     );
 
@@ -58,6 +65,7 @@ export const handler = async () => {
       ),
     );
 
+    
     const personThree = await personnelRepo.save(
       personnelRepo.create(
         new PersonnelEntity({
@@ -73,12 +81,11 @@ export const handler = async () => {
       ),
     );
     for (let i = 0; i < 50; i++) {
-      const { personnelData, emcrData } = dataHandler(
-        locations.map((itm) => ({
-          locationName: itm.locationName,
-          region: itm.region,
-          id: itm.id,
-        })),
+      const { personnelData, emcrData, bcwsData } = dataHandler(
+        locations,
+        tools,
+        certs,
+        roles,
         functions,
         trainings,
       );
@@ -92,8 +99,14 @@ export const handler = async () => {
           new EmcrPersonnelEntity({ ...emcrData, personnelId: person.id }),
         ),
       );
-    }
+    
+    bcwsData.personnelId = person.id;
 
+      
+    await bcwsPersonnelRepo.save(
+      bcwsPersonnelRepo.create(new BcwsPersonnelEntity(bcwsData)),
+    );
+  }
     console.log('...complete...');
 
     await datasource.destroy();

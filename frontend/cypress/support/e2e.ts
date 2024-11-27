@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 // ***********************************************************
 // This example support/component.ts is processed and
 // loaded automatically before your test files.
@@ -36,7 +36,7 @@ Cypress.Commands.add('login_coordinator', () => {
   cy.intercept({ method: 'GET', url: '**/api/v1/keycloak' }).as('keycloak');
 
   cy.get('#login-button-main').click();
-  
+
   cy.origin('https://logontest7.gov.bc.ca/', () => {
     cy.wait(1000);
     cy.get('#user').type(Cypress.env('CYPRESS_KEYCLOAK_USER'));

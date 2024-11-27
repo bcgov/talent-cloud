@@ -230,8 +230,11 @@ seed-local:
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed.ts")'
 
+seed-local-recommitment:
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-recommitment.ts")'
+
 seed-local-bcws:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-bcws.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-personnel.ts")'
 
 seed-local-emcr:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-emcr.ts")'

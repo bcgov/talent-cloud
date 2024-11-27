@@ -8,11 +8,8 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { BcwsPersonnelCertificationEntity } from './bcws-personnel-certification.entity';
-import { LanguageEntity } from './bcws-personnel-language.entity';
 import { BcwsSectionsAndRolesEntity } from './bcws-personnel-roles.entity';
-import { BcwsPersonnelTools } from './bcws-personnel-tools.entity';
-import { PersonnelEntity } from '../personnel.entity';
+import { PersonnelEntity } from '../personnel/personnel.entity';
 import { Role } from '../../../auth/interface';
 import { CreatePersonnelBcwsDTO } from '../../../bcws/dto/create-bcws-personnel.dto';
 import { BcwsRO } from '../../../bcws/ro';
@@ -79,38 +76,6 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'liason_email', type: 'varchar', length: 50, nullable: true })
   liaisonEmail?: string;
 
-  @Column({
-    name: 'emergency_contact_first_name',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  emergencyContactFirstName?: string;
-
-  @Column({
-    name: 'emergency_contact_last_name',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  emergencyContactLastName?: string;
-
-  @Column({
-    name: 'emergency_contact_phone_number',
-    type: 'varchar',
-    length: 10,
-    nullable: true,
-  })
-  emergencyContactPhoneNumber?: string;
-
-  @Column({
-    name: 'emergency_contact_relationship',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  emergencyContactRelationship?: string;
-
   @Column({ name: 'coordinator_notes', type: 'text', nullable: true })
   coordinatorNotes?: string;
 
@@ -133,7 +98,8 @@ export class BcwsPersonnelEntity {
     name: 'travel_preference',
     type: 'enum',
     enum: TravelPreference,
-    enumName: 'travel_preference'
+    enumName: 'travel_preference',
+    default: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
   })
   travelPreference: TravelPreference;
 
@@ -155,21 +121,10 @@ export class BcwsPersonnelEntity {
   })
   secondChoiceSection?: Section;
 
-  @OneToMany(() => BcwsPersonnelTools, (b) => b.personnel, { cascade: true })
-  tools?: BcwsPersonnelTools[];
-
   @OneToMany(() => BcwsSectionsAndRolesEntity, (s) => s.personnel, {
     cascade: true,
   })
   roles?: BcwsSectionsAndRolesEntity[];
-
-  @OneToMany(() => LanguageEntity, (l) => l.id, { cascade: true })
-  languages?: LanguageEntity[];
-
-  @OneToMany(() => BcwsPersonnelCertificationEntity, (c) => c.personnel, {
-    cascade: true,
-  })
-  certifications: BcwsPersonnelCertificationEntity[];
 
   toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
     const response = new BcwsRO();
@@ -200,15 +155,7 @@ export class BcwsPersonnelEntity {
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,
       travelPreference: this.travelPreference,
-      tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
-      languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
-      certifications:
-        this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
-      emergencyContactFirstName: this.emergencyContactFirstName,
-      emergencyContactLastName: this.emergencyContactLastName,
-      emergencyContactPhoneNumber: this.emergencyContactPhoneNumber,
-      emergencyContactRelationship: this.emergencyContactRelationship,
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });

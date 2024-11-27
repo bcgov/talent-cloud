@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BcwsToolsRO } from '../../../bcws/ro/tools.ro';
+import { BcwsToolsRO } from '../../../personnel/ro/tools.ro';
 import { Tools, ToolsName } from '../../../common/enums/bcws/tools.enum';
 
-@Entity('bcws_tools')
-export class BcwsToolsEntity {
+@Entity('tools')
+export class ToolsEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

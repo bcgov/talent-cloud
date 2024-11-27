@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Personnel } from '@/common';
+import type { Personnel, Role } from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { useRoleContext } from '@/providers';
@@ -12,17 +12,20 @@ const usePersonnel = (): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
   profileData: ProfileData;
+  role?: Role;
+  loading?: boolean;
+  program?: Program;
 } => {
+  const { role, program, loading } = useRoleContext();
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
-  const { program } = useRoleContext();
+
   const { profileId } = useParams();
 
   useEffect(() => {
     (async () => {
       try {
-        const response =
-          program && (await AxiosPrivate.get(`/${program}/${profileId}`));
+        const response = await AxiosPrivate.get(`/${program}/${profileId}`);
         response && setPersonnel(response.data);
       } catch (e) {
         console.log(e);
@@ -44,6 +47,8 @@ const usePersonnel = (): {
   return {
     personnel,
     updatePersonnel,
+    role,
+    loading,
     profileData:
       program === Program.BCWS ? bcwsData(personnel) : emcrData(personnel),
   };

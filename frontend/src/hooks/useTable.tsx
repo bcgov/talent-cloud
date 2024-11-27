@@ -41,7 +41,9 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
             ),
         }),
       );
-      const columns = isPending ? pendingColumns[program] : activeCols[program];
+      const columns = isPending
+        ? pendingColumns[program as keyof typeof pendingColumns]
+        : activeCols[program as keyof typeof pendingColumns];
 
       setRows(rows);
       setTabCount(count);

@@ -1,9 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AvailabilityRO } from './availability.ro';
+import { RecommitmentRO } from './recommitment.ro';
 import { Ministry } from '../../common/enums/ministry.enum';
 import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
 import { LocationRO } from '../../region-location/region-location.ro';
+import { PersonnelToolsRO } from './personnel-tools.ro';
+import { PersonnelCertificationRO } from './personnel-certitifications.ro';
+import { PersonnelLanguagesRO } from './personnel-languages.ro';
+import { EmcrRO } from 'src/emcr/ro';
+import { BcwsRO } from 'src/bcws/ro';
+import { Exclude, Expose } from 'class-transformer';
 
 export class PersonnelRO {
   @ApiProperty({
@@ -145,4 +152,49 @@ export class PersonnelRO {
     required: false,
   })
   division?: string;
+
+  @ApiProperty({
+    description: 'Recommitment',
+    required: false,
+  })
+  recommitment: RecommitmentRO;
+
+
+  //TODO: Add the following properties
+  @ApiProperty()
+  tools?:PersonnelToolsRO[];
+
+  @ApiProperty()
+  certifications?: PersonnelCertificationRO[];
+
+  @ApiProperty()
+  languages?: PersonnelLanguagesRO[];
+
+  @ApiProperty({
+    description: 'Emergency Contact First Name',
+    required: false,
+  })
+  emergencyContactFirstName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Last Name',
+    required: false,
+  })
+  emergencyContactLastName: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Phone Number',
+    required: false,
+  })
+  emergencyContactPhoneNumber: string;
+
+  @ApiProperty()
+  @Expose({ groups: ['emcr', 'member'] })
+  emcr?: EmcrRO
+
+
+  @ApiProperty()
+  @Expose({ groups: ['bcws', 'member'] })
+  bcws?: BcwsRO
+
 }

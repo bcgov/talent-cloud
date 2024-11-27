@@ -13,6 +13,7 @@ import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
 import axios from 'axios';
+import { PersonnelService } from './personnel/personnel.service';
 
 @ApiTags('Application API')
 @Controller()
@@ -23,6 +24,7 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
     @Inject(BcwsService) private bcwsService: BcwsService,
     @Inject(EmcrService) private emcrService: EmcrService,
+    @Inject(PersonnelService) private personnelService: PersonnelService, 
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
@@ -114,8 +116,8 @@ export class AppController {
     this.logger.log(`${req.url} ${req.role}`);
 
     const sections = await this.bcwsService.getRoles();
-    const certificates = await this.bcwsService.getCertificates(true);
-    const tools = await this.bcwsService.getTools();
+    const certificates = await this.personnelService.getCertificates(true);
+    const tools = await this.personnelService.getTools();
     const roles = await this.bcwsService.getAllRoles();
     const functions = await this.emcrService.getFunctions();
     /**
