@@ -117,7 +117,10 @@ export class EmcrPersonnelEntity {
 
   toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
     const response = new EmcrRO();  
+    const personnelData: Record<string, PersonnelRO> =
+    this.personnel.toResponseObject(role, lastDeployed);
     const data = {
+      ...personnelData,
       dateApplied: this.dateApplied ?? '',
       dateApproved: this.dateApproved ?? '',
       coordinatorNotes: this.coordinatorNotes,
