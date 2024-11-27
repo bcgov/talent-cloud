@@ -7,10 +7,10 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { PersonnelEntity } from './personnel.entity';
 import { RecommitmentCycleEntity } from './recommitment-cycle.entity';
-import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
-import { RecommitmentRO } from '../../personnel/ro/recommitment.ro';
+import { PersonnelEntity } from '../personnel/personnel.entity';
+import { RecommitmentStatus } from '../../../common/enums/recommitment-status.enum';
+import { RecommitmentRO } from '../../../personnel/ro/recommitment.ro';
 
 @Entity('recommitment')
 export class RecommitmentEntity {

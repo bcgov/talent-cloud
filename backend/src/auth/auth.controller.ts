@@ -48,7 +48,7 @@ export class AuthController {
       idir: req?.idir,
       member: isMember,
       supervisor: isSupervisor,
-      recommitment
+      recommitment,
     };
   }
 }

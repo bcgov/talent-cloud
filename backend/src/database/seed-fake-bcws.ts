@@ -1,7 +1,7 @@
 import { datasource } from './datasource';
 import { BcwsPersonnelEntity } from './entities/bcws';
-import { PersonnelEntity } from './entities/personnel.entity';
 import { handler as dataHandler } from '../common/bcws-seed';
+import { PersonnelEntity } from './entities/personnel/personnel.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
@@ -9,8 +9,8 @@ export const handler = async () => {
   }
 
   const locations = await datasource.query('SELECT * FROM location');
-  const tools = await datasource.query('SELECT * FROM bcws_tools');
-  const certs = await datasource.query('SELECT * FROM bcws_certification');
+  const tools = await datasource.query('SELECT * FROM tools');
+  const certs = await datasource.query('SELECT * FROM certification');
   const roles = await datasource.query('SELECT * FROM bcws_role');
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
@@ -34,9 +34,6 @@ export const handler = async () => {
     );
 
     bcwsData.personnelId = person.id;
-
-    bcwsData.languages.forEach((itm) => (itm.personnelId = person.id));
-
     await bcwsPersonnelRepo.save(
       bcwsPersonnelRepo.create(
         new BcwsPersonnelEntity({ ...bcwsData, personnelId: person.id }),
@@ -56,8 +53,6 @@ export const handler = async () => {
       );
 
       bcwsData.personnelId = person.id;
-
-      bcwsData.languages.forEach((itm) => (itm.personnelId = person.id));
       await bcwsPersonnelRepo.save(
         bcwsPersonnelRepo.create(new BcwsPersonnelEntity(bcwsData)),
       );

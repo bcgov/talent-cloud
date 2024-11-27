@@ -1,21 +1,22 @@
 import { Entity, ManyToOne, JoinColumn, Column, PrimaryColumn } from 'typeorm';
-import { BcwsPersonnelEntity } from './bcws-personnel.entity';
-import { BcwsToolsEntity } from './bcws-tools.entity';
-import { BcwsPersonnelToolsRO } from '../../../bcws/ro';
-import { ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
+import { PersonnelEntity } from './personnel.entity';
+import { ToolsEntity } from './tools.entity';
 
-@Entity('bcws_personnel_tools')
-export class BcwsPersonnelTools {
-  @ManyToOne(() => BcwsPersonnelEntity, { orphanedRowAction: 'delete' })
-  @JoinColumn({ name: 'personnel_id' })
-  personnel: BcwsPersonnelEntity;
+import { ToolsProficiency } from '../../../common/enums/bcws/tools.enum';
+import { PersonnelToolsRO } from '../../../personnel/ro/personnel-tools.ro';
+
+@Entity('personnel_tools')
+export class PersonnelTools {
+  @ManyToOne(() => PersonnelEntity, { orphanedRowAction: 'delete' })
+  @JoinColumn({ name: 'personnel_id', referencedColumnName: 'id' })
+  personnel: PersonnelEntity;
 
   @PrimaryColumn({ name: 'personnel_id', type: 'uuid' })
   personnelId: string;
 
-  @ManyToOne(() => BcwsToolsEntity, (b) => b.id, { eager: true })
+  @ManyToOne(() => ToolsEntity, (b) => b.id, { eager: true })
   @JoinColumn({ name: 'tool_id', referencedColumnName: 'id' })
-  tool: BcwsToolsEntity;
+  tool: ToolsEntity;
 
   @PrimaryColumn({ name: 'tool_id', type: 'int' })
   toolId: number;
@@ -28,7 +29,7 @@ export class BcwsPersonnelTools {
   })
   proficiencyLevel: ToolsProficiency;
 
-  toResponseObject(): BcwsPersonnelToolsRO {
+  toResponseObject(): PersonnelToolsRO {
     return {
       tool: this.tool.name ?? null,
       proficiencyLevel: this.proficiencyLevel,

@@ -1,21 +1,21 @@
 import { faker } from '@faker-js/faker';
 import { format } from 'date-fns';
 import { divisionsAndMinistries } from './const';
+import { CreatePersonnelDTO, LocationDTO } from '../personnel';
 import { AvailabilityType } from './enums/availability-type.enum';
 import { DriverLicense } from './enums/driver-license.enum';
 import { FirstAid, Experience } from './enums/emcr';
 import { Ministry } from './enums/ministry.enum';
 import { Status } from './enums/status.enum';
+import { TravelPreference } from './enums/travel-preference.enum';
 import { UnionMembership } from './enums/union-membership.enum';
-import { AvailabilityEntity } from '../database/entities/availability.entity';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
   EmcrTrainingEntity,
 } from '../database/entities/emcr';
+import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
-import { CreatePersonnelDTO, LocationDTO } from '../personnel';
-import { TravelPreference } from './enums/travel-preference.enum';
 
 export const handler = (
   locations: LocationDTO[],

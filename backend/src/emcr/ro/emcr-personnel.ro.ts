@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { EmcrExperienceRO } from './experience.ro';
-import { PersonnelRO } from '../../personnel/ro/personnel.ro';
 
-export class EmcrRO extends PersonnelRO {
+export class EmcrRO {
   @ApiProperty({
     description: 'Notes about Personnel - Only vieweable by coordinators',
     required: false,

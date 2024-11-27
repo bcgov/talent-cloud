@@ -12,14 +12,14 @@ import {
 } from 'typeorm';
 import { EmcrExperienceEntity } from './emcr-function-experience.entity';
 import { EmcrTrainingEntity } from './emcr-training.entity';
-import { PersonnelEntity } from '../personnel.entity';
+import { PersonnelEntity } from '../personnel/personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
 import { Status } from '../../../common/enums/status.enum';
+import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 import { CreatePersonnelEmcrDTO } from '../../../emcr/dto';
 import { EmcrRO } from '../../../emcr/ro';
 import { PersonnelRO } from '../../../personnel';
-import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
@@ -117,9 +117,8 @@ export class EmcrPersonnelEntity {
 
   toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
     const response = new EmcrRO();
-
     const personnelData: Record<string, PersonnelRO> =
-      this.personnel.toResponseObject(role, lastDeployed);
+      this?.personnel?.toResponseObject(role, lastDeployed) ?? {};
     const data = {
       ...personnelData,
       dateApplied: this.dateApplied ?? '',

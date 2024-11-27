@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsAlphanumeric,
+  IsArray,
   IsEmail,
   IsEnum,
   IsOptional,
@@ -9,11 +10,17 @@ import {
   ValidateIf,
 } from 'class-validator';
 
+import { CreateCertificationsDTO } from './create-certifications.dto';
+import { CreatePersonnelLanguagesDTO } from './create-personnel-languages.dto';
+import { CreatePersonnelToolsDTO } from './create-personnel-tools.dto';
+import { UpdateCertificationsDTO } from './update-personnel-certifications.dto';
+import { UpdatePersonnelToolsDTO } from './update-personnel-tools.dto';
 import { CreatePersonnelBcwsDTO } from '../../bcws/dto';
 import { FireCentre, Ministry, Region } from '../../common/enums';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
-import { AvailabilityEntity } from '../../database/entities/availability.entity';
+
+import { AvailabilityEntity } from '../../database/entities/personnel/availability.entity';
 import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
 
 export class LocationDTO {
@@ -190,4 +197,52 @@ export class CreatePersonnelDTO {
 
   @IsOptional()
   bcws?: CreatePersonnelBcwsDTO;
+
+  @ApiProperty({
+    description: 'Emergency Contact First Name',
+  })
+  @IsOptional()
+  emergencyContactFirstName?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Last Name',
+  })
+  @IsOptional()
+  emergencyContactLastName?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Phone Number',
+  })
+  @IsOptional()
+  emergencyContactPhoneNumber?: string;
+
+  @ApiProperty({
+    description: 'Emergency Contact Relationship',
+  })
+  @IsOptional()
+  emergencyContactRelationship?: string;
+
+  @ApiProperty({
+    description: 'Tools used by the personnel',
+    required: false,
+  })
+  @IsArray()
+  @IsOptional()
+  tools?: CreatePersonnelToolsDTO[] | UpdatePersonnelToolsDTO[];
+
+  @ApiProperty({
+    description: 'Languages spoken by the personnel',
+    required: false,
+  })
+  @IsArray()
+  @IsOptional()
+  languages?: CreatePersonnelLanguagesDTO[];
+
+  @ApiProperty({
+    description: 'Certifications for the personnel',
+    required: false,
+  })
+  @IsArray()
+  @IsOptional()
+  certifications?: CreateCertificationsDTO[] | UpdateCertificationsDTO[];
 }

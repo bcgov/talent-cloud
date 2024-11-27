@@ -5,10 +5,10 @@ import { EmcrService } from './emcr.service';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
-  LocationEntity,
   EmcrPersonnelEntity,
   EmcrTrainingEntity,
 } from '../database/entities/emcr';
+import { LocationEntity } from '../database/entities/location.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelModule } from '../personnel/personnel.module';
 @Module({
