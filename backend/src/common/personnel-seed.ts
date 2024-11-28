@@ -22,11 +22,11 @@ import {
 import { LocationEntity } from '../database/entities/location.entity';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
+import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { createBCWShandler } from '../database/seed-bcws-partial';
 import { createEMCRhandler } from '../database/seed-emcr-partial';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
-import { CreatePersonnelLanguagesDTO } from '../personnel/dto/create-personnel-languages.dto';
 
 export const handler = (
   locations?: LocationEntity[],
@@ -80,7 +80,7 @@ export const handler = (
     supervisorPhone: faker.string.numeric('##########'),
     tools: createTools(tools),
     certifications: createCertifications(certs),
-    languages: [],
+    languages: createLanguages(),
     emergencyContactFirstName: faker.person.firstName(),
     emergencyContactLastName: faker.person.lastName(),
     emergencyContactPhoneNumber: faker.string.numeric('##########'),
@@ -144,24 +144,26 @@ const availability = () => {
   return availabilities;
 };
 
-export const createLanguages = (): CreatePersonnelLanguagesDTO[] => {
-  const personnelLang: CreatePersonnelLanguagesDTO[] = [];
+export const createLanguages = (): LanguageEntity[] => {
+  const personnelLang: LanguageEntity[] = [];
 
   for (let i = 0; i < 2; i++) {
-    personnelLang.push({
-      language: faker.helpers.arrayElement([
-        'Portuguese',
-        'English',
-        'Spanish',
-      ]),
-      level:
-        LanguageProficiency[
-          faker.helpers.arrayElement(Object.values(LanguageProficiency))
+    personnelLang.push(
+      new LanguageEntity({
+        language: faker.helpers.arrayElement([
+          'Portuguese',
+          'English',
+          'Spanish',
+        ]),
+        level:
+          LanguageProficiency[
+            faker.helpers.arrayElement(Object.values(LanguageProficiency))
+          ],
+        type: LanguageLevelType[
+          faker.helpers.arrayElement(Object.values(LanguageLevelType))
         ],
-      type: LanguageLevelType[
-        faker.helpers.arrayElement(Object.values(LanguageLevelType))
-      ],
-    });
+      }),
+    );
   }
   const uniqueLang = new Set(personnelLang.map((lang) => lang.language));
 

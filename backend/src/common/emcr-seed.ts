@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { format } from 'date-fns';
 import { divisionsAndMinistries } from './const';
 import { CreatePersonnelDTO, LocationDTO } from '../personnel';
-import { AvailabilityType } from './enums/availability-type.enum';
 import { DriverLicense } from './enums/driver-license.enum';
 import { FirstAid, Experience } from './enums/emcr';
 import { Ministry } from './enums/ministry.enum';
@@ -10,17 +8,27 @@ import { Status } from './enums/status.enum';
 import { TravelPreference } from './enums/travel-preference.enum';
 import { UnionMembership } from './enums/union-membership.enum';
 import {
+  createTools,
+  createCertifications,
+  createLanguages,
+  availability,
+} from './seed-common';
+import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
   EmcrTrainingEntity,
 } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
+import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
+import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
 
 export const handler = (
   locations: LocationDTO[],
   functions: EmcrFunctionEntity[],
   seededTrainings: EmcrTrainingEntity[],
+  tools: ToolsEntity[],
+  certs: CertificationEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
   emcrData: CreatePersonnelEmcrDTO;
@@ -89,6 +97,13 @@ export const handler = (
     supervisorEmail: faker.internet.email(),
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
+    tools: createTools(tools),
+    certifications: createCertifications(certs),
+    languages: Array.from(new Set(createLanguages())),
+    emergencyContactFirstName: faker.person.firstName(),
+    emergencyContactLastName: faker.person.lastName(),
+    emergencyContactPhoneNumber: faker.string.numeric('##########'),
+    emergencyContactRelationship: faker.lorem.word(),
     driverLicense: Array.from(
       new Set([
         faker.helpers.arrayElement(Object.values(DriverLicense)),
@@ -101,51 +116,6 @@ export const handler = (
       status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
   };
   return { personnelData, emcrData };
-};
-
-const threeMonthsArray = () => {
-  const today = new Date();
-  const startDate = new Date(today.getFullYear(), today.getMonth() - 3, 1);
-  const sevenMonthsFromNow = new Date(
-    today.getFullYear(),
-    today.getMonth() + 7,
-    0,
-  );
-  const dates = [];
-  for (let i = startDate; i < sevenMonthsFromNow; i.setDate(i.getDate() + 1)) {
-    dates.push(new Date(i));
-  }
-  return dates;
-};
-
-const availability = () => {
-  const availabilities = [];
-  const dates = threeMonthsArray();
-
-  dates.forEach((date, index) => {
-    const randomInterval = Math.floor(Math.random() * 10);
-
-    const sliceOfTime = dates.splice(index, randomInterval + index - 1);
-
-    const availabilityType = faker.helpers.arrayElement(
-      Object.values(AvailabilityType),
-    );
-
-    const deploymentCode =
-      availabilityType === AvailabilityType.DEPLOYED
-        ? faker.string.alphanumeric(6)
-        : '';
-
-    sliceOfTime.forEach((date) => {
-      availabilities.push({
-        date: format(date, 'yyyy-MM-dd'),
-        availabilityType,
-        deploymentCode,
-      });
-    });
-  });
-
-  return availabilities;
 };
 
 const experiences = (functions: EmcrFunctionEntity[]) => {

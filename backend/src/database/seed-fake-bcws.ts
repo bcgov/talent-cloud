@@ -9,7 +9,7 @@ export const handler = async () => {
   }
 
   const locations = await datasource.query('SELECT * FROM location');
-  const tools = await datasource.query('SELECT * FROM tools');
+  const tools = await datasource.query('SELECT * FROM tool');
   const certs = await datasource.query('SELECT * FROM certification');
   const roles = await datasource.query('SELECT * FROM bcws_role');
   const personnelRepo = datasource.getRepository(PersonnelEntity);

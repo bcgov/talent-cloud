@@ -8,7 +8,7 @@ export class CertsToolsMigration1732663788650 implements MigrationInterface {
       `ALTER TABLE IF EXISTS "bcws_personnel_language" RENAME TO "personnel_language"`,
     );
     await queryRunner.query(
-      `ALTER TABLE IF EXISTS "bcws_tools" RENAME TO "tools"`,
+      `ALTER TABLE IF EXISTS "bcws_tools" RENAME TO "tool"`,
     );
     await queryRunner.query(
       `ALTER TABLE IF EXISTS "bcws_personnel_tools" RENAME TO "personnel_tools"`,
@@ -40,7 +40,7 @@ export class CertsToolsMigration1732663788650 implements MigrationInterface {
       `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_63dd347bf4d1b3fe8f597066d05" FOREIGN KEY ("personnel_id") REFERENCES "personnel"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_65844d0c28077778e4b1d6c4f53" FOREIGN KEY ("tool_id") REFERENCES "tools"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_65844d0c28077778e4b1d6c4f53" FOREIGN KEY ("tool_id") REFERENCES "tool"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "personnel_certifications" ADD CONSTRAINT "FK_0132f7c03a4c0724aaf2c2d986b" FOREIGN KEY ("personnel_id") REFERENCES "personnel"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
@@ -136,7 +136,7 @@ export class CertsToolsMigration1732663788650 implements MigrationInterface {
       `ALTER TABLE IF EXISTS "personnel_language" RENAME TO "bcws_personnel_language"`,
     );
     await queryRunner.query(
-      `ALTER TABLE IF EXISTS "tools" RENAME TO "bcws_tools"`,
+      `ALTER TABLE IF EXISTS "tool" RENAME TO "bcws_tools"`,
     );
     await queryRunner.query(
       `ALTER TABLE IF EXISTS "personnel_tools" RENAME TO "bcws_personnel_tools"`,

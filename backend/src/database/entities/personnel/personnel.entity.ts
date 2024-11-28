@@ -143,7 +143,7 @@ export class PersonnelEntity extends BaseEntity {
   @JoinColumn({ name: 'recommitment', referencedColumnName: 'memberId' })
   recommitment?: RecommitmentEntity;
 
-  @OneToMany(() => LanguageEntity, (l) => l.id, { cascade: true })
+  @OneToMany(() => LanguageEntity, (l) => l.personnel, { cascade: true })
   languages?: LanguageEntity[];
 
   @OneToMany(() => PersonnelCertificationEntity, (c) => c.personnel, {

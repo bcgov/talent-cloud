@@ -34,7 +34,7 @@ const seed = async () => {
     await datasource.query(functionSql);
   }
 
-  const tools = await datasource.query(`SELECT * FROM public.tools`);
+  const tools = await datasource.query(`SELECT * FROM public.tool`);
   if (tools.length === 0) {
     await datasource.query(toolsSql);
   }

@@ -13,7 +13,8 @@ export const handler = async () => {
   const locations = await locationRepo.find();
   const functions = await datasource.query('SELECT * FROM emcr_function');
   const trainings = await datasource.query('SELECT * FROM emcr_training');
-
+  const tools = await datasource.query('SELECT * FROM tool');
+  const certs = await datasource.query('SELECT * FROM certification');
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
@@ -26,6 +27,8 @@ export const handler = async () => {
       })),
       functions,
       trainings,
+      tools,
+      certs,
     );
 
     const person = await personnelRepo.save(
@@ -82,6 +85,8 @@ export const handler = async () => {
         })),
         functions,
         trainings,
+        tools,
+        certs,
       );
 
       const person = await personnelRepo.save(

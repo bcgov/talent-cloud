@@ -85,7 +85,7 @@ export const certsSql = `insert into certification (id, name) values
         (10, 'OFA III')
         `;
 
-export const toolsSql = `insert into tools (id,  name)
+export const toolsSql = `insert into tool (id,  name)
         values
         (1, 'ADOBE'),
         (2, 'CAS'),

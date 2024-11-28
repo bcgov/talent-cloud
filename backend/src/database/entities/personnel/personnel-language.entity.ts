@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -15,11 +16,13 @@ import { PersonnelLanguagesRO } from '../../../personnel/ro/personnel-languages.
 
 @Entity('personnel_language')
 export class LanguageEntity {
-  @ManyToOne(() => PersonnelEntity, { nullable: false })
+  @ManyToOne(() => PersonnelEntity, (p) => p.id, {
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ name: 'personnel_id', referencedColumnName: 'id' })
   personnel: PersonnelEntity;
 
-  @Column({ name: 'personnel_id', type: 'uuid' })
+  @PrimaryColumn({ name: 'personnel_id', type: 'uuid' })
   personnelId: string;
 
   @PrimaryGeneratedColumn('increment')
@@ -50,5 +53,8 @@ export class LanguageEntity {
       level: this.level,
       type: this.type,
     };
+  }
+  constructor(data?: Partial<LanguageEntity>) {
+    Object.assign(this, data);
   }
 }

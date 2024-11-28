@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Tools, ToolsName } from '../../../common/enums/bcws/tools.enum';
 import { BcwsToolsRO } from '../../../personnel/ro/tools.ro';
 
-@Entity('tools')
+@Entity('tool')
 export class ToolsEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -11,7 +11,7 @@ export class ToolsEntity {
     name: 'name',
     type: 'enum',
     enum: Tools,
-    enumName: 'personnel-tools',
+    enumName: 'tools',
   })
   name: Tools;
 

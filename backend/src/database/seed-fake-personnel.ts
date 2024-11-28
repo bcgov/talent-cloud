@@ -15,7 +15,7 @@ export const handler = async () => {
   const functions = await datasource.query('SELECT * FROM emcr_function');
   const trainings = await datasource.query('SELECT * FROM emcr_training');
 
-  const tools = await datasource.query('SELECT * FROM tools');
+  const tools = await datasource.query('SELECT * FROM tool');
   const certs = await datasource.query('SELECT * FROM certification');
   const roles = await datasource.query('SELECT * FROM bcws_role');
   const personnelRepo = datasource.getRepository(PersonnelEntity);
@@ -24,7 +24,7 @@ export const handler = async () => {
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-    const { personnelData, emcrData } = dataHandler(
+    const { personnelData, emcrData, bcwsData } = dataHandler(
       locations,
       tools,
       certs,
@@ -32,6 +32,7 @@ export const handler = async () => {
       functions,
       trainings,
     );
+
     const personOne = new PersonnelEntity({
       ...personnelData,
       email: 'member@gmail.com',
@@ -44,6 +45,12 @@ export const handler = async () => {
     await emcrPersonnelRepo.save(
       emcrPersonnelRepo.create(
         new EmcrPersonnelEntity({ ...emcrData, personnelId: person.id }),
+      ),
+    );
+
+    await bcwsPersonnelRepo.save(
+      bcwsPersonnelRepo.create(
+        new BcwsPersonnelEntity({ ...bcwsData, personnelId: person.id }),
       ),
     );
     const personTwo = await personnelRepo.save(
@@ -61,6 +68,11 @@ export const handler = async () => {
         new EmcrPersonnelEntity({ ...emcrData, personnelId: personTwo.id }),
       ),
     );
+    await bcwsPersonnelRepo.save(
+      bcwsPersonnelRepo.create(
+        new BcwsPersonnelEntity({ ...bcwsData, personnelId: personTwo.id }),
+      ),
+    );
 
     const personThree = await personnelRepo.save(
       personnelRepo.create(
@@ -74,6 +86,11 @@ export const handler = async () => {
     await emcrPersonnelRepo.save(
       emcrPersonnelRepo.create(
         new EmcrPersonnelEntity({ ...emcrData, personnelId: personThree.id }),
+      ),
+    );
+    await bcwsPersonnelRepo.save(
+      bcwsPersonnelRepo.create(
+        new BcwsPersonnelEntity({ ...bcwsData, personnelId: personThree.id }),
       ),
     );
     for (let i = 0; i < 50; i++) {
