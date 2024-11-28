@@ -180,16 +180,16 @@ export class CertsToolsMigration1732829859521 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `UPDATE personnel SET emergency_contact_relationship = bcws_personnel.emergency_contact_relationship FROM bcws_personnel WHERE personnel.id = bcws_personnel.personnel_id`,
+      `UPDATE bcws_personnel SET emergency_contact_relationship = personnel.emergency_contact_relationship FROM personnel WHERE personnel.id = bcws_personnel.personnel_id`,
     );
     await queryRunner.query(
-      `UPDATE personnel SET emergency_contact_phone_number = bcws_personnel.emergency_contact_phone_number FROM bcws_personnel WHERE personnel.id = bcws_personnel.personnel_id`,
+      `UPDATE bcws_personnel SET emergency_contact_phone_number = personnel.emergency_contact_phone_number FROM personnel WHERE personnel.id = bcws_personnel.personnel_id`,
     );
     await queryRunner.query(
-      `UPDATE personnel SET emergency_contact_last_name = bcws_personnel.emergency_contact_last_name FROM bcws_personnel WHERE personnel.id = bcws_personnel.personnel_id`,
+      `UPDATE bcws_personnel SET emergency_contact_last_name = personnel.emergency_contact_last_name FROM personnel WHERE personnel.id = bcws_personnel.personnel_id`,
     );
     await queryRunner.query(
-      `UPDATE personnel SET emergency_contact_first_name = bcws_personnel.emergency_contact_first_name FROM bcws_personnel WHERE personnel.id = bcws_personnel.personnel_id`,
+      `UPDATE bcws_personnel SET emergency_contact_first_name = personnel.emergency_contact_first_name FROM personnel WHERE personnel.id = bcws_personnel.personnel_id`,
     );
     await queryRunner.query(
       `ALTER TABLE "personnel" DROP COLUMN "emergency_contact_relationship"`,
