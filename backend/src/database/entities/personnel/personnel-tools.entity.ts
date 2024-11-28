@@ -7,7 +7,9 @@ import { PersonnelToolsRO } from '../../../personnel/ro/personnel-tools.ro';
 
 @Entity('personnel_tools')
 export class PersonnelTools {
-  @ManyToOne(() => PersonnelEntity, { orphanedRowAction: 'delete' })
+  @ManyToOne(() => PersonnelEntity, (p) => p.id, {
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ name: 'personnel_id', referencedColumnName: 'id' })
   personnel: PersonnelEntity;
 

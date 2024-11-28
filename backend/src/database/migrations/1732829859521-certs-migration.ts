@@ -114,9 +114,39 @@ export class CertsToolsMigration1732829859521 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_63dd347bf4d1b3fe8f597066d05" FOREIGN KEY ("personnel_id") REFERENCES "personnel"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_certifications" DROP CONSTRAINT "FK_cd97407a0849edfe2d1b51d794c"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_certifications" DROP CONSTRAINT "FK_ee076e36e564a46e1d0f7fc6651"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_language" DROP CONSTRAINT "FK_84e834ee0e921d47e11b5c6bd29"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_tools" DROP CONSTRAINT "FK_431a4dccb518fae099202377260"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_tools" DROP CONSTRAINT "FK_b33c0a7ad2fbfd1fb459eae3f1f"`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_b33c0a7ad2fbfd1fb459eae3f1f" FOREIGN KEY ("personnel_id") REFERENCES "bcws_personnel"("personnel_id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_tools" ADD CONSTRAINT "FK_431a4dccb518fae099202377260" FOREIGN KEY ("tool_id") REFERENCES "tool"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_language" ADD CONSTRAINT "FK_84e834ee0e921d47e11b5c6bd29" FOREIGN KEY ("personnel_id") REFERENCES "bcws_personnel"("personnel_id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_certifications" ADD CONSTRAINT "FK_ee076e36e564a46e1d0f7fc6651" FOREIGN KEY ("personnel_id") REFERENCES "bcws_personnel"("personnel_id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "personnel_certifications" ADD CONSTRAINT "FK_cd97407a0849edfe2d1b51d794c" FOREIGN KEY ("certification_id") REFERENCES "certification"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
     await queryRunner.query(
       `ALTER TABLE "personnel_tools" DROP CONSTRAINT "FK_63dd347bf4d1b3fe8f597066d05"`,
     );
