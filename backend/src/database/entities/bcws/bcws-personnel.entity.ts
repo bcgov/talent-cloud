@@ -158,7 +158,7 @@ export class BcwsPersonnelEntity {
       travelPreference: this.travelPreference,
       roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
     };
-    console.log(this.roles);
+
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
     return instanceToPlain(response, { groups: [role] });
   }

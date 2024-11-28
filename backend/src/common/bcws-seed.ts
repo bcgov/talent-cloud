@@ -4,12 +4,12 @@ import { DriverLicense } from './enums/driver-license.enum';
 import { Ministry } from './enums/ministry.enum';
 import { Status } from './enums/status.enum';
 import { UnionMembership } from './enums/union-membership.enum';
-import { createTools } from './personnel-seed';
 import {
   availability,
   createCertifications,
   createLanguages,
   createRoles,
+  createTools,
 } from './seed-common';
 import { CreatePersonnelBcwsDTO } from '../bcws/dto/create-bcws-personnel.dto';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
