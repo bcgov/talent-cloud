@@ -18,8 +18,9 @@ import { Program, RequestWithRoles } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { ICS_TRAINING_NAME } from '../common/const';
 import { AppLogger } from '../logger/logger.service';
-import { GetPersonnelRO, PersonnelRO, UpdatePersonnelDTO } from '../personnel';
+import { GetPersonnelRO, UpdatePersonnelDTO } from '../personnel';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { EmcrRO } from './ro';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
@@ -72,10 +73,10 @@ export class EmcrController {
   async getPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
-  ): Promise<Record<'Personnel', PersonnelRO>> {
+  ): Promise<Record<'Personnel', EmcrRO>> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    const personnelRO: Record<'Personnel', PersonnelRO> =
+    const personnelRO: Record<'Personnel', EmcrRO> =
       await this.personnelService.getEmcrPersonnelById(req.role, id);
 
     return personnelRO;

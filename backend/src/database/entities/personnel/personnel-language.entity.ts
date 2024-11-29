@@ -3,22 +3,26 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BcwsPersonnelEntity } from './bcws-personnel.entity';
-import { BcwsPersonnelLanguagesRO } from '../../../bcws/ro';
+
+import { PersonnelEntity } from './personnel.entity';
 import {
   LanguageLevelType,
   LanguageProficiency,
 } from '../../../common/enums/bcws/language.enum';
+import { PersonnelLanguagesRO } from '../../../personnel/ro/personnel-languages.ro';
 
-@Entity('bcws_personnel_language')
+@Entity('personnel_language')
 export class LanguageEntity {
-  @ManyToOne(() => BcwsPersonnelEntity, { nullable: false })
-  @JoinColumn({ name: 'personnel_id' })
-  personnel: BcwsPersonnelEntity;
+  @ManyToOne(() => PersonnelEntity, (p) => p.id, {
+    orphanedRowAction: 'delete',
+  })
+  @JoinColumn({ name: 'personnel_id', referencedColumnName: 'id' })
+  personnel: PersonnelEntity;
 
-  @Column({ name: 'personnel_id', type: 'uuid' })
+  @PrimaryColumn({ name: 'personnel_id', type: 'uuid' })
   personnelId: string;
 
   @PrimaryGeneratedColumn('increment')
@@ -43,11 +47,14 @@ export class LanguageEntity {
   })
   type: LanguageLevelType;
 
-  toResponseObject(): BcwsPersonnelLanguagesRO {
+  toResponseObject(): PersonnelLanguagesRO {
     return {
       language: this.language,
       level: this.level,
       type: this.type,
     };
+  }
+  constructor(data?: Partial<LanguageEntity>) {
+    Object.assign(this, data);
   }
 }

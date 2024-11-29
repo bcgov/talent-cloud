@@ -12,6 +12,7 @@ import {
   PersonnelFormData,
 } from './interface';
 import { FormSubmissionDTO } from './submission.dto';
+import { Program } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { CreatePersonnelBcwsDTO } from '../bcws/dto';
 import {
@@ -26,14 +27,13 @@ import {
   ToolsProficiency,
   UnionMembership,
 } from '../common/enums';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 import { Form } from '../database/entities/form.entity';
 import { CreatePersonnelEmcrDTO } from '../emcr/dto';
 import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
-import { Program } from '../auth/interface';
 
 @Injectable()
 export class FormService {
@@ -144,24 +144,12 @@ export class FormService {
 
     const emcrPersonnel =
       data.personnel.program === 'EMCR' || data.personnel.program === 'BOTH'
-        ? this.parseEmcrPersonnel(
-            data.emcr,
-            data.personnel.pfa,
-            deployment,
-            data.personnel.firstAidLevel,
-            data.personnel.firstAidExpiry,
-          )
+        ? this.parseEmcrPersonnel(data.emcr, deployment)
         : undefined;
 
     const bcwsPersonnel =
       data.personnel.program === 'BCWS' || data.personnel.program === 'BOTH'
-        ? this.parseBcwsPersonnel(
-            data.bcws,
-            data.personnel.pfa,
-            deployment,
-            data.personnel.firstAidLevel,
-            data.personnel.firstAidExpiry,
-          )
+        ? this.parseBcwsPersonnel(data.bcws, deployment)
         : undefined;
 
     if (data.personnel.program === 'BOTH' && !emcrPersonnel && !bcwsPersonnel) {
@@ -186,7 +174,13 @@ export class FormService {
         `BCWS program selected but no data found for BCWS program`,
       );
     }
-    const personnel = this.parsePersonnel(data.personnel, formId);
+    const personnel = this.parsePersonnel(
+      data.personnel,
+      formId,
+      data.personnel.pfa,
+      data.personnel.firstAidLevel,
+      data.personnel.firstAidExpiry,
+    );
 
     try {
       const person = await this.personnelService.createOnePerson(personnel);
@@ -202,21 +196,24 @@ export class FormService {
     }
   }
 
-  parseTravelPreference(
-    deployment: FormDeployment,
-    route: Program,
-  ) {
+  parseTravelPreference(deployment: FormDeployment, route: Program) {
     switch (deployment) {
       case 'remoteOnly':
         return TravelPreference.REMOTE_ONLY;
       case 'travelHome':
         return TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION;
       case 'travelFireZone':
-        return route === Program.BCWS ? TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE : TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION;
+        return route === Program.BCWS
+          ? TravelPreference.WILLING_TO_TRAVEL_FIRE_ZONE
+          : TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION;
       case 'travelFireCentre':
-        return route === Program.BCWS ? TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE : TravelPreference.WILLING_TO_TRAVEL_REGION;
+        return route === Program.BCWS
+          ? TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE
+          : TravelPreference.WILLING_TO_TRAVEL_REGION;
       case 'travelRegion':
-        return route === Program.EMCR ? TravelPreference.WILLING_TO_TRAVEL_REGION : TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE;
+        return route === Program.EMCR
+          ? TravelPreference.WILLING_TO_TRAVEL_REGION
+          : TravelPreference.WILLING_TO_TRAVEL_FIRE_CENTRE;
       case 'travelAnywhere':
         return TravelPreference.WILLING_TO_TRAVEL_ANYWHERE;
       default:
@@ -224,72 +221,13 @@ export class FormService {
     }
   }
 
-  parsePersonnel(data: PersonnelFormData, formId: number): CreatePersonnelDTO {
-    const personnelData: CreatePersonnelDTO = {
-      intakeForm: formId,
-      unionMembership: UnionMembership[data.unionMembership],
-      ministry: Ministry[data.ministry.value],
-      division: data.division,
-      homeLocation: data.homeLocation,
-      workLocation: data.workLocation,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      primaryPhone: data.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
-      secondaryPhone: data?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, ''),
-      workPhone: data?.workPhone?.replace(/[(]|-|[)]|\s/gi, ''),
-      supervisorEmail: data.supervisorEmail,
-      supervisorLastName: data.supervisorLastName,
-      supervisorFirstName: data.supervisorFirstName,
-      supervisorPhone: data?.supervisorPhoneNumber?.replace(
-        /[(]|-|[)]|\s/gi,
-        '',
-      ),
-      driverLicense: data.dl,
-      jobTitle: data.jobTitle,
-    };
-    return personnelData;
-  }
-
-  parseEmcrPersonnel(
-    data: EmcrFormData,
+  parsePersonnel(
+    data: PersonnelFormData,
+    formId: number,
     pfa: string,
-    deployment: FormDeployment,
     firstAidLevel?: string,
     firstAidExpiry?: Date,
-  ): CreatePersonnelEmcrDTO {
-    const functions = Object.keys(data.functions).filter(
-      (itm) => data.functions[itm] === true,
-    );
-
-    const emcrData: CreatePersonnelEmcrDTO = {
-      dateApplied: new Date(),
-      firstNationExperienceWorking: data.experience?.firstNationsWorking,
-      peccExperience: data.experience?.peccExperience,
-      preocExperience: data.experience?.preocExperience,
-      emergencyExperience: data.experience?.emergencyExperience,
-      trainings: [],
-      firstAidLevel: firstAidLevel ?? undefined,
-      firstAidExpiry: firstAidExpiry ?? undefined,
-      psychologicalFirstAid: pfa === 'yes',
-      travelPreference: this.parseTravelPreference(deployment, Program.EMCR),
-      experiences: functions.map((itm) => ({
-        functionId: parseInt(itm),
-        experienceType: Experience.INTERESTED,
-      })),
-    };
-
-    return emcrData;
-  }
-
-  parseBcwsPersonnel(
-    data: BcwsFormData,
-    pfa: string,
-    deployment: FormDeployment,
-    firstAidLevel?: string,
-    firstAidExpiry?: Date,
-  ): CreatePersonnelBcwsDTO {
-    //TODO prevent duplicate tools to be submitted and then remove this:
+  ): CreatePersonnelDTO {
     const uniqueToolIds = Array.from(
       new Set(data?.tools?.map((itm) => itm.name.id)),
     );
@@ -301,34 +239,6 @@ export class FormService {
           data.tools.find((tool) => tool.name.id === itm).proficiency.name
         ],
     }));
-
-    //TODO prevent duplicate tools to be submitted and then remove this:
-    const roles = Object.keys(data?.sections)
-      ?.map((itm) => data?.sections[itm])
-      .filter((itm) => itm?.length > 0)
-      .flatMap(
-        (itm) =>
-          // eslint-disable-next-line
-          itm?.map(
-            ({
-              role,
-              experience,
-            }: {
-              role: { id: number };
-              experience: ExperienceLevel;
-            }) => ({
-              roleId: role?.id,
-              expLevel: experience,
-            }),
-          ),
-      );
-
-    const uniqueRoleIds = Array.from(new Set(roles?.map((itm) => itm?.roleId)));
-
-    const uniqueRoles = uniqueRoleIds?.map(
-      (itm) => roles?.find((role) => role?.roleId === itm),
-    );
-
     const parsedCertifications =
       data.certificates?.map((itm) => ({
         certificationId: itm?.id,
@@ -367,6 +277,113 @@ export class FormService {
       }
     }
 
+    const personnelData: CreatePersonnelDTO = {
+      intakeForm: formId,
+      unionMembership: UnionMembership[data.unionMembership],
+      ministry: Ministry[data.ministry.value],
+      division: data.division,
+      homeLocation: data.homeLocation,
+      workLocation: data.workLocation,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      primaryPhone: data.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
+      secondaryPhone: data?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, ''),
+      workPhone: data?.workPhone?.replace(/[(]|-|[)]|\s/gi, ''),
+      supervisorEmail: data.supervisorEmail,
+      supervisorLastName: data.supervisorLastName,
+      supervisorFirstName: data.supervisorFirstName,
+      supervisorPhone: data?.supervisorPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      ),
+      driverLicense: data.dl,
+      jobTitle: data.jobTitle,
+
+      languages: Array.from(
+        new Set(
+          data?.languages?.map((itm) => ({
+            language: itm.language,
+            level:
+              LanguageProficiency[
+                itm.proficiency.split('.')[0] ?? itm.proficiency
+              ],
+            type: LanguageLevelType[itm.proficiency.split('.')[1] ?? 'BOTH'],
+          })),
+        ),
+      ),
+
+      tools: tools ?? [],
+      certifications: parsedCertifications ?? [],
+      emergencyContactFirstName: data.emergencyContactFirstName,
+      emergencyContactLastName: data.emergencyContactLastName,
+      emergencyContactPhoneNumber: data.emergencyContactPhoneNumber?.replace(
+        /[(]|-|[)]|\s/gi,
+        '',
+      ),
+      emergencyContactRelationship: data.emergencyContactRelationship,
+    };
+    return personnelData;
+  }
+
+  parseEmcrPersonnel(
+    data: EmcrFormData,
+    deployment: FormDeployment,
+  ): CreatePersonnelEmcrDTO {
+    const functions = Object.keys(data.functions).filter(
+      (itm) => data.functions[itm] === true,
+    );
+
+    const emcrData: CreatePersonnelEmcrDTO = {
+      dateApplied: new Date(),
+      firstNationExperienceWorking: data.experience?.firstNationsWorking,
+      peccExperience: data.experience?.peccExperience,
+      preocExperience: data.experience?.preocExperience,
+      emergencyExperience: data.experience?.emergencyExperience,
+      trainings: [],
+      travelPreference: this.parseTravelPreference(deployment, Program.EMCR),
+      experiences: functions.map((itm) => ({
+        functionId: parseInt(itm),
+        experienceType: Experience.INTERESTED,
+      })),
+    };
+
+    return emcrData;
+  }
+
+  parseBcwsPersonnel(
+    data: BcwsFormData,
+    deployment: FormDeployment,
+  ): CreatePersonnelBcwsDTO {
+    //TODO prevent duplicate tools to be submitted and then remove this:
+
+    //TODO prevent duplicate tools to be submitted and then remove this:
+    const roles = Object.keys(data?.sections)
+      ?.map((itm) => data?.sections[itm])
+      .filter((itm) => itm?.length > 0)
+      .flatMap(
+        (itm) =>
+          // eslint-disable-next-line
+          itm?.map(
+            ({
+              role,
+              experience,
+            }: {
+              role: { id: number };
+              experience: ExperienceLevel;
+            }) => ({
+              roleId: role?.id,
+              expLevel: experience,
+            }),
+          ),
+      );
+
+    const uniqueRoleIds = Array.from(new Set(roles?.map((itm) => itm?.roleId)));
+
+    const uniqueRoles = uniqueRoleIds?.map(
+      (itm) => roles?.find((role) => role?.roleId === itm),
+    );
+
     const bcwsData: CreatePersonnelBcwsDTO = {
       dateApplied: new Date(),
       coordinatorNotes: '',
@@ -388,28 +405,7 @@ export class FormService {
           ? undefined
           : Section[data.secondChoiceSection],
       travelPreference: this.parseTravelPreference(deployment, Program.BCWS),
-      languages: Array.from(
-        new Set(
-          data?.languages?.map((itm) => ({
-            language: itm.language,
-            level:
-              LanguageProficiency[
-                itm.proficiency.split('.')[0] ?? itm.proficiency
-              ],
-            type: LanguageLevelType[itm.proficiency.split('.')[1] ?? 'BOTH'],
-          })),
-        ),
-      ),
       roles: uniqueRoles ?? [],
-      tools: tools ?? [],
-      certifications: parsedCertifications ?? [],
-      emergencyContactFirstName: data.emergencyContactFirstName,
-      emergencyContactLastName: data.emergencyContactLastName,
-      emergencyContactPhoneNumber: data.emergencyContactPhoneNumber?.replace(
-        /[(]|-|[)]|\s/gi,
-        '',
-      ),
-      emergencyContactRelationship: data.emergencyContactRelationship,
     };
     return bcwsData;
   }

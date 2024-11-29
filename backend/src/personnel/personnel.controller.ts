@@ -16,13 +16,13 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { PersonnelService } from './personnel.service';
+import { PersonnelRO } from './ro';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
-import { MemberProfileRO } from './ro/member-profile.ro';
 import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
-import { AvailabilityEntity } from '../database/entities/availability.entity';
+import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('personnel')
@@ -45,7 +45,9 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  async getPersonnel(@Req() req: RequestWithRoles): Promise<MemberProfileRO> {
+  async getPersonnel(
+    @Req() req: RequestWithRoles,
+  ): Promise<Record<string, PersonnelRO>> {
     return await this.personnelService.getPersonnel(req);
   }
 

@@ -203,7 +203,6 @@ export class EmcrService {
         query.page,
         query.status,
       );
-
     return { personnel, count };
   }
   /**
@@ -215,20 +214,21 @@ export class EmcrService {
     role: Role,
     id: string,
   ): Promise<Record<string, EmcrRO>> {
-    const person = await this.emcrPersonnelRepository.findOneOrFail({
+    const person = await this.personnelService.findOne(id);
+    const emcr = await this.emcrPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
       relations: [
         'experiences',
         'experiences.function',
         'trainings',
         'personnel',
-        'personnel.recommitment',
       ],
     });
 
     const lastDeployed = await this.personnelService.getLastDeployedDate(id);
+    emcr.personnel = person;
 
-    return person.toResponseObject(role, lastDeployed);
+    return emcr.toResponseObject(role, lastDeployed);
   }
   async getTrainingsByNames(names: string[]): Promise<EmcrTrainingEntity[]> {
     const trainings = await this.trainingRepository.find({

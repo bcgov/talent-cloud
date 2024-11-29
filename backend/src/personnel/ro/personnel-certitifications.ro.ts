@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
-export class CreateBcwsCertificationsDTO {
+export class PersonnelCertificationRO {
   @ApiProperty({
-    description: 'Certification id',
+    description: 'Certification name',
     required: true,
   })
-  certificationId: number;
+  name: string;
 
   @ApiProperty({
     description: 'Certification expiry date',

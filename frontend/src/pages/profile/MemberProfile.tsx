@@ -55,7 +55,7 @@ const MemberProfile = () => {
             {personnel && (
               <RecommitmentProfileBanner personnel={personnel} program={program} />
             )}
-            <TabsBody>
+            <TabsBody  placeholder={undefined}>
               <TabPanel value={TabIndexes.AVAILABILITY}>
                 {personnel && (
                   <MemberAvailabilityTab

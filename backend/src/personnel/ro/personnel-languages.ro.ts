@@ -4,7 +4,7 @@ import {
   LanguageProficiency,
 } from '../../common/enums/bcws';
 
-export class BcwsPersonnelLanguagesRO {
+export class PersonnelLanguagesRO {
   @ApiProperty({
     description: 'Language name',
     example: 'English',

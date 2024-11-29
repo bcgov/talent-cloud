@@ -1,15 +1,12 @@
-import { AvailabilityEntity } from './entities/availability.entity';
-import {
-  EmcrExperienceEntity,
-  EmcrFunctionEntity,
-  LocationEntity,
-} from './entities/emcr';
+import { EmcrExperienceEntity, EmcrFunctionEntity } from './entities/emcr';
+import { LocationEntity } from './entities/location.entity';
 import { Experience, Region } from '../common/enums/emcr';
 import { Ministry } from '../common/enums/ministry.enum';
 import { Status } from '../common/enums/status.enum';
+import { TravelPreference } from '../common/enums/travel-preference.enum';
 import { UnionMembership } from '../common/enums/union-membership.enum';
 import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
+import { AvailabilityEntity } from './entities/personnel/availability.entity';
 
 export const personnel: CreatePersonnelDTO[] = [
   {
@@ -20,27 +17,26 @@ export const personnel: CreatePersonnelDTO[] = [
     primaryPhone: '8939179531',
     secondaryPhone: '4462570360',
     workPhone: '3859589684',
-    
+
     unionMembership: UnionMembership['EXCLUDED'],
     supervisorFirstName: 'Damon',
     supervisorLastName: 'Mraz',
     supervisorEmail: 'Ernestina73@yahoo.com',
     homeLocation: {
-        id: 29,
-        locationName: 'Merritt',
-        region: Region['CTL'],
-      } as LocationEntity,
-      workLocation: {
-        id: 29,
-        locationName: 'Merritt',
-        region: Region['CTL'],
-      } as LocationEntity,
+      id: 29,
+      locationName: 'Merritt',
+      region: Region['CTL'],
+    } as LocationEntity,
+    workLocation: {
+      id: 29,
+      locationName: 'Merritt',
+      region: Region['CTL'],
+    } as LocationEntity,
     driverLicense: ['CLASS_3'],
     emcr: {
-      
       trainings: [],
       status: Status.ACTIVE,
-      
+
       dateApplied: new Date(2024, 1, 10),
       coordinatorNotes: 'Succedo pauci cogo.',
       logisticsNotes:
@@ -105,30 +101,27 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '7523110457',
 
     supervisorFirstName: 'Harry',
-    
+
     supervisorLastName: 'Rohan',
     supervisorEmail: 'Maegan.Upton@yahoo.com',
     unionMembership: UnionMembership['PEA'],
-    
+
     driverLicense: ['CLASS_5'],
-    
-      homeLocation: {
-        id: 23,
-        locationName: 'Kimberley',
-        region: Region['SEA'],
-      } as LocationEntity,
-      workLocation: {
-        id: 29,
-        locationName: 'Merritt',
-        region: Region['CTL'],
-      } as LocationEntity,
-      emcr: {
-        
+
+    homeLocation: {
+      id: 23,
+      locationName: 'Kimberley',
+      region: Region['SEA'],
+    } as LocationEntity,
+    workLocation: {
+      id: 29,
+      locationName: 'Merritt',
+      region: Region['CTL'],
+    } as LocationEntity,
+    emcr: {
       trainings: [],
       dateApplied: new Date(2023, 11, 9),
       status: Status.ACTIVE,
-
-      
 
       coordinatorNotes: 'Condico eaque clamo condico cicuta adhuc uxor patria.',
       logisticsNotes:
@@ -191,7 +184,6 @@ export const personnel: CreatePersonnelDTO[] = [
 
     jobTitle: 'Open-architected static knowledge base',
 
-
     availability: [] as AvailabilityEntity[],
   },
   {
@@ -203,27 +195,26 @@ export const personnel: CreatePersonnelDTO[] = [
     secondaryPhone: '8409072412',
     workPhone: '5929269241',
     supervisorFirstName: 'Elliot',
-    
+
     supervisorLastName: 'Swaniawski',
     supervisorEmail: 'Cristina_Hirthe41@yahoo.com',
-    
-      homeLocation: {
-        id: 16,
-        locationName: 'Elkford',
-        region: Region['SEA'],
-      } as LocationEntity,
-      workLocation: {
-        id: 23,
-        locationName: 'Kimberley',
-        region: Region['SEA'],
-      } as LocationEntity,
-      emcr: {
-        
+
+    homeLocation: {
+      id: 16,
+      locationName: 'Elkford',
+      region: Region['SEA'],
+    } as LocationEntity,
+    workLocation: {
+      id: 23,
+      locationName: 'Kimberley',
+      region: Region['SEA'],
+    } as LocationEntity,
+    emcr: {
       trainings: [],
       coordinatorNotes: 'Termes cunabula depulso canonicus nisi.',
       dateApplied: new Date(2023, 5, 9),
       status: Status.ACTIVE,
-      
+
       dateApproved: new Date('2024-01-04T07:49:41.764Z'),
       logisticsNotes:
         'Accendo tonsor iure dedecor quo spero vinco aperio. Demulceo creber est concido comburo repellendus strenuus ',
@@ -282,11 +273,10 @@ export const personnel: CreatePersonnelDTO[] = [
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_REGION,
     },
     driverLicense: ['CLASS_2'],
-    
+
     unionMembership: UnionMembership['PEA'],
 
     jobTitle: 'Down-sized asynchronous benchmark',
-
 
     availability: [] as AvailabilityEntity[],
   },
@@ -300,28 +290,26 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '6382495637',
 
     supervisorFirstName: 'Fatima',
-    
+
     supervisorLastName: 'Howell',
     supervisorEmail: 'Lauryn63@yahoo.com',
-    
+
     unionMembership: UnionMembership['BCGEU'],
     driverLicense: ['CLASS_3'],
     homeLocation: {
-        id: 40,
-        locationName: 'Prince George',
-        region: Region['NEA'],
-      } as LocationEntity,
-      workLocation: {
-        id: 16,
-        locationName: 'Elkford',
-        region: Region['SEA'],
-      } as LocationEntity,
+      id: 40,
+      locationName: 'Prince George',
+      region: Region['NEA'],
+    } as LocationEntity,
+    workLocation: {
+      id: 16,
+      locationName: 'Elkford',
+      region: Region['SEA'],
+    } as LocationEntity,
     emcr: {
-      
       trainings: [],
       status: Status.PENDING,
       dateApplied: new Date(2023, 4, 24),
-      
 
       coordinatorNotes: 'Varius quam coruscus attero.',
       logisticsNotes:
@@ -383,7 +371,6 @@ export const personnel: CreatePersonnelDTO[] = [
     },
 
     jobTitle: 'Organized needs-based toolset',
-    
 
     availability: [] as AvailabilityEntity[],
   },
@@ -397,29 +384,26 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '3422536265',
 
     supervisorFirstName: 'Brooke',
-    
+
     supervisorLastName: 'Ward',
     supervisorEmail: 'Breanne17@gmail.com',
-    
+
     unionMembership: UnionMembership['BCGEU'],
-    
-      homeLocation: {
-        id: 35,
-        locationName: 'North Vancouver',
-        region: Region['SWE'],
-      } as LocationEntity,
-      workLocation: {
-        id: 40,
-        locationName: 'Prince George',
-        region: Region['NEA'],
-      } as LocationEntity,
-      emcr: {
-        
+
+    homeLocation: {
+      id: 35,
+      locationName: 'North Vancouver',
+      region: Region['SWE'],
+    } as LocationEntity,
+    workLocation: {
+      id: 40,
+      locationName: 'Prince George',
+      region: Region['NEA'],
+    } as LocationEntity,
+    emcr: {
       trainings: [],
       dateApplied: new Date(2024, 1, 2),
       status: Status.PENDING,
-
-      
 
       coordinatorNotes:
         'Calco capio trepide approbo unus similique quidem amplitudo.',
@@ -460,8 +444,6 @@ export const personnel: CreatePersonnelDTO[] = [
 
     jobTitle: 'Public-key tangible info-mediaries',
 
-
-
     availability: [] as AvailabilityEntity[],
   },
   {
@@ -474,25 +456,23 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '7469424252',
 
     supervisorFirstName: 'Citlalli',
-    
+
     supervisorLastName: 'Ebert-Schuster',
     supervisorEmail: 'Stacey.Thompson@gmail.com',
     homeLocation: {
-        id: 58,
-        locationName: 'Whistler',
-        region: Region['SWE'],
-      } as LocationEntity,
-      workLocation: {
-        id: 35,
-        locationName: 'North Vancouver',
-        region: Region['SWE'],
-      } as LocationEntity,
+      id: 58,
+      locationName: 'Whistler',
+      region: Region['SWE'],
+    } as LocationEntity,
+    workLocation: {
+      id: 35,
+      locationName: 'North Vancouver',
+      region: Region['SWE'],
+    } as LocationEntity,
     emcr: {
-      
       trainings: [],
       status: Status.PENDING,
       dateApplied: new Date(2023, 9, 17),
-      
 
       coordinatorNotes:
         'Ambulo sortitus tenax deserunt ago stips ver voro adduco libero.',
@@ -529,11 +509,9 @@ export const personnel: CreatePersonnelDTO[] = [
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
     },
     driverLicense: ['LL2'],
-    
+
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Cross-group client-driven encryption',
-
-
 
     availability: [] as AvailabilityEntity[],
   },
@@ -548,25 +526,23 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '9685539627',
 
     supervisorFirstName: 'Pasquale',
-    
+
     supervisorLastName: 'Rolfson',
     supervisorEmail: 'Anastasia48@hotmail.com',
     homeLocation: {
-        id: 10,
-        locationName: 'Cumberland',
-        region: Region['VIC'],
-      } as LocationEntity,
-      workLocation: {
-        id: 58,
-        locationName: 'Whistler',
-        region: Region['SWE'],
-      } as LocationEntity,
+      id: 10,
+      locationName: 'Cumberland',
+      region: Region['VIC'],
+    } as LocationEntity,
+    workLocation: {
+      id: 58,
+      locationName: 'Whistler',
+      region: Region['SWE'],
+    } as LocationEntity,
     emcr: {
-      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2023, 6, 6),
-      
 
       coordinatorNotes:
         'Tondeo cubicularis angelus tamen desino amplexus officia ceno aurum.',
@@ -620,12 +596,10 @@ export const personnel: CreatePersonnelDTO[] = [
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
     driverLicense: ['CLASS_2'],
-    
+
     unionMembership: UnionMembership['PEA'],
 
     jobTitle: 'Profound disintermediate concept',
-
-
 
     availability: [] as AvailabilityEntity[],
   },
@@ -639,28 +613,26 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '6542825199',
 
     supervisorFirstName: 'Lexus',
-    
+
     supervisorLastName: 'Koch',
     supervisorEmail: 'Esther_Ebert29@hotmail.com',
-    
+
     unionMembership: UnionMembership['EXCLUDED'],
     driverLicense: ['LL2'],
     homeLocation: {
-        id: 59,
-        locationName: 'Williams Lake',
-        region: Region['NEA'],
-      } as LocationEntity,
-      workLocation: {
-        id: 10,
-        locationName: 'Cumberland',
-        region: Region['VIC'],
-      } as LocationEntity,
+      id: 59,
+      locationName: 'Williams Lake',
+      region: Region['NEA'],
+    } as LocationEntity,
+    workLocation: {
+      id: 10,
+      locationName: 'Cumberland',
+      region: Region['VIC'],
+    } as LocationEntity,
     emcr: {
-      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2024, 3, 15),
-      
 
       coordinatorNotes: 'Perferendis attero sequi voveo sollers.',
       logisticsNotes:
@@ -722,8 +694,6 @@ export const personnel: CreatePersonnelDTO[] = [
     },
     jobTitle: 'Monitored encompassing paradigm',
 
-
-
     availability: [] as AvailabilityEntity[],
   },
 
@@ -737,25 +707,23 @@ export const personnel: CreatePersonnelDTO[] = [
     workPhone: '3100550523',
 
     supervisorFirstName: 'Eduardo',
-    
+
     supervisorLastName: 'Frami',
     supervisorEmail: 'Imani87@hotmail.com',
     homeLocation: {
-        id: 26,
-        locationName: 'Lillooet',
-        region: Region['SWE'],
-      } as LocationEntity,
-      workLocation: {
-        id: 59,
-        locationName: 'Williams Lake',
-        region: Region['NEA'],
-      } as LocationEntity,
+      id: 26,
+      locationName: 'Lillooet',
+      region: Region['SWE'],
+    } as LocationEntity,
+    workLocation: {
+      id: 59,
+      locationName: 'Williams Lake',
+      region: Region['NEA'],
+    } as LocationEntity,
     emcr: {
-      
       trainings: [],
       status: Status.INACTIVE,
       dateApplied: new Date(2023, 11, 15),
-      
 
       coordinatorNotes: 'Thymum ars vespillo distinctio.',
       logisticsNotes:
@@ -816,11 +784,9 @@ export const personnel: CreatePersonnelDTO[] = [
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_UNKNOWN,
     },
     driverLicense: ['CLASS_3'],
-    
+
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Automated attitude-oriented benchmark',
-
-
 
     availability: [] as AvailabilityEntity[],
   },

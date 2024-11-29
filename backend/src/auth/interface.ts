@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
+import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 
 export enum Role {
   COORDINATOR = 'coordinator',

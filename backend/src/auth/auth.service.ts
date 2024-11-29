@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Program, Role, Token } from './interface';
-import { RecommitmentCycleRO } from '../database/entities/recommitment-cycle.ro';
+import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 

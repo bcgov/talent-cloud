@@ -239,16 +239,21 @@ seed-local-bcws:
 seed-local-emcr:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-emcr.ts")'
 
+seed-local-personnel:
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed-fake-personnel.ts")'
+
 seed-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed.js")'
 	
+seed-oc-personnel:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-fake-personnel.js")'
+
 seed-oc-bcws:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-fake-bcws.js")'
 
 seed-oc-emcr:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-fake-emcr.js")'
-
 
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"

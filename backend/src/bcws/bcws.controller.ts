@@ -18,8 +18,9 @@ import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO, GetPersonnelRO, PersonnelRO } from '../personnel';
+import { UpdatePersonnelDTO, GetPersonnelRO } from '../personnel';
 import { QueryTransformPipe } from '../query-validation.pipe';
+import { BcwsRO } from './ro';
 
 @Controller('bcws')
 @ApiTags('BCWS Personnel API')
@@ -87,12 +88,9 @@ export class BcwsController {
   async getBcwsPersonnelById(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
-  ): Promise<Record<'Personnel', PersonnelRO>> {
+  ): Promise<Record<'Personnel', BcwsRO>> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    const personnelRO: Record<'Personnel', PersonnelRO> =
-      await this.bcwsService.getBcwsPersonnelById(req.role, id);
-
-    return personnelRO;
+    return await this.bcwsService.getBcwsPersonnelById(req.role, id);
   }
 }

@@ -72,7 +72,7 @@ export const rolesSql = `INSERT INTO public.bcws_role (id,"name","section") VALU
 	 (50,'HELI_COORDINATOR','AVIATION'),
 	 (51,'HELIBASE_MANAGER','AVIATION');`;
 
-export const certsSql = `insert into bcws_certification (id, name) values 
+export const certsSql = `insert into certification (id, name) values 
         (1, 'Forklift - Certified'),
         (2, 'Psychological First Aid (PFA)'),
         (3, 'Radio Operator'),
@@ -85,7 +85,7 @@ export const certsSql = `insert into bcws_certification (id, name) values
         (10, 'OFA III')
         `;
 
-export const toolsSql = `insert into bcws_tools (id,  name)
+export const toolsSql = `insert into tool (id,  name)
         values
         (1, 'ADOBE'),
         (2, 'CAS'),
@@ -95,8 +95,6 @@ export const toolsSql = `insert into bcws_tools (id,  name)
         (6, 'IMIS'),
         (7, 'RRT'),
         (8, 'VISIO')`;
-
-
 
 //TODO Update this when we have all of the fire centres/regions
 export const joinedLocationsSql = `INSERT INTO public."location" (id,location_name,region,fire_centre) VALUES
@@ -188,4 +186,4 @@ export const joinedLocationsSql = `INSERT INTO public."location" (id,location_na
 (54,'Ucluelet','VIC','COASTAL'),
 (89, 'Telkwa', 'NWE', 'NORTHWEST'),
 (90,'Anahim Lake', 'NWE', 'CARIBOO')
-;`
+;`;

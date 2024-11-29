@@ -1,9 +1,15 @@
-
 import { datasource } from './datasource';
-import { certsSql,  functionSql, insertPersonnelTrainingSql, insertTrainingSql, joinedLocationsSql, rolesSql, toolsSql } from './queries';
+import {
+  certsSql,
+  functionSql,
+  insertPersonnelTrainingSql,
+  insertTrainingSql,
+  joinedLocationsSql,
+  rolesSql,
+  toolsSql,
+} from './queries';
 
 const seed = async () => {
-  
   await datasource.initialize();
   const roles = await datasource.query(`SELECT * FROM public.bcws_role`);
 
@@ -28,20 +34,15 @@ const seed = async () => {
     await datasource.query(functionSql);
   }
 
-  const tools = await datasource.query(`SELECT * FROM public.bcws_tools`);
+  const tools = await datasource.query(`SELECT * FROM public.tool`);
   if (tools.length === 0) {
     await datasource.query(toolsSql);
   }
 
-  
-
-  const data = await datasource.query(
-    `SELECT * FROM public.bcws_certification`,
-  );
+  const data = await datasource.query(`SELECT * FROM public.certification`);
   if (data.length === 0) {
     await datasource.query(certsSql);
   }
-
 };
 
 seed();

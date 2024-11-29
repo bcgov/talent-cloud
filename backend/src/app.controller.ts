@@ -5,14 +5,15 @@ import {
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import axios from 'axios';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
 import { BcwsService } from './bcws/bcws.service';
 import { Ministry, MinistryName } from './common/enums';
 import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
+import { PersonnelService } from './personnel/personnel.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
-import axios from 'axios';
 
 @ApiTags('Application API')
 @Controller()
@@ -23,6 +24,7 @@ export class AppController {
     private db: TypeOrmHealthIndicator,
     @Inject(BcwsService) private bcwsService: BcwsService,
     @Inject(EmcrService) private emcrService: EmcrService,
+    @Inject(PersonnelService) private personnelService: PersonnelService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
@@ -68,16 +70,19 @@ export class AppController {
   async chips() {
     this.logger.log('CHIPS');
     try {
-      const response = await axios.get(`${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$top=100`, {
-        headers: {
-          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
-        }
-      });
+      const response = await axios.get(
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$top=100`,
+        {
+          headers: {
+            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+          },
+        },
+      );
       this.logger.log('SUCCESS');
       this.logger.log(response);
       return response.data;
     } catch (e) {
-      this.logger.error("ERROR");
+      this.logger.error('ERROR');
       this.logger.error(e);
       return 'error';
     }
@@ -88,16 +93,19 @@ export class AppController {
   async training() {
     this.logger.log('TRAINING');
     try {
-      const response = await axios.get(`${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=100`, {
-        headers: {
-          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
-        }
-      });
+      const response = await axios.get(
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=100`,
+        {
+          headers: {
+            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+          },
+        },
+      );
       this.logger.log('SUCCESS');
       this.logger.log(response);
       return response.data;
     } catch (e) {
-      this.logger.error("ERROR");
+      this.logger.error('ERROR');
       this.logger.error(e);
       return 'error';
     }
@@ -114,8 +122,8 @@ export class AppController {
     this.logger.log(`${req.url} ${req.role}`);
 
     const sections = await this.bcwsService.getRoles();
-    const certificates = await this.bcwsService.getCertificates(true);
-    const tools = await this.bcwsService.getTools();
+    const certificates = await this.personnelService.getCertificates(true);
+    const tools = await this.personnelService.getTools();
     const roles = await this.bcwsService.getAllRoles();
     const functions = await this.emcrService.getFunctions();
     /**

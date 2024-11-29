@@ -8,12 +8,7 @@ import {
   Length,
   ValidateIf,
 } from 'class-validator';
-import { CreateBcwsCertificationsDTO } from './create-bcws-personnel-certifications.dto';
-import { CreateBcwsPersonnelLanguagesDTO } from './create-bcws-personnel-languages.dto';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
-import { CreateBcwsPersonnelToolsDTO } from './create-bcws-personnel-tools.dto';
-import { UpdateBcwsCertificationsDTO } from './update-bcws-personnel-certifications.dto';
-import { UpdateBcwsPersonnelToolsDTO } from './update-bcws-personnel-tools.dto';
 import { Section } from '../../common/enums/bcws';
 import { Status } from '../../common/enums/status.enum';
 import { TravelPreference } from '../../common/enums/travel-preference.enum';
@@ -104,30 +99,6 @@ export class CreatePersonnelBcwsDTO {
   liaisonEmail?: string;
 
   @ApiProperty({
-    description: 'Emergency Contact First Name',
-  })
-  @IsOptional()
-  emergencyContactFirstName?: string;
-
-  @ApiProperty({
-    description: 'Emergency Contact Last Name',
-  })
-  @IsOptional()
-  emergencyContactLastName?: string;
-
-  @ApiProperty({
-    description: 'Emergency Contact Phone Number',
-  })
-  @IsOptional()
-  emergencyContactPhoneNumber?: string;
-
-  @ApiProperty({
-    description: 'Emergency Contact Relationship',
-  })
-  @IsOptional()
-  emergencyContactRelationship?: string;
-
-  @ApiProperty({
     default: false,
   })
   willingnessStatement?: boolean;
@@ -155,38 +126,12 @@ export class CreatePersonnelBcwsDTO {
   travelPreference: TravelPreference;
 
   @ApiProperty({
-    description: 'Tools used by the personnel',
-    required: false,
-  })
-  @IsArray()
-  @IsOptional()
-  tools?: CreateBcwsPersonnelToolsDTO[] | UpdateBcwsPersonnelToolsDTO[];
-
-  @ApiProperty({
-    description: 'Languages spoken by the personnel',
-    required: false,
-  })
-  @IsArray()
-  @IsOptional()
-  languages?: CreateBcwsPersonnelLanguagesDTO[];
-
-  @ApiProperty({
     description: 'Roles and sections for the personnel',
     required: false,
   })
   @IsArray()
   @IsOptional()
   roles?: CreateBcwsPersonnelRolesDTO[];
-
-  @ApiProperty({
-    description: 'Certifications for the personnel',
-    required: false,
-  })
-  @IsArray()
-  @IsOptional()
-  certifications?:
-    | CreateBcwsCertificationsDTO[]
-    | UpdateBcwsCertificationsDTO[];
 
   @ApiProperty({
     description: 'First Choice Section',

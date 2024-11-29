@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { RolesRO } from '../../../bcws/ro/roles.ro';
 import { BcwsRole, Section } from '../../../common/enums/bcws';
+import { RolesRO } from '../../../personnel/ro/roles.ro';
 
 @Entity('bcws_role')
 export class BcwsRoleEntity {
