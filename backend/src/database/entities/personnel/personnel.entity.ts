@@ -107,12 +107,6 @@ export class PersonnelEntity extends BaseEntity {
   intakeFormId?: number;
 
   @Column({
-    name: 'intake_form_id',
-    nullable: true,
-  })
-  intakeFormId?: number;
-
-  @Column({
     name: 'driver_licenses',
     type: 'simple-array',
     nullable: true,
