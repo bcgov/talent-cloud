@@ -9,6 +9,9 @@ import {
 
 export class BcwsPersonnelRoleRO {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   @IsOptional()
   personnel_id?: string;
 
