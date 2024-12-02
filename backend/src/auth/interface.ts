@@ -2,17 +2,25 @@ import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 
+export enum Roles {
+  COORDINATOR = 'coordinator',
+  LOGISTICS = 'logistics',
+  SUPERVISOR = 'supervisor',
+  MEMBER = 'member',
+}
 export enum Role {
   COORDINATOR = 'coordinator',
   LOGISTICS = 'logistics',
   SUPERVISOR = 'supervisor',
+  BCWS = 'bcws',
+  EMCR = 'emcr',
   MEMBER = 'member',
 }
 
 export enum Program {
   BCWS = 'bcws',
   EMCR = 'emcr',
-  ALL = 'ALL',
+  ALL = 'all',
 }
 
 export enum TokenType {
@@ -54,12 +62,9 @@ interface ResourceAccess {
   [key: string]: { roles: Role[] };
 }
 export interface RolesRequest {
-  role: Role;
-  program: Program;
-  username: string;
-  idir: string;
-  member: boolean;
-  supervisor: boolean;
-  recommitment: RecommitmentCycleRO;
+  roles?: Role[];
+  program?: Program;
+  username?: string;
+  idir?: string;
 }
 export interface RequestWithRoles extends Request, RolesRequest {}

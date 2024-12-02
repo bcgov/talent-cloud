@@ -193,7 +193,7 @@ export class PersonnelEntity extends BaseEntity {
   emergencyContactRelationship?: string;
 
   toResponseObject(
-    role: Role,
+    role: Role[],
     lastDeployed?: string,
   ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
@@ -251,7 +251,7 @@ export class PersonnelEntity extends BaseEntity {
     }
     // this is required in order to conditionally omit certain fields from the response based on the user role
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
 
   constructor(data: CreatePersonnelDTO) {

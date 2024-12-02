@@ -7,15 +7,15 @@ import { Program, Status } from '@/common';
 import { Loading } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { useProgramFieldData } from '@/hooks';
-import { bcwsData, emcrData } from '@/hooks/profileData';
-import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
 import { MemberProfileTab } from '@/components/tabs/Details';
 import { Tabs as TabIndexes } from '@/common';
+import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
+import { bcwsData, emcrData } from '@/hooks/profileData';
 
 const MemberProfile = () => {
   const { personnel, program, loading } = useMemberProfile();
-  const { role } = useRoleContext();
+  const { roles } = useRoleContext();
   const [activeTab, setActiveTab] = useState('availability');
 
   const bcwsProfileData =
@@ -46,7 +46,7 @@ const MemberProfile = () => {
           <ProfileMemberHeader
             personnel={personnel}
             currentTab={activeTab}
-            role={role}
+            roles={roles}
           />
         )}
 
@@ -55,7 +55,7 @@ const MemberProfile = () => {
             {personnel && (
               <RecommitmentProfileBanner personnel={personnel} program={program} />
             )}
-            <TabsBody  placeholder={undefined}>
+            <TabsBody placeholder={undefined}>
               <TabPanel value={TabIndexes.AVAILABILITY}>
                 {personnel && (
                   <MemberAvailabilityTab

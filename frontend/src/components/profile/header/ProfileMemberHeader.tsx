@@ -7,11 +7,11 @@ import { PersonnelStatus } from '@/components';
 export const ProfileMemberHeader = ({
   currentTab = Tabs.AVAILABILITY,
   personnel,
-  role,
+  roles,
 }: {
   currentTab: string;
   personnel: Personnel;
-  role?: Role;
+  roles?: Role[];
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
 
@@ -30,7 +30,7 @@ export const ProfileMemberHeader = ({
           <h2 className="font-semibold px-2">
             {personnel.firstName} {personnel.lastName}
           </h2>
-          {role === Role.COORDINATOR && (
+          {roles?.includes(Role.COORDINATOR) && (
             <span>
               <PersonnelStatus status={personnel?.status} />
             </span>
@@ -43,9 +43,11 @@ export const ProfileMemberHeader = ({
               className:
                 'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
             }}
+            placeholder={undefined}
           >
             <div className="flex gap-4">
               <Tab
+                placeholder={undefined}
                 className={`${activeTab === Tabs.AVAILABILITY ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.AVAILABILITY)}
                 value={Tabs.AVAILABILITY}
@@ -53,6 +55,7 @@ export const ProfileMemberHeader = ({
                 {TabNames.AVAILABILITY}
               </Tab>
               <Tab
+                placeholder={undefined}
                 className={`${activeTab === Tabs.PROFILE ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.PROFILE)}
                 value={Tabs.PROFILE}
@@ -60,6 +63,7 @@ export const ProfileMemberHeader = ({
                 {TabNames.PROFILE}
               </Tab>
               <Tab
+                placeholder={undefined}
                 className={`${activeTab === Tabs.TRAINING ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.TRAINING)}
                 value={Tabs.TRAINING}

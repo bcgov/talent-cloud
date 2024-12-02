@@ -39,7 +39,7 @@ export class EmcrController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Programs([Program.EMCR])
+  @Programs(Program.EMCR)
   @Get()
   @UsePipes(new QueryTransformPipe())
   async getEmcrPersonnel(
@@ -53,7 +53,7 @@ export class EmcrController {
     );
 
     return {
-      personnel: personnel.map((itm) => itm.toResponseObject(req.role)),
+      personnel: personnel.map((itm) => itm.toResponseObject(req.roles)),
       count,
       rows: query.rows,
       page: query.page,
@@ -68,7 +68,7 @@ export class EmcrController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Programs([Program.EMCR])
+  @Programs(Program.EMCR)
   @Get(':id')
   async getPersonnelById(
     @Param('id') id: string,
@@ -77,7 +77,7 @@ export class EmcrController {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const personnelRO: Record<'Personnel', EmcrRO> =
-      await this.personnelService.getEmcrPersonnelById(req.role, id);
+      await this.personnelService.getEmcrPersonnelById(req.roles, id);
 
     return personnelRO;
   }
@@ -89,7 +89,7 @@ export class EmcrController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Programs([Program.EMCR])
+  @Programs(Program.EMCR)
   @Patch(':id')
   async updatePersonnel(
     @Body() personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
@@ -117,12 +117,12 @@ export class EmcrController {
       return this.personnelService.updatePersonnelExperiences(
         id,
         experiences,
-        req.role,
+        req.roles,
       );
     } else if (Object.keys(details).length > 0) {
-      return this.personnelService.updatePersonnel(id, details, req.role);
+      return this.personnelService.updatePersonnel(id, details, req.roles);
     } else {
-      return this.personnelService.getEmcrPersonnelById(req.role, id);
+      return this.personnelService.getEmcrPersonnelById(req.roles, id);
     }
   }
 }

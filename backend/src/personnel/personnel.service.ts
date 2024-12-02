@@ -161,7 +161,7 @@ export class PersonnelService {
 
     await this.personnelRepository.update(id, { ...personnel });
     const person = await this.findOne(id);
-    return person.toResponseObject(Role.MEMBER);
+    return person.toResponseObject([Role.MEMBER]);
   }
   /**
    * Format Languages for saving in the database
@@ -428,6 +428,7 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
+    
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
@@ -614,7 +615,7 @@ export class PersonnelService {
 
     const personnelData = await qb.getOne();
     this.logger.log(`User is a member`);
-    return personnelData?.toResponseObject(Role.MEMBER);
+    return personnelData?.toResponseObject(req.roles);
   }
 
   async verifyMemberOrSupervisor(
@@ -669,5 +670,12 @@ export class PersonnelService {
    */
   async getTools(): Promise<ToolsEntity[]> {
     return this.toolsRepository.find();
+  }
+
+  async checkRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
+    const qb = this.recommitmentCycleRepository.createQueryBuilder();
+    qb.where('start_date <= :date', { date: new Date() });
+    qb.andWhere('end_date >= :date', { date: new Date() });
+    return await qb.getOne();
   }
 }

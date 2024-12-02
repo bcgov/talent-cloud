@@ -115,7 +115,10 @@ export class EmcrPersonnelEntity {
   @Column({ name: 'preoc_exp', type: 'boolean', nullable: true })
   preocExperience?: boolean;
 
-  toResponseObject(role: Role, lastDeployed?: string): Record<string, EmcrRO> {
+  toResponseObject(
+    role: Role[],
+    lastDeployed?: string,
+  ): Record<string, EmcrRO> {
     const response = new EmcrRO();
     const personnelData: Record<string, PersonnelRO> =
       this?.personnel?.toResponseObject(role, lastDeployed) ?? {};
@@ -145,7 +148,7 @@ export class EmcrPersonnelEntity {
         [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
   constructor(data: Partial<CreatePersonnelEmcrDTO>) {
     Object.assign(this, data);

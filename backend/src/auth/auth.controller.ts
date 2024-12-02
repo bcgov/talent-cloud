@@ -16,10 +16,7 @@ import { AppLogger } from '../logger/logger.service';
 @ApiTags('Auth API')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(
-    @Inject(AuthService) private readonly authService: AuthService,
-    private readonly logger: AppLogger,
-  ) {
+  constructor(private readonly logger: AppLogger) {
     this.logger.setContext(AuthController.name);
   }
 
@@ -31,24 +28,16 @@ export class AuthController {
     status: HttpStatus.OK,
   })
   @Get()
-  async checkUserPermissions(
-    @Request() req: RequestWithRoles,
-  ): Promise<RolesRequest> {
+  checkUserPermissions(@Request() req: RequestWithRoles): RolesRequest {
     this.logger.log(
-      `${req.method}: ${req.url} - ${req.role} - ${req.username}`,
+      `${req.method}: ${req.url} - ${req.roles} - ${req.username}`,
     );
 
-    const { isMember, isSupervisor, recommitment } =
-      await this.authService.verifyMemberOrSupervisor(req.idir);
-
     return {
-      role: req?.role,
+      roles: req?.roles,
       program: req?.program,
       username: `${req?.username}`,
       idir: req?.idir,
-      member: isMember,
-      supervisor: isSupervisor,
-      recommitment,
     };
   }
 }

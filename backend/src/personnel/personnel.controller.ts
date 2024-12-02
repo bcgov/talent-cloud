@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { CreatePersonnelDTO } from './dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { PersonnelService } from './personnel.service';
@@ -24,7 +25,6 @@ import { Programs } from '../auth/program.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
-import { CreatePersonnelDTO } from './dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -61,9 +61,12 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  async updatePersonnel(@Req() req: RequestWithRoles, @Body() personnel: Partial<CreatePersonnelDTO>): Promise<Record<string, PersonnelRO>> {
+  async updatePersonnel(
+    @Req() req: RequestWithRoles,
+    @Body() personnel: Partial<CreatePersonnelDTO>,
+  ): Promise<Record<string, PersonnelRO>> {
     return await this.personnelService.updatePersonnel(personnel, req);
-  } 
+  }
 
   @ApiOperation({
     summary: 'Update personnel availability',
@@ -73,7 +76,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Programs([Program.EMCR, Program.BCWS])
+  @Programs(Program.EMCR, Program.BCWS, Program.ALL)
   @Patch(':id/availability')
   async updatePersonnelAvailability(
     @Param('id') id: string,
@@ -96,7 +99,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
   })
   @Get(':id/availability')
-  @Programs([Program.EMCR, Program.BCWS])
+  @Programs(Program.EMCR, Program.BCWS, Program.ALL)
   async getPersonnelAvailability(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,

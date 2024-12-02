@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { Role } from '@/common';
-import { AuthProvider, RoleProvider } from '@/providers';
+import { AuthProvider } from '@/providers';
 import RoleProtectedRoute from './RoleProtectedRoute';
 import PrivateRoute from './PrivateRoute';
 import Redirect from './Redirect';
@@ -20,69 +20,60 @@ const Unauthenticated = lazy(() => import('../pages/Unauthenticated'));
 export default () => {
   return (
     <AuthProvider>
-      <RoleProvider>
-        <BrowserRouter>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path={AppRoutes.Home} element={<SplashPage />} />
-              <Route path={AppRoutes.NotFound} element={<NotFound />} />
+      <BrowserRouter>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path={AppRoutes.Home} element={<SplashPage />} />
+            <Route path={AppRoutes.NotFound} element={<NotFound />} />
+            <Route path={AppRoutes.Unauthenticated} element={<Unauthenticated />} />
+            <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
+            <Route element={<PrivateRoute />}>
+              <Route path={AppRoutes.Root} element={<Redirect />} />
               <Route
-                path={AppRoutes.Unauthenticated}
-                element={<Unauthenticated />}
-              />
-
-              <Route element={<PrivateRoute />}>
-                <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
-                <Route path={AppRoutes.Root} element={<Redirect />} />
-                <Route
-                  element={
-                    <RoleProtectedRoute
-                      allowedRoles={[Role.COORDINATOR, Role.LOGISTICS]}
-                    />
-                  }
-                >
-                  <Route element={<Dashboard />} path={AppRoutes.Dashboard} />
-                  <Route element={<Profile />} path={AppRoutes.Profile} />
-                </Route>
-                <Route
-                  element={
-                    <RoleProtectedRoute
-                      allowedRoles={[
-                        Role.COORDINATOR,
-                        Role.LOGISTICS,
-                        Role.SUPERVISOR,
-                        Role.MEMBER,
-                      ]}
-                    />
-                  }
-                >
-                  <Route
-                    element={<MemberProfile />}
-                    path={AppRoutes.MemberProfile}
+                element={
+                  <RoleProtectedRoute
+                    allowedRoles={[Role.COORDINATOR, Role.LOGISTICS]}
                   />
-                </Route>
-
-                <Route
-                  element={
-                    <RoleProtectedRoute
-                      allowedRoles={[
-                        Role.COORDINATOR,
-                        Role.LOGISTICS,
-                        Role.SUPERVISOR,
-                      ]}
-                    />
-                  }
-                >
-                  <Route
-                    element={<SupervisorDashboard />}
-                    path={AppRoutes.SupervisorDashboard}
-                  />
-                </Route>
+                }
+              >
+                <Route element={<Dashboard />} path={AppRoutes.Dashboard} />
+                <Route element={<Profile />} path={AppRoutes.Profile} />
               </Route>
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </RoleProvider>
+              <Route
+                element={
+                  <RoleProtectedRoute
+                    allowedRoles={[
+                      Role.COORDINATOR,
+                      Role.LOGISTICS,
+                      Role.SUPERVISOR,
+                      Role.MEMBER,
+                    ]}
+                  />
+                }
+              >
+                <Route element={<MemberProfile />} path={AppRoutes.MemberProfile} />
+              </Route>
+
+              <Route
+                element={
+                  <RoleProtectedRoute
+                    allowedRoles={[
+                      Role.COORDINATOR,
+                      Role.LOGISTICS,
+                      Role.SUPERVISOR,
+                    ]}
+                  />
+                }
+              >
+                <Route
+                  element={<SupervisorDashboard />}
+                  path={AppRoutes.SupervisorDashboard}
+                />
+              </Route>
+            </Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </AuthProvider>
   );
 };

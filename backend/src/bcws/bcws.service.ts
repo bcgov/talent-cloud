@@ -39,7 +39,7 @@ export class BcwsService {
   async updateBcwsPersonnel(
     id: string,
     personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
-    role: Role,
+    role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelService.findOne(id);
@@ -185,7 +185,7 @@ export class BcwsService {
    * @returns {EmcrPersonnelEntity} Single personnel
    */
   async getBcwsPersonnelById(
-    role: Role,
+    role: Role[],
     id: string,
   ): Promise<Record<string, BcwsRO>> {
     const person = await this.personnelService.findOne(id);

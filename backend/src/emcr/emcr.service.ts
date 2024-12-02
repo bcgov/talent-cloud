@@ -48,7 +48,7 @@ export class EmcrService {
   async updatePersonnel(
     id: string,
     personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
-    role: Role,
+    role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
     const person = await this.personnelService.findOne(id);
@@ -84,7 +84,7 @@ export class EmcrService {
   async updatePersonnelExperiences(
     id: string,
     experiences: EmcrPersonnelExperienceDTO[],
-    role: Role,
+    role: Role[],
   ) {
     const experienceEntities = experiences.map((e) => ({
       functionId: e.id,
@@ -211,7 +211,7 @@ export class EmcrService {
    * @returns {EmcrPersonnelEntity} Single personnel
    */
   async getEmcrPersonnelById(
-    role: Role,
+    role: Role[],
     id: string,
   ): Promise<Record<string, EmcrRO>> {
     const person = await this.personnelService.findOne(id);
