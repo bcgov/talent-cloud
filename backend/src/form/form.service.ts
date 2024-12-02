@@ -17,6 +17,7 @@ import { BcwsService } from '../bcws/bcws.service';
 import { CreatePersonnelBcwsDTO } from '../bcws/dto';
 import {
   CertificationName,
+  DriverLicense,
   Experience,
   ExperienceLevel,
   LanguageLevelType,
@@ -278,7 +279,7 @@ export class FormService {
     }
 
     const personnelData: CreatePersonnelDTO = {
-      intakeForm: formId,
+      intakeFormId: formId,
       unionMembership: UnionMembership[data.unionMembership],
       ministry: Ministry[data.ministry.value],
       division: data.division,
@@ -297,7 +298,7 @@ export class FormService {
         /[(]|-|[)]|\s/gi,
         '',
       ),
-      driverLicense: data.dl,
+      driverLicense: data.dl.map((itm) => DriverLicense[itm]),
       jobTitle: data.jobTitle,
 
       languages: Array.from(

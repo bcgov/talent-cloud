@@ -31,7 +31,7 @@ export class BcwsPersonnelEntity {
   status: Status;
 
   @Column({ name: 'employee_id', type: 'varchar', length: 6 })
-  employeeId: number;
+  employeeId: string;
 
   @Column({ name: 'date_applied', type: 'timestamp', nullable: true })
   dateApplied: Date;
@@ -47,7 +47,7 @@ export class BcwsPersonnelEntity {
 
   //TODO confirm length of paylist_id
   @Column({ name: 'paylist_id', type: 'varchar', length: 50 })
-  paylistId: number;
+  paylistId: string;
 
   @Column({
     name: 'liason_first_name',

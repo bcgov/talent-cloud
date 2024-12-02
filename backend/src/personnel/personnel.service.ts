@@ -117,6 +117,52 @@ export class PersonnelService {
       console.log(e);
     }
   }
+
+  async updatePersonnel(
+    personnel: Partial<CreatePersonnelDTO>,
+    req: RequestWithRoles,
+  ): Promise<Record<string, PersonnelRO>> {
+    this.logger.log(`${JSON.stringify(personnel)}`);
+    const { id } = await this.personnelRepository.findOneOrFail({
+      where: { email: req.idir },
+    });
+
+    if (personnel.languages) {
+      const currentLanguages = await this.languageRepository.find({
+        where: { personnel: { id } },
+      });
+      const updatedLanguageNames = personnel.languages.map((l) => l.language);
+      const deletedLanguagesIds = currentLanguages
+        .filter((cl) => !updatedLanguageNames.includes(cl.language))
+        .map((cl) => cl.id);
+      if (deletedLanguagesIds.length) {
+        await this.languageRepository.delete(deletedLanguagesIds);
+      }
+
+      const currentLanguagesNames = currentLanguages.map((cl) => cl.language);
+      const newLanguages = personnel.languages
+        .filter((l) => !currentLanguagesNames.includes(l.language))
+        .map((l) => ({
+          personnelId: id,
+          ...l,
+        }));
+      await this.languageRepository.save(newLanguages);
+      delete personnel.languages;
+    }
+
+    if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
+      const allCertifications = await this.certificationRepository.find();
+      const personnelCerts = personnel.certifications.map((c) => ({
+        certificationId: allCertifications.find((ac) => ac.name === c.name).id,
+        expiry: c.expiry,
+      }));
+      personnel.certifications = personnelCerts;
+    }
+
+    await this.personnelRepository.update(id, { ...personnel });
+    const person = await this.findOne(id);
+    return person.toResponseObject(Role.MEMBER);
+  }
   /**
    * Format Languages for saving in the database
    * @param languages
@@ -530,7 +576,7 @@ export class PersonnelService {
    * Gets all approved BCWS members for e-diaries to pull daily
    */
   async getApprovedBCWSMembers(): Promise<
-    { employeeId: number; firstName: string; lastName: string }[]
+    { employeeId: string; firstName: string; lastName: string }[]
   > {
     const qb = this.personnelRepository
       .createQueryBuilder('personnel')

@@ -7,6 +7,7 @@ import { TravelPreference } from '../common/enums/travel-preference.enum';
 import { UnionMembership } from '../common/enums/union-membership.enum';
 import { CreatePersonnelDTO } from '../personnel/dto/create-personnel.dto';
 import { AvailabilityEntity } from './entities/personnel/availability.entity';
+import { DriverLicense } from '../common/enums/driver-license.enum';
 
 export const personnel: CreatePersonnelDTO[] = [
   {
@@ -32,7 +33,7 @@ export const personnel: CreatePersonnelDTO[] = [
       locationName: 'Merritt',
       region: Region['CTL'],
     } as LocationEntity,
-    driverLicense: ['CLASS_3'],
+    driverLicense: [DriverLicense['CLASS_3']],
     emcr: {
       trainings: [],
       status: Status.ACTIVE,
@@ -106,7 +107,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorEmail: 'Maegan.Upton@yahoo.com',
     unionMembership: UnionMembership['PEA'],
 
-    driverLicense: ['CLASS_5'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     homeLocation: {
       id: 23,
@@ -272,7 +273,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_REGION,
     },
-    driverLicense: ['CLASS_2'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     unionMembership: UnionMembership['PEA'],
 
@@ -295,7 +296,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorEmail: 'Lauryn63@yahoo.com',
 
     unionMembership: UnionMembership['BCGEU'],
-    driverLicense: ['CLASS_3'],
+    driverLicense: [DriverLicense['CLASS_3']],
     homeLocation: {
       id: 40,
       locationName: 'Prince George',
@@ -440,7 +441,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
-    driverLicense: ['CLASS_4'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     jobTitle: 'Public-key tangible info-mediaries',
 
@@ -508,7 +509,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,
     },
-    driverLicense: ['LL2'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Cross-group client-driven encryption',
@@ -595,7 +596,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_ANYWHERE,
     },
-    driverLicense: ['CLASS_2'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     unionMembership: UnionMembership['PEA'],
 
@@ -618,7 +619,7 @@ export const personnel: CreatePersonnelDTO[] = [
     supervisorEmail: 'Esther_Ebert29@hotmail.com',
 
     unionMembership: UnionMembership['EXCLUDED'],
-    driverLicense: ['LL2'],
+    driverLicense: [DriverLicense['CLASS_3']],
     homeLocation: {
       id: 59,
       locationName: 'Williams Lake',
@@ -783,7 +784,7 @@ export const personnel: CreatePersonnelDTO[] = [
       ],
       travelPreference: TravelPreference.WILLING_TO_TRAVEL_UNKNOWN,
     },
-    driverLicense: ['CLASS_3'],
+    driverLicense: [DriverLicense['CLASS_3']],
 
     unionMembership: UnionMembership['PEA'],
     jobTitle: 'Automated attitude-oriented benchmark',
