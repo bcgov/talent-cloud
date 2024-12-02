@@ -99,7 +99,7 @@ export class PersonnelEntity extends BaseEntity {
   @OneToOne(() => Form, (form) => form.id, { nullable: true })
   intakeForm?: Form;
 
-  @Column({name:'intake_form_id', type: 'number', nullable: true})
+  @Column({name:'intake_form_id',  nullable: true})
   intakeFormId?: number;
 
   @Column({
