@@ -102,7 +102,6 @@ export class PersonnelEntity extends BaseEntity {
 
   @Column({
     name: 'intake_form_id',
-    type: 'uuid',
     nullable: true,
   })
   intakeFormId?: number;
