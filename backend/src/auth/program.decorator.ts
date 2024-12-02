@@ -7,5 +7,5 @@ import { Metadata } from './metadata';
  * @param program
  * @returns
  */
-export const Programs = (program: Program[]) =>
+export const Programs = (...program: Program[]) =>
   SetMetadata(Metadata.PROGRAM, [...program]);

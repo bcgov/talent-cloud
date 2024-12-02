@@ -32,7 +32,6 @@ export default () => {
               />
 
               <Route element={<PrivateRoute />}>
-                <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
                 <Route path={AppRoutes.Root} element={<Redirect />} />
                 <Route
                   element={
@@ -78,6 +77,7 @@ export default () => {
                     path={AppRoutes.SupervisorDashboard}
                   />
                 </Route>
+                <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
               </Route>
             </Routes>
           </Suspense>

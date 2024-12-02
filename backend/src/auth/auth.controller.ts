@@ -35,14 +35,14 @@ export class AuthController {
     @Request() req: RequestWithRoles,
   ): Promise<RolesRequest> {
     this.logger.log(
-      `${req.method}: ${req.url} - ${req.role} - ${req.username}`,
+      `${req.method}: ${req.url} - ${req.roles} - ${req.username}`,
     );
 
     const { isMember, isSupervisor, recommitment } =
       await this.authService.verifyMemberOrSupervisor(req.idir);
 
     return {
-      role: req?.role,
+      roles: req?.roles,
       program: req?.program,
       username: `${req?.username}`,
       idir: req?.idir,

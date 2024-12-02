@@ -12,11 +12,11 @@ const usePersonnel = (): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
   profileData: ProfileData;
-  role?: Role;
+  roles?: Role[];
   loading?: boolean;
   program?: Program;
 } => {
-  const { role, program, loading } = useRoleContext();
+  const { roles, program, loading } = useRoleContext();
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
 
@@ -47,7 +47,7 @@ const usePersonnel = (): {
   return {
     personnel,
     updatePersonnel,
-    role,
+    roles,
     loading,
     profileData:
       program === Program.BCWS ? bcwsData(personnel) : emcrData(personnel),

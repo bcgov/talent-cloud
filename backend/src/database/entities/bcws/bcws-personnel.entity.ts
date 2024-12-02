@@ -126,7 +126,10 @@ export class BcwsPersonnelEntity {
   })
   roles?: BcwsSectionsAndRolesEntity[];
 
-  toResponseObject(role: Role, lastDeployed?: string): Record<string, BcwsRO> {
+  toResponseObject(
+    role: Role[],
+    lastDeployed?: string,
+  ): Record<string, BcwsRO> {
     const response = new BcwsRO();
 
     const personnelData: Record<string, PersonnelRO> =
@@ -160,7 +163,7 @@ export class BcwsPersonnelEntity {
     };
 
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: [role] });
+    return instanceToPlain(response, { groups: role });
   }
   constructor(data: Partial<CreatePersonnelBcwsDTO>) {
     Object.assign(this, data);

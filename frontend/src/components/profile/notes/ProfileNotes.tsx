@@ -12,9 +12,9 @@ import { EditNotes } from './EditNotes';
 export const ProfileNotes = ({
   personnel,
   updatePersonnel,
-  role,
+  roles,
 }: {
-  role?: Role;
+  roles?: Role[];
   personnel: Personnel;
 
   updatePersonnel: (props: Partial<Personnel>) => void;
@@ -84,7 +84,7 @@ export const ProfileNotes = ({
                     </div>
                   </div>
 
-                  {role === Role.COORDINATOR && (
+                  {roles?.includes(Role.COORDINATOR) && (
                     <div>
                       <div className="py-2">
                         <div className="flex flex-row items-center space-x-2">

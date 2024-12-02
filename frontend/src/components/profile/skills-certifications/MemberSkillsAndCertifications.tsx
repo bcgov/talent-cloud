@@ -8,12 +8,7 @@ import { format } from 'date-fns';
 import { DialogUI } from '@/components/ui';
 import { useState } from 'react';
 import { ProfileEditSkills } from './ProfileEditSkills';
-import type {
-  BcwsCertification,
-  BcwsLanguages,
-  BcwsPersonnelTool,
-  Personnel,
-} from '@/common';
+import type { Certification, Languages, PersonnelTool, Personnel } from '@/common';
 
 export type MemberSkillsProps = {
   title?: string;
@@ -48,9 +43,9 @@ export const MemberSkillsAndCertifications = ({
   };
 
   const handleSave = (skills: {
-    newLanguages: BcwsLanguages[];
-    newTools: BcwsPersonnelTool[];
-    newCertifications: BcwsCertification[];
+    newLanguages: Languages[];
+    newTools: PersonnelTool[];
+    newCertifications: Certification[];
   }) => {
     updatePersonnel({
       languages: skills.newLanguages,

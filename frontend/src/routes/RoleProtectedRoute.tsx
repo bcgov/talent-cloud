@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Loading } from '@/components';
 
 const RoleProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
-  const { role, loading } = useRoleContext();
+  const { roles, loading } = useRoleContext();
   const { keycloak } = useKeycloak();
 
   if (loading) {
@@ -17,7 +17,7 @@ const RoleProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
     return <Navigate to={Routes.Unauthenticated} />;
   }
 
-  if (role && !allowedRoles?.includes(role)) {
+  if (roles && !roles.find((role) => allowedRoles?.includes(role))) {
     return <Navigate to={Routes.Unauthorized} />;
   }
   return <Outlet />;

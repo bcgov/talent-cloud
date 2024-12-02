@@ -119,7 +119,7 @@ export class AppController {
   @Public()
   @Get('/field/data')
   async getBcwsFilters(@Request() req: RequestWithRoles) {
-    this.logger.log(`${req.url} ${req.role}`);
+    this.logger.log(`${req.url} ${req.roles}`);
 
     const sections = await this.bcwsService.getRoles();
     const certificates = await this.personnelService.getCertificates(true);

@@ -3,12 +3,28 @@ import type { ReactElement } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from './interface';
 import { useAxios } from '@/hooks/useAxios';
-import type { RecommitmentCycle } from '@/common';
+import type { Program, Role } from '@/common';
+import { type RecommitmentCycle } from '@/common';
 
 export const RoleContext = createContext<{
-  user: User;
+  program?: Program;
+  roles?: Role[];
+  username?: string;
+  idir?: string;
+  member?: boolean;
+  supervisor?: boolean;
+  loading?: boolean;
   recommitmentCycle: RecommitmentCycle | null;
-}>({ user: {}, recommitmentCycle: null });
+}>({
+  program: undefined,
+  roles: [],
+  username: undefined,
+  idir: undefined,
+  member: false,
+  supervisor: false,
+  loading: false,
+  recommitmentCycle: null,
+});
 
 export const useRecommitmentCycle = () => {
   const { recommitmentCycle } = useContext(RoleContext);
@@ -16,18 +32,25 @@ export const useRecommitmentCycle = () => {
 };
 
 export const useRoleContext = () => {
-  const {
-    user: { role, program, username, idir, member, supervisor, loading },
-  } = useContext(RoleContext);
-
-  return { role, program, username, idir, member, supervisor, loading };
+  const ctx = useContext(RoleContext);
+  if (!ctx) throw new Error('useRoleContext must be used within a RoleProvider');
+  const { roles, program, username, idir, member, supervisor, loading } = ctx;
+  return { roles, program, username, idir, member, supervisor, loading };
 };
 
 export const RoleProvider = ({ children }: { children: ReactElement }) => {
   const { AxiosPrivate } = useAxios();
   const [recommitmentCycle, setRecommitmentCycle] =
     useState<RecommitmentCycle | null>(null);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>({
+    program: undefined,
+    roles: [],
+    username: undefined,
+    idir: undefined,
+    member: false,
+    supervisor: false,
+    loading: false,
+  });
 
   const { keycloak } = useKeycloak();
 
@@ -35,8 +58,9 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     try {
       setUser((prev) => ({ ...prev, loading: true }));
       const { data } = await AxiosPrivate.get('/auth');
+      console.log(data, 'DATA');
       setRecommitmentCycle(data.recommitment);
-      setUser((prev) => ({ ...prev, ...data }));
+      setUser((prev) => ({ ...prev, ...data, loading: false }));
     } catch (e) {
       console.error(e);
     } finally {
@@ -46,21 +70,19 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
 
   useEffect(() => {
     getLoggedInUser();
-  }, [keycloak.idToken]);
+  }, [keycloak.token]);
 
   return (
     <RoleContext.Provider
       value={{
         recommitmentCycle,
-        user: {
-          role: user?.role,
-          program: user?.program,
-          username: user?.username,
-          idir: user?.idir,
-          member: user?.member,
-          supervisor: user?.supervisor,
-          loading: user?.loading,
-        },
+        roles: user?.roles,
+        program: user?.program,
+        username: user?.username,
+        idir: user?.idir,
+        member: user?.member,
+        supervisor: user?.supervisor,
+        loading: user?.loading,
       }}
     >
       {children}

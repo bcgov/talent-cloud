@@ -48,9 +48,9 @@ export class RolesGuard implements CanActivate {
       Metadata.PROGRAM,
       context.getHandler(),
     );
-    
-    const request = context.switchToHttp().getRequest();
 
+    const request = context.switchToHttp().getRequest();
+    this.logger.log('RolesGuard: request', request.roles);
     // if this route does not specify any required program then allow passthrough
     if (requiredProgramRoles) {
       // get the current logged in users program (attached to the request during authentication)
@@ -60,7 +60,7 @@ export class RolesGuard implements CanActivate {
 
     if (requiredRoles) {
       // get the current logged in users roles (attached to the request during authentication)
-      const currentUserRole = request?.role;
+      const currentUserRole = request?.roles;
 
       this.validateRoles(currentUserRole, requiredRoles);
     }
@@ -69,10 +69,9 @@ export class RolesGuard implements CanActivate {
   }
 
   validateRoles(currentUserRole: Role, requiredRoles: Role[]) {
-    if (requiredRoles.includes(currentUserRole)) {
+    if (requiredRoles.some((role) => currentUserRole.includes(role))) {
       return true;
     }
-
     throw new UnauthorizedException();
   }
 

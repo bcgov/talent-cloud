@@ -9,8 +9,7 @@ import {
 } from '@/common';
 import * as Yup from 'yup';
 
-import { Route } from '@/providers';
-import { DriverLicense, DriverLicenseName } from '@/common/enums';
+import { DriverLicense, DriverLicenseName, Program } from '@/common/enums';
 import type { TravelPreference } from '@/common/enums/travel-preference.enum';
 import {
   BcwsTravelPreference,
@@ -162,7 +161,7 @@ export const workLocationField = {
     disabled: true,
     break: true,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: Object.keys(FireCentre).map((itm) => ({
       label: FireCentreName[itm as FireCentre],
       value: itm,
@@ -176,7 +175,7 @@ export const workLocationField = {
     break: true,
     autoComplete: 'off',
     disabled: true,
-    program: Route.EMCR,
+    program: Program.EMCR,
     options: Object.keys(Region).map((itm) => ({
       label: RegionName[itm as Region],
       value: itm,
@@ -202,7 +201,7 @@ export const homeLocationField = {
     break: true,
     disabled: true,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: Object.keys(FireCentre).map((itm) => ({
       label: FireCentreName[itm as FireCentre],
       value: itm,
@@ -217,7 +216,7 @@ export const homeLocationField = {
     autoComplete: 'off',
     break: true,
     disabled: true,
-    program: Route.EMCR,
+    program: Program.EMCR,
     options: Object.keys(Region).map((itm) => ({
       label: RegionName[itm as Region],
       value: itm,
@@ -253,7 +252,7 @@ export const fields = {
     type: 'select',
     autoComplete: 'off',
     disabled: false,
-    program: Route.EMCR,
+    program: Program.EMCR,
     options: [
       { label: 'Incomplete', value: 'false' },
       { label: 'Completed', value: 'true' },
@@ -280,7 +279,7 @@ export const fields = {
     required: true,
 
     type: 'select',
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: [
       { label: 'Completed', value: 'true' },
       { label: 'Incomplete', value: 'false' },
@@ -293,7 +292,7 @@ export const fields = {
     disabled: false,
     required: true,
     type: 'select',
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: [
       { label: 'Completed', value: 'true' },
       { label: 'Incomplete', value: 'false' },
@@ -306,7 +305,7 @@ export const fields = {
     disabled: false,
     required: true,
     type: 'select',
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: [
       { label: 'Completed', value: 'true' },
       { label: 'Incomplete', value: 'false' },
@@ -366,7 +365,7 @@ export const fields = {
     disabled: false,
     required: true,
     type: 'select',
-    program: Route.BCWS,
+    program: Program.BCWS,
     options: [
       { label: 'Yes', value: 'true' },
       { label: 'No', value: 'false' },
@@ -430,7 +429,7 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
 
   emergencyContactLastName: {
@@ -440,7 +439,7 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
 
   emergencyContactPhoneNumber: {
@@ -450,7 +449,7 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'tel',
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
 
   emergencyContactRelationship: {
@@ -460,7 +459,7 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
   supervisorPhone: {
     name: 'supervisorPhone',
@@ -502,7 +501,7 @@ export const fields = {
     disabled: false,
     required: true,
     type: 'text',
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
 
   unionMembership: {
@@ -525,7 +524,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
   liaisonLastName: {
     name: 'liaisonLastName',
@@ -534,7 +533,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
 
   liaisonPhoneNumber: {
@@ -544,7 +543,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
   liaisonEmail: {
     name: 'liaisonEmail',
@@ -553,7 +552,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: false,
-    program: Route.BCWS,
+    program: Program.BCWS,
   },
   homeLocation: homeLocationField,
   workLocation: workLocationField,

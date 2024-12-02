@@ -17,7 +17,7 @@ import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 
 const Profile = () => {
-  const { loading, program, role, personnel, updatePersonnel, profileData } =
+  const { loading, program, roles, personnel, updatePersonnel, profileData } =
     usePersonnel();
   const { functions, bcwsRoles } = useProgramFieldData(program);
 
@@ -32,7 +32,7 @@ const Profile = () => {
       {personnel && <ProfileBreadcrumbs personnel={personnel} />}
 
       {personnel && (
-        <ProfileHeader personnel={personnel} program={program} role={role} />
+        <ProfileHeader personnel={personnel} program={program} roles={roles} />
       )}
 
       <div className="bg-white w-full">
@@ -47,7 +47,7 @@ const Profile = () => {
           {personnel && (
             <ProfileToggle
               personnel={personnel}
-              role={role}
+              roles={roles}
               updatePersonnel={updatePersonnel}
             />
           )}
@@ -55,12 +55,12 @@ const Profile = () => {
             <RecommitmentProfileBanner personnel={personnel} program={program} />
           )}
 
-          <ProfileDetails />
+          {personnel && <ProfileDetails />}
           {personnel && program === Program.EMCR && (
             <ProfileFunctions
               functions={functions}
               personnel={personnel}
-              allowEditing={role === Role.COORDINATOR}
+              allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
               updatePersonnel={updatePersonnel}
             />
           )}
@@ -71,20 +71,20 @@ const Profile = () => {
               <SectionsAndRoles
                 personnel={personnel}
                 bcwsRoles={bcwsRoles}
-                allowEditing={role === Role.COORDINATOR}
+                allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
                 updatePersonnel={updatePersonnel}
               />
               <SkillsAndCertifications
                 personnel={personnel}
                 profileData={profileData}
-                allowEditing={role === Role.COORDINATOR}
+                allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
                 updatePersonnel={updatePersonnel}
               />
             </>
           )}
           {personnel && (
             <ProfileNotes
-              role={role}
+              roles={roles}
               personnel={personnel}
               updatePersonnel={updatePersonnel}
             />

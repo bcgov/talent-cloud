@@ -113,17 +113,17 @@ export interface BcwsLanguages {
   level: LanguageProficiency;
 }
 
-export interface BcwsPersonnelTool {
+export interface PersonnelTool {
   tool: Tools;
   proficiencyLevel: ToolsProficiency;
 }
 
-export interface BcwsCertification {
+export interface Certification {
   name: string;
   expiry?: string;
 }
 
-export interface BcwsLanguages {
+export interface Languages {
   language: string;
   type: LanguageLevelType;
   level: LanguageProficiency;
@@ -203,10 +203,13 @@ export interface Personnel {
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
   emergencyContactRelationship?: string;
-  tools?: BcwsPersonnelTool[];
-  languages?: BcwsLanguages[];
+  tools?: PersonnelTool[];
+  languages?: Languages[];
   roles?: BcwsPersonnelRoleInterface[];
-  certifications?: BcwsCertification[];
+  certifications?: Certification[];
+  bcws?: Partial<Personnel>;
+  emcr?: Partial<Personnel>;
+  skills: PersonnelTool[] | Certification[] | Languages[];
 }
 
 export interface AvailabilityRange {

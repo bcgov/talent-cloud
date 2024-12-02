@@ -38,7 +38,7 @@ export class BcwsController {
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Programs([Program.BCWS])
+  @Programs(Program.BCWS)
   @Patch('/:id')
   async updateBcwsPersonnel(
     @Body() personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
@@ -46,7 +46,7 @@ export class BcwsController {
     @Param('id') id: string,
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    return this.bcwsService.updateBcwsPersonnel(id, personnel, req.role);
+    return this.bcwsService.updateBcwsPersonnel(id, personnel, req.roles);
   }
 
   @ApiOperation({
@@ -56,7 +56,7 @@ export class BcwsController {
   @ApiResponse({
     status: HttpStatus.OK,
   })
-  @Programs([Program.BCWS])
+  @Programs(Program.BCWS)
   @Get()
   @UsePipes(new QueryTransformPipe())
   async getBcwsPersonnel(
@@ -68,7 +68,7 @@ export class BcwsController {
     const { personnel, count } = await this.bcwsService.getBcwsPersonnel(query);
 
     return {
-      personnel: personnel.map((itm) => itm.toResponseObject(req.role)),
+      personnel: personnel.map((itm) => itm.toResponseObject(req.roles)),
       count,
       rows: query.rows,
       page: query.page,
@@ -83,7 +83,7 @@ export class BcwsController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Programs([Program.BCWS])
+  @Programs(Program.BCWS)
   @Get('/:id')
   async getBcwsPersonnelById(
     @Param('id') id: string,
@@ -91,6 +91,6 @@ export class BcwsController {
   ): Promise<Record<'Personnel', BcwsRO>> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    return await this.bcwsService.getBcwsPersonnelById(req.role, id);
+    return await this.bcwsService.getBcwsPersonnelById(req.roles, id);
   }
 }

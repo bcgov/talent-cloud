@@ -22,11 +22,11 @@ function HorizontalLine() {
 
 export const ProfileHeader = ({
   personnel,
-  role,
+  roles,
   program,
 }: {
   personnel: Personnel;
-  role?: Role;
+  roles?: Role[];
   program?: Program;
 }) => {
   const getLastDeployed = () => {
@@ -61,7 +61,7 @@ export const ProfileHeader = ({
           <h2 className="font-semibold px-2">
             {personnel.firstName} {personnel.lastName}
           </h2>
-          {role === Role.COORDINATOR && (
+          {roles?.includes(Role.COORDINATOR) && (
             <span>
               <PersonnelStatus status={personnel?.status} />
             </span>

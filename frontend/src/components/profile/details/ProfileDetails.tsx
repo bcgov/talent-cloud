@@ -12,10 +12,11 @@ import { useRoleContext } from '@/providers';
 export const ProfileDetails = () => {
   const { personnel, profileData, updatePersonnel } = usePersonnel();
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
-  const { program, role } = useRoleContext();
-  const allowEditing = role === Role.COORDINATOR;
+  const { program, roles } = useRoleContext();
+  const allowEditing = roles?.includes(Role.COORDINATOR);
 
   const [open, setOpen] = useState(1);
+
   const { generalInformation, contact, organizational, intakeRequirements } =
     profileData;
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
@@ -87,7 +88,7 @@ export const ProfileDetails = () => {
             </AccordionHeader>
 
             <AccordionBody>
-              {sections.map((itm) => (
+              {sections.map((itm: any) => (
                 <Fragment key={itm.title}>
                   <DetailsSection title={itm.title} columns={itm.columns} />
                   <div className="w-full border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>

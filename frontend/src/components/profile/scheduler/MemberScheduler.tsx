@@ -22,14 +22,14 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
   const [editCell, setEditCell] = useState<{
     from?: string;
     to?: string;
-    availabilityType?: AvailabilityType;
+    availabilityType?: AvailabilityType | null;
     deploymentCode?: string;
   }>();
 
   const openSchedulerDialog = (
     from?: string,
     to?: string,
-    availabilityType?: AvailabilityType,
+    availabilityType?: AvailabilityType | null,
     deploymentCode?: string,
   ) => {
     if (!schedulerDialogOpen) {
@@ -80,10 +80,10 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
       const month = day.format('MMM');
       if (
         availDay.availabilityType === lastStatus &&
-        availDay.availabilityType !== AvailabilityType.NOT_INDICATED
+        availDay.availabilityType !== AvailabilityType.AVAILABLE
       ) {
         count++;
-      } else if (availDay.availabilityType === AvailabilityType.NOT_INDICATED) {
+      } else if (availDay.availabilityType === AvailabilityType.AVAILABLE) {
         // This is a break in the group of days with one status, so we set numDays and reset
         if (startDates[startDay]) {
           startDates[startDay].numDays = count;
@@ -97,11 +97,11 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
           startDates[startDay].numDays = count;
         }
         startDates[availDay.date] = {
-          status: availDay.availabilityType,
+          status: availDay.availabilityType ?? AvailabilityType.AVAILABLE,
           numDays: 1,
         };
         count = 1;
-        lastStatus = availDay.availabilityType;
+        lastStatus = availDay.availabilityType ?? AvailabilityType.AVAILABLE;
         startDay = availDay.date;
       }
 
@@ -155,7 +155,7 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
     const statusIndex = availability.findIndex((s) => s.date === date);
     if (statusIndex > -1) {
       const status = availability[statusIndex];
-      if (status.availabilityType === AvailabilityType.NOT_INDICATED) {
+      if (status.availabilityType === AvailabilityType.AVAILABLE) {
         openSchedulerDialog(status.date, status.date);
       } else {
         // For all elements before (including this one), find the first break in availability type
