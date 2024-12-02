@@ -2,31 +2,55 @@ import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from '@material-tailwind/re
 import {
   MemberScheduler,
   MemberSectionsAndRoles,
-  MemberProfileFunctions,
   MemberSkillsAndCertifications,
 } from '@/components';
 import {
   Program,
-  type BcwsRoleInterface,
-  type FunctionType,
+  // type BcwsRoleInterface,
+  // type FunctionType,
   type MemberProfile,
 } from '@/common';
 import { useState } from 'react';
 import { ProfileSectionHeader } from '../profile/common';
+import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const MemberAvailabilityTab = ({
-  bcwsRoles,
-  functions,
+  // bcwsRoles,
+  // functions,
   personnel,
   profileData,
 }: {
-  bcwsRoles: BcwsRoleInterface[];
-  functions: FunctionType[];
+  // bcwsRoles: BcwsRoleInterface[];
+  // functions: FunctionType[];
   personnel: MemberProfile;
   profileData: any;
 }) => {
   const defaultTab = personnel.bcws ? Program.BCWS : Program.EMCR;
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
+
+  const ScheduleDescription = () => (
+    <div>
+      <p className="text-defaultGray text-sm">
+        Select the calendar dates below to update your availability or view more
+        details.
+      </p>
+      <p className="text-defaultGray text-sm">
+        Deployment dates can only be declined and cannot be edited.
+      </p>
+    </div>
+  );
+
+  const ProfileDescription = () => (
+    <div>
+      <p className="text-defaultGray text-sm">
+        The following shows the list of sections that you prefer to be deployed in,
+        as indicated in your CORE application.
+      </p>
+      <p className="text-defaultGray text-sm">
+        You can add or remove a section from this table.
+      </p>
+    </div>
+  );
 
   return (
     <>
@@ -34,15 +58,13 @@ export const MemberAvailabilityTab = ({
         title="My Schedule"
         callToAction="Show Upcoming Deployments"
         onCallToActionClick={() => {}}
-        description={
-          'Select the calendar dates below to update your availability or view more details'
-        }
+        description={<ScheduleDescription />}
       >
         <MemberScheduler personnelId={personnel.id} />
       </ProfileSectionHeader>
       <ProfileSectionHeader
         title="Section Preferences" // make this depend on bcws / emcr
-        description="The following shows the list of sections that you prefer to be deployed in, as indicated in your CORE application."
+        description={<ProfileDescription />}
         buttonText="+ Add Preference"
         onButtonClick={() => {}}
       >
@@ -73,22 +95,69 @@ export const MemberAvailabilityTab = ({
           )}
           <TabsBody>
             {personnel.bcws && (
-              <TabPanel value="bcws">
+              <TabPanel value="bcws" className="px-0">
                 <MemberSectionsAndRoles
-                  personnel={personnel}
-                  bcwsRoles={bcwsRoles}
-                  allowEditing={true}
-                  updatePersonnel={() => {}}
+                  data={
+                    personnel.bcws.roles?.map((r) => ({
+                      id: r.id,
+                      section: SectionName[r.section],
+                      role: BcwsRoleName[r.role],
+                      experience: 'none',
+                    })) || []
+                  }
+                  columns={[
+                    {
+                      name: 'Section Name',
+                      key: 'section',
+                    },
+                    {
+                      name: 'Role',
+                      key: 'role',
+                    },
+                    {
+                      name: 'Action',
+                      key: 'remove',
+                    },
+                  ]}
+                  preferences={{
+                    first:
+                      personnel.firstChoiceSection &&
+                      SectionName[personnel.firstChoiceSection],
+                    second:
+                      personnel.secondChoiceSection &&
+                      SectionName[personnel.secondChoiceSection],
+                    third: undefined, // TODO
+                  }}
+                  removeRow={(id: number) => {
+                    console.log(id);
+                  }}
                 />
               </TabPanel>
             )}
             {personnel.emcr && (
-              <TabPanel value="emcr">
-                <MemberProfileFunctions
-                  personnel={personnel}
-                  functions={functions}
-                  allowEditing={true}
-                  updatePersonnel={() => {}}
+              <TabPanel value="emcr" className="px-0">
+                <MemberSectionsAndRoles
+                  data={
+                    personnel.emcr.experiences?.map((e) => ({
+                      id: e.id,
+                      section: e.functionName,
+                      experience: 'none',
+                    })) || []
+                  }
+                  columns={[
+                    {
+                      name: 'Section Name',
+                      key: 'section',
+                    },
+                    {
+                      name: 'Action',
+                      key: 'remove',
+                    },
+                  ]}
+                  // preferences: TODO
+                  removeRow={(id: number) => {
+                    console.log(id);
+                  }}
                 />
               </TabPanel>
             )}

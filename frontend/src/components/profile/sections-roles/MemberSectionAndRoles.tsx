@@ -1,64 +1,51 @@
 import { Chip } from '@material-tailwind/react';
-import type { Section } from '@/common/enums/sections.enum';
-import {
-  BcwsRoleName,
-  ExperienceLevel,
-  ExperienceLevelName,
-  SectionName,
-} from '@/common/enums/sections.enum';
-import { chipClass } from '@/common/helpers';
-import { DialogUI } from '@/components/ui';
-import { ProfileEditRoles } from './ProfileEditRoles';
-import type {
-  BcwsPersonnelRoleInterface,
-  BcwsRoleInterface,
-  Personnel,
-} from '@/common';
-import { useState } from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
+/**
+ * Possible Columns:
+ * - Section (with choice designation) - `section`
+ * - Role Name (BCWS) - `role`
+ * - Experience Level (Coordinator / Logistics view) - `experience`
+ * - Delete Action (Coordinator / Member view) - `delete`
+ */
 export const MemberSectionsAndRoles = ({
-  bcwsRoles,
-  personnel,
-  updatePersonnel,
+  preferences,
+  columns,
+  data,
+  removeRow,
 }: {
-  allowEditing: boolean;
-  bcwsRoles: BcwsRoleInterface[];
-  personnel: Personnel;
-  updatePersonnel: (props: Partial<Personnel>) => void;
-}) => {
-  const [openEditRolesPopUp, setOpenEditRolesPopUp] = useState(false);
-  const firstChoiceSection = personnel.firstChoiceSection;
-  const secondChoiceSection = personnel.secondChoiceSection;
-  const handleOpenEditRoles = () => {
-    setOpenEditRolesPopUp(!openEditRolesPopUp);
+  preferences?: {
+    first?: string;
+    second?: string;
+    third?: string;
   };
-  const sections = personnel?.roles?.reduce(
-    (acc: { [key: string]: BcwsPersonnelRoleInterface[] }, role) => {
-      const key = role.section;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(role);
-      return acc;
-    },
-    {},
+  columns: { key: string; name: string }[];
+  data: {
+    id: number;
+    [key: string]: string | number;
+  }[];
+  removeRow: (id: number) => void;
+}) => {
+  const firstChoiceSection = preferences?.first;
+  const secondChoiceSection = preferences?.second;
+  // const thirdChoiceSection = preferences?.third;
+
+  const Header = ({ columnNames }: { columnNames: string[] }) => (
+    <div className="flex flex-row p-2 bg-grayBackground">
+      {columnNames.map((columnName) => (
+        <div className={`basis-1/${columnNames.length}`} key={columnName}>
+          <span className="text-darkGray font-bold">{columnName}</span>
+        </div>
+      ))}
+    </div>
   );
 
-  const handleSave = (roles: {
-    newRoles: { roleId: number; expLevel: string }[];
-    firstChoiceSection?: Section;
-    secondChoiceSection?: Section;
-  }) => {
-    updatePersonnel(roles);
-    setOpenEditRolesPopUp(false);
-  };
-
-  const EmptyChoiceSection = ({ section }: { section: Section }) => (
-    <div className="border-b-2 border-gray-100">
+  const EmptyChoiceSection = ({ section }: { section: string }) => (
+    <div className="border-t-2 border-gray-100">
       <div className="flex flex-row py-2 items-center justify-between">
-        <div className="basis-1/3 text-darkGray px-8">
+        <div className="basis-1/3 text-darkGray px-2">
           <p className="flex flex-row gap-2">
-            {SectionName[section]}
+            {section}
             <Chip
               value={section === firstChoiceSection ? '1st Choice' : '2nd Choice'}
               className={
@@ -75,97 +62,70 @@ export const MemberSectionsAndRoles = ({
 
   return (
     <>
-      <div>
-        <div className="flex flex-row border-b-2 border-slate-800 py-2 px-8">
-          <div className="basis-1/3">
-            <span className="text-darkGray font-bold">Section</span>
-          </div>
-          <div className="basis-1/3">
-            <span className="text-darkGray font-bold">Roles</span>
-          </div>
-          <div className="basis-1/3">
-            <span className="text-darkGray font-bold">Experience Level</span>
-          </div>
-        </div>
-        <div>
-          {firstChoiceSection &&
-            sections &&
-            !Object.keys(sections).includes(firstChoiceSection) && (
-              <EmptyChoiceSection section={firstChoiceSection} />
-            )}
-          {secondChoiceSection &&
-            sections &&
-            !Object.keys(sections).includes(secondChoiceSection) && (
-              <EmptyChoiceSection section={secondChoiceSection} />
-            )}
-          {sections &&
-            Object.keys(sections).map((section) => (
-              <div key={section} className="border-b-2 border-gray-100">
-                {sections[section].map((itm, i) => (
+      <section>
+        <Header columnNames={columns.map((c) => c.name)} />
+        {firstChoiceSection &&
+          !data.map((d) => d.section).includes(firstChoiceSection) && (
+            <EmptyChoiceSection section={firstChoiceSection} />
+          )}
+        {secondChoiceSection &&
+          !data.map((d) => d.section).includes(secondChoiceSection) && (
+            <EmptyChoiceSection section={secondChoiceSection} />
+          )}
+        {data.map((row, i) => {
+          // sort by section name
+          const notFirstRowOfSection =
+            i !== 0 && row.section === data[i - 1].section;
+          return (
+            <>
+              <div
+                key={i}
+                className={`flex flex-row p-2 items-center justify-between ${!notFirstRowOfSection && 'border-t-2 border-gray-100'}`}
+              >
+                {columns.map((c) => (
                   <div
-                    key={itm.role}
-                    className="flex flex-row py-2 items-center justify-between"
+                    key={c.key}
+                    className={`basis-1/${columns.length} text-darkGray`}
                   >
-                    <div className="basis-1/3 text-darkGray px-8">
-                      {i === 0 && (
-                        <p className="flex flex-row gap-2">
-                          {SectionName[section as keyof typeof Section]}
-                          {section === firstChoiceSection && (
+                    {c.key === 'section' && (
+                      <p className="flex flex-row gap-2">
+                        {notFirstRowOfSection ? '' : row.section}
+                        {!notFirstRowOfSection &&
+                          row.section === firstChoiceSection && (
                             <Chip
                               value="1st Choice"
                               className="rounded-full capitalize"
                             />
                           )}
-                          {section === secondChoiceSection && (
+                        {!notFirstRowOfSection &&
+                          row.section === secondChoiceSection && (
                             <Chip
                               value="2nd Choice"
                               className="rounded-full bg-infoBannerLight text-ministry capitalize"
                             />
                           )}
-                        </p>
-                      )}
-                    </div>{' '}
-                    <div className="basis-1/3 text-darkGray px-4">
-                      <p>{BcwsRoleName[itm.role]}</p>
-                    </div>{' '}
-                    <div className="basis-1/3">
-                      <div className="flex flex-row justify-start">
-                        <div className="flex flex-shrink ">
-                          <Chip
-                            className={chipClass(
-                              ExperienceLevel[itm.expLevel as ExperienceLevel],
-                            )}
-                            value={
-                              ExperienceLevelName[itm.expLevel as ExperienceLevel]
-                            }
-                          />
-                        </div>
-                      </div>
-                    </div>
+                      </p>
+                    )}
+                    {c.key === 'role' && (
+                      <p>{row[columns[1].key as keyof typeof row]}</p>
+                    )}
+                    {c.key === 'experience' && <></>}
+                    {c.key === 'remove' && (
+                      <button
+                        className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-primaryBlue rounded-none text-sm"
+                        onClick={() => removeRow(row.id)}
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                        Remove
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
-            ))}
-        </div>
-      </div>
-      <DialogUI
-        open={openEditRolesPopUp}
-        onClose={handleOpenEditRoles}
-        handleOpen={handleOpenEditRoles}
-        title="Edit Roles"
-        style="w-5/6"
-      >
-        <ProfileEditRoles
-          allRoles={bcwsRoles}
-          originalRoles={personnel.roles || []}
-          sectionChoices={{
-            firstChoiceSection,
-            secondChoiceSection,
-          }}
-          handleClose={handleOpenEditRoles}
-          handleSave={handleSave}
-        />
-      </DialogUI>
+            </>
+          );
+        })}
+      </section>
     </>
   );
 };

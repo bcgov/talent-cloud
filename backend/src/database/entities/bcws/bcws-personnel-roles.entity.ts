@@ -30,6 +30,7 @@ export class BcwsSectionsAndRolesEntity {
 
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
+      id: this.roleId,
       personnel_id: this.personnelId,
       role: this.role.name,
       roleName: BcwsRoleName[this.role.name],

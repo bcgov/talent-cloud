@@ -96,6 +96,7 @@ export interface Availability {
 }
 
 export interface BcwsPersonnelRoleInterface {
+  id: number;
   role: BcwsRole;
   section: Section;
   expLevel?: ExperienceLevel;

@@ -4,7 +4,7 @@ interface ProfileSectionHeaderProps {
   title: string;
   callToAction?: string;
   onCallToActionClick?: () => void;
-  description?: string;
+  description?: React.ReactNode;
   buttonText?: string;
   onButtonClick?: () => void;
   children: React.ReactNode;
@@ -27,7 +27,7 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
         {callToAction && (
           <button
             onClick={onCallToActionClick}
-            className="text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+            className="text-sm text-linkBlue underline hover:text-gray-700 transition-colors cursor-pointer"
           >
             {callToAction}
           </button>
@@ -37,11 +37,11 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
       {/* Optional middle row with description and button */}
       {(description || buttonText) && (
         <div className="flex justify-between items-center mb-6">
-          {description && <p className="text-sm text-gray-600">{description}</p>}
+          {description && <>{description}</>}
           {buttonText && (
             <Button
               variant="filled"
-              className="bg-calBlue normal-case"
+              className="bg-primaryBlue normal-case text-md rounded-none py-1"
               onClick={onButtonClick}
             >
               {buttonText}
