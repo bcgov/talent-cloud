@@ -3,6 +3,7 @@ import {
   IsArray,
   IsEmail,
   IsEnum,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -14,15 +15,25 @@ import { Status } from '../../common/enums/status.enum';
 import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class CreatePersonnelBcwsDTO {
-  @ApiProperty({})
+  @ApiProperty({
+    description: 'Personnel ID',
+    example: '123456',
+  })
   @IsOptional()
   personnelId?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Employee ID',
+    example: '123456',
+  })
   @Length(6, 6)
   employeeId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Paylist ID',
+    example: "123-345"
+  })
+  @IsNumber()
   paylistId: string;
 
   @ApiProperty()

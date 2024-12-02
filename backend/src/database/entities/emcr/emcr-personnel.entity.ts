@@ -73,7 +73,7 @@ export class EmcrPersonnelEntity {
   firstAidLevel?: string;
 
   @Column({ name: 'first_aid_expiry', type: 'date', nullable: true })
-  firstAidExpiry?: string;
+  firstAidExpiry?: Date;
 
   @Column({ name: 'psychological_first_aid', type: 'boolean', nullable: true })
   psychologicalFirstAid?: boolean;

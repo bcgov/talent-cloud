@@ -16,12 +16,12 @@ import { CreatePersonnelToolsDTO } from './create-personnel-tools.dto';
 import { UpdateCertificationsDTO } from './update-personnel-certifications.dto';
 import { UpdatePersonnelToolsDTO } from './update-personnel-tools.dto';
 import { CreatePersonnelBcwsDTO } from '../../bcws/dto';
-import { FireCentre, Ministry, Region } from '../../common/enums';
+import { DriverLicense, FireCentre, Ministry, Region } from '../../common/enums';
 import { AvailabilityType } from '../../common/enums/availability-type.enum';
 import { UnionMembership } from '../../common/enums/union-membership.enum';
-
 import { AvailabilityEntity } from '../../database/entities/personnel/availability.entity';
 import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
+import { Form } from '../../database/entities/form.entity';
 
 export class LocationDTO {
   @ApiProperty()
@@ -174,11 +174,11 @@ export class CreatePersonnelDTO {
     description: 'Driver License',
   })
   @IsOptional()
-  driverLicense?: string[];
+  driverLicense?: DriverLicense[];
 
   @ApiProperty()
   @IsOptional()
-  intakeForm?: number;
+  intakeFormId?: number;
 
   @ApiProperty({
     enum: Ministry,
@@ -228,7 +228,7 @@ export class CreatePersonnelDTO {
   })
   @IsArray()
   @IsOptional()
-  tools?: CreatePersonnelToolsDTO[] | UpdatePersonnelToolsDTO[];
+  tools?: CreatePersonnelToolsDTO[] 
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',

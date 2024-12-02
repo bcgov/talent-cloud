@@ -24,5 +24,5 @@ export class UpdatePersonnelToolsDTO {
       ToolsProficiency,
     )}`,
   })
-  proficenyLevel: ToolsProficiency;
+  proficiencyLevel: ToolsProficiency;
 }
