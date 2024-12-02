@@ -22,7 +22,6 @@ import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { Program, RequestWithRoles, TokenType } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
-import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';

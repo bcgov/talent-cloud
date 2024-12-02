@@ -1,15 +1,16 @@
 import { DashboardFilters } from './DashboardFilters';
 import { useTable } from '@/hooks';
-import { useRecommitmentCycle, useRoleContext } from '@/providers';
+import { useRoleContext } from '@/providers';
 import type { Status } from '@/common';
 import { Role } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components';
 
 import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 const Dashboard = () => {
-  const { program, role } = useRoleContext();
+  const { program, roles } = useRoleContext();
   const { searchParamsUrl, handleChangeOne } = useFilters();
   const {
     totalRows,
@@ -36,7 +37,7 @@ const Dashboard = () => {
             <h4 className="font-bold px-4">Search Results</h4>
           </div>
 
-          {role === Role.COORDINATOR && (
+          {roles && roles.includes(Role.COORDINATOR) && (
             <Tabs
               tabs={tabs}
               changeTab={(value: unknown) => {

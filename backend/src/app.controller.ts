@@ -17,7 +17,6 @@ import { RegionsAndLocationsService } from './region-location/region-location.se
 
 @ApiTags('Application API')
 @Controller()
-@Public()
 export class AppController {
   constructor(
     private health: HealthCheckService,
@@ -49,6 +48,7 @@ export class AppController {
   })
   @Get('/health')
   @HealthCheck()
+  @Public()
   async checkApp() {
     return {
       api: await this.health.check([]),
@@ -57,6 +57,7 @@ export class AppController {
   }
 
   @Get('/keycloak')
+  @Public()
   async getKeycloak() {
     return {
       authUrl: process.env.KEYCLOAK_AUTH_URL,
@@ -145,5 +146,17 @@ export class AppController {
       tools: tools.map((t) => t.toResponseObject()),
       functions: functions.map((f) => f.toResponseObject()),
     };
+  }
+  @ApiOperation({
+    summary: 'Recommitment Cycle Dates',
+    description: 'Endpoint to return the recommitment cycle dates',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Recommitment Cycle Dates',
+  })
+  @Get('/recommitment')
+  async checkRecommitmentPeriod(){
+    return await this.personnelService.checkRecommitmentPeriod();
   }
 }

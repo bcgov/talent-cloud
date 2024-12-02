@@ -9,10 +9,9 @@ import { Role } from '@/common';
 
 export const UserMenu = ({ logout }: { logout: () => void }) => {
   const navigate = useNavigate();
-  const { supervisor, member, username, roles } = useRoleContext();
+  const { username, roles } = useRoleContext();
   const keycloak = useKeycloak();
   const keycloakUsername = keycloak?.keycloak?.idTokenParsed?.preferred_username;
-
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
@@ -30,20 +29,21 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col">
-          {roles?.find(
-            (role) => role === Role.COORDINATOR || role === Role.LOGISTICS,
-          ) && (
-            <Menu.Item>
-              <button
-                aria-label="profile"
-                onClick={() => navigate(Routes.Dashboard)}
-                className="py-2 px-4 text-sm text-left"
-              >
-                CORE Dashboard
-              </button>
-            </Menu.Item>
-          )}
-          {member && (
+          {roles &&
+            roles?.find(
+              (role) => role === Role.COORDINATOR || role === Role.LOGISTICS,
+            ) && (
+              <Menu.Item>
+                <button
+                  aria-label="profile"
+                  onClick={() => navigate(Routes.Dashboard)}
+                  className="py-2 px-4 text-sm text-left"
+                >
+                  CORE Dashboard
+                </button>
+              </Menu.Item>
+            )}
+          {roles && roles?.includes(Role.MEMBER) && (
             <Menu.Item>
               <button
                 aria-label="profile"
@@ -54,7 +54,7 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
               </button>
             </Menu.Item>
           )}
-          {supervisor && (
+          {roles && roles?.includes(Role.SUPERVISOR) && (
             <Menu.Item>
               <button
                 aria-label="supervisor"
