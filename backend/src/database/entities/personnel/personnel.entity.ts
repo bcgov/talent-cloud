@@ -97,9 +97,14 @@ export class PersonnelEntity extends BaseEntity {
   availability: AvailabilityEntity[];
 
   @OneToOne(() => Form, (form) => form.id, { nullable: true })
+  @JoinColumn({ name: 'intake_form_id', referencedColumnName: 'id' })
   intakeForm?: Form;
 
-  @Column({name:'intake_form_id',  nullable: true})
+  @Column({
+    name: 'intake_form_id',
+    type: 'uuid',
+    nullable: true,
+  })
   intakeFormId?: number;
 
   @Column({
