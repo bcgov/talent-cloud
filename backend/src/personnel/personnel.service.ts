@@ -428,7 +428,7 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
-    // if(personnel.email != req.idir)
+    
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());

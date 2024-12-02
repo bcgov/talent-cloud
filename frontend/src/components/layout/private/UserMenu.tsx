@@ -43,7 +43,7 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
                 </button>
               </Menu.Item>
             )}
-          {roles && roles?.includes(Role.MEMBER) && (
+          {roles?.includes(Role.MEMBER) && (
             <Menu.Item>
               <button
                 aria-label="profile"
@@ -54,7 +54,7 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
               </button>
             </Menu.Item>
           )}
-          {roles && roles?.includes(Role.SUPERVISOR) && (
+          {roles?.includes(Role.SUPERVISOR) && (
             <Menu.Item>
               <button
                 aria-label="supervisor"

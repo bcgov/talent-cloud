@@ -9,16 +9,13 @@ const Redirect = () => {
   if (loading) {
     return <Loading />;
   }
-  if (
-    (roles && roles?.includes(Role.COORDINATOR)) ||
-    roles?.includes(Role.LOGISTICS)
-  ) {
+  if (roles?.includes(Role.COORDINATOR) || roles?.includes(Role.LOGISTICS)) {
     return <Navigate to={Routes.Dashboard} />;
   }
-  if (roles && roles?.includes(Role.SUPERVISOR)) {
+  if (roles?.includes(Role.SUPERVISOR)) {
     return <Navigate to={Routes.SupervisorDashboard} />;
   }
-  if (roles && roles?.includes(Role.MEMBER)) {
+  if (roles?.includes(Role.MEMBER)) {
     return <Navigate to={Routes.MemberProfile} />;
   }
 };
