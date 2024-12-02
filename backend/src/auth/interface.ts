@@ -66,8 +66,5 @@ export interface RolesRequest {
   program?: Program;
   username?: string;
   idir?: string;
-  member?: boolean;
-  supervisor?: boolean;
-  recommitment?: RecommitmentCycleRO;
 }
 export interface RequestWithRoles extends Request, RolesRequest {}

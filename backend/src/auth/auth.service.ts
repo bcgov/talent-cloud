@@ -69,11 +69,7 @@ export class AuthService {
       }
       if (isBcws) {
         
-        request['program'] = Program.EMCR;
-      }
-      if (isMember || (isBcws && isEmcr)) {
-        
-        request['program'] = Program.EMCR;
+        request['program'] = Program.BCWS;
       }
     }
     request['roles'] = [...roles];  

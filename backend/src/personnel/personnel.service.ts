@@ -671,4 +671,11 @@ export class PersonnelService {
   async getTools(): Promise<ToolsEntity[]> {
     return this.toolsRepository.find();
   }
+
+  async checkRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
+    const qb = this.recommitmentCycleRepository.createQueryBuilder();
+    qb.where('start_date <= :date', { date: new Date() });
+    qb.andWhere('end_date >= :date', { date: new Date() });
+    return await qb.getOne();
+  }
 }
