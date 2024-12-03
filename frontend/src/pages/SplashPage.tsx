@@ -31,7 +31,7 @@ const SplashPage = () => {
     banner: '',
     bannerLink: {
       name: 'here ',
-      url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',
+      url: `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`,
     },
     subtitle: 'Coordinated Operation Response in Emergencies',
     description: {
@@ -54,10 +54,12 @@ const SplashPage = () => {
                 type={BannerType.INFO}
                 content={
                   <>
-                    <span className="font-bold mr-2">CORE</span>
-                    <span className="pb-12">{`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}</span>
-                    <a href="https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}">
-                      <strong>here</strong>.
+                    <span className="font-bold">CORE</span>
+                    {` (Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
+                    <a
+                      href={`https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`}
+                    >
+                      <span className="font-bold">here.</span>
                     </a>
                   </>
                 }
