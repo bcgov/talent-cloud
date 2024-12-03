@@ -1,5 +1,5 @@
 # Do not run on production
-name: Seed BCWS dev faker data
+name: Seed (dev) faker data
 
 on:
   workflow_dispatch:  
