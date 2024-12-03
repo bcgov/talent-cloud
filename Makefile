@@ -108,7 +108,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-0 5432
+	@oc port-forward $(APP_NAME)-patroni-1 5432
 
 ### Openshift Setup
 db-prep:
@@ -254,6 +254,9 @@ seed-oc-bcws:
 
 seed-oc-emcr:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-fake-emcr.js")'
+
+seed-oc-recommitment:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed-recommitment.js")'
 
 delete-db:
 	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
