@@ -28,11 +28,6 @@ const SplashPage = () => {
 
   const content = {
     title: 'Welcome to CORE Team',
-    banner: '',
-    bannerLink: {
-      name: 'here ',
-      url: 'https://submit.digital.gov.bc.ca/app/form/submit?f=a6e29c0d-8d3b-4b8d-adfb-e025f150e3cd',
-    },
     subtitle: 'Coordinated Operation Response in Emergencies',
     description: {
       pt1: 'This is the staffing system (previously known as TEAMS – Temporary Emergency Assignment Management System) that maintains a roster of employees from numerous ministries in the BC Government who have a combination of interest, skills, and experience to work within EMCR operation centres and BCWS fire centres to support communities in emergency management and wildfire response across the province.',
@@ -54,10 +49,12 @@ const SplashPage = () => {
                 type={BannerType.INFO}
                 content={
                   <>
-                    <span className="font-bold mr-2">CORE</span>
-                    <span className="pb-12">{`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}</span>
-                    <a href="https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}">
-                      <strong>here</strong>.
+                    <span className="font-bold">CORE</span>
+                    {` (Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
+                    <a
+                      href={`https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`}
+                    >
+                      <span className="font-bold">here.</span>
                     </a>
                   </>
                 }
@@ -85,9 +82,7 @@ const SplashPage = () => {
           <div className="flex py-24 lg:hidden">
             <div className="bg-[#013366]  rounded-md border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 ">
               <h3 className="text-white">Login</h3>
-              <p className="text-white">
-                Use your IDIR to access the CORE member database.
-              </p>
+              <p className="text-white">{content.login.description}</p>
               <Button
                 id={'login-button-mobile'}
                 variant={ButtonTypes.SECONDARY_LIGHT}
@@ -103,9 +98,7 @@ const SplashPage = () => {
           <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-60 rounded-md h-[300px] mr-24"></div>
           <div className="absolute inset-0 top-1/3  border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
             <h3 className="text-white">Login</h3>
-            <p className="text-white">
-              Use your IDIR to access the CORE member database.
-            </p>
+            <p className="text-white">{content.login.description}</p>
             <Button
               id={'login-button-main'}
               variant={ButtonTypes.SECONDARY_LIGHT}
