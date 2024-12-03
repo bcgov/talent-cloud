@@ -90,7 +90,9 @@ export const ProfileDetails = () => {
             <AccordionBody>
               {sections.map((itm: any) => (
                 <Fragment key={itm.title}>
-                  <DetailsSection title={itm.title} columns={itm.columns} />
+                  <div className="px-16">
+                    <DetailsSection title={itm.title} columns={itm.columns} />
+                  </div>
                   <div className="w-full border border-b-1 border-gray-300 col-span-1 lg:col-span-5 my-8"></div>
                 </Fragment>
               ))}
