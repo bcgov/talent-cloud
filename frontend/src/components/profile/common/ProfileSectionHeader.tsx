@@ -3,6 +3,7 @@ import { Button } from '@material-tailwind/react';
 interface ProfileSectionHeaderProps {
   title: string;
   callToAction?: string;
+  callToActionType?: 'text' | 'button';
   onCallToActionClick?: () => void;
   description?: React.ReactNode;
   buttonText?: string;
@@ -13,6 +14,7 @@ interface ProfileSectionHeaderProps {
 export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
   title,
   callToAction,
+  callToActionType,
   onCallToActionClick,
   description,
   buttonText,
@@ -25,12 +27,17 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
         {callToAction && (
-          <button
+          <Button
             onClick={onCallToActionClick}
-            className="text-sm text-linkBlue underline hover:text-gray-700 transition-colors cursor-pointer"
+            className={
+              callToActionType === 'text'
+                ? 'text-sm text-linkBlue underline hover:text-gray-700 transition-colors cursor-pointer normal-case'
+                : 'bg-primaryBlue normal-case text-md rounded-none py-1'
+            }
+            variant={callToActionType === 'text' ? 'text' : 'filled'}
           >
             {callToAction}
-          </button>
+          </Button>
         )}
       </div>
 

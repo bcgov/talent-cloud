@@ -2,32 +2,21 @@ import { useState } from 'react';
 import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
-import type { Personnel } from '@/common';
-import { Program, Status } from '@/common';
+import { Status } from '@/common';
 import { Loading } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
-import { useProgramFieldData } from '@/hooks';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
 import { MemberProfileTab } from '@/components/tabs/Details';
 import { Tabs as TabIndexes } from '@/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
-import { bcwsData, emcrData } from '@/hooks/profileData';
+import { memberData } from '@/hooks/profileData';
 
 const MemberProfile = () => {
   const { personnel, program, loading } = useMemberProfile();
   const { roles } = useRoleContext();
   const [activeTab, setActiveTab] = useState('availability');
 
-  const bcwsProfileData =
-    (program === Program.BCWS || program === Program.ALL) &&
-    bcwsData({ ...personnel, ...personnel?.bcws } as Personnel);
-  const emcrProfileData =
-    (program === Program.EMCR || program === Program.ALL) &&
-    emcrData({ ...personnel, ...personnel?.emcr } as Personnel);
-
-  const profileData = { ...bcwsProfileData, ...emcrProfileData };
-
-  const { functions, bcwsRoles } = useProgramFieldData(program);
+  const profileData = memberData(personnel);
 
   const handleTabChange = (index: string) => {
     setActiveTab(index);
@@ -59,15 +48,20 @@ const MemberProfile = () => {
               <TabPanel value={TabIndexes.AVAILABILITY}>
                 {personnel && (
                   <MemberAvailabilityTab
-                    bcwsRoles={bcwsRoles}
-                    functions={functions}
+                    // bcwsRoles={bcwsRoles}
+                    // functions={functions}
                     personnel={personnel}
                     profileData={profileData}
                   />
                 )}
               </TabPanel>
               <TabPanel value={TabIndexes.PROFILE}>
-                {personnel && <MemberProfileTab />}
+                {personnel && (
+                  <MemberProfileTab
+                    personnel={personnel}
+                    profileData={profileData}
+                  />
+                )}
               </TabPanel>
             </TabsBody>
           </div>

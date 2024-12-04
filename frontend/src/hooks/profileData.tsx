@@ -10,6 +10,7 @@ import { TravelPreferenceText } from '../common/enums/travel-preference.enum';
 import type { DriverLicense } from '../common/enums/driver-license.enum';
 import { DriverLicenseName } from '../common/enums/driver-license.enum';
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { formatDate } from 'date-fns';
 
 const formatDriversLicenses = (driverLicenses: string[]): string => {
   const licensesFormatted = driverLicenses.map(
@@ -286,13 +287,13 @@ export const memberData = (personnel?: Personnel) => {
   return {
     generalInformation: [
       {
-        title: 'Home Location',
+        title: 'Home Location/Region',
         content: personnel?.homeLocation
           ? `${personnel.homeLocation.locationName}, ${FireCentreName[personnel.homeLocation.fireCentre]}`
           : 'Not Listed',
       },
       {
-        title: 'Work Location',
+        title: 'Work Location/Region',
         content: personnel?.workLocation
           ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
           : 'Not Listed',
@@ -305,61 +306,55 @@ export const memberData = (personnel?: Personnel) => {
           ],
       },
       {
-        title: "Driver's License",
+        title: "Driver's License Classification",
         content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
       },
       {
         title: 'Employee ID',
-        content: personnel?.employeeId,
+        content: personnel?.bcws?.employeeId,
       },
-      { title: 'Paylist', content: personnel?.paylistId },
+      { title: 'Paylist', content: personnel?.bcws?.paylistId },
     ],
     contact: [
       {
         title: 'Primary Number',
-        content: formatPhone(personnel?.primaryPhone) ?? 'Not Listed',
+        content: formatPhone(personnel?.primaryPhone) ?? '--',
       },
       {
         title: 'Secondary Number',
-        content: formatPhone(personnel?.secondaryPhone) ?? 'Not Listed',
+        content: formatPhone(personnel?.secondaryPhone) ?? '--',
       },
       {
         title: 'Work Phone',
-        content: formatPhone(personnel?.workPhone) ?? 'Not Listed',
+        content: formatPhone(personnel?.workPhone) ?? '--',
       },
       { title: 'Email Address', content: personnel?.email },
-      // {
-      //   title: 'Emergency Contact First Name',
-      //   content: personnel?.emergencyContactFirstName ?? 'Not Listed',
-      // },
-      // {
-      //   title: 'Emergency Contact Last Name',
-      //   content: personnel?.emergencyContactLastName ?? 'Not Listed',
-      // },
-      // {
-      //   title: 'Emergency Phone Number',
-      //   content: formatPhone(personnel?.emergencyContactPhoneNumber) ?? 'Not Listed',
-      // },
     ],
     organizational: [
       {
         title: 'Supervisor Name',
-        content: `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`,
+        content:
+          personnel?.supervisorFirstName && personnel?.supervisorLastName
+            ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
+            : '--',
       },
       {
         title: 'Supervisor Email',
-        content: personnel?.supervisorEmail ?? 'Not Listed',
+        content: personnel?.supervisorEmail ?? '--',
       },
       {
         title: 'Supervisor Phone',
-        content: personnel?.supervisorPhone ?? 'Not Listed',
+        content: formatPhone(personnel?.supervisorPhone) ?? '--',
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
       {
         title: 'Liaison Name',
-        content: personnel?.liaisonFirstName ?? 'Not Listed',
+        content:
+          personnel?.liaisonFirstName && personnel?.liaisonLastName
+            ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
+            : '--',
       },
-      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? 'Not Listed' },
+      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '--' },
       {
         title: 'Ministry',
         content: `${personnel?.ministry}`,
@@ -367,6 +362,39 @@ export const memberData = (personnel?: Personnel) => {
       {
         title: 'Division',
         content: `${personnel?.division ?? 'Not Listed'}`,
+      },
+    ],
+    emergency: [
+      {
+        title: 'Emergency Contact Name',
+        content:
+          personnel?.emergencyContactFirstName && personnel?.emergencyContactLastName
+            ? `${personnel?.emergencyContactFirstName} ${personnel?.emergencyContactLastName}`
+            : '--',
+      },
+      {
+        title: 'Emergency Contact Number',
+        content: formatPhone(personnel?.emergencyContactPhoneNumber) ?? '--',
+      },
+      {
+        title: 'Relationship',
+        content: personnel?.emergencyContactRelationship,
+      },
+    ],
+    membership: [
+      {
+        title: 'Program',
+        content: 'EMCR', // TODO
+      },
+      {
+        title: 'Annual Recommitment',
+        content: 'Returned 2025-01-25', // TODO
+      },
+      {
+        title: 'Member since',
+        content: personnel?.dateApplied
+          ? formatDate(personnel?.dateApplied, 'yyyy-MM-dd')
+          : '--',
       },
     ],
   };
