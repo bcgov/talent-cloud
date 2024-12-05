@@ -187,6 +187,18 @@ export class PersonnelRO {
   })
   emergencyContactPhoneNumber: string;
 
+  @ApiProperty({
+    description: 'Employee ID',
+    required: false,
+  })
+  employeeId?: string;
+
+  @ApiProperty({
+    description: 'Paylist ID',
+    required: false,
+  })
+  paylistId?: string;
+
   @ApiProperty()
   @Expose({ groups: ['emcr', 'member'] })
   emcr?: EmcrRO;

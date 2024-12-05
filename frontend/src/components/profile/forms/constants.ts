@@ -25,6 +25,8 @@ const phoneNumber = (value: any) => {
 };
 
 export const editProfileValidationSchema = Yup.object().shape({
+  paylistId: Yup.string().optional().nullable(),
+  employeeId: Yup.string().optional().nullable(),
   firstName: Yup.string()
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
@@ -65,7 +67,18 @@ export const editProfileValidationSchema = Yup.object().shape({
     'Invalid phone number format. Please enter digits only. ex: 5555555555',
     phoneNumber,
   ),
-
+  emergencyContactFirstName: Yup.string().optional(),
+  emergencyContactLastName: Yup.string().optional(),
+  emergencyContactPhoneNumber: Yup.string()
+    .optional()
+    .nullable()
+    .test(
+      'phone number',
+      'Invalid phone number format. Please enter digits only. ex: 5555555555',
+      phoneNumber,
+    )
+    .optional(),
+  emergencyContactRelationship: Yup.string().optional(),
   supervisorFirstName: Yup.string()
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
@@ -100,7 +113,6 @@ export const emcrPendingValidationSchema = Yup.object().shape({
 export const bcwsProfileValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
   purchaseCardHolder: Yup.string().required('This field is required.'),
-  paylistId: Yup.string().required('This field is required.'),
   liaisonFirstName: Yup.string().optional(),
   liaisonLastName: Yup.string().optional(),
   liaisonPhoneNumber: Yup.string()
@@ -112,18 +124,6 @@ export const bcwsProfileValidationSchema = Yup.object().shape({
     .optional()
     .nullable(),
   liaisonEmail: Yup.string().optional(),
-  emergencyContactFirstName: Yup.string().optional(),
-  emergencyContactLastName: Yup.string().optional(),
-  emergencyContactPhoneNumber: Yup.string()
-    .optional()
-    .nullable()
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    )
-    .optional(),
-  emergencyContactRelationship: Yup.string().optional(),
 });
 
 export const bcwsPendingValidationSchema = Yup.object().shape({
@@ -429,7 +429,6 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Program.BCWS,
   },
 
   emergencyContactLastName: {
@@ -439,7 +438,6 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Program.BCWS,
   },
 
   emergencyContactPhoneNumber: {
@@ -449,7 +447,6 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'tel',
-    program: Program.BCWS,
   },
 
   emergencyContactRelationship: {
@@ -459,7 +456,6 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'text',
-    program: Program.BCWS,
   },
   supervisorPhone: {
     name: 'supervisorPhone',
@@ -501,7 +497,6 @@ export const fields = {
     disabled: false,
     required: true,
     type: 'text',
-    program: Program.BCWS,
   },
 
   unionMembership: {

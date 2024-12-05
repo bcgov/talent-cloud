@@ -25,7 +25,8 @@ const usePersonnel = (): {
   useEffect(() => {
     (async () => {
       try {
-        const response = await AxiosPrivate.get(`/${program}/${profileId}`);
+        const response =
+          program && (await AxiosPrivate.get(`/${program}/${profileId}`));
         response && setPersonnel(response.data);
       } catch (e) {
         console.log(e);

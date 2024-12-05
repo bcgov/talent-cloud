@@ -15,10 +15,11 @@ import { Status, Role, Program } from '@/common';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
+import { useRoleContext } from '@/providers';
 
 const Profile = () => {
-  const { loading, program, roles, personnel, updatePersonnel, profileData } =
-    usePersonnel();
+  const { loading, roles, personnel, updatePersonnel, profileData } = usePersonnel();
+  const { program } = useRoleContext();
   const { functions, bcwsRoles } = useProgramFieldData(program);
 
   if (loading) {
@@ -74,13 +75,15 @@ const Profile = () => {
                 allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
                 updatePersonnel={updatePersonnel}
               />
-              <SkillsAndCertifications
-                personnel={personnel}
-                profileData={profileData}
-                allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
-                updatePersonnel={updatePersonnel}
-              />
             </>
+          )}
+          {personnel && (
+            <SkillsAndCertifications
+              personnel={personnel}
+              profileData={profileData}
+              allowEditing={roles?.includes(Role.COORDINATOR) ?? false}
+              updatePersonnel={updatePersonnel}
+            />
           )}
           {personnel && (
             <ProfileNotes

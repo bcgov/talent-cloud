@@ -75,6 +75,8 @@ export const handler = (
     supervisorLastName: faker.person.lastName(),
     supervisorFirstName: faker.person.firstName(),
     supervisorPhone: faker.string.numeric('##########'),
+    employeeId: faker.string.numeric('######'),
+    paylistId: faker.string.numeric('########'),
     tools: createTools(tools),
     certifications: createCertifications(certs),
     languages: createLanguages(),

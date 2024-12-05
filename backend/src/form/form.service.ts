@@ -280,6 +280,8 @@ export class FormService {
 
     const personnelData: CreatePersonnelDTO = {
       intakeFormId: formId,
+      employeeId: data.employeeId,
+      paylistId: data.paylistId,
       unionMembership: UnionMembership[data.unionMembership],
       ministry: Ministry[data.ministry.value],
       division: data.division,
@@ -389,8 +391,6 @@ export class FormService {
       dateApplied: new Date(),
       coordinatorNotes: '',
       logisticsNotes: '',
-      employeeId: data.employeeId,
-      paylistId: data.paylistId,
       status: Status.PENDING,
       purchaseCardHolder: data.purchaseCard,
       liaisonFirstName: data?.liaisonFirstName,

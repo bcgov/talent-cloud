@@ -30,9 +30,7 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'status', type: 'enum', enum: Status, enumName: 'status' })
   status: Status;
 
-  @Column({ name: 'employee_id', type: 'varchar', length: 6 })
-  employeeId: string;
-
+  
   @Column({ name: 'date_applied', type: 'timestamp', nullable: true })
   dateApplied: Date;
 
@@ -45,9 +43,6 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
 
-  //TODO confirm length of paylist_id
-  @Column({ name: 'paylist_id', type: 'varchar', length: 50 })
-  paylistId: string;
 
   @Column({
     name: 'liason_first_name',
@@ -137,8 +132,7 @@ export class BcwsPersonnelEntity {
 
     const data = {
       ...personnelData,
-      employeeId: this.employeeId,
-      paylistId: this.paylistId,
+      
       dateApplied: this.dateApplied,
       dateApproved: this.dateApproved,
       coordinatorNotes: this.coordinatorNotes,

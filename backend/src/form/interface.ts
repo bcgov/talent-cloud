@@ -83,6 +83,8 @@ export interface PersonnelFormData {
   emergencyContactLastName: string;
   emergencyContactPhoneNumber: string;
   emergencyContactRelationship: string;
+  employeeId?: string;
+  paylistId?: string;
 }
 
 export interface ToolsFormSection {

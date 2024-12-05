@@ -34,8 +34,6 @@ export const createBCWShandler = (
     logisticsNotes: faker.lorem.paragraph(),
     coordinatorNotes: faker.lorem.sentence(),
     approvedBySupervisor: faker.datatype.boolean({ probability: 0.8 }),
-    employeeId: faker.string.numeric('######'),
-    paylistId: faker.string.numeric('########'),
     status: status,
     purchaseCardHolder: faker.datatype.boolean({ probability: 0.4 }),
     liaisonFirstName: faker.person.firstName(),
