@@ -1,4 +1,4 @@
 export * from './Detail';
 export * from './DetailsSection';
 export * from './ProfileDetails';
-export * from './MemberProfileDetails';
+export * from '../../tabs/MemberProfileDetails';
