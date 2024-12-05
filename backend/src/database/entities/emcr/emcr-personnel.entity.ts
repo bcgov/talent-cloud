@@ -23,7 +23,7 @@ import { PersonnelRO } from '../../../personnel';
 
 @Entity('emcr_personnel')
 export class EmcrPersonnelEntity {
-  @OneToOne(() => PersonnelEntity, (p) => p.id, { eager: true })
+  @OneToOne(() => PersonnelEntity, (p) => p.id)
   @JoinColumn({ name: 'personnel_id' })
   personnel: PersonnelEntity;
 
