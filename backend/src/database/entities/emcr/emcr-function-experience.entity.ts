@@ -14,7 +14,7 @@ export class EmcrExperienceEntity {
   @PrimaryColumn({ name: 'personnel_id' })
   personnelId: string;
 
-  @ManyToOne(() => EmcrFunctionEntity, (f) => f.id)
+  @ManyToOne(() => EmcrFunctionEntity, (f) => f.experiences)
   @JoinColumn({ name: 'function_id', referencedColumnName: 'id' })
   function: EmcrFunctionEntity;
 
@@ -32,9 +32,8 @@ export class EmcrExperienceEntity {
   toResponseObject(): EmcrExperienceRO {
     return {
       id: this.functionId,
-      functionName: this.function.name,
-      functionAbbrv: this.function.abbreviation,
       experienceType: this.experienceType,
+      function: this.function.toResponseObject(), 
     };
   }
 }

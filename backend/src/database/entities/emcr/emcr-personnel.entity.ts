@@ -116,12 +116,12 @@ export class EmcrPersonnelEntity {
   preocExperience?: boolean;
 
   toResponseObject(
-    role: Role[],
+    roles: Role[],
     lastDeployed?: string,
   ): Record<string, EmcrRO> {
     const response = new EmcrRO();
     const personnelData: Record<string, PersonnelRO> =
-      this?.personnel?.toResponseObject(role, lastDeployed) ?? {};
+      this?.personnel?.toResponseObject(roles, lastDeployed) ?? {};
     const data = {
       ...personnelData,
       dateApplied: this.dateApplied ?? '',
@@ -148,7 +148,7 @@ export class EmcrPersonnelEntity {
         [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: role });
+    return instanceToPlain(response, { groups: roles });
   }
   constructor(data: Partial<CreatePersonnelEmcrDTO>) {
     Object.assign(this, data);

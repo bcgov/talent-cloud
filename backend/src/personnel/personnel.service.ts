@@ -586,7 +586,7 @@ export class PersonnelService {
       .andWhere('bcws.status = :status', { status: Status.ACTIVE });
     const personnel = await qb.getMany();
     return personnel.map((p) => ({
-      employeeId: p.bcws.employeeId,
+      employeeId: p.employeeId,
       firstName: p.firstName,
       lastName: p.lastName,
     }));

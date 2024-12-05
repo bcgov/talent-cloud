@@ -222,12 +222,15 @@ export class EmcrService {
         'experiences.function',
         'trainings',
         'personnel',
+        'personnel.languages',
+        'personnel.tools',
+        'personnel.certifications'
       ],
     });
 
     const lastDeployed = await this.personnelService.getLastDeployedDate(id);
     emcr.personnel = person;
-
+    
     return emcr.toResponseObject(role, lastDeployed);
   }
   async getTrainingsByNames(names: string[]): Promise<EmcrTrainingEntity[]> {

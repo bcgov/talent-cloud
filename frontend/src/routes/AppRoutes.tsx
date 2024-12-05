@@ -26,7 +26,7 @@ export default () => {
             <Route path={AppRoutes.Home} element={<SplashPage />} />
             <Route path={AppRoutes.NotFound} element={<NotFound />} />
             <Route path={AppRoutes.Unauthenticated} element={<Unauthenticated />} />
-            <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
+
             <Route element={<PrivateRoute />}>
               <Route path={AppRoutes.Root} element={<Redirect />} />
               <Route
@@ -70,6 +70,7 @@ export default () => {
                   path={AppRoutes.SupervisorDashboard}
                 />
               </Route>
+              <Route path={AppRoutes.Unauthorized} element={<Unauthorized />} />
             </Route>
           </Routes>
         </Suspense>

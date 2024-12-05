@@ -46,6 +46,20 @@ export class CreatePersonnelDTO {
   lastName: string;
 
   @ApiProperty({
+    description: 'Employee ID',
+    example: '123456',
+  })
+  @Length(6, 6)
+  employeeId?: string;
+
+  @ApiProperty({
+    description: 'Paylist ID',
+    example: "123-345"
+  })
+  @IsString()
+  paylistId?: string;
+
+  @ApiProperty({
     description: "Personnel's work fire centre",
     example: {
       locationName: 'Victoria',

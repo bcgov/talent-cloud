@@ -191,6 +191,13 @@ export class PersonnelEntity extends BaseEntity {
     nullable: true,
   })
   emergencyContactRelationship?: string;
+  
+  @Column({ name: 'employee_id', type: 'varchar', length: 6, nullable: true })
+  employeeId: string;
+
+  //TODO confirm length of paylist_id
+  @Column({ name: 'paylist_id', type: 'varchar', length: 50, nullable: true })
+  paylistId: string;
 
   toResponseObject(
     role: Role[],
@@ -202,6 +209,8 @@ export class PersonnelEntity extends BaseEntity {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
+      employeeId: this.employeeId ?? '',
+      paylistId: this.paylistId ?? '',
       email: this.email,
       primaryPhone: this.primaryPhone ?? '',
       secondaryPhone: this.secondaryPhone ?? '',

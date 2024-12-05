@@ -22,20 +22,6 @@ export class CreatePersonnelBcwsDTO {
   @IsOptional()
   personnelId?: string;
 
-  @ApiProperty({
-    description: 'Employee ID',
-    example: '123456',
-  })
-  @Length(6, 6)
-  employeeId: string;
-
-  @ApiProperty({
-    description: 'Paylist ID',
-    example: "123-345"
-  })
-  @IsNumber()
-  paylistId: string;
-
   @ApiProperty()
   @IsOptional()
   approvedBySupervisor?: boolean;

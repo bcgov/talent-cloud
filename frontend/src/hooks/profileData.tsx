@@ -49,6 +49,23 @@ export const emcrData = (personnel?: Personnel) => {
           ? datePST(personnel?.dateApplied as Date)
           : '-',
       },
+      {
+        title: 'Employee ID',
+        content: personnel?.employeeId,
+      },
+      { title: 'Paylist', content: personnel?.paylistId },
+      {
+        title: 'Emergency Contact First Name',
+        content: personnel?.emergencyContactFirstName ?? 'Not Listed',
+      },
+      {
+        title: 'Emergency Contact Last Name',
+        content: personnel?.emergencyContactLastName ?? 'Not Listed',
+      },
+      {
+        title: 'Emergency Phone Number',
+        content: formatPhone(personnel?.emergencyContactPhoneNumber) ?? 'Not Listed',
+      },
       personnel?.status === Status.PENDING
         ? {
             title: 'ICS Training',
@@ -91,7 +108,35 @@ export const emcrData = (personnel?: Personnel) => {
           personnel?.approvedBySupervisor === true ? 'Received' : 'Not Received',
       },
     ],
-    skills: [],
+    skills: [
+      {
+        title: 'Languages',
+        header: 'Language',
+        subheader: 'Proficiency Level',
+        itms: personnel?.languages?.map((l) => ({
+          label: l.language,
+          value: LanguageProficiencyName[l.level],
+        })),
+      },
+      {
+        title: 'Tools',
+        header: 'Skill',
+        subheader: 'Proficiency Level',
+        itms: personnel?.tools?.map((t) => ({
+          label: ToolsName[t.tool as keyof typeof Tools],
+          value: ToolsProficiencyName[t.proficiencyLevel],
+        })),
+      },
+      {
+        title: 'Certifications',
+        header: 'Name',
+        subheader: 'Expiry Date',
+        itms: personnel?.certifications?.map((c) => ({
+          label: c.name,
+          value: c.expiry,
+        })),
+      },
+    ],
   };
 };
 
@@ -183,6 +228,11 @@ export const bcwsData = (personnel?: Personnel) => {
         title: "Driver's License",
         content: `${personnel?.driverLicense ? formatDriversLicenses(personnel.driverLicense) : '-'}`,
       },
+      {
+        title: 'Employee ID',
+        content: personnel?.employeeId,
+      },
+      { title: 'Paylist', content: personnel?.paylistId },
     ],
     contact: [
       {
@@ -311,9 +361,9 @@ export const memberData = (personnel?: Personnel) => {
       },
       {
         title: 'Employee ID',
-        content: personnel?.bcws?.employeeId,
+        content: personnel?.employeeId,
       },
-      { title: 'Paylist', content: personnel?.bcws?.paylistId },
+      { title: 'Paylist', content: personnel?.paylistId },
     ],
     contact: [
       {
@@ -395,6 +445,35 @@ export const memberData = (personnel?: Personnel) => {
         content: personnel?.dateApplied
           ? formatDate(personnel?.dateApplied, 'yyyy-MM-dd')
           : '--',
+      },
+    ],
+    skills: [
+      {
+        title: 'Languages',
+        header: 'Language',
+        subheader: 'Proficiency Level',
+        itms: personnel?.languages?.map((l) => ({
+          label: l.language,
+          value: LanguageProficiencyName[l.level],
+        })),
+      },
+      {
+        title: 'Tools',
+        header: 'Skill',
+        subheader: 'Proficiency Level',
+        itms: personnel?.tools?.map((t) => ({
+          label: ToolsName[t.tool as keyof typeof Tools],
+          value: ToolsProficiencyName[t.proficiencyLevel],
+        })),
+      },
+      {
+        title: 'Certifications',
+        header: 'Name',
+        subheader: 'Expiry Date',
+        itms: personnel?.certifications?.map((c) => ({
+          label: c.name,
+          value: c.expiry,
+        })),
       },
     ],
   };

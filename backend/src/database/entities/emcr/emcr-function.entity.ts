@@ -13,7 +13,7 @@ export class EmcrFunctionEntity {
   @Column({ name: 'abbreviation', type: 'varchar', length: 10 })
   abbreviation: string;
 
-  @OneToMany(() => EmcrExperienceEntity, (e) => e.functionId)
+  @OneToMany(() => EmcrExperienceEntity, (e) => e.function)
   experiences: EmcrExperienceEntity[];
 
   toResponseObject(): EmcrFunctionRO {
@@ -21,6 +21,8 @@ export class EmcrFunctionEntity {
       id: this.id,
       name: this.name,
       abbreviation: this.abbreviation,
+      
     };
   }
 }
+

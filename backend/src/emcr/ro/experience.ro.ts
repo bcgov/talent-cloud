@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Experience } from '../../common/enums/emcr';
+import { EmcrFunctionRO } from './function.ro';
 
 export class EmcrExperienceRO {
   @ApiProperty({
@@ -10,18 +11,10 @@ export class EmcrExperienceRO {
   id: number;
 
   @ApiProperty({
-    description: 'Name of function',
+    description: 'Id of function',
     required: true,
-    example: 'Operations',
   })
-  functionName: string;
-
-  @ApiProperty({
-    description: 'Abbreviated name of function',
-    required: true,
-    example: 'Ops',
-  })
-  functionAbbrv: string;
+  function: EmcrFunctionRO
 
   @ApiProperty({
     description: 'Experience with function',
