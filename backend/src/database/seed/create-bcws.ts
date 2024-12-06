@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { CreatePersonnelBcwsDTO } from '../bcws/dto/create-bcws-personnel.dto';
-import { Status, ExperienceLevel } from '../common/enums';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
-import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
+import { CreatePersonnelBcwsDTO } from '../../bcws/dto/create-bcws-personnel.dto';
+import { Status, ExperienceLevel } from '../../common/enums';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
+import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
 
 export const createBCWShandler = (
   roles: BcwsRoleEntity[],

@@ -1,9 +1,9 @@
-import { datasource } from './datasource';
-import { PersonnelEntity } from './entities/personnel/personnel.entity';
+import { datasource } from '../datasource';
+import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 
-import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
-import { RecommitmentCycleEntity } from './entities/recommitment/recommitment-cycle.entity';
-import { RecommitmentEntity } from './entities/recommitment/recommitment.entity';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
+import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
