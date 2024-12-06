@@ -35,7 +35,7 @@ import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
-import { CreateCertificationsDTO } from 'src/personnel/dto/create-certifications.dto';
+import { CreateCertificationsDTO } from '../personnel/dto/create-certifications.dto';
 
 @Injectable()
 export class FormService {

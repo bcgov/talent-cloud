@@ -45,7 +45,7 @@ export const handler = async () => {
     const commitment = await recommitmentRepository.save(
       recommitmentRepository.create({
         memberId: person.id,
-        year: cycle['year'],
+        recommitmentCycleId: cycle['year'],
         emcr: person?.emcr ? RecommitmentStatus.PENDING : null,
         bcws: person?.bcws ? RecommitmentStatus.PENDING : null,
         memberDecisionDate: null,

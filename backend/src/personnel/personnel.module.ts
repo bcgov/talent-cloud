@@ -9,6 +9,8 @@ import { PersonnelEntity } from '../database/entities/personnel/personnel.entity
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { LoggerModule } from '../logger/logger.module';
+import { SupervisorController } from './supervisor.controller';
+import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 
 @Module({
   imports: [
@@ -17,13 +19,14 @@ import { LoggerModule } from '../logger/logger.module';
       PersonnelEntity,
       AvailabilityEntity,
       RecommitmentCycleEntity,
+      RecommitmentEntity,
       CertificationEntity,
       LanguageEntity,
       CertificationEntity,
       ToolsEntity,
     ]),
   ],
-  controllers: [PersonnelController],
+  controllers: [PersonnelController, SupervisorController],
   providers: [PersonnelService],
   exports: [TypeOrmModule, PersonnelService],
 })

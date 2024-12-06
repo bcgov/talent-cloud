@@ -6,23 +6,31 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { RecommitmentCycleEntity } from './recommitment-cycle.entity';
 import { PersonnelEntity } from '../personnel/personnel.entity';
 import { RecommitmentStatus } from '../../../common/enums/recommitment-status.enum';
 import { RecommitmentRO } from '../../../personnel/ro/recommitment.ro';
+import { Role } from '../../../auth/interface';
 
 @Entity('recommitment')
+@Unique(['memberId', 'recommitmentCycleId'])
 export class RecommitmentEntity {
   @PrimaryColumn({ name: 'member', type: 'uuid' })
   memberId: string;
 
-  @OneToOne(() => PersonnelEntity)
+  @ManyToOne(() => PersonnelEntity, p => p.recommitment)
+  @JoinColumn({ name: 'member', referencedColumnName: 'id' })
   member: PersonnelEntity;
 
   @ManyToOne(() => RecommitmentCycleEntity, (r) => r.year)
   @JoinColumn({ name: 'year', referencedColumnName: 'year' })
-  year: RecommitmentCycleEntity['year'];
+  recommitmentCycle: RecommitmentCycleEntity;
+
+  @PrimaryColumn({ name: 'year', type: 'integer' })
+  recommitmentCycleId: number;
 
   @Column({
     name: 'emcr',
@@ -90,25 +98,26 @@ export class RecommitmentEntity {
   })
   supervisorReasonBcws?: string | null;
 
-  toResponseObject(): Record<string, RecommitmentRO> {
+  toResponseObject(roles: Role[]): Record<string, RecommitmentRO> {
     const response = new RecommitmentRO();
 
     const data = {
-      member: this.member,
-      year: this.year,
-      emcr: this.emcr,
-      bcws: this.bcws,
-      memberDecisionDate: this.memberDecisionDate,
-      memberReasonEmcr: this.memberReasonEmcr,
-      memberReasonBcws: this.memberReasonBcws,
-      supervisorIdir: this.supervisorIdir,
-      supervisorDecisionDate: this.supervisorDecisionDate,
-      supervisorReasonEmcr: this.supervisorReasonEmcr,
-      supervisorReasonBcws: this.supervisorReasonBcws,
+      member: this?.member,
+      recommitmentCycleId: this?.recommitmentCycle?.toResponseObject(),
+      emcr: this?.emcr,
+      bcws: this?.bcws,
+      memberDecisionDate: this?.memberDecisionDate,
+      memberReasonEmcr: this?.memberReasonEmcr,
+      memberReasonBcws: this?.memberReasonBcws,
+      supervisorIdir: this?.supervisorIdir,
+      supervisorDecisionDate: this?.supervisorDecisionDate,
+      supervisorReasonEmcr: this?.supervisorReasonEmcr,
+      supervisorReasonBcws: this?.supervisorReasonBcws,
+
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
 
-    return instanceToPlain(response, { groups: [] });
+    return instanceToPlain(response, { groups: roles });
   }
 
   constructor(data: Partial<RecommitmentEntity>) {
