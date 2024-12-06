@@ -17,6 +17,7 @@ type FormProps = {
   validationSchema: any;
   handleClose: (e: MouseEvent<HTMLElement>) => void;
   sections: SectionType[];
+  showHeaders?: boolean;
   fieldChangeHandler: (e: any, field: any, values: any, setValues: any) => void;
 };
 
@@ -26,6 +27,7 @@ export default function Form({
   validationSchema,
   handleClose,
   sections,
+  showHeaders = true,
   fieldChangeHandler,
 }: FormProps) {
   return (
@@ -51,6 +53,7 @@ export default function Form({
                   header={section.header}
                   fields={section.fields}
                   fieldChangeHandler={fieldChangeHandler}
+                  showHeader={showHeaders}
                 />
               ))}
             </div>

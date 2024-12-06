@@ -3,16 +3,15 @@ import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
 import { Status } from '@/common';
-import { Loading } from '@/components';
+import { Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
-import { MemberProfileTab } from '@/components/tabs/Details';
 import { Tabs as TabIndexes } from '@/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { memberData } from '@/hooks/profileData';
 
 const MemberProfile = () => {
-  const { personnel, program, loading } = useMemberProfile();
+  const { personnel, program, loading, updatePersonnel } = useMemberProfile();
   const { roles } = useRoleContext();
   const [activeTab, setActiveTab] = useState('availability');
 
@@ -57,9 +56,10 @@ const MemberProfile = () => {
               </TabPanel>
               <TabPanel value={TabIndexes.PROFILE}>
                 {personnel && (
-                  <MemberProfileTab
-                    personnel={personnel}
+                  <MemberProfileDetails
                     profileData={profileData}
+                    personnel={personnel}
+                    updatePersonnel={updatePersonnel}
                   />
                 )}
               </TabPanel>

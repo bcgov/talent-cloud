@@ -42,8 +42,7 @@ const useMemberProfile = (): {
   const updatePersonnel = async (personnel: FormikValues | MemberProfile) => {
     try {
       const res =
-        program &&
-        (await AxiosPrivate.patch(encodeURI(`/member/${personnel.id}`), personnel));
+        program && (await AxiosPrivate.patch(encodeURI(`/personnel`), personnel));
       if (res) {
         setPersonnel(res.data);
       }

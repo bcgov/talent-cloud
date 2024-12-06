@@ -24,118 +24,216 @@ const phoneNumber = (value: any) => {
   } else return value?.toString().replace(/[^\d]/g, '').length === 10;
 };
 
-export const editProfileValidationSchema = Yup.object().shape({
-  paylistId: Yup.string().optional().nullable(),
-  employeeId: Yup.string().optional().nullable(),
-  firstName: Yup.string()
-    .min(2, 'Min length 2 characters.')
-    .max(50, 'Max length 50 characters.')
-    .required('This field is required.'),
-  lastName: Yup.string()
-    .min(2, 'Min length 2 characters.')
-    .max(50, 'Max length 50 characters.')
-    .required('This field is required.'),
-  workLocation: Yup.object().shape({
-    locationName: Yup.string(),
-    region: Yup.string(),
-    fireCentre: Yup.string(),
-  }),
-  homeLocation: Yup.object().shape({
-    locationName: Yup.string(),
-    region: Yup.string(),
-    fireCentre: Yup.string(),
-  }),
-  travelPreference: Yup.string().required('This field is required.'),
-  primaryPhone: Yup.string()
-    .required('This field is required.')
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    ),
-  secondaryPhone: Yup.string()
-    .nullable()
-    .optional()
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    )
-    .optional(),
-  workPhone: Yup.string().test(
+const firstName = Yup.string()
+  .min(2, 'Min length 2 characters.')
+  .max(50, 'Max length 50 characters.')
+  .required('This field is required.');
+
+const lastName = Yup.string()
+  .min(2, 'Min length 2 characters.')
+  .max(50, 'Max length 50 characters.')
+  .required('This field is required.');
+
+const workLocation = Yup.object().shape({
+  locationName: Yup.string(),
+  region: Yup.string(),
+  fireCentre: Yup.string(),
+});
+
+const homeLocation = Yup.object().shape({
+  locationName: Yup.string(),
+  region: Yup.string(),
+  fireCentre: Yup.string(),
+});
+
+const travelPreference = Yup.string().required('This field is required.');
+
+const primaryPhone = Yup.string()
+  .required('This field is required.')
+  .test(
     'phone number',
     'Invalid phone number format. Please enter digits only. ex: 5555555555',
     phoneNumber,
-  ),
-  emergencyContactFirstName: Yup.string().optional(),
-  emergencyContactLastName: Yup.string().optional(),
-  emergencyContactPhoneNumber: Yup.string()
-    .optional()
-    .nullable()
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    )
-    .optional(),
-  emergencyContactRelationship: Yup.string().optional(),
-  supervisorFirstName: Yup.string()
-    .min(2, 'Min length 2 characters.')
-    .max(50, 'Max length 50 characters.')
-    .required('This field is required.'),
-  supervisorLastName: Yup.string()
-    .min(2, 'Min length 2 characters.')
-    .max(50, 'Max length 50 characters.')
-    .required('This field is required.'),
-  supervisorEmail: Yup.string().optional().nullable().email('Invalid email format.'),
-  supervisorPhone: Yup.string()
-    .optional()
-    .nullable()
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    )
-    .optional(),
-  approvedBySupervisor: Yup.boolean().required('This field is required.'),
-  ministry: Yup.string().required('This field is required.'),
-  division: Yup.string().optional().nullable(),
-  unionMembership: Yup.string().required('This field is required.'),
-  driversLicense: Yup.array().optional(),
-  // conditional for pending status for both
+  );
+
+const secondaryPhone = Yup.string()
+  .nullable()
+  .optional()
+  .test(
+    'phone number',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
+    phoneNumber,
+  )
+  .optional();
+
+const workPhone = Yup.string().test(
+  'phone number',
+  'Invalid phone number format. Please enter digits only. ex: 5555555555',
+  phoneNumber,
+);
+
+const supervisorFirstName = Yup.string()
+  .min(2, 'Min length 2 characters.')
+  .max(50, 'Max length 50 characters.')
+  .required('This field is required.');
+
+const supervisorLastName = Yup.string()
+  .min(2, 'Min length 2 characters.')
+  .max(50, 'Max length 50 characters.')
+  .required('This field is required.');
+
+const supervisorEmail = Yup.string()
+  .optional()
+  .nullable()
+  .email('Invalid email format.');
+
+const supervisorPhone = Yup.string()
+  .optional()
+  .nullable()
+  .test(
+    'phone number',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
+    phoneNumber,
+  )
+  .optional();
+
+const approvedBySupervisor = Yup.boolean().required('This field is required.');
+
+const ministry = Yup.string().required('This field is required.');
+
+const division = Yup.string().optional().nullable();
+
+const unionMembership = Yup.string().required('This field is required.');
+
+const driversLicense = Yup.array().optional();
+
+const icsTraining = Yup.boolean().required('This field is required.');
+
+const purchaseCardHolder = Yup.string().required('This field is required.');
+
+const employeeId = Yup.string().optional().nullable();
+
+const paylistId = Yup.string().required('This field is required.');
+
+const liaisonFirstName = Yup.string().optional();
+
+const liaisonLastName = Yup.string().optional();
+
+const liaisonPhoneNumber = Yup.string()
+  .test(
+    'phone number',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
+    phoneNumber,
+  )
+  .optional()
+  .nullable();
+
+const liaisonEmail = Yup.string().optional();
+
+const emergencyContactFirstName = Yup.string().optional();
+
+const emergencyContactLastName = Yup.string().optional();
+
+const emergencyContactPhoneNumber = Yup.string()
+  .optional()
+  .nullable()
+  .test(
+    'phone number',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
+    phoneNumber,
+  )
+  .optional();
+
+const emergencyContactRelationship = Yup.string().optional();
+
+const parQ = Yup.boolean().required('This field is required.');
+
+const willingnessStatement = Yup.boolean().required('This field is required.');
+
+const orientation = Yup.boolean().required('This field is required.');
+
+export const editProfileValidationSchema = Yup.object().shape({
+  paylistId,
+  employeeId,
+  firstName,
+  lastName,
+  workLocation,
+  homeLocation,
+  travelPreference,
+  primaryPhone,
+  secondaryPhone,
+  workPhone,
+  supervisorFirstName,
+  supervisorLastName,
+  supervisorEmail,
+  supervisorPhone,
+  approvedBySupervisor,
+  ministry,
+  division,
+  unionMembership,
+  driversLicense,
+  emergencyContactFirstName,
+  emergencyContactLastName,
+  emergencyContactPhoneNumber,
+  emergencyContactRelationship,
 });
 
 export const emcrPendingValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
-  icsTraining: Yup.boolean().required('This field is required.'),
+  icsTraining,
 });
 
 export const bcwsProfileValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
-  purchaseCardHolder: Yup.string().required('This field is required.'),
-  liaisonFirstName: Yup.string().optional(),
-  liaisonLastName: Yup.string().optional(),
-  liaisonPhoneNumber: Yup.string()
-    .test(
-      'phone number',
-      'Invalid phone number format. Please enter digits only. ex: 5555555555',
-      phoneNumber,
-    )
-    .optional()
-    .nullable(),
-  liaisonEmail: Yup.string().optional(),
+  purchaseCardHolder,
+  liaisonFirstName,
+  liaisonLastName,
+  liaisonPhoneNumber,
+  liaisonEmail,
 });
 
 export const bcwsPendingValidationSchema = Yup.object().shape({
   ...bcwsProfileValidationSchema.fields,
-  parQ: Yup.boolean().required('This field is required.'),
-  willingnessStatement: Yup.boolean().required('This field is required.'),
-  orientation: Yup.boolean().required('This field is required.'),
+  parQ,
+  willingnessStatement,
+  orientation,
 });
 
 export const emcrValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
 });
+
+export const memberValidationSchema = {
+  general: Yup.object().shape({
+    workLocation,
+    homeLocation,
+    travelPreference,
+    driversLicense,
+    paylistId,
+  }),
+  employee: Yup.object().shape({
+    supervisorFirstName,
+    supervisorLastName,
+    supervisorPhone,
+    unionMembership,
+    liaisonFirstName,
+    liaisonLastName,
+    liaisonEmail,
+    ministry,
+    division,
+  }),
+  contact: Yup.object().shape({
+    primaryPhone,
+    secondaryPhone,
+    workPhone,
+  }),
+  emergency: Yup.object().shape({
+    emergencyContactFirstName,
+    emergencyContactLastName,
+    emergencyContactPhoneNumber,
+    emergencyContactRelationship,
+  }),
+};
 
 export type SectionType = {
   header: string;
@@ -159,7 +257,6 @@ export const workLocationField = {
     type: 'select',
     autoComplete: 'off',
     disabled: true,
-    break: true,
     required: false,
     program: Program.BCWS,
     options: Object.keys(FireCentre).map((itm) => ({
@@ -172,7 +269,6 @@ export const workLocationField = {
     label: 'Work Region',
     required: false,
     type: 'select',
-    break: true,
     autoComplete: 'off',
     disabled: true,
     program: Program.EMCR,
@@ -198,7 +294,6 @@ export const homeLocationField = {
     label: 'Home Fire Centre',
     type: 'select',
     autoComplete: 'off',
-    break: true,
     disabled: true,
     required: false,
     program: Program.BCWS,
@@ -214,7 +309,6 @@ export const homeLocationField = {
     required: false,
     type: 'select',
     autoComplete: 'off',
-    break: true,
     disabled: true,
     program: Program.EMCR,
     options: Object.keys(Region).map((itm) => ({
@@ -337,7 +431,6 @@ export const fields = {
     type: 'select',
     autoComplete: 'off',
     disabled: false,
-    break: true,
     options: Object.keys(BcwsTravelPreference).map((itm) => ({
       label: TravelPreferenceText[itm as keyof typeof TravelPreference],
       value: itm,
@@ -351,11 +444,20 @@ export const fields = {
     type: 'select',
     autoComplete: 'off',
     disabled: false,
-    break: true,
     options: Object.keys(EmcrTravelPreference).map((itm) => ({
       label: TravelPreferenceText[itm as keyof typeof TravelPreference],
       value: itm,
     })),
+  },
+
+  employeeId: {
+    name: 'employeeId',
+    label: 'Employee ID',
+    required: true,
+    type: 'text',
+    disabled: true,
+    break: true,
+    autoComplete: 'off',
   },
 
   purchaseCardHolder: {
@@ -397,7 +499,6 @@ export const fields = {
   secondaryPhone: {
     name: 'secondaryPhone',
     label: 'Secondary Number',
-    break: true,
     required: false,
     type: 'tel',
     autoComplete: 'off',
@@ -418,6 +519,7 @@ export const fields = {
     label: 'Work Number',
     required: false,
     type: 'tel',
+    break: true,
     autoComplete: 'off',
     disabled: false,
   },
@@ -447,6 +549,7 @@ export const fields = {
     disabled: false,
     required: false,
     type: 'tel',
+    break: true,
   },
 
   emergencyContactRelationship: {
@@ -547,6 +650,7 @@ export const fields = {
     autoComplete: 'off',
     disabled: false,
     required: false,
+    break: true,
     program: Program.BCWS,
   },
   homeLocation: homeLocationField,
