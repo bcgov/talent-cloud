@@ -34,7 +34,8 @@ const usePersonnel = (): {
     })();
   }, [profileId, program, AxiosPrivate]);
 
-  const updatePersonnel = async (personnel: FormikValues | Personnel) => {
+  const updatePersonnel = async (personnel: FormikValues) => {
+    personnel.roles = personnel?.newRoles ?? [];
     try {
       const res =
         program &&

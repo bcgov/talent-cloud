@@ -600,6 +600,7 @@ export class PersonnelService {
       .leftJoinAndSelect('personnel.workLocation', 'workLocation')
       .leftJoinAndSelect('personnel.homeLocation', 'homeLocation')
       .leftJoinAndSelect('personnel.recommitment', 'recommitment')
+      .leftJoinAndSelect('personnel.languages', 'languages')
       .leftJoinAndSelect('personnel.certifications', 'certifications')
       .leftJoinAndSelect('certifications.certification', 'certification')
       .leftJoinAndSelect('personnel.tools', 'tools')
