@@ -35,6 +35,7 @@ import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import { CreateCertificationsDTO } from 'src/personnel/dto/create-certifications.dto';
 
 @Injectable()
 export class FormService {
@@ -240,14 +241,14 @@ export class FormService {
           data.tools.find((tool) => tool.name.id === itm).proficiency.name
         ],
     }));
-    const parsedCertifications =
+    const parsedCertifications: CreateCertificationsDTO[] =
       data.certificates?.map((itm) => ({
         certificationId: itm?.id,
         expiry:
           itm?.id === 6
-            ? data?.foodSafe1Expiry
+            ? new Date(data?.foodSafe1Expiry)
             : itm?.id === 7
-            ? data?.foodSafe2Expiry
+            ? new Date(data?.foodSafe2Expiry)
             : undefined,
       })) ?? [];
 
@@ -259,21 +260,21 @@ export class FormService {
       if (CertificationName[firstAidLevel] === CertificationName.OFA_I) {
         parsedCertifications.push({
           certificationId: 8,
-          expiry: firstAidExpiry,
+          expiry: new Date(firstAidExpiry),
         });
       } else if (
         CertificationName[firstAidLevel] === CertificationName.OFA_II
       ) {
         parsedCertifications.push({
           certificationId: 9,
-          expiry: firstAidExpiry,
+          expiry: new Date(firstAidExpiry),
         });
       } else if (
         CertificationName[firstAidLevel] === CertificationName.OFA_III
       ) {
         parsedCertifications.push({
           certificationId: 10,
-          expiry: firstAidExpiry,
+          expiry: new Date(firstAidExpiry),
         });
       }
     }
