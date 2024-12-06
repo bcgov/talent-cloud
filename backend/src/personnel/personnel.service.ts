@@ -64,6 +64,8 @@ export class PersonnelService {
         'tools.tool',
         'recommitment',
         'homeLocation',
+        'bcws',
+        'emcr'
       ],
     });
 
@@ -159,8 +161,29 @@ export class PersonnelService {
       personnel.certifications = personnelCerts;
     }
 
-    await this.personnelRepository.update(id, { ...personnel });
     const person = await this.findOne(id);
+    const bcws = person.bcws;
+    const emcr = person.emcr;
+
+    Object.keys(personnel).forEach((key) => {
+      if (['bcws', 'emcr'].includes(key)) {
+        return;
+      }
+      person[key] = personnel[key];
+    });
+    if (personnel.bcws && person.bcws) {
+      Object.keys(personnel.bcws).forEach((key) => {
+        bcws[key] = personnel.bcws[key];
+      });
+    }
+    if (personnel.emcr && person.emcr) {
+      Object.keys(personnel.emcr).forEach((key) => {
+        emcr[key] = personnel.emcr[key];
+      });
+    }
+    
+    await this.personnelRepository.save(person);
+
     return person.toResponseObject([Role.MEMBER]);
   }
   /**
