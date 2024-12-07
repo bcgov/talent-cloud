@@ -8,7 +8,9 @@ import RoleProtectedRoute from './RoleProtectedRoute';
 import PrivateRoute from './PrivateRoute';
 import Redirect from './Redirect';
 
-const SupervisorDashboard = lazy(() => import('../pages/SupervisorDashboard'));
+const SupervisorDashboard = lazy(
+  () => import('../pages/supervisor/SupervisorDashboard'),
+);
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const MemberProfile = lazy(() => import('../pages/profile/MemberProfile'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));

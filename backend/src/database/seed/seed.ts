@@ -1,4 +1,4 @@
-import { datasource } from './datasource';
+import { datasource } from '../datasource';
 import {
   certsSql,
   functionSql,
@@ -7,7 +7,7 @@ import {
   joinedLocationsSql,
   rolesSql,
   toolsSql,
-} from './queries';
+} from '../queries';
 
 const seed = async () => {
   await datasource.initialize();

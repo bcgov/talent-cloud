@@ -10,6 +10,7 @@ import type {
   Ministry,
   Region,
   Status,
+  Program,
 } from '@/common';
 import type { FireCentre } from '@/common/enums/firecentre.enum';
 import type {
@@ -138,7 +139,7 @@ export interface RecommitmentCycle {
 
 export interface Recommitment {
   memberId: string;
-  year: number;
+  recommitmentCycleId: RecommitmentCycle;
   emcr?: RecommitmentStatus | null;
   bcws?: RecommitmentStatus | null;
   memberDecisionDate?: Date | null;
@@ -151,6 +152,7 @@ export interface Recommitment {
 }
 
 export interface Personnel {
+  program?: Program;
   id: string;
   firstName: string;
   lastName: string;

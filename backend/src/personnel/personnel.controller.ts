@@ -20,12 +20,12 @@ import { PersonnelService } from './personnel.service';
 import { PersonnelRO } from './ro';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
-import { Program, RequestWithRoles, Role, TokenType } from '../auth/interface';
-import { Programs } from '../auth/program.decorator';
+import { RequestWithRoles, Role, TokenType } from '../auth/interface';
+import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
-import { Roles } from '../auth/roles.decorator';
+
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -77,7 +77,7 @@ export class PersonnelController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Programs(Program.EMCR, Program.BCWS, Program.ALL)
+  @Roles(Role.LOGISTICS, Role.COORDINATOR, Role.MEMBER)
   @Patch(':id/availability')
   async updatePersonnelAvailability(
     @Param('id') id: string,

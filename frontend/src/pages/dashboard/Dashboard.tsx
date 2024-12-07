@@ -25,7 +25,7 @@ const Dashboard = () => {
   const recommitmentCycle = useRecommitmentCycle();
 
   return (
-    <div className="mx-auto md:px-12 xl:px-32  2xl:px-64   pt-32 pb-24">
+    <div className="pt-32 pb-24">
       {recommitmentCycle && (
         <RecommitmentDashBanner recommitment={recommitmentCycle} />
       )}
@@ -46,7 +46,7 @@ const Dashboard = () => {
               }}
             />
           )}
-          <Table rows={rows} columns={columns} loading={loading} />
+          <Table rows={rows} columns={columns} loading={loading} auto={true} />
 
           <div className="flex flex-row justify-between p-4">
             <TableFooterPageSelect

@@ -3,11 +3,10 @@ import { Footer } from './Footer';
 import { Header } from './Header';
 
 export const Layout = ({ children }: { children: ReactElement }) => {
-
   return (
     <div className="min-h-screen flex flex-col">
-      <Header  />
-      <div className="w-full  mt-12 bg-white">{children}</div>
+      <Header />
+      <div className="w-full  mt-12 bg-white lg:px-64">{children}</div>
       <Footer />
     </div>
   );
