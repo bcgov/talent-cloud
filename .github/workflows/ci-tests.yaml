@@ -45,7 +45,7 @@ jobs:
         run: make build-test
 
       - name: migrate
-        run: make migrations-run
+        run: make migration-run
 
       - name: Seed Test Data
         run: make seed-local-personnel
