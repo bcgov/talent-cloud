@@ -1,40 +1,47 @@
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
+import { ButtonTypes } from '@/common';
+import { Transition } from '@headlessui/react';
+import { Button } from '@/components/ui';
 
-import type { Personnel } from '@/common';
-import { Program } from '@/common';
-
-type BannerProps = {
-  personnel: Personnel;
-  program?: Program;
-};
-
-// TODO - make me look nice
-export const RecommitmentProfileBanner = ({ personnel, program }: BannerProps) => {
+export const RecommitmentProfileBanner = ({
+  year,
+  endDate,
+  showWarningBanner,
+}: {
+  year: number;
+  endDate: string;
+  showWarningBanner: boolean;
+}) => {
   return (
-    <div className="xl:mr-12">
-      <div className="px-6 pb-12 bg-white pt-4">
-        <Banner
-          content={
-            <p className="flex flex-col text-sm text-warningDark">
-              <span className="font-bold">Recommitment Banner</span>
-              {(program === Program.BCWS || program === Program.ALL) && (
-                <span className="pt-2">
-                  BCWS Status: {personnel.recommitment?.bcws}
-                </span>
-              )}
-              {(program === Program.EMCR || program === Program.ALL) && (
-                <span className=" pt-2">
-                  EMCR Status: {personnel.recommitment?.emcr}
-                </span>
-              )}
+    <Transition
+      show={showWarningBanner}
+      appear={true}
+      enter="ease-out duration-100"
+      enterFrom="opacity-0 scale-95"
+      enterTo="opacity-100 scale-100"
+      leave="ease-in duration-200"
+      leaveFrom="opacity-100 scale-100"
+      leaveTo="opacity-0 scale-95"
+    >
+      <Banner
+        content={
+          <div>
+            <p className="text-sm">
+              <span className="font-bold">
+                Confirm your recommitment status for the upcoming year.
+              </span>{' '}
+              Please ensure that your profile details are up-to-date, before
+              confirming your recommitment to CORE for {year} by{' '}
+              <span className="font-bold">{endDate}</span>.
             </p>
-          }
-          onClick={() => alert('Complete Review')}
-          buttonText={'Complete Review'}
-          type={BannerType.INFO}
-        />
-      </div>
-    </div>
+            <div className="pt-4">
+              <Button variant={ButtonTypes.TERTIARY} text={'Start Recommitment'} />
+            </div>
+          </div>
+        }
+        type={BannerType.WARNING}
+      />
+    </Transition>
   );
 };
