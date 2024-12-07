@@ -14,7 +14,6 @@ import {
 import { Status, Role, Program } from '@/common';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
-import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { useRoleContext } from '@/providers';
 
 const Profile = () => {
@@ -51,9 +50,6 @@ const Profile = () => {
               roles={roles}
               updatePersonnel={updatePersonnel}
             />
-          )}
-          {personnel && (
-            <RecommitmentProfileBanner personnel={personnel} program={program} />
           )}
 
           {personnel && <ProfileDetails />}
