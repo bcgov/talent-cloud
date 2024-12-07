@@ -145,8 +145,7 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'division', type: 'varchar', length: 100, nullable: true })
   division?: string;
 
-  @OneToOne(() => RecommitmentEntity, (r) => r.memberId, { nullable: true })
-  @JoinColumn({ name: 'recommitment', referencedColumnName: 'memberId' })
+  @OneToOne(() => RecommitmentEntity, (r) => r.member, { nullable: true })
   recommitment?: RecommitmentEntity;
 
   @OneToMany(() => LanguageEntity, (l) => l.personnel, { cascade: true })
