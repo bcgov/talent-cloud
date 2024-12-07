@@ -44,6 +44,9 @@ jobs:
       - name: Run Docker containers
         run: make build-test
 
+      - name: migrate
+        run: make migrations-run
+
       - name: Seed Test Data
         run: make seed-local-personnel
       
