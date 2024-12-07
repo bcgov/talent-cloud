@@ -19,5 +19,11 @@ export const useRecommitmentCycle = () => {
     fetchRecommitmentCycle();
   }, []);
 
-  return recommitmentCycle;
+  return {
+    recommitmentCycle,
+    isRecommitmentCycleOpen:
+      recommitmentCycle &&
+      new Date(recommitmentCycle.endDate) >= new Date() &&
+      new Date(recommitmentCycle.startDate) <= new Date(),
+  };
 };

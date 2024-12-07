@@ -5,11 +5,12 @@ import type { Status } from '@/common';
 import { Role } from '@/common';
 import { useFilters } from '@/hooks/useFilters';
 import { Table, TableFooterNav, TableFooterPageSelect, Tabs } from '@/components';
-
 import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 const Dashboard = () => {
+  const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
+
   const { program, roles } = useRoleContext();
   const { searchParamsUrl, handleChangeOne } = useFilters();
   const {
@@ -22,14 +23,16 @@ const Dashboard = () => {
     loading,
     setLoading,
   } = useTable(searchParamsUrl, program);
-  const recommitmentCycle = useRecommitmentCycle();
 
   return (
-    <div className="pt-32 pb-24">
+    <div className="xl:px-32 xl:pt-8 pb-24">
       {recommitmentCycle && (
-        <RecommitmentDashBanner recommitment={recommitmentCycle} />
+        <RecommitmentDashBanner
+          recommitment={recommitmentCycle}
+          isRecommitmentCycleOpen={isRecommitmentCycleOpen ?? false}
+        />
       )}
-      <h1 className="text-left font-bold">Personnel</h1>
+      <h1 className="pt-16 text-left font-bold">Personnel</h1>
       <DashboardFilters program={program} />
       <div className="overflow-x-scroll border border-slate-500 rounded-md">
         <div className="mt-2  bg-white w-full">
