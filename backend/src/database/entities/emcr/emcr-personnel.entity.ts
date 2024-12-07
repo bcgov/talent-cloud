@@ -144,7 +144,7 @@ export class EmcrPersonnelEntity {
       icsTraining:
         this.trainings?.some((t) => t.name === ICS_TRAINING_NAME) || false,
       experiences:
-        this.experiences?.map((experience) => experience.toResponseObject()) ??
+        this?.experiences?.map((experience) => experience.toResponseObject()) ??
         [],
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));

@@ -1,9 +1,9 @@
-import { datasource } from './datasource';
-import { PersonnelEntity } from './entities/personnel/personnel.entity';
+import { datasource } from '../datasource';
+import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 
-import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
-import { RecommitmentCycleEntity } from './entities/recommitment/recommitment-cycle.entity';
-import { RecommitmentEntity } from './entities/recommitment/recommitment.entity';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
+import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
@@ -45,7 +45,7 @@ export const handler = async () => {
     const commitment = await recommitmentRepository.save(
       recommitmentRepository.create({
         memberId: person.id,
-        year: cycle['year'],
+        recommitmentCycleId: cycle['year'],
         emcr: person?.emcr ? RecommitmentStatus.PENDING : null,
         bcws: person?.bcws ? RecommitmentStatus.PENDING : null,
         memberDecisionDate: null,

@@ -2,7 +2,6 @@ import { SectionHeader } from '@/components';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
 import { FormField } from './FormField';
-
 import { useFormikContext } from 'formik';
 import type { Personnel } from '@/common';
 import type { FieldType } from '@/components/profile/forms/types';

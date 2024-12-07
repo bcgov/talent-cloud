@@ -1,9 +1,13 @@
-import { datasource } from './datasource';
-import { EmcrPersonnelEntity } from './entities/emcr';
-import { handler as dataHandler } from '../common/personnel-seed';
-import { BcwsPersonnelEntity } from './entities/bcws';
-import { LocationEntity } from './entities/location.entity';
-import { PersonnelEntity } from './entities/personnel/personnel.entity';
+import { datasource } from '../datasource';
+import { EmcrPersonnelEntity } from '../entities/emcr';
+import { createPersonnelHandler } from './create-personnel';
+import { BcwsPersonnelEntity } from '../entities/bcws';
+import { LocationEntity } from '../entities/location.entity';
+import { PersonnelEntity } from '../entities/personnel/personnel.entity';
+import { faker } from '@faker-js/faker';
+import { Status } from '../../common/enums';
+import { createEMCRhandler } from './create-emcr';
+import { createBCWShandler } from './create-bcws';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
@@ -24,14 +28,32 @@ export const handler = async () => {
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-    const { personnelData, emcrData, bcwsData } = dataHandler(
+    const status =
+    Status[
+      faker.helpers.arrayElement([
+        Status.ACTIVE,
+        Status.INACTIVE,
+        Status.PENDING,
+      ])
+    ];
+
+    const dateApplied = faker.date.past();
+    
+    const { personnelData } = createPersonnelHandler(
+      status,
       locations,
       tools,
       certs,
-      roles,
+    );
+    
+    const { emcrData } = createEMCRhandler(
       functions,
       trainings,
+      status,
+      dateApplied,
     );
+    
+    const { bcwsData } = createBCWShandler(roles, status, dateApplied);
 
     const personOne = new PersonnelEntity({
       ...personnelData,
@@ -53,6 +75,7 @@ export const handler = async () => {
         new BcwsPersonnelEntity({ ...bcwsData, personnelId: person.id }),
       ),
     );
+    
     const personTwo = await personnelRepo.save(
       personnelRepo.create(
         new PersonnelEntity({
@@ -93,15 +116,35 @@ export const handler = async () => {
         new BcwsPersonnelEntity({ ...bcwsData, personnelId: personThree.id }),
       ),
     );
+   
     for (let i = 0; i < 50; i++) {
-      const { personnelData, emcrData, bcwsData } = dataHandler(
-        locations,
-        tools,
-        certs,
-        roles,
-        functions,
-        trainings,
-      );
+      const status =
+    Status[
+      faker.helpers.arrayElement([
+        Status.ACTIVE,
+        Status.INACTIVE,
+        Status.PENDING,
+      ])
+    ];
+
+    const dateApplied = faker.date.past();
+    
+    const { personnelData } = createPersonnelHandler(
+      status,
+      locations,
+      tools,
+      certs,
+    );
+    
+    const { emcrData } = createEMCRhandler(
+      functions,
+      trainings,
+      status,
+      dateApplied,
+    );
+    
+    const { bcwsData } = createBCWShandler(roles, status, dateApplied);
+
 
       const person = await personnelRepo.save(
         personnelRepo.create(new PersonnelEntity(personnelData)),

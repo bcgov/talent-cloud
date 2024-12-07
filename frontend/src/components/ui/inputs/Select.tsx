@@ -1,5 +1,6 @@
 import { classes } from '@/components/filters/classes';
-import type { FieldType } from '@/pages/profile';
+import type { FieldType } from '@/components/profile/forms/types';
+
 import type { FieldInputProps } from 'formik';
 import { ErrorMessage } from 'formik';
 

@@ -200,7 +200,7 @@ export class PersonnelEntity extends BaseEntity {
   paylistId: string;
 
   toResponseObject(
-    role: Role[],
+    roles: Role[],
     lastDeployed?: string,
   ): Record<string, PersonnelRO> {
     const response = new PersonnelRO();
@@ -222,26 +222,25 @@ export class PersonnelEntity extends BaseEntity {
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
-      recommitment: this.recommitment?.toResponseObject() ?? null,
+      recommitment: this.recommitment?.toResponseObject(roles) ?? null,
       lastDeployed: lastDeployed ?? null,
-      homeLocation: this.homeLocation.toResponseObject(),
+      homeLocation: this.homeLocation?.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),
       ministry: this.ministry,
       division: this?.division ?? '',
       tools: this.tools?.map((tool) => tool.toResponseObject()) ?? [],
       languages: this.languages?.map((lang) => lang.toResponseObject()) ?? [],
-
       certifications:
         this.certifications?.map((cert) => cert.toResponseObject()) ?? [],
-      emergencyContactFirstName: this.emergencyContactFirstName,
-      emergencyContactLastName: this.emergencyContactLastName,
-      emergencyContactPhoneNumber: this.emergencyContactPhoneNumber,
-      emergencyContactRelationship: this.emergencyContactRelationship,
+      emergencyContactFirstName: this.emergencyContactFirstName ?? '',
+      emergencyContactLastName: this.emergencyContactLastName ?? '',
+      emergencyContactPhoneNumber: this.emergencyContactPhoneNumber ?? '',
+      emergencyContactRelationship: this.emergencyContactRelationship ?? '',
       // trainings will not be returned until we have a more robust system
       availability:
-        this.availability?.map((avail) => avail.toResponseObject()) || [],
-      bcws: this?.bcws?.toResponseObject(role) ?? null,
-      emcr: this?.emcr?.toResponseObject(role) ?? null,
+        this.availability?.map((avail) => avail.toResponseObject()) ?? [],
+      bcws: this?.bcws?.toResponseObject(roles) ?? null,
+      emcr: this?.emcr?.toResponseObject(roles) ?? null,
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"
@@ -260,7 +259,7 @@ export class PersonnelEntity extends BaseEntity {
     }
     // this is required in order to conditionally omit certain fields from the response based on the user role
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
-    return instanceToPlain(response, { groups: role });
+    return instanceToPlain(response, { groups: roles });
   }
 
   constructor(data: CreatePersonnelDTO) {

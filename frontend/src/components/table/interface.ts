@@ -2,10 +2,15 @@ import type { Status } from '@/common';
 
 export interface Cell {
   key: string;
-
+  options: string[];
   columnName: string;
   value: any;
   className: string;
+  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  submitChange?: (e: any) => void;
+  onClick?: (e: any) => void;
+  rowData?: Row;
+  nested?: Row[];
 }
 
 export interface Row {

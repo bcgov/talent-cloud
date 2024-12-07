@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
 
 export const useRecommitmentCycle = () => {
-  const [recommitmentCycle, setRecommitmentCycle] =
-    useState<RecommitmentCycle | null>(null);
+  const [recommitmentCycle, setRecommitmentCycle] = useState<RecommitmentCycle>();
 
   const { AxiosPrivate } = useAxios();
 

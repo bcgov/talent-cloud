@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { Experience, FirstAid, Status } from '../common/enums';
-import { TravelPreference } from '../common/enums/travel-preference.enum';
+import { Experience, FirstAid, Status } from '../../common/enums';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
   EmcrTrainingEntity,
-} from '../database/entities/emcr';
-import { CreatePersonnelEmcrDTO } from '../emcr/dto';
+} from '../entities/emcr';
+import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
 
 export const createEMCRhandler = (
   functions: EmcrFunctionEntity[],

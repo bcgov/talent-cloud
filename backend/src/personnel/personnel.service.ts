@@ -28,6 +28,8 @@ import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
+import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
+import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 
 @Injectable()
 export class PersonnelService {
@@ -38,6 +40,8 @@ export class PersonnelService {
     private availabilityRepository: Repository<AvailabilityEntity>,
     @InjectRepository(RecommitmentCycleEntity)
     private recommitmentCycleRepository: Repository<RecommitmentCycleEntity>,
+    @InjectRepository(RecommitmentEntity)
+    private recommitmentRepository: Repository<RecommitmentEntity>,
     @InjectRepository(ToolsEntity)
     private toolsRepository: Repository<ToolsEntity>,
     @InjectRepository(CertificationEntity)
@@ -117,7 +121,15 @@ export class PersonnelService {
       console.log(e);
     }
   }
+  async updatePersonnelRecommitmentStatus(recommitmentUpdate: UpdatePersonnelRecommitmentDTO, req: RequestWithRoles): Promise<UpdateResult> {
+    const { recommitmentCycleId, memberId  } = recommitmentUpdate;
+  
+    const recommitment = await this.recommitmentRepository.findOneOrFail({where:{memberId, recommitmentCycleId}});
 
+    if(recommitment){
+      return await this.recommitmentRepository.update({memberId, recommitmentCycleId: recommitment.recommitmentCycleId}, {  ...recommitmentUpdate, supervisorIdir: req.idir });
+    }
+  }
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,
     req: RequestWithRoles,
@@ -632,7 +644,7 @@ export class PersonnelService {
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail)
       .includes(email);
-
+    
     return {
       isMember,
       isSupervisor,
@@ -678,5 +690,19 @@ export class PersonnelService {
     qb.where('start_date <= :date', { date: new Date() });
     qb.andWhere('end_date >= :date', { date: new Date() });
     return await qb.getOne();
+  }
+
+  async getSupervisorPersonnel(req: RequestWithRoles): Promise<{personnel: PersonnelEntity[], count: number}> {
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    qb.leftJoinAndSelect('personnel.emcr', 'emcr');
+    qb.leftJoinAndSelect('personnel.bcws', 'bcws');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment'); 
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
+    qb.where('personnel.supervisorEmail = :email', { email: req.idir });
+    
+    const personnel = await qb.getMany();
+    const count = await qb.getCount();
+    this.logger.log(personnel);
+    return {personnel, count}
   }
 }
