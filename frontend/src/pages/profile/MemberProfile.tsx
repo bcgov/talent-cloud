@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
-import { Program, Status } from '@/common';
+import { Status } from '@/common';
 import { Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
@@ -12,7 +12,7 @@ import { memberData } from '@/hooks/profileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 const MemberProfile = () => {
-  const { personnel, program, loading, updatePersonnel } = useMemberProfile();
+  const { personnel, loading, updatePersonnel } = useMemberProfile();
   const { roles } = useRoleContext();
   const [activeTab, setActiveTab] = useState('availability');
 
@@ -49,7 +49,6 @@ const MemberProfile = () => {
                   <RecommitmentProfileBanner
                     year={recommitmentCycle?.year}
                     endDate={recommitmentCycle.endDate}
-                    program={program ?? Program.ALL}
                     showWarningBanner={isRecommitmentCycleOpen ?? false}
                   />
                 </div>
