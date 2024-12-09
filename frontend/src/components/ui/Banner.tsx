@@ -28,49 +28,40 @@ export const CustomBanner = ({
   onClose?: (props?: any) => void;
 }) => (
   <div
-    className={`flex flex-row py-2 px-6 rounded-sm bg-${bgColor} items-center justify-start space-x-2 w-full py-6`}
+    className={`flex flex-row py-4 px-6 rounded-md bg-${bgColor} items-start justify-start space-x-2 w-full py-6 shadow-lg`}
   >
-    <span>{icon}</span>
-    <div>
-      {title && (
-        <div className="display flex flex-row w-full justify-between items-start">
-          <p className={`text-sm font-bold text-${textColor}`}>{title}</p>
-          <button onClick={onClose}>
-            <CloseIcon color={`text-${textColor}`} />
-          </button>
-        </div>
-      )}
-      {!title && (
-        <div className="display flex flex-row w-full justify-between items-center">
-          <p className={`text-sm pt-2 text-${textColor} lg:pr-32`}>{content}</p>
-          <button onClick={onClose}>
-            <CloseIcon color={`text-${textColor}`} />
-          </button>
-        </div>
-      )}
-      {title && (
+    <div className="display flex flex-row w-full justify-between items-start">
+      <div className="pt-3">{icon}</div>
+      <div className="flwx flex-col">
+        {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
         <p className={`text-sm pt-2 text-${textColor} lg:pr-32`}>{content}</p>
-      )}
-      {link && (
-        <a
-          className="font-bold inline cursor-pointer"
-          href={link.url}
-          target={'_blank'}
-          rel={'noopener noreferrer'}
-        >
-          {link.name}
-        </a>
-      )}
-      {onClick && (
-        <button
-          aria-label="banner button"
-          className={`bg-${textColor}Dark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm h-12`}
-          onClick={onClick}
-        >
-          {buttonText}
+      </div>
+      {onClose && (
+        <button onClick={onClose}>
+          <CloseIcon color={`text-${textColor}`} />
         </button>
       )}
     </div>
+
+    {link && (
+      <a
+        className="font-bold inline cursor-pointer"
+        href={link.url}
+        target={'_blank'}
+        rel={'noopener noreferrer'}
+      >
+        {link.name}
+      </a>
+    )}
+    {onClick && (
+      <button
+        aria-label="banner button"
+        className={`bg-${textColor}Dark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm h-12`}
+        onClick={onClick}
+      >
+        {buttonText}
+      </button>
+    )}
   </div>
 );
 

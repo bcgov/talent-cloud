@@ -4,9 +4,11 @@ import { Header } from './Header';
 
 export const Layout = ({ children }: { children: ReactElement }) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen overflow-y-hidden">
       <Header />
-      <div className="w-full  mt-12 bg-white lg:px-64">{children}</div>
+      <div className="pt-8 md:pt-32 lg:pt-16 w-full  h-full  bg-white overflow-y-auto">
+        {children}
+      </div>
       <Footer />
     </div>
   );
