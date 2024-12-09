@@ -6,11 +6,11 @@ import {
   LanguageProficiency,
   LanguageLevelType,
   AvailabilityType,
-} from './enums';
-import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
-import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
-import { ToolsEntity } from '../database/entities/personnel/tools.entity';
-import { CreatePersonnelLanguagesDTO } from '../personnel/dto/create-personnel-languages.dto';
+} from '../../common/enums';
+import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
+import { CertificationEntity } from '../entities/personnel/certifications.entity';
+import { ToolsEntity } from '../entities/personnel/tools.entity';
+import { CreatePersonnelLanguagesDTO } from '../../personnel/dto/create-personnel-languages.dto';
 
 export const threeMonthsArray = () => {
   const today = new Date();

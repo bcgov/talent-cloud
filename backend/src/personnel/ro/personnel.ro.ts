@@ -200,10 +200,10 @@ export class PersonnelRO {
   paylistId?: string;
 
   @ApiProperty()
-  @Expose({ groups: ['emcr', 'member'] })
+  @Expose({ groups: ['emcr', 'member', 'supervisor'] })
   emcr?: EmcrRO;
 
   @ApiProperty()
-  @Expose({ groups: ['bcws', 'member'] })
+  @Expose({ groups: ['bcws', 'member', 'supervisor'] })
   bcws?: BcwsRO;
 }

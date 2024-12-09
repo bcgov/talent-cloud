@@ -5,6 +5,7 @@ import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
 import { activeCols, pendingColumns } from '@/pages/dashboard/columns';
+import { renderName } from '@/components/ui/helpers';
 
 export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) => {
   const { AxiosPrivate } = useAxios();
@@ -87,7 +88,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
         selected: status === Status.PENDING,
       },
     ],
-    columns,
+    columns: columns?.map((itm) => renderName(itm)),
     setLoading: (loading: boolean) => setLoading(loading),
   };
 };

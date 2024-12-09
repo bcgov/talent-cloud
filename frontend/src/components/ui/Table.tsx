@@ -1,28 +1,31 @@
 import type { Cell, Row } from '@/components';
 import { Loading, TableBodyCell } from '@/components';
-import { renderName } from './helpers';
-import type { DashboardColumns } from '@/common';
+import type { ReactElement } from 'react';
 
 export const Table = ({
   loading,
   rows,
   columns,
+  auto,
 }: {
   loading: boolean;
   rows: any[];
-  columns?: DashboardColumns[];
+  columns?: any[];
+  auto?: boolean;
 }) => {
   return (
-    <table className="table-auto w-full border-collapse border border-slate-500">
+    <table
+      className={`${auto ? 'table-auto ' : 'table-fixed '} w-full border-collapse border border-slate-500`}
+    >
       <thead>
         <tr>
-          {columns?.map((name: string) => (
+          {columns?.map((col: ReactElement, index: number) => (
             <th
-              key={name}
+              key={index}
               scope="col"
-              className={`px-4 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue`}
+              className={`px-2 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue`}
             >
-              {renderName(name)}
+              {col}
             </th>
           ))}
         </tr>
@@ -48,18 +51,41 @@ export const Table = ({
               )}
               <tr key={row.key} id={row.key}>
                 {row.cells.map((itm: Cell) => (
-                  <td
-                    key={itm.key}
-                    scope="row"
-                    className={`py-4 px-4 text-nowrap truncate max-w-[250px]`}
-                  >
-                    <TableBodyCell
+                  <>
+                    <td
                       key={itm.key}
-                      cell={itm}
-                      id={row.key}
-                      status={row.status}
-                    />
-                  </td>
+                      scope="row"
+                      className={`py-4 px-4 text-nowrap truncate max-w-[250px]`}
+                    >
+                      <TableBodyCell
+                        key={itm.key}
+                        cell={itm}
+                        id={row.key}
+                        status={row.status}
+                      />
+                    </td>
+                    {itm.nested && itm.nested.length > 0 && (
+                      <table className="bg-red-200">
+                        {itm.nested.map((nestedRow) => (
+                          <tr key={nestedRow.key} id={nestedRow.key}>
+                            {nestedRow?.cells.map((cell) => (
+                              <td
+                                key={cell.key}
+                                scope="row"
+                                className={`py-4 px-4 text-nowrap truncate max-w-[250px]`}
+                              >
+                                <TableBodyCell
+                                  key={cell.key}
+                                  cell={cell}
+                                  id={nestedRow.key}
+                                />
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </table>
+                    )}
+                  </>
                 ))}
               </tr>
             </>

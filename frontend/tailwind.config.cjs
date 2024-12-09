@@ -36,6 +36,28 @@ module.exports = withMT({
         sans: ['"BC Sans"'],
       },
       colors: {
+        blue:{
+          100: '#F2F9FF',
+          200: '#E6F3FF',
+          300: '#CCE6FF',
+          400: '#99CCFF',
+          500: '#66B2FF',
+          600: '#338EFF',
+          700: '#134573',
+          800: '#1A5A96',
+          900: '#0D324F',
+        },
+        dark: {
+          100: '#FFFFFF',
+          200: '#FAFAFA',
+          300: '#F2F2F2',
+          400: '#CFCFCF',
+          500: '#878787',
+          600: '#606060',
+          700: '#313132',
+          800: '#262729',
+          900: '#000000',
+        },
         errorRed: '#D8292F',
         
         transparent: 'transparent',
@@ -85,11 +107,11 @@ module.exports = withMT({
         errorBannerDark: '#A12622',
         errorBannerLight: '#F2DEDE',
         successBannerDark: '#2D4821',
-        successBannerLight: '#DFF0D8',
+        successBannerLight: '#E5F3E0',
         warningBannerDark: '#6C4A00',
-        warningBannerLight: '#F9F1C6',
+        warningBannerLight: '#FDFAE6',
         infoBannerDark: '#1A5A96',
-        infoBannerLight: '#D9EAF7',
+        infoBannerLight: '#ECF5FB',
         
       },
       textColor: {
@@ -99,6 +121,7 @@ module.exports = withMT({
         info: '#1a5a96',
         active: '#2D4821',
         inactive: '#343633',
+        
         dark: {
           100: '#FFFFFF',
           200: '#FAFAFA',

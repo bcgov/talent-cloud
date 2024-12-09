@@ -1,5 +1,5 @@
-import type { Cell } from '@/components';
-import { DashboardColumns } from '@/common';
+import { Button, type Cell } from '@/components';
+import { ButtonTypes, DashboardColumns } from '@/common';
 import {
   getAvailabilityClass,
   getUnionMembershipClass,
@@ -26,7 +26,7 @@ export const TableBodyCell = ({
 }: {
   cell: Cell;
   id: string;
-  status: Status;
+  status?: Status;
 }) => {
   switch (cell.columnName) {
     case DashboardColumns.NAME:
@@ -40,7 +40,7 @@ export const TableBodyCell = ({
           >
             {cell.value}
           </Link>
-          {status === Status.NEW && (
+          {status && status === Status.NEW && (
             <span className="bg-warningBannerLight px-2 rounded-full ml-2">
               {StatusNames.NEW}
             </span>
@@ -135,7 +135,27 @@ export const TableBodyCell = ({
           )}
         </>
       );
-
+    case 'Approval':
+      return (
+        <div className="relative flex flex-row items-center space-x-4">
+          <select
+            onChange={(e) => cell.handleChange && cell?.handleChange(e)}
+            value={cell.value}
+            className="rounded-md"
+          >
+            {cell?.options?.map((itm) => <option key={itm}>{itm}</option>)}
+          </select>
+          {cell.value}
+        </div>
+      );
+    case 'Submit':
+      return (
+        <Button
+          variant={ButtonTypes.TERTIARY}
+          text={'Submit'}
+          onClick={cell.onClick}
+        />
+      );
     case DashboardColumns.LOCATION:
       return <span className="text-sm text-dark-600">{cell.value}</span>;
     case DashboardColumns.REGION:
