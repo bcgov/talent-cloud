@@ -27,16 +27,20 @@ const Profile = () => {
 
   return (
     <div
-      className={`min-h-screen pt-24  ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} w-full overflow-x-hidden`}
+      className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
-      {personnel && <ProfileBreadcrumbs personnel={personnel} />}
+      <div
+        className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
+      >
+        {personnel && <ProfileBreadcrumbs personnel={personnel} />}
 
-      {personnel && (
-        <ProfileHeader personnel={personnel} program={program} roles={roles} />
-      )}
+        {personnel && (
+          <ProfileHeader personnel={personnel} program={program} roles={roles} />
+        )}
+      </div>
 
       <div className="bg-white w-full">
-        <div className="md:px-12 xl:px-24 2xl:px-64 mx-auto w-auto">
+        <div className="mx-auto w-auto">
           {personnel?.status === Status.PENDING && (
             <NewApplicantBanner
               program={program}
