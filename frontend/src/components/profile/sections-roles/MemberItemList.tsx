@@ -30,8 +30,6 @@ export const MemberItemList = ({
   const secondChoiceSection = preferences?.second;
   // const thirdChoiceSection = preferences?.third;
 
-  console.log(preferences);
-
   const Header = ({ columnNames }: { columnNames: string[] }) => (
     <div className="flex flex-row p-2 bg-grayBackground">
       {columnNames.map((columnName) => (
