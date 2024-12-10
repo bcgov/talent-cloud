@@ -109,7 +109,7 @@ export const memberFormConfig = (
       homeLocation: personnel.homeLocation,
       workLocation: personnel.workLocation,
       travelPreference:
-        personnel.bcws?.travelPreference || personnel.emcr?.travelPreference, // Need something here?
+        personnel.bcws?.travelPreference || personnel.emcr?.travelPreference, // TODO: Probably should change this
       driverLicense: personnel?.driverLicense ?? [],
       employeeId: personnel?.employeeId,
       paylistId: personnel?.paylistId,

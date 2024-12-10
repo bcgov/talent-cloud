@@ -152,9 +152,7 @@ export class PersonnelService {
       delete person.tools;
     }
     
-    console.log(personnel);
     if (personnel.languages?.length) {
-      console.log('????')
       const currentLanguages = await this.languageRepository.find({
         where: { personnel: { id } },
       });
@@ -209,7 +207,6 @@ export class PersonnelService {
 
     delete person.bcws.personnelId;
     delete person.emcr.personnelId;
-    console.log(person);
     
     await this.personnelRepository.save(person);
 
