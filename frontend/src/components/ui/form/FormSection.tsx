@@ -26,7 +26,7 @@ export const FormSection = ({
   return (
     <Fragment>
       {showHeader && <SectionHeader section={header} />}
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  gap-6">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
         {fields?.map((field) => (
           <Fragment key={field.name}>
             <div className="col-span-1">

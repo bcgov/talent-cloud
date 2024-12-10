@@ -352,7 +352,8 @@ export const memberData = (personnel?: Personnel) => {
         title: 'Travel Preference',
         content:
           TravelPreferenceText[
-            personnel?.travelPreference as keyof typeof TravelPreference
+            (personnel?.bcws?.travelPreference ||
+              personnel?.emcr?.travelPreference) as keyof typeof TravelPreference // DO SOMETHING?
           ],
       },
       {

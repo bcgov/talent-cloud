@@ -8,7 +8,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
  * - Experience Level (Coordinator / Logistics view) - `experience`
  * - Delete Action (Coordinator / Member view) - `delete`
  */
-export const MemberSectionsAndRoles = ({
+export const MemberItemList = ({
   preferences,
   columns,
   data,
@@ -21,14 +21,16 @@ export const MemberSectionsAndRoles = ({
   };
   columns: { key: string; name: string }[];
   data: {
-    id: number;
+    id: string | number;
     [key: string]: string | number;
   }[];
-  removeRow: (id: number) => void;
+  removeRow?: (id: number | string) => void;
 }) => {
   const firstChoiceSection = preferences?.first;
   const secondChoiceSection = preferences?.second;
   // const thirdChoiceSection = preferences?.third;
+
+  console.log(preferences);
 
   const Header = ({ columnNames }: { columnNames: string[] }) => (
     <div className="flex flex-row p-2 bg-grayBackground">
@@ -109,8 +111,8 @@ export const MemberSectionsAndRoles = ({
                     {c.key === 'role' && (
                       <p>{row[columns[1].key as keyof typeof row]}</p>
                     )}
-                    {c.key === 'experience' && <></>}
-                    {c.key === 'remove' && (
+                    {/* {c.key === 'experience' && <></>} TODO */}
+                    {c.key === 'remove' && !!removeRow && (
                       <button
                         className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-primaryBlue rounded-none text-sm"
                         onClick={() => removeRow(row.id)}
@@ -119,6 +121,11 @@ export const MemberSectionsAndRoles = ({
                         Remove
                       </button>
                     )}
+                    {c.key === 'language' && <p>{row['language']}</p>}
+                    {c.key === 'proficiency' && <p>{row['proficiency']}</p>}
+                    {c.key === 'tool' && <p>{row['tool']}</p>}
+                    {c.key === 'certification' && <p>{row['certification']}</p>}
+                    {c.key === 'expiry' && <p>{row['expiry']}</p>}
                   </div>
                 ))}
               </div>

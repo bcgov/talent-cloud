@@ -1,14 +1,11 @@
-import { Accordion } from '@/components/ui/Accordion';
-import { Chip } from '@material-tailwind/react';
-import { chipClass } from '@/common/helpers';
-import type { ToolsProficiencyName } from '@/common/enums/tools.enum';
+import { getLanguageProficiency } from '@/common/helpers';
+import { Tabs, Tab, TabsBody, TabsHeader, TabPanel } from '@material-tailwind/react';
+import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { ExperienceLevel } from '@/common/enums/sections.enum';
-import { format } from 'date-fns';
-import { DialogUI } from '@/components/ui';
 import { useState } from 'react';
-import { ProfileEditSkills } from './ProfileEditSkills';
-import type { Certification, Languages, PersonnelTool, Personnel } from '@/common';
+import type { Personnel } from '@/common';
+import { MemberItemList } from '../sections-roles';
 
 export type MemberSkillsProps = {
   title?: string;
@@ -25,110 +22,117 @@ export type MemberSkillsProps = {
 };
 
 export const MemberSkillsAndCertifications = ({
-  allowEditing,
-  updatePersonnel,
   personnel,
-  profileData,
 }: {
   allowEditing: boolean;
   updatePersonnel: (props: Partial<Personnel>) => void;
   personnel: Personnel;
   profileData: any;
 }) => {
-  const title = 'Skills & Certifications';
-  const [openEditSkillsPopUp, setOpenEditSkillsPopUp] = useState(false);
-
-  const handleOpenEditSkills = () => {
-    setOpenEditSkillsPopUp(!openEditSkillsPopUp);
-  };
-
-  const handleSave = (skills: {
-    newLanguages: Languages[];
-    newTools: PersonnelTool[];
-    newCertifications: Certification[];
-  }) => {
-    updatePersonnel({
-      languages: skills.newLanguages,
-      tools: skills.newTools,
-      certifications: skills.newCertifications,
-    });
-    setOpenEditSkillsPopUp(false);
+  const [activeTab, setActiveTab] = useState('languages');
+  const handleTabChange = (index: string) => {
+    setActiveTab(index);
   };
 
   return (
     <>
-      <Accordion
-        title={title}
-        onClick={handleOpenEditSkills}
-        allowEditing={allowEditing}
-      >
-        <div>
-          {profileData?.skills?.map((itm: any) => (
-            <div key={itm.title}>
-              <h5 className="pl-8 py-6  font-bold text-primaryBlue">{itm.title}</h5>
-              <div className="flex flex-row border-b-2 border-slate-800 py-2 px-8">
-                <div className="basis-1/2">
-                  <span className="text-darkGray font-bold">{itm.header}</span>
-                </div>
-                <div className="basis-1/2">
-                  <span className="text-darkGray font-bold">{itm.subheader}</span>
-                </div>
-              </div>
-              {itm.itms?.map(
-                ({
-                  label,
-                  value,
-                }: {
-                  label?: string;
-                  value?:
-                    | ExperienceLevel
-                    | ToolsProficiencyName
-                    | LanguageProficiencyName
-                    | string;
-                }) => (
-                  <div
-                    key={label}
-                    className="flex flex-row border-b-2 border-gray-100 py-2 items-center justify-between"
-                  >
-                    <div className="text-darkGray px-8 basis-1/2">
-                      <p>{label}</p>
-                    </div>{' '}
-                    <div className="basis-1/2">
-                      <div className="flex flex-row justify-start">
-                        {itm.title === 'Certifications' && value && (
-                          <p>{format(value ?? '', 'PPP')}</p>
-                        )}
-                        {itm.title !== 'Certifications' && value && (
-                          <div className="flex flex-shrink ">
-                            <Chip className={chipClass(value)} value={value} />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          ))}
-        </div>
-      </Accordion>
-
-      {/* Skills and Certs */}
-      <DialogUI
-        open={openEditSkillsPopUp}
-        onClose={handleOpenEditSkills}
-        handleOpen={handleOpenEditSkills}
-        title="Edit Skills & Certifications"
-        style="w-5/6"
-      >
-        <ProfileEditSkills
-          originalLanguages={personnel.languages || []}
-          originalTools={personnel.tools || []}
-          originalCerts={personnel.certifications || []}
-          handleClose={handleOpenEditSkills}
-          handleSave={handleSave}
-        />
-      </DialogUI>
+      <Tabs value={activeTab} onChange={handleTabChange}>
+        <TabsHeader
+          className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
+          indicatorProps={{
+            className:
+              'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+          }}
+        >
+          <Tab
+            className={`${activeTab === 'languages' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            value={'languages'}
+            onClick={() => setActiveTab('languages')}
+          >
+            Languages
+          </Tab>
+          <Tab
+            className={`${activeTab === 'tools' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            value={'tools'}
+            onClick={() => setActiveTab('tools')}
+          >
+            Tools & Software
+          </Tab>
+          <Tab
+            className={`${activeTab === 'certifications' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            value={'certifications'}
+            onClick={() => setActiveTab('certifications')}
+          >
+            Certifications
+          </Tab>
+        </TabsHeader>
+        <TabsBody>
+          <TabPanel value="languages" className="px-0">
+            <MemberItemList
+              data={
+                personnel.languages?.map((l) => ({
+                  id: l.id,
+                  language: l.language,
+                  proficiency: getLanguageProficiency(l.level, l.type),
+                  level: l.level,
+                })) || []
+              }
+              columns={[
+                {
+                  name: 'Language',
+                  key: 'language',
+                },
+                {
+                  name: 'Proficiency',
+                  key: 'proficiency',
+                },
+              ]}
+            />
+          </TabPanel>
+          <TabPanel value="tools" className="px-0">
+            <MemberItemList
+              data={
+                personnel.tools?.map((t) => ({
+                  id: t.tool,
+                  tool: ToolsName[t.tool],
+                  proficiency: ToolsProficiencyName[t.proficiencyLevel],
+                })) || []
+              }
+              columns={[
+                {
+                  name: 'Tool',
+                  key: 'tool',
+                },
+                {
+                  name: 'Proficiency',
+                  key: 'proficiency',
+                },
+              ]}
+            />
+          </TabPanel>
+          <TabPanel value="certifications" className="px-0">
+            <MemberItemList
+              data={
+                personnel.certifications?.map((c) => ({
+                  id: c.name,
+                  certification: c.name,
+                  expiry: c.expiry || '--',
+                })) || []
+              }
+              columns={[
+                {
+                  name: 'Certification',
+                  key: 'certification',
+                },
+                {
+                  name: 'Expiry',
+                  key: 'expiry',
+                },
+              ]}
+            />
+          </TabPanel>
+        </TabsBody>
+      </Tabs>
     </>
   );
 };

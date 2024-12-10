@@ -8,7 +8,6 @@ export const memberFormConfig = (
 ) => {
   delete personnelData?.availability;
   delete personnelData?.experiences;
-  delete personnelData?.employeeId;
 
   const personnel = {
     ...personnelData,
@@ -109,10 +108,11 @@ export const memberFormConfig = (
       lastName: personnel.lastName,
       homeLocation: personnel.homeLocation,
       workLocation: personnel.workLocation,
-      travelPreference: personnel.travelPreference,
+      travelPreference:
+        personnel.bcws?.travelPreference || personnel.emcr?.travelPreference, // Need something here?
       driverLicense: personnel?.driverLicense ?? [],
-      employeeId: personnel?.bcws?.employeeId,
-      paylistId: personnel?.bcws?.paylistId,
+      employeeId: personnel?.employeeId,
+      paylistId: personnel?.paylistId,
     },
     employee: {
       supervisorFirstName: personnel.supervisorFirstName,

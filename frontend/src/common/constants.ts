@@ -85,7 +85,11 @@ export interface Location {
 
 export interface ExperienceInterface {
   experienceType: Experience;
-  functionName: string;
+  function: {
+    id: number;
+    name: string;
+    abbreviation: string;
+  };
   id: number;
 }
 export interface Availability {
@@ -126,6 +130,7 @@ export interface Certification {
 }
 
 export interface Languages {
+  id: number;
   language: string;
   type: LanguageLevelType;
   level: LanguageProficiency;

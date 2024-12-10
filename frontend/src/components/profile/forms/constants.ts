@@ -209,7 +209,6 @@ export const memberValidationSchema = {
     homeLocation,
     travelPreference,
     driversLicense,
-    paylistId,
   }),
   employee: Yup.object().shape({
     supervisorFirstName,
@@ -597,8 +596,8 @@ export const fields = {
     name: 'paylistId',
     label: 'Paylist ID',
     autoComplete: 'off',
-    disabled: false,
-    required: true,
+    disabled: true,
+    required: false,
     type: 'text',
   },
 
