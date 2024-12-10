@@ -3,4 +3,5 @@ export enum BannerType {
   WARNING = 'WARNING',
   ERROR = 'ERROR',
   SUCCESS = 'SUCCESS',
+  RECOMMITMENT = 'RECOMMITMENT',
 }

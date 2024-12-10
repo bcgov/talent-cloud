@@ -10,9 +10,15 @@ import { Tabs as TabIndexes } from '@/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { memberData } from '@/hooks/profileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { Transition } from '@headlessui/react';
 
 const MemberProfile = () => {
   const { personnel, loading, updatePersonnel } = useMemberProfile();
+  const [showBanner, setShowBanner] = useState(true);
+
+  const handleCloseBanner = () => {
+    setShowBanner(false);
+  };
   const { roles } = useRoleContext();
   const [activeTab, setActiveTab] = useState('availability');
 
@@ -46,11 +52,23 @@ const MemberProfile = () => {
             <div className="mx-auto w-auto">
               {personnel && recommitmentCycle && (
                 <div className="py-24">
-                  <RecommitmentProfileBanner
-                    year={recommitmentCycle?.year}
-                    endDate={recommitmentCycle.endDate}
-                    showWarningBanner={isRecommitmentCycleOpen ?? false}
-                  />
+                  <Transition
+                    show={isRecommitmentCycleOpen && showBanner}
+                    appear={true}
+                    enter="ease-out duration-100"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <RecommitmentProfileBanner
+                      year={recommitmentCycle?.year}
+                      endDate={recommitmentCycle.endDate}
+                      personnel={personnel}
+                      handleCloseBanner={handleCloseBanner}
+                    />
+                  </Transition>
                 </div>
               )}
               <TabsBody placeholder={undefined}>
