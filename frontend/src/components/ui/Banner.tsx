@@ -4,7 +4,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/solid';
 import type { ReactElement } from 'react';
-import { CloseIcon } from './Icons';
+import { CloseIcon, ExclamationCircleIcon } from './Icons';
 
 export const CustomBanner = ({
   content,
@@ -30,18 +30,16 @@ export const CustomBanner = ({
   <div
     className={`flex flex-row py-4 px-6 rounded-md bg-${bgColor} items-start justify-start space-x-2 w-full py-6 shadow-lg`}
   >
-    <div className="display flex flex-row w-full justify-between items-start">
-      <div className="pt-3">{icon}</div>
-      <div className="flwx flex-col">
-        {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
-        <p className={`text-sm pt-2 text-${textColor} lg:pr-32`}>{content}</p>
-      </div>
-      {onClose && (
-        <button onClick={onClose}>
-          <CloseIcon color={`text-${textColor}`} />
-        </button>
-      )}
+    <div className="pt-3">{icon}</div>
+    <div className="flwx flex-col">
+      {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
+      <p className={`text-sm pt-2 text-${textColor} lg:pr-32`}>{content}</p>
     </div>
+    {onClose && (
+      <button onClick={onClose}>
+        <CloseIcon color={`text-${textColor}`} />
+      </button>
+    )}
 
     {link && (
       <a
@@ -112,6 +110,20 @@ export const Banner = ({
             link={link}
             buttonText={buttonText}
             icon={<ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />}
+          />
+        );
+      case BannerType.RECOMMITMENT:
+        return (
+          <CustomBanner
+            onClose={onClose}
+            content={content}
+            title={title}
+            onClick={onClick}
+            textColor={'warning'}
+            bgColor={'warningBannerLight'}
+            link={link}
+            buttonText={buttonText}
+            icon={<ExclamationCircleIcon className="text-info  " />}
           />
         );
       case BannerType.ERROR:
