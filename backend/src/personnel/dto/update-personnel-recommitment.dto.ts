@@ -4,7 +4,7 @@ import { Program } from "../../auth/interface";
 
 export class UpdatePersonnelRecommitmentDTO {
   @ApiProperty({ name: 'year', type: 'integer' })
-  year?: number;
+  year: number;
 
   @ApiProperty({
     name: 'program',
