@@ -1,10 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
-import { Program } from 'src/auth/interface';
+import { ApiProperty } from "@nestjs/swagger";
+import { RecommitmentStatus } from "../../common/enums/recommitment-status.enum";
+import { Program } from "../../auth/interface";
 
 export class UpdatePersonnelRecommitmentDTO {
   @ApiProperty({ name: 'year', type: 'integer' })
-  year: number;
+  year?: number;
 
   @ApiProperty({
     name: 'program',
