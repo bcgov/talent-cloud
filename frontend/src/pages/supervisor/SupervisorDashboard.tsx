@@ -28,7 +28,7 @@ const SupervisorDashboard = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="xl:px-64">
+    <div className="xl:px-32">
       {recommitmentCycle && (
         <SupervisorDashboardHeaderBanner
           recommitmentDate={datePST(new Date(recommitmentCycle.endDate)) ?? ''}

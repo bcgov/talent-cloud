@@ -22,9 +22,7 @@ export const SupervisorTable = ({
                   <div>{itm.label.split(' ')[1]}</div>
                 </>
               ) : (
-                <div className={'pl-2  self-start justify-start pb-6'}>
-                  {itm.label}
-                </div>
+                <div className={'  self-start justify-start pb-6'}>{itm.label}</div>
               )}
             </th>
           ))}
@@ -37,7 +35,7 @@ export const SupervisorTable = ({
               {row.bcws && row.emcr ? (
                 <td
                   scope="column"
-                  className={`pl-2 text-nowrap truncate max-w-[250px] text-gray-800 pb-[55px]`}
+                  className={` text-nowrap truncate max-w-[250px] text-gray-800 pb-[55px]`}
                   key="memberName"
                 >
                   {row.memberName}
@@ -45,7 +43,7 @@ export const SupervisorTable = ({
               ) : (
                 <td
                   scope="column"
-                  className={`pl-2 text-nowrap truncate max-w-[250px] text-gray-800 `}
+                  className={` text-nowrap truncate max-w-[250px] text-gray-800 `}
                   key="memberName"
                 >
                   {row.memberName}
@@ -56,11 +54,9 @@ export const SupervisorTable = ({
                 <td scope="column" key={itm.key}>
                   <table>
                     {row?.bcws && (
-                      <tr
-                        className={`py-4  pl-2 text-nowrap truncate max-w-[250px]`}
-                      >
+                      <tr className={`py-4   text-nowrap truncate max-w-[250px]`}>
                         <td
-                          className={`py-4 pl-2  text-nowrap truncate max-w-[250px] text-gray-800`}
+                          className={`py-4   text-nowrap truncate max-w-[250px] text-gray-800`}
                           key={itm.key}
                         >
                           {row.bcws?.[itm.key]}
@@ -70,7 +66,7 @@ export const SupervisorTable = ({
                     {row?.emcr && (
                       <tr>
                         <td
-                          className={`py-4 text-nowrap truncate max-w-[250px] text-gray-800 pl-2`}
+                          className={`py-4 text-nowrap truncate max-w-[250px] text-gray-800 `}
                           key={itm.key}
                         >
                           {row?.emcr?.[itm.key]}

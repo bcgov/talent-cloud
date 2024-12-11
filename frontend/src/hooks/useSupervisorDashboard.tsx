@@ -64,7 +64,10 @@ export const useSupervisorDashboard = () => {
                 <ApprovalCell
                   personnel={person}
                   program={Program.BCWS}
-                  handleShowBanner={() => setShowSuccessBanner(!showSuccessMessage)}
+                  handleShowBanner={() => {
+                    setShowSuccessBanner(!showSuccessMessage);
+                    handleCloseWarningBanner();
+                  }}
                   year={person.recommitment?.recommitmentCycle?.year}
                 />
               ),

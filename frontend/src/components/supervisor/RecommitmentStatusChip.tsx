@@ -29,7 +29,7 @@ export const RecommitmentStatusChip = ({
   return (
     <div
       className={
-        'px-6 py-1.5 rounded-full text-sm flex flex-row justify-center text-center ' +
+        'px-4 py-1.5 rounded-full text-sm flex flex-row justify-center text-center ' +
         getClassName(status)
       }
     >
