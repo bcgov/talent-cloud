@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
-import { Status } from '@/common';
+import { Program, Status } from '@/common';
 import { Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
@@ -11,10 +11,12 @@ import { RecommitmentProfileBanner } from '@/components/profile/banners/Recommit
 import { memberData } from '@/hooks/profileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { Transition } from '@headlessui/react';
+import { useProgramFieldData } from '@/hooks';
 
 const MemberProfile = () => {
   const { personnel, loading, updatePersonnel } = useMemberProfile();
   const [showBanner, setShowBanner] = useState(true);
+  const { bcwsRoles } = useProgramFieldData(Program.ALL);
 
   const handleCloseBanner = () => {
     setShowBanner(false);
@@ -75,10 +77,11 @@ const MemberProfile = () => {
                 <TabPanel value={TabIndexes.AVAILABILITY}>
                   {personnel && (
                     <MemberAvailabilityTab
-                      // bcwsRoles={bcwsRoles}
+                      bcwsRoles={bcwsRoles}
                       // functions={functions}
                       personnel={personnel}
                       profileData={profileData}
+                      updatePersonnel={updatePersonnel}
                     />
                   )}
                 </TabPanel>

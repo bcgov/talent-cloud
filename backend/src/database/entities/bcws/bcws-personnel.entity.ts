@@ -153,7 +153,9 @@ export class BcwsPersonnelEntity {
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,
       travelPreference: this.travelPreference,
-      roles: this.roles?.map((role) => role.toResponseObject()) ?? [],
+      roles: this.roles?.sort((a, b) =>
+        Object.values(Section).indexOf(b.role.section) - Object.values(Section).indexOf(a.role.section))
+        .map((role) => role.toResponseObject()) ?? [],
     };
 
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
