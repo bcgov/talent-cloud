@@ -67,6 +67,7 @@ export class PersonnelService {
         'tools',
         'tools.tool',
         'recommitment',
+        'recommitment.recommitmentCycle',
         'homeLocation',
         'bcws',
         'emcr',
@@ -120,11 +121,26 @@ export class PersonnelService {
     }
   }
   
-  async updatePersonnelRecommitmentStatus(id: string, recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>, req: RequestWithRoles): Promise<UpdateResult>  {
-    
-    const { year } = recommitmentUpdate; 
-      return recommitmentUpdate.bcws ? await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {bcws: recommitmentUpdate.bcws,  supervisorIdir: req.idir, supervisorReasonBcws: recommitmentUpdate.supervisorReasonBcws }) : await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {emcr: recommitmentUpdate.emcr,  supervisorIdir: req.idir, supervisorReasonEmcr: recommitmentUpdate.supervisorReasonEmcr });
-    
+  async updatePersonnelRecommitmentStatus(id: string, recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>, req: RequestWithRoles): Promise<UpdateResult|void>  {
+    const recommitment = await this.recommitmentRepository.findOneOrFail({where: {memberId: id, recommitmentCycleId: recommitmentUpdate.year}});
+      const { year } = recommitmentUpdate; 
+      
+      recommitment.supervisorIdir = req.idir;
+      if (recommitmentUpdate.program === Program.BCWS) {
+        recommitment.bcws = recommitmentUpdate.status;
+        if(recommitmentUpdate.reason){
+          recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
+        }
+      }
+      if (recommitmentUpdate.program === Program.EMCR) {
+        recommitment.emcr = recommitmentUpdate.status;
+        if(recommitmentUpdate.reason){
+          recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
+        }
+      }
+      
+    return await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {...recommitment});
+       
   }
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,

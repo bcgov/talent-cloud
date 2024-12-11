@@ -62,7 +62,7 @@ export class SupervisorController {
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
     @Body() personnel: Partial<UpdatePersonnelRecommitmentDTO>,
-  ): Promise<UpdateResult> {
+  ): Promise<UpdateResult|void> {
     return await this.personnelService.updatePersonnelRecommitmentStatus(id, personnel, req);
   }  
 }

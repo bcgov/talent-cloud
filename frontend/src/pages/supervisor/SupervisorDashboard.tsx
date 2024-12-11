@@ -1,4 +1,4 @@
-import { Loading, Table, TableFooterNav, TableFooterPageSelect } from '@/components';
+import { Loading, TableFooterNav, TableFooterPageSelect } from '@/components';
 import { Transition } from '@headlessui/react';
 import { useSupervisorDashboard } from '@/hooks/useSupervisorDashboard';
 import { SupervisorDashboardHeaderBanner } from './SupervisorDashboardHeader';
@@ -6,6 +6,7 @@ import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { datePST } from '@/utils';
+import { SupervisorTable } from './SupervisorTable';
 
 const SupervisorDashboard = () => {
   const {
@@ -35,40 +36,40 @@ const SupervisorDashboard = () => {
         />
       )}
 
-      <div className="py-12">
-        <Transition
-          show={showSuccessMessage}
-          appear={true}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-          // as={Banner}
-          onClick={handleCloseSuccessBanner}
-        >
+      <Transition
+        show={showSuccessMessage}
+        appear={true}
+        enter="ease-in-out duration-300"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="ease-in-out duration-300"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+        onClick={handleCloseSuccessBanner}
+      >
+        <div className="pt-12">
           <Banner
             onClose={handleCloseSuccessBanner}
-            title={'Supervisor Approval for Recommitment Successfully Submitted'}
+            title={'Supervisor Decision for Recommitment Successfully Submitted'}
             content={
-              'Thank you for approving [LAST, First]’s recommitment to [PROG]. Your employee and their coordinator will be notified. You’ll be informed if they are called for deployment to provide approval. For questions, contact us at [CORE email address].'
+              'Thank you for your submission. Your employee and their coordinator will be notified. If approved, You’ll be informed if they are called for deployment to provide approval.'
             }
             type={BannerType.SUCCESS}
           />
-        </Transition>
+        </div>
+      </Transition>
 
-        <Transition
-          show={showWarningBanner}
-          appear={true}
-          enter="ease-out duration-100"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-          onClick={handleCloseSuccessBanner}
-        >
+      <Transition
+        show={showWarningBanner}
+        appear={true}
+        enter="ease-in duration-300"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="ease-out duration-300"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+      >
+        <div className="pt-12">
           <Banner
             onClose={handleCloseWarningBanner}
             content={
@@ -77,19 +78,17 @@ const SupervisorDashboard = () => {
             title={'Approval Action Cannot be Undone'}
             type={BannerType.WARNING}
           />
-        </Transition>
-      </div>
-      <div className="w-full py-4">
+        </div>
+      </Transition>
+
+      <div className="w-full py-4 pt-16">
         <h6 className="font-bold text-left ">Pending Member List</h6>
       </div>
-      <Table
-        loading={loading}
-        rows={rows ?? []}
-        columns={columns ?? []}
-        auto={false}
-      />
+      <SupervisorTable rows={rows} columns={columns} />
+
       <div className="flex flex-row justify-between p-4 w-full">
         <TableFooterPageSelect
+          options={[5, 10, 15]}
           totalRows={totalRows}
           rowsPerPage={rowsPerPage}
           handleChangeNumRows={(e: React.ChangeEvent<any>) =>
