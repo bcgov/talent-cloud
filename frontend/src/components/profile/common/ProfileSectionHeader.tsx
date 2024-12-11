@@ -25,7 +25,7 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
     <div className="w-full">
       {/* Top row with header and call to action */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
         {callToAction && (
           <Button
             onClick={onCallToActionClick}

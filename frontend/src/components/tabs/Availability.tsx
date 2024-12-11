@@ -4,9 +4,9 @@ import {
   MemberItemList,
   MemberSkillsAndCertifications,
   DialogUI,
-  MemberProfileEditRoles,
+  MemberProfileEditPreferences,
 } from '@/components';
-import type { BcwsRoleInterface, Personnel } from '@/common';
+import type { BcwsRoleInterface, FunctionType, Personnel } from '@/common';
 import {
   Program,
   // type BcwsRoleInterface,
@@ -19,13 +19,13 @@ import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const MemberAvailabilityTab = ({
   bcwsRoles,
-  // functions,
+  functions,
   personnel,
   profileData,
   updatePersonnel,
 }: {
   bcwsRoles: BcwsRoleInterface[];
-  // functions: FunctionType[];
+  functions: FunctionType[];
   personnel: MemberProfile;
   profileData: any;
   updatePersonnel: (personnel: Personnel) => Promise<void>;
@@ -196,13 +196,28 @@ export const MemberAvailabilityTab = ({
         title={'Add Preference'}
         style={'lg:w-2/3 xl:w-1/2'}
       >
-        <MemberProfileEditRoles
-          allRoles={bcwsRoles}
-          originalRoles={personnel.bcws?.roles || []}
-          sectionChoices={{
-            firstChoiceSection: personnel.bcws?.firstChoiceSection,
-            secondChoiceSection: personnel.bcws?.secondChoiceSection,
-          }}
+        <MemberProfileEditPreferences
+          bcws={
+            personnel.bcws
+              ? {
+                  allRoles: bcwsRoles,
+                  originalRoles: personnel.bcws.roles || [],
+                  sectionChoices: {
+                    firstChoiceSection: personnel.bcws?.firstChoiceSection,
+                    secondChoiceSection: personnel.bcws?.secondChoiceSection,
+                  },
+                }
+              : undefined
+          }
+          emcr={
+            personnel.emcr
+              ? {
+                  allFunctions: functions,
+                  originalExperiences: personnel.emcr.experiences || [],
+                  sectionChoices: {},
+                }
+              : undefined
+          }
           handleClose={handleOpenEditSections}
           handleSave={updatePersonnel}
         />

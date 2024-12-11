@@ -30,6 +30,7 @@ import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitm
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
+import { EmcrExperienceEntity } from 'src/database/entities/emcr';
 
 @Injectable()
 export class PersonnelService {
@@ -48,6 +49,8 @@ export class PersonnelService {
     private certificationRepository: Repository<CertificationEntity>,
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
+    @InjectRepository(EmcrExperienceEntity)
+    private experiencesRepository: Repository<EmcrExperienceEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -70,8 +73,6 @@ export class PersonnelService {
         'recommitment.recommitmentCycle',
         'homeLocation',
         'bcws',
-        'bcws.roles',
-        'bcws.roles.role',
         'emcr',
         'languages',
       ],
@@ -211,6 +212,15 @@ export class PersonnelService {
       }));
     }
 
+    if (personnel.emcr?.experiences?.length) {
+      await this.experiencesRepository.delete({ personnelId: person.id });
+      personnel.emcr.experiences = personnel.emcr.experiences.map((e) => ({
+        functionId: e.id,
+        experienceType: e.experienceType,
+        id: e.id,
+      }));
+    }
+
     Object.keys(personnel).forEach((key) => {
       if (['bcws', 'emcr'].includes(key)) {
         return;
@@ -228,12 +238,9 @@ export class PersonnelService {
       });
     }
 
-    // delete person.bcws.personnelId;
-    // delete person.emcr.personnelId;
-
     await this.personnelRepository.save(person);
 
-    return (await this.findOne(person.id)).toResponseObject([Role.MEMBER]);
+    return this.getPersonnel(req);
   }
   /**
    * Format Languages for saving in the database

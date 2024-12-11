@@ -16,7 +16,7 @@ import { useProgramFieldData } from '@/hooks';
 const MemberProfile = () => {
   const { personnel, loading, updatePersonnel } = useMemberProfile();
   const [showBanner, setShowBanner] = useState(true);
-  const { bcwsRoles } = useProgramFieldData(Program.ALL);
+  const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
 
   const handleCloseBanner = () => {
     setShowBanner(false);
@@ -78,7 +78,7 @@ const MemberProfile = () => {
                   {personnel && (
                     <MemberAvailabilityTab
                       bcwsRoles={bcwsRoles}
-                      // functions={functions}
+                      functions={functions}
                       personnel={personnel}
                       profileData={profileData}
                       updatePersonnel={updatePersonnel}
