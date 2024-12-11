@@ -69,6 +69,8 @@ export class PersonnelService {
         'recommitment',
         'homeLocation',
         'bcws',
+        'bcws.roles',
+        'bcws.roles.role',
         'emcr',
         'languages',
       ],
@@ -188,6 +190,13 @@ export class PersonnelService {
       delete person.certifications;
     }
 
+    if (personnel.bcws?.roles?.length) {
+      personnel.bcws.roles = personnel.bcws.roles.map((r) => ({
+        roleId: r.roleId,
+        expLevel: r.expLevel,
+      }));
+    }
+
     Object.keys(personnel).forEach((key) => {
       if (['bcws', 'emcr'].includes(key)) {
         return;
@@ -205,9 +214,9 @@ export class PersonnelService {
       });
     }
 
-    delete person.bcws.personnelId;
-    delete person.emcr.personnelId;
-    
+    // delete person.bcws.personnelId;
+    // delete person.emcr.personnelId;
+
     await this.personnelRepository.save(person);
 
     return (await this.findOne(person.id)).toResponseObject([Role.MEMBER]);
