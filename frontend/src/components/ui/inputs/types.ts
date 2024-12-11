@@ -9,6 +9,8 @@ export type InputProps = {
   placeholder?: string;
   autocomplete?: string;
   error?: FormikErrors<any> | string;
+  className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 export type SelectProps = InputProps & {

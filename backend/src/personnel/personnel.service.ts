@@ -119,14 +119,12 @@ export class PersonnelService {
       console.log(e);
     }
   }
-  async updatePersonnelRecommitmentStatus(recommitmentUpdate: UpdatePersonnelRecommitmentDTO, req: RequestWithRoles): Promise<UpdateResult> {
-    const { recommitmentCycleId, memberId  } = recommitmentUpdate;
   
-    const recommitment = await this.recommitmentRepository.findOneOrFail({where:{memberId, recommitmentCycleId}});
-
-    if(recommitment){
-      return await this.recommitmentRepository.update({memberId, recommitmentCycleId: recommitment.recommitmentCycleId}, {  ...recommitmentUpdate, supervisorIdir: req.idir });
-    }
+  async updatePersonnelRecommitmentStatus(id: string, recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>, req: RequestWithRoles): Promise<UpdateResult>  {
+    
+    const { year } = recommitmentUpdate; 
+      return recommitmentUpdate.bcws ? await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {bcws: recommitmentUpdate.bcws,  supervisorIdir: req.idir, supervisorReasonBcws: recommitmentUpdate.supervisorReasonBcws }) : await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {emcr: recommitmentUpdate.emcr,  supervisorIdir: req.idir, supervisorReasonEmcr: recommitmentUpdate.supervisorReasonEmcr });
+    
   }
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,

@@ -8,6 +8,7 @@ import {
   Inject,
   Req,
   Patch,
+  Param,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreatePersonnelDTO } from './dto';
@@ -58,9 +59,10 @@ export class SupervisorController {
     type: GetPersonnelRO,
   })
   async updatePersonnel(
+    @Param('id') id: string,
     @Req() req: RequestWithRoles,
-    @Body() personnel: UpdatePersonnelRecommitmentDTO,
+    @Body() personnel: Partial<UpdatePersonnelRecommitmentDTO>,
   ): Promise<UpdateResult> {
-    return await this.personnelService.updatePersonnelRecommitmentStatus(personnel, req);
+    return await this.personnelService.updatePersonnelRecommitmentStatus(id, personnel, req);
   }  
 }
