@@ -44,7 +44,7 @@ export const useSupervisorDashboard = () => {
 
       const {
         data: { personnel, count },
-      } = await AxiosPrivate.get(`/supervisor/personnel`);
+      } = await AxiosPrivate.get(`/supervisor/personnel?${searchParamsUrl}`);
 
       setCount(count);
 
@@ -64,9 +64,8 @@ export const useSupervisorDashboard = () => {
                 <ApprovalCell
                   personnel={person}
                   program={Program.BCWS}
-                  handleShowBanner={() =>
-                    setShowSuccessBanner(!showSuccessMessage)
-                  }
+                  handleShowBanner={() => setShowSuccessBanner(!showSuccessMessage)}
+                  year={person.recommitment?.recommitmentCycle?.year}
                 />
               ),
             }
@@ -85,9 +84,8 @@ export const useSupervisorDashboard = () => {
                 <ApprovalCell
                   personnel={person}
                   program={Program.EMCR}
-                  handleShowBanner={() =>
-                    setShowSuccessBanner(!showSuccessMessage)
-                  }
+                  handleShowBanner={() => setShowSuccessBanner(!showSuccessMessage)}
+                  year={person.recommitment?.recommitmentCycle?.year}
                 />
               ),
             }
@@ -104,7 +102,7 @@ export const useSupervisorDashboard = () => {
 
   useEffect(() => {
     getData();
-  }, [showSuccessMessage]);
+  }, [searchParamsUrl, showSuccessMessage]);
 
   return {
     totalRows: count,

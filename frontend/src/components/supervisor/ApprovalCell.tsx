@@ -7,15 +7,16 @@ import { useAxios } from '../../hooks/useAxios';
 import { SupervisorReason } from '@/common/enums/supervisor-decision.enum';
 import { declineFormFields } from './constants';
 
-
 export const ApprovalCell = ({
   personnel,
   program,
   handleShowBanner,
+  year,
 }: {
   personnel: Personnel;
   program: Program;
-  handleShowBanner: (banner: boolean) => void;
+  handleShowBanner: () => void;
+  year: number;
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
     useState<SupervisorReason>();
@@ -61,16 +62,19 @@ export const ApprovalCell = ({
     reason?: SupervisorReason;
     comments?: string;
   }) => {
+    const reason =
+      values.reason === SupervisorReason.OTHER
+        ? `${values.reason}: ${values.comments}`
+        : values.reason;
     try {
       const res = await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
         status: values.status,
         program,
-        reason: values.reason,
-        comments: values.comments,
-        year: personnel.recommitment?.recommitmentCycle?.year,
+        reason,
+        year,
       });
       handleShowDeclineModal();
-      res && handleShowBanner
+      res && handleShowBanner();
     } catch (e) {
       console.log(e);
     }
@@ -78,12 +82,12 @@ export const ApprovalCell = ({
 
   const handleSubmitApproval = async () => {
     try {
-      const res = await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
+      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
         status,
         program,
-        year: personnel.recommitment?.recommitmentCycle?.year!,
+        year,
       });
-      res && handleShowBanner;
+      handleShowBanner();
     } catch (e) {
       console.log(e);
     }
@@ -119,7 +123,7 @@ export const ApprovalCell = ({
           </option>
         </select>
         <Button
-          disabled={disabled}
+          disabled={disabled || !status}
           variant={ButtonTypes.TERTIARY}
           text={'Submit'}
           onClick={
@@ -147,7 +151,7 @@ export const ApprovalCell = ({
               While it is expected that you have previously discussed the possibility
               of recommitment with your member,{' '}
               <span className="font-bold">
-                your reason from declining their recommitment will only be visible to
+                your reason for declining their recommitment will only be visible to
                 their coordinators once you click “Submit Reason”.
               </span>
             </p>
@@ -156,7 +160,6 @@ export const ApprovalCell = ({
             initialValues={{
               memberName: personnel.firstName + ' ' + personnel.lastName,
               memberID: personnel.employeeId,
-              year: personnel.recommitment?.recommitmentCycle?.year!,
               program: program,
               reason: supervisorDeclinedReason,
               comments: '',

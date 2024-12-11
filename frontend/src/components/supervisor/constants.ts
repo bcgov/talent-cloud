@@ -31,13 +31,12 @@ export const declineFormFields = {
     type: 'select',
     required: true,
     options: [
+      { label: 'Select...', value: '' },
       { label: SupervisorReason.CONFLICT, value: SupervisorReason.CONFLICT },
       { label: SupervisorReason.NEGATIVE, value: SupervisorReason.NEGATIVE },
       { label: SupervisorReason.PERFORMANCE, value: SupervisorReason.PERFORMANCE },
       { label: SupervisorReason.OTHER, value: SupervisorReason.OTHER },
     ],
-    value: '',
-    error: '',
     span: 'col-span-2',
   },
 };

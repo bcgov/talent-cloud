@@ -743,13 +743,15 @@ export class PersonnelService {
     return await qb.getOne();
   }
 
-  async getSupervisorPersonnel(req: RequestWithRoles): Promise<{personnel: PersonnelEntity[], count: number}> {
+  async getSupervisorPersonnel(req: RequestWithRoles, rows: number, page: number): Promise<{personnel: PersonnelEntity[], count: number}> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     qb.leftJoinAndSelect('personnel.emcr', 'emcr');
     qb.leftJoinAndSelect('personnel.bcws', 'bcws');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment'); 
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
     qb.where('personnel.supervisorEmail = :email', { email: req.idir });
+    qb.limit(rows);
+    qb.offset((page - 1) * rows);
     
     const personnel = await qb.getMany();
     const count = await qb.getCount();
