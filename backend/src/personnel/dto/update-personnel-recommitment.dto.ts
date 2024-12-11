@@ -1,47 +1,30 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { RecommitmentStatus } from "../../common/enums/recommitment-status.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { Program } from 'src/auth/interface';
 
-export class UpdatePersonnelRecommitmentDTO{
-  @ApiProperty({
-    description: 'personnel id',
-    required: true,
-  })
-  memberId: string;
-
-  @ApiProperty({
-    description: 'Supervisor idir',
-    required: true,
-  })
-  supervisorIdir: string;
-
+export class UpdatePersonnelRecommitmentDTO {
   @ApiProperty({ name: 'year', type: 'integer' })
-  recommitmentCycleId: number;
+  year: number;
 
   @ApiProperty({
-    name: 'emcr',
+    name: 'program',
+    type: 'enum',
+    enum: Program,
+    nullable: false,
+  })
+  program: Program;
+
+  @ApiProperty({
+    name: 'status',
     type: 'enum',
     enum: RecommitmentStatus,
     nullable: true,
   })
-  emcr?: RecommitmentStatus | null;
-
-  @ApiProperty({
-    name: 'bcws',
-    type: 'enum',
-    enum: RecommitmentStatus,
-    nullable: true,
-  })
-  bcws?: RecommitmentStatus | null;
+  status: RecommitmentStatus;
 
   @ApiProperty({
     description: 'supervisor reason for updating emcr',
-    required: false,  
+    required: false,
   })
-  supervisorReasonEmcr?: string | null;
-
-  @ApiProperty({
-    description: 'supervisor reason for updating bcws',
-    required: false,  
-  })
-  supervisorReasonBcws?: string | null;
+  reason?: string;
 }

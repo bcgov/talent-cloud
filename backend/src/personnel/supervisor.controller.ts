@@ -8,6 +8,8 @@ import {
   Inject,
   Req,
   Patch,
+  Param,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreatePersonnelDTO } from './dto';
@@ -43,8 +45,9 @@ export class SupervisorController {
   })
   async getSupervisorPersonnel(
     @Req() req: RequestWithRoles,
+    @Query() query: {rows: number, page: number},
   ): Promise<{personnel: Record<string, PersonnelRO>[], count: number}> {
-    const {personnel, count} = await this.personnelService.getSupervisorPersonnel(req);
+    const {personnel, count} = await this.personnelService.getSupervisorPersonnel(req, query.rows, query.page);
     return {personnel: personnel.map(itm => itm.toResponseObject(req.roles)), count};
   }
 
@@ -58,9 +61,10 @@ export class SupervisorController {
     type: GetPersonnelRO,
   })
   async updatePersonnel(
+    @Param('id') id: string,
     @Req() req: RequestWithRoles,
-    @Body() personnel: UpdatePersonnelRecommitmentDTO,
-  ): Promise<UpdateResult> {
-    return await this.personnelService.updatePersonnelRecommitmentStatus(personnel, req);
+    @Body() personnel: Partial<UpdatePersonnelRecommitmentDTO>,
+  ): Promise<UpdateResult|void> {
+    return await this.personnelService.updatePersonnelRecommitmentStatus(id, personnel, req);
   }  
 }

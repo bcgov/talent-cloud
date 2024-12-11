@@ -105,7 +105,9 @@ export class BcwsService {
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment')
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle')
+    
 
     await this.personnelService.addQueryBuilderCommonFilters(
       qb,

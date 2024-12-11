@@ -102,17 +102,17 @@ export class RecommitmentEntity {
     const response = new RecommitmentRO();
 
     const data = {
-      member: this?.member,
-      recommitmentCycleId: this?.recommitmentCycle?.toResponseObject(),
-      emcr: this?.emcr,
-      bcws: this?.bcws,
-      memberDecisionDate: this?.memberDecisionDate,
-      memberReasonEmcr: this?.memberReasonEmcr,
-      memberReasonBcws: this?.memberReasonBcws,
-      supervisorIdir: this?.supervisorIdir,
-      supervisorDecisionDate: this?.supervisorDecisionDate,
-      supervisorReasonEmcr: this?.supervisorReasonEmcr,
-      supervisorReasonBcws: this?.supervisorReasonBcws,
+      member: this.member,
+      recommitmentCycle: this.recommitmentCycle?.toResponseObject(),
+      emcr: this.emcr,
+      bcws: this.bcws,
+      memberDecisionDate: this.memberDecisionDate,
+      memberReasonEmcr: this.memberReasonEmcr,
+      memberReasonBcws: this.memberReasonBcws,
+      supervisorIdir: this.supervisorIdir,
+      supervisorDecisionDate: this.supervisorDecisionDate,
+      supervisorReasonEmcr: this.supervisorReasonEmcr,
+      supervisorReasonBcws: this.supervisorReasonBcws,
 
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
