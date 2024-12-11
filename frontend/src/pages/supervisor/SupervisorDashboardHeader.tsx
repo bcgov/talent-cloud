@@ -15,9 +15,13 @@ export const SupervisorDashboardHeaderBanner = ({
     <div className="bg-infoBannerLight px-12 flex flex-col items-start justify-start text-left space-y-4  pt-20 pb-12">
       <h3>{`Supervisor Approval for ${recommitmentYear} CORE Recommitment`}</h3>
       <p>
-        {`Please approve or decline your employees’ participation for the
-              upcoming season by ${recommitmentDate} down below. If you have any
-              concerns, please contact your member’s CORE coordinator.`}
+        {
+          "Please approve or decline your employees' participation for the upcoming season by "
+        }
+        <span className="font-bold">{recommitmentDate}</span>
+        {
+          " down below. If you have any concerns, please contact your member's CORE coordinator."
+        }
       </p>
       <button
         onClick={() => setShowFAQs((showFAQs) => !showFAQs)}
