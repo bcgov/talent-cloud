@@ -30,7 +30,6 @@ export const MemberProfileEditForm = ({
     helpers: FormikHelpers<Personnel>,
     ...props: any
   ) => {
-    console.log('????');
     // trim all the formatted characters out of the phone numbers
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
@@ -56,9 +55,33 @@ export const MemberProfileEditForm = ({
       );
     }
 
+    if (values.travelPreference) {
+      if (values.bcws) {
+        values.bcws = {
+          travelPreference: values.travelPreference,
+          ...values.bcws,
+        };
+      } else {
+        values.bcws = {
+          travelPreference: values.travelPreference,
+        };
+      }
+      if (values.emcr) {
+        values.emcr = {
+          travelPreference: values.travelPreference,
+          ...values.emcr,
+        };
+      } else {
+        values.emcr = {
+          travelPreference: values.travelPreference,
+        };
+      }
+    }
+
     delete values.dateApplied;
     delete values.dateApproved;
     delete values.employeeId; // Cannot be changed
+    delete values.paylistId; // Cannot be changed
 
     // only send the fields that have been changed
     Object.keys(personnel).forEach((key) => {

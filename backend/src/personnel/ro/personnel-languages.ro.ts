@@ -6,6 +6,12 @@ import {
 
 export class PersonnelLanguagesRO {
   @ApiProperty({
+    description: 'id',
+    example: 1,
+  })
+  id: number;
+
+  @ApiProperty({
     description: 'Language name',
     example: 'English',
   })

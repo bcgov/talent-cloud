@@ -49,6 +49,7 @@ export class LanguageEntity {
 
   toResponseObject(): PersonnelLanguagesRO {
     return {
+      id: this.id,
       language: this.language,
       level: this.level,
       type: this.type,

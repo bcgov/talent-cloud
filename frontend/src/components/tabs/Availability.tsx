@@ -1,7 +1,7 @@
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from '@material-tailwind/react';
 import {
   MemberScheduler,
-  MemberSectionsAndRoles,
+  MemberItemList,
   MemberSkillsAndCertifications,
 } from '@/components';
 import {
@@ -57,6 +57,7 @@ export const MemberAvailabilityTab = ({
       <ProfileSectionHeader
         title="My Schedule"
         callToAction="Show Upcoming Deployments"
+        callToActionType="text"
         onCallToActionClick={() => {}}
         description={<ScheduleDescription />}
       >
@@ -96,7 +97,7 @@ export const MemberAvailabilityTab = ({
           <TabsBody>
             {personnel.bcws && (
               <TabPanel value="bcws" className="px-0">
-                <MemberSectionsAndRoles
+                <MemberItemList
                   data={
                     personnel.bcws.roles?.map((r) => ({
                       id: r.id,
@@ -121,14 +122,14 @@ export const MemberAvailabilityTab = ({
                   ]}
                   preferences={{
                     first:
-                      personnel.firstChoiceSection &&
-                      SectionName[personnel.firstChoiceSection],
+                      personnel.bcws?.firstChoiceSection &&
+                      SectionName[personnel.bcws.firstChoiceSection],
                     second:
-                      personnel.secondChoiceSection &&
-                      SectionName[personnel.secondChoiceSection],
+                      personnel.bcws?.secondChoiceSection &&
+                      SectionName[personnel.bcws.secondChoiceSection],
                     third: undefined, // TODO
                   }}
-                  removeRow={(id: number) => {
+                  removeRow={(id: number | string) => {
                     console.log(id);
                   }}
                 />
@@ -136,11 +137,11 @@ export const MemberAvailabilityTab = ({
             )}
             {personnel.emcr && (
               <TabPanel value="emcr" className="px-0">
-                <MemberSectionsAndRoles
+                <MemberItemList
                   data={
                     personnel.emcr.experiences?.map((e) => ({
-                      id: e.id,
-                      section: e.functionName,
+                      id: e.function.id,
+                      section: e.function.name,
                       experience: 'none',
                     })) || []
                   }
@@ -155,7 +156,7 @@ export const MemberAvailabilityTab = ({
                     },
                   ]}
                   // preferences: TODO
-                  removeRow={(id: number) => {
+                  removeRow={(id: number | string) => {
                     console.log(id);
                   }}
                 />
@@ -164,7 +165,12 @@ export const MemberAvailabilityTab = ({
           </TabsBody>
         </Tabs>
       </ProfileSectionHeader>
-      <ProfileSectionHeader title="Other Skills">
+      <ProfileSectionHeader
+        title="Other Skills"
+        buttonText="Edit Skills"
+        description="&nbsp;"
+        onButtonClick={() => {}}
+      >
         <MemberSkillsAndCertifications
           personnel={personnel}
           profileData={profileData}

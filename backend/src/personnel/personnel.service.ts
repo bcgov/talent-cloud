@@ -69,14 +69,10 @@ export class PersonnelService {
         'recommitment',
         'homeLocation',
         'bcws',
-        'emcr'
+        'emcr',
+        'languages',
       ],
     });
-
-    const languages = await this.languageRepository.find({
-      where: { personnel: { id } },
-    });
-    person.languages = languages;
 
     return person;
   }
@@ -141,7 +137,22 @@ export class PersonnelService {
       where: { email: req.idir },
     });
 
-    if (personnel.languages) {
+    const person = await this.findOne(id);
+    const bcws = person.bcws;
+    const emcr = person.emcr;
+
+    if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
+      const allTools = await this.toolsRepository.find();
+      const personnelTools = personnel.tools.map((t) => ({
+        toolId: allTools.find((at) => at.id === t.toolId).id,
+        proficiencyLevel: t.proficiencyLevel,
+      }));
+      personnel.tools = personnelTools;
+    } else {
+      delete person.tools;
+    }
+    
+    if (personnel.languages?.length) {
       const currentLanguages = await this.languageRepository.find({
         where: { personnel: { id } },
       });
@@ -162,6 +173,8 @@ export class PersonnelService {
         }));
       await this.languageRepository.save(newLanguages);
       delete personnel.languages;
+    } else {
+      delete person.languages;
     }
 
     if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
@@ -171,11 +184,9 @@ export class PersonnelService {
         expiry: c.expiry,
       }));
       personnel.certifications = personnelCerts;
+    } else {
+      delete person.certifications;
     }
-
-    const person = await this.findOne(id);
-    const bcws = person.bcws;
-    const emcr = person.emcr;
 
     Object.keys(personnel).forEach((key) => {
       if (['bcws', 'emcr'].includes(key)) {
@@ -193,10 +204,13 @@ export class PersonnelService {
         emcr[key] = personnel.emcr[key];
       });
     }
+
+    delete person.bcws.personnelId;
+    delete person.emcr.personnelId;
     
     await this.personnelRepository.save(person);
 
-    return person.toResponseObject([Role.MEMBER]);
+    return (await this.findOne(person.id)).toResponseObject([Role.MEMBER]);
   }
   /**
    * Format Languages for saving in the database
