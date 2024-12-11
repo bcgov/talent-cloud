@@ -144,7 +144,7 @@ export interface RecommitmentCycle {
 
 export interface Recommitment {
   memberId: string;
-  recommitmentCycleId: RecommitmentCycle;
+  recommitmentCycle: RecommitmentCycle;
   emcr?: RecommitmentStatus | null;
   bcws?: RecommitmentStatus | null;
   memberDecisionDate?: Date | null;

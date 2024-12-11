@@ -142,6 +142,7 @@ export class EmcrService {
     qb.leftJoinAndSelect('experiences.function', 'function');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
 
     await this.personnelService.addQueryBuilderCommonFilters(
       qb,
@@ -214,7 +215,7 @@ export class EmcrService {
     role: Role[],
     id: string,
   ): Promise<Record<string, EmcrRO>> {
-    const person = await this.personnelService.findOne(id);
+    const person = await this.personnelService.findOne(id)
     const emcr = await this.emcrPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
       relations: [
@@ -224,7 +225,9 @@ export class EmcrService {
         'personnel',
         'personnel.languages',
         'personnel.tools',
-        'personnel.certifications'
+        'personnel.certifications',
+        'personnel.recommitment',
+        'personnel.recommitment.recommitmentCycle',
       ],
     });
 

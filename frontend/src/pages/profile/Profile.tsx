@@ -15,6 +15,7 @@ import { Status, Role, Program } from '@/common';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { useRoleContext } from '@/providers';
+import { RecommitmentDetails } from '@/components/profile/details/RecommitmentDetails';
 
 const Profile = () => {
   const { loading, roles, personnel, updatePersonnel, profileData } = usePersonnel();
@@ -55,7 +56,7 @@ const Profile = () => {
               updatePersonnel={updatePersonnel}
             />
           )}
-
+          {personnel && <RecommitmentDetails/>}
           {personnel && <ProfileDetails />}
           {personnel && program === Program.EMCR && (
             <ProfileFunctions

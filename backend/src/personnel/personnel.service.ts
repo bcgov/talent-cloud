@@ -67,6 +67,7 @@ export class PersonnelService {
         'tools',
         'tools.tool',
         'recommitment',
+        'recommitment.recommitmentCycle',
         'homeLocation',
         'bcws',
         'emcr',
@@ -119,14 +120,27 @@ export class PersonnelService {
       console.log(e);
     }
   }
-  async updatePersonnelRecommitmentStatus(recommitmentUpdate: UpdatePersonnelRecommitmentDTO, req: RequestWithRoles): Promise<UpdateResult> {
-    const { recommitmentCycleId, memberId  } = recommitmentUpdate;
   
-    const recommitment = await this.recommitmentRepository.findOneOrFail({where:{memberId, recommitmentCycleId}});
-
-    if(recommitment){
-      return await this.recommitmentRepository.update({memberId, recommitmentCycleId: recommitment.recommitmentCycleId}, {  ...recommitmentUpdate, supervisorIdir: req.idir });
-    }
+  async updatePersonnelRecommitmentStatus(id: string, recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>, req: RequestWithRoles): Promise<UpdateResult|void>  {
+    const recommitment = await this.recommitmentRepository.findOneOrFail({where: {memberId: id, recommitmentCycleId: recommitmentUpdate.year}});
+      const { year } = recommitmentUpdate; 
+      
+      recommitment.supervisorIdir = req.idir;
+      if (recommitmentUpdate.program === Program.BCWS) {
+        recommitment.bcws = recommitmentUpdate.status;
+        if(recommitmentUpdate.reason){
+          recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
+        }
+      }
+      if (recommitmentUpdate.program === Program.EMCR) {
+        recommitment.emcr = recommitmentUpdate.status;
+        if(recommitmentUpdate.reason){
+          recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
+        }
+      }
+      
+    return await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {...recommitment});
+       
   }
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,

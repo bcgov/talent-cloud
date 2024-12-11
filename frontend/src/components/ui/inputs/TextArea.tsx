@@ -9,19 +9,26 @@ export const TextArea = ({
   error,
   disabled,
   placeholder,
+  className,
   ...props
 }: InputProps) => {
   const [field] = useField(props as any as FieldInputProps<string>);
 
   return (
-    <label htmlFor={field.name} className="w-full px-16 py-8">
+    <label htmlFor={field.name} className="w-full  py-8">
       {label}
       {required && <span className="text-error">*</span>}
       <textarea
         {...field}
         placeholder={placeholder ?? ''}
         disabled={disabled}
-        className={error ? classes.menu.textAreaError : classes.menu.textArea}
+        className={
+          className
+            ? className
+            : error
+              ? classes.menu.textAreaError
+              : classes.menu.textArea
+        }
       />
       <ErrorMessage name={field.name}>
         {(msg) => <div className="font-normal text-errorRed">{msg}</div>}

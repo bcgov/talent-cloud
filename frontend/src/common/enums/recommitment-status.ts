@@ -29,3 +29,35 @@ export enum RecommitmentStatus {
   // member will be set as INACTIVE in the particular program
   SUPERVISOR_NO_RESPONSE = 'SUPERVISOR_NO_RESPONSE',
 }
+
+export enum RecommitmentStatusLabel {
+  // set to pending on first day of recommitment period only if currently active in the particular program
+  // prompts communication with member to recommit
+  PENDING = 'Pending',
+
+  // temporary status set after member has committed to recommit
+  // initiate communication for supervisor approval
+  MEMBER_COMMITTED = 'Requested',
+
+  // 1 of 4 final status for member for a program
+  // at end of recommitment period member will be set as INACTIVE in the particular program
+  MEMBER_DENIED = 'Declined By Member',
+
+  // 1 of 4 final status for member for a program
+  // automatically set if no member response by end_date of recommitment period
+  // member will be set as INACTIVE in the particular program
+  MEMBER_NO_RESPONSE = 'No Member Response',
+
+  // 1 of 4 final status for member for a program
+  // at end of recommitment member will remain ACTIVE in the particular program
+  SUPERVISOR_APPROVED = 'Recommitted',
+
+  // 1 of 4 final status for member for a program
+  // at end of recommitment period member will be set as INACTIVE in the particular program
+  SUPERVISOR_DENIED = 'Declined',
+
+  // 1 of 4 final status for member for a program
+  // automatically set if no supervisor response by end_date of recommitment period
+  // member will be set as INACTIVE in the particular program
+  SUPERVISOR_NO_RESPONSE = 'No Supervisor Response',
+}

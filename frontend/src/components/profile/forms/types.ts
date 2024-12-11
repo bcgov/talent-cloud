@@ -11,6 +11,7 @@ export type FieldType = {
   handleChange?: boolean;
   options?: { label: string; value: string }[];
   onChange?: (e: React.ChangeEvent<any>) => void;
+  value?: any;
 };
 
 export type SectionProps = {
