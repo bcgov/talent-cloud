@@ -3,10 +3,10 @@ import { Transition } from '@headlessui/react';
 import { useSupervisorDashboard } from '@/hooks/useSupervisorDashboard';
 import { SupervisorDashboardHeaderBanner } from './SupervisorDashboardHeader';
 import { BannerType } from '@/common/enums/banner-enum';
-import { Banner } from '@/components/ui/Banner';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { datePST } from '@/utils';
 import { SupervisorTable } from './SupervisorTable';
+import { Banner } from '@/components/ui/Banner';
 
 const SupervisorDashboard = () => {
   const {
