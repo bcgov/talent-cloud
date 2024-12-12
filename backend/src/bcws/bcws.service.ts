@@ -216,7 +216,7 @@ export class BcwsService {
    * @returns {RolesDataRO} List of roles
    */
   async getRoles(): Promise<BcwsSectionsRO> {
-    const roles = await this.roleRepository.find();
+    const roles = await this.roleRepository.find({ order: { section: 'ASC' }});
 
     const sectionsAndRoles = roles.reduce((acc, role) => {
       const key = role.section;

@@ -3,7 +3,10 @@ import {
   MemberScheduler,
   MemberItemList,
   MemberSkillsAndCertifications,
+  DialogUI,
+  MemberProfileEditPreferences,
 } from '@/components';
+import type { BcwsRoleInterface, FunctionType, Personnel } from '@/common';
 import {
   Program,
   // type BcwsRoleInterface,
@@ -15,18 +18,25 @@ import { ProfileSectionHeader } from '../profile/common';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 
 export const MemberAvailabilityTab = ({
-  // bcwsRoles,
-  // functions,
+  bcwsRoles,
+  functions,
   personnel,
   profileData,
+  updatePersonnel,
 }: {
-  // bcwsRoles: BcwsRoleInterface[];
-  // functions: FunctionType[];
+  bcwsRoles: BcwsRoleInterface[];
+  functions: FunctionType[];
   personnel: MemberProfile;
   profileData: any;
+  updatePersonnel: (personnel: Personnel) => Promise<void>;
 }) => {
   const defaultTab = personnel.bcws ? Program.BCWS : Program.EMCR;
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
+  const [openEditSections, setOpenEditSections] = useState(false);
+
+  const handleOpenEditSections = () => {
+    setOpenEditSections(!openEditSections);
+  };
 
   const ScheduleDescription = () => (
     <div>
@@ -67,7 +77,7 @@ export const MemberAvailabilityTab = ({
         title="Section Preferences" // make this depend on bcws / emcr
         description={<ProfileDescription />}
         buttonText="+ Add Preference"
-        onButtonClick={() => {}}
+        onButtonClick={handleOpenEditSections}
       >
         <Tabs value={activeSectionRolesTab}>
           {personnel.bcws && personnel.emcr && (
@@ -178,6 +188,40 @@ export const MemberAvailabilityTab = ({
           updatePersonnel={() => {}}
         />
       </ProfileSectionHeader>
+
+      <DialogUI
+        open={openEditSections}
+        onClose={handleOpenEditSections}
+        handleOpen={handleOpenEditSections}
+        title={'Add Preference'}
+        style={'lg:w-2/3 xl:w-1/2'}
+      >
+        <MemberProfileEditPreferences
+          bcws={
+            personnel.bcws
+              ? {
+                  allRoles: bcwsRoles,
+                  originalRoles: personnel.bcws.roles || [],
+                  sectionChoices: {
+                    firstChoiceSection: personnel.bcws?.firstChoiceSection,
+                    secondChoiceSection: personnel.bcws?.secondChoiceSection,
+                  },
+                }
+              : undefined
+          }
+          emcr={
+            personnel.emcr
+              ? {
+                  allFunctions: functions,
+                  originalExperiences: personnel.emcr.experiences || [],
+                  sectionChoices: {},
+                }
+              : undefined
+          }
+          handleClose={handleOpenEditSections}
+          handleSave={updatePersonnel}
+        />
+      </DialogUI>
     </>
   );
 };

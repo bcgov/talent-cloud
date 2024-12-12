@@ -11,6 +11,7 @@ import { RecommitmentCycleEntity } from '../database/entities/recommitment/recom
 import { LoggerModule } from '../logger/logger.module';
 import { SupervisorController } from './supervisor.controller';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RecommitmentEntity } from '../database/entities/recommitment/recommitme
       LanguageEntity,
       CertificationEntity,
       ToolsEntity,
+      EmcrExperienceEntity, // TODO: Tech debt, bug in saving experiences through personnel, cannot remove existing
     ]),
   ],
   controllers: [PersonnelController, SupervisorController],

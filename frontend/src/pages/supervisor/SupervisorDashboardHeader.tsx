@@ -37,14 +37,14 @@ export const SupervisorDashboardHeaderBanner = ({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <>
+        <div>
           {FAQ.map((itm: any) => (
             <>
               <div className="pt-6 pb-3">{itm.title}</div>
               <div>{itm.content}</div>
             </>
           ))}
-        </>
+        </div>
       </Transition>
     </div>
   );
