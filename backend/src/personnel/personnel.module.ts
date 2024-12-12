@@ -11,7 +11,7 @@ import { RecommitmentCycleEntity } from '../database/entities/recommitment/recom
 import { LoggerModule } from '../logger/logger.module';
 import { SupervisorController } from './supervisor.controller';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
-import { EmcrExperienceEntity } from 'src/database/entities/emcr';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
 
 @Module({
   imports: [

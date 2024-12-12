@@ -8,7 +8,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
 import { RequestWithRoles, RolesRequest } from './interface';
 import { AppLogger } from '../logger/logger.service';
 

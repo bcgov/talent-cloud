@@ -30,7 +30,7 @@ import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitm
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
-import { EmcrExperienceEntity } from 'src/database/entities/emcr';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
 
 @Injectable()
 export class PersonnelService {
