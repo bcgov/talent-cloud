@@ -2,7 +2,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Layout } from '@/components';
 import { createCustomLoginUrl } from '@/utils/keycloak';
-import { RoleProvider } from '@/providers';
 
 const PrivateRoute = () => {
   const { keycloak } = useKeycloak();
@@ -19,11 +18,9 @@ const PrivateRoute = () => {
   }
 
   return (
-    <RoleProvider>
-      <Layout>
-        <Outlet />
-      </Layout>
-    </RoleProvider>
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 };
 export default PrivateRoute;
