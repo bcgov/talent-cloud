@@ -6,16 +6,19 @@ import { useState } from 'react';
 import { useAxios } from '../../hooks/useAxios';
 import { SupervisorReason } from '@/common/enums/supervisor-decision.enum';
 import { declineFormFields } from './constants';
+import { CheckIcon } from '../ui/Icons';
 
 export const ApprovalCell = ({
   personnel,
   program,
-  handleShowBanner,
+  handleShowSuccessBanner,
+  handleShowWarningBanner,
   year,
 }: {
   personnel: Personnel;
   program: Program;
-  handleShowBanner: () => void;
+  handleShowSuccessBanner: (banner?: boolean) => void;
+  handleShowWarningBanner: (banner?: boolean) => void;
   year: number;
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
@@ -62,32 +65,38 @@ export const ApprovalCell = ({
     reason?: SupervisorReason;
     comments?: string;
   }) => {
+    handleShowSuccessBanner(false);
+    handleShowWarningBanner(true);
     const reason =
       values.reason === SupervisorReason.OTHER
         ? `${values.reason}: ${values.comments}`
         : values.reason;
     try {
-      const res = await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
+      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
         status: values.status,
         program,
         reason,
         year,
       });
       handleShowDeclineModal();
-      res && handleShowBanner();
+      handleShowSuccessBanner(true);
+      handleShowWarningBanner(false);
     } catch (e) {
       console.log(e);
     }
   };
 
   const handleSubmitApproval = async () => {
+    handleShowSuccessBanner(false);
+    handleShowWarningBanner(true);
     try {
       await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
         status,
         program,
         year,
       });
-      handleShowBanner();
+      handleShowSuccessBanner(true);
+      handleShowWarningBanner(false);
     } catch (e) {
       console.log(e);
     }
@@ -95,15 +104,35 @@ export const ApprovalCell = ({
 
   const disabled =
     (program === Program.BCWS &&
-      personnel.recommitment?.bcws !== RecommitmentStatus.MEMBER_COMMITTED) ||
+      personnel.recommitment?.bcws !== RecommitmentStatus.MEMBER_COMMITTED &&
+      personnel.recommitment?.bcws !== RecommitmentStatus.SUPERVISOR_DENIED) ||
     (program === Program.EMCR &&
-      personnel.recommitment?.emcr !== RecommitmentStatus.MEMBER_COMMITTED);
+      personnel.recommitment?.emcr !== RecommitmentStatus.MEMBER_COMMITTED &&
+      personnel.recommitment?.emcr !== RecommitmentStatus.SUPERVISOR_DENIED);
 
+  const revertDecision = async () => {
+    try {
+      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
+        status: RecommitmentStatus.MEMBER_COMMITTED,
+        program,
+        year,
+      });
+      handleShowSuccessBanner(false);
+      handleShowWarningBanner(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <div className="flex flex-row gap-x-4 pr-12">
         <select
-          disabled={disabled}
+          disabled={
+            disabled ||
+            personnel.recommitment?.[
+              program as keyof typeof personnel.recommitment
+            ] === RecommitmentStatus.SUPERVISOR_DENIED
+          }
           className={[
             'rounded-sm  outline-none w-40 text-sm ',
             disabled
@@ -122,16 +151,32 @@ export const ApprovalCell = ({
             Decline
           </option>
         </select>
-        <Button
-          disabled={disabled || !status}
-          variant={ButtonTypes.TERTIARY}
-          text={'Submit'}
-          onClick={
-            status === RecommitmentStatus.SUPERVISOR_DENIED
-              ? handleShowDeclineModal
-              : handleSubmitApproval
-          }
-        />
+        {personnel?.recommitment?.[
+          program as keyof typeof personnel.recommitment
+        ] === RecommitmentStatus.SUPERVISOR_APPROVED ? (
+          <div className="flex flex-row text-success items-center space-x-2">
+            <CheckIcon /> <span className="text-sm">Submitted!</span>
+          </div>
+        ) : personnel?.recommitment?.[
+            program as keyof typeof personnel.recommitment
+          ] === RecommitmentStatus.SUPERVISOR_DENIED ? (
+          <Button
+            variant={ButtonTypes.TERTIARY}
+            text={'Unlock'}
+            onClick={revertDecision}
+          />
+        ) : (
+          <Button
+            disabled={disabled || !status}
+            variant={ButtonTypes.TERTIARY}
+            text={'Submit'}
+            onClick={
+              status === RecommitmentStatus.SUPERVISOR_DENIED
+                ? handleShowDeclineModal
+                : handleSubmitApproval
+            }
+          />
+        )}
       </div>
       <DialogUI
         open={showDeclineModal}
@@ -164,6 +209,7 @@ export const ApprovalCell = ({
               reason: supervisorDeclinedReason,
               comments: '',
               status: status,
+              year: new Date().getFullYear(),
             }}
             onSubmit={handleSubmitDenial}
             validationSchema={undefined}

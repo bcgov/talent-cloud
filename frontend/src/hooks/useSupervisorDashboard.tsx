@@ -16,12 +16,12 @@ export const useSupervisorDashboard = () => {
 
   const [showWarningBanner, setShowWarningBanner] = useState(true);
 
-  const handleCloseSuccessBanner = () => {
-    setShowSuccessBanner(false);
+  const handleShowSuccessBanner = (banner?: boolean) => {
+    setShowSuccessBanner(banner ?? !showSuccessMessage);
   };
 
-  const handleCloseWarningBanner = () => {
-    setShowWarningBanner(false);
+  const handleShowWarningBanner = (banner?: boolean) => {
+    setShowWarningBanner(banner ?? !showWarningBanner);
   };
 
   const [searchParamsUrl, setSearchUrlParams] = useSearchParams({
@@ -64,7 +64,8 @@ export const useSupervisorDashboard = () => {
                 <ApprovalCell
                   personnel={person}
                   program={Program.BCWS}
-                  handleShowBanner={() => setShowSuccessBanner(!showSuccessMessage)}
+                  handleShowSuccessBanner={handleShowSuccessBanner}
+                  handleShowWarningBanner={handleShowWarningBanner}
                   year={person.recommitment?.recommitmentCycle?.year}
                 />
               ),
@@ -84,7 +85,8 @@ export const useSupervisorDashboard = () => {
                 <ApprovalCell
                   personnel={person}
                   program={Program.EMCR}
-                  handleShowBanner={() => setShowSuccessBanner(!showSuccessMessage)}
+                  handleShowSuccessBanner={handleShowSuccessBanner}
+                  handleShowWarningBanner={handleShowWarningBanner}
                   year={person.recommitment?.recommitmentCycle?.year}
                 />
               ),
@@ -122,7 +124,7 @@ export const useSupervisorDashboard = () => {
     handleChangePage,
     showSuccessMessage,
     showWarningBanner,
-    handleCloseSuccessBanner,
-    handleCloseWarningBanner,
+    handleShowSuccessBanner,
+    handleShowWarningBanner,
   };
 };
