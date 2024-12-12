@@ -38,7 +38,7 @@ export const SingleSelect = ({
                 />
                 <Menu.Button aria-label="Single Select Menu Button" id={field.name}>
                   <ChevronDownIcon
-                    className="-mr-1 h-5 w-5 text-icon"
+                    className="-mr-1 h-5 w-5 text-dark-600"
                     aria-hidden="true"
                     aria-label="close"
                   />
@@ -53,13 +53,13 @@ export const SingleSelect = ({
                 <p className={classes.menu.placeholder}>{placeholder}</p>
                 {open ? (
                   <ChevronUpIcon
-                    className="-mr-1 h-5 w-5 text-icon"
+                    className="-mr-1 h-5 w-5 text-dark-600"
                     aria-hidden="true"
                     aria-label="open"
                   />
                 ) : (
                   <ChevronDownIcon
-                    className="-mr-1 h-5 w-5 text-icon"
+                    className="-mr-1 h-5 w-5 text-dark-600"
                     aria-hidden="true"
                     aria-label="close"
                   />
@@ -83,7 +83,7 @@ export const SingleSelect = ({
                       <button
                         aria-label="Single Select Menu Button"
                         onClick={() => onChange(field.name, itm.value)}
-                        className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
+                        className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-dark-300 w-full text-left"
                       >
                         {itm.label}
                       </button>

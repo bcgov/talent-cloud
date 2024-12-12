@@ -30,11 +30,11 @@ export const MemberAvailabilityTab = ({
 
   const ScheduleDescription = () => (
     <div>
-      <p className="text-defaultGray text-sm">
+      <p className="text-dark-600 text-sm">
         Select the calendar dates below to update your availability or view more
         details.
       </p>
-      <p className="text-defaultGray text-sm">
+      <p className="text-dark-600 text-sm">
         Deployment dates can only be declined and cannot be edited.
       </p>
     </div>
@@ -42,11 +42,11 @@ export const MemberAvailabilityTab = ({
 
   const ProfileDescription = () => (
     <div>
-      <p className="text-defaultGray text-sm">
+      <p className="text-dark-600 text-sm">
         The following shows the list of sections that you prefer to be deployed in,
         as indicated in your CORE application.
       </p>
-      <p className="text-defaultGray text-sm">
+      <p className="text-dark-600 text-sm">
         You can add or remove a section from this table.
       </p>
     </div>
@@ -75,7 +75,7 @@ export const MemberAvailabilityTab = ({
               className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
               indicatorProps={{
                 className:
-                  'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+                  'bg-transparent border-b-2 border-blue-700 shadow-none rounded-none',
               }}
             >
               <Tab

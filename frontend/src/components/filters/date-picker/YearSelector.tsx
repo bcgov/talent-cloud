@@ -13,7 +13,7 @@ export const YearSelector = (props: SelectorProps) => (
         aria-label="open"
       >
         <span className="text-md pr-1">{getYear(props.displayMonth)}</span>
-        <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-icon" />
+        <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-dark-600" />
       </Menu.Button>
     </div>
 
@@ -37,7 +37,7 @@ export const YearSelector = (props: SelectorProps) => (
                     new Date(itm.value, props.displayMonth.getMonth(), 1),
                   )
                 }
-                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
+                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-dark-300 font-bold text-left"
               >
                 {props.displayMonth.getFullYear() === itm.value ? (
                   <span className="font-bold">{itm.label}</span>

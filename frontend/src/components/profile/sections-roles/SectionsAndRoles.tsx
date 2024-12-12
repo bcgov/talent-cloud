@@ -59,7 +59,7 @@ export const SectionsAndRoles = ({
   const EmptyChoiceSection = ({ section }: { section: Section }) => (
     <div className="border-b-2 border-gray-100">
       <div className="flex flex-row py-2 items-center justify-between">
-        <div className="basis-1/3 text-darkGray px-8">
+        <div className="basis-1/3 text-dark-710 px-8">
           <p className="flex flex-row gap-2">
             {SectionName[section]}
             <Chip
@@ -67,7 +67,7 @@ export const SectionsAndRoles = ({
               className={
                 section === firstChoiceSection
                   ? 'rounded-full capitalize'
-                  : 'rounded-full capitalize bg-infoBannerLight text-ministry'
+                  : 'rounded-full capitalize bg-blue-200 text-blue-800'
               }
             />
           </p>
@@ -85,18 +85,16 @@ export const SectionsAndRoles = ({
       >
         <div>
           <div>
-            <h5 className="pl-8 py-6 font-bold text-stormy-700">
-              Sections & Roles
-            </h5>
+            <h5 className="pl-8 py-6 font-bold text-stormy-700">Sections & Roles</h5>
             <div className="flex flex-row border-b-2 border-slate-800 py-2 px-8">
               <div className="basis-1/3">
-                <span className="text-darkGray font-bold">Section</span>
+                <span className="text-dark-710 font-bold">Section</span>
               </div>
               <div className="basis-1/3">
-                <span className="text-darkGray font-bold">Roles</span>
+                <span className="text-dark-710 font-bold">Roles</span>
               </div>
               <div className="basis-1/3">
-                <span className="text-darkGray font-bold">Experience Level</span>
+                <span className="text-dark-710 font-bold">Experience Level</span>
               </div>
             </div>
             <div>
@@ -118,7 +116,7 @@ export const SectionsAndRoles = ({
                         key={itm.role}
                         className="flex flex-row py-2 items-center justify-between"
                       >
-                        <div className="basis-1/3 text-darkGray px-8">
+                        <div className="basis-1/3 text-dark-710 px-8">
                           {i === 0 && (
                             <p className="flex flex-row gap-2">
                               {SectionName[section as keyof typeof Section]}
@@ -131,13 +129,13 @@ export const SectionsAndRoles = ({
                               {section === secondChoiceSection && (
                                 <Chip
                                   value="2nd Choice"
-                                  className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                                  className="rounded-full bg-blue-200 text-blue-800 capitalize"
                                 />
                               )}
                             </p>
                           )}
                         </div>{' '}
-                        <div className="basis-1/3 text-darkGray px-4">
+                        <div className="basis-1/3 text-dark-710 px-4">
                           <p>{BcwsRoleName[itm.role]}</p>
                         </div>{' '}
                         <div className="basis-1/3">

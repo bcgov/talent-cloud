@@ -30,7 +30,7 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
                   {' '}
                   {label}{' '}
                   <span
-                    className={`mx-4 px-1.5 border border-gray-400 rounded-md py-1 ${selected ? 'bg-primaryBlue text-white' : 'text-defaultGray '}`}
+                    className={`mx-4 px-1.5 border border-gray-400 rounded-md py-1 ${selected ? 'bg-blue-800 text-white' : 'text-dark-600 '}`}
                   >
                     {count}
                   </span>

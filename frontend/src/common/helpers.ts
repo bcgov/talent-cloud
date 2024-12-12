@@ -24,20 +24,20 @@ export const chipClass = (
       case ToolsProficiencyName.ADVANCED:
       case LanguageProficiencyName.FLUENT:
         return {
-          bgColor: 'lightPurple',
+          bgColor: 'purple-200',
           textColor: 'darkPurple',
           borderColor: 'darkPurple',
         };
       case ToolsProficiencyName.INTERMEDIATE:
       case LanguageProficiencyName.BASIC:
         return {
-          bgColor: 'successBannerLight',
+          bgColor: 'sprout-200',
           textColor: 'successDark',
           borderColor: 'successDark',
         };
       default:
         return {
-          bgColor: 'infoBannerLight',
+          bgColor: 'blue-200',
           textColor: 'infoDark',
           borderColor: 'infoDark',
         };

@@ -20,7 +20,7 @@ export const Tooltip = ({
         <MuiTooltip
           content={content}
           placement={placement}
-          className="bg-infoBannerLight text-info"
+          className="bg-blue-200 text-blue-800"
           disabled={disabled}
         >
           {children}

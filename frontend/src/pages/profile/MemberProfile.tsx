@@ -37,7 +37,7 @@ const MemberProfile = () => {
       className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
       <div
-        className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
+        className={`${personnel?.status === Status.PENDING ? 'bg-dark-300' : 'bg-grayBackground'} pt-32`}
       >
         <Tabs value={activeTab} onChange={handleTabChange}>
           {personnel && (

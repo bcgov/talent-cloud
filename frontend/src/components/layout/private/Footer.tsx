@@ -3,7 +3,7 @@ import { footerLinks } from '@/common/links';
 
 export const Footer = () => {
   return (
-    <footer className="max-w-full bg-backgroundBlue mt-auto">
+    <footer className="max-w-full bg-ink-900 mt-auto">
       <ul className="text-white   space-x-4 flex flex-row no-wrap justify-start items-center text-sm py-2 md:px-8 overflow-x-hidden">
         {footerLinks.map(({ href, label }: LinkProps, i: number) => (
           <li key={i.toString() + label}>

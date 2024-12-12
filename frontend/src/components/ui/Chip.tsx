@@ -17,7 +17,7 @@ export const Chip = ({
       <Typography
         placeholder={undefined}
         variant="small"
-        className="font-bold text-info capitalize leading-none"
+        className="font-bold text-blue-800 capitalize leading-none"
       >
         {label}
       </Typography>

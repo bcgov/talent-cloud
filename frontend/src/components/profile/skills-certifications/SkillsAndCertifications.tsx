@@ -73,10 +73,10 @@ export const SkillsAndCertifications = ({
               <h5 className="pl-8 py-6  font-bold text-stormy-700">{itm.title}</h5>
               <div className="flex flex-row border-b-2 border-slate-800 py-2 px-8">
                 <div className="basis-1/2">
-                  <span className="text-darkGray font-bold">{itm.header}</span>
+                  <span className="text-dark-710 font-bold">{itm.header}</span>
                 </div>
                 <div className="basis-1/2">
-                  <span className="text-darkGray font-bold">{itm.subheader}</span>
+                  <span className="text-dark-710 font-bold">{itm.subheader}</span>
                 </div>
               </div>
               {itm.itms?.map(
@@ -95,7 +95,7 @@ export const SkillsAndCertifications = ({
                     key={label}
                     className="flex flex-row border-b-2 border-gray-100 py-2 items-center justify-between"
                   >
-                    <div className="text-darkGray px-8 basis-1/2">
+                    <div className="text-dark-710 px-8 basis-1/2">
                       <p>{label}</p>
                     </div>{' '}
                     <div className="basis-1/2">

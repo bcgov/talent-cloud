@@ -41,7 +41,7 @@ export const TableBodyCell = ({
             {cell.value}
           </Link>
           {status && status === Status.NEW && (
-            <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+            <span className="bg-yellow-200 px-2 rounded-full ml-2">
               {StatusNames.NEW}
             </span>
           )}
@@ -53,7 +53,7 @@ export const TableBodyCell = ({
           <span className={getAvailabilityClass(cell.value?.availability)}>
             {cell?.value?.availability}
           </span>
-          <span className="ml-2 text-defaultGray">{cell.value?.days}</span>
+          <span className="ml-2 text-dark-600">{cell.value?.days}</span>
         </>
       );
     case DashboardColumns.TRAVEL_PREFERENCE:

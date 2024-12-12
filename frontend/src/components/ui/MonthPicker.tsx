@@ -17,7 +17,7 @@ const MonthPicker = ({
   return (
     <div className="z-50">
       <div className="flex flex-row pl-8">
-        <div className="grow text-black font-bold pt-2">{year}</div>
+        <div className="grow text-dark-800 font-bold pt-2">{year}</div>
         <div>
           <Button
             size="sm"
@@ -25,7 +25,7 @@ const MonthPicker = ({
             variant="text"
             onClick={() => setYear(year - 1)}
           >
-            <ChevronLeftIcon className="h-4 w-4 text-icon" />
+            <ChevronLeftIcon className="h-4 w-4 text-dark-600" />
           </Button>
         </div>
         <div>
@@ -35,7 +35,7 @@ const MonthPicker = ({
             variant="text"
             onClick={() => setYear(year + 1)}
           >
-            <ChevronRightIcon className="h-4 w-4 text-icon" />
+            <ChevronRightIcon className="h-4 w-4 text-dark-600" />
           </Button>
         </div>
       </div>

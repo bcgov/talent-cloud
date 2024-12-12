@@ -9,9 +9,9 @@ export const ProfileBreadcrumbs = ({ personnel }: { personnel: Personnel }) => {
   return (
     <Breadcrumbs
       placeholder={'Breadcrumbs'}
-      className={`md:px-12 xl:px-24 2xl:px-64 max-w-full ${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'}`}
+      className={`md:px-12 xl:px-24 2xl:px-64 max-w-full ${personnel?.status === Status.PENDING ? 'bg-dark-300' : 'bg-dark-300'}`}
     >
-      <Link to={Routes.Dashboard} className="text-linkBlue">
+      <Link to={Routes.Dashboard} className="text-blue-800">
         <div className="flex flex-row items-center">
           <ChevronLeftIcon className="h-4 w-4 fill-[#003366]" />
           <span className="pl-2 underline decoration-solid">
@@ -20,7 +20,7 @@ export const ProfileBreadcrumbs = ({ personnel }: { personnel: Personnel }) => {
         </div>
       </Link>
       {personnel && (
-        <span className="font-bold text-black">
+        <span className="font-bold text-dark-800">
           {personnel.firstName} {personnel.lastName}
         </span>
       )}

@@ -61,10 +61,10 @@ export const ProfileFunctionEdit = ({
       <div className="pb-24 px-10">
         <div className="flex flex-row border-b-2">
           <div className="basis-1/2">
-            <span className="text-info font-bold">Function</span>
+            <span className="text-blue-800 font-bold">Function</span>
           </div>
           <div className="basis-1/2">
-            <span className="text-info font-bold">Experience</span>
+            <span className="text-blue-800 font-bold">Experience</span>
           </div>
         </div>
         {allFunctions.map((f) => (

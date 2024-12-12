@@ -50,7 +50,7 @@ export const TableFooterNav = ({
         onClick={() => handleChangePage(1)}
         className={
           currentPage === 1
-            ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
+            ? 'relative z-10 inline-flex items-center bg-blue-800 px-4 py-2 text-sm font-semibold text-white'
             : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
         }
       >
@@ -67,7 +67,7 @@ export const TableFooterNav = ({
             onClick={() => handleChangePage(itm)}
             className={
               currentPage === itm
-                ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
+                ? 'relative z-10 inline-flex items-center bg-blue-800 px-4 py-2 text-sm font-semibold text-white'
                 : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
             }
           >
@@ -84,7 +84,7 @@ export const TableFooterNav = ({
           onClick={() => handleChangePage(lastPage)}
           className={
             currentPage === lastPage
-              ? 'relative z-10 inline-flex items-center bg-primaryBlue px-4 py-2 text-sm font-semibold text-white'
+              ? 'relative z-10 inline-flex items-center bg-blue-800 px-4 py-2 text-sm font-semibold text-white'
               : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 '
           }
         >

@@ -25,7 +25,7 @@ export const Toggle = ({
             id={label}
             aria-label="toggle switch"
             className={`${
-              checked ? 'bg-backgroundBlue' : 'bg-gray-200'
+              checked ? 'bg-ink-900' : 'bg-dark-300'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span className="sr-only">{'showInactive'}</span>

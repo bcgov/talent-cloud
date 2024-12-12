@@ -31,7 +31,7 @@ const Profile = () => {
       className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
       <div
-        className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
+        className={`${personnel?.status === Status.PENDING ? 'bg-dark-300' : 'bg-dark-300'} pt-32`}
       >
         {personnel && <ProfileBreadcrumbs personnel={personnel} />}
 
@@ -56,7 +56,7 @@ const Profile = () => {
               updatePersonnel={updatePersonnel}
             />
           )}
-          {personnel && <RecommitmentDetails/>}
+          {personnel && <RecommitmentDetails />}
           {personnel && <ProfileDetails />}
           {personnel && program === Program.EMCR && (
             <ProfileFunctions

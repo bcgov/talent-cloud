@@ -34,28 +34,28 @@ export const ProfileFunctions = ({
       case Experience.CHIEF_EXPERIENCED:
         return (
           <Chip
-            className="text-darkPurple bg-lightPurple border-darkPurple border-2 rounded-md font-bold capitalize py-0"
+            className="text-darkPurple bg-purple-200 border-darkPurple border-2 rounded-md font-bold capitalize py-0"
             value="Chief Experienced"
           />
         );
       case Experience.EXPERIENCED:
         return (
           <Chip
-            className="text-info bg-infoBannerLight border-infoDark border-2 rounded-md font-bold capitalize py-0"
+            className="text-blue-800 bg-blue-200 border-blue-800 border-2 rounded-md font-bold capitalize py-0"
             value="Experienced"
           />
         );
       case Experience.OUTSIDE_EXPERIENCED:
         return (
           <Chip
-            className="text-darkYellow bg-lightYellow border-darkYellow border-2 rounded-md font-bold capitalize py-0"
+            className="text-darkYellow bg-yellow-200 border-darkYellow border-2 rounded-md font-bold capitalize py-0"
             value="Outside Experienced"
           />
         );
       case Experience.INTERESTED:
         return (
           <Chip
-            className="text-successDark bg-successBannerLight border-successDark rounded-md border-2 font-bold capitalize py-0"
+            className="text-leaf-700Dark bg-sprout-200 border-forest-900 rounded-md border-2 font-bold capitalize py-0"
             value="Interested"
           />
         );
@@ -113,10 +113,10 @@ export const ProfileFunctions = ({
               <div className="">
                 <div className="flex flex-row border-b-2 border-slate-800 py-2">
                   <div className="basis-1/2">
-                    <span className="text-info font-bold">Function</span>
+                    <span className="text-blue-800 font-bold">Function</span>
                   </div>
                   <div className="basis-1/2">
-                    <span className="text-info font-bold">Experience Level</span>
+                    <span className="text-blue-800 font-bold">Experience Level</span>
                   </div>
                 </div>
                 {functions.map((f) => (

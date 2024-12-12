@@ -17,7 +17,7 @@ export const MonthSelector = (props: SelectorProps) => (
               ?.label ?? ''}
           </span>
           <ChevronDownIcon
-            className="font-bold h-5 w-5 stroke-4 text-icon"
+            className="font-bold h-5 w-5 stroke-4 text-dark-600"
             aria-label="open"
           />
         </Menu.Button>
@@ -43,7 +43,7 @@ export const MonthSelector = (props: SelectorProps) => (
                     new Date(props.displayMonth.getFullYear(), itm.value, 1),
                   )
                 }
-                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
+                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-dark-300 font-bold text-left"
               >
                 {props.displayMonth.getMonth() === itm.value ? (
                   <span className="font-bold">{itm.label}</span>

@@ -60,7 +60,7 @@ export const NewApplicantBanner = ({
       <div className="px-6 pb-12 bg-white pt-4">
         <Banner
           content={
-            <p className="flex flex-col text-sm text-warningDark">
+            <p className="flex flex-col text-sm text-yellow-900Dark">
               <span className="font-bold">Pending Applicant Information Alert</span>
               <span className="pt-2">
                 {reviewComplete ? (

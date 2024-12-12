@@ -17,7 +17,7 @@ export const TextArea = ({
   return (
     <label htmlFor={field.name} className="w-full  py-8">
       {label}
-      {required && <span className="text-error">*</span>}
+      {required && <span className="text-red-600">*</span>}
       <textarea
         {...field}
         placeholder={placeholder ?? ''}

@@ -41,7 +41,7 @@ export const RecommitmentBanner = ({
           </div>
           {statusText === 'Not Started' && (
             <div className="pt-4 text-sm">
-              <span className="font-bold text-sm text-infoDark pr-2">
+              <span className="font-bold text-sm text-blue-800Dark pr-2">
                 Estimated Duration:
               </span>
               <span>10 minutes</span>
@@ -60,7 +60,7 @@ export const RecommitmentBanner = ({
               </div>
             )}
             {onClose && (
-              <button className="underline text-info text-md" onClick={onClose}>
+              <button className="underline text-blue-800 text-md" onClick={onClose}>
                 Close
               </button>
             )}

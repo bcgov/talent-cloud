@@ -57,7 +57,9 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
             <MultiSelect
               field={program === Program.BCWS ? filters.fireCentre : filters.region}
               values={
-                program === Program.BCWS ? filterValues.fireCentre : filterValues.region
+                program === Program.BCWS
+                  ? filterValues.fireCentre
+                  : filterValues.region
               }
               label={program === Program.BCWS ? 'Fire Centre' : 'Region'}
               handleChange={handleChange}
@@ -88,7 +90,9 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
               groupValues={
                 filterValues[program === Program.BCWS ? 'fireCentre' : 'region']
               }
-              groupField={program === Program.BCWS ? filters.fireCentre : filters.region}
+              groupField={
+                program === Program.BCWS ? filters.fireCentre : filters.region
+              }
             />
             <Checkbox
               crossOrigin=""
@@ -96,7 +100,7 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
               checked={includeTravel && !!filterValues.location?.length}
               name="includeTravel"
               disabled={!filterValues.location?.length}
-              iconProps={{ color: 'primaryBlue' }}
+              iconProps={{ color: 'blue-700' }}
               onChange={(e) => {
                 setIncludeTravel(e.target.checked);
                 handleChangeOne(e.target.name, e.target.checked ? 'true' : 'false');
@@ -122,7 +126,9 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
             clearSearchParams(name);
             clearSearchParams(nestedName);
           }}
-          value={program === Program.BCWS ? filterValues.section : filterValues.function}
+          value={
+            program === Program.BCWS ? filterValues.section : filterValues.function
+          }
           program={program}
         />
         {program === Program.BCWS && (
@@ -136,7 +142,7 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
               }
               name="experience"
               disabled={!filterValues.role || !filterValues.section}
-              iconProps={{ color: 'primaryBlue' }}
+              iconProps={{ color: 'blue-700' }}
               onChange={(e) => {
                 if (e.target.checked) {
                   setExperienceCheckbox('PREVIOUSLY_DEPLOYED');
@@ -153,7 +159,7 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
               checked={experienceCheckbox === 'INTERESTED' && !!filterValues.section}
               name="experience"
               disabled={!filterValues.role || !filterValues.section}
-              iconProps={{ color: 'primaryBlue' }}
+              iconProps={{ color: 'blue-700' }}
               onChange={(e) => {
                 if (e.target.checked) {
                   setExperienceCheckbox('INTERESTED');

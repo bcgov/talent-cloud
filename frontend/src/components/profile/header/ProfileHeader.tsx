@@ -44,7 +44,7 @@ export const ProfileHeader = ({
   return (
     <>
       <div className="px-8 float-left hidden lg:inline-block">
-        <div className="w-32 h-32 grid rounded-full bg-primaryBlue justify-center content-center">
+        <div className="w-32 h-32 grid rounded-full bg-blue-800 justify-center content-center">
           <h1 className="text-white font-bold text-5xl">
             {personnel.firstName?.charAt(0)}
             {personnel.lastName?.charAt(0)}
@@ -73,14 +73,14 @@ export const ProfileHeader = ({
 
           <div className="flex flex-col space-y-6  lg:space-y-0 lg:flex-row lg:space-x-12">
             <div className="flex flex-row">
-              <ClockIcon className="h-7 w-7 text-defaultGray" />
+              <ClockIcon className="h-7 w-7 text-dark-600" />
               <div className="px-2">
                 <p className="subtext">Last Deployed</p>
                 <p>{getLastDeployed()}</p>
               </div>
             </div>
             <div className="flex flex-row">
-              <MapPinIcon className="text-defaultGray h-7 w-7" />
+              <MapPinIcon className="text-dark-600 h-7 w-7" />
               <div className="pl-2">
                 <p className="subtext">Work Location</p>
                 <p>
@@ -93,7 +93,7 @@ export const ProfileHeader = ({
             </div>
 
             <div className="flex flex-row">
-              <HomeIcon className="h-7 w-7 text-defaultGray" />
+              <HomeIcon className="h-7 w-7 text-dark-600" />
               <div className="pl-2">
                 <p className="subtext">Home Location</p>
                 <p>

@@ -14,7 +14,7 @@ export const SupervisorTable = ({
             <th
               scope="column"
               key={itm.key}
-              className={` bg-infoBannerLight flex-col justify-start  items-start text-wrap  text-info text-left h-[64px] `}
+              className={` bg-blue-200 flex-col justify-start  items-start text-wrap  text-blue-800 text-left h-[64px] `}
             >
               {['program', 'status', 'year'].includes(itm.key) ? (
                 <>

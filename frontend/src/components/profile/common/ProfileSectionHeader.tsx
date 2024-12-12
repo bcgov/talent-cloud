@@ -31,8 +31,8 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
             onClick={onCallToActionClick}
             className={
               callToActionType === 'text'
-                ? 'text-sm text-linkBlue underline hover:text-gray-700 transition-colors cursor-pointer normal-case'
-                : 'bg-primaryBlue normal-case text-md rounded-none py-1'
+                ? 'text-sm text-blue-800 underline hover:text-gray-700 transition-colors cursor-pointer normal-case'
+                : 'bg-blue-800 normal-case text-md rounded-none py-1'
             }
             variant={callToActionType === 'text' ? 'text' : 'filled'}
           >
@@ -48,7 +48,7 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
           {buttonText && (
             <Button
               variant="filled"
-              className="bg-primaryBlue normal-case text-md rounded-none py-1"
+              className="bg-blue-800 normal-case text-md rounded-none py-1"
               onClick={onButtonClick}
             >
               {buttonText}

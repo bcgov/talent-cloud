@@ -35,7 +35,7 @@ export const NestedMenu = ({
             </span>
             <ChevronRightIcon
               strokeWidth={2.5}
-              className={`h-3.5 w-3.5 transition-transform text-icon ${
+              className={`h-3.5 w-3.5 transition-transform text-dark-600 ${
                 openMenu ? 'rotate-90' : ''
               }`}
             />

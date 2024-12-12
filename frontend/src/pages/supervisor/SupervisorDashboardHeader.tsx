@@ -12,7 +12,7 @@ export const SupervisorDashboardHeaderBanner = ({
 }) => {
   const [showFAQs, setShowFAQs] = useState(false);
   return (
-    <div className="bg-infoBannerLight px-12 flex flex-col items-start justify-start text-left space-y-4  pt-20 pb-12">
+    <div className="bg-blue-200 px-12 flex flex-col items-start justify-start text-left space-y-4  pt-20 pb-12">
       <h3>{`Supervisor Approval for ${recommitmentYear} CORE Recommitment`}</h3>
       <p>
         {

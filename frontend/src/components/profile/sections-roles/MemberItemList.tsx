@@ -34,7 +34,7 @@ export const MemberItemList = ({
     <div className="flex flex-row p-2 bg-grayBackground">
       {columnNames.map((columnName) => (
         <div className={`basis-1/${columnNames.length}`} key={columnName}>
-          <span className="text-darkGray font-bold">{columnName}</span>
+          <span className="text-dark-710 font-bold">{columnName}</span>
         </div>
       ))}
     </div>
@@ -43,7 +43,7 @@ export const MemberItemList = ({
   const EmptyChoiceSection = ({ section }: { section: string }) => (
     <div className="border-t-2 border-gray-100">
       <div className="flex flex-row py-2 items-center justify-between">
-        <div className="basis-1/3 text-darkGray px-2">
+        <div className="basis-1/3 text-dark-710 px-2">
           <p className="flex flex-row gap-2">
             {section}
             <Chip
@@ -51,7 +51,7 @@ export const MemberItemList = ({
               className={
                 section === firstChoiceSection
                   ? 'rounded-full capitalize'
-                  : 'rounded-full capitalize bg-infoBannerLight text-ministry'
+                  : 'rounded-full capitalize bg-blue-200 text-blue-800'
               }
             />
           </p>
@@ -85,7 +85,7 @@ export const MemberItemList = ({
                 {columns.map((c) => (
                   <div
                     key={c.key}
-                    className={`basis-1/${columns.length} text-darkGray`}
+                    className={`basis-1/${columns.length} text-dark-710`}
                   >
                     {c.key === 'section' && (
                       <p className="flex flex-row gap-2">
@@ -101,7 +101,7 @@ export const MemberItemList = ({
                           row.section === secondChoiceSection && (
                             <Chip
                               value="2nd Choice"
-                              className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                              className="rounded-full bg-blue-200 text-blue-800 capitalize"
                             />
                           )}
                       </p>
@@ -112,7 +112,7 @@ export const MemberItemList = ({
                     {/* {c.key === 'experience' && <></>} TODO */}
                     {c.key === 'remove' && !!removeRow && (
                       <button
-                        className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-stormy-700 rounded-none text-sm"
+                        className="flex items-center gap-2 px-3 py-1 border border-blue-700 text-stormy-700 rounded-none text-sm"
                         onClick={() => removeRow(row.id)}
                       >
                         <TrashIcon className="h-4 w-4" />

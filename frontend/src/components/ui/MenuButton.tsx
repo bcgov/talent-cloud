@@ -10,11 +10,11 @@ export const MenuButton = () => {
     <div className={classes.menu.buttonContainer}>
       {open ? (
         <button className={classes.menu.button} aria-label="close">
-          <ChevronUpIcon className="h-8 w-5 text-icon" />
+          <ChevronUpIcon className="h-8 w-5 text-dark-600" />
         </button>
       ) : (
         <button className={classes.menu.button} aria-label="open">
-          <ChevronDownIcon className="h-8 w-5 text-icon" />
+          <ChevronDownIcon className="h-8 w-5 text-dark-600" />
         </button>
       )}
     </div>

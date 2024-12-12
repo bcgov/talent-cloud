@@ -23,7 +23,7 @@ export const Table = ({
             <th
               key={index}
               scope="col"
-              className={`px-2 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue`}
+              className={`px-2 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-blue-700`}
             >
               {col}
             </th>

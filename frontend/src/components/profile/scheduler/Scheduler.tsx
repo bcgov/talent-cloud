@@ -208,7 +208,7 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
             <AccordionHeader
               placeholder={'Schedule'}
               onClick={() => handleOpen(1)}
-              className="bg-grayBackground px-8"
+              className="bg-dark-300 px-8"
             >
               {`${personnel.firstName}'s Schedule`}
             </AccordionHeader>
@@ -240,7 +240,7 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
       >
         <DialogHeader
           placeholder={''}
-          className="flex flex-row align-middle bg-grayBackground"
+          className="flex flex-row align-middle bg-dark-300"
         >
           <h4 className="grow font-bold">
             {editCell?.availabilityType ? 'Edit Availability' : 'Add Availability'}

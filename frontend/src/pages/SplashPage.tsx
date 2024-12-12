@@ -71,7 +71,7 @@ const SplashPage = () => {
               />
             )}
             <div className="pt-16 lg:pt-24">
-              <span className="text-info lg:mt-32">{content.subtitle}</span>
+              <span className="text-blue-800 lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
             </div>
             <div>
@@ -80,7 +80,7 @@ const SplashPage = () => {
           </div>
           {/* Small Screen Login in Section */}
           <div className="flex py-24 lg:hidden">
-            <div className="bg-[#013366]  rounded-md border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 ">
+            <div className="bg-[#013366]  rounded-md border-l-4 h-[300px] border-yellow-300  pt-6 px-6 space-y-6 ">
               <h3 className="text-white">Login</h3>
               <p className="text-white">{content.login.description}</p>
               <Button
@@ -96,7 +96,7 @@ const SplashPage = () => {
           <SplashImage />
 
           <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-60 rounded-md h-[300px] mr-24"></div>
-          <div className="absolute inset-0 top-1/3  border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
+          <div className="absolute inset-0 top-1/3  border-l-4 h-[300px] border-yellow-300  pt-6 px-6 space-y-6 mr-24">
             <h3 className="text-white">Login</h3>
             <p className="text-white">{content.login.description}</p>
             <Button

@@ -18,7 +18,7 @@ export const ProfileMemberHeader = ({
   return (
     <>
       <div className="px-8 float-left hidden lg:inline-block">
-        <div className="w-32 h-32 grid rounded-full bg-primaryBlue justify-center content-center">
+        <div className="w-32 h-32 grid rounded-full bg-blue-800 justify-center content-center">
           <h1 className="text-white font-bold text-5xl">
             {personnel.firstName?.charAt(0)}
             {personnel.lastName?.charAt(0)}
@@ -41,7 +41,7 @@ export const ProfileMemberHeader = ({
             className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap gap-6"
             indicatorProps={{
               className:
-                'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+                'bg-transparent border-b-2 border-blue-700 shadow-none rounded-none',
             }}
             placeholder={undefined}
           >

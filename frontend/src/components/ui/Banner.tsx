@@ -90,11 +90,11 @@ export const Banner = ({
             title={title}
             onClick={onClick}
             textColor={'info'}
-            bgColor={'infoBannerLight'}
+            bgColor={'blue-200'}
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />
+              <InformationCircleIcon className="text-blue-800  h-6 hidden sm:inline sm:mr-2" />
             }
           />
         );
@@ -106,10 +106,10 @@ export const Banner = ({
             title={title}
             onClick={onClick}
             textColor={'warning'}
-            bgColor={'warningBannerLight'}
+            bgColor={'yellow-200'}
             link={link}
             buttonText={buttonText}
-            icon={<ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />}
+            icon={<ExclamationTriangleIcon className="text-yellow-900  h-6 mx-2 " />}
           />
         );
       case BannerType.RECOMMITMENT:
@@ -120,10 +120,10 @@ export const Banner = ({
             title={title}
             onClick={onClick}
             textColor={'warning'}
-            bgColor={'warningBannerLight'}
+            bgColor={'yellow-200'}
             link={link}
             buttonText={buttonText}
-            icon={<ExclamationCircleIcon className="text-info  " />}
+            icon={<ExclamationCircleIcon className="text-blue-800  " />}
           />
         );
       case BannerType.ERROR:
@@ -134,11 +134,11 @@ export const Banner = ({
             title={title}
             onClick={onClick}
             textColor={'error'}
-            bgColor={'errorBannerLight'}
+            bgColor={'red-200'}
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-error  h-6 hidden sm:inline-block sm:mr-2" />
+              <InformationCircleIcon className="text-red-600  h-6 hidden sm:inline-block sm:mr-2" />
             }
           />
         );
@@ -150,11 +150,11 @@ export const Banner = ({
             title={title}
             onClick={onClick}
             textColor={'success'}
-            bgColor={'successBannerLight'}
+            bgColor={'sprout-200'}
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-success  h-6 hidden sm:inline-block sm:mr-2" />
+              <InformationCircleIcon className="text-leaf-700  h-6 hidden sm:inline-block sm:mr-2" />
             }
           />
         );

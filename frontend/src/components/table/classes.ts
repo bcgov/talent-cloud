@@ -10,11 +10,11 @@ export const tableClass = {
 export const getUnionMembershipClass = (value?: string) => {
   switch (value) {
     case UnionMembership.BCGEU:
-      return `${tableClass.classificationClass} text-info bg-infoBannerLight border-infoDark`;
+      return `${tableClass.classificationClass} text-blue-800 bg-blue-200 border-blue-800`;
     case UnionMembership.EXCLUDED:
-      return `${tableClass.classificationClass} text-error bg-errorBannerLight border-error`;
+      return `${tableClass.classificationClass} text-red-600 bg-red-200 border-error`;
     case UnionMembership.PEA:
-      return `${tableClass.classificationClass} text-successDark bg-successBannerLight border-successDark`;
+      return `${tableClass.classificationClass} text-leaf-700Dark bg-sprout-200 border-forest-900`;
     default:
       return;
   }
@@ -23,19 +23,19 @@ export const getUnionMembershipClass = (value?: string) => {
 export const getAvailabilityClass = (value: AvailabilityTypeName) => {
   switch (value) {
     case AvailabilityTypeName.AVAILABLE:
-      return 'text-success';
+      return 'text-leaf-700';
     case AvailabilityTypeName.UNAVAILABLE:
-      return 'text-error';
+      return 'text-red-600';
     case AvailabilityTypeName.DEPLOYED:
-      return 'text-info';
+      return 'text-blue-800';
     default:
-      return 'text-warning';
+      return 'text-yellow-900';
   }
 };
 export const iconClass = (value: boolean) => {
-  return value ? 'h-4 w-4 text-success mr-1' : 'h-4 w-4 text-error mr-1';
+  return value ? 'h-4 w-4 text-leaf-700 mr-1' : 'h-4 w-4 text-red-600 mr-1';
 };
 
 export const pendingIconClass = (value: boolean) => {
-  return value ? 'h-4 w-4 text-success mr-1' : 'h-4 w-4 text-warning mr-1';
+  return value ? 'h-4 w-4 text-leaf-700 mr-1' : 'h-4 w-4 text-yellow-900 mr-1';
 };

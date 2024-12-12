@@ -8,7 +8,7 @@ export const Select = ({ ...props }: FieldInputProps<string> & FieldType) => {
   return (
     <label htmlFor={props.name}>
       {props.label}
-      {props.required && <span className="text-error">*</span>}
+      {props.required && <span className="text-red-600">*</span>}
       <select
         {...props}
         name={props.name}

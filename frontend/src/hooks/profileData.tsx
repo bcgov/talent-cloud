@@ -149,11 +149,11 @@ export const bcwsData = (personnel?: Personnel) => {
               title: 'Willingness Statement',
               content:
                 personnel?.willingnessStatement === true ? (
-                  <span className="flex flex-row items-center space-x-2 text-success">
+                  <span className="flex flex-row items-center space-x-2 text-leaf-700">
                     <CheckCircleIcon className="w-6 h-6" /> <span>Received</span>
                   </span>
                 ) : (
-                  <span className="flex flex-row items-center space-x-2 text-error">
+                  <span className="flex flex-row items-center space-x-2 text-red-600">
                     <ExclamationTriangleIcon className="w-6 h-6" />
                     <span>Not yet received</span>
                   </span>
@@ -163,11 +163,11 @@ export const bcwsData = (personnel?: Personnel) => {
               title: 'ParQ',
               content:
                 personnel?.parQ === true ? (
-                  <span className="flex flex-row items-center space-x-2 text-success">
+                  <span className="flex flex-row items-center space-x-2 text-leaf-700">
                     <CheckCircleIcon className="w-6 h-6" /> <span>Received</span>
                   </span>
                 ) : (
-                  <span className="flex flex-row items-center space-x-2 text-error">
+                  <span className="flex flex-row items-center space-x-2 text-red-600">
                     <ExclamationTriangleIcon className="w-6 h-6" />
                     <span>Not yet received</span>
                   </span>
@@ -177,11 +177,11 @@ export const bcwsData = (personnel?: Personnel) => {
               title: 'TEAMS Orientation',
               content:
                 personnel?.orientation === true ? (
-                  <span className="flex flex-row items-center space-x-2 text-success">
+                  <span className="flex flex-row items-center space-x-2 text-leaf-700">
                     <CheckCircleIcon className="w-6 h-6" /> <span>Completed</span>
                   </span>
                 ) : (
-                  <span className="flex flex-row items-center space-x-2 text-error">
+                  <span className="flex flex-row items-center space-x-2 text-red-600">
                     <ExclamationTriangleIcon className="w-6 h-6" />
                     <span>Incomplete</span>
                   </span>
@@ -219,7 +219,7 @@ export const bcwsData = (personnel?: Personnel) => {
         title: 'Purchase Card Holder',
         content:
           personnel?.purchaseCardHolder === true ? (
-            <span className="text-success">Yes</span>
+            <span className="text-leaf-700">Yes</span>
           ) : (
             <span className="text-cherry-700">No</span>
           ),
@@ -272,7 +272,7 @@ export const bcwsData = (personnel?: Personnel) => {
         title: 'Supervisor Approval',
         content:
           personnel?.approvedBySupervisor === true ? (
-            <span className="text-success">Received</span>
+            <span className="text-leaf-700">Received</span>
           ) : (
             <span className="text-cherry-700">Not yet Received</span>
           ),

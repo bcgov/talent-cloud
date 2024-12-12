@@ -8,7 +8,7 @@ interface ResetProps {
 export const ResetButton = (props: ResetProps) => (
   <button
     aria-label="reset date filter"
-    className="text-sm  pl-2 text-left py-4 underline  text-info"
+    className="text-sm  pl-2 text-left py-4 underline  text-blue-800"
     onClick={() => {
       props.reset && props.reset();
       props.onChange({ from: undefined, to: undefined });

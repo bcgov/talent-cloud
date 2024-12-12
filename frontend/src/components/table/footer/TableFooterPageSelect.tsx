@@ -28,7 +28,7 @@ export const TableFooterPageSelect = ({
               ),
           )}
         </select>
-        <p className="text-black">{totalRows} total rows</p>
+        <p className="text-dark-800">{totalRows} total rows</p>
       </div>
     </div>
   );

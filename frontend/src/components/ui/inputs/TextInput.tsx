@@ -25,7 +25,7 @@ export const TextInput = ({ ...props }: FieldInputProps<string> & FieldType) => 
   return (
     <label htmlFor={name}>
       {label}
-      {required && <span className="text-error">*</span>}
+      {required && <span className="text-red-600">*</span>}
       <input
         {...props}
         {...field}

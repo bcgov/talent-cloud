@@ -48,7 +48,7 @@ export const SchedulerPopUp = ({
   const [confirmModal, setConfirmModal] = useState<'DELETE' | 'EDIT' | null>(null);
 
   const BUTTON_GROUP_SELECTED_CLASS =
-    'bg-primaryBlue text-white capitalize hover:bg-primaryBlue';
+    'bg-blue-800 text-white capitalize hover:bg-blue-800';
   const BUTTON_GROUP_UNSELECTED_CLASS = 'capitalize hover:bg-white';
 
   const saveDates = () => {
@@ -165,7 +165,7 @@ export const SchedulerPopUp = ({
           aria-label="confirm"
           onClick={confirmAction}
           placeholder={''}
-          className="normal-case bg-primaryBlue cursor-pointer"
+          className="normal-case bg-blue-800 cursor-pointer"
         >
           Confirm Update
         </Button>
@@ -195,7 +195,7 @@ export const SchedulerPopUp = ({
           aria-label="confirm"
           onClick={confirmAction}
           placeholder={''}
-          className="normal-case bg-primaryBlue cursor-pointer"
+          className="normal-case bg-blue-800 cursor-pointer"
         >
           Confirm Delete
         </Button>
@@ -207,7 +207,7 @@ export const SchedulerPopUp = ({
     <div className="grid grid-cols-2">
       <div className="">
         <div>
-          <span className="text-sm text-black font-bold">
+          <span className="text-sm text-dark-800 font-bold">
             Task No. / Resource Request No.
           </span>
           <Input
@@ -224,7 +224,7 @@ export const SchedulerPopUp = ({
         </div>
         <div className="grid grid-cols-2 pt-4 gap-8">
           <div>
-            <span className="text-sm text-black font-bold">Start Date</span>
+            <span className="text-sm text-dark-800 font-bold">Start Date</span>
             <Input
               variant="static"
               value={fromInput}
@@ -238,7 +238,7 @@ export const SchedulerPopUp = ({
             />
           </div>
           <div>
-            <span className="text-sm text-black font-bold">End Date</span>
+            <span className="text-sm text-dark-800 font-bold">End Date</span>
             <Input
               variant="static"
               value={toInput}
@@ -317,7 +317,7 @@ export const SchedulerPopUp = ({
           <div className={editMode ? 'basis-1/2' : 'basis-full'}>
             <Button
               placeholder={''}
-              className="w-full bg-primaryBlue"
+              className="w-full bg-blue-00"
               onClick={() => {
                 if (
                   editedAvailabilityType &&

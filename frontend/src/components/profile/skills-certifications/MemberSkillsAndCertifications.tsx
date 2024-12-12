@@ -41,7 +41,7 @@ export const MemberSkillsAndCertifications = ({
           className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
           indicatorProps={{
             className:
-              'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+              'bg-transparent border-b-2 border-blue-700 shadow-none rounded-none',
           }}
         >
           <Tab

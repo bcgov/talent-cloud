@@ -66,7 +66,7 @@ export const Footer = ({ content }: { content: any }) => {
         </div>
       </div>
 
-      <div className="col-span-1 sm:col-span-2 border border-b-1 border-primaryBlue w-full mx-0 sm:ml-0 md:col-span-3"></div>
+      <div className="col-span-1 sm:col-span-2 border border-b-1 border-blue-700 w-full mx-0 sm:ml-0 md:col-span-3"></div>
       <div className="col-span-1 sm:col-span-2 md:col-span-3 pt-6 pb-24">
         © 2024 Government Of British Columbia
       </div>

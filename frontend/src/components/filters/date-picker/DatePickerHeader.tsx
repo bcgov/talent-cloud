@@ -26,13 +26,13 @@ export const DatePickerHeader = (props: CustomCaptionProps) => {
             aria-label="previous month"
             onClick={() => previousMonth && goToMonth(previousMonth)}
           >
-            <ChevronLeftIcon className="h-4 w-4 stroke-4 text-icon" />
+            <ChevronLeftIcon className="h-4 w-4 stroke-4 text-dark-600" />
           </button>
           <button
             aria-label="next month"
             onClick={() => nextMonth && goToMonth(nextMonth)}
           >
-            <ChevronRightIcon className="h-4 w-4 stroke-4 text-icon" />
+            <ChevronRightIcon className="h-4 w-4 stroke-4 text-dark-600" />
           </button>
         </div>
       </div>

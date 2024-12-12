@@ -3,7 +3,7 @@ export const MemberSchedulerKey = () => {
     <div className="flex flex-row gap-12 px-4 py-6">
       <div className="flex items-center">
         {/* Change to green if not member view */}
-        <span className="px-4 py-1 bg-gray-100 text-sm">Available</span>
+        <span className="px-4 py-1 bg-dark-300 text-sm">Available</span>
       </div>
 
       <div className="flex items-center">

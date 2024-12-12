@@ -28,8 +28,8 @@ export const Search = ({
     <div className="relative w-full">
       <label>
         Search by Name
-        <div className="absolute w-full text-defaultGray placeholder:text-defaultGray">
-          <MagnifyingGlassIcon className="h-6 w-6 text-defaultGray absolute inset-y-4 right-4" />
+        <div className="absolute w-full text-dark-600 placeholder:text-dark-600">
+          <MagnifyingGlassIcon className="h-6 w-6 text-dark-600 absolute inset-y-4 right-4" />
           <input
             id={field.name}
             autoComplete="name"

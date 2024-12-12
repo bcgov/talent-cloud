@@ -11,21 +11,19 @@ const UnauthMessage = () => {
     'If you believe you should have access to this site, please reach out to your local coordinator or program administrator.';
 
   return (
-
-      <div className="flex flex-col items-center justify-center  bg-blue-gray-100 lg:py-56">
-        <div className="bg-white shadow-md rounded-md py-16 px-8 sm:px-16 lg:px-32 flex flex-col text-left items-start justify-start space-y-8 max-w-[800px]">
-          <h3 className="font-bold text-backgroundBlue pb-4">{title}</h3>
-          <p>{p1}</p>
-          <p>{p2}</p>
-          <a
-            className="text-md font-bold text-blue700 underline"
-            href={logoutUrl(keycloak)}
-          >
-            Log me out
-          </a>
-        </div>
+    <div className="flex flex-col items-center justify-center  bg-blue-gray-100 lg:py-56">
+      <div className="bg-white shadow-md rounded-md py-16 px-8 sm:px-16 lg:px-32 flex flex-col text-left items-start justify-start space-y-8 max-w-[800px]">
+        <h3 className="font-bold text-ink-900 pb-4">{title}</h3>
+        <p>{p1}</p>
+        <p>{p2}</p>
+        <a
+          className="text-md font-bold text-ink-700 underline"
+          href={logoutUrl(keycloak)}
+        >
+          Log me out
+        </a>
       </div>
-
+    </div>
   );
 };
 

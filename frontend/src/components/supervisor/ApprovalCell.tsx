@@ -127,7 +127,7 @@ export const ApprovalCell = ({
           className={[
             'rounded-sm  outline-none w-40 text-sm ',
             disabled
-              ? 'bg-gray-200 border-none outline-none text-gray-500 '
+              ? 'bg-dark-300 border-none outline-none text-gray-500 '
               : 'text-gray-600 bg-white border-1.5 border-gray-400',
           ].join(', ')}
           onChange={handleChangeStatus}
@@ -145,7 +145,7 @@ export const ApprovalCell = ({
         {personnel?.recommitment?.[
           program as keyof typeof personnel.recommitment
         ] === RecommitmentStatus.SUPERVISOR_APPROVED ? (
-          <div className="flex flex-row text-success items-center space-x-2">
+          <div className="flex flex-row text-leaf-700 items-center space-x-2">
             <CheckIcon /> <span className="text-sm">Submitted!</span>
           </div>
         ) : personnel?.recommitment?.[
@@ -183,7 +183,7 @@ export const ApprovalCell = ({
               returning to CORE this year.
             </p>
           </div>
-          <div className="text-info bg-infoBannerLight mx-8">
+          <div className="text-blue-800 bg-blue-200 mx-8">
             <p className="px-4 py-2">
               While it is expected that you have previously discussed the possibility
               of recommitment with your member,{' '}

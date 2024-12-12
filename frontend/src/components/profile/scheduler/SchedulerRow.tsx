@@ -85,7 +85,7 @@ const Cell = ({
         <div className="flex-grow">
           {dayOfMonthStatus?.date &&
             dayjs().isSame(dayOfMonthStatus?.date, 'day') && (
-              <span className="font-bold text-calGreenText text-xs">Today</span>
+              <span className="font-bold text-forest-900 text-xs">Today</span>
             )}
         </div>
         {dayOfMonthStatus?.start &&
