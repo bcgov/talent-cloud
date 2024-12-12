@@ -1,4 +1,4 @@
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList } from '@headlessui/react';
 
 export type Tab = {
   label: string;
@@ -13,13 +13,13 @@ export type TabProps = {
 
 export const Tabs = ({ tabs, changeTab }: TabProps) => {
   return (
-    <Tab.Group
+    <TabGroup
       selectedIndex={tabs?.indexOf(
         tabs?.find((itm) => itm.selected === true) ?? tabs[0],
       )}
       onChange={(index) => changeTab(tabs[index].value ?? tabs[0].value)}
     >
-      <Tab.List className={`flex flex-row bg-white md:px-6 px-0`} as="div">
+      <TabList className={`flex flex-row bg-white md:px-6 px-0`} as="div">
         {tabs.map(({ label, value, count }, index) => (
           <Tab key={value}>
             {({ selected }) => (
@@ -42,7 +42,7 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
             )}
           </Tab>
         ))}
-      </Tab.List>
-    </Tab.Group>
+      </TabList>
+    </TabGroup>
   );
 };

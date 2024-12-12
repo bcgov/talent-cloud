@@ -64,12 +64,14 @@ const MemberProfile = () => {
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
                   >
-                    <RecommitmentProfileBanner
-                      year={recommitmentCycle?.year}
-                      endDate={recommitmentCycle.endDate}
-                      personnel={personnel}
-                      handleCloseBanner={handleCloseBanner}
-                    />
+                    <div>
+                      <RecommitmentProfileBanner
+                        year={recommitmentCycle?.year}
+                        endDate={recommitmentCycle.endDate}
+                        personnel={personnel}
+                        handleCloseBanner={handleCloseBanner}
+                      />
+                    </div>
                   </Transition>
                 </div>
               )}

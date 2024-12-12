@@ -2,7 +2,13 @@ import { Fragment } from 'react';
 import { classes, menuItemClass } from './classes';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
-import { Menu, Transition } from '@headlessui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react';
 import { Chip } from '../ui';
 import type { AvailabilityType } from '@/common';
 import { AvailabilityTypeName } from '@/common';
@@ -36,16 +42,16 @@ export const SingleSelect = ({
                   name={field.name}
                   handleClose={handleClose}
                 />
-                <Menu.Button aria-label="Single Select Menu Button" id={field.name}>
+                <MenuButton aria-label="Single Select Menu Button" id={field.name}>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
                     aria-label="close"
                   />
-                </Menu.Button>
+                </MenuButton>
               </div>
             ) : (
-              <Menu.Button
+              <MenuButton
                 id={field.name}
                 className={menuItemClass[field.name]}
                 aria-label="Single Select Menu Button"
@@ -64,7 +70,7 @@ export const SingleSelect = ({
                     aria-label="close"
                   />
                 )}
-              </Menu.Button>
+              </MenuButton>
             )}
 
             <Transition
@@ -76,10 +82,10 @@ export const SingleSelect = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1 w-full">
                   {field.options.map((itm: { label: string; value: string }) => (
-                    <Menu.Item key={itm.value}>
+                    <MenuItem key={itm.value}>
                       <button
                         aria-label="Single Select Menu Button"
                         onClick={() => onChange(field.name, itm.value)}
@@ -87,10 +93,10 @@ export const SingleSelect = ({
                       >
                         {itm.label}
                       </button>
-                    </Menu.Item>
+                    </MenuItem>
                   ))}
                 </div>
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </>
         )}

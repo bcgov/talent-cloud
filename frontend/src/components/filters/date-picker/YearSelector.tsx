@@ -1,4 +1,10 @@
-import { Menu, Transition } from '@headlessui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { years } from './constants';
@@ -8,13 +14,13 @@ import type { SelectorProps } from './interface';
 export const YearSelector = (props: SelectorProps) => (
   <Menu>
     <div className="flex flex-row">
-      <Menu.Button
+      <MenuButton
         className="w-full flex  font-bold  items-center pb-1"
         aria-label="open"
       >
         <span className="text-md pr-1">{getYear(props.displayMonth)}</span>
         <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-icon" />
-      </Menu.Button>
+      </MenuButton>
     </div>
 
     <Transition
@@ -26,10 +32,10 @@ export const YearSelector = (props: SelectorProps) => (
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <Menu.Items className="absolute ml-16 z-10 mt-2  text-left  bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <MenuItems className="absolute ml-16 z-10 mt-2  text-left  bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
         <div className="flex flex-col py-4">
           {years().map((itm) => (
-            <Menu.Item key={itm.value}>
+            <MenuItem key={itm.value}>
               <button
                 aria-label="year selector"
                 onClick={() =>
@@ -45,10 +51,10 @@ export const YearSelector = (props: SelectorProps) => (
                   <span className="font-normal">{itm.label}</span>
                 )}
               </button>
-            </Menu.Item>
+            </MenuItem>
           ))}
         </div>
-      </Menu.Items>
+      </MenuItems>
     </Transition>
   </Menu>
 );

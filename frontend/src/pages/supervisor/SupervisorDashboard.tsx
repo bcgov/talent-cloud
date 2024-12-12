@@ -48,14 +48,16 @@ const SupervisorDashboard = () => {
           // as={Banner}
           onClick={handleCloseSuccessBanner}
         >
-          <Banner
-            onClose={handleCloseSuccessBanner}
-            title={'Supervisor Approval for Recommitment Successfully Submitted'}
-            content={
-              'Thank you for approving [LAST, First]’s recommitment to [PROG]. Your employee and their coordinator will be notified. You’ll be informed if they are called for deployment to provide approval. For questions, contact us at [CORE email address].'
-            }
-            type={BannerType.SUCCESS}
-          />
+          <div>
+            <Banner
+              onClose={handleCloseSuccessBanner}
+              title={'Supervisor Approval for Recommitment Successfully Submitted'}
+              content={
+                'Thank you for approving [LAST, First]’s recommitment to [PROG]. Your employee and their coordinator will be notified. You’ll be informed if they are called for deployment to provide approval. For questions, contact us at [CORE email address].'
+              }
+              type={BannerType.SUCCESS}
+            />
+          </div>
         </Transition>
 
         <Transition
@@ -69,14 +71,16 @@ const SupervisorDashboard = () => {
           leaveTo="opacity-0 scale-95"
           onClick={handleCloseSuccessBanner}
         >
-          <Banner
-            onClose={handleCloseWarningBanner}
-            content={
-              'Approved (“YES”) recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
-            }
-            title={'Approval Action Cannot be Undone'}
-            type={BannerType.WARNING}
-          />
+          <div>
+            <Banner
+              onClose={handleCloseWarningBanner}
+              content={
+                'Approved (“YES”) recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
+              }
+              title={'Approval Action Cannot be Undone'}
+              type={BannerType.WARNING}
+            />
+          </div>
         </Transition>
       </div>
       <div className="w-full py-4">

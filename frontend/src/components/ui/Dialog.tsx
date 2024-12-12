@@ -1,4 +1,4 @@
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import type { ReactElement } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -33,8 +33,8 @@ export const DialogUI = ({
         {/* Container to center the panel */}
         <div className="flex min-h-full items-center justify-center p-4">
           {/* The actual dialog panel  */}
-          <Dialog.Panel className={`mx-auto rounded bg-white ${style}`}>
-            <Dialog.Title className="bg-grayBackground flex flex-row w-full justify-between p-2">
+          <DialogPanel className={`mx-auto rounded bg-white ${style}`}>
+            <DialogTitle className="bg-grayBackground flex flex-row w-full justify-between p-2">
               <h4 className="font-bold">{title}</h4>
               <button
                 aria-label="close"
@@ -43,10 +43,10 @@ export const DialogUI = ({
               >
                 <XMarkIcon className="h-6 w-6" />
               </button>
-            </Dialog.Title>
+            </DialogTitle>
 
             {children}
-          </Dialog.Panel>
+          </DialogPanel>
         </div>
       </div>
     </Dialog>
