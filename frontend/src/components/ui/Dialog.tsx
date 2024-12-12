@@ -38,7 +38,7 @@ export const DialogUI = ({
               <h4 className="font-bold">{title}</h4>
               <button
                 aria-label="close"
-                className="text-sm text-primaryBlue underline font-normal"
+                className="text-sm text-stormy-700 underline font-normal"
                 onClick={handleOpen}
               >
                 <XMarkIcon className="h-6 w-6" />

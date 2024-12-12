@@ -86,11 +86,11 @@ export const ProfileEditListSection = ({
       }
     >
       <AccordionHeader placeholder={title} onClick={handleAccordionOpen}>
-        <span className="text-primaryBlue">{title}</span>
+        <span className="text-stormy-700">{title}</span>
       </AccordionHeader>
       <AccordionBody>
         <>
-          {error && <p className="text-errorRed text-sm">{error}</p>}
+          {error && <p className="text-cherry-700 text-sm">{error}</p>}
           {existingData.map((data, i) => (
             <div
               className="flex flex-row gap-20 py-3 items-end"

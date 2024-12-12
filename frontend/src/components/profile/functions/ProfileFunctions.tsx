@@ -101,7 +101,7 @@ export const ProfileFunctions = ({
                   <button
                     aria-label="edit functions"
                     onClick={handleOpenEditFunctionsPopUp}
-                    className="z-20 flex text-primaryBlue flex-row items-center"
+                    className="z-20 flex text-stormy-700 flex-row items-center"
                   >
                     <PencilSquareIcon className="h-6 w-6" />
                     <span className="pl-2 font-normal underline text-sm">Edit</span>

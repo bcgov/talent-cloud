@@ -78,7 +78,7 @@ export const ProfileDetails = () => {
                   <button
                     aria-label="edit profile"
                     onClick={handleOpenEditProfilePopUp}
-                    className="z-20 flex text-primaryBlue flex-row items-center"
+                    className="z-20 flex text-stormy-700 flex-row items-center"
                   >
                     <PencilSquareIcon className="h-6 w-6" />
                     <span className="pl-2 font-normal underline text-sm">Edit</span>

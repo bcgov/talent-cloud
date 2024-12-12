@@ -31,7 +31,7 @@ export const TextArea = ({
         }
       />
       <ErrorMessage name={field.name}>
-        {(msg) => <div className="font-normal text-errorRed">{msg}</div>}
+        {(msg) => <div className="font-normal text-cherry-700">{msg}</div>}
       </ErrorMessage>
     </label>
   );

@@ -85,7 +85,7 @@ export const SectionsAndRoles = ({
       >
         <div>
           <div>
-            <h5 className="pl-8 py-6 font-bold text-primaryBlue">
+            <h5 className="pl-8 py-6 font-bold text-stormy-700">
               Sections & Roles
             </h5>
             <div className="flex flex-row border-b-2 border-slate-800 py-2 px-8">

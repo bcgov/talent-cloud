@@ -34,7 +34,7 @@ export const TextInput = ({ ...props }: FieldInputProps<string> & FieldType) => 
         type={type}
       />
       <ErrorMessage name={name}>
-        {(msg) => <div className="font-normal text-errorRed">{msg}</div>}
+        {(msg) => <div className="font-normal text-cherry-700">{msg}</div>}
       </ErrorMessage>
     </label>
   );

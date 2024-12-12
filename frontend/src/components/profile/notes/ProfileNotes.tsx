@@ -56,7 +56,7 @@ export const ProfileNotes = ({
                 <button
                   aria-label="edit notes"
                   onClick={handleOpenEditNotes}
-                  className="z-20 flex text-primaryBlue flex-row items-center"
+                  className="z-20 flex text-stormy-700 flex-row items-center"
                 />
               </div>
             </AccordionHeader>

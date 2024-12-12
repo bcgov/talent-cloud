@@ -112,7 +112,7 @@ export const MemberItemList = ({
                     {/* {c.key === 'experience' && <></>} TODO */}
                     {c.key === 'remove' && !!removeRow && (
                       <button
-                        className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-primaryBlue rounded-none text-sm"
+                        className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-stormy-700 rounded-none text-sm"
                         onClick={() => removeRow(row.id)}
                       >
                         <TrashIcon className="h-4 w-4" />

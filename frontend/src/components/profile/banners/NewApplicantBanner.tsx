@@ -83,7 +83,7 @@ export const NewApplicantBanner = ({
                   {itm.value === true ? (
                     <CheckIcon className="h-5 text-calGreenTwo" />
                   ) : (
-                    <XMarkIcon className="h-5 text-errorRed" />
+                    <XMarkIcon className="h-5 text-cherry-700" />
                   )}
                   {itm.key}
                 </span>

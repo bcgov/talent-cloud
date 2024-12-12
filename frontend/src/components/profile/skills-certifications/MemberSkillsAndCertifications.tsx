@@ -45,21 +45,21 @@ export const MemberSkillsAndCertifications = ({
           }}
         >
           <Tab
-            className={`${activeTab === 'languages' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            className={`${activeTab === 'languages' ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
             value={'languages'}
             onClick={() => setActiveTab('languages')}
           >
             Languages
           </Tab>
           <Tab
-            className={`${activeTab === 'tools' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            className={`${activeTab === 'tools' ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
             value={'tools'}
             onClick={() => setActiveTab('tools')}
           >
             Tools & Software
           </Tab>
           <Tab
-            className={`${activeTab === 'certifications' ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+            className={`${activeTab === 'certifications' ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
             value={'certifications'}
             onClick={() => setActiveTab('certifications')}
           >

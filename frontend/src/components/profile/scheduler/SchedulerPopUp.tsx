@@ -155,7 +155,7 @@ export const SchedulerPopUp = ({
         <Button
           aria-label="close"
           variant="text"
-          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
+          className="text-sm text-stormy-700 underline normal-case cursor-pointer"
           onClick={() => setConfirmModal(null)}
           placeholder={''}
         >
@@ -185,7 +185,7 @@ export const SchedulerPopUp = ({
         <Button
           aria-label="close"
           variant="text"
-          className="text-sm text-primaryBlue underline normal-case cursor-pointer"
+          className="text-sm text-stormy-700 underline normal-case cursor-pointer"
           onClick={() => setConfirmModal(null)}
           placeholder={''}
         >

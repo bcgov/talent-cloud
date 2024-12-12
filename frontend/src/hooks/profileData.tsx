@@ -221,7 +221,7 @@ export const bcwsData = (personnel?: Personnel) => {
           personnel?.purchaseCardHolder === true ? (
             <span className="text-success">Yes</span>
           ) : (
-            <span className="text-errorRed">No</span>
+            <span className="text-cherry-700">No</span>
           ),
       },
       {
@@ -274,7 +274,7 @@ export const bcwsData = (personnel?: Personnel) => {
           personnel?.approvedBySupervisor === true ? (
             <span className="text-success">Received</span>
           ) : (
-            <span className="text-errorRed">Not yet Received</span>
+            <span className="text-cherry-700">Not yet Received</span>
           ),
       },
       {

@@ -159,11 +159,11 @@ export const TableBodyCell = ({
     case DashboardColumns.LOCATION:
       return <span className="text-sm text-dark-600">{cell.value}</span>;
     case DashboardColumns.REGION:
-      return <span className="text-sm text-dark-700">{cell.value}</span>;
+      return <span className="text-sm text-dark-710">{cell.value}</span>;
     case DashboardColumns.FIRE_CENTRE:
-      return <span className="text-sm text-dark-700">{cell.value}</span>;
+      return <span className="text-sm text-dark-710">{cell.value}</span>;
     case DashboardColumns.DATE_APPROVED:
-      return <span className="text-sm text-dark-700">{cell.value}</span>;
+      return <span className="text-sm text-dark-710">{cell.value}</span>;
     default:
       return (
         <span className={`${tableClass.rowClass} + text-left `}>{cell.value}</span>

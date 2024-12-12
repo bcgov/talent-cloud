@@ -48,7 +48,7 @@ export const ProfileMemberHeader = ({
             <div className="flex gap-4">
               <Tab
                 placeholder={undefined}
-                className={`${activeTab === Tabs.AVAILABILITY ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                className={`${activeTab === Tabs.AVAILABILITY ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.AVAILABILITY)}
                 value={Tabs.AVAILABILITY}
               >
@@ -56,7 +56,7 @@ export const ProfileMemberHeader = ({
               </Tab>
               <Tab
                 placeholder={undefined}
-                className={`${activeTab === Tabs.PROFILE ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                className={`${activeTab === Tabs.PROFILE ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.PROFILE)}
                 value={Tabs.PROFILE}
               >
@@ -64,7 +64,7 @@ export const ProfileMemberHeader = ({
               </Tab>
               <Tab
                 placeholder={undefined}
-                className={`${activeTab === Tabs.TRAINING ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                className={`${activeTab === Tabs.TRAINING ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(Tabs.TRAINING)}
                 value={Tabs.TRAINING}
               >

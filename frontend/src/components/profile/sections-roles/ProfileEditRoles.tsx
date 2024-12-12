@@ -96,7 +96,7 @@ export const ProfileEditRoles = ({
         {/* Section Choices */}
         <Accordion title="Section Ranking" placeholder="Section Ranking" open={true}>
           <AccordionHeader placeholder="Section Ranking">
-            <span className="text-primaryBlue">Section Ranking</span>
+            <span className="text-stormy-700">Section Ranking</span>
           </AccordionHeader>
           <AccordionBody>
             <div className="flex flex-row gap-8">

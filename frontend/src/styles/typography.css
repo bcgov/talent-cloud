@@ -2,19 +2,19 @@ a {
   @apply outline-none focus:outline-none;
 }
 h1 {
-  @apply text-dark-800;
+  @apply text-dark-700;
   font-size: 37.32px;
   font-weight: 400;
   line-height: 59.7px;
 }
 h2 {
-  @apply text-dark-800;
+  @apply text-dark-700;
   font-size: 31px;
   font-weight: 400;
   line-height: 49px;
 }
 h3 {
-  @apply text-dark-800;
+  @apply text-dark-700;
   font-size: 25.92px;
   font-weight: 700;
   line-height: 41.5px;
@@ -26,20 +26,20 @@ h4 {
   line-height: 34px;
 }
 h5 {
-  @apply text-dark-800;
+  @apply text-dark-700;
   font-size: 18px;
   font-weight: 400;
   line-height: 24px;
 }
 p {
-  @apply text-dark-700;
+  @apply text-dark-710;
   font-size: 16px;
   font-weight: 400;
   line-height: 27px;
 }
 
 label {
-  @apply text-dark-800;
+  @apply text-dark-700;
   font-size: 14px;
   font-weight: 700;
   line-height: 26px;

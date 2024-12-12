@@ -79,14 +79,14 @@ export const MemberAvailabilityTab = ({
               }}
             >
               <Tab
-                className={`${activeSectionRolesTab === Program.BCWS ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                className={`${activeSectionRolesTab === Program.BCWS ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
                 value={Program.BCWS}
                 onClick={() => setActiveSectionRolesTab(Program.BCWS)}
               >
                 BCWS Roles
               </Tab>
               <Tab
-                className={`${activeSectionRolesTab === Program.EMCR ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                className={`${activeSectionRolesTab === Program.EMCR ? 'text-stormy-700 font-bold' : 'text-gray-600'}`}
                 value={Program.EMCR}
                 onClick={() => setActiveSectionRolesTab(Program.EMCR)}
               >

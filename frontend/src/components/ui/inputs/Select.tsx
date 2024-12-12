@@ -26,7 +26,7 @@ export const Select = ({ ...props }: FieldInputProps<string> & FieldType) => {
         ))}
       </select>
       <ErrorMessage name={props.name}>
-        {(msg) => <div className="text-errorRed font-normal">{msg}</div>}
+        {(msg) => <div className="text-cherry-700 font-normal">{msg}</div>}
       </ErrorMessage>
     </label>
   );

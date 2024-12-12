@@ -25,7 +25,7 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
             {({ selected }) => (
               <>
                 <button
-                  className={`font-normal px-2 py-2 my-.5 md:px-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'} ${selected ? 'text-dark-700' : 'text-dark-600'}`}
+                  className={`font-normal px-2 py-2 my-.5 md:px-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'} ${selected ? 'text-dark-710' : 'text-dark-600'}`}
                 >
                   {' '}
                   {label}{' '}
