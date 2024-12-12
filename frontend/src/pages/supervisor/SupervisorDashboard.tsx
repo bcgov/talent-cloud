@@ -19,8 +19,8 @@ const SupervisorDashboard = () => {
     columns,
     showSuccessMessage,
     showWarningBanner,
-    handleCloseSuccessBanner,
-    handleCloseWarningBanner,
+    handleShowSuccessBanner,
+    handleShowWarningBanner,
   } = useSupervisorDashboard();
 
   const { recommitmentCycle } = useRecommitmentCycle();
@@ -45,11 +45,10 @@ const SupervisorDashboard = () => {
         leave="ease-in-out duration-300"
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
-        onClick={handleCloseSuccessBanner}
       >
         <div className="pt-12">
           <Banner
-            onClose={handleCloseSuccessBanner}
+            onClose={() => handleShowSuccessBanner(false)}
             title={'Supervisor Decision for Recommitment Successfully Submitted'}
             content={
               'Thank you for your submission. Your employee and their coordinator will be notified. If approved, You’ll be informed if they are called for deployment to provide approval.'
@@ -71,7 +70,7 @@ const SupervisorDashboard = () => {
       >
         <div className="pt-12">
           <Banner
-            onClose={handleCloseWarningBanner}
+            onClose={() => handleShowWarningBanner(false)}
             content={
               'Approved (“YES”) recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
             }

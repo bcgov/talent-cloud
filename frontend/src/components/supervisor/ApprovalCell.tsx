@@ -11,12 +11,14 @@ import { CheckIcon } from '../ui/Icons';
 export const ApprovalCell = ({
   personnel,
   program,
-  handleShowBanner,
+  handleShowSuccessBanner,
+  handleShowWarningBanner,
   year,
 }: {
   personnel: Personnel;
   program: Program;
-  handleShowBanner: () => void;
+  handleShowSuccessBanner: (banner?: boolean) => void;
+  handleShowWarningBanner: (banner?: boolean) => void;
   year: number;
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
@@ -63,6 +65,8 @@ export const ApprovalCell = ({
     reason?: SupervisorReason;
     comments?: string;
   }) => {
+    handleShowSuccessBanner(false);
+    handleShowWarningBanner(true);
     const reason =
       values.reason === SupervisorReason.OTHER
         ? `${values.reason}: ${values.comments}`
@@ -75,20 +79,24 @@ export const ApprovalCell = ({
         year,
       });
       handleShowDeclineModal();
-      handleShowBanner();
+      handleShowSuccessBanner(true);
+      handleShowWarningBanner(false);
     } catch (e) {
       console.log(e);
     }
   };
 
   const handleSubmitApproval = async () => {
+    handleShowSuccessBanner(false);
+    handleShowWarningBanner(true);
     try {
       await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
         status,
         program,
         year,
       });
-      handleShowBanner();
+      handleShowSuccessBanner(true);
+      handleShowWarningBanner(false);
     } catch (e) {
       console.log(e);
     }
@@ -109,7 +117,8 @@ export const ApprovalCell = ({
         program,
         year,
       });
-      handleShowBanner();
+      handleShowSuccessBanner(false);
+      handleShowWarningBanner(true);
     } catch (e) {
       console.log(e);
     }
@@ -152,7 +161,6 @@ export const ApprovalCell = ({
             program as keyof typeof personnel.recommitment
           ] === RecommitmentStatus.SUPERVISOR_DENIED ? (
           <Button
-            // disabled={disabled || !status}
             variant={ButtonTypes.TERTIARY}
             text={'Unlock'}
             onClick={revertDecision}
@@ -201,7 +209,7 @@ export const ApprovalCell = ({
               reason: supervisorDeclinedReason,
               comments: '',
               status: status,
-              year: 2025,
+              year: new Date().getFullYear(),
             }}
             onSubmit={handleSubmitDenial}
             validationSchema={undefined}

@@ -32,16 +32,17 @@ module.exports = withMT({
         sans: ['"BC Sans"'],
       },
       colors: {
-        dark: {
-          100: '#FFFFFF',
-          300: '#F2F2F2',
-          400: '#CFCFCF',
-          500: '#878787',
-          600: '#606060',
-          710: '#313132',
-          700: '#262729',
-          800: '#000000',
-        },
+        // TODO will uncomment once I've updated the colors in the rest of the app
+        // dark: {
+        //   100: '#FFFFFF',
+        //   300: '#F2F2F2',
+        //   400: '#CFCFCF',
+        //   500: '#878787',
+        //   600: '#606060',
+        //   710: '#313132',
+        //   700: '#262729',
+        //   800: '#000000',
+        // },
         blue: {
           // Deployed calendar block
           200: '#ECF5FB',
