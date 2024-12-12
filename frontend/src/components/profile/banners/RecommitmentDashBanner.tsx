@@ -29,22 +29,24 @@ export const RecommitmentDashBanner = ({
       leaveTo="opacity-0 scale-95"
       onClick={hideBanner}
     >
-      <Banner
-        type={BannerType.INFO}
-        content={
-          <p>
-            {' '}
-            <span className="font-bold">
-              {recommitment.year} CORE recommitment reminders have been sent to
-              members and supervisors.
-            </span>{' '}
-            Returning members with supervisor approval will be marked as
-            “Recommitted: {recommitment.year}” in the coming weeks. Please monitor
-            their status for any needed follow-up and ParQ review.
-          </p>
-        }
-        onClose={hideBanner}
-      />
+      <div>
+        <Banner
+          type={BannerType.INFO}
+          content={
+            <p>
+              {' '}
+              <span className="font-bold">
+                {recommitment.year} CORE recommitment reminders have been sent to
+                members and supervisors.
+              </span>{' '}
+              Returning members with supervisor approval will be marked as
+              “Recommitted: {recommitment.year}” in the coming weeks. Please monitor
+              their status for any needed follow-up and ParQ review.
+            </p>
+          }
+          onClose={hideBanner}
+        />
+      </div>
     </Transition>
   );
 };

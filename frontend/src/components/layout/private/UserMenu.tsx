@@ -1,4 +1,10 @@
-import { Menu, Transition } from '@headlessui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from '@headlessui/react';
 import { Fragment } from 'react';
 import { UserIcon } from '../../images';
 import { useNavigate } from 'react-router-dom';
@@ -14,10 +20,10 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
   const keycloakUsername = keycloak?.keycloak?.idTokenParsed?.preferred_username;
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
+      <MenuButton className="hover:bg-gray-50 flex flex-row items-center justify-center space-x-2">
         <p className="font-bold">{username ?? keycloakUsername}</p>
         <UserIcon />
-      </Menu.Button>
+      </MenuButton>
 
       <Transition
         as={Fragment}
@@ -28,11 +34,11 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col">
+        <MenuItems className="absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none flex flex-col">
           {roles?.find(
             (role) => role === Role.COORDINATOR || role === Role.LOGISTICS,
           ) && (
-            <Menu.Item>
+            <MenuItem>
               <button
                 aria-label="profile"
                 onClick={() => navigate(Routes.Dashboard)}
@@ -40,10 +46,10 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
               >
                 CORE Dashboard
               </button>
-            </Menu.Item>
+            </MenuItem>
           )}
           {roles?.includes(Role.MEMBER) && (
-            <Menu.Item>
+            <MenuItem>
               <button
                 aria-label="profile"
                 onClick={() => navigate(Routes.MemberProfile)}
@@ -51,10 +57,10 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
               >
                 My Profile
               </button>
-            </Menu.Item>
+            </MenuItem>
           )}
           {roles?.includes(Role.SUPERVISOR) && (
-            <Menu.Item>
+            <MenuItem>
               <button
                 aria-label="supervisor"
                 onClick={() => navigate(Routes.SupervisorDashboard)}
@@ -62,9 +68,9 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
               >
                 Supervisor Dashboard
               </button>
-            </Menu.Item>
+            </MenuItem>
           )}
-          <Menu.Item>
+          <MenuItem>
             <button
               aria-label="logout"
               onClick={logout}
@@ -72,8 +78,8 @@ export const UserMenu = ({ logout }: { logout: () => void }) => {
             >
               Logout
             </button>
-          </Menu.Item>
-        </Menu.Items>
+          </MenuItem>
+        </MenuItems>
       </Transition>
     </Menu>
   );
