@@ -17,7 +17,7 @@ const Redirect = () => {
   const logistics = roles?.includes(Role.LOGISTICS);
   const unauthorized = !member && !supervisor && !coordinator && !logistics;
 
-  if (member || coordinator) {
+  if (logistics || coordinator) {
     return <Navigate to={Routes.Dashboard} />;
   }
   if (supervisor) {
