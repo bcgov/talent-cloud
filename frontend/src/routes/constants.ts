@@ -6,8 +6,8 @@ export default Object.freeze({
   Dashboard: '/dashboard',
   MemberProfile: '/profile',
   Profile: '/profile/:profileId',
-  SupervisorDashboard: '/supervisor', 
+  SupervisorDashboard: '/supervisor',
   Root: '/',
-  Home: '/home',
   NotFound: '*',
+  Redirect: '/redirect',
 });

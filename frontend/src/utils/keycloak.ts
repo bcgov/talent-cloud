@@ -17,7 +17,7 @@ export const createCustomLoginUrl = (
 
   const loginUrl = kcInstance.createLoginUrl({
     idpHint,
-    redirectUri: `${window.location.origin}/${route}`,
+    redirectUri: `${window.location.origin}${route}`,
   });
 
   const fullLoginUrl = loginUrl + `&idps_to_show=${idpHint || idps.join(',')}`;
@@ -28,7 +28,7 @@ export const createCustomLoginUrl = (
 export const logoutUrl = (keycloak: Keycloak) =>
   `https://logon7.gov.bc.ca/clp-cgi/logoff.cgi?retnow=1&returl=${encodeURIComponent(
     `${keycloak.authServerUrl}/realms/${keycloak.realm}/protocol/openid-connect/logout?post_logout_redirect_uri=` +
-      `${window.location.origin}${Routes.Home}` +
+      `${window.location.origin}${Routes.Root}` +
       '&id_token_hint=' +
       keycloak.idToken,
   )}`;

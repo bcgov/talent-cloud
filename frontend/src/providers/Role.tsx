@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAxios } from '@/hooks/useAxios';
 import type { Program, Role } from '@/common';
-import { Loading } from '@/components';
+import { useKeycloak } from '@react-keycloak/web';
 
 interface RoleContext {
   program?: Program;
@@ -43,9 +43,11 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     }
   };
 
+  const { keycloak } = useKeycloak();
+
   useEffect(() => {
     getLoggedInUser();
-  }, []);
+  }, [keycloak.idToken]);
 
   const value = useMemo(() => {
     return {
@@ -57,8 +59,5 @@ export const RoleProvider = ({ children }: { children: ReactElement }) => {
     };
   }, [roles, program, username, idir, loading]);
 
-  if (loading) {
-    return <Loading />;
-  }
   return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
 };
