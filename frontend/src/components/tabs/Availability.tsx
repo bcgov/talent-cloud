@@ -184,7 +184,7 @@ export const MemberAvailabilityTab = ({
         open={openEditSections}
         onClose={handleOpenEditSections}
         handleOpen={handleOpenEditSections}
-        title={'Add Preference'}
+        title={'Edit Preferences'}
         style={'lg:w-2/3 xl:w-1/2'}
       >
         <MemberProfileEditPreferences
