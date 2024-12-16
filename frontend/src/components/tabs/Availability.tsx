@@ -5,6 +5,7 @@ import {
   MemberSkillsAndCertifications,
   DialogUI,
   MemberProfileEditPreferences,
+  ProfileEditSkills,
 } from '@/components';
 import type { BcwsRoleInterface, FunctionType, Personnel } from '@/common';
 import {
@@ -28,14 +29,19 @@ export const MemberAvailabilityTab = ({
   functions: FunctionType[];
   personnel: MemberProfile;
   profileData: any;
-  updatePersonnel: (personnel: Personnel) => Promise<void>;
+  updatePersonnel: (personnel: Partial<Personnel>) => Promise<void>;
 }) => {
   const defaultTab = personnel.bcws ? Program.BCWS : Program.EMCR;
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
   const [openEditSections, setOpenEditSections] = useState(false);
+  const [openEditSkills, setOpenEditSkills] = useState(false);
 
   const handleOpenEditSections = () => {
     setOpenEditSections(!openEditSections);
+  };
+
+  const handleOpenEditSkills = () => {
+    setOpenEditSkills(!openEditSkills);
   };
 
   const ScheduleDescription = () => (
@@ -125,10 +131,6 @@ export const MemberAvailabilityTab = ({
                       name: 'Role',
                       key: 'role',
                     },
-                    {
-                      name: 'Action',
-                      key: 'remove',
-                    },
                   ]}
                   preferences={{
                     first:
@@ -138,9 +140,6 @@ export const MemberAvailabilityTab = ({
                       personnel.bcws?.secondChoiceSection &&
                       SectionName[personnel.bcws.secondChoiceSection],
                     third: undefined, // TODO
-                  }}
-                  removeRow={(id: number | string) => {
-                    console.log(id);
                   }}
                 />
               </TabPanel>
@@ -160,15 +159,7 @@ export const MemberAvailabilityTab = ({
                       name: 'Section Name',
                       key: 'section',
                     },
-                    {
-                      name: 'Action',
-                      key: 'remove',
-                    },
                   ]}
-                  // preferences: TODO
-                  removeRow={(id: number | string) => {
-                    console.log(id);
-                  }}
                 />
               </TabPanel>
             )}
@@ -179,7 +170,7 @@ export const MemberAvailabilityTab = ({
         title="Other Skills"
         buttonText="Edit Skills"
         description="&nbsp;"
-        onButtonClick={() => {}}
+        onButtonClick={handleOpenEditSkills}
       >
         <MemberSkillsAndCertifications
           personnel={personnel}
@@ -220,6 +211,29 @@ export const MemberAvailabilityTab = ({
           }
           handleClose={handleOpenEditSections}
           handleSave={updatePersonnel}
+        />
+      </DialogUI>
+      {/* Skills and Certs */}
+      <DialogUI
+        open={openEditSkills}
+        onClose={handleOpenEditSkills}
+        handleOpen={handleOpenEditSkills}
+        title="Edit Skills & Certifications"
+        style="w-5/6"
+      >
+        <ProfileEditSkills
+          originalLanguages={personnel.languages || []}
+          originalTools={personnel.tools || []}
+          originalCerts={personnel.certifications || []}
+          handleClose={handleOpenEditSkills}
+          handleSave={(newSkills) => {
+            updatePersonnel({
+              languages: newSkills.newLanguages,
+              tools: newSkills.newTools,
+              certifications: newSkills.newCertifications,
+            });
+            setOpenEditSkills(false);
+          }}
         />
       </DialogUI>
     </>

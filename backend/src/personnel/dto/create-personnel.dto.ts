@@ -242,7 +242,7 @@ export class CreatePersonnelDTO {
   })
   @IsArray()
   @IsOptional()
-  tools?: CreatePersonnelToolsDTO[] 
+  tools?: CreatePersonnelToolsDTO[] | UpdatePersonnelToolsDTO[];
 
   @ApiProperty({
     description: 'Languages spoken by the personnel',

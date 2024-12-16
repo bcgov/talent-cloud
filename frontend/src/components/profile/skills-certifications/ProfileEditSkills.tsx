@@ -136,7 +136,7 @@ export const ProfileEditSkills = ({
         <ProfileEditListSection
           existingData={tools}
           keyName="Skill"
-          title="Tools & Programs"
+          title="Tools & Software"
           type="Skill"
           valueName="Proficiency"
           valueOptions={Object.keys(ToolsProficiency).map((key) => ({
