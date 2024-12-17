@@ -161,7 +161,7 @@ export class PersonnelService {
     if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
       const allTools = await this.toolsRepository.find();
       const personnelTools = personnel.tools.map((t) => ({
-        toolId: allTools.find((at) => at.id === t.toolId).id,
+        toolId: allTools.find((at) => at.name === t.tool).id,
         proficiencyLevel: t.proficiencyLevel,
       }));
       personnel.tools = personnelTools;

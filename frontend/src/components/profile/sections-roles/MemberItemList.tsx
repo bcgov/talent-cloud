@@ -1,5 +1,4 @@
 import { Chip } from '@material-tailwind/react';
-import { TrashIcon } from '@heroicons/react/24/outline';
 
 /**
  * Possible Columns:
@@ -12,7 +11,6 @@ export const MemberItemList = ({
   preferences,
   columns,
   data,
-  removeRow,
 }: {
   preferences?: {
     first?: string;
@@ -24,7 +22,6 @@ export const MemberItemList = ({
     id: string | number;
     [key: string]: string | number;
   }[];
-  removeRow?: (id: number | string) => void;
 }) => {
   const firstChoiceSection = preferences?.first;
   const secondChoiceSection = preferences?.second;
@@ -110,15 +107,6 @@ export const MemberItemList = ({
                       <p>{row[columns[1].key as keyof typeof row]}</p>
                     )}
                     {/* {c.key === 'experience' && <></>} TODO */}
-                    {c.key === 'remove' && !!removeRow && (
-                      <button
-                        className="flex items-center gap-2 px-3 py-1 border border-primaryBlue text-primaryBlue rounded-none text-sm"
-                        onClick={() => removeRow(row.id)}
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                        Remove
-                      </button>
-                    )}
                     {c.key === 'language' && <p>{row['language']}</p>}
                     {c.key === 'proficiency' && <p>{row['proficiency']}</p>}
                     {c.key === 'tool' && <p>{row['tool']}</p>}
