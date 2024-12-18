@@ -7,6 +7,7 @@
 name: OpenShift Build and Deploy to Dev
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
