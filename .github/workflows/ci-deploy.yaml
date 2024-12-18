@@ -108,6 +108,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup ENV file
         run: cp .env.example .env
+      - name: Cache OpenShift CLI
+        id: cache-oc
+        uses: actions/cache@v2
+        with:
+          path: /usr/local/bin/oc
+          key: ${{ runner.os }}-oc
+      - name: Install OpenShift CLI
+        if: steps.cache-oc.outputs.cache-hit != 'true'
+        run: |
+          wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
+          tar -xvf oc.tar.gz
+          sudo mv oc /usr/local/bin/
       # - uses: dorny/paths-filter@v2
       #   id: frontend_changes
       #   with:
