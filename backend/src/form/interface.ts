@@ -48,7 +48,7 @@ export interface PersonnelFormData {
   program: string;
   jobTitle: string;
   email: string;
-  firstAidExpiry?: Date;
+  firstAidExpiry?: string;
   lastName: string;
   firstName: string;
   primaryPhone: string;
