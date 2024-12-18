@@ -39,7 +39,7 @@ jobs:
           key: ${{ runner.os }}-oc
       - name: Install OpenShift CLI
         if: steps.cache-oc.outputs.cache-hit != 'true'
-          run: |
+        run: |
           wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
