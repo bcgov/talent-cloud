@@ -1,8 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
-import { RecommitmentStatus } from 'src/common/enums/recommitment-status.enum';
-import { EmailTemplates } from 'src/mail/utils';
 import {
   Brackets,
   DeleteResult,
@@ -10,6 +8,8 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
+import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
+import { EmailTemplates } from '../mail/utils';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
