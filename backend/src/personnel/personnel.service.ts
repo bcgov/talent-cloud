@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
+import { RecommitmentStatus } from 'src/common/enums/recommitment-status.enum';
+import { EmailTemplates } from 'src/mail/utils';
 import {
   Brackets,
   DeleteResult,
@@ -12,7 +14,7 @@ import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
 import { AvailabilityRO, PersonnelRO } from './ro';
-import { Program, RequestWithRoles, Role } from '../auth/interface';
+import { Program, RequestWithRoles } from '../auth/interface';
 import {
   AvailabilityType,
   AvailabilityTypeLabel,
@@ -20,6 +22,7 @@ import {
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/create-personnel-languages.dto';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
@@ -30,7 +33,7 @@ import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitm
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
-import { EmcrExperienceEntity } from '../database/entities/emcr';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PersonnelService {
@@ -51,6 +54,7 @@ export class PersonnelService {
     private languageRepository: Repository<LanguageEntity>,
     @InjectRepository(EmcrExperienceEntity)
     private experiencesRepository: Repository<EmcrExperienceEntity>,
+    @Inject(MailService) private readonly mailService: MailService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -123,28 +127,56 @@ export class PersonnelService {
       console.log(e);
     }
   }
-  
-  async updatePersonnelRecommitmentStatus(id: string, recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>, req: RequestWithRoles): Promise<UpdateResult|void>  {
-    const recommitment = await this.recommitmentRepository.findOneOrFail({where: {memberId: id, recommitmentCycleId: recommitmentUpdate.year}});
-      const { year } = recommitmentUpdate; 
-      
-      recommitment.supervisorIdir = req.idir;
-      if (recommitmentUpdate.program === Program.BCWS) {
-        recommitment.bcws = recommitmentUpdate.status;
-        if(recommitmentUpdate.reason){
-          recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
-        }
+
+  async updatePersonnelRecommitmentStatus(
+    id: string,
+    recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
+    req: RequestWithRoles,
+  ): Promise<UpdateResult | void> {
+    const recommitment = await this.recommitmentRepository.findOneOrFail({
+      where: { memberId: id, recommitmentCycleId: recommitmentUpdate.year },
+    });
+    const { year } = recommitmentUpdate;
+
+    recommitment.supervisorIdir = req.idir;
+    if (recommitmentUpdate.program === Program.BCWS) {
+      recommitment.bcws = recommitmentUpdate.status;
+      if (recommitmentUpdate.reason) {
+        recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
       }
-      if (recommitmentUpdate.program === Program.EMCR) {
-        recommitment.emcr = recommitmentUpdate.status;
-        if(recommitmentUpdate.reason){
-          recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
-        }
+    }
+    if (recommitmentUpdate.program === Program.EMCR) {
+      recommitment.emcr = recommitmentUpdate.status;
+      if (recommitmentUpdate.reason) {
+        recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
       }
-      
-    return await this.recommitmentRepository.update({memberId: id, recommitmentCycleId: year},  {...recommitment});
-       
+    }
+
+    await this.recommitmentRepository.update(
+      { memberId: id, recommitmentCycleId: year },
+      { ...recommitment },
+    );
+    await this.triggerEmail(id, year, recommitmentUpdate);
   }
+
+  async triggerEmail(id, year, recommitmentUpdate) {
+    const personnel = await this.findOne(id);
+    if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
+      return await this.mailService.generateAndSendTemplate(
+        EmailTemplates.MEMBER_APPROVED,
+        [personnel],
+        recommitmentUpdate.program,
+      );
+    }
+    if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_DENIED) {
+      return await this.mailService.generateAndSendTemplate(
+        EmailTemplates.MEMBER_DENIED,
+        [personnel],
+        recommitmentUpdate.program,
+      );
+    }
+  }
+
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,
     req: RequestWithRoles,
@@ -168,7 +200,7 @@ export class PersonnelService {
     } else {
       delete person.tools;
     }
-    
+
     if (personnel.languages?.length) {
       const currentLanguages = await this.languageRepository.find({
         where: { personnel: { id } },
@@ -507,7 +539,6 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
-    
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
@@ -711,7 +742,7 @@ export class PersonnelService {
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail)
       .includes(email);
-    
+
     return {
       isMember,
       isSupervisor,
@@ -759,19 +790,23 @@ export class PersonnelService {
     return await qb.getOne();
   }
 
-  async getSupervisorPersonnel(req: RequestWithRoles, rows: number, page: number): Promise<{personnel: PersonnelEntity[], count: number}> {
+  async getSupervisorPersonnel(
+    req: RequestWithRoles,
+    rows: number,
+    page: number,
+  ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
     qb.leftJoinAndSelect('personnel.emcr', 'emcr');
     qb.leftJoinAndSelect('personnel.bcws', 'bcws');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment'); 
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
     qb.where('personnel.supervisorEmail = :email', { email: req.idir });
     qb.limit(rows);
     qb.offset((page - 1) * rows);
-    
+
     const personnel = await qb.getMany();
     const count = await qb.getCount();
     this.logger.log(personnel);
-    return {personnel, count}
+    return { personnel, count };
   }
 }

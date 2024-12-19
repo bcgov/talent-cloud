@@ -7,7 +7,9 @@
     padding: 0;
   }
 
-
+h1 {
+  color: red;
+}
   .container {
     width: 100%;
     max-width: 600px;
@@ -48,35 +50,17 @@
     text-decoration-skip-ink: none;
   }
 
-  .button {
-
-    display: inline-block;
-    padding: 6px 24px;
-    margin: 20px 0;
-    background-color: #003366;
-    color: #ffffff;
-    text-decoration: none;
+   #link-button {
+    padding: 12px 24px;
     border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    background-color: #003366;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-
-
-
+    margin: 24px 0px;
   }
 
-  a {
-    display: inline-block;
-    padding: 6px 24px;
-    margin: 20px 0;
-    background-color: #003366;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-
+  
   .footer {
     text-align: center;
     padding: 20px;
@@ -84,6 +68,11 @@
     font-size: 12px;
     background-color: #F6F9FC;
   }
+
+  .button-div {
+    padding: 24px 0px;
+  }
+
 </style>
 
 
@@ -98,11 +87,6 @@
       <div class="content">
         <p>Hello {{member}},</p>
         {% block content %}{% endblock %}
-      </div>
-      <div>
-        <a href='{{link}}'>Get Started</a>
-      </div>
-      <div class="content">
         <p>Sincerely,</p>
         <p>BC CORE Team</p>
 

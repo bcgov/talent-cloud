@@ -23,6 +23,7 @@ const renderMemberDeclinedTemplate = () => {
     date: '{{date}}',
     member: '{{member}}',
     year: '{{year}}',
+    link: '{{link}}',
   });
 };
 
@@ -99,6 +100,7 @@ const renderSupervisorRequestRecommitmentTemplate = () => {
     bcws_contact: '{{bcws_contact}}',
     member: '{{member}}',
     program: '{{program}}',
+    link: '{{link}}',
   });
 };
 const renderSupervisorFollowUpTemplate = () => {
@@ -116,6 +118,18 @@ export const renderTemplate = (
   personnel: PersonnelEntity[],
   program?: Program,
 ) => {
+  let baseUrl;
+  if (process.env.NODE_ENV === 'production') {
+    baseUrl = 'https://coreteam.gov.bc.ca';
+  } else if (process.env.NODE_ENV === 'development') {
+    baseUrl = 'https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca';
+  } else if (process.env.NODE_ENV === 'test') {
+    baseUrl = 'https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca';
+  } else {
+    baseUrl = 'localhost:3000';
+  }
+  const memberUrl = `${baseUrl}/profile`;
+  const supervisorUrl = `${baseUrl}/supervisor`;
   switch (template) {
     case EmailTemplates.MEMBER_DECLINED:
       return new MailDto({
@@ -138,6 +152,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -162,6 +177,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -181,6 +197,7 @@ export const renderTemplate = (
             year: person.recommitment.recommitmentCycle.year,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -201,6 +218,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -221,6 +239,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -241,6 +260,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -261,6 +281,7 @@ export const renderTemplate = (
             date: person.recommitment.recommitmentCycle.endDate,
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.firstName} ${person.lastName}`,
+            link: memberUrl,
           },
         })),
       });
@@ -282,6 +303,7 @@ export const renderTemplate = (
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.supervisorFirstName} ${person.supervisorLastName}`,
             supervisor: `${person.supervisorFirstName} ${person.supervisorLastName}`,
+            link: supervisorUrl,
           },
         })),
       });
@@ -303,6 +325,7 @@ export const renderTemplate = (
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.supervisorFirstName} ${person.supervisorLastName}`,
             supervisor: `${person.supervisorFirstName} ${person.supervisorLastName}`,
+            link: supervisorUrl,
           },
         })),
       });
@@ -325,6 +348,7 @@ export const renderTemplate = (
             member: `${person.firstName} ${person.lastName}`,
             subject: `${person.supervisorFirstName} ${person.supervisorLastName}`,
             supervisor: `${person.supervisorFirstName} ${person.supervisorLastName}`,
+            link: supervisorUrl,
           },
         })),
       });

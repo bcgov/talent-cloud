@@ -39,7 +39,6 @@ class Contexts {
     this.bcc = data.bcc ?? [];
     this.cc = data.cc ?? [];
     this.delayTS = data?.delayTS ?? 0;
-    this.tag = Math.random().toString(36).substring(7);
   }
 }
 

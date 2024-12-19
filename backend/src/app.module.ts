@@ -32,7 +32,6 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     EmcrModule,
     FormModule,
     RegionsAndLocationsModule,
-    MailModule,
   ],
   controllers: [AppController],
   providers: [
