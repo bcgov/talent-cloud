@@ -19,6 +19,7 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
+  
 
 jobs:
   config:
@@ -27,9 +28,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup ENV file
         run: cp .env.example .env
+      - name: Cache OpenShift CLI
+        id: cache-oc
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/oc
+          key: ${{ runner.os }}-oc
+      - name: Install OpenShift CLI
+        if: steps.cache-oc.outputs.cache-hit != 'true'
+        run: |
+          wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
+          tar -xvf oc.tar.gz
+          sudo mv oc /usr/local/bin/
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -37,6 +50,7 @@ jobs:
             src:
               - 'openshift/**'
           base: ${{ github.ref}}
+      
       - name: Apply Changes
         env:
           OS_NAMESPACE_SUFFIX: dev
@@ -60,13 +74,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup ENV file
         run: cp .env.example .env
-      # - uses: dorny/paths-filter@v2
-      #   id: backend_changes
-      #   with:
-      #     # filters: |
-      #     #   backend:
-      #     #     - 'backend/**'
-      #     base: ${{ github.ref}}
+      - name: Cache OpenShift CLI
+        id: cache-oc
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/oc
+          key: ${{ runner.os }}-oc
+      - name: Install OpenShift CLI
+        if: steps.cache-oc.outputs.cache-hit != 'true'
+        run: |
+          wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
+          tar -xvf oc.tar.gz
+          sudo mv oc /usr/local/bin/
       - name: Build & Deploy Backend
         # if: steps.backend_changes.outputs.backend == 'true'
         run: |
@@ -89,6 +108,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup ENV file
         run: cp .env.example .env
+      - name: Cache OpenShift CLI
+        id: cache-oc
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/oc
+          key: ${{ runner.os }}-oc
+      - name: Install OpenShift CLI
+        if: steps.cache-oc.outputs.cache-hit != 'true'
+        run: |
+          wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
+          tar -xvf oc.tar.gz
+          sudo mv oc /usr/local/bin/
       # - uses: dorny/paths-filter@v2
       #   id: frontend_changes
       #   with:
