@@ -8,6 +8,9 @@ export class RecommitmentRO {
   @ApiProperty({ name: 'year', type: 'number' })
   year: number;
 
+  @ApiProperty({ name: 'endDate', type: 'date' })
+  endDate: Date;
+
   @ApiProperty({
     name: 'emcr',
     type: 'enum',

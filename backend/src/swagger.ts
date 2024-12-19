@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { BcwsModule } from './bcws/bcws.module';
 import { EmcrModule } from './emcr/emcr.module';
 import { FormModule } from './form/form.module';
+import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
 
@@ -25,6 +26,7 @@ export const Documentation = (app: INestApplication) => {
       EmcrModule,
       FormModule,
       RegionsAndLocationsModule,
+      MailModule,
     ],
   });
 
@@ -36,6 +38,7 @@ export const Documentation = (app: INestApplication) => {
       tagsSorter: 'alpha',
       defaultModelsExpandDepth: 2,
       defaultModelExpandDepth: 2,
+      useUnsafeMarkdown: true, // This is required to render markdown in the description
     },
   });
 };

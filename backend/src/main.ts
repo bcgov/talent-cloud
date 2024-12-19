@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
+import * as nunjucks from 'nunjucks';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { AppLogger } from './logger/logger.service';
 import { Documentation } from './swagger';
@@ -28,6 +30,22 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useStaticAssets(join(__dirname, 'mail', 'views'));
+
+  nunjucks.configure('src/mail/views', {
+    autoescape: true,
+    throwOnUndefined: false,
+    trimBlocks: false,
+    lstripBlocks: false,
+    watch: true,
+    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    express: app,
+  });
+
+  app.engine('njk', nunjucks.render);
+  app.setViewEngine('njk');
+  app.set('view cache', true);
 
   Documentation(app);
 

@@ -10,6 +10,7 @@ import { EmcrModule } from './emcr/emcr.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { FormModule } from './form/form.module';
 import { LoggerModule } from './logger/logger.module';
+import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
 
@@ -21,6 +22,7 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
         limit: 10,
       },
     ]),
+    MailModule,
     DatabaseModule,
     LoggerModule,
     TerminusModule,
@@ -30,6 +32,7 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     EmcrModule,
     FormModule,
     RegionsAndLocationsModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
