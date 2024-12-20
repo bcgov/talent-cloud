@@ -25,6 +25,8 @@ import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
+import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
+import { RecommitmentService } from './recommitment.service';
 
 
 @Controller('personnel')
@@ -34,6 +36,8 @@ export class PersonnelController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(RecommitmentService)
+    private readonly recommitmentService: RecommitmentService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelController.name);
@@ -67,6 +71,23 @@ export class PersonnelController {
     @Body() personnel: Partial<CreatePersonnelDTO>,
   ): Promise<Record<string, PersonnelRO>> {
     return await this.personnelService.updatePersonnel(personnel, req);
+  }
+  @Patch('/recommitment/:id')
+  @ApiOperation({
+    summary: 'Update personnel data',
+    description: 'Update personnel data',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  async updatePersonnelRecommitment(
+    @Param('id') id: string,
+    @Req() req: RequestWithRoles,
+    @Body() recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
+  ): Promise<any> {
+    console.log("updatePersonnelRecommitment");
+    return await this.recommitmentService.updateMemberRecommitmentStatus(id, recommitmentUpdate, req);
   }
 
   @ApiOperation({

@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse } from 'date-fns';
 import {
@@ -28,12 +28,7 @@ import { CertificationEntity } from '../database/entities/personnel/certificatio
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
-import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
-import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
-import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
-import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PersonnelService {
@@ -42,10 +37,6 @@ export class PersonnelService {
     private personnelRepository: Repository<PersonnelEntity>,
     @InjectRepository(AvailabilityEntity)
     private availabilityRepository: Repository<AvailabilityEntity>,
-    @InjectRepository(RecommitmentCycleEntity)
-    private recommitmentCycleRepository: Repository<RecommitmentCycleEntity>,
-    @InjectRepository(RecommitmentEntity)
-    private recommitmentRepository: Repository<RecommitmentEntity>,
     @InjectRepository(ToolsEntity)
     private toolsRepository: Repository<ToolsEntity>,
     @InjectRepository(CertificationEntity)
@@ -54,7 +45,6 @@ export class PersonnelService {
     private languageRepository: Repository<LanguageEntity>,
     @InjectRepository(EmcrExperienceEntity)
     private experiencesRepository: Repository<EmcrExperienceEntity>,
-    @Inject(MailService) private readonly mailService: MailService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -128,56 +118,6 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnelRecommitmentStatus(
-    id: string,
-    recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
-    req: RequestWithRoles,
-  ): Promise<UpdateResult | void> {
-    const recommitment = await this.recommitmentRepository.findOneOrFail({
-      where: { memberId: id, recommitmentCycleId: recommitmentUpdate.year },
-    });
-    const { year } = recommitmentUpdate;
-
-    recommitment.supervisorIdir = req.idir;
-    if (recommitmentUpdate.program === Program.BCWS) {
-      recommitment.bcws = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
-      }
-    }
-    if (recommitmentUpdate.program === Program.EMCR) {
-      recommitment.emcr = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
-      }
-    }
-
-    await this.recommitmentRepository.update(
-      { memberId: id, recommitmentCycleId: year },
-      { ...recommitment },
-    );
-    await this.triggerEmail(id, year, recommitmentUpdate);
-  }
-
-  async triggerEmail(id, year, recommitmentUpdate) {
-    const personnel = await this.findOne(id);
-    if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
-      return await this.mailService.generateAndSendTemplate(
-        EmailTemplates.MEMBER_APPROVED,
-        TemplateType.MEMBER,
-        [personnel],
-        recommitmentUpdate.program,
-      );
-    }
-    if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_DENIED) {
-      return await this.mailService.generateAndSendTemplate(
-        EmailTemplates.MEMBER_DENIED,
-        TemplateType.MEMBER,
-        [personnel],
-        recommitmentUpdate.program,
-      );
-    }
-  }
 
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,
@@ -188,7 +128,7 @@ export class PersonnelService {
       where: { email: req.idir },
     });
 
-    const person = await this.findOne(id);
+    const person = await this.findOneByEmail(req.idir);
     const bcws = person.bcws;
     const emcr = person.emcr;
 
@@ -751,12 +691,7 @@ export class PersonnelService {
     };
   }
 
-  async getRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
-    const qb = this.recommitmentCycleRepository.createQueryBuilder();
-    qb.where('start_date <= :date', { date: new Date() });
-    qb.andWhere('end_date >= :date', { date: new Date() });
-    return await qb.getOne();
-  }
+  
 
   /**
    * Returns certifications that are not OFA I, II, or III
@@ -785,12 +720,7 @@ export class PersonnelService {
     return this.toolsRepository.find();
   }
 
-  async checkRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
-    const qb = this.recommitmentCycleRepository.createQueryBuilder();
-    qb.where('start_date <= :date', { date: new Date() });
-    qb.andWhere('end_date >= :date', { date: new Date() });
-    return await qb.getOne();
-  }
+  
 
   async getSupervisorPersonnel(
     req: RequestWithRoles,
@@ -810,5 +740,16 @@ export class PersonnelService {
     const count = await qb.getCount();
     this.logger.log(personnel);
     return { personnel, count };
+  }
+
+  async findPersonnelForRecommitment(){
+    const qb = this.personnelRepository
+    .createQueryBuilder('personnel')
+    .leftJoinAndSelect('personnel.bcws', 'bcws')
+    .leftJoinAndSelect('personnel.emcr', 'emcr');
+    qb.where('bcws.status = :status', { status: Status.ACTIVE });
+    qb.orWhere('emcr.status = :status', { status: Status.ACTIVE });
+  const personnel = await qb.getMany();
+  return personnel;
   }
 }

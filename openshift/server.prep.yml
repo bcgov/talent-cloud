@@ -34,6 +34,14 @@ parameters:
     description: Base for URL used to request authentication actions with CHES
     value: 'https://dev.loginproxy.gov.bc.ca'
     required: true
+  - name: CHES_API
+    description: Base for URL used to request actions with CHES
+    value: 'https://ches-dev.api.gov.bc.ca/api/v1'
+    required: true
+  - name: CHES_AUTH_API
+    description: Base for URL used to request authentication actions with CHES
+    value: 'https://dev.loginproxy.gov.bc.ca'
+    required: true
 objects:
   - kind: Secret
     apiVersion: v1

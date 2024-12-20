@@ -3,12 +3,15 @@ import { Program, Role, Token } from './interface';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
+import { RecommitmentService } from 'src/personnel/recommitment.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(RecommitmentService)
+    private readonly recommitmentService: RecommitmentService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(AuthService.name);
@@ -90,7 +93,7 @@ export class AuthService {
   }> {
     const { isMember, isSupervisor } =
       await this.personnelService.verifyMemberOrSupervisor(email);
-    const recommitment = await this.personnelService.getRecommitmentPeriod();
+    const recommitment = await this.recommitmentService.getRecommitmentPeriod();
     return {
       isMember,
       isSupervisor,

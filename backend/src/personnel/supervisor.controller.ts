@@ -21,6 +21,7 @@ import { Roles } from '../auth/roles.decorator';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { UpdateResult } from 'typeorm';
+import { RecommitmentService } from './recommitment.service';
 
 @Controller('supervisor')
 @ApiTags('Supervisor API')
@@ -30,6 +31,8 @@ export class SupervisorController {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(RecommitmentService)
+    private readonly recommitmentService: RecommitmentService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(SupervisorController.name);
@@ -65,6 +68,6 @@ export class SupervisorController {
     @Req() req: RequestWithRoles,
     @Body() personnel: Partial<UpdatePersonnelRecommitmentDTO>,
   ): Promise<UpdateResult|void> {
-    return await this.personnelService.updatePersonnelRecommitmentStatus(id, personnel, req);
+    return await this.recommitmentService.updatePersonnelRecommitmentStatus(id, personnel, req);
   }  
 }
