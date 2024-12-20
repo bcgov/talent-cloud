@@ -9,7 +9,7 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
-import { EmailTemplates } from '../mail/utils';
+import { EmailTemplates, TemplateType } from '../mail/constants';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { GetAvailabilityDTO } from './dto/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
@@ -164,6 +164,7 @@ export class PersonnelService {
     if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
       return await this.mailService.generateAndSendTemplate(
         EmailTemplates.MEMBER_APPROVED,
+        TemplateType.MEMBER,
         [personnel],
         recommitmentUpdate.program,
       );
@@ -171,6 +172,7 @@ export class PersonnelService {
     if (recommitmentUpdate.status === RecommitmentStatus.SUPERVISOR_DENIED) {
       return await this.mailService.generateAndSendTemplate(
         EmailTemplates.MEMBER_DENIED,
+        TemplateType.MEMBER,
         [personnel],
         recommitmentUpdate.program,
       );
