@@ -32,6 +32,14 @@ parameters:
   - name: FORM_ID
     description: Form ID specific to the environment
     required: true
+  - name: CHES_API
+    description: Base for URL used to request actions with CHES
+    value: 'https://ches-dev.api.gov.bc.ca/api/v1'
+    required: true
+  - name: CHES_AUTH_API
+    description: Base for URL used to request authentication actions with CHES
+    value: 'https://dev.loginproxy.gov.bc.ca'
+    required: true
 objects:
   - kind: Secret
     apiVersion: v1
@@ -70,3 +78,10 @@ objects:
       name: ${APP_NAME}-server-config
     data:
       app-env: ${APP_ENV}
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-ches
+    stringData:
+      ches_client_id: ${CHES_CLIENT_ID}  
+      ches_client_secret: ${CHES_CLIENT_SECRET}

@@ -89,6 +89,10 @@ objects:
                   value: '3000'
                 - name: CONFIG_VERSION
                   value: ${CONFIG_VERSION}
+                - name: CHES_API
+                  value: ${CHES_API}
+                - name: CHES_AUTH_API
+                  value: {CHES_AUTH_API}
                 - name: DB_HOST
                   value: ${APP_NAME}-patroni
                 - name: DB_NAME
@@ -121,6 +125,21 @@ objects:
                     secretKeyRef:
                       key: client
                       name: ${APP_NAME}-keycloak
+                - name: CHES_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_client_id
+                      name: ${APP_NAME}-ches
+                - name: CHES_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_client-secret
+                      name: ${APP_NAME}-ches
+                - name: MODE
+                  valueFrom:
+                    secretKeyRef:
+                      key: mode
+                      name: ${APP_NAME}-ches
                 - name: CHEFS_API
                   valueFrom:
                     secretKeyRef:
