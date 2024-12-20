@@ -26,12 +26,6 @@ parameters:
     generate: expression
     from: '[a-zA-Z0-9]{32}'
     required: true
-  - name: FORM_ENABLED
-    description: Used to enable or disable the form on the frontend
-    required: true
-  - name: FORM_ID
-    description: Form ID specific to the environment
-    required: true
   - name: CHES_API
     description: Base for URL used to request actions with CHES
     value: 'https://ches-dev.api.gov.bc.ca/api/v1'
