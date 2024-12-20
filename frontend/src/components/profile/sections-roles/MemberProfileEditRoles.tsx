@@ -43,7 +43,6 @@ interface FunctionChanges {
 
 const RoleSelect = ({ allRoles, selectedRoles, onRoleSelect }: RoleSelectProps) => {
   const [query, setQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
 
   const filteredRoles =
     query === ''
@@ -69,15 +68,7 @@ const RoleSelect = ({ allRoles, selectedRoles, onRoleSelect }: RoleSelectProps) 
   };
 
   return (
-    <Combobox
-      immediate
-      value={selectedRoles}
-      onChange={onRoleSelect}
-      multiple
-      open={isOpen}
-      onFocus={() => setIsOpen(true)}
-      onBlur={() => setIsOpen(false)}
-    >
+    <Combobox immediate value={selectedRoles} onChange={onRoleSelect} multiple>
       <div className="relative mt-1">
         <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
           <ComboboxInput
@@ -136,7 +127,6 @@ const FunctionSelect = ({
   onFunctionSelect: (functions: FunctionType[]) => void;
 }) => {
   const [query, setQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
 
   const filteredFunctions =
     query === ''
@@ -159,9 +149,6 @@ const FunctionSelect = ({
       value={selectedFunctions}
       onChange={onFunctionSelect}
       multiple
-      open={isOpen}
-      onFocus={() => setIsOpen(true)}
-      onBlur={() => setIsOpen(false)}
     >
       <div className="relative mt-1">
         <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
