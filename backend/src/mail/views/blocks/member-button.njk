@@ -1,0 +1,13 @@
+<div class="button-div">
+{% if dev %}
+  <a id="link-button" href="https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/profile">Get Started</a>
+{% elif test %}
+    <a id="link-button" href="https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca/profile">Get Started</a>
+{% elif production %}
+    <a id="link-button" href="https://coreteam.gov.bc.ca/profile">Get Started</a>
+{% else %}
+    <a id="link-button" href="http://localhost:3000/profile">Get Started</a>
+{% endif %}
+</div>
+
+    

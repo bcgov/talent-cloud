@@ -1,0 +1,24 @@
+{# supervisor - follow up }
+{% extends "layout.njk" %}
+
+{% block content %}
+<p>This is just a reminder to give or decline approval for the following employee who has requested to recommit to the CORE program for {{year}}:</p>
+
+{% include "blocks/member-program.njk" %}
+
+{% include "blocks/steps.njk" %}
+
+<p><span>What if I need to change my approval decision?</span></p>
+<p>Selecting <span>APPROVE</span> for YOUR employee’s recommitment is a final action and cannot be undone. However, if you initially <span>DECLINED</span> their recommitment, you can only change it once before {{date}}. After this date, please reach out to  {{emcr_contact}} OR {{bcws_contact}} if you wish to re-approve this member.</p>
+
+<p>Thank you so much for your ongoing support!</p>
+
+{% endblock %}
+
+{# year #}
+{# emcr_contact #}
+{# bcws_contact #}
+{# member #}
+{# program #}
+
+ 
