@@ -13,6 +13,7 @@ import { RecommitmentCycleEntity } from '../database/entities/recommitment/recom
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 import { LoggerModule } from '../logger/logger.module';
 import { MailModule } from '../mail/mail.module';
+import { RecommitmentService } from './recommitment.service';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { MailModule } from '../mail/mail.module';
     ]),
   ],
   controllers: [PersonnelController, SupervisorController],
-  providers: [PersonnelService],
-  exports: [TypeOrmModule, PersonnelService],
+  providers: [PersonnelService, RecommitmentService],
+  exports: [TypeOrmModule, PersonnelService, RecommitmentService],
 })
 export class PersonnelModule {}

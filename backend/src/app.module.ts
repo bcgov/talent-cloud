@@ -13,9 +13,11 @@ import { LoggerModule } from './logger/logger.module';
 import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,

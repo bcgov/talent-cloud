@@ -14,6 +14,7 @@ import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
 import { PersonnelService } from './personnel/personnel.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
+import { RecommitmentService } from './personnel/recommitment.service';
 
 @ApiTags('Application API')
 @Controller()
@@ -24,6 +25,7 @@ export class AppController {
     @Inject(BcwsService) private bcwsService: BcwsService,
     @Inject(EmcrService) private emcrService: EmcrService,
     @Inject(PersonnelService) private personnelService: PersonnelService,
+    @Inject(RecommitmentService) private recommitmentService: RecommitmentService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
@@ -157,6 +159,6 @@ export class AppController {
   })
   @Get('/recommitment')
   async checkRecommitmentPeriod(){
-    return await this.personnelService.checkRecommitmentPeriod();
+    return await this.recommitmentService.checkRecommitmentPeriod();
   }
 }
