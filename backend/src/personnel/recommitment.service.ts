@@ -1,21 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getWeekOfMonth } from 'date-fns';
 import { In, Repository } from 'typeorm';
-import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
-import { EmailTemplates } from '../mail/constants';
+import { PersonnelService } from './personnel.service';
 import { Program, RequestWithRoles } from '../auth/interface';
+import { Status } from '../common/enums';
+import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
-import { MailService } from '../mail/mail.service';
-import { PersonnelService } from './personnel.service';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { TemplateType } from '../mail/constants';
-import { getWeekOfMonth } from 'date-fns';
-import { Status } from 'src/common/enums';
+import { EmailTemplates } from '../mail/constants';
+import { MailService } from '../mail/mail.service';
 
 export const RecommitmentCron = {
   EVERY_MONDAY_OF_JAN: '0 0 * 1 1',
@@ -83,25 +83,25 @@ export class RecommitmentService {
             recommitmentUpdate[key].program,
           );
           break;
-        case RecommitmentStatus.MEMBER_DENIED:
+        case RecommitmentStatus.MEMBER_DECLINED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.MEMBER_DECLINED,
+            TemplateType.MEMBER,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+        case RecommitmentStatus.SUPERVISOR_APPROVED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.MEMBER_APPROVED,
+            TemplateType.MEMBER,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+        case RecommitmentStatus.SUPERVISOR_DENIED:
           await this.mailService.generateAndSendTemplate(
             EmailTemplates.MEMBER_DENIED,
-            TemplateType.MEMBER,
-            [personnel],
-            recommitmentUpdate[key].program,
-          );
-          break;
-        case RecommitmentStatus.SUPERVISOR_APPROVED:
-          await this.mailService.generateAndSendTemplate(
-            EmailTemplates.MEMBER_APPROVED,
-            TemplateType.MEMBER,
-            [personnel],
-            recommitmentUpdate[key].program,
-          );
-          break;
-        case RecommitmentStatus.SUPERVISOR_APPROVED:
-          await this.mailService.generateAndSendTemplate(
-            EmailTemplates.MEMBER_APPROVED,
             TemplateType.MEMBER,
             [personnel],
             recommitmentUpdate[key].program,
@@ -146,7 +146,7 @@ export class RecommitmentService {
   }
 
   async endRecommitmentCycle() {
-    const cycle = await this.getRecommitmentPeriod();
+    // const cycle = await this.getRecommitmentPeriod();
     //TODO set all final recommitment status's and emails
   }
 
