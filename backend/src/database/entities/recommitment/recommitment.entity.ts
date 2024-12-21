@@ -13,10 +13,10 @@ import { RecommitmentCycleEntity } from './recommitment-cycle.entity';
 import { PersonnelEntity } from '../personnel/personnel.entity';
 import { RecommitmentStatus } from '../../../common/enums/recommitment-status.enum';
 import { RecommitmentRO } from '../../../personnel/ro/recommitment.ro';
-import { Role } from '../../../auth/interface';
+import { Program, Role } from '../../../auth/interface';
 
 @Entity('recommitment')
-@Unique(['memberId', 'recommitmentCycleId'])
+@Unique(['memberId', 'recommitmentCycleId', 'program']) 
 export class RecommitmentEntity {
   @PrimaryColumn({ name: 'member', type: 'uuid' })
   memberId: string;
@@ -32,21 +32,16 @@ export class RecommitmentEntity {
   @PrimaryColumn({ name: 'year', type: 'integer' })
   recommitmentCycleId: number;
 
+  @PrimaryColumn({ name: 'program', type: 'enum', enum: Program })
+  program: Program;
+
   @Column({
     name: 'emcr',
     type: 'enum',
     enum: RecommitmentStatus,
     nullable: true,
   })
-  emcr?: RecommitmentStatus | null;
-
-  @Column({
-    name: 'bcws',
-    type: 'enum',
-    enum: RecommitmentStatus,
-    nullable: true,
-  })
-  bcws?: RecommitmentStatus | null;
+  status?: RecommitmentStatus | null;
 
   @Column({ name: 'member_decision_date', type: 'timestamp', nullable: true })
   memberDecisionDate?: Date | null;
@@ -57,15 +52,9 @@ export class RecommitmentEntity {
     length: 250,
     nullable: true,
   })
-  memberReasonEmcr?: string | null;
+  memberReason?: string | null;
 
-  @Column({
-    name: 'member_reason_bcws',
-    type: 'varchar',
-    length: 250,
-    nullable: true,
-  })
-  memberReasonBcws?: string | null;
+  
 
   @Column({
     name: 'supervisor_idir',
@@ -88,15 +77,9 @@ export class RecommitmentEntity {
     length: 250,
     nullable: true,
   })
-  supervisorReasonEmcr?: string | null;
+  supervisorReason?: string | null;
 
-  @Column({
-    name: 'supervisor_reason_bcws',
-    type: 'varchar',
-    length: 250,
-    nullable: true,
-  })
-  supervisorReasonBcws?: string | null;
+
 
   toResponseObject(roles: Role[]): Record<string, RecommitmentRO> {
     const response = new RecommitmentRO();
@@ -104,15 +87,13 @@ export class RecommitmentEntity {
     const data = {
       member: this.member,
       recommitmentCycle: this.recommitmentCycle?.toResponseObject(),
-      emcr: this.emcr,
-      bcws: this.bcws,
+      status: this.status,
       memberDecisionDate: this.memberDecisionDate,
-      memberReasonEmcr: this.memberReasonEmcr,
-      memberReasonBcws: this.memberReasonBcws,
+      memberReason: this.memberReason,
       supervisorIdir: this.supervisorIdir,
       supervisorDecisionDate: this.supervisorDecisionDate,
-      supervisorReasonEmcr: this.supervisorReasonEmcr,
-      supervisorReasonBcws: this.supervisorReasonBcws,
+      supervisorReason: this.supervisorReason,
+      
 
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));

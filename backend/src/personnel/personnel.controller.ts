@@ -25,8 +25,9 @@ import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
+import { PersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentService } from './recommitment.service';
+import { Public } from '../auth/public.decorator';
 
 
 @Controller('personnel')
@@ -84,11 +85,12 @@ export class PersonnelController {
   async updatePersonnelRecommitment(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
-    @Body() recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
-  ): Promise<any> {
-    console.log("updatePersonnelRecommitment");
-    return await this.recommitmentService.updateMemberRecommitmentStatus(id, recommitmentUpdate, req);
-  }
+    @Body() update: PersonnelRecommitmentDTO,
+  ): Promise<Record<'personnel', PersonnelRO>> {
+    
+    const personnel =  await this.recommitmentService.updateMemberRecommitmentStatus(id, update, req);
+    return personnel.toResponseObject(req.roles); 
+  }  
 
   @ApiOperation({
     summary: 'Update personnel availability',
@@ -138,4 +140,5 @@ export class PersonnelController {
   > {
     return this.personnelService.getApprovedBCWSMembers();
   }
+  
 }

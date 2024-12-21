@@ -1,28 +1,27 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
 import { EmailTemplates } from '../mail/constants';
 import { Program, RequestWithRoles } from '../auth/interface';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
+import { PersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 import { MailService } from '../mail/mail.service';
 import { PersonnelService } from './personnel.service';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
-import { PersonnelEntity } from 'src/database/entities/personnel/personnel.entity';
-import { TemplateType } from 'src/mail/constants';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
+import { TemplateType } from '../mail/constants';
+import { getWeekOfMonth } from 'date-fns';
+import { Status } from 'src/common/enums';
 
-export enum RecommitmentCron {
-  SECOND_MONDAY_OF_JAN = '0 0 * 1 1#2',
-  THIRD_MONDAY_OF_JAN = '0 0 * 1 1#3',
-  FOURTH_MONDAY_OF_JAN = '0 0 * 1 1#4',
-  FIRST_MONDAY_OF_FEB = '0 0 * 2 1#1',
-  SECOND_MONDAY_OF_FEB = '0 0 * 2 1#2',
-  THIRD_FRIDAY_OF_FEB = '0 0 * 2 5#3',
-}
+export const RecommitmentCron = {
+  EVERY_MONDAY_OF_JAN: '0 0 * 1 1',
+  EVERY_MONDAY_OF_FEB: '0 0 * 2 1',
+  EVERY_FRIDAY_OF_FEB: '0 0 * 2 5',
+};
 
 @Injectable()
 export class RecommitmentService {
@@ -47,105 +46,70 @@ export class RecommitmentService {
    * @param req
    * @returns
    */
-  async updatePersonnelRecommitmentStatus(
-    id: string,
-    recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
-    req: RequestWithRoles,
-  ): Promise<any> {
-    console.log(id, recommitmentUpdate, req.idir);
-
-    const personnel = await this.personnelService.findOne(id);
-    const recommitment = await this.recommitmentRepository.findOneOrFail({
-      where: { memberId: id, recommitmentCycleId: recommitmentUpdate.year },
-    });
-    const { year } = recommitmentUpdate;
-
-    if (recommitmentUpdate.program === Program.BCWS) {
-      recommitment.bcws = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.supervisorReasonBcws = recommitmentUpdate.reason;
-      }
-    }
-    if (recommitmentUpdate.program === Program.EMCR) {
-      recommitment.emcr = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.supervisorReasonEmcr = recommitmentUpdate.reason;
-      }
-    }
-
-    await this.recommitmentRepository.update(
-      { memberId: id, recommitmentCycleId: year },
-      { ...recommitment },
-    );
-    await this.triggerEmail(id, recommitmentUpdate);
-    return await this.personnelService.findOne(id);
-  }
-
-  /**
-   *
-   * @param id Supervisor function to update recommitment status
-   * @param recommitmentUpdate
-   * @param req
-   * @returns
-   */
   async updateMemberRecommitmentStatus(
     id: string,
-    recommitmentUpdate: Partial<UpdatePersonnelRecommitmentDTO>,
+    recommitmentUpdate: PersonnelRecommitmentDTO,
     req: RequestWithRoles,
-  ): Promise<any> {
-    console.log(id, recommitmentUpdate, req.idir);
-    const recommitment = await this.recommitmentRepository.findOneOrFail({
-      where: { memberId: id, recommitmentCycleId: recommitmentUpdate.year },
+  ): Promise<PersonnelEntity> {
+    Object.keys(recommitmentUpdate).forEach(async (key) => {
+      const recommitment = await this.recommitmentRepository.findOneOrFail({
+        where: {
+          memberId: id,
+          recommitmentCycleId: recommitmentUpdate[key].year,
+          program: recommitmentUpdate[key].program,
+        },
+      });
+
+      req.idir === id
+        ? (recommitment.memberDecisionDate = new Date())
+        : (recommitment.supervisorDecisionDate = new Date());
+      await this.recommitmentRepository.update(
+        {
+          memberId: id,
+          recommitmentCycleId: recommitmentUpdate[key].year,
+          program: recommitmentUpdate[key].program,
+        },
+        { ...recommitment },
+      );
+
+      const personnel = await this.personnelService.findOne(id);
+
+      switch (recommitmentUpdate[key].status) {
+        case RecommitmentStatus.MEMBER_COMMITTED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.SUPERVISOR_REQUEST,
+            TemplateType.SUPERVISOR,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+        case RecommitmentStatus.MEMBER_DENIED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.MEMBER_DENIED,
+            TemplateType.MEMBER,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+        case RecommitmentStatus.SUPERVISOR_APPROVED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.MEMBER_APPROVED,
+            TemplateType.MEMBER,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+        case RecommitmentStatus.SUPERVISOR_APPROVED:
+          await this.mailService.generateAndSendTemplate(
+            EmailTemplates.MEMBER_APPROVED,
+            TemplateType.MEMBER,
+            [personnel],
+            recommitmentUpdate[key].program,
+          );
+          break;
+      }
     });
-
-    const { year } = recommitmentUpdate;
-
-    if (recommitmentUpdate.program === Program.BCWS) {
-      recommitment.bcws = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.memberReasonBcws = recommitmentUpdate.reason;
-      }
-    }
-    if (recommitmentUpdate.program === Program.EMCR) {
-      recommitment.emcr = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.memberReasonBcws = recommitmentUpdate.reason;
-      }
-    }
-    if (recommitmentUpdate.program === Program.ALL) {
-      recommitment.bcws = recommitmentUpdate.status;
-      recommitment.emcr = recommitmentUpdate.status;
-      if (recommitmentUpdate.reason) {
-        recommitment.memberReasonBcws = recommitmentUpdate.reason;
-        recommitment.memberReasonEmcr = recommitmentUpdate.reason;
-      }
-    }
-    recommitment.memberDecisionDate = new Date();
-    const updated = await this.recommitmentRepository.update(
-      { memberId: id, recommitmentCycleId: year },
-      { ...recommitment },
-    );
-    console.log(updated);
-    const personnel = await this.personnelService.findOne(id);
-
-    if (recommitmentUpdate.status === RecommitmentStatus.MEMBER_COMMITTED) {
-      return await this.mailService.generateAndSendTemplate(
-        EmailTemplates.SUPERVISOR_REQUEST,
-        TemplateType.SUPERVISOR,
-        [personnel],
-        recommitmentUpdate.program,
-      );
-    }
-    if (recommitmentUpdate.status === RecommitmentStatus.MEMBER_DENIED) {
-      return await this.mailService.generateAndSendTemplate(
-        EmailTemplates.MEMBER_DENIED,
-        TemplateType.MEMBER,
-        [personnel],
-        recommitmentUpdate.program,
-      );
-    }
-
-    return personnel;
+    return await this.personnelService.findOne(id);
   }
 
   async triggerEmail(id, recommitmentUpdate) {
@@ -186,7 +150,48 @@ export class RecommitmentService {
     //TODO set all final recommitment status's and emails
   }
 
-  async initRecommitmentCycle() {
+  @Cron(RecommitmentCron.EVERY_MONDAY_OF_JAN, {
+    name: 'januaryMondayCron',
+  })
+  async januaryMondayCron() {
+    const week = getWeekOfMonth(new Date());
+    if (week === 2) {
+      this.logger.log('2nd Monday in Jan - initializing recommitment cycle');
+      return await this.handleStartRecommitment();
+    }
+    if (week === 3) {
+      this.logger.log('3rd Monday in Jan - sending reminder');
+      return await this.handleInitiateReminder();
+    }
+  }
+
+  @Cron(RecommitmentCron.EVERY_MONDAY_OF_FEB, {
+    name: 'februaryMondayCron',
+  })
+  async februaryMondayCron() {
+    const week = getWeekOfMonth(new Date());
+    if (week === 2) {
+      this.logger.log('2nd Monday in Feb - sending reminder');
+      return await this.handleInitiateReminder();
+    }
+    if (week === 3) {
+      this.logger.log('3rd Monday in Feb - sending reminder');
+      return await this.handleInitiateReminder();
+    }
+  }
+
+  @Cron(RecommitmentCron.EVERY_FRIDAY_OF_FEB, {
+    name: 'februaryFridayCron',
+  })
+  async februaryFridayCron() {
+    const week = getWeekOfMonth(new Date());
+    if (week === 3) {
+      this.logger.log('3rd Friday in Feb - end recommitment cycle');
+      return await this.handleEndRecommitment();
+    }
+  }
+
+  async handleStartRecommitment() {
     const currentDate = new Date();
     const recommitmentCycleData = new RecommitmentCycleEntity();
     recommitmentCycleData.year = currentDate.getFullYear();
@@ -210,63 +215,122 @@ export class RecommitmentService {
       await this.personnelService.findPersonnelForRecommitment();
 
     personnel.forEach(async (person: PersonnelEntity) => {
-      const commitment = await this.recommitmentRepository.save(
-        this.recommitmentRepository.create({
-          memberId: person.id,
-          recommitmentCycleId: cycle['year'],
-          emcr: person?.emcr ? RecommitmentStatus.PENDING : null,
-          bcws: person?.bcws ? RecommitmentStatus.PENDING : null,
-          memberDecisionDate: null,
-          memberReasonEmcr: null,
-          memberReasonBcws: null,
-          supervisorIdir: null,
-          supervisorDecisionDate: null,
-        }),
-      );
-      person.recommitment = commitment;
-      await this.personnelService.save(person);
+      if (person.emcr) {
+        await this.recommitmentRepository.save(
+          this.recommitmentRepository.create({
+            memberId: person.id,
+            recommitmentCycleId: cycle['year'],
+            status: RecommitmentStatus.PENDING,
+            memberDecisionDate: null,
+            supervisorIdir: null,
+            supervisorDecisionDate: null,
+            program: Program.EMCR,
+          }),
+        );
+      }
+      if (person.bcws) {
+        await this.recommitmentRepository.save(
+          this.recommitmentRepository.create({
+            memberId: person.id,
+            recommitmentCycleId: cycle['year'],
+            status: RecommitmentStatus.PENDING,
+            memberDecisionDate: null,
+            supervisorIdir: null,
+            supervisorDecisionDate: null,
+            program: Program.BCWS,
+          }),
+        );
+      }
     });
   }
 
-  @Cron(RecommitmentCron.SECOND_MONDAY_OF_JAN, {
-    name: 'initiateRecommitment',
-    timeZone: 'America/Vancouver',
-  })
-  async handleInitiateRecommitmentCron() {
-    this.logger.log('Called when the second Monday of January');
-    await this.initRecommitmentCycle();
-  }
-
-  @Cron(RecommitmentCron.THIRD_MONDAY_OF_JAN, {
-    name: 'firstRecommitmentReminder',
-    timeZone: 'America/Vancouver',
-  })
-  handleInitiateReminderCron() {
+  async handleInitiateReminder() {
     //TODO trigger email to all members who are pending and to all supervisors of members who are MEMBER_COMMITTED
-  }
+    const personnel =
+      await this.personnelService.findPersonnelForRecommitment();
+    const personnelIds = personnel.map((person) => person.id);
+    const pendingMembers = await this.recommitmentRepository.find({
+      where: {
+        memberId: In(personnelIds),
+        status: RecommitmentStatus.PENDING,
+      },
+    });
+    pendingMembers.forEach(async (person: RecommitmentEntity) => {
+      await this.mailService.generateAndSendTemplate(
+        EmailTemplates.MEMBER_FOLLOW_UP,
+        TemplateType.MEMBER,
+        personnel.filter((p) => p.id === person.memberId),
+        person.program,
+      );
+    });
 
-  @Cron(RecommitmentCron.FIRST_MONDAY_OF_FEB, {
-    name: 'secondRecommitmentReminder',
-    timeZone: 'America/Vancouver',
-  })
-  handleInitiateSecondReminderCron() {
-    this.logger.log('Called when the second Monday of January');
+    const committedMembers = await this.recommitmentRepository.find({
+      where: {
+        memberId: In(personnelIds),
+        status: RecommitmentStatus.MEMBER_COMMITTED,
+      },
+    });
+    committedMembers.forEach(async (person: RecommitmentEntity) => {
+      await this.mailService.generateAndSendTemplate(
+        EmailTemplates.SUPERVISOR_REMINDER,
+        TemplateType.SUPERVISOR,
+        personnel.filter((p) => p.id === person.memberId),
+        person.program,
+      );
+    });
+  }
+  async handleEndRecommitment() {
     //TODO trigger email to all members who are pending and to all supervisors of members who are MEMBER_COMMITTED
-  }
+    const personnel =
+      await this.personnelService.findPersonnelForRecommitment();
+    const personnelIds = personnel.map((person) => person.id);
+    const pendingMembersBCWS = await this.recommitmentRepository.find({
+      where: {
+        memberId: In(personnelIds),
+        status: In([
+          RecommitmentStatus.PENDING,
+          RecommitmentStatus.MEMBER_COMMITTED,
+        ]),
+        program: Program.BCWS,
+      },
+    });
+    const stillPendingBCWSPersonnel = personnel.filter((person) =>
+      pendingMembersBCWS.map((itm) => itm.memberId).includes(person.id),
+    );
+    stillPendingBCWSPersonnel.forEach(async (person: PersonnelEntity) => {
+      person.bcws.status = Status.INACTIVE;
+      await this.personnelService.save(person);
+    });
+    await this.mailService.generateAndSendTemplate(
+      EmailTemplates.MEMBER_NO_RESPONSE,
+      TemplateType.MEMBER,
+      stillPendingBCWSPersonnel,
+      Program.BCWS,
+    );
 
-  @Cron(RecommitmentCron.SECOND_MONDAY_OF_FEB, {
-    name: 'finalRecommitmentReminder',
-    timeZone: 'America/Vancouver',
-  })
-  handleInitiateFinalReminderCron() {
-    //TODO trigger email to all members who are pending and to all supervisors of members who are MEMBER_COMMITTED
-  }
+    const pendingMembersEMCR = await this.recommitmentRepository.find({
+      where: {
+        memberId: In(personnelIds),
+        status: In([
+          RecommitmentStatus.PENDING,
+          RecommitmentStatus.MEMBER_COMMITTED,
+        ]),
+        program: Program.EMCR,
+      },
+    });
 
-  @Cron(RecommitmentCron.THIRD_FRIDAY_OF_FEB, {
-    name: 'endRecommitment',
-    timeZone: 'America/Vancouver',
-  })
-  handleEndRecommitmentCycle() {
-    this.endRecommitmentCycle();
+    const stillPendingEMCRPersonnel = personnel.filter((person) =>
+      pendingMembersEMCR.map((itm) => itm.memberId).includes(person.id),
+    );
+    stillPendingBCWSPersonnel.forEach(async (person: PersonnelEntity) => {
+      person.bcws.status = Status.INACTIVE;
+      await this.personnelService.save(person);
+    });
+    await this.mailService.generateAndSendTemplate(
+      EmailTemplates.MEMBER_NO_RESPONSE,
+      TemplateType.MEMBER,
+      stillPendingEMCRPersonnel,
+      Program.EMCR,
+    );
   }
 }

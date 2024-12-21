@@ -127,10 +127,7 @@ export class MailService {
         context: {
           program: program,
           year: person.recommitment.recommitmentCycle.year,
-          reason:
-            program === Program.BCWS
-              ? person?.recommitment.memberReasonBcws
-              : person?.recommitment.memberReasonEmcr,
+          reason: person.recommitment.memberReason,
           date: person.recommitment.recommitmentCycle.endDate,
           member: `${person.firstName} ${person.lastName}`,
           subject:

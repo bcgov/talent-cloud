@@ -12,15 +12,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreatePersonnelDTO } from './dto';
 import { PersonnelService } from './personnel.service';
 import { PersonnelRO } from './ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
-import { UpdateResult } from 'typeorm';
+import { PersonnelRecommitmentDTO } from './dto/update-personnel-recommitment.dto';
 import { RecommitmentService } from './recommitment.service';
 
 @Controller('supervisor')
@@ -66,8 +64,9 @@ export class SupervisorController {
   async updatePersonnel(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
-    @Body() personnel: Partial<UpdatePersonnelRecommitmentDTO>,
-  ): Promise<UpdateResult|void> {
-    return await this.recommitmentService.updatePersonnelRecommitmentStatus(id, personnel, req);
+    @Body() update: PersonnelRecommitmentDTO,
+  ): Promise<Record<'personnel', PersonnelRO>> {
+    const personnel =  await this.recommitmentService.updateMemberRecommitmentStatus(id, update, req);
+    return personnel.toResponseObject(req.roles); 
   }  
 }

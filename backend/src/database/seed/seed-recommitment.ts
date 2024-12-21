@@ -4,6 +4,8 @@ import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
 import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
+import { Program } from '../../auth/interface';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
@@ -42,20 +44,30 @@ export const handler = async () => {
   const personnel = await qb.getMany();
 
   personnel.forEach(async (person: PersonnelEntity) => {
-    const commitment = await recommitmentRepository.save(
+    person.bcws && await recommitmentRepository.save(
       recommitmentRepository.create({
         memberId: person.id,
         recommitmentCycleId: cycle['year'],
-        emcr: person?.emcr ? RecommitmentStatus.PENDING : null,
-        bcws: person?.bcws ? RecommitmentStatus.PENDING : null,
+        status: RecommitmentStatus.PENDING,
         memberDecisionDate: null,
-        memberReasonEmcr: null,
-        memberReasonBcws: null,
+        memberReason: null,
         supervisorIdir: null,
         supervisorDecisionDate: null,
+        program: Program.BCWS,
       }),
     );
-    person.recommitment = commitment;
+    person.emcr && await recommitmentRepository.save(
+      recommitmentRepository.create({
+        memberId: person.id,
+        recommitmentCycleId: cycle['year'],
+        status: RecommitmentStatus.PENDING,
+        memberDecisionDate: null,
+        memberReason: null,
+        supervisorIdir: null,
+        supervisorDecisionDate: null,
+        program: Program.EMCR,
+      }),
+    );
     await personnelRepository.save(person);
   });
 };

@@ -28,3 +28,9 @@ export class UpdatePersonnelRecommitmentDTO {
   })
   reason?: string;
 }
+
+
+export class PersonnelRecommitmentDTO{
+  bcws?: UpdatePersonnelRecommitmentDTO;
+  emcr?: UpdatePersonnelRecommitmentDTO;
+}
