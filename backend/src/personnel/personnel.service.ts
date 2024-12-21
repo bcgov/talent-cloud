@@ -694,7 +694,11 @@ export class PersonnelService {
     const qb = this.personnelRepository
       .createQueryBuilder('personnel')
       .innerJoinAndSelect('personnel.bcws', 'bcws')
-      .select(['personnel.firstName', 'personnel.lastName', 'bcws.employeeId'])
+      .select([
+        'personnel.firstName',
+        'personnel.lastName',
+        'personnel.employeeId',
+      ])
       .andWhere('bcws.status = :status', { status: Status.ACTIVE });
     const personnel = await qb.getMany();
     return personnel.map((p) => ({
