@@ -133,7 +133,7 @@ objects:
                 - name: CHES_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      key: ches_client-secret
+                      key: ches_client_secret
                       name: ${APP_NAME}-ches
                 - name: MODE
                   valueFrom:
