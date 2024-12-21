@@ -34,8 +34,8 @@ import { CreatePersonnelEmcrDTO } from '../emcr/dto';
 import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
-import { PersonnelService } from '../personnel/personnel.service';
 import { CreateCertificationsDTO } from '../personnel/dto/create-certifications.dto';
+import { PersonnelService } from '../personnel/personnel.service';
 
 @Injectable()
 export class FormService {
@@ -228,7 +228,7 @@ export class FormService {
     formId: number,
     pfa: string,
     firstAidLevel?: string,
-    firstAidExpiry?: Date,
+    firstAidExpiry?: string,
   ): CreatePersonnelDTO {
     const uniqueToolIds = Array.from(
       new Set(data?.tools?.map((itm) => itm.name.id)),
