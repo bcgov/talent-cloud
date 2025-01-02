@@ -8,11 +8,13 @@ export const RecommitmentProfileBanner = ({
   year,
   endDate,
   personnel,
+  handleClick,
   handleCloseBanner,
 }: {
   year: number;
   endDate: string;
   personnel: Personnel;
+  handleClick: () => void;
   handleCloseBanner: () => void;
 }) => {
   const PendingContent = {
@@ -30,7 +32,7 @@ export const RecommitmentProfileBanner = ({
     statusText: 'Not Started',
     statusBg: 'bg-errorBannerLight',
     statusTextBg: 'error',
-    onClick: () => alert("Clicked on 'Start Recommitment'"),
+    onClick: handleClick,
     type: BannerType.RECOMMITMENT,
   };
 

@@ -3,7 +3,7 @@ import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
 import { Program, Status } from '@/common';
-import { Loading, MemberProfileDetails } from '@/components';
+import { DialogUI, Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
 import { Tabs as TabIndexes } from '@/common';
@@ -12,11 +12,17 @@ import { memberData } from '@/hooks/profileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { Transition } from '@headlessui/react';
 import { useProgramFieldData } from '@/hooks';
+import { RecommitmentFormBase } from '@/components/recommitment';
 
 const MemberProfile = () => {
-  const { personnel, loading, updatePersonnel } = useMemberProfile();
+  const { personnel, program, loading, updatePersonnel } = useMemberProfile();
   const [showBanner, setShowBanner] = useState(true);
+  const [openRecommitmentForm, setOpenRecommitmentForm] = useState(false);
   const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
+
+  const handleOpenRecommitmentForm = () => {
+    setOpenRecommitmentForm(!openRecommitmentForm);
+  };
 
   const handleCloseBanner = () => {
     setShowBanner(false);
@@ -69,6 +75,7 @@ const MemberProfile = () => {
                         year={recommitmentCycle?.year}
                         endDate={recommitmentCycle.endDate}
                         personnel={personnel}
+                        handleClick={handleOpenRecommitmentForm}
                         handleCloseBanner={handleCloseBanner}
                       />
                     </div>
@@ -101,6 +108,21 @@ const MemberProfile = () => {
           </div>
         </Tabs>
       </div>
+      {program && personnel && (
+        <DialogUI
+          open={openRecommitmentForm}
+          onClose={updatePersonnel}
+          handleOpen={handleOpenRecommitmentForm}
+          title={'Confirm Recommitment Status'}
+          style={'lg:w-2/3 xl:w-1/2'}
+        >
+          <RecommitmentFormBase
+            program={program}
+            personnel={personnel}
+            onCancel={() => setOpenRecommitmentForm(false)}
+          />
+        </DialogUI>
+      )}
     </div>
   );
 };
