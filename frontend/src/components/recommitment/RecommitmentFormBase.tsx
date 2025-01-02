@@ -82,7 +82,7 @@ export const RecommitmentFormBase = ({
 
   const getSteps = () => {
     switch (recommitmentAnswer) {
-      case 'yes':
+      case 'yes-both':
         return [
           <InitialRecommitmentDropdown
             program={program}
@@ -107,7 +107,7 @@ export const RecommitmentFormBase = ({
             key="assertions"
           />,
         ];
-      case 'emcr':
+      case 'emcr-only': // Rejecting BCWS as BOTH
         return [
           <InitialRecommitmentDropdown
             program={program}
@@ -131,7 +131,7 @@ export const RecommitmentFormBase = ({
             key="assertions"
           />,
         ];
-      case 'bcws':
+      case 'bcws-only': // Rejecting EMCR as BOTH
         return [
           <InitialRecommitmentDropdown
             program={program}
@@ -143,6 +143,50 @@ export const RecommitmentFormBase = ({
             program={Program.EMCR}
             onUpdate={setUnableToJoinReasons}
             key="unable"
+          />,
+          <ParQBase
+            currentPage={currentParQStep}
+            onGeneralAnswersChange={setParqGeneralAnswers}
+            onFollowUpAnswersChange={setParqFollowUpAnswers}
+            key="parq"
+          />,
+          <SupervisorForm
+            initialData={supervisorInformation}
+            onUpdate={setSupervisorInformation}
+            key="supervisor"
+          />,
+          <Assertions
+            program={Program.BCWS}
+            onUpdate={setAssertionsChecked}
+            key="assertions"
+          />,
+        ];
+      case 'yes-emcr': // No programs rejected
+        return [
+          <InitialRecommitmentDropdown
+            program={program}
+            initialValue={recommitmentAnswer}
+            handleChange={setRecommitmentAnswer}
+            key="initial"
+          />,
+          <SupervisorForm
+            initialData={supervisorInformation}
+            onUpdate={setSupervisorInformation}
+            key="supervisor"
+          />,
+          <Assertions
+            program={Program.EMCR}
+            onUpdate={setAssertionsChecked}
+            key="assertions"
+          />,
+        ];
+      case 'yes-bcws': // No programs rejected
+        return [
+          <InitialRecommitmentDropdown
+            program={program}
+            initialValue={recommitmentAnswer}
+            handleChange={setRecommitmentAnswer}
+            key="initial"
           />,
           <ParQBase
             currentPage={currentParQStep}
