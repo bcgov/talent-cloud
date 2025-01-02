@@ -228,7 +228,7 @@ export class FormService {
     formId: number,
     pfa: string,
     firstAidLevel?: string,
-    firstAidExpiry?: string,
+    firstAidExpiry?: Date,
   ): CreatePersonnelDTO {
     const uniqueToolIds = Array.from(
       new Set(data?.tools?.map((itm) => itm.name.id)),
@@ -246,9 +246,9 @@ export class FormService {
         certificationId: itm?.id,
         expiry:
           itm?.id === 6
-            ? new Date(data?.foodSafe1Expiry)
+            ? data?.foodSafe1Expiry
             : itm?.id === 7
-            ? new Date(data?.foodSafe2Expiry)
+            ? data?.foodSafe2Expiry
             : undefined,
       })) ?? [];
 
@@ -260,7 +260,7 @@ export class FormService {
       if (CertificationName[firstAidLevel] === CertificationName.OFA_I) {
         parsedCertifications.push({
           certificationId: 8,
-          expiry: new Date(firstAidExpiry),
+          expiry: firstAidExpiry,
         });
       } else if (
         CertificationName[firstAidLevel] === CertificationName.OFA_II

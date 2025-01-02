@@ -48,7 +48,7 @@ export interface PersonnelFormData {
   program: string;
   jobTitle: string;
   email: string;
-  firstAidExpiry?: string;
+  firstAidExpiry?: Date;
   lastName: string;
   firstName: string;
   primaryPhone: string;
@@ -77,8 +77,8 @@ export interface PersonnelFormData {
   languages?: LanguagesFormSection[];
   tools?: ToolsFormSection[];
   certificates?: CertsFormSection[];
-  foodSafe1Expiry?: string;
-  foodSafe2Expiry?: string;
+  foodSafe1Expiry?: Date;
+  foodSafe2Expiry?: Date;
   emergencyContactFirstName: string;
   emergencyContactLastName: string;
   emergencyContactPhoneNumber: string;
