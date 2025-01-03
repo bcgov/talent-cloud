@@ -4,26 +4,24 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { RecommitmentCycleEntity } from './recommitment-cycle.entity';
 import { PersonnelEntity } from '../personnel/personnel.entity';
+import { Program, Role } from '../../../auth/interface';
 import { RecommitmentStatus } from '../../../common/enums/recommitment-status.enum';
 import { RecommitmentRO } from '../../../personnel/ro/recommitment.ro';
-import { Role } from '../../../auth/interface';
 
 @Entity('recommitment')
-@Unique(['memberId', 'recommitmentCycleId'])
+@Unique(['personnelId', 'recommitmentCycleId', 'program'])
 export class RecommitmentEntity {
-  @PrimaryColumn({ name: 'member', type: 'uuid' })
-  memberId: string;
+  @PrimaryColumn({ name: 'personnel', type: 'uuid' })
+  personnelId: string;
 
-  @ManyToOne(() => PersonnelEntity, p => p.recommitment)
-  @JoinColumn({ name: 'member', referencedColumnName: 'id' })
-  member: PersonnelEntity;
+  @ManyToOne(() => PersonnelEntity, (p) => p.id)
+  @JoinColumn({ name: 'personnel', referencedColumnName: 'id' })
+  personnel: PersonnelEntity;
 
   @ManyToOne(() => RecommitmentCycleEntity, (r) => r.year)
   @JoinColumn({ name: 'year', referencedColumnName: 'year' })
@@ -32,40 +30,27 @@ export class RecommitmentEntity {
   @PrimaryColumn({ name: 'year', type: 'integer' })
   recommitmentCycleId: number;
 
-  @Column({
-    name: 'emcr',
-    type: 'enum',
-    enum: RecommitmentStatus,
-    nullable: true,
-  })
-  emcr?: RecommitmentStatus | null;
+  @PrimaryColumn({ name: 'program', type: 'enum', enum: Program })
+  program: Program;
 
   @Column({
-    name: 'bcws',
+    name: 'status',
     type: 'enum',
     enum: RecommitmentStatus,
     nullable: true,
   })
-  bcws?: RecommitmentStatus | null;
+  status?: RecommitmentStatus | null;
 
   @Column({ name: 'member_decision_date', type: 'timestamp', nullable: true })
   memberDecisionDate?: Date | null;
 
   @Column({
-    name: 'member_reason_emcr',
+    name: 'member_reason',
     type: 'varchar',
     length: 250,
     nullable: true,
   })
-  memberReasonEmcr?: string | null;
-
-  @Column({
-    name: 'member_reason_bcws',
-    type: 'varchar',
-    length: 250,
-    nullable: true,
-  })
-  memberReasonBcws?: string | null;
+  memberReason?: string | null;
 
   @Column({
     name: 'supervisor_idir',
@@ -83,44 +68,30 @@ export class RecommitmentEntity {
   supervisorDecisionDate?: Date;
 
   @Column({
-    name: 'supervisor_reason_emcr',
+    name: 'supervisor_reason',
     type: 'varchar',
     length: 250,
     nullable: true,
   })
-  supervisorReasonEmcr?: string | null;
-
-  @Column({
-    name: 'supervisor_reason_bcws',
-    type: 'varchar',
-    length: 250,
-    nullable: true,
-  })
-  supervisorReasonBcws?: string | null;
+  supervisorReason?: string | null;
 
   toResponseObject(roles: Role[]): Record<string, RecommitmentRO> {
     const response = new RecommitmentRO();
 
     const data = {
-      member: this.member,
+      personnelId: this.personnelId,
+      personnel: this.personnel.toResponseObject(roles),
       recommitmentCycle: this.recommitmentCycle?.toResponseObject(),
-      emcr: this.emcr,
-      bcws: this.bcws,
+      status: this.status,
+      program: this.program,
       memberDecisionDate: this.memberDecisionDate,
-      memberReasonEmcr: this.memberReasonEmcr,
-      memberReasonBcws: this.memberReasonBcws,
+      memberReason: this.memberReason,
       supervisorIdir: this.supervisorIdir,
       supervisorDecisionDate: this.supervisorDecisionDate,
-      supervisorReasonEmcr: this.supervisorReasonEmcr,
-      supervisorReasonBcws: this.supervisorReasonBcws,
-
+      supervisorReason: this.supervisorReason,
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
 
     return instanceToPlain(response, { groups: roles });
-  }
-
-  constructor(data: Partial<RecommitmentEntity>) {
-    Object.assign(this, data);
   }
 }

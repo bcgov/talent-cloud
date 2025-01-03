@@ -4,8 +4,8 @@ import * as nunjucks from 'nunjucks';
 import { EmailTemplates, envs, TemplateType } from './constants';
 import { MailDto } from './mail.dto';
 import { Program } from '../auth/interface';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
+import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
 
 @Injectable()
 export class MailService {
@@ -79,19 +79,21 @@ export class MailService {
   async generateAndSendTemplate(
     template: EmailTemplates,
     templateType: TemplateType,
-    personnel: PersonnelEntity[],
+    records: Record<string, RecommitmentRO>[],
     program?: Program,
   ) {
     this.logger.log(
-      `Sending ${template} for ${program}. Members: ${personnel.map(
-        (p) => p.email,
-      )} / Supervisors: ${personnel.map((p) => p.supervisorEmail)}`,
+      `Sending ${template} for ${program}. Members: ${records.map(
+        (p) => p.recommitment.personnel.email,
+      )} / Supervisors: ${records.map(
+        (p) => p.recommitment.personnel.supervisorEmail,
+      )}`,
     );
 
     const generatedTemplate = this.generateTemplate(
       template,
       templateType,
-      personnel,
+      records,
       program,
     );
     return await this.sendMail(generatedTemplate);
@@ -101,7 +103,7 @@ export class MailService {
   generateTemplate(
     template: EmailTemplates,
     templateType: TemplateType,
-    personnel: PersonnelEntity[],
+    records: Record<'recommitment', RecommitmentRO>[],
     program?: Program,
   ) {
     return new MailDto({
@@ -118,28 +120,31 @@ export class MailService {
         ...envs,
       }),
       attachments: [],
-      contexts: personnel.map((person) => ({
-        to: [person.email],
+      contexts: records.map((record) => ({
+        to: [
+          templateType === TemplateType.MEMBER
+            ? record.recommitment.personnel.email
+            : record.recommitment.personnel.supervisorEmail,
+        ],
         cc: [],
         bcc: [],
-        tag: `${template}_${person.id}`,
+        tag:
+          templateType === TemplateType.MEMBER
+            ? `${template}_${record.recommitment.personnel.id}`
+            : `${template}_${record.recommitment.personnel.supervisorEmail}`,
         delayTS: 0,
         context: {
           program: program,
-          year: person.recommitment.recommitmentCycle.year,
-          reason:
-            program === Program.BCWS
-              ? person?.recommitment.memberReasonBcws
-              : person?.recommitment.memberReasonEmcr,
-          date: person.recommitment.recommitmentCycle.endDate,
-          member: `${person.firstName} ${person.lastName}`,
+          year: record.recommitment.year,
+          date: record.recommitment.endDate,
+          member: `${record.recommitment.personnel.firstName} ${record.recommitment.personnel.lastName}`,
           subject:
             templateType === TemplateType.SUPERVISOR
-              ? `${person.supervisorFirstName} ${person.supervisorLastName}`
-              : `${person.firstName} ${person.lastName}`,
-          supervisor: `${person.supervisorFirstName} ${person.supervisorLastName}`,
-          emcr_contact: 'TODO: EMCR Contact',
-          bcws_contact: 'TODO: BCWS Contact',
+              ? `${record.recommitment.personnel.supervisorFirstName} ${record.recommitment.personnel.supervisorLastName}`
+              : `${record.recommitment.personnel.firstName} ${record.recommitment.personnel.lastName}`,
+          supervisor: `${record.recommitment.personnel.supervisorFirstName} ${record.recommitment.personnel.supervisorLastName}`,
+          emcr_contact: 'EMCR.CORETeam@gov.bc.ca',
+          bcws_contact: 'BCWS.CORETeam@gov.bc.ca',
           ...envs,
         },
       })),

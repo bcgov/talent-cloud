@@ -1,5 +1,5 @@
 import { BannerType } from '@/common/enums/banner-enum';
-import type { Personnel } from '@/common';
+import { Program, type Personnel } from '@/common';
 import { datePST } from '@/utils';
 import { RecommitmentBanner } from '../RecommitmentBanner';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
@@ -113,18 +113,21 @@ export const RecommitmentProfileBanner = ({
   };
 
   const renderBanner = () => {
-    switch (personnel?.recommitment?.bcws) {
-      case RecommitmentStatus.PENDING:
-        return <RecommitmentBanner {...PendingContent} />;
-      case RecommitmentStatus.MEMBER_DENIED:
+    const emcrStatus = personnel?.recommitment?.find(itm => itm.program === Program.EMCR)?.status;
+    const bcwsStatus = personnel?.recommitment?.find(itm => itm.program === Program.BCWS)?.status;
+    
+    
+      if(emcrStatus===RecommitmentStatus.PENDING || bcwsStatus===RecommitmentStatus.PENDING)
+        return <RecommitmentBanner {...PendingContent} />
+      if(emcrStatus===RecommitmentStatus.MEMBER_DENIED || bcwsStatus===RecommitmentStatus.MEMBER_DENIED)
         return <RecommitmentBanner {...DeclinedContent} />;
-      case RecommitmentStatus.MEMBER_COMMITTED:
+      if(emcrStatus===RecommitmentStatus.MEMBER_COMMITTED || bcwsStatus===RecommitmentStatus.MEMBER_COMMITTED)
         return <RecommitmentBanner {...AcceptedContent} />;
-      case RecommitmentStatus.SUPERVISOR_APPROVED:
+      if(emcrStatus===RecommitmentStatus.SUPERVISOR_APPROVED || bcwsStatus===RecommitmentStatus.SUPERVISOR_APPROVED)
         return <RecommitmentBanner {...ApprovedContent} />;
-      case RecommitmentStatus.SUPERVISOR_DENIED:
+      if(emcrStatus===RecommitmentStatus.SUPERVISOR_DENIED || bcwsStatus===RecommitmentStatus.SUPERVISOR_DENIED)
         return <RecommitmentBanner {...RejectedContent} />;
-    }
+    
   };
 
   return renderBanner();

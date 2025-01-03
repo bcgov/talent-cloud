@@ -1,9 +1,12 @@
 import { datasource } from '../datasource';
-import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 
-import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { BcwsPersonnelEntity } from '../entities/bcws';
+import { EmcrPersonnelEntity } from '../entities/emcr';
 import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
+import { Program } from '../../auth/interface';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
@@ -33,30 +36,42 @@ export const handler = async () => {
   const cycle: RecommitmentCycleEntity = await recommitmentCycleRepository.save(
     recommitmentCycleRepository.create(recommitmentCycleData),
   );
-  const personnelRepository = datasource.getRepository(PersonnelEntity);
-  const qb = personnelRepository
-    .createQueryBuilder('personnel')
-    .leftJoinAndSelect('personnel.bcws', 'bcws')
-    .leftJoinAndSelect('personnel.emcr', 'emcr');
 
-  const personnel = await qb.getMany();
+  const bcwsPersonnelRepository = datasource.getRepository(BcwsPersonnelEntity);
+  const emcrPersonnelRepository = datasource.getRepository(EmcrPersonnelEntity);
 
-  personnel.forEach(async (person: PersonnelEntity) => {
-    const commitment = await recommitmentRepository.save(
-      recommitmentRepository.create({
-        memberId: person.id,
-        recommitmentCycleId: cycle['year'],
-        emcr: person?.emcr ? RecommitmentStatus.PENDING : null,
-        bcws: person?.bcws ? RecommitmentStatus.PENDING : null,
-        memberDecisionDate: null,
-        memberReasonEmcr: null,
-        memberReasonBcws: null,
-        supervisorIdir: null,
-        supervisorDecisionDate: null,
-      }),
-    );
-    person.recommitment = commitment;
-    await personnelRepository.save(person);
+  const bcwsPersonnelRepositoryQB =
+    bcwsPersonnelRepository.createQueryBuilder('bcwsPersonnel');
+  const emcrPersonnelRepositoryQB =
+    emcrPersonnelRepository.createQueryBuilder('emcrPersonnel');
+  const bcwsPersonnel = await bcwsPersonnelRepositoryQB.getMany();
+  const emcrPersonnel = await emcrPersonnelRepositoryQB.getMany();
+
+  emcrPersonnel.forEach(async (person: EmcrPersonnelEntity) => {
+    const emcrRecommitment = recommitmentRepository.create({
+      personnelId: person.personnelId,
+      recommitmentCycleId: cycle['year'],
+      status: RecommitmentStatus.PENDING,
+      memberDecisionDate: null,
+      memberReason: null,
+      supervisorIdir: null,
+      supervisorDecisionDate: null,
+      program: Program.EMCR,
+    });
+    await recommitmentRepository.save(emcrRecommitment);
+  });
+  bcwsPersonnel.forEach(async (person: BcwsPersonnelEntity) => {
+    const bcwsRecommitment = recommitmentRepository.create({
+      personnelId: person.personnelId,
+      recommitmentCycleId: cycle['year'],
+      status: RecommitmentStatus.PENDING,
+      memberDecisionDate: null,
+      memberReason: null,
+      supervisorIdir: null,
+      supervisorDecisionDate: null,
+      program: Program.BCWS,
+    });
+    await recommitmentRepository.save(bcwsRecommitment);
   });
 };
 
