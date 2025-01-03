@@ -241,7 +241,7 @@ export class PersonnelEntity extends BaseEntity {
       bcws: this?.bcws?.toResponseObject(roles) ?? null,
       emcr: this?.emcr?.toResponseObject(roles) ?? null,
       recommitment:
-        this.recommitment?.map((itm) => itm.toResponseObject(roles)) ?? null,
+        this.recommitment?.map((itm) => itm.toResponseObject()) ?? null,
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"

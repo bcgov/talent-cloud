@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
 import { PersonnelEntity } from '../../database/entities/personnel/personnel.entity';
+import { RecommitmentCycleRO } from '../../database/entities/recommitment/recommitment-cycle.ro';
 
 export class RecommitmentRO {
   @ApiProperty({ name: 'personnel_id', type: 'string' })
@@ -8,6 +9,9 @@ export class RecommitmentRO {
 
   @ApiProperty()
   personnel?: PersonnelEntity;
+
+  @ApiProperty()
+  recommitmentCycle: RecommitmentCycleRO;
 
   @ApiProperty({ name: 'year', type: 'number' })
   year: number;

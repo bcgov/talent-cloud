@@ -1,4 +1,3 @@
-import { instanceToPlain } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -9,7 +8,7 @@ import {
 } from 'typeorm';
 import { RecommitmentCycleEntity } from './recommitment-cycle.entity';
 import { PersonnelEntity } from '../personnel/personnel.entity';
-import { Program, Role } from '../../../auth/interface';
+import { Program } from '../../../auth/interface';
 import { RecommitmentStatus } from '../../../common/enums/recommitment-status.enum';
 import { RecommitmentRO } from '../../../personnel/ro/recommitment.ro';
 
@@ -23,7 +22,7 @@ export class RecommitmentEntity {
   @JoinColumn({ name: 'personnel', referencedColumnName: 'id' })
   personnel: PersonnelEntity;
 
-  @ManyToOne(() => RecommitmentCycleEntity, (r) => r.year)
+  @ManyToOne(() => RecommitmentCycleEntity, (r) => r.year, { eager: true })
   @JoinColumn({ name: 'year', referencedColumnName: 'year' })
   recommitmentCycle: RecommitmentCycleEntity;
 
@@ -75,12 +74,14 @@ export class RecommitmentEntity {
   })
   supervisorReason?: string | null;
 
-  toResponseObject(roles: Role[]): Record<string, RecommitmentRO> {
+  toResponseObject(): RecommitmentRO {
     const response = new RecommitmentRO();
 
     const data = {
       personnelId: this.personnelId,
-      personnel: this.personnel.toResponseObject(roles),
+      personnel: this.personnel,
+      year: this.recommitmentCycleId,
+      endDate: this.recommitmentCycle?.endDate,
       recommitmentCycle: this.recommitmentCycle?.toResponseObject(),
       status: this.status,
       program: this.program,
@@ -92,6 +93,6 @@ export class RecommitmentEntity {
     };
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));
 
-    return instanceToPlain(response, { groups: roles });
+    return response;
   }
 }
