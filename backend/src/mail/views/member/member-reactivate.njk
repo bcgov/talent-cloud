@@ -2,12 +2,19 @@
 
 {% block content %}
 
+<p>You are receiving this email because you missed the initial recommitment deadline but expressed interest to us in returning to CORE for {{year}}. Your CORE coordinator has temporarily reactivated the recommitment process for you.</p>
 
-{% include "blocks/member-program.njk" %}
+<p><span>Please confirm your recommitment within the next 5 days using the following the instructions:</span></p>
 
-<h1> MEMBER REACTIVATED CONTENT</h1>
+{% include "blocks/member-steps.nj" %}
+
+{% include "blocks/parq.njk" %}
+
 
 {% include "blocks/member-button.njk" %}
 
+<p>Your prompt confirmation will help us finalize your participation for the upcoming year.</p>
+
+<p>If you have any questions or need assistance, feel free to reach out to us.</p>
 
 {% endblock %}
