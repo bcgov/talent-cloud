@@ -1,6 +1,8 @@
+import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../src/app.controller';
+import { AppModule } from '../src/app.module';
 import { AuthModule } from '../src/auth/auth.module';
 import { BcwsModule } from '../src/bcws/bcws.module';
 import { DatabaseModule } from '../src/database/database.module';
@@ -18,6 +20,8 @@ describe('AppController', () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       imports: [
+        AppModule,
+        ScheduleModule.forRoot(),
         DatabaseModule,
         LoggerModule,
         TerminusModule,
