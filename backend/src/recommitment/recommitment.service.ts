@@ -76,6 +76,7 @@ export class RecommitmentService {
           status: recommitmentUpdate[key].status,
         },
       );
+      this.triggerEmailNotification(id, recommitmentUpdate[key]);
     }
 
     return await this.personnelService.findOne(id);
@@ -89,13 +90,13 @@ export class RecommitmentService {
   async triggerEmailNotification(
     id: string,
     recommitmentUpdate: UpdatePersonnelRecommitmentDTO,
-    key: Program,
   ): Promise<void> {
     const personnel = await this.recommitmentRepository.findOneOrFail({
       where: { personnelId: id },
+      relations: ['personnel'],
     });
     const recommitmentCycle = await this.checkRecommitmentPeriod();
-    switch (recommitmentUpdate[key].status) {
+    switch (recommitmentUpdate.status) {
       case RecommitmentStatus.MEMBER_COMMITTED:
         return await this.mailService.sendMail(
           this.mailService.generateTemplate(
@@ -103,7 +104,7 @@ export class RecommitmentService {
             TemplateType.SUPERVISOR,
             [personnel.toResponseObject()],
             recommitmentCycle.endDate,
-            recommitmentUpdate[key].program,
+            recommitmentUpdate.program,
           ),
         );
 
@@ -113,7 +114,8 @@ export class RecommitmentService {
             EmailTemplates.MEMBER_DECLINED,
             TemplateType.MEMBER,
             [personnel.toResponseObject()],
-            recommitmentUpdate[key].program,
+            recommitmentCycle.endDate,
+            recommitmentUpdate.program,
           ),
         );
       case RecommitmentStatus.SUPERVISOR_APPROVED:
@@ -122,7 +124,8 @@ export class RecommitmentService {
             EmailTemplates.MEMBER_APPROVED,
             TemplateType.MEMBER,
             [personnel.toResponseObject()],
-            recommitmentUpdate[key].program,
+            recommitmentCycle.endDate,
+            recommitmentUpdate.program,
           ),
         );
 
@@ -132,7 +135,8 @@ export class RecommitmentService {
             EmailTemplates.MEMBER_DENIED,
             TemplateType.MEMBER,
             [personnel.toResponseObject()],
-            recommitmentUpdate[key].program,
+            recommitmentCycle.endDate,
+            recommitmentUpdate.program,
           ),
         );
     }

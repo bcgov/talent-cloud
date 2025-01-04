@@ -115,7 +115,7 @@ export class MailService {
             : `${template}_${record.personnel.supervisorEmail}`,
         delayTS: 0,
         context: {
-          program: program,
+          program: program.toUpperCase(),
           year: record.year,
           date: format(endDate, 'MMMM do, yyyy'),
           member: `${record.personnel.firstName} ${record.personnel.lastName}`,
