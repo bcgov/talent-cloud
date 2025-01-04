@@ -50,6 +50,27 @@ h1 {
     text-decoration-skip-ink: none;
   }
 
+   .content ol {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13.33px;
+    font-weight: 400;
+    line-height: 20.95px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .content a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13.33px;
+    font-weight: 400;
+    line-height: 20.95px;
+    text-align: left;
+    
+  }
+
+
+
    #link-button {
     padding: 12px 24px;
     border-radius: 5px;
@@ -85,7 +106,7 @@ h1 {
     
     <div class="content-wrapper">
       <div class="content">
-        <p>Hello {{subject}},</p>
+        
         {% block content %}{% endblock %}
         <p>Sincerely,</p>
         <p>BC CORE Team</p>

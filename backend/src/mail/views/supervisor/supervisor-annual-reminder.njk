@@ -2,13 +2,14 @@
 
 {% block content %}
 
+<p>Hello {{supervisor}},</p>
+
 <p>You are receiving this email because one or more of your employees have been members of the CORE Team program. If you are no longer a supervisor for a CORE member, please disregard this email.</p>
 
-<p>As we begin the new year, we want to remind you that it’s recommitment time for the program. Some of your team members may wish to return this season, and they’ll likely reach out to discuss their participation for 2025. Please be aware that <span>you’ll need to give approval for their recommitment before {{date}}.</span></p>
+<p>As we begin the new year, we want to remind you that it’s recommitment time for the program. Some of your team members may wish to return this season, and they’ll likely reach out to discuss their participation for {{year}}. Please be aware that <span>you’ll need to give approval for their recommitment before {{date}} .</span></p>
 
 <p>No action is required from you at this time, but once a member confirms their interest, you’ll receive further instructions to approve or decline their participation.</p> 
 
-<p>For more information, please visit: </p>
 {% include "blocks/resources.njk" %}
 
 <p>Thank you for your ongoing support!</p>
