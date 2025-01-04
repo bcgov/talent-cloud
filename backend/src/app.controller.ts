@@ -13,6 +13,7 @@ import { Ministry, MinistryName } from './common/enums';
 import { EmcrService } from './emcr/emcr.service';
 import { AppLogger } from './logger/logger.service';
 import { PersonnelService } from './personnel/personnel.service';
+import { RecommitmentService } from './recommitment/recommitment.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
 
 @ApiTags('Application API')
@@ -24,6 +25,8 @@ export class AppController {
     @Inject(BcwsService) private bcwsService: BcwsService,
     @Inject(EmcrService) private emcrService: EmcrService,
     @Inject(PersonnelService) private personnelService: PersonnelService,
+    @Inject(RecommitmentService)
+    private recommitmentService: RecommitmentService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
@@ -156,7 +159,7 @@ export class AppController {
     description: 'Recommitment Cycle Dates',
   })
   @Get('/recommitment')
-  async checkRecommitmentPeriod(){
-    return await this.personnelService.checkRecommitmentPeriod();
+  async checkRecommitmentPeriod() {
+    return await this.recommitmentService.checkRecommitmentPeriod();
   }
 }

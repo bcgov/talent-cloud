@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
@@ -12,10 +13,12 @@ import { FormModule } from './form/form.module';
 import { LoggerModule } from './logger/logger.module';
 import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
+import { RecommitmentModule } from './recommitment/recommitment.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
@@ -32,6 +35,7 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     EmcrModule,
     FormModule,
     RegionsAndLocationsModule,
+    RecommitmentModule,
   ],
   controllers: [AppController],
   providers: [

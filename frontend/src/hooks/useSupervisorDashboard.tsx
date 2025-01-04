@@ -4,6 +4,7 @@ import { useAxios } from './useAxios';
 import { useSearchParams } from 'react-router-dom';
 import { ApprovalCell } from '../components/supervisor/ApprovalCell';
 import { RecommitmentStatusChip } from '@/components/supervisor/RecommitmentStatusChip';
+import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
 export const useSupervisorDashboard = () => {
   const { AxiosPrivate } = useAxios();
@@ -55,18 +56,19 @@ export const useSupervisorDashboard = () => {
           ? {
               name: `${person.firstName} ${person.lastName}`,
               employeeId: person.employeeId,
-              year: person.recommitment?.recommitmentCycle?.year,
+              year: person.recommitment?.find(itm => itm.program === Program.BCWS)?.recommitmentCycle?.year,
               program: 'BCWS',
-              status: person.recommitment?.bcws && (
-                <RecommitmentStatusChip status={person.recommitment.bcws} />
+              status: person.recommitment?.find(itm => itm.program === Program.BCWS)?.status && (
+                <RecommitmentStatusChip status={person.recommitment?.find(itm => itm.program === Program.BCWS)?.status ?? 'N/A'} />
               ),
-              approval: person?.recommitment?.bcws && (
+              approval: person.recommitment?.find(itm => itm.program === Program.BCWS)?.status && (
                 <ApprovalCell
                   personnel={person}
                   program={Program.BCWS}
+                  recommitmentStatus={person.recommitment?.find(itm => itm.program === Program.BCWS)?.status ?? RecommitmentStatus.PENDING}
                   handleShowSuccessBanner={handleShowSuccessBanner}
                   handleShowWarningBanner={handleShowWarningBanner}
-                  year={person.recommitment?.recommitmentCycle?.year}
+                  year={person.recommitment?.find(itm => itm.program === Program.BCWS)?.recommitmentCycle?.year ?? new Date().getFullYear()}
                 />
               ),
             }
@@ -76,18 +78,17 @@ export const useSupervisorDashboard = () => {
           ? {
               name: `${person.firstName} ${person.lastName}`,
               employeeId: person.employeeId,
-              year: person.recommitment?.recommitmentCycle?.year,
+              year: person.recommitment?.find(itm => itm.program === Program.EMCR)?.recommitmentCycle?.year,
               program: 'EMCR',
-              status: person.recommitment?.emcr && (
-                <RecommitmentStatusChip status={person.recommitment.emcr} />
-              ),
-              approval: person?.recommitment?.emcr && (
+              status: person.recommitment?.find(itm => itm.program === Program.EMCR)?.status  && <RecommitmentStatusChip status={person.recommitment?.find(itm => itm.program === Program.EMCR)?.status ?? RecommitmentStatus.PENDING} />,
+              approval: person.recommitment?.find(itm => itm.program === Program.EMCR)?.status && (
                 <ApprovalCell
                   personnel={person}
+                  recommitmentStatus={person.recommitment?.find(itm => itm.program === Program.EMCR)?.status ?? RecommitmentStatus.PENDING}
                   program={Program.EMCR}
                   handleShowSuccessBanner={handleShowSuccessBanner}
                   handleShowWarningBanner={handleShowWarningBanner}
-                  year={person.recommitment?.recommitmentCycle?.year}
+                  year={person.recommitment?.find(itm => itm.program === Program.EMCR)?.recommitmentCycle.year ?? new Date().getFullYear()}
                 />
               ),
             }

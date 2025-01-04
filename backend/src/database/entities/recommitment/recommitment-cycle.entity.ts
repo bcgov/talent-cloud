@@ -20,4 +20,20 @@ export class RecommitmentCycleEntity extends BaseEntity {
       endDate: this.endDate,
     };
   }
+
+  constructor() {
+    super();
+    const today = new Date();
+    this.startDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 2,
+    );
+    this.year = this.startDate.getFullYear();
+    this.endDate = new Date(
+      this.startDate.getFullYear(),
+      this.startDate.getMonth(),
+      this.startDate.getDate() + 35,
+    );
+  }
 }

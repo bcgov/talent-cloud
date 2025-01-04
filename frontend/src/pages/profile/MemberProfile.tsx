@@ -35,7 +35,7 @@ const MemberProfile = () => {
   const handleTabChange = (index: string) => {
     setActiveTab(index);
   };
-
+  
   if (loading) {
     return <Loading />;
   }
@@ -71,9 +71,9 @@ const MemberProfile = () => {
                     leaveTo="opacity-0 scale-95"
                   >
                     <div>
-                      <RecommitmentProfileBanner
-                        year={recommitmentCycle?.year}
-                        endDate={recommitmentCycle.endDate}
+                       <RecommitmentProfileBanner
+                        year={recommitmentCycle.year!}
+                        endDate={recommitmentCycle.endDate!}
                         personnel={personnel}
                         handleClick={handleOpenRecommitmentForm}
                         handleCloseBanner={handleCloseBanner}
@@ -81,7 +81,7 @@ const MemberProfile = () => {
                     </div>
                   </Transition>
                 </div>
-              )}
+               )} 
               <TabsBody placeholder={undefined}>
                 <TabPanel value={TabIndexes.AVAILABILITY}>
                   {personnel && (

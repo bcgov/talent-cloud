@@ -1,9 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { PersonnelEntity } from '../../database/entities/personnel/personnel.entity';
+import { RecommitmentCycleRO } from '../../database/entities/recommitment/recommitment-cycle.ro';
 
 export class RecommitmentRO {
-  @ApiProperty({ name: 'member_id', type: 'string' })
-  memberId: string;
+  @ApiProperty({ name: 'personnel_id', type: 'string' })
+  personnelId: string;
+
+  @ApiProperty()
+  personnel?: PersonnelEntity;
+
+  @ApiProperty()
+  recommitmentCycle: RecommitmentCycleRO;
 
   @ApiProperty({ name: 'year', type: 'number' })
   year: number;
@@ -12,20 +20,12 @@ export class RecommitmentRO {
   endDate: Date;
 
   @ApiProperty({
-    name: 'emcr',
+    name: 'status',
     type: 'enum',
     enum: RecommitmentStatus,
     nullable: true,
   })
-  emcr?: RecommitmentStatus | null;
-
-  @ApiProperty({
-    name: 'bcws',
-    type: 'enum',
-    enum: RecommitmentStatus,
-    nullable: true,
-  })
-  bcws?: RecommitmentStatus | null;
+  status?: RecommitmentStatus | null;
 
   @ApiProperty({
     name: 'member_decision_date',
@@ -35,20 +35,12 @@ export class RecommitmentRO {
   memberDecisionDate?: Date | null;
 
   @ApiProperty({
-    name: 'member_reason_emcr',
+    name: 'member_reason',
     type: 'varchar',
 
     nullable: true,
   })
-  memberReasonEmcr?: string | null;
-
-  @ApiProperty({
-    name: 'member_reason_bcws',
-    type: 'varchar',
-
-    nullable: true,
-  })
-  memberReasonBcws?: string | null;
+  memberReason?: string | null;
 
   @ApiProperty({
     name: 'supervisor_idir',
@@ -66,18 +58,10 @@ export class RecommitmentRO {
   supervisorDecisionDate?: Date;
 
   @ApiProperty({
-    name: 'supervisor_reason_emcr',
-    type: 'varchar',
-
-    nullable: true,
-  })
-  supervisorReasonEmcr?: string | null;
-
-  @ApiProperty({
     name: 'supervisor_reason_bcws',
     type: 'varchar',
 
     nullable: true,
   })
-  supervisorReasonBcws?: string | null;
+  supervisorReason?: string | null;
 }

@@ -9,8 +9,6 @@ import { CertificationEntity } from '../database/entities/personnel/certificatio
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
-import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
-import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 import { LoggerModule } from '../logger/logger.module';
 import { MailModule } from '../mail/mail.module';
 
@@ -21,8 +19,6 @@ import { MailModule } from '../mail/mail.module';
     TypeOrmModule.forFeature([
       PersonnelEntity,
       AvailabilityEntity,
-      RecommitmentCycleEntity,
-      RecommitmentEntity,
       CertificationEntity,
       LanguageEntity,
       CertificationEntity,

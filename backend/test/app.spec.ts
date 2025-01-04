@@ -8,6 +8,7 @@ import { EmcrModule } from '../src/emcr/emcr.module';
 import { FormModule } from '../src/form/form.module';
 import { LoggerModule } from '../src/logger/logger.module';
 import { PersonnelModule } from '../src/personnel/personnel.module';
+import { RecommitmentModule } from '../src/recommitment/recommitment.module';
 import { RegionsAndLocationsModule } from '../src/region-location/region-location.module';
 
 describe('AppController', () => {
@@ -26,6 +27,7 @@ describe('AppController', () => {
         EmcrModule,
         FormModule,
         RegionsAndLocationsModule,
+        RecommitmentModule,
       ],
     }).compile();
 

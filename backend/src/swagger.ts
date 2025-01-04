@@ -7,6 +7,7 @@ import { EmcrModule } from './emcr/emcr.module';
 import { FormModule } from './form/form.module';
 import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
+import { RecommitmentModule } from './recommitment/recommitment.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
 
 export const Documentation = (app: INestApplication) => {
@@ -27,6 +28,7 @@ export const Documentation = (app: INestApplication) => {
       FormModule,
       RegionsAndLocationsModule,
       MailModule,
+      RecommitmentModule,
     ],
   });
 

@@ -157,7 +157,7 @@ export class PersonnelRO {
     description: 'Recommitment',
     required: false,
   })
-  recommitment: RecommitmentRO;
+  recommitment: RecommitmentRO[];
 
   //TODO: Add the following properties
   @ApiProperty()
