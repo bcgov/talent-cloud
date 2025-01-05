@@ -3,6 +3,7 @@ import { Banner } from '@/components/ui/Banner';
 import type { RecommitmentCycle } from '@/common';
 import { Transition } from '@headlessui/react';
 import { useState } from 'react';
+import { format } from 'date-fns';
 
 // TODO - make me look nice
 export const RecommitmentDashBanner = ({
@@ -34,14 +35,14 @@ export const RecommitmentDashBanner = ({
           type={BannerType.INFO}
           content={
             <p>
-              {' '}
               <span className="font-bold">
-                {recommitment.year} CORE recommitment reminders have been sent to
-                members and supervisors.
-              </span>{' '}
+                {format(new Date(recommitment.year), 'MMMM do, yyyy')} CORE
+                recommitment reminders have been sent to members and supervisors.
+              </span>
               Returning members with supervisor approval will be marked as
-              “Recommitted: {recommitment.year}” in the coming weeks. Please monitor
-              their status for any needed follow-up and ParQ review.
+              Recommitted: {format(new Date(recommitment.year), 'MMMM do, yyyy')} in
+              the coming weeks. Please monitor their status for any needed follow-up
+              and ParQ review.
             </p>
           }
           onClose={hideBanner}

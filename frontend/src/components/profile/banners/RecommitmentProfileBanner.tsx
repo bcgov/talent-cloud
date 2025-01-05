@@ -1,6 +1,5 @@
 import { BannerType } from '@/common/enums/banner-enum';
 import type { Personnel } from '@/common';
-import { datePST } from '@/utils';
 import { RecommitmentBanner } from '../RecommitmentBanner';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
@@ -25,7 +24,7 @@ export const RecommitmentProfileBanner = ({
         </span>{' '}
         Please ensure that your profile details are up-to-date, before confirming
         your recommitment to CORE for {year} by{' '}
-        <span className="font-bold text-sm">{datePST(new Date(endDate))}</span>
+        <span className="font-bold text-sm">{endDate}</span>
       </p>
     ),
     buttonText: 'Start Recommitment',
@@ -81,7 +80,7 @@ export const RecommitmentProfileBanner = ({
         </span>
         Sorry to see you go! We hope to welcome you back to CORE in the future. You
         can change your decision any time before{' '}
-        <span className="font-bold">{datePST(new Date(endDate))}</span>
+        <span className="font-bold">{endDate}</span>
       </p>
     ),
     onClick: () => alert("Clicked on 'Accept Recommitment'"),

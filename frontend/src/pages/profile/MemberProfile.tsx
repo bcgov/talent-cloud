@@ -13,6 +13,7 @@ import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { Transition } from '@headlessui/react';
 import { useProgramFieldData } from '@/hooks';
 import { RecommitmentFormBase } from '@/components/recommitment';
+import { format } from 'date-fns';
 
 const MemberProfile = () => {
   const { personnel, program, loading, updatePersonnel } = useMemberProfile();
@@ -73,7 +74,7 @@ const MemberProfile = () => {
                     <div>
                       <RecommitmentProfileBanner
                         year={recommitmentCycle?.year}
-                        endDate={recommitmentCycle.endDate}
+                        endDate={format(recommitmentCycle.endDate, 'MMMM do, yyyy')}
                         personnel={personnel}
                         handleClick={handleOpenRecommitmentForm}
                         handleCloseBanner={handleCloseBanner}
