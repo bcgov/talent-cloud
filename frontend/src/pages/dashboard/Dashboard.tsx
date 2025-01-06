@@ -24,6 +24,10 @@ const Dashboard = () => {
     setLoading,
   } = useTable(searchParamsUrl, program);
 
+  if (rows.length === 0) {
+    handleChangeOne('page', '1');
+  }
+
   return (
     <div className="xl:px-32 xl:pt-8 pb-24">
       {recommitmentCycle && (
