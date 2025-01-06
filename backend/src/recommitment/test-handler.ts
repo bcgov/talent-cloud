@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { CronTestService } from './cron-test.service';
 import { RecommitmentModule } from './recommitment.module';
@@ -7,6 +7,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppLogger } from '../logger/logger.service';
 import { datePST } from '../common/helpers';
+import { INestApplicationContext } from '@nestjs/common';
 
 export const handler = async (
   email: string,
@@ -16,6 +17,7 @@ export const handler = async (
 ) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const logger = new AppLogger();
+  
   app.useLogger(logger);
 
   logger.setContext('RecommitmentTestHandler');
@@ -25,6 +27,7 @@ export const handler = async (
   logger.log(`Dry Run: ${dryRun}`);
 
   app.useStaticAssets(join(__dirname, 'mail', 'views'));
+  app.setBaseViewsDir(join(__dirname, '..', 'mail', 'views'));
   nunjucks.configure('src/mail/views', {
     autoescape: true,
     throwOnUndefined: false,
@@ -36,30 +39,34 @@ export const handler = async (
   });
 
   app.engine('njk', nunjucks.render);
-  app.setViewEngine('njk');
   app.set('view cache', true);
+  app.setViewEngine('njk');
+  
+  if(app){
+    const cronTestService = app.select(RecommitmentModule).get(CronTestService);
 
-  const cronTestService = app.select(RecommitmentModule).get(CronTestService);
+    const today = datePST(new Date());
+  
+    const startDate = today.getDate();
+    const startHour = today.getHours();
+    const startMonth = today.getMonth() + 1;
+    const finalHour = startHour + hours;
+    const endDate = today.getDate();
+    const endHour = finalHour > 24 ? finalHour - 24 : finalHour;
+    const endMonth = today.getMonth() + 1;
+  
+    await cronTestService.initiateRecommitment(
+      email,
+      schedule,
+      dryRun,
+      endDate,
+      endHour,
+      endMonth,
+      startDate,
+      startHour,
+      startMonth,
+    );
+  }
 
-  const today = datePST(new Date());
-
-  const startDate = today.getDate();
-  const startHour = today.getHours();
-  const startMonth = today.getMonth() + 1;
-  const finalHour = startHour + hours;
-  const endDate = today.getDate();
-  const endHour = finalHour > 24 ? finalHour - 24 : finalHour;
-  const endMonth = today.getMonth() + 1;
-
-  await cronTestService.initiateRecommitment(
-    email,
-    schedule,
-    dryRun,
-    endDate,
-    endHour,
-    endMonth,
-    startDate,
-    startHour,
-    startMonth,
-  );
+  
 };
