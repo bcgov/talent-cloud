@@ -4,9 +4,9 @@ import { useSupervisorDashboard } from '@/hooks/useSupervisorDashboard';
 import { SupervisorDashboardHeaderBanner } from './SupervisorDashboardHeader';
 import { BannerType } from '@/common/enums/banner-enum';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import { datePST } from '@/utils';
 import { SupervisorTable } from './SupervisorTable';
 import { Banner } from '@/components/ui/Banner';
+import { format } from 'date-fns';
 
 const SupervisorDashboard = () => {
   const {
@@ -31,7 +31,9 @@ const SupervisorDashboard = () => {
     <div className="xl:px-32">
       {recommitmentCycle && (
         <SupervisorDashboardHeaderBanner
-          recommitmentDate={datePST(new Date(recommitmentCycle.endDate)) ?? ''}
+          recommitmentDate={
+            format(new Date(recommitmentCycle.endDate), 'MMMM do, yyyy') ?? ''
+          }
           recommitmentYear={recommitmentCycle?.year ?? ''}
         />
       )}
