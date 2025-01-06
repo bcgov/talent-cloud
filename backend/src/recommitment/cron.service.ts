@@ -61,11 +61,11 @@ export class CronService {
    * @param {number} week - The week of the month.
    */
   private async handleFebruaryMondayCron(week: number): Promise<void> {
-    if (week === 2) {
-      this.logger.log('2nd Monday in Feb - sending reminder');
+    if (week === 1) {
+      this.logger.log('1st Monday in Feb - sending reminder');
       await this.recommitmentService.handleSendAutomatedReminders();
-    } else if (week === 3) {
-      this.logger.log('3rd Monday in Feb - sending reminder');
+    } else if (week === 2) {
+      this.logger.log('2nd Monday in Feb - sending reminder');
       await this.recommitmentService.handleSendAutomatedReminders();
     }
   }
