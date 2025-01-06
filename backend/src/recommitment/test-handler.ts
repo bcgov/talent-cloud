@@ -26,9 +26,9 @@ export const handler = async (
   logger.log(`Schedule: ${schedule}`);
   logger.log(`Dry Run: ${dryRun}`);
 
-  app.useStaticAssets(join(__dirname, 'mail', 'views'));
-  app.setBaseViewsDir(join(__dirname, '..', 'mail', 'views'));
-  nunjucks.configure('src/mail/views', {
+  app.useStaticAssets(join(__dirname, '..', 'views'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  nunjucks.configure(join(__dirname, '..', 'views'), {
     autoescape: true,
     throwOnUndefined: false,
     trimBlocks: false,
@@ -41,7 +41,7 @@ export const handler = async (
   app.engine('njk', nunjucks.render);
   app.set('view cache', true);
   app.setViewEngine('njk');
-  
+
   if(app){
     const cronTestService = app.select(RecommitmentModule).get(CronTestService);
 
