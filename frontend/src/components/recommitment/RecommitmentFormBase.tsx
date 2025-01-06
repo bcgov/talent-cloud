@@ -11,6 +11,7 @@ import {
 } from './';
 import { ParQBase } from './parq';
 import { QUESTIONS as PARQ_FOLLOWUP_QUESTIONS } from './parq/ParQFollowUp';
+import { fillInAndDownloadParQ } from '@/utils';
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -71,6 +72,17 @@ export const RecommitmentFormBase = ({
   const [parqFollowUpAnswers, setParqFollowUpAnswers] = useState<
     Record<string, boolean | null>
   >({});
+  const [parqDeclaration, setParqDeclaration] = useState<{
+    fullName: string;
+    dateSigned: string;
+    witnessName: string;
+  }>({
+    fullName: '',
+    dateSigned: '',
+    witnessName: '',
+  });
+  const [parQDownloaded, setParQDownloaded] = useState(false);
+
   const [unableToJoinReasons, setUnableToJoinReasons] = useState<{
     selectedReasons: string[];
     otherReason: string;
@@ -79,6 +91,15 @@ export const RecommitmentFormBase = ({
     otherReason: '',
   });
   const [assertionsChecked, setAssertionsChecked] = useState<boolean>(false);
+
+  const isDeclarationComplete = (): boolean => {
+    const { fullName, dateSigned, witnessName } = parqDeclaration;
+    return Boolean(
+      fullName?.trim() &&
+        !isNaN(new Date(dateSigned?.trim()).getTime()) &&
+        witnessName?.trim(),
+    );
+  };
 
   const getSteps = () => {
     switch (recommitmentAnswer) {
@@ -94,6 +115,7 @@ export const RecommitmentFormBase = ({
             currentPage={currentParQStep}
             onGeneralAnswersChange={setParqGeneralAnswers}
             onFollowUpAnswersChange={setParqFollowUpAnswers}
+            onDeclarationChange={setParqDeclaration}
             key="parq"
           />,
           <SupervisorForm
@@ -148,6 +170,7 @@ export const RecommitmentFormBase = ({
             currentPage={currentParQStep}
             onGeneralAnswersChange={setParqGeneralAnswers}
             onFollowUpAnswersChange={setParqFollowUpAnswers}
+            onDeclarationChange={setParqDeclaration}
             key="parq"
           />,
           <SupervisorForm
@@ -192,6 +215,7 @@ export const RecommitmentFormBase = ({
             currentPage={currentParQStep}
             onGeneralAnswersChange={setParqGeneralAnswers}
             onFollowUpAnswersChange={setParqFollowUpAnswers}
+            onDeclarationChange={setParqDeclaration}
             key="parq"
           />,
           <SupervisorForm
@@ -341,6 +365,8 @@ export const RecommitmentFormBase = ({
             parqFollowUpAnswers[id] !== null &&
             parqFollowUpAnswers[id] !== undefined,
         );
+      } else if (currentParQStep === 3) {
+        return isDeclarationComplete() && parQDownloaded;
       }
     }
 
@@ -367,6 +393,17 @@ export const RecommitmentFormBase = ({
     return currentComponentType === Assertions ? 'Submit Decision' : 'Next';
   };
 
+  const downloadParQ = () => {
+    fillInAndDownloadParQ({
+      general: parqGeneralAnswers,
+      followUps: parqFollowUpAnswers,
+      fullName: parqDeclaration.fullName,
+      dateSigned: parqDeclaration.dateSigned,
+      witnessName: parqDeclaration.witnessName,
+    });
+    setParQDownloaded(true);
+  };
+
   return (
     <div className="w-full py-8 min-h-[500px] flex flex-col">
       <StepIndicator currentStep={currentStep} totalSteps={numSteps} />
@@ -389,6 +426,15 @@ export const RecommitmentFormBase = ({
           onClick={onCancel}
           text="Cancel"
         />
+        {currentComponent.type === ParQBase && currentParQStep === 3 && (
+          <Button
+            variant={ButtonTypes.PRIMARY}
+            type="button"
+            onClick={downloadParQ}
+            text="Download PDF"
+            disabled={!isDeclarationComplete()}
+          />
+        )}
         <Button
           variant={ButtonTypes.TERTIARY}
           text={getButtonText()}
