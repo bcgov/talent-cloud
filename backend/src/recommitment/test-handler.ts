@@ -11,17 +11,18 @@ import { datePST } from '../common/helpers';
 export const handler = async (
   email: string,
   schedule = '0 * * * *',
-  hours=5
+  hours = 5,
+  dryRun = true,
 ) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const logger = new AppLogger();
   app.useLogger(logger);
-  
+
   logger.setContext('RecommitmentTestHandler');
   logger.log('Starting recommitment test cron job');
   logger.log(`Email: ${email}`);
   logger.log(`Schedule: ${schedule}`);
-  logger.log(`Dry Run: true`);
+  logger.log(`Dry Run: ${dryRun}`);
 
   app.useStaticAssets(join(__dirname, 'mail', 'views'));
   nunjucks.configure('src/mail/views', {
@@ -41,17 +42,24 @@ export const handler = async (
   const cronTestService = app.select(RecommitmentModule).get(CronTestService);
 
   const today = datePST(new Date());
-  
-    
 
-    const startDate= today.getDate();
-    const startHour= today.getHours();
-    const startMonth= today.getMonth() + 1;
-    const finalHour = startHour + hours;  
-    const endDate= today.getDate();
-    const endHour=  finalHour > 24 ? finalHour - 24 : finalHour;
-    const endMonth= today.getMonth() + 1;
+  const startDate = today.getDate();
+  const startHour = today.getHours();
+  const startMonth = today.getMonth() + 1;
+  const finalHour = startHour + hours;
+  const endDate = today.getDate();
+  const endHour = finalHour > 24 ? finalHour - 24 : finalHour;
+  const endMonth = today.getMonth() + 1;
 
-  await cronTestService.initiateRecommitment(email, schedule, true, endDate, endHour, endMonth, startDate, startHour, startMonth);
-
+  await cronTestService.initiateRecommitment(
+    email,
+    schedule,
+    dryRun,
+    endDate,
+    endHour,
+    endMonth,
+    startDate,
+    startHour,
+    startMonth,
+  );
 };
