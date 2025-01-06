@@ -47,4 +47,4 @@ jobs:
           export TEST_EMAIL=${{ env.TEST_EMAIL }}
           export SCHEDULE=${{ env.SCHEDULE }}
           export END_HOUR=${{ env.END_HOUR }}
-          make test-recommitment-oc
+          make test-recommitment-oc TEST_EMAIL=$TEST_EMAIL SCHEDULE=$SCHEDULE END_HOUR=$END_HOUR

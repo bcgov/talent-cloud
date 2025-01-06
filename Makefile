@@ -33,10 +33,9 @@ export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
 # Recommitment
-export TEST_EMAIL:=$(TEST_EMAIL)
-export SCHEDULE:=$(SCHEDULE)
-export END_HOUR:=$(END_HOUR)
-
+export TEST_EMAIL?=$(TEST_EMAIL)
+export SCHEDULE?=$(SCHEDULE)
+export END_HOUR?=$(END_HOUR)
 
 # Docker compose v2 for GHA
 build-test:
