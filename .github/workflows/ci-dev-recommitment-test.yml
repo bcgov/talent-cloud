@@ -47,4 +47,4 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make test-recommitment-oc TEST_EMAIL=$TEST_EMAIL SCHEDULE=$SCHEDULE END_HOUR=$END_HOUR
+          make test-recommitment-oc TEST_EMAIL="$TEST_EMAIL" SCHEDULE="$SCHEDULE" END_HOUR=$END_HOUR
