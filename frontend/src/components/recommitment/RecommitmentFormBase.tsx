@@ -390,7 +390,13 @@ export const RecommitmentFormBase = ({
 
   const getButtonText = () => {
     const currentComponentType = currentComponent.type;
-    return currentComponentType === Assertions ? 'Submit Decision' : 'Next';
+    if (currentComponentType === Assertions) {
+      return 'Submit Decision';
+    }
+    if (currentComponentType === ParQBase && currentParQStep === 3) {
+      return 'Complete and Proceed';
+    }
+    return 'Next';
   };
 
   const downloadParQ = () => {
