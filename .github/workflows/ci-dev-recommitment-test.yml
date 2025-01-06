@@ -8,9 +8,6 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
-  TEST_EMAIL: ${{ vars.TEST_EMAIL }}
-  SCHEDULE: ${{ vars.SCHEDULE }}
-  END_HOUR: ${{ vars.END_HOUR }}
 
 jobs:
   test_recommitment:
@@ -42,9 +39,18 @@ jobs:
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
 
+      - name: Test
+        run: |
+          export TEST_EMAIL=${{ env.TEST_EMAIL }}
+          export SCHEDULE=${{ env.SCHEDULE }}
+          export END_HOUR=${{ env.END_HOUR }}
+          echo $TEST_EMAIL
       - name: Test Recommitment (Dev)
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
+          export TEST_EMAIL=${{ env.TEST_EMAIL }}
+          export SCHEDULE=${{ env.SCHEDULE }}
+          export END_HOUR=${{ env.END_HOUR }}
           make test-recommitment-oc TEST_EMAIL="$TEST_EMAIL" SCHEDULE="$SCHEDULE" END_HOUR=$END_HOUR
