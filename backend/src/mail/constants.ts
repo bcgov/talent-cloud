@@ -13,7 +13,7 @@ export enum EmailTemplates {
   MEMBER_REACTIVATE = 'member/member-reactivate.njk',
   SUPERVISOR_ANNUAL = 'supervisor/supervisor-annual-reminder.njk',
   SUPERVISOR_REQUEST = 'supervisor/supervisor-request.njk',
-  SUPERVISOR_REMINDER = 'supervisor/supervisor-follow-up-reminer.njk',
+  SUPERVISOR_REMINDER = 'supervisor/supervisor-follow-up-reminder.njk',
 }
 export const envs = {
   dev: process.env.MODE === 'development',
