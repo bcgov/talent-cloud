@@ -1,14 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
-import { getWeekOfMonth } from 'date-fns';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from 'cron';
 import { RecommitmentService } from './recommitment.service';
 import { AppLogger } from '../logger/logger.service';
-
-export const RecommitmentCron = {
-  EVERY_MONDAY_OF_JAN: '0 0 * 1 1',
-  EVERY_MONDAY_OF_FEB: '0 0 * 2 1',
-  EVERY_FRIDAY_OF_FEB: '0 0 * 2 5',
-};
 
 @Injectable()
 export class CronService {
@@ -16,79 +10,45 @@ export class CronService {
     @Inject(RecommitmentService)
     private readonly recommitmentService: RecommitmentService,
     private readonly logger: AppLogger,
+    private readonly schedulerRegistry: SchedulerRegistry,
   ) {
     this.logger.setContext(CronService.name);
   }
 
   /**
-   * Cron job that runs every Monday in January.
+   * Initial Job Scheduled
    */
-  @Cron(RecommitmentCron.EVERY_MONDAY_OF_JAN, {
-    name: 'januaryMondayCron',
+  @Cron(`0 0 13 1 *`, {
+    name: 'initial_recommitment',
+    timeZone: 'America/Vancouver',
   })
-  async januaryMondayCron() {
-    const week = getWeekOfMonth(new Date());
-    await this.handleJanuaryCron(week);
-  }
-
-  /**
-   * Handles the cron job logic for January based on the week of the month.
-   * @param {number} week - The week of the month.
-   */
-  private async handleJanuaryCron(week: number): Promise<void> {
-    if (week === 2) {
-      this.logger.log('2nd Monday in Jan - initializing recommitment cycle');
-      await this.recommitmentService.handleStartRecommitment();
-    } else if (week === 3) {
-      this.logger.log('3rd Monday in Jan - sending reminder');
+  async initialRecommitment() {
+    const recurringNotificationsJob = new CronJob('0 0 * * 1', async () => {
       await this.recommitmentService.handleSendAutomatedReminders();
-    }
-  }
+    });
 
-  /**
-   * Cron job that runs every Monday in February.
-   */
-  @Cron(RecommitmentCron.EVERY_MONDAY_OF_FEB, {
-    name: 'februaryMondayCron',
-  })
-  async februaryMondayCron() {
-    const week = getWeekOfMonth(new Date());
-    await this.handleFebruaryMondayCron(week);
-  }
+    this.schedulerRegistry.addCronJob(
+      'recommitment_follow_up_notifications',
+      recurringNotificationsJob,
+    );
+    this.logger.warn(`Automated reminders scheduled to run every monday`);
 
-  /**
-   * Handles the cron job logic for Mondays in February based on the week of the month.
-   * @param {number} week - The week of the month.
-   */
-  private async handleFebruaryMondayCron(week: number): Promise<void> {
-    if (week === 1) {
-      this.logger.log('1st Monday in Feb - sending reminder');
-      await this.recommitmentService.handleSendAutomatedReminders();
-    } else if (week === 2) {
-      this.logger.log('2nd Monday in Feb - sending reminder');
-      await this.recommitmentService.handleSendAutomatedReminders();
-    }
-  }
+    const endRecommitmentJob = new CronJob(`0 0 14 2 *`, async () => {
+      this.schedulerRegistry.deleteCronJob(
+        'recommitment_follow_up_notifications',
+      );
+      this.logger.warn(`Job recommitment_follow_up_notifications deleted!`);
+      this.schedulerRegistry.deleteCronJob('initial_recommitment');
+      this.logger.warn(`Job initial_recommitment deleted!`);
 
-  /**
-   * Cron job that runs every Friday in February.
-   */
-  @Cron(RecommitmentCron.EVERY_FRIDAY_OF_FEB, {
-    name: 'februaryFridayCron',
-  })
-  async februaryFridayCron() {
-    const week = getWeekOfMonth(new Date());
-    await this.handleFebruaryFridayCron(week);
-  }
-
-  /**
-   * Handles the cron job logic for Fridays in February based on the week of the month.
-   * @param {number} week - The week of the month.
-   */
-  private async handleFebruaryFridayCron(week: number): Promise<void> {
-    if (week === 3) {
-      this.logger.log('3rd Friday in Feb - end recommitment cycle');
       await this.recommitmentService.handleEndRecommitment();
-    }
+
+      this.schedulerRegistry.deleteCronJob('end_recommitment');
+    });
+
+    this.schedulerRegistry.addCronJob('end_recommitment', endRecommitmentJob);
+    this.logger.warn(`End Recommitment Job scheduled to run on Feb 14th`);
+    recurringNotificationsJob.start();
+    endRecommitmentJob.start();
   }
 }

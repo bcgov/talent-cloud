@@ -24,13 +24,19 @@ export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
-export TEST_EMAIL:=$(TEST_EMAIL)
+
 
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-color --format="%h, %cn, %f, %D" | sed 's/->/:/')
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
+
+# Recommitment
+export TEST_EMAIL:=$(TEST_EMAIL)
+export SCHEDULE:=$(SCHEDULE)
+export END_HOUR:=$(END_HOUR)
+
 
 # Docker compose v2 for GHA
 build-test:
@@ -265,10 +271,10 @@ seed-oc-recommitment:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js")'
 
 test-recommitment-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/recommitment/test-handler.js").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/recommitment/test-handler.js").handler($(TEST_EMAIL),  $(SCHEDULE), $(END_HOUR))'
 
 test-recommitment-local:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/recommitment/test-handler.ts").handler($(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/recommitment/test-handler.ts").handler($(TEST_EMAIL),  $(SCHEDULE), $(END_HOUR))'
 
 delete-db:
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
