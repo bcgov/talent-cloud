@@ -1,4 +1,36 @@
-export const ParQDeclaration = () => {
+import { useState } from 'react';
+
+interface ParQDeclarationProps {
+  onDeclarationChange: (declaration: {
+    fullName: string;
+    dateSigned: string;
+    witnessName: string;
+  }) => void;
+}
+
+export const ParQDeclaration = ({ onDeclarationChange }: ParQDeclarationProps) => {
+  const [declaration, setDeclaration] = useState<{
+    fullName: string;
+    dateSigned: string;
+    witnessName: string;
+  }>({
+    fullName: '',
+    dateSigned: '',
+    witnessName: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setDeclaration({
+      ...declaration,
+      [id]: value,
+    });
+    onDeclarationChange({
+      ...declaration,
+      [id]: value,
+    });
+  };
+
   return (
     <div className="max-w-3xl mx-auto space-y-8 p-6">
       {/* Header Section */}
@@ -34,6 +66,8 @@ export const ParQDeclaration = () => {
             <input
               type="text"
               id="fullName"
+              value={declaration.fullName}
+              onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Full Name"
             />
@@ -45,6 +79,8 @@ export const ParQDeclaration = () => {
             <input
               type="date"
               id="dateSigned"
+              value={declaration.dateSigned}
+              onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Select Date"
             />
@@ -57,6 +93,8 @@ export const ParQDeclaration = () => {
           <input
             type="text"
             id="witnessName"
+            value={declaration.witnessName}
+            onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Full Name"
           />

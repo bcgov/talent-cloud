@@ -4,12 +4,18 @@ interface ParQBaseProps {
   currentPage: number;
   onGeneralAnswersChange: (answers: Record<string, boolean | null>) => void;
   onFollowUpAnswersChange: (answers: Record<string, boolean | null>) => void;
+  onDeclarationChange: (declaration: {
+    fullName: string;
+    dateSigned: string;
+    witnessName: string;
+  }) => void;
 }
 
 export const ParQBase: React.FC<ParQBaseProps> = ({
   currentPage,
   onGeneralAnswersChange,
   onFollowUpAnswersChange,
+  onDeclarationChange,
 }: ParQBaseProps) => {
   const renderPage = () => {
     switch (currentPage) {
@@ -20,7 +26,7 @@ export const ParQBase: React.FC<ParQBaseProps> = ({
       case 2:
         return <ParQFollowUp onAnswersChange={onFollowUpAnswersChange} />;
       case 3:
-        return <ParQDeclaration />;
+        return <ParQDeclaration onDeclarationChange={onDeclarationChange} />;
       default:
         return <ParQIntro />;
     }
