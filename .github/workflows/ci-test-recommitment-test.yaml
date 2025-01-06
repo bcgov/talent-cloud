@@ -21,6 +21,9 @@ jobs:
     env:
       OS_NAMESPACE_SUFFIX: test
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
+      TEST_EMAIL: ${{ vars.TEST_EMAIL }}
+      SCHEDULE: ${{ vars.SCHEDULE }}
+      END_HOUR: ${{ vars.END_HOUR }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,5 +47,5 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make test-recommitment-oc TEST_EMAIL="${{ env.TEST_EMAIL }}" SCHEDULE="${{ env.SCHEDULE }}" END_HOUR=${{ env.END_HOUR }}
+          make test-recommitment-oc TEST_EMAIL="$TEST_EMAIL" SCHEDULE="$SCHEDULE" END_HOUR=$END_HOUR
       

@@ -8,8 +8,8 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
-  TEST_EMAIL: "${{ vars.TEST_EMAIL }}"
-  SCHEDULE: "${{ vars.SCHEDULE }}"
+  TEST_EMAIL: ${{ vars.TEST_EMAIL }}
+  SCHEDULE: ${{ vars.SCHEDULE }}
   END_HOUR: ${{ vars.END_HOUR }}
 
 jobs:
