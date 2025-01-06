@@ -1,4 +1,4 @@
-name: Run Migrations (Test)
+name: Run Recommitment Test (Test)
 
 on:
   workflow_dispatch:  
@@ -8,10 +8,11 @@ env:
   AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
+  TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
 
 jobs:
-  run_migrations:
-    name: Run Migrations (Test)
+  test_recommitment:
+    name: Test Recommitment (Test)
     environment: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -25,7 +26,7 @@ jobs:
         run: cp .env.example .env
       - name: Cache OpenShift CLI
         id: cache-oc
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /usr/local/bin/oc
           key: ${{ runner.os }}-oc
@@ -36,10 +37,11 @@ jobs:
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
 
-      - name: Run migrations
+      - name: Run Recommitment Test (Test)
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
-          make migration-run-oc
+          export TEST_EMAIL=${{ env.TEST_EMAIL }}
+          make test-recommitment-oc
       

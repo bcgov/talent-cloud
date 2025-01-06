@@ -744,16 +744,14 @@ export class PersonnelService {
     return { personnel, count };
   }
 
-  async findActivePersonnel() {
-    const qb = this.personnelRepository
-      .createQueryBuilder('personnel')
-      .leftJoinAndSelect('personnel.bcws', 'bcws')
-      .leftJoinAndSelect('personnel.emcr', 'emcr')
-      .leftJoinAndSelect('personnel.recommitment', 'recommitment');
+  async findActivePersonnel(): Promise<{emcr: PersonnelEntity[], bcws: PersonnelEntity[]}> {
+    const activeEmcrPersonnel = await this.personnelRepository.find({
+      where: { emcr: { status: Status.ACTIVE } },
+    });
+    const activeBcwsPersonnel = await this.personnelRepository.find({
+      where: { bcws: { status: Status.ACTIVE } },
+    });
 
-    qb.where('bcws.status = :status', { status: Status.ACTIVE });
-    qb.orWhere('emcr.status = :status', { status: Status.ACTIVE });
-    const personnel = await qb.getMany();
-    return personnel;
+    return { emcr: activeEmcrPersonnel, bcws: activeBcwsPersonnel };
   }
 }

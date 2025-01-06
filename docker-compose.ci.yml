@@ -67,6 +67,7 @@ services:
       MODE: ${MODE}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
+      TEST_EMAIL: ${TEST_EMAIL}
     ports:
       - "3001:3000"
     volumes:
