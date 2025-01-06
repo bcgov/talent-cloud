@@ -22,7 +22,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:pipeline": "NODE_ENV=ci RUNTIME_ENV=ci jest  --config ./test/jest.json --runInBand --detectOpenHandles --verbose",
+    "test:pipeline": "NODE_ENV=ci RUNTIME_ENV=ci jest  --config ./test/jest.json --runInBand --detectOpenHandles --verbose --forceExit",
     "prepare": "cd ../ && husky install ./backend/.husky",
     "nibble": "eslint-nibble --ext .jsx,.js,ts,.tsx src/",
     "typeorm": "ts-node ./node_modules/typeorm/cli",

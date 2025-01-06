@@ -1,21 +1,30 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { CronTestService } from './cron-test.service';
+import { CronService } from './cron.service';
 import { RecommitmentController } from './recommitment.controller';
 import { RecommitmentService } from './recommitment.service';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 import { AppLogger } from '../logger/logger.service';
-import { MailService } from '../mail/mail.service';
 import { PersonnelModule } from '../personnel/personnel.module';
+import { MailModule } from '../mail/mail.module';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 @Module({
   imports: [
     PersonnelModule,
+    MailModule,
     TypeOrmModule.forFeature([RecommitmentEntity, RecommitmentCycleEntity]),
   ],
   controllers: [RecommitmentController],
-  providers: [RecommitmentService, MailService, AppLogger],
-  exports: [RecommitmentService],
+  providers: [
+    SchedulerRegistry,
+    RecommitmentService,
+    AppLogger,
+    CronService,
+    CronTestService
+  ],
+  exports: [RecommitmentService]
 })
 export class RecommitmentModule {}

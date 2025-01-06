@@ -24,7 +24,7 @@ export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
 export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
-
+export TEST_EMAIL:=$(TEST_EMAIL)
 
 # Git
 export COMMIT_SHA:=$(shell git rev-parse --short=7 HEAD)
@@ -230,6 +230,10 @@ seed-local:
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
 	@docker exec -it tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed.ts")'
 
+seed-local-ci:
+	@docker exec  tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/create-availability-functions.ts")'
+	@docker exec  tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed.ts")'
+
 seed-local-recommitment:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-recommitment.ts")'
 
@@ -241,6 +245,8 @@ seed-local-emcr:
 
 seed-local-personnel:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-both.ts")'
+
+
 
 seed-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
@@ -258,9 +264,15 @@ seed-oc-emcr:
 seed-oc-recommitment:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js")'
 
+test-recommitment-oc:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/recommitment/test-handler.js").handler($(TEST_EMAIL))'
+
+test-recommitment-local:
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/recommitment/test-handler.ts").handler($(TEST_EMAIL))'
+
 delete-db:
-	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
-	@docker exec -it tc-db-local psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
+	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
+	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
 
 
 

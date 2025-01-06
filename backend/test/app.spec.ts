@@ -1,37 +1,18 @@
-import { TerminusModule } from '@nestjs/terminus';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { AppController } from '../src/app.controller';
-import { AuthModule } from '../src/auth/auth.module';
-import { BcwsModule } from '../src/bcws/bcws.module';
-import { DatabaseModule } from '../src/database/database.module';
-import { EmcrModule } from '../src/emcr/emcr.module';
-import { FormModule } from '../src/form/form.module';
-import { LoggerModule } from '../src/logger/logger.module';
-import { PersonnelModule } from '../src/personnel/personnel.module';
-import { RecommitmentModule } from '../src/recommitment/recommitment.module';
-import { RegionsAndLocationsModule } from '../src/region-location/region-location.module';
+import { AppModule } from '../src/app.module';
+import { INestApplication } from '@nestjs/common';
 
 describe('AppController', () => {
   let appController: AppController;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      imports: [
-        DatabaseModule,
-        LoggerModule,
-        TerminusModule,
-        AuthModule,
-        PersonnelModule,
-        BcwsModule,
-        EmcrModule,
-        FormModule,
-        RegionsAndLocationsModule,
-        RecommitmentModule,
-      ],
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
-
-    appController = app.get<AppController>(AppController);
+    const app: INestApplication = moduleRef.createNestApplication();
+    await app.init();
+    appController = moduleRef.get<AppController>(AppController);
   });
 
   describe('root', () => {

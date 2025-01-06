@@ -125,6 +125,7 @@ services:
       HEALTH_ENABLED: "true"
       HTTP_ENABLED: "true"
       METRICS_ENABLED: "true"
+      TEST_EMAIL: ${TEST_EMAIL}
     depends_on:
       - db
     ports:

@@ -64,8 +64,10 @@ services:
       KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       DB_PASSWORD: ${DB_PASSWORD}
+      MODE: ${MODE}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
+      TEST_EMAIL: ${TEST_EMAIL}
     ports:
       - "3001:3000"
     volumes:
