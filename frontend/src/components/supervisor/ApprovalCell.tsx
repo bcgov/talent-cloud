@@ -11,6 +11,7 @@ import { CheckIcon } from '../ui/Icons';
 export const ApprovalCell = ({
   personnel,
   program,
+  recommitmentStatus,
   handleShowSuccessBanner,
   handleShowWarningBanner,
   year,
@@ -19,12 +20,13 @@ export const ApprovalCell = ({
   program: Program;
   handleShowSuccessBanner: (banner?: boolean) => void;
   handleShowWarningBanner: (banner?: boolean) => void;
+  recommitmentStatus: RecommitmentStatus;
   year: number;
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
     useState<SupervisorReason>();
 
-  const [status, setStatus] = useState<RecommitmentStatus>();
+  const [status, setStatus] = useState<RecommitmentStatus>(recommitmentStatus);
 
   const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(RecommitmentStatus[e.target.value as keyof typeof RecommitmentStatus]);
@@ -72,11 +74,13 @@ export const ApprovalCell = ({
         ? `${values.reason}: ${values.comments}`
         : values.reason;
     try {
-      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
-        status: values.status,
-        program,
-        reason,
-        year,
+      await AxiosPrivate.patch(`/recommitment/${personnel.id}`, {
+        [program]: {
+          status: values.status,
+          program,
+          reason,
+          year,
+        },
       });
       handleShowDeclineModal();
       handleShowSuccessBanner(true);
@@ -89,11 +93,10 @@ export const ApprovalCell = ({
   const handleSubmitApproval = async () => {
     handleShowSuccessBanner(false);
     handleShowWarningBanner(true);
+
     try {
-      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
-        status,
-        program,
-        year,
+      await AxiosPrivate.patch(`/recommitment/${personnel.id}`, {
+        [program]: { status, program, year },
       });
       handleShowSuccessBanner(true);
       handleShowWarningBanner(false);
@@ -104,18 +107,26 @@ export const ApprovalCell = ({
 
   const disabled =
     (program === Program.BCWS &&
-      personnel.recommitment?.bcws !== RecommitmentStatus.MEMBER_COMMITTED &&
-      personnel.recommitment?.bcws !== RecommitmentStatus.SUPERVISOR_DENIED) ||
+      personnel.bcws &&
+      personnel.recommitment?.find((itm) => itm.program === Program.BCWS)?.status !==
+        RecommitmentStatus.MEMBER_COMMITTED &&
+      personnel.recommitment?.find((itm) => itm.program === Program.BCWS)?.status !==
+        RecommitmentStatus.SUPERVISOR_DENIED) ||
     (program === Program.EMCR &&
-      personnel.recommitment?.emcr !== RecommitmentStatus.MEMBER_COMMITTED &&
-      personnel.recommitment?.emcr !== RecommitmentStatus.SUPERVISOR_DENIED);
+      personnel.emcr &&
+      personnel.recommitment?.find((itm) => itm.program === Program.EMCR)?.status !==
+        RecommitmentStatus.MEMBER_COMMITTED &&
+      personnel.recommitment?.find((itm) => itm.program === Program.EMCR)?.status !==
+        RecommitmentStatus.SUPERVISOR_DENIED);
 
   const revertDecision = async () => {
     try {
-      await AxiosPrivate.patch(`/supervisor/personnel/${personnel.id}`, {
-        status: RecommitmentStatus.MEMBER_COMMITTED,
-        program,
-        year,
+      await AxiosPrivate.patch(`/recommitment/${personnel.id}`, {
+        [program]: {
+          status: RecommitmentStatus.MEMBER_COMMITTED,
+          program,
+          year,
+        },
       });
       handleShowSuccessBanner(false);
       handleShowWarningBanner(true);
@@ -129,9 +140,8 @@ export const ApprovalCell = ({
         <select
           disabled={
             disabled ||
-            personnel.recommitment?.[
-              program as keyof typeof personnel.recommitment
-            ] === RecommitmentStatus.SUPERVISOR_DENIED
+            personnel.recommitment?.find((itm) => itm.program === program)
+              ?.status === RecommitmentStatus.SUPERVISOR_DENIED
           }
           className={[
             'rounded-sm  outline-none w-40 text-sm ',
@@ -151,15 +161,11 @@ export const ApprovalCell = ({
             Decline
           </option>
         </select>
-        {personnel?.recommitment?.[
-          program as keyof typeof personnel.recommitment
-        ] === RecommitmentStatus.SUPERVISOR_APPROVED ? (
+        {recommitmentStatus === RecommitmentStatus.SUPERVISOR_APPROVED ? (
           <div className="flex flex-row text-success items-center space-x-2">
             <CheckIcon /> <span className="text-sm">Submitted!</span>
           </div>
-        ) : personnel?.recommitment?.[
-            program as keyof typeof personnel.recommitment
-          ] === RecommitmentStatus.SUPERVISOR_DENIED ? (
+        ) : recommitmentStatus === RecommitmentStatus.SUPERVISOR_DENIED ? (
           <Button
             variant={ButtonTypes.TERTIARY}
             text={'Unlock'}

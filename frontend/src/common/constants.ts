@@ -145,15 +145,13 @@ export interface RecommitmentCycle {
 export interface Recommitment {
   memberId: string;
   recommitmentCycle: RecommitmentCycle;
-  emcr?: RecommitmentStatus | null;
-  bcws?: RecommitmentStatus | null;
+  status: RecommitmentStatus;
+  program: Program;
   memberDecisionDate?: Date | null;
-  memberReasonEmcr?: string | null;
-  memberReasonBcws?: string | null;
+  memberReason?: string | null;
   supervisorIdir?: string;
   supervisorDecisionDate?: Date;
-  supervisorReasonEmcr?: string | null;
-  supervisorReasonBcws?: string | null;
+  supervisorReason?: string | null;
 }
 
 export interface Personnel {
@@ -166,7 +164,6 @@ export interface Personnel {
   experiences?: ExperienceInterface[];
   availability?: Availability[];
   status: Status;
-  recommitment?: Recommitment;
   newMember?: boolean;
   travelPreference: TravelPreference;
   unionMembership: string;
@@ -218,6 +215,7 @@ export interface Personnel {
   bcws?: Partial<Personnel>;
   emcr?: Partial<Personnel>;
   skills: PersonnelTool[] | Certification[] | Languages[];
+  recommitment?: Recommitment[];
 }
 
 export interface AvailabilityRange {

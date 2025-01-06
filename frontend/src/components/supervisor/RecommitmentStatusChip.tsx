@@ -6,9 +6,9 @@ import {
 export const RecommitmentStatusChip = ({
   status,
 }: {
-  status: RecommitmentStatus;
+  status: RecommitmentStatus | string;
 }) => {
-  const getClassName = (status: RecommitmentStatus) => {
+  const getClassName = (status: RecommitmentStatus | string) => {
     switch (status) {
       case RecommitmentStatus.PENDING:
         return 'text-warningDark bg-warningBannerLight';
@@ -33,7 +33,7 @@ export const RecommitmentStatusChip = ({
         getClassName(status)
       }
     >
-      {RecommitmentStatusLabel[status]}
+      {RecommitmentStatusLabel[status as keyof typeof RecommitmentStatus] ?? 'N/A'}
     </div>
   );
 };

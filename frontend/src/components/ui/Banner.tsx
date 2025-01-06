@@ -28,12 +28,16 @@ export const CustomBanner = ({
   onClose?: (props?: any) => void;
 }) => (
   <div
-    className={`flex flex-row py-4 px-6 rounded-md bg-${bgColor} items-start justify-start space-x-2 w-full py-6 shadow-lg`}
+    className={`flex flex-row py-4 px-6 rounded-md bg-${bgColor} items-start justify-between space-x-2 w-full  shadow-lg`}
   >
-    <div className="pt-3">{icon}</div>
-    <div className="flwx flex-col">
-      {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
-      <p className={`text-sm pt-2 text-${textColor} lg:pr-32`}>{content}</p>
+    <div
+      className={`flex flex-row py-4 px-6 items-start justify-start space-x-2 w-full`}
+    >
+      <div className="pt-3">{icon}</div>
+      <div className="flex flex-col">
+        {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
+        <p className={`text-sm pt-2 text-${textColor}`}>{content}</p>
+      </div>
     </div>
     {onClose && (
       <button onClick={onClose}>

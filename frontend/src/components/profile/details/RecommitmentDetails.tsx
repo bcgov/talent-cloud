@@ -2,16 +2,21 @@ import { Fragment, useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
-import { Program } from '@/common';
 import usePersonnel from '@/hooks/usePersonnel';
 import { useRoleContext } from '@/providers';
 import { datePST } from '@/utils';
 import { RecommitmentStatusLabel } from '@/common/enums/recommitment-status';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 export const RecommitmentDetails = () => {
   const { personnel } = usePersonnel();
   const { program } = useRoleContext();
+  const { recommitmentCycle } = useRecommitmentCycle();
   const [open, setOpen] = useState(true);
+
+  const recommitment = personnel?.recommitment?.find(
+    (itm) => itm.program === program,
+  );
 
   const handleOpen = (open: boolean) => setOpen(!open);
 
@@ -34,62 +39,61 @@ export const RecommitmentDetails = () => {
             <AccordionHeader
               placeholder={'Member Details'}
               className="bg-grayBackground px-8"
-              onClick={()=> handleOpen(open)}
+              onClick={() => handleOpen(open)}
             >
               <div className=" w-full justify-between items-center flex lg:flex-row">
-                <span>
-
-                    Recommitment   Details
-                </span>
-                
+                <span>Recommitment Details</span>
               </div>
             </AccordionHeader>
 
             <AccordionBody>
               <Fragment>
                 <div className="px-16">
-                  
-                    <DetailsSection
-                      title={''}
-                      columns={[
-                        {
-                          title: 'Upcoming Year',
-                          content:
-                            personnel?.recommitment?.recommitmentCycle.year ? <p>{personnel?.recommitment?.recommitmentCycle.year}</p> :  '--'
-                        },
-                        {
-                          title: 'Status',
-                          content: program === Program.BCWS ? <p>{RecommitmentStatusLabel[personnel?.recommitment?.bcws as keyof typeof  RecommitmentStatusLabel]}</p> : <p>{RecommitmentStatusLabel[personnel?.recommitment?.emcr as keyof typeof  RecommitmentStatusLabel]}</p>,
-                        },
-                        {
-                          title: 'Date Recommitted',
-                          content: personnel?.recommitment?.supervisorDecisionDate
-                            ? datePST(
-                                new Date(
-                                  personnel?.recommitment?.supervisorDecisionDate,
-                                ),
-                              )
-                            : '--',
-                        },
-                        {
-                          title: 'Declined By',
-                          content: personnel?.recommitment?.supervisorIdir ?? '--',
-                        },
-                        {
-                          title: 'Reason for Declining',
-                          content:
-                          program === Program.BCWS ? <p>{personnel?.recommitment?.supervisorReasonBcws ?? '--'}</p>  : <p>{personnel?.recommitment?.supervisorReasonEmcr ?? '--'}</p>,
-                        },
-                      ]}
-                    />
+                  <DetailsSection
+                    title={''}
+                    columns={[
+                      {
+                        title: 'Upcoming Year',
+                        content: recommitmentCycle?.year ? (
+                          <p>{recommitmentCycle.year}</p>
+                        ) : (
+                          '--'
+                        ),
+                      },
+                      {
+                        title: 'Status',
+                        content: (
+                          <p>
+                            {
+                              RecommitmentStatusLabel[
+                                recommitment?.status as keyof typeof RecommitmentStatusLabel
+                              ]
+                            }
+                          </p>
+                        ),
+                      },
+                      {
+                        title: 'Date Recommitted',
+                        content: recommitment?.supervisorDecisionDate
+                          ? datePST(new Date(recommitment?.supervisorDecisionDate))
+                          : '--',
+                      },
+                      {
+                        title: 'Declined By',
+                        content: recommitment?.supervisorIdir ?? '--',
+                      },
+                      {
+                        title: 'Reason for Declining',
+                        content: <p>{recommitment?.supervisorReason ?? '--'}</p>,
+                      },
+                    ]}
+                  />
                 </div>
-                
               </Fragment>
             </AccordionBody>
           </Accordion>
         </div>
       </section>
-      
     </>
   );
 };

@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { RecommitmentStatus } from "../../common/enums/recommitment-status.enum";
-import { Program } from "../../auth/interface";
+import { ApiProperty } from '@nestjs/swagger';
+import { Program } from '../../auth/interface';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
 
 export class UpdatePersonnelRecommitmentDTO {
   @ApiProperty({ name: 'year', type: 'integer' })
@@ -18,7 +18,7 @@ export class UpdatePersonnelRecommitmentDTO {
     name: 'status',
     type: 'enum',
     enum: RecommitmentStatus,
-    nullable: true,
+    nullable: false,
   })
   status: RecommitmentStatus;
 
@@ -27,4 +27,9 @@ export class UpdatePersonnelRecommitmentDTO {
     required: false,
   })
   reason?: string;
+}
+
+export class PersonnelRecommitmentDTO {
+  bcws?: UpdatePersonnelRecommitmentDTO;
+  emcr?: UpdatePersonnelRecommitmentDTO;
 }

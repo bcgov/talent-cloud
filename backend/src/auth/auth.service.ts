@@ -3,12 +3,15 @@ import { Program, Role, Token } from './interface';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
+import { RecommitmentService } from '../recommitment/recommitment.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(RecommitmentService)
+    private readonly recommitmentService: RecommitmentService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(AuthService.name);
@@ -43,7 +46,6 @@ export class AuthService {
 
     if (isSupervisor) {
       roles.push(Role.SUPERVISOR);
-      
     }
 
     if (payload.client_roles) {
@@ -51,35 +53,31 @@ export class AuthService {
 
       if (logistics) {
         roles.push(Role.LOGISTICS);
-      
       }
       const coordinator = payload.client_roles.includes(Role.COORDINATOR);
 
       if (coordinator) {
         roles.push(Role.COORDINATOR);
-      
       }
 
       const isBcws = payload.client_roles.includes(Program.BCWS);
       const isEmcr = payload.client_roles.includes(Program.EMCR);
 
       if (isEmcr) {
-        
         request['program'] = Program.EMCR;
       }
       if (isBcws) {
-        
         request['program'] = Program.BCWS;
       }
     }
-    request['roles'] = [...roles];  
-    
+    request['roles'] = [...roles];
+
     this.logger.log(`User Info:`);
     this.logger.log(`name: ${request['username']}`);
     this.logger.log(`idir: ${request['idir']}`);
     this.logger.log(`roles: ${request['roles']}`);
     this.logger.log(`program: ${request['program']}`);
-    
+
     return true;
   }
 
@@ -90,7 +88,8 @@ export class AuthService {
   }> {
     const { isMember, isSupervisor } =
       await this.personnelService.verifyMemberOrSupervisor(email);
-    const recommitment = await this.personnelService.getRecommitmentPeriod();
+    const recommitment =
+      await this.recommitmentService.checkRecommitmentPeriod();
     return {
       isMember,
       isSupervisor,

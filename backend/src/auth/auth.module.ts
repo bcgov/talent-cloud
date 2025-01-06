@@ -7,9 +7,10 @@ import { RolesGuard } from './roles.guard';
 import { TokenGuard } from './token.guard';
 import { LoggerModule } from '../logger/logger.module';
 import { PersonnelModule } from '../personnel/personnel.module';
+import { RecommitmentModule } from '../recommitment/recommitment.module';
 
 @Module({
-  imports: [LoggerModule, PersonnelModule],
+  imports: [LoggerModule, PersonnelModule, RecommitmentModule],
   providers: [
     AuthService,
     {

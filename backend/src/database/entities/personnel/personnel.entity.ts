@@ -145,9 +145,6 @@ export class PersonnelEntity extends BaseEntity {
   @Column({ name: 'division', type: 'varchar', length: 100, nullable: true })
   division?: string;
 
-  @OneToOne(() => RecommitmentEntity, (r) => r.member, { nullable: true })
-  recommitment?: RecommitmentEntity;
-
   @OneToMany(() => LanguageEntity, (l) => l.personnel, { cascade: true })
   languages?: LanguageEntity[];
 
@@ -190,13 +187,16 @@ export class PersonnelEntity extends BaseEntity {
     nullable: true,
   })
   emergencyContactRelationship?: string;
-  
+
   @Column({ name: 'employee_id', type: 'varchar', length: 6, nullable: true })
   employeeId: string;
 
   //TODO confirm length of paylist_id
   @Column({ name: 'paylist_id', type: 'varchar', length: 50, nullable: true })
   paylistId: string;
+
+  @OneToMany(() => RecommitmentEntity, (r) => r.personnel)
+  recommitment?: RecommitmentEntity[];
 
   toResponseObject(
     roles: Role[],
@@ -221,7 +221,7 @@ export class PersonnelEntity extends BaseEntity {
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
-      recommitment: this.recommitment?.toResponseObject(roles) ?? null,
+
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation?.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),
@@ -240,6 +240,8 @@ export class PersonnelEntity extends BaseEntity {
         this.availability?.map((avail) => avail.toResponseObject()) ?? [],
       bcws: this?.bcws?.toResponseObject(roles) ?? null,
       emcr: this?.emcr?.toResponseObject(roles) ?? null,
+      recommitment:
+        this.recommitment?.map((itm) => itm.toResponseObject()) ?? null,
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"
