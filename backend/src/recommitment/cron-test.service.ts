@@ -3,6 +3,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { RecommitmentService } from './recommitment.service';
 import { AppLogger } from '../logger/logger.service';
+import { format } from 'date-fns';
 
 @Injectable()
 export class CronTestService {
@@ -65,14 +66,14 @@ export class CronTestService {
 
     this.schedulerRegistry.addCronJob('end_recommitment', endRecommitmentJob);
     this.logger.warn(
-      `End Recommitment Job scheduled to run on ${endDate}/${endMonth} at ${endHour}:00`,
+      `End Recommitment Job scheduled to run on ${format(endMonth, 'LLLL')} ${endDate} at ${endHour}:00`,
     );
 
     
     recurringNotificationsJob.start();
     endRecommitmentJob.start();
     this.logger.warn(
-      `Initializing Recommitment Job Scheduled for ${startDate}/${startMonth} at ${startHour}:00!`,
+      `Initializing Recommitment Job Scheduled for ${format(startMonth, 'LLLL')} ${startDate} at ${startHour}:00`,
     );
     return await this.recommitmentService.handleStartRecommitment(
       dryRun,
