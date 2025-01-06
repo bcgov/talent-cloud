@@ -6,11 +6,12 @@ import * as nunjucks from 'nunjucks';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppLogger } from '../logger/logger.service';
+import { datePST } from '../common/helpers';
 
 export const handler = async (
   email: string,
-  schedule = '* * * * *',
-  dryRun = true,
+  schedule = '0 * * * *',
+  hours=5
 ) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const logger = new AppLogger();
@@ -20,7 +21,7 @@ export const handler = async (
   logger.log('Starting recommitment test cron job');
   logger.log(`Email: ${email}`);
   logger.log(`Schedule: ${schedule}`);
-  logger.log(`Dry Run: ${dryRun}`);
+  logger.log(`Dry Run: true`);
 
   app.useStaticAssets(join(__dirname, 'mail', 'views'));
   nunjucks.configure('src/mail/views', {
@@ -38,7 +39,19 @@ export const handler = async (
   app.set('view cache', true);
 
   const cronTestService = app.select(RecommitmentModule).get(CronTestService);
-  await cronTestService.scheduleTestCron(email, schedule, dryRun);
 
+  const today = datePST(new Date());
   
+    
+
+    const startDate= today.getDate();
+    const startHour= today.getHours();
+    const startMonth= today.getMonth() + 1;
+    const finalHour = startHour + hours;  
+    const endDate= today.getDate();
+    const endHour=  finalHour > 24 ? finalHour - 24 : finalHour;
+    const endMonth= today.getMonth() + 1;
+
+  await cronTestService.initiateRecommitment(email, schedule, true, endDate, endHour, endMonth, startDate, startHour, startMonth);
+
 };
