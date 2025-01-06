@@ -28,7 +28,7 @@ export const handler = async (
 
   app.useStaticAssets(join(__dirname, '..', 'views'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  nunjucks.configure(join(__dirname, '..', 'views'), {
+  nunjucks.configure('src/views', {
     autoescape: true,
     throwOnUndefined: false,
     trimBlocks: false,
