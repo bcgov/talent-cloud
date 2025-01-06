@@ -36,7 +36,7 @@ const MemberProfile = () => {
   const handleTabChange = (index: string) => {
     setActiveTab(index);
   };
-
+  
   if (loading) {
     return <Loading />;
   }
@@ -82,7 +82,7 @@ const MemberProfile = () => {
                     </div>
                   </Transition>
                 </div>
-              )}
+               )} 
               <TabsBody placeholder={undefined}>
                 <TabPanel value={TabIndexes.AVAILABILITY}>
                   {personnel && (

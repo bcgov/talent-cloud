@@ -64,6 +64,7 @@ services:
       KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       DB_PASSWORD: ${DB_PASSWORD}
+      MODE: ${MODE}
       CHOKIDAR_USEPOLLING: "true"
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:

@@ -104,18 +104,18 @@ export class MailService {
       contexts: records.map((record) => ({
         to: [
           templateType === TemplateType.MEMBER
-            ? record.personnel.email
+            ? record.personnel?.email
             : record.personnel.supervisorEmail,
         ],
         cc: [],
         bcc: [],
         tag:
           templateType === TemplateType.MEMBER
-            ? `${template}_${record.personnel.id}`
-            : `${template}_${record.personnel.supervisorEmail}`,
+            ? `${template}_${record.personnel?.id}`
+            : `${template}_${record.personnel?.supervisorEmail}`,
         delayTS: 0,
         context: {
-          program: program.toUpperCase(),
+          program: program?.toUpperCase(),
           year: record.year,
           date: format(endDate, 'MMMM do, yyyy'),
           member: `${record.personnel.firstName} ${record.personnel.lastName}`,
@@ -151,7 +151,8 @@ export class MailService {
       const { data } = await this.mailApi.post('/emailMerge', body);
       return data;
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e.message);
+      this.logger.error(e.status);
       throw new Error(e);
     }
   }
