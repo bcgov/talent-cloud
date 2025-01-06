@@ -11,7 +11,7 @@ import {
   Section,
   SectionName,
 } from '@/common/enums/sections.enum';
-import { Button } from '@/components';
+import { Button, DialogUI } from '@/components';
 import {
   Combobox,
   ComboboxInput,
@@ -22,6 +22,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { Fragment, useEffect, useState } from 'react';
 import { ProfileSectionHeader } from '../common';
+import { QuestionIcon } from '@/components/ui/Icons';
+import RolesAndFunctionsDescriptionsTabs from './RolesGuide';
 
 interface RoleSelectProps {
   allRoles: BcwsRoleInterface[];
@@ -528,41 +530,87 @@ export const MemberProfileEditPreferences = ({
     handleClose();
   };
 
+  const [openBcwsRoles, setOpenBcwsRoles] = useState(false);
+  const showBcwsRoles = () => {
+    setOpenBcwsRoles(!openBcwsRoles);
+  };
+
   return (
-    <div className="pb-6">
-      {bcws && emcr && (
+    <>
+      <div className="pb-6">
         <div className="pt-6 px-12">
-          <h2 className="text-xl font-bold text-gray-900">EMCR</h2>
+          <div className="flex flex-row items-center justify-start space-x-2">
+            <QuestionIcon />
+            <button
+              onClick={showBcwsRoles}
+              className="text-info cursor-pointer underline"
+            >
+              See Section Definitions
+            </button>
+          </div>
         </div>
-      )}
-      {emcr && (
-        <MemberProfileEditFunctions
-          allFunctions={emcr.allFunctions}
-          originalExperiences={emcr.originalExperiences}
-          sectionChoices={emcr.sectionChoices}
-          handleChange={setFunctionsToSave}
-        />
-      )}
-      {bcws && emcr && (
-        <div className="pt-6 px-12 border-t-2 mt-6 border-defaultGray"></div>
-      )}
-      {bcws && (
-        <MemberProfileEditRoles
-          allRoles={bcws.allRoles}
-          originalRoles={bcws.originalRoles}
-          sectionChoices={bcws.sectionChoices}
-          handleChange={setRolesToSave}
-        />
-      )}
-      <div className="flex flex-row content-end pt-6 px-6 border-t-4 justify-end gap-2">
-        <Button
-          variant={ButtonTypes.PRIMARY}
-          type="button"
-          onClick={handleClose}
-          text="Cancel"
-        />
-        <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={onSave} />
+
+        {emcr && (
+          <div className="pt-6 px-12">
+            <h2 className="text-xl font-bold text-gray-900">EMCR</h2>
+          </div>
+        )}
+        {emcr && (
+          <MemberProfileEditFunctions
+            allFunctions={emcr.allFunctions}
+            originalExperiences={emcr.originalExperiences}
+            sectionChoices={emcr.sectionChoices}
+            handleChange={setFunctionsToSave}
+          />
+        )}
+        {bcws && emcr && (
+          <div className="pt-6 px-12 border-t-2 mt-6 border-defaultGray"></div>
+        )}
+        {bcws && (
+          <div className="pt-6 px-12">
+            <h2 className="text-xl font-bold text-gray-900">BCWS</h2>
+          </div>
+        )}
+
+        {bcws && (
+          <MemberProfileEditRoles
+            allRoles={bcws.allRoles}
+            originalRoles={bcws.originalRoles}
+            sectionChoices={bcws.sectionChoices}
+            handleChange={setRolesToSave}
+          />
+        )}
+        <div className="flex flex-row content-end pt-6 px-6 border-t-4 justify-end gap-2">
+          <Button
+            variant={ButtonTypes.PRIMARY}
+            type="button"
+            onClick={handleClose}
+            text="Cancel"
+          />
+          <Button variant={ButtonTypes.TERTIARY} text="Save" onClick={onSave} />
+        </div>
       </div>
-    </div>
+
+      <DialogUI
+        open={openBcwsRoles}
+        onClose={showBcwsRoles}
+        handleOpen={showBcwsRoles}
+        title={
+          bcws && !emcr
+            ? 'BCWS Role Definitions'
+            : emcr && !bcws
+              ? 'EMCR Section'
+              : 'EMCR Section, BCWS Role Definitions'
+        }
+        style="w-full max-w-3xl h-full"
+      >
+        <div>
+          <RolesAndFunctionsDescriptionsTabs
+            bcws={bcws !== undefined}
+            emcr={emcr !== undefined}
+          />
+        </div>
+      </DialogUI>
+    </>
   );
 };
