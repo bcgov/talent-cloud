@@ -33,7 +33,6 @@ export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
 
-
 # Docker compose v2 for GHA
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
