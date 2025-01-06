@@ -21,7 +21,7 @@ export const TableFooterNav = ({
   const iconButtonClass = 'text-dark h-4 w-4';
 
   const pageRange = usePagination({ currentPage, totalRows, rowsPerPage });
-  if (!pageRange) return null;
+
   const totalPages = Math.ceil(totalRows / rowsPerPage);
   const lastPage = totalPages;
 
