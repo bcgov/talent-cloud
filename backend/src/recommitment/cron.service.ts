@@ -18,7 +18,7 @@ export class CronService {
   /**
    * Initial Job Scheduled for 6am on Jan 13th or otherwise specified
    */
-  @Cron(process.env.START_DATE ?? '0 6 13 1 *', {
+  @Cron(process.env.START_DATE ?? '0 8 13 1 *', {
     name: 'initial_recommitment',
     timeZone: 'America/Vancouver',
   })
@@ -58,7 +58,7 @@ export class CronService {
    * End Recommitment on Feb 14th or otherwise
    * Cancel daily recurring job
    */
-  @Cron(process.env.END_DATE ?? '0 6 14 2 *', {
+  @Cron(process.env.END_DATE ?? '0 17 14 2 *', {
     name: 'initial_recommitment',
     timeZone: 'America/Vancouver',
   })
