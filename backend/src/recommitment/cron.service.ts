@@ -24,8 +24,9 @@ export class CronService {
   })
   async initialRecommitment() {
     // Start Recommitment. If not in production, use test email and do not send emails to members
+    // TODO set the start and end date dynamically
     process.env.ENV === 'production'
-      ? await this.recommitmentService.handleStartRecommitment()
+      ? await this.recommitmentService.handleStartRecommitment(false, null, '2025-01-13 08:00:00', '2025-02-14 17:00:00')
       : await this.recommitmentService.handleStartRecommitment(
           true,
           process.env.TEST_EMAIL,

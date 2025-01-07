@@ -16,6 +16,7 @@ export const handler = async () => {
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
+  
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
 
   const currentDate = new Date();

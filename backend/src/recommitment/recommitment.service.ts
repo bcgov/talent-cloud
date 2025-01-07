@@ -166,10 +166,11 @@ export class RecommitmentService {
    * @returns {Promise<RecommitmentCycleRO>} - The recommitment cycle information.
    */
   async checkRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
-    const qb = this.recommitmentCycleRepository.createQueryBuilder();
-    qb.where('start_date <= :date', { date: new Date() });
-    qb.andWhere('end_date >= :date', { date: new Date() });
-    return await qb.getOne();
+    const cycle = await this.recommitmentCycleRepository.findOne({
+      where: { year: new Date().getFullYear() },
+    });
+    this.logger.log(cycle);
+    return cycle;
   }
 
   /**
@@ -181,9 +182,12 @@ export class RecommitmentService {
   async handleStartRecommitment(
     dryRun: boolean = false,
     testEmail?: string,
+    startDate?: string,
+    endDate?:string
   ): Promise<void> {
+    
     const cycle = await this.recommitmentCycleRepository.save(
-      new RecommitmentCycleEntity(),
+      new RecommitmentCycleEntity(startDate, endDate),
     );
 
     this.logger.log(`RECOMMITMENT CYCLE: ${cycle.year}`);
@@ -201,29 +205,32 @@ export class RecommitmentService {
       relations: ['personnel'],
     });
 
-    const uniqueIds = [...new Set(recommitment.map((itm) => itm.personnel.id))];
+    const uniqueIds = Array.from(
+      new Set(recommitment.map((itm) => itm.personnel.id)),
+    );
 
-    const uniqueSupervisors = [...new Set(recommitment.map((itm) => itm.personnel.supervisorEmail))];
+    const uniqueSupervisors = Array.from(
+      new Set(recommitment.map((itm) => itm.personnel.supervisorEmail)),
+    );
+
     const recommitmentRO = recommitment.map((itm) => itm.toResponseObject());
 
     const memberTemplate = this.mailService.generateTemplate(
       EmailTemplates.MEMBER_ANNUAL,
       TemplateType.MEMBER,
-      uniqueIds.map((itm) =>
-        recommitmentRO.find((r) => r.personnel.id === itm),
-      ),
+      recommitmentRO.filter((itm) => uniqueIds.includes(itm.personnel.id)),
       cycle.endDate,
     );
 
     this.logger.log(
       `Generated ${memberTemplate.contexts.length} member annual reminder emails`,
     );
-    //TODO unique for supervisor email
+
     const supervisorTemplate = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_ANNUAL,
       TemplateType.SUPERVISOR,
-      uniqueSupervisors.map((itm) =>
-        recommitmentRO.find((r) => r.personnel.supervisorEmail === itm),
+      recommitmentRO.filter((r) =>
+        uniqueSupervisors.includes(r.personnel.supervisorEmail),
       ),
       cycle.endDate,
     );
@@ -282,25 +289,37 @@ export class RecommitmentService {
   ): Promise<void> {
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
-    const { memberPending, memberCommittedBCWS, memberCommittedEMCR } =
-      await this.findStillPendingAndCommitedMembers();
-    const uniquePendingMembers = [
-      ...new Set(memberPending.map((itm) => itm.personnel.id)),
-    ];
-    const membersCommitted = [...memberCommittedBCWS, ...memberCommittedEMCR];
-    const membersCommittedBoth = Array.from(new Set([...memberCommittedBCWS.filter((itm) => memberCommittedEMCR.find(r => r.personnel.id === itm.personnel.id)), ...memberCommittedEMCR.filter((itm) => memberCommittedBCWS.find(r => r.personnel.id === itm.personnel.id))]));
-    const membersCommittedBCWS = memberCommittedBCWS.filter((itm) => !membersCommittedBoth.find(r=> r.personnel.id === itm.personnel.id));
-    const membersCommittedEMCR = memberCommittedEMCR.filter((itm) => !membersCommittedBoth.find(r=> r.personnel.id === itm.personnel.id));
+    const { memberPending, memberCommitted } =
+      await this.findMembersByRecommitmentStatus();
+
+    const uniquePendingMemberIds = Array.from(
+      new Set(memberPending.map((itm) => itm.personnel.id)),
+    );
+
+    const uniqueSupervisorEmails = Array.from(
+      new Set(memberCommitted.map((itm) => itm.personnel.supervisorEmail)),
+    );
+
+    const uniquePendingMembers = uniquePendingMemberIds.map((itm) =>
+      memberPending.find((r) => r.personnel.id === itm),
+    );
+
+    const uniqueCommittedMembers = uniqueSupervisorEmails.map((itm) =>
+      memberCommitted.find((r) => r.personnel.supervisorEmail === itm),
+    );
+
     this.logger.log(
-      `Found ${memberPending.length} pending members and ${membersCommitted.length} committed members`,
+      `Found ${uniquePendingMembers.length} pending members (waiting for member response)`,
+    );
+
+    this.logger.log(
+      `Found ${uniqueCommittedMembers.length} committed members (waiting for supervisor response)`,
     );
 
     const pendingMembersTemplate = this.mailService.generateTemplate(
       EmailTemplates.MEMBER_FOLLOW_UP,
       TemplateType.MEMBER,
-      uniquePendingMembers.map((itm) =>
-        memberPending.find((r) => r.personnel.id === itm),
-      ),
+      uniquePendingMembers,
       recommitmentCycle.endDate,
     );
 
@@ -308,35 +327,16 @@ export class RecommitmentService {
       `Generated ${pendingMembersTemplate.contexts.length} emails for pending members`,
     );
 
-    const committedMembersTemplateBcws = this.mailService.generateTemplate(
+    const committedMembersTemplate = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_REMINDER,
       TemplateType.SUPERVISOR,
-      membersCommittedBCWS,
+      uniqueCommittedMembers,
       recommitmentCycle.endDate,
       Program.BCWS,
     );
 
-    const committedMembersTemplateEmcr = this.mailService.generateTemplate(
-      EmailTemplates.SUPERVISOR_REMINDER,
-      TemplateType.SUPERVISOR,
-      membersCommittedEMCR,
-      recommitmentCycle.endDate,
-      Program.EMCR,
-    );
-
-    const committedMembersTemplateBoth = this.mailService.generateTemplate(
-      EmailTemplates.SUPERVISOR_REMINDER,
-      TemplateType.SUPERVISOR,
-      membersCommittedBoth,
-      recommitmentCycle.endDate,
-      Program.ALL,
-    );
-
     this.logger.log(
-      `Generated ${
-        committedMembersTemplateEmcr.contexts.length +
-        committedMembersTemplateBcws.contexts.length + committedMembersTemplateBoth.contexts.length
-      } emails for committed members supervisors`,
+      `Generated ${committedMembersTemplate.contexts.length} emails for supervisors of committed members`,
     );
 
     if (dryRun) {
@@ -346,38 +346,20 @@ export class RecommitmentService {
       );
 
       this.logger.log('Generated emails for committed BCWS members:');
-      committedMembersTemplateBcws.contexts.forEach((template) =>
-        this.logger.log(template.to),
-      );
-
-      this.logger.log('Generated emails for committed BOTH members:');
-      committedMembersTemplateBoth.contexts.forEach((template) =>
-        this.logger.log(template.to),
-      );
-
-      this.logger.log('Generated emails for committed EMCR members:');
-      committedMembersTemplateEmcr.contexts.forEach((template) =>
+      committedMembersTemplate.contexts.forEach((template) =>
         this.logger.log(template.to),
       );
 
       pendingMembersTemplate.contexts = pendingMembersTemplate.contexts.filter(
         (context) => context.to.includes(testEmail),
       );
-      committedMembersTemplateEmcr.contexts =
-        committedMembersTemplateEmcr.contexts.filter((context) =>
+      committedMembersTemplate.contexts =
+        committedMembersTemplate.contexts.filter((context) =>
           context.to.includes(testEmail),
         );
-      committedMembersTemplateBcws.contexts =
-        committedMembersTemplateBcws.contexts.filter((context) =>
-          context.to.includes(testEmail),
-        );
-      committedMembersTemplateBoth.contexts = committedMembersTemplateBoth.contexts.filter((context) =>
-        context.to.includes(testEmail),
-      );
     }
     await this.mailService.sendMail(pendingMembersTemplate);
-    await this.mailService.sendMail(committedMembersTemplateEmcr);
-    await this.mailService.sendMail(committedMembersTemplateBcws);
+    await this.mailService.sendMail(committedMembersTemplate);
   }
 
   /**
@@ -390,51 +372,65 @@ export class RecommitmentService {
     dryRun: boolean = false,
     testEmail?: string,
   ): Promise<void> {
-    const { memberPending, memberCommittedBCWS, memberCommittedEMCR } =
-      await this.findStillPendingAndCommitedMembers();
+    const { memberPending, memberCommitted, memberDeclined, supervisorDenied } =
+      await this.findMembersByRecommitmentStatus();
 
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
     if (!dryRun) {
       await this.updatePersonnelStatus(
         memberPending,
-        memberCommittedBCWS,
-        memberCommittedEMCR,
+        memberCommitted,
+        memberDeclined,
+        supervisorDenied,
       );
     }
 
-    this.logger.log(
-      `Set ${memberPending.length} members recommitment status to MEMBER_NO_RESPONSE`,
-    );
-    this.logger.log(
-      `Set ${
-        memberCommittedBCWS.length + memberCommittedEMCR.length
-      } members recommitment status to SUPERVISOR_NO_RESPONSE`,
-    );
-    this.logger.log(
-      `Set ${
-        memberPending.length +
-        memberCommittedBCWS.length +
-        memberCommittedEMCR.length
-      } members to INACTIVE`,
+    const uniqueMemberIds = [...memberCommitted, ...memberPending].map(
+      (itm) => itm.personnel.id,
     );
 
-    const finalEmails = this.mailService.generateTemplate(
+    const memberNoResponseEmails = this.mailService.generateTemplate(
       EmailTemplates.MEMBER_NO_RESPONSE,
       TemplateType.MEMBER,
-      memberPending,
+      memberPending.filter((itm) => uniqueMemberIds.includes(itm.personnel.id)),
+      recommitmentCycle?.endDate,
+    );
+
+    // TODO change this to use new template
+    const supervisorNoResponseEmails = this.mailService.generateTemplate(
+      EmailTemplates.MEMBER_NO_RESPONSE,
+      TemplateType.MEMBER,
+      memberCommitted.filter((itm) =>
+        uniqueMemberIds.includes(itm.personnel.id),
+      ),
       recommitmentCycle?.endDate,
     );
 
     if (dryRun) {
-      finalEmails.contexts.forEach((context) => this.logger.log(context.to));
+      memberNoResponseEmails.contexts.forEach((context) =>
+        this.logger.log(context.to),
+      );
 
-      finalEmails.contexts = [
-        finalEmails.contexts.find((context) => context.to.includes(testEmail)),
+      memberNoResponseEmails.contexts = [
+        memberNoResponseEmails.contexts.find((context) =>
+          context.to.includes(testEmail),
+        ),
+      ];
+
+      supervisorNoResponseEmails.contexts.forEach((context) =>
+        this.logger.log(context.to),
+      );
+
+      supervisorNoResponseEmails.contexts = [
+        supervisorNoResponseEmails.contexts.find((context) =>
+          context.to.includes(testEmail),
+        ),
       ];
     }
 
-    await this.mailService.sendMail(finalEmails);
+    await this.mailService.sendMail(memberNoResponseEmails);
+    await this.mailService.sendMail(supervisorNoResponseEmails);
   }
 
   /**
@@ -445,36 +441,41 @@ export class RecommitmentService {
    */
   private async updatePersonnelStatus(
     memberPending: RecommitmentRO[],
-    memberCommittedBCWS: RecommitmentRO[],
-    memberCommittedEMCR: RecommitmentRO[],
+    memberCommitted: RecommitmentRO[],
+    memberDeclined: RecommitmentRO[],
+    supervisorDenied: RecommitmentRO[],
   ): Promise<void> {
-    for (const recommitment of [
-      ...memberPending.filter((itm) => itm.program === Program.BCWS),
-      ...memberCommittedBCWS,
-    ]) {
-      recommitment.personnel.bcws.status = Status.INACTIVE;
-      await this.personnelService.save(recommitment.personnel);
-    }
-    for (const recommitment of [
-      ...memberPending.filter((itm) => itm.program === Program.EMCR),
-      ...memberCommittedEMCR,
-    ]) {
-      recommitment.personnel.emcr.status = Status.INACTIVE;
-      await this.personnelService.save(recommitment.personnel);
-    }
     for (const recommitment of [...memberPending]) {
       await this.recommitmentRepository.update(recommitment.personnelId, {
         status: RecommitmentStatus.MEMBER_NO_RESPONSE,
       });
     }
 
-    for (const recommitment of [
-      ...memberCommittedBCWS,
-      ...memberCommittedEMCR,
-    ]) {
+    for (const recommitment of [...memberCommitted]) {
       await this.recommitmentRepository.update(recommitment.personnelId, {
         status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
       });
+    }
+
+    const membersToInactive = [
+      ...memberPending,
+      ...memberCommitted,
+      ...memberDeclined,
+      ...supervisorDenied,
+    ];
+
+    for (const recommitment of [
+      ...membersToInactive.filter((itm) => itm.program === Program.BCWS),
+    ]) {
+      recommitment.personnel.bcws.status = Status.INACTIVE;
+      await this.personnelService.save(recommitment.personnel);
+    }
+
+    for (const recommitment of [
+      ...membersToInactive.filter((itm) => itm.program === Program.EMCR),
+    ]) {
+      recommitment.personnel.emcr.status = Status.INACTIVE;
+      await this.personnelService.save(recommitment.personnel);
     }
   }
 
@@ -482,41 +483,31 @@ export class RecommitmentService {
    * Finds members who are still pending in the recommitment process.
    * @returns {Promise<{ memberPending: RecommitmentRO[]; memberCommittedBCWS: RecommitmentRO[]; memberCommittedEMCR: RecommitmentRO[] }>}
    */
-  async findStillPendingAndCommitedMembers(): Promise<{
+  async findMembersByRecommitmentStatus(): Promise<{
     memberPending: RecommitmentRO[];
-    memberCommittedBCWS: RecommitmentRO[];
-    memberCommittedEMCR: RecommitmentRO[];
+    memberCommitted: RecommitmentRO[];
+    memberDeclined: RecommitmentRO[];
+    supervisorDenied: RecommitmentRO[];
   }> {
-    const memberPending = await this.recommitmentRepository.find({
-      where: {
-        status: RecommitmentStatus.PENDING,
-      },
+    const members = await this.recommitmentRepository.find({
+      where: { recommitmentCycle: { year: new Date().getFullYear() } },
       relations: ['personnel', 'recommitmentCycle'],
     });
 
-    const memberCommittedBCWS = await this.recommitmentRepository.find({
-      where: {
-        status: RecommitmentStatus.MEMBER_COMMITTED,
-        program: Program.BCWS,
-      },
-      relations: ['personnel', 'recommitmentCycle'],
-    });
-
-    const memberCommittedEMCR = await this.recommitmentRepository.find({
-      where: {
-        status: RecommitmentStatus.MEMBER_COMMITTED,
-        program: Program.EMCR,
-      },
-      relations: ['personnel', 'recommitmentCycle'],
-    });
+    const membersRo = members.map((itm) => itm.toResponseObject());
 
     return {
-      memberPending: memberPending.map((itm) => itm.toResponseObject()),
-      memberCommittedBCWS: memberCommittedBCWS.map((itm) =>
-        itm.toResponseObject(),
+      memberPending: membersRo.filter(
+        (itm) => itm.status === RecommitmentStatus.PENDING,
       ),
-      memberCommittedEMCR: memberCommittedEMCR.map((itm) =>
-        itm.toResponseObject(),
+      memberCommitted: membersRo.filter(
+        (itm) => itm.status === RecommitmentStatus.MEMBER_COMMITTED,
+      ),
+      memberDeclined: membersRo.filter(
+        (itm) => itm.status === RecommitmentStatus.MEMBER_DENIED,
+      ),
+      supervisorDenied: membersRo.filter(
+        (itm) => itm.status === RecommitmentStatus.SUPERVISOR_DENIED,
       ),
     };
   }

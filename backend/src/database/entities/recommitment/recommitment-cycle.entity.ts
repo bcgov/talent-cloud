@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 import { RecommitmentCycleRO } from './recommitment-cycle.ro';
+import { datePST } from '../../../common/helpers';
 
 @Entity('recommitment_cycle')
 @Unique(['year'])
@@ -21,19 +22,11 @@ export class RecommitmentCycleEntity extends BaseEntity {
     };
   }
 
-  constructor() {
+  constructor(startDate?: string, endDate?: string) { 
     super();
-    const today = new Date();
-    this.startDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - 2,
-    );
+    
+    this.startDate = startDate ? new Date(startDate) : new Date(datePST(new Date())); 
+    this.endDate = endDate ? new Date(endDate) : new Date(datePST(new Date(this.startDate.getFullYear(), this.startDate.getMonth() + 1, this.startDate.getDate()+35)));
     this.year = this.startDate.getFullYear();
-    this.endDate = new Date(
-      this.startDate.getFullYear(),
-      this.startDate.getMonth(),
-      this.startDate.getDate() + 35,
-    );
   }
 }
