@@ -266,17 +266,10 @@ seed-oc-emcr:
 seed-oc-recommitment:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js")'
 
-test-recommitment-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/recommitment/test-handler.js").handler("$(TEST_EMAIL)",  "$(SCHEDULE)", $(END_HOUR))'
-
-test-recommitment-local:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/recommitment/test-handler.ts").handler("$(TEST_EMAIL)",  "$(SCHEDULE)", $(END_HOUR))'
 
 delete-db:
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
-
-
 
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
