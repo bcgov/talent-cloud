@@ -23,6 +23,7 @@ export class CronService {
     timeZone: 'America/Vancouver',
   })
   async initialRecommitment() {
+    this.logger.log(`Initial Recommitment Job started! for ${process.env.START_DATE ?? '0 6 13 1 *'}`);
     // Start Recommitment. If not in production, use test email and do not send emails to members
     // TODO set the start and end date dynamically
     process.env.ENV === 'production'
@@ -64,6 +65,7 @@ export class CronService {
     timeZone: 'America/Vancouver',
   })
   async endRecommitment() {
+    this.logger.log(`Recommitment Ended on ${process.env.END_DATE ?? '0 17 14 2 *'}`);
     // delete the recurring job
     this.schedulerRegistry.deleteCronJob(
       'recommitment_follow_up_notifications',
