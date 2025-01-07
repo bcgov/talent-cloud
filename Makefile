@@ -286,3 +286,9 @@ run-nibble-be:
 run-nibble-fe:
 	@echo "Run lint Backend"
 	@cd frontend && npm run nibble
+
+update-recommitment-configmap:
+	@echo "Update recommitment configmap"
+	@oc patch configmap tc-recommitment -p='{"data":{"start_date":$(START_DATE),"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
+
+	
