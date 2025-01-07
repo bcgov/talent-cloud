@@ -12,7 +12,7 @@ import {
 import { ParQBase } from './parq';
 import { QUESTIONS as PARQ_FOLLOWUP_QUESTIONS } from './parq/ParQFollowUp';
 import { fillInAndDownloadParQ } from '@/utils';
-import { RecommitmentDecision, useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
 interface StepIndicatorProps {
@@ -271,49 +271,57 @@ export const RecommitmentFormBase = ({
   }, [recommitmentAnswer]);
 
   const handleSubmitRecommitment = async () => {
-    const reasons = [...unableToJoinReasons.selectedReasons, unableToJoinReasons.otherReason].join(', ');
+    const reasons = [
+      ...unableToJoinReasons.selectedReasons,
+      unableToJoinReasons.otherReason,
+    ].join(', ');
     const currentYear = new Date().getFullYear();
-  
-    const createDecision = (status: RecommitmentStatus, programType: Program, includeReason = false) => ({
+
+    const createDecision = (
+      status: RecommitmentStatus,
+      programType: Program,
+      includeReason = false,
+    ) => ({
       status,
       year: currentYear,
       program: programType,
-      ...(includeReason && { reason: reasons })
+      ...(includeReason && { reason: reasons }),
     });
-    
+
     const decisionMap = {
       'yes-both': {
         bcws: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.BCWS),
-        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR)
+        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR),
       },
       'emcr-only': {
         bcws: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.BCWS, true),
-        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR)
+        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR),
       },
       'bcws-only': {
         bcws: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.BCWS),
-        emcr: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.EMCR, true)
+        emcr: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.EMCR, true),
       },
       'yes-bcws': {
-        bcws: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.BCWS)
+        bcws: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.BCWS),
       },
       'yes-emcr': {
-        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR)
+        emcr: createDecision(RecommitmentStatus.MEMBER_COMMITTED, Program.EMCR),
       },
-      'no': {
+      no: {
         ...(program !== Program.EMCR && {
-          bcws: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.BCWS, true)
+          bcws: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.BCWS, true),
         }),
         ...(program !== Program.BCWS && {
-          emcr: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.EMCR, true)
-        })
-      }
+          emcr: createDecision(RecommitmentStatus.MEMBER_DENIED, Program.EMCR, true),
+        }),
+      },
     };
 
-    const decision = decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
+    const decision =
+      decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
     await updateRecommitment(personnel.id, decision);
     onClose();
-  }
+  };
 
   const handleNext = () => {
     const currentComponentType = currentComponent.type;
