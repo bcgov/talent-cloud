@@ -73,7 +73,7 @@ objects:
       ches_client_secret: ${CHES_CLIENT_SECRET}
       ches_api: ${CHES_API}
       ches_auth_api: ${CHES_AUTH_API}
-  - kind: Secret
+  - kind: ConfigMap
     apiVersion: v1
     metadata:
       name: ${APP_NAME}-recommitment

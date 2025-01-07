@@ -16,27 +16,11 @@ export const handler = async () => {
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
-  
+
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
 
-  const currentDate = new Date();
-  const recommitmentCycleData = new RecommitmentCycleEntity();
-  recommitmentCycleData.year = currentDate.getFullYear();
-  recommitmentCycleData.startDate = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate() - 2,
-  );
-
-  recommitmentCycleData.endDate = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    currentDate.getDate(),
-  );
-
-  const cycle: RecommitmentCycleEntity = await recommitmentCycleRepository.save(
-    recommitmentCycleRepository.create(recommitmentCycleData),
-  );
+  const recommitmentCycle = new RecommitmentCycleEntity();
+  await recommitmentCycleRepository.save(recommitmentCycle);
 
   const bcwsPersonnelRepository = datasource.getRepository(BcwsPersonnelEntity);
   const emcrPersonnelRepository = datasource.getRepository(EmcrPersonnelEntity);
@@ -51,7 +35,7 @@ export const handler = async () => {
   emcrPersonnel.forEach(async (person: EmcrPersonnelEntity) => {
     const emcrRecommitment = recommitmentRepository.create({
       personnelId: person.personnelId,
-      recommitmentCycleId: cycle['year'],
+      recommitmentCycleId: recommitmentCycle['year'],
       status: RecommitmentStatus.PENDING,
       memberDecisionDate: null,
       memberReason: null,
@@ -64,7 +48,7 @@ export const handler = async () => {
   bcwsPersonnel.forEach(async (person: BcwsPersonnelEntity) => {
     const bcwsRecommitment = recommitmentRepository.create({
       personnelId: person.personnelId,
-      recommitmentCycleId: cycle['year'],
+      recommitmentCycleId: recommitmentCycle['year'],
       status: RecommitmentStatus.PENDING,
       memberDecisionDate: null,
       memberReason: null,
