@@ -201,6 +201,8 @@ export class RecommitmentService {
     });
 
     const uniqueIds = [...new Set(recommitment.map((itm) => itm.personnel.id))];
+
+    const uniqueSupervisors = [...new Set(recommitment.map((itm) => itm.personnel.supervisorEmail))];
     const recommitmentRO = recommitment.map((itm) => itm.toResponseObject());
 
     const memberTemplate = this.mailService.generateTemplate(
@@ -215,12 +217,12 @@ export class RecommitmentService {
     this.logger.log(
       `Generated ${memberTemplate.contexts.length} member annual reminder emails`,
     );
-
+    //TODO unique for supervisor email
     const supervisorTemplate = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_ANNUAL,
       TemplateType.SUPERVISOR,
-      uniqueIds.map((itm) =>
-        recommitmentRO.find((r) => r.personnel.id === itm),
+      uniqueSupervisors.map((itm) =>
+        recommitmentRO.find((r) => r.personnel.supervisorEmail === itm),
       ),
       cycle.endDate,
     );
@@ -285,7 +287,9 @@ export class RecommitmentService {
       ...new Set(memberPending.map((itm) => itm.personnel.id)),
     ];
     const membersCommitted = [...memberCommittedBCWS, ...memberCommittedEMCR];
-
+    const membersCommittedBoth = Array.from(new Set([...memberCommittedBCWS.filter((itm) => memberCommittedEMCR.find(r => r.personnel.id === itm.personnel.id)), ...memberCommittedEMCR.filter((itm) => memberCommittedBCWS.find(r => r.personnel.id === itm.personnel.id))]));
+    const membersCommittedBCWS = memberCommittedBCWS.filter((itm) => !membersCommittedBoth.find(r=> r.personnel.id === itm.personnel.id));
+    const membersCommittedEMCR = memberCommittedEMCR.filter((itm) => !membersCommittedBoth.find(r=> r.personnel.id === itm.personnel.id));
     this.logger.log(
       `Found ${memberPending.length} pending members and ${membersCommitted.length} committed members`,
     );
@@ -306,7 +310,7 @@ export class RecommitmentService {
     const committedMembersTemplateBcws = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_REMINDER,
       TemplateType.SUPERVISOR,
-      memberCommittedBCWS,
+      membersCommittedBCWS,
       recommitmentCycle.endDate,
       Program.BCWS,
     );
@@ -314,15 +318,23 @@ export class RecommitmentService {
     const committedMembersTemplateEmcr = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_REMINDER,
       TemplateType.SUPERVISOR,
-      memberCommittedEMCR,
+      membersCommittedEMCR,
       recommitmentCycle.endDate,
       Program.EMCR,
+    );
+
+    const committedMembersTemplateBoth = this.mailService.generateTemplate(
+      EmailTemplates.SUPERVISOR_REMINDER,
+      TemplateType.SUPERVISOR,
+      membersCommittedBoth,
+      recommitmentCycle.endDate,
+      Program.ALL,
     );
 
     this.logger.log(
       `Generated ${
         committedMembersTemplateEmcr.contexts.length +
-        committedMembersTemplateBcws.contexts.length
+        committedMembersTemplateBcws.contexts.length + committedMembersTemplateBoth.contexts.length
       } emails for committed members supervisors`,
     );
 
@@ -334,6 +346,11 @@ export class RecommitmentService {
 
       this.logger.log('Generated emails for committed BCWS members:');
       committedMembersTemplateBcws.contexts.forEach((template) =>
+        this.logger.log(template.to),
+      );
+
+      this.logger.log('Generated emails for committed BOTH members:');
+      committedMembersTemplateBoth.contexts.forEach((template) =>
         this.logger.log(template.to),
       );
 
@@ -353,6 +370,9 @@ export class RecommitmentService {
         committedMembersTemplateBcws.contexts.filter((context) =>
           context.to.includes(testEmail),
         );
+      committedMembersTemplateBoth.contexts = committedMembersTemplateBoth.contexts.filter((context) =>
+        context.to.includes(testEmail),
+      );
     }
     await this.mailService.sendMail(pendingMembersTemplate);
     await this.mailService.sendMail(committedMembersTemplateEmcr);
