@@ -96,6 +96,7 @@ export class CronService {
       try {
         next = value.nextDate().toJSDate();
       } catch (e) {
+        this.logger.error(`Error: ${e}`);
         next = 'error: next fire date is in the past!';
       }
       this.logger.log(`job: ${key} -> next: ${next}`);
