@@ -34,6 +34,7 @@ export const FormField = ({
           }
           name={field.name}
           label={field.label}
+          placeholder={field.placeholder}
         />
       ) : field.multiple ? (
         <MultiSelect

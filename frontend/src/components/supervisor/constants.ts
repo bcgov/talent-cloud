@@ -15,13 +15,13 @@ export const declineFormFields = {
   },
   year: {
     name: 'year',
-    label: 'Year',
+    label: 'Recommitment Year',
     type: 'text',
     disabled: true,
   },
   program: {
     name: 'program',
-    label: 'Program',
+    label: 'Program Declining',
     type: 'text',
     disabled: true,
   },
@@ -31,10 +31,8 @@ export const declineFormFields = {
     type: 'select',
     required: true,
     options: [
-      { label: 'Select...', value: '' },
+      { label: 'Select an option', value: '' },
       { label: SupervisorReason.CONFLICT, value: SupervisorReason.CONFLICT },
-      { label: SupervisorReason.NEGATIVE, value: SupervisorReason.NEGATIVE },
-      { label: SupervisorReason.PERFORMANCE, value: SupervisorReason.PERFORMANCE },
       { label: SupervisorReason.OTHER, value: SupervisorReason.OTHER },
     ],
     span: 'col-span-2',

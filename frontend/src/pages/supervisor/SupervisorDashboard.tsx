@@ -74,7 +74,7 @@ const SupervisorDashboard = () => {
           <Banner
             onClose={() => handleShowWarningBanner(false)}
             content={
-              'Approved (“YES”) recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
+              'Approved recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
             }
             title={'Approval Action Cannot be Undone'}
             type={BannerType.WARNING}
