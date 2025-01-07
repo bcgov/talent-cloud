@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { RecommitmentService } from './recommitment.service';
 import { AppLogger } from '../logger/logger.service';
 import { format } from 'date-fns';
+import { start } from 'repl';
 
 @Injectable()
 export class CronTestService {
@@ -16,6 +17,29 @@ export class CronTestService {
     this.logger.setContext(CronTestService.name);
   }
 
+  
+
+  @Cron(`* * * * *`, {
+    name: 'initial_recommitment',
+    timeZone: 'America/Vancouver',
+  })
+  testCron() { 
+    this.logger.warn(`Test Cron Job is running every minute!`);
+
+    this.logger.warn(`All jobs in the scheduler registry:`);
+
+    const jobs = this.schedulerRegistry.getCronJobs();
+    jobs.forEach((value, key, map) => {
+      let next;
+      try {
+        next = value.nextDate().toJSDate();
+      } catch (e) {
+        next = 'error: next fire date is in the past!';
+      }
+      this.logger.log(`job: ${key} -> next: ${next}`);
+    });
+  }
+
   /**
    * Schedules a test cron job to run based on the provided schedule.
    * @param {string} testEmail - The email address to send test emails to.
@@ -23,7 +47,7 @@ export class CronTestService {
    * @param {boolean} dryRun - If true, the process will not make any changes.
    * @returns {Promise<void>}
    */
-  async initiateRecommitment(
+  initiateRecommitment(
     testEmail: string,
     schedule: string,
     dryRun: boolean,
@@ -33,10 +57,24 @@ export class CronTestService {
     startDate: number,
     startHour: number,
     startMonth: number,
-  ): Promise<void> {
+  ): void {
     
+    const startRecommitmentJob = new CronJob(`0 ${endHour} ${endDate} ${endMonth} *`, async () => {
+      this.logger.warn(
+        `Initializing Recommitment Job Scheduled for ${format(startMonth, 'LLLL')} ${startDate} at ${startHour}:00`,
+      );
+      await this.recommitmentService.handleStartRecommitment(
+        dryRun,
+        testEmail,
+      );
+    })
 
-    
+    this.schedulerRegistry.addCronJob(
+      'initialize_recommitment',
+      startRecommitmentJob,
+    );
+
+    this.logger.warn(`Initial Recommitment Job Scheduled to Run: ${schedule}`);    
 
     const recurringNotificationsJob = new CronJob(schedule, async () => {
       await this.recommitmentService.handleSendAutomatedReminders(
@@ -68,18 +106,6 @@ export class CronTestService {
     this.logger.warn(
       `End Recommitment Job scheduled to run on ${format(endMonth, 'LLLL')} ${endDate} at ${endHour}:00`,
     );
-
-    
-    recurringNotificationsJob.start();
-    endRecommitmentJob.start();
-    this.logger.warn(
-      `Initializing Recommitment Job Scheduled for ${format(startMonth, 'LLLL')} ${startDate} at ${startHour}:00`,
-    );
-    return await this.recommitmentService.handleStartRecommitment(
-      dryRun,
-      testEmail,
-    );
-    
   }
 
   /**

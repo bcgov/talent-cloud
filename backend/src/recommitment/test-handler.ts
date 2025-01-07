@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { CronTestService } from './cron-test.service';
 import { RecommitmentModule } from './recommitment.module';
@@ -7,7 +7,6 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppLogger } from '../logger/logger.service';
 import { datePST } from '../common/helpers';
-import { INestApplicationContext } from '@nestjs/common';
 
 export const handler = async (
   email: string,
@@ -17,7 +16,7 @@ export const handler = async (
 ) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const logger = new AppLogger();
-  
+
   app.useLogger(logger);
 
   logger.setContext('RecommitmentTestHandler');
@@ -42,20 +41,20 @@ export const handler = async (
   app.set('view cache', true);
   app.setViewEngine('njk');
 
-  if(app){
+
     const cronTestService = app.select(RecommitmentModule).get(CronTestService);
 
     const today = datePST(new Date());
-  
+
     const startDate = today.getDate();
-    const startHour = today.getHours();
+    const startHour = today.getHours() + 1;
     const startMonth = today.getMonth() + 1;
     const finalHour = startHour + hours;
     const endDate = today.getDate();
     const endHour = finalHour > 24 ? finalHour - 24 : finalHour;
     const endMonth = today.getMonth() + 1;
-  
-    await cronTestService.initiateRecommitment(
+
+    cronTestService.initiateRecommitment(
       email,
       schedule,
       dryRun,
@@ -66,7 +65,6 @@ export const handler = async (
       startHour,
       startMonth,
     );
-  }
-
-  
+    
+    await app.close();
 };
