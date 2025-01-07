@@ -1,8 +1,11 @@
 {
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
-  "assets": ["src/**/*.njk"],
+  "assets": ["src/**/*.njk",  "views/**/*.njk",     "**/*.njk"],
   "watchAssets": true
+
+  
+
 
 }
 

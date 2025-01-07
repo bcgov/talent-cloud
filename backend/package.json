@@ -10,7 +10,8 @@
     "npm": "10.x.x"
   },
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && npm run copy:assets",
+    "copy:assets": "cp -r src/views dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
