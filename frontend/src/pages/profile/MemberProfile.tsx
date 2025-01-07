@@ -120,7 +120,7 @@ const MemberProfile = () => {
           <RecommitmentFormBase
             program={program}
             personnel={personnel}
-            onCancel={() => setOpenRecommitmentForm(false)}
+            onClose={() => setOpenRecommitmentForm(false)}
           />
         </DialogUI>
       )}

@@ -47,6 +47,7 @@ export class RecommitmentService {
     req: RequestWithRoles,
   ): Promise<PersonnelEntity> {
     const programsToUpdate = Object.keys(recommitmentUpdate);
+    const personnel = await this.personnelService.findOne(id);
 
     for (const key of programsToUpdate) {
       const recommitment = await this.recommitmentRepository.findOneOrFail({
@@ -58,9 +59,9 @@ export class RecommitmentService {
       });
 
       // If update request is sent by the member, log the member decision date, otherwise log the supervisor decision date.
-      if (req.idir === id) {
+      if (req.idir === personnel.email) {
         recommitment.memberDecisionDate = new Date();
-      } else {
+      } else if (req.idir === personnel.supervisorEmail) {
         recommitment.supervisorDecisionDate = new Date();
       }
 
