@@ -49,6 +49,7 @@ export const ApprovalCell = ({
           error: '',
           span: 'col-span-2',
           value: 'comments',
+          placeholder: 'If you selected “Other”, please provide more details here.',
         },
       }));
     }
@@ -152,7 +153,11 @@ export const ApprovalCell = ({
           onChange={handleChangeStatus}
         >
           <option value="" className="text-sm">
-            Select
+            {recommitmentStatus === RecommitmentStatus.SUPERVISOR_APPROVED
+              ? 'Approved'
+              : recommitmentStatus === RecommitmentStatus.SUPERVISOR_DENIED
+                ? 'Declined'
+                : 'Select'}
           </option>
           <option className="text-sm" value={RecommitmentStatus.SUPERVISOR_APPROVED}>
             Approve
@@ -173,7 +178,12 @@ export const ApprovalCell = ({
           />
         ) : (
           <Button
-            disabled={disabled || !status}
+            disabled={
+              ![
+                RecommitmentStatus.SUPERVISOR_DENIED,
+                RecommitmentStatus.MEMBER_COMMITTED,
+              ].includes(recommitmentStatus)
+            }
             variant={ButtonTypes.TERTIARY}
             text={'Submit'}
             onClick={
@@ -182,7 +192,7 @@ export const ApprovalCell = ({
                 : handleSubmitApproval
             }
           />
-        )} 
+        )}
       </div>
       <DialogUI
         open={showDeclineModal}
