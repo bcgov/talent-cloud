@@ -32,10 +32,7 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
-# Recommitment
-export TEST_EMAIL?=$(TEST_EMAIL)
-export SCHEDULE?=$(SCHEDULE)
-export END_HOUR?=$(END_HOUR)
+
 
 # Docker compose v2 for GHA
 build-test:
@@ -113,7 +110,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-1 5432
+	@oc port-forward $(APP_NAME)-patroni-0 5432
 
 ### Openshift Setup
 db-prep:
@@ -269,17 +266,10 @@ seed-oc-emcr:
 seed-oc-recommitment:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js")'
 
-test-recommitment-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/recommitment/test-handler.js").handler($(TEST_EMAIL),  $(SCHEDULE), $(END_HOUR))'
-
-test-recommitment-local:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/recommitment/test-handler.ts").handler($(TEST_EMAIL),  $(SCHEDULE), $(END_HOUR))'
 
 delete-db:
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "DROP SCHEMA public CASCADE;"
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
-
-
 
 migration-run-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js

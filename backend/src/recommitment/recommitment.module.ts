@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CronTestService } from './cron-test.service';
 import { CronService } from './cron.service';
 import { RecommitmentController } from './recommitment.controller';
 import { RecommitmentService } from './recommitment.service';
@@ -23,7 +22,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
     RecommitmentService,
     AppLogger,
     CronService,
-    CronTestService
+    
   ],
   exports: [RecommitmentService]
 })
