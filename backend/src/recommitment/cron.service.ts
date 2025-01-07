@@ -35,7 +35,7 @@ export class CronService {
 
     // Job to send follow up reminder for members/supervisors during recommitment
     const recurringNotificationsJob = new CronJob(
-      process.env.NOTIFICATION_SCHEDULE ?? '0 8 * * 1',
+      process.env.SCHEDULE ?? '0 8 * * 1',
       async () => {
         // Start Recommitment. If not in production, use test email and do not send emails to members
         process.env.ENV === 'production'
