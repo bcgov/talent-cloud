@@ -36,6 +36,8 @@ export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 export END_RECOMMITMENT_SCHEDULE:=$(END_RECOMMITMENT_SCHEDULE)
 export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
 export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
+export TEST_EMAIL:=$(TEST_EMAIL)
+export END_DATE:=$(END_DATE)
 
 # Docker compose v2 for GHA
 build-test:
@@ -291,9 +293,7 @@ run-nibble-fe:
 	@echo "Run lint Backend"
 	@cd frontend && npm run nibble
 
-update-recommitment-configmap:
-	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
+
 
 start-recommitment:
 	@echo "Trigger recommitment job"
@@ -328,4 +328,9 @@ create-end-recommitment-cron:
 
 create-notifications-cron:
 	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE=$(NOTIFICATION_SCHEDULE)| oc apply -n $(TARGET_NAMESPACE) -f -
+
+update-recommitment-configmap:
+	@echo "Update recommitment configmap"
+	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
+
 
