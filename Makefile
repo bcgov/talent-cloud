@@ -32,6 +32,11 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+# Cron Job Schedules
+export END_RECOMMITMENT_SCHEDULE:=$(END_RECOMMITMENT_SCHEDULE)
+export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
+export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
+
 # Docker compose v2 for GHA
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
@@ -293,6 +298,7 @@ update-recommitment-configmap:
 start-recommitment:
 	@echo "Trigger recommitment job"
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts").handler($(END_DATE),$(TEST_EMAIL))'
+	./node_modules/.bin/ts-node -e "./src/jobs/start_recommitment.js $(END_DATE) $(TEST_EMAIL)
 
 end-recommitment:
 	@echo "Trigger end recommitment job"
@@ -304,12 +310,22 @@ send-notification:
 
 start-recommitment-oc:
 	@echo "Trigger recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js").handler($(END_DATE),$(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
 
 end-recommitment-oc:
 	@echo "Trigger end recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js")'
 
 send-notification-oc:
 	@echo "Trigger send notification job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
+
+create-start-recommitment-cron:
+	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE=$(START_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+
+end-start-recommitment-cron:
+	@oc process -f openshift/end-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE=$(END_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+
+create-notifications-cron:
+	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE=$(NOTIFICATION_SCHEDULE)| oc apply -n $(TARGET_NAMESPACE) -f -
+
