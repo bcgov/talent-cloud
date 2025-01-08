@@ -32,7 +32,6 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
-
 # Docker compose v2 for GHA
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
@@ -289,6 +288,28 @@ run-nibble-fe:
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tc-recommitment -p='{"data":{"start_date":$(START_DATE),"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
+	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
 
-	
+start-recommitment:
+	@echo "Trigger recommitment job"
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts").handler($(END_DATE),$(TEST_EMAIL))'
+
+end-recommitment:
+	@echo "Trigger end recommitment job"
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/end_recommitment.ts").handler($(TEST_EMAIL))'
+
+send-notification:
+	@echo "Trigger send notification job"
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts").handler($(TEST_EMAIL))'
+
+start-recommitment-oc:
+	@echo "Trigger recommitment job"
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js").handler($(END_DATE),$(TEST_EMAIL))'
+
+end-recommitment-oc:
+	@echo "Trigger end recommitment job"
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js").handler($(TEST_EMAIL))'
+
+send-notification-oc:
+	@echo "Trigger send notification job"
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js").handler($(TEST_EMAIL))'

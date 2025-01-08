@@ -78,7 +78,6 @@ objects:
     metadata:
       name: ${APP_NAME}-recommitment
     stringData:
-      start_date: ${START_DATE}
       end_date: ${END_DATE}
       test_email: ${TEST_EMAIL}
       schedule: ${SCHEDULE}

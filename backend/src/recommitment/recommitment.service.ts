@@ -182,15 +182,10 @@ export class RecommitmentService {
   async handleStartRecommitment(
     dryRun: boolean = false,
     testEmail?: string,
-    startDate?: string,
-    endDate?:string
-  ): Promise<void> {
-    
-    const cycle = await this.recommitmentCycleRepository.save(
-      new RecommitmentCycleEntity(startDate, endDate),
-    );
-
-    this.logger.log(`RECOMMITMENT CYCLE: ${cycle.year}`);
+  ): Promise<{member: unknown, supervisor: unknown}> {
+    const cycle = await this.recommitmentCycleRepository.findOne({
+      where: { year: new Date().getFullYear() },
+    });
 
     const { emcr, bcws } = await this.personnelService.findActivePersonnel();
 
@@ -218,7 +213,7 @@ export class RecommitmentService {
     const memberTemplate = this.mailService.generateTemplate(
       EmailTemplates.MEMBER_ANNUAL,
       TemplateType.MEMBER,
-      recommitmentRO.filter((itm) => uniqueIds.includes(itm.personnel.id)),
+      uniqueIds.map(itm => recommitmentRO.find(r => r.personnel.id === itm)),
       cycle.endDate,
     );
 
@@ -229,9 +224,8 @@ export class RecommitmentService {
     const supervisorTemplate = this.mailService.generateTemplate(
       EmailTemplates.SUPERVISOR_ANNUAL,
       TemplateType.SUPERVISOR,
-      recommitmentRO.filter((r) =>
-        uniqueSupervisors.includes(r.personnel.supervisorEmail),
-      ),
+      uniqueSupervisors.map(itm => recommitmentRO.find(r => r.personnel.supervisorEmail === itm)),
+      
       cycle.endDate,
     );
 
@@ -247,8 +241,10 @@ export class RecommitmentService {
         (context) => context.to.includes(testEmail),
       );
     }
-    await this.mailService.sendMail(memberTemplate);
-    await this.mailService.sendMail(supervisorTemplate);
+    return {
+      member: await this.mailService.sendMail(memberTemplate), 
+      supervisor: await this.mailService.sendMail(supervisorTemplate)
+    }
   }
 
   /**
@@ -286,7 +282,7 @@ export class RecommitmentService {
   async handleSendAutomatedReminders(
     dryRun: boolean = false,
     testEmail?: string,
-  ): Promise<void> {
+  ): Promise<{members: unknown, supervisors: unknown}> {
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
     const { memberPending, memberCommitted } =
@@ -332,7 +328,6 @@ export class RecommitmentService {
       TemplateType.SUPERVISOR,
       uniqueCommittedMembers,
       recommitmentCycle.endDate,
-      Program.BCWS,
     );
 
     this.logger.log(
@@ -340,6 +335,8 @@ export class RecommitmentService {
     );
 
     if (dryRun) {
+      this.logger.log('TEST RUN: Emails will only be sent to test email');
+
       this.logger.log('Generated emails for pending members:');
       pendingMembersTemplate.contexts.forEach((template) =>
         this.logger.log(template.to),
@@ -358,9 +355,10 @@ export class RecommitmentService {
           context.to.includes(testEmail),
         );
     }
-    await this.mailService.sendMail(pendingMembersTemplate);
-    await this.mailService.sendMail(committedMembersTemplate);
-  }
+    return {
+      members: await this.mailService.sendMail(pendingMembersTemplate), 
+      supervisors: await this.mailService.sendMail(committedMembersTemplate)
+    }}
 
   /**
    * Ends the recommitment process and updates the status of members who did not respond.
@@ -408,29 +406,32 @@ export class RecommitmentService {
     );
 
     if (dryRun) {
-      memberNoResponseEmails.contexts.forEach((context) =>
-        this.logger.log(context.to),
-      );
-
+      this.logger.log('TEST RUN: Emails will only be sent to test email');
       memberNoResponseEmails.contexts = [
         memberNoResponseEmails.contexts.find((context) =>
           context.to.includes(testEmail),
         ),
       ];
 
-      supervisorNoResponseEmails.contexts.forEach((context) =>
-        this.logger.log(context.to),
-      );
-
       supervisorNoResponseEmails.contexts = [
         supervisorNoResponseEmails.contexts.find((context) =>
           context.to.includes(testEmail),
         ),
       ];
-    }
 
-    await this.mailService.sendMail(memberNoResponseEmails);
-    await this.mailService.sendMail(supervisorNoResponseEmails);
+      memberNoResponseEmails?.contexts?.forEach((context) =>
+        this.logger.log(context?.to ?? "no member no response emails"),
+      );
+      supervisorNoResponseEmails?.contexts?.forEach((context) =>
+        this.logger.log(context?.to ?? "no supervisor no response emails"),
+      );
+    }
+    try {
+      memberNoResponseEmails.contexts.length > 0 && await this.mailService.sendMail(memberNoResponseEmails);
+      supervisorNoResponseEmails.contexts.length > 0 && await this.mailService.sendMail(supervisorNoResponseEmails);
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 
   /**

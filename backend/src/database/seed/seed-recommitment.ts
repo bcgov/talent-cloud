@@ -6,6 +6,7 @@ import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-c
 import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
 import { Program } from '../../auth/interface';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { datePST } from '../../common/helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
@@ -18,9 +19,9 @@ export const handler = async () => {
   );
 
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
+  const startDate = new Date(datePST(new Date()));
+  await recommitmentCycleRepository.save(recommitmentCycleRepository.create(new RecommitmentCycleEntity(startDate, new Date(), new Date().getFullYear()) ));
 
-  const recommitmentCycle = new RecommitmentCycleEntity();
-  await recommitmentCycleRepository.save(recommitmentCycle);
 
   const bcwsPersonnelRepository = datasource.getRepository(BcwsPersonnelEntity);
   const emcrPersonnelRepository = datasource.getRepository(EmcrPersonnelEntity);
@@ -35,7 +36,7 @@ export const handler = async () => {
   emcrPersonnel.forEach(async (person: EmcrPersonnelEntity) => {
     const emcrRecommitment = recommitmentRepository.create({
       personnelId: person.personnelId,
-      recommitmentCycleId: recommitmentCycle['year'],
+      recommitmentCycleId: new Date().getFullYear(),
       status: RecommitmentStatus.PENDING,
       memberDecisionDate: null,
       memberReason: null,
@@ -48,7 +49,7 @@ export const handler = async () => {
   bcwsPersonnel.forEach(async (person: BcwsPersonnelEntity) => {
     const bcwsRecommitment = recommitmentRepository.create({
       personnelId: person.personnelId,
-      recommitmentCycleId: recommitmentCycle['year'],
+      recommitmentCycleId: new Date().getFullYear(),
       status: RecommitmentStatus.PENDING,
       memberDecisionDate: null,
       memberReason: null,

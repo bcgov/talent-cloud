@@ -40,18 +40,18 @@ async function bootstrap() {
     trimBlocks: false,
     lstripBlocks: false,
     watch: true,
-    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    noCache: true,
     express: app,
   });
 
   app.engine('njk', nunjucks.render);
   app.set('view cache', true);
-  app.setViewEngine('njk');
+  app.setViewEngine('njk');  
 
   Documentation(app);
 
   await app.listen(port);
-  logger.log(`Server running on http://localhost:${port}`, 'Bootstrap');
+  logger.log(`Server running on PORT ${port}`, 'Bootstrap');
 }
 
 bootstrap();
