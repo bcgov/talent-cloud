@@ -22,11 +22,11 @@ export class RecommitmentCycleEntity extends BaseEntity {
     };
   }
 
-  constructor(startDate?: string, endDate?: string) { 
+  constructor(startDate: Date, endDate: Date, year: number) { 
     super();
     
-    this.startDate = startDate ? new Date(startDate) : new Date(datePST(new Date())); 
-    this.endDate = endDate ? new Date(endDate) : new Date(datePST(new Date(this.startDate.getFullYear(), this.startDate.getMonth() + 1, this.startDate.getDate()+35)));
-    this.year = this.startDate.getFullYear();
+    this.startDate = startDate
+    this.endDate = endDate
+    this.year = year
   }
 }

@@ -182,15 +182,10 @@ export class RecommitmentService {
   async handleStartRecommitment(
     dryRun: boolean = false,
     testEmail?: string,
-    startDate?: string,
-    endDate?:string
   ): Promise<void> {
-    
-    const cycle = await this.recommitmentCycleRepository.save(
-      new RecommitmentCycleEntity(startDate, endDate),
-    );
-
-    this.logger.log(`RECOMMITMENT CYCLE: ${cycle.year}`);
+    const cycle = await this.recommitmentCycleRepository.findOne({
+      where: { year: new Date().getFullYear() },
+    });
 
     const { emcr, bcws } = await this.personnelService.findActivePersonnel();
 
@@ -408,29 +403,31 @@ export class RecommitmentService {
     );
 
     if (dryRun) {
-      memberNoResponseEmails.contexts.forEach((context) =>
-        this.logger.log(context.to),
-      );
-
       memberNoResponseEmails.contexts = [
         memberNoResponseEmails.contexts.find((context) =>
           context.to.includes(testEmail),
         ),
       ];
 
-      supervisorNoResponseEmails.contexts.forEach((context) =>
-        this.logger.log(context.to),
-      );
-
       supervisorNoResponseEmails.contexts = [
         supervisorNoResponseEmails.contexts.find((context) =>
           context.to.includes(testEmail),
         ),
       ];
-    }
 
-    await this.mailService.sendMail(memberNoResponseEmails);
-    await this.mailService.sendMail(supervisorNoResponseEmails);
+      memberNoResponseEmails.contexts.forEach((context) =>
+        this.logger.log(context.to),
+      );
+      supervisorNoResponseEmails.contexts.forEach((context) =>
+        this.logger.log(context.to),
+      );
+    }
+    try {
+      await this.mailService.sendMail(memberNoResponseEmails);
+      await this.mailService.sendMail(supervisorNoResponseEmails);
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 
   /**
