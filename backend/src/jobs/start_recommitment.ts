@@ -13,6 +13,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 
 
 export const handler = async (endDate: string, testEmail: string) => {
+  
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -20,7 +21,7 @@ export const handler = async (endDate: string, testEmail: string) => {
   
   const logger = new AppLogger();
   app.useLogger(logger);
-  
+  logger.log('Starting recommitment job', 'Recommitment');
   app.useStaticAssets(join(__dirname, '..', 'views'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   nunjucks.configure(join(__dirname, '..', 'views'), {
@@ -52,11 +53,23 @@ export const handler = async (endDate: string, testEmail: string) => {
   
 const startDate = new Date(datePST(new Date()));
 
-console.log(startDate, endDate)
+
   await recommitmentCycleRepository.save(recommitmentCycleRepository.create(new RecommitmentCycleEntity(startDate, new Date(endDate), new Date().getFullYear()) ));
   const recommitmentService = app.get(RecommitmentService);
 
-  testEmail ? await recommitmentService.handleStartRecommitment(true, testEmail) : await recommitmentService.handleStartRecommitment();
+  if(testEmail){
+    const data = await recommitmentService.handleStartRecommitment(true, testEmail);
+    console.log(data)
+    logger.log('Recommitment job completed', 'Recommitment');
+  } else {
+      const data = await recommitmentService.handleStartRecommitment();
+      console.log(data)
+    logger.log('Recommitment job completed', 'Recommitment');
+    
+    }
+
+    return app.close();
+
 }
   
 

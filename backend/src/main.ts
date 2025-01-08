@@ -33,25 +33,25 @@ async function bootstrap() {
 
   
   app.useStaticAssets(join(__dirname,  'views'));
-  app.setBaseViewsDir(join(__dirname,  'views'));
+  // app.setBaseViewsDir(join(__dirname,  'views'));
   nunjucks.configure(join(__dirname,  'views'), {
     autoescape: true,
     throwOnUndefined: false,
     trimBlocks: false,
     lstripBlocks: false,
     watch: true,
-    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    noCache: true,
     express: app,
   });
 
   app.engine('njk', nunjucks.render);
-  app.set('view cache', true);
-  app.setViewEngine('njk');
+  // app.set('view cache', true);
+  app.setViewEngine('njk');  
 
   Documentation(app);
 
   await app.listen(port);
-  logger.log(`Server running on http://localhost:${port}`, 'Bootstrap');
+  logger.log(`Server running on PORT ${port}`, 'Bootstrap');
 }
 
 bootstrap();
