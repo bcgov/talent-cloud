@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AppModule } from '../app.module';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
+import { datePST } from '../common/helpers';
 
 export const handler = async (testEmail: string) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -23,7 +24,7 @@ export const handler = async (testEmail: string) => {
     trimBlocks: false,
     lstripBlocks: false,
     watch: true,
-    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    noCache: true,
     express: app,
   });
 
@@ -33,7 +34,7 @@ export const handler = async (testEmail: string) => {
 
   const recommitmentService = app.get(RecommitmentService);
   const recommitment_cycle = await recommitmentService.checkRecommitmentPeriod()
-  const today = new Date()
+  const today = new Date(datePST(new Date()))
 
   if (today < recommitment_cycle.endDate || today > recommitment_cycle.startDate) {
     const data = testEmail

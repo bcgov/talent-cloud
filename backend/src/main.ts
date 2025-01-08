@@ -33,7 +33,7 @@ async function bootstrap() {
 
   
   app.useStaticAssets(join(__dirname,  'views'));
-  // app.setBaseViewsDir(join(__dirname,  'views'));
+  app.setBaseViewsDir(join(__dirname,  'views'));
   nunjucks.configure(join(__dirname,  'views'), {
     autoescape: true,
     throwOnUndefined: false,
@@ -45,7 +45,7 @@ async function bootstrap() {
   });
 
   app.engine('njk', nunjucks.render);
-  // app.set('view cache', true);
+  app.set('view cache', true);
   app.setViewEngine('njk');  
 
   Documentation(app);
