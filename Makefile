@@ -288,7 +288,7 @@ run-nibble-fe:
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"start_date":$(START_DATE),"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
+	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
 
 start-recommitment:
 	@echo "Trigger recommitment job"
@@ -304,12 +304,12 @@ send-notification:
 
 start-recommitment-oc:
 	@echo "Trigger recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.ts").handler($(END_DATE),$(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js").handler($(END_DATE),$(TEST_EMAIL))'
 
 end-recommitment-oc:
 	@echo "Trigger end recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.ts").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js").handler($(TEST_EMAIL))'
 
 send-notification-oc:
 	@echo "Trigger send notification job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.ts").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js").handler($(TEST_EMAIL))'
