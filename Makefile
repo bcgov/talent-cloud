@@ -113,7 +113,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-0 5432
+	@oc port-forward $(APP_NAME)-patroni-2 5432
 
 ### Openshift Setup
 db-prep:
@@ -323,8 +323,8 @@ send-notification-oc:
 create-start-recommitment-cron:
 	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE=$(START_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
 
-end-start-recommitment-cron:
-	@oc process -f openshift/end-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE=$(END_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+create-end-recommitment-cron:
+	@oc process -f openshift/cron-end-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE=$(END_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
 
 create-notifications-cron:
 	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE=$(NOTIFICATION_SCHEDULE)| oc apply -n $(TARGET_NAMESPACE) -f -

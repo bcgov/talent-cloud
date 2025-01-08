@@ -29,7 +29,7 @@ objects:
     metadata:
       name: ${APP_NAME}-cronjob-end-recommitment
     spec:
-      schedule: ${EBD_RECOMMITMENT_SCHEDULE}
+      schedule: ${END_RECOMMITMENT_SCHEDULE}
       concurrencyPolicy: 'Replace'
       startingDeadlineSeconds: 10
       successfulJobsHistoryLimit: 3
