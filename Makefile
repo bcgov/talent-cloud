@@ -37,7 +37,7 @@ export END_RECOMMITMENT_SCHEDULE:=$(END_RECOMMITMENT_SCHEDULE)
 export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
 export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
 export TEST_EMAIL:=$(TEST_EMAIL)
-export END_DATE:=$(END_DATE)
+
 
 # Docker compose v2 for GHA
 build-test:
@@ -115,7 +115,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-2 5432
+	@oc port-forward $(APP_NAME)-patroni-0 5432
 
 ### Openshift Setup
 db-prep:
@@ -330,7 +330,7 @@ create-notifications-cron:
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
+	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
 
 
 
