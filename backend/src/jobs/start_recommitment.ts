@@ -47,6 +47,7 @@ export const handler = async () => {
 
   let endDate;
   if (process.env.ENV !== 'production') {
+    
     const endHour = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[1];
     endDate = new Date(
       startDate.getFullYear(),
@@ -59,13 +60,14 @@ export const handler = async () => {
     );
     logger.log(endDate, 'END DATE - TEST RUN');
   } else {
+    const endHour = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[1];
     const endDateProd = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[2];
-    console.log(endDateProd);
+    const endMonth = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[3];
     endDate = new Date(
       startDate.getFullYear(),
-      startDate.getMonth(),
+      parseInt(endMonth),
       parseInt(endDateProd),
-      17,
+      parseInt(endHour),
       0,
       0,
       0,
