@@ -5,12 +5,13 @@ import {
   MemberSchedulerControl,
   MemberSchedulerHeader,
   MemberSchedulerKey,
+  MemberSchedulerPopUp,
 } from './';
 import type { AvailabilityRange, SchedulerRowItem } from '@/common';
 import dayjs from 'dayjs';
 import { AvailabilityType } from '@/common';
-import { SchedulerPopUp } from './SchedulerPopUp';
 import useAvailability from '@/hooks/useAvailability';
+import { DialogUI } from '@/components/ui';
 
 export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
@@ -24,6 +25,8 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
     to?: string;
     availabilityType?: AvailabilityType | null;
     deploymentCode?: string;
+    min?: string;
+    max?: string;
   }>();
 
   const openSchedulerDialog = (
@@ -31,10 +34,12 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
     to?: string,
     availabilityType?: AvailabilityType | null,
     deploymentCode?: string,
+    min?: string,
+    max?: string,
   ) => {
     if (!schedulerDialogOpen) {
       // Account for parameters
-      setEditCell({ from, to, availabilityType, deploymentCode });
+      setEditCell({ from, to, availabilityType, deploymentCode, min, max });
     } else {
       setEditCell(undefined);
     }
@@ -155,34 +160,49 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
     const statusIndex = availability.findIndex((s) => s.date === date);
     if (statusIndex > -1) {
       const status = availability[statusIndex];
+      // For all elements before (including this one), find the first break in availability type
+      const elementsBefore = availability.slice(0, statusIndex + 1).reverse();
+      const lastBreakIndex = elementsBefore.findIndex(
+        (s) => s.availabilityType !== status.availabilityType,
+      );
+      const firstDateStatus =
+        lastBreakIndex > -1 ? elementsBefore[lastBreakIndex - 1] : status;
+
+      // For all elements after (including this one), find the next break in availability type
+      const elementsAfter = availability.slice(statusIndex);
+      const nextBreakIndex = elementsAfter.findIndex(
+        (s) => s.availabilityType !== status.availabilityType,
+      );
+      const lastDateStatus =
+        nextBreakIndex > -1 ? elementsAfter[nextBreakIndex - 1] : status;
+
+      const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
+      const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
+      const availabilityType = status.availabilityType;
+      
       if (status.availabilityType === AvailabilityType.AVAILABLE) {
-        openSchedulerDialog(status.date, status.date);
-      } else {
-        // For all elements before (including this one), find the first break in availability type
-        const elementsBefore = availability.slice(0, statusIndex + 1).reverse();
-        const lastBreakIndex = elementsBefore.findIndex(
-          (s) => s.availabilityType !== status.availabilityType,
-        );
-        const firstDateStatus =
-          lastBreakIndex > -1 ? elementsBefore[lastBreakIndex - 1] : status;
-
-        // For all elements after (including this one), find the next break in availability type
-        const elementsAfter = availability.slice(statusIndex);
-        const nextBreakIndex = elementsAfter.findIndex(
-          (s) => s.availabilityType !== status.availabilityType,
-        );
-        const lastDateStatus =
-          nextBreakIndex > -1 ? elementsAfter[nextBreakIndex - 1] : status;
-
         // Use actualStartDate / actualEndDate if it exists
-        const availabilityType = status.availabilityType;
+        const min = lastBreakIndex > -1 ? firstDate : undefined;
+        const max = nextBreakIndex > -1 ? lastDate : undefined;
+        openSchedulerDialog(status.date, status.date, availabilityType, undefined, min, max);
+      } else {
+        // Use actualStartDate / actualEndDate if it exists
         const deploymentCode = status.deploymentCode;
-        const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
-        const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
         openSchedulerDialog(firstDate, lastDate, availabilityType, deploymentCode);
       }
     }
   };
+
+  const getEditDialogTitle = () => {
+    switch (editCell?.availabilityType) {
+      case AvailabilityType.UNAVAILABLE:
+        return 'Unavailable for Deployment';
+      case AvailabilityType.DEPLOYED:
+        return `Deployment: ${editCell.deploymentCode}`;
+      default:
+        return 'Set Unavailability';
+    }
+  }
 
   return (
     <>
@@ -205,39 +225,23 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
           <MemberSchedulerKey />
         </div>
       </section>
-      <Dialog
+      <DialogUI
         open={schedulerDialogOpen}
-        handler={handleSchedulerOpen}
-        placeholder={''}
-        size="md"
+        onClose={handleSchedulerOpen}
+        handleOpen={handleSchedulerOpen}
+        title={getEditDialogTitle()}
+        style=""
       >
-        <DialogHeader
-          placeholder={''}
-          className="flex flex-row align-middle bg-grayBackground"
-        >
-          <h4 className="grow font-bold">
-            {editCell?.availabilityType ? 'Edit Availability' : 'Add Availability'}
-          </h4>
-          <Button
-            placeholder={''}
-            variant="text"
-            className="text-sm"
-            onClick={() => setSchedulerDialogOpen(false)}
-          >
-            Cancel
-          </Button>
-        </DialogHeader>
-        <DialogBody placeholder={''}>
-          <SchedulerPopUp
-            editedFrom={editCell?.from}
-            editedTo={editCell?.to}
-            editedAvailabilityType={editCell?.availabilityType}
-            editedDeploymentCode={editCell?.deploymentCode}
-            editMode={!!editCell?.availabilityType}
-            onSave={saveAvailabilityDates}
-          />
-        </DialogBody>
-      </Dialog>
+        <MemberSchedulerPopUp
+          editedFrom={editCell?.from}
+          editedTo={editCell?.to}
+          editedAvailabilityType={editCell?.availabilityType}
+          min={editCell?.min}
+          max={editCell?.max}
+          onCancel={handleSchedulerOpen}
+          onSave={saveAvailabilityDates}
+        />
+      </DialogUI>
     </>
   );
 };
