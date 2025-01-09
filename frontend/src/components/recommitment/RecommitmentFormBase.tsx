@@ -6,6 +6,7 @@ import { Button } from '../ui';
 import {
   Assertions,
   InitialRecommitmentDropdown,
+  reasonDefinitions,
   SupervisorForm,
   UnableToJoin,
 } from './';
@@ -271,10 +272,8 @@ export const RecommitmentFormBase = ({
   }, [recommitmentAnswer]);
 
   const handleSubmitRecommitment = async () => {
-    const reasons = [
-      ...unableToJoinReasons.selectedReasons,
-      unableToJoinReasons.otherReason,
-    ].join(', ');
+    const selectedReasons = unableToJoinReasons.selectedReasons.map(r => reasonDefinitions[r as keyof typeof reasonDefinitions]);
+    const reasons = [...selectedReasons, unableToJoinReasons.otherReason].join(', ');
     const currentYear = new Date().getFullYear();
 
     const createDecision = (

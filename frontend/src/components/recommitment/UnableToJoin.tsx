@@ -6,6 +6,11 @@ interface Reason {
   text: string;
 }
 
+export const reasonDefinitions = {
+  'commitments': 'Work commitments from base position',
+  'leave': 'Extended leave',
+};
+
 const REASONS: Reason[] = [
   { id: 'commitments', text: 'Work commitments from base position' },
   { id: 'leave', text: 'Extended leave' },
