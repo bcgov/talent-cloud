@@ -57,7 +57,7 @@ export const handler = async () => {
     ),
   );
   const recommitmentService = app.get(RecommitmentService);
-  console.log(process.env.TEST_EMAIL); 
+  
   const testEmails = process.env.TEST_EMAIL.split(',');
 
 
