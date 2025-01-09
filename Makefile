@@ -333,3 +333,4 @@ update-recommitment-configmap:
 	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
 
 
+

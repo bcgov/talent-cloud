@@ -42,24 +42,44 @@ export const handler = async () => {
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
-  console.log(process.env.END_DATE);
+
   const startDate = datePST(new Date());
-  const endDate = datePST(new Date(process.env.END_DATE))
 
-
+  let endDate;
+  if (process.env.ENV !== 'production') {
+    const endHour = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[1];
+    endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate(),
+      parseInt(endHour),
+      0,
+      0,
+      0,
+    );
+    logger.log(endDate, 'END DATE - TEST RUN');
+  } else {
+    const endDateProd = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[2];
+    console.log(endDateProd);
+    endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      parseInt(endDateProd),
+      17,
+      0,
+      0,
+      0,
+    );
+    logger.log(endDate, 'END DATE - PROD');
+  }
   await recommitmentCycleRepository.save(
     recommitmentCycleRepository.create(
-      new RecommitmentCycleEntity(
-        startDate,
-        endDate,
-        new Date().getFullYear(),
-      ),
+      new RecommitmentCycleEntity(startDate, endDate, new Date().getFullYear()),
     ),
   );
   const recommitmentService = app.get(RecommitmentService);
-  
-  const testEmails = process.env.TEST_EMAIL.split(',');
 
+  const testEmails = process.env.TEST_EMAIL.split(',');
 
   if (process.env.ENV !== 'production') {
     const data = await recommitmentService.handleStartRecommitment(
