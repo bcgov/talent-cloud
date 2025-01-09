@@ -7,7 +7,7 @@ import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { datePST } from '../common/helpers';
 
-export const handler = async (testEmail: string) => {
+export const handler = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -35,10 +35,10 @@ export const handler = async (testEmail: string) => {
   const recommitmentService = app.get(RecommitmentService);
   const recommitment_cycle = await recommitmentService.checkRecommitmentPeriod()
   const today = new Date(datePST(new Date()))
-
+  const testEmails = process.env.TEST_EMAIL.split(',')
   if (today < recommitment_cycle.endDate || today > recommitment_cycle.startDate) {
-    const data = testEmail
-    ? await recommitmentService.handleSendAutomatedReminders(true, testEmail)
+    const data = process.env.ENV !== 'production'
+    ? await recommitmentService.handleSendAutomatedReminders(true, testEmails)
     : await recommitmentService.handleSendAutomatedReminders();
     logger.log('Sent out automated reminders')  
     console.log(data)
@@ -47,3 +47,6 @@ export const handler = async (testEmail: string) => {
   }
   return await app.close()
 };
+
+
+handler();

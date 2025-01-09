@@ -7,7 +7,8 @@ import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { datePST } from '../common/helpers';
 
-export const handler = async (testEmail: string) => {
+
+export const handler = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -35,12 +36,17 @@ export const handler = async (testEmail: string) => {
   const recommitment_cycle =
     await recommitmentService.checkRecommitmentPeriod();
   const today = new Date(datePST(new Date()));
-
+  const testEmails = process.env.TEST_EMAIL.split(','); 
   if (today.getDate() === recommitment_cycle.endDate.getDate()) {
-    testEmail
-      ? await recommitmentService.handleEndRecommitment(true, testEmail)
-      : await recommitmentService.handleEndRecommitment();
+   if(process.env.ENV !== 'production') {
+      await recommitmentService.handleEndRecommitment(true, testEmails);
+   } else {
+     await recommitmentService.handleEndRecommitment();
+   }
+    
   } else {
     logger.warn('Not end date for recommitment');
   }
 };
+
+handler();

@@ -32,6 +32,13 @@ export LAST_COMMIT_MESSAGE:=$(shell git log -1 --oneline --decorate=full --no-co
 export GIT_LOCAL_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
 export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 
+# Cron Job Schedules
+export END_RECOMMITMENT_SCHEDULE:=$(END_RECOMMITMENT_SCHEDULE)
+export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
+export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
+export TEST_EMAIL:=$(TEST_EMAIL)
+
+
 # Docker compose v2 for GHA
 build-test:
 	@echo "+\n++ Make: Running test build ...\n+"
@@ -286,30 +293,44 @@ run-nibble-fe:
 	@echo "Run lint Backend"
 	@cd frontend && npm run nibble
 
-update-recommitment-configmap:
-	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"end_date":$(END_DATE),"schedule":$(SCHEDULE),"email":$(TEST_EMAIL)}}'
+
 
 start-recommitment:
 	@echo "Trigger recommitment job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts").handler($(END_DATE),$(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts")'
 
 end-recommitment:
 	@echo "Trigger end recommitment job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/end_recommitment.ts").handler($(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/end_recommitment.ts")'
 
 send-notification:
 	@echo "Trigger send notification job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts").handler($(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts")'
 
 start-recommitment-oc:
 	@echo "Trigger recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js").handler($(END_DATE),$(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
 
 end-recommitment-oc:
 	@echo "Trigger end recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js")'
 
 send-notification-oc:
 	@echo "Trigger send notification job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js").handler($(TEST_EMAIL))'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
+
+create-start-recommitment-cron:
+	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE=$(START_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+
+create-end-recommitment-cron:
+	@oc process -f openshift/cron-end-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE=$(END_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+
+create-notifications-cron:
+	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE=$(NOTIFICATION_SCHEDULE)| oc apply -n $(TARGET_NAMESPACE) -f -
+
+update-recommitment-configmap:
+	@echo "Update recommitment configmap"
+	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
+
+
+

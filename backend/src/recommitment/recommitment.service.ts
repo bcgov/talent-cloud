@@ -176,12 +176,12 @@ export class RecommitmentService {
   /**
    * Initiates the recommitment process for all active personnel.
    * @param {boolean} dryRun - If true, the process will not make any changes.
-   * @param {string} [testEmail] - The test email address.
+   * @param {string[]} [testEmail] - The test email address.
    * @returns {Promise<void>}
    */
   async handleStartRecommitment(
     dryRun: boolean = false,
-    testEmail?: string,
+    testEmail?: string[],
   ): Promise<{member: unknown, supervisor: unknown}> {
     const cycle = await this.recommitmentCycleRepository.findOne({
       where: { year: new Date().getFullYear() },
@@ -235,10 +235,10 @@ export class RecommitmentService {
 
     if (dryRun) {
       memberTemplate.contexts = memberTemplate.contexts.filter((context) =>
-        context.to.includes(testEmail),
+        testEmail.find((email) => context.to.includes(email)), 
       );
       supervisorTemplate.contexts = supervisorTemplate.contexts.filter(
-        (context) => context.to.includes(testEmail),
+        (context) => testEmail.find((email) => context.to.includes(email)), 
       );
     }
     return {
@@ -281,7 +281,7 @@ export class RecommitmentService {
    */
   async handleSendAutomatedReminders(
     dryRun: boolean = false,
-    testEmail?: string,
+    testEmail?: string[],
   ): Promise<{members: unknown, supervisors: unknown}> {
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
@@ -348,11 +348,11 @@ export class RecommitmentService {
       );
 
       pendingMembersTemplate.contexts = pendingMembersTemplate.contexts.filter(
-        (context) => context.to.includes(testEmail),
+        (context) => testEmail.find((email) => context.to.includes(email)), 
       );
       committedMembersTemplate.contexts =
         committedMembersTemplate.contexts.filter((context) =>
-          context.to.includes(testEmail),
+          testEmail.find((email) => context.to.includes(email)), 
         );
     }
     return {
@@ -368,7 +368,7 @@ export class RecommitmentService {
    */
   async handleEndRecommitment(
     dryRun: boolean = false,
-    testEmail?: string,
+    testEmail?: string[],
   ): Promise<void> {
     const { memberPending, memberCommitted, memberDeclined, supervisorDenied } =
       await this.findMembersByRecommitmentStatus();
@@ -409,13 +409,13 @@ export class RecommitmentService {
       this.logger.log('TEST RUN: Emails will only be sent to test email');
       memberNoResponseEmails.contexts = [
         memberNoResponseEmails.contexts.find((context) =>
-          context.to.includes(testEmail),
+          testEmail.find(email => context.to.includes(email)),
         ),
       ];
 
       supervisorNoResponseEmails.contexts = [
         supervisorNoResponseEmails.contexts.find((context) =>
-          context.to.includes(testEmail),
+          testEmail.find(email => context.to.includes(email)),
         ),
       ];
 
