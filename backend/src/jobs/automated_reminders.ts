@@ -35,10 +35,10 @@ export const handler = async () => {
   const recommitmentService = app.get(RecommitmentService);
   const recommitment_cycle = await recommitmentService.checkRecommitmentPeriod()
   const today = new Date(datePST(new Date()))
-
+  const testEmails = process.env.TEST_EMAILS.split(',')
   if (today < recommitment_cycle.endDate || today > recommitment_cycle.startDate) {
     const data = process.env.ENV !== 'production'
-    ? await recommitmentService.handleSendAutomatedReminders(true, process.env.TEST_EMAIL)
+    ? await recommitmentService.handleSendAutomatedReminders(true, testEmails)
     : await recommitmentService.handleSendAutomatedReminders();
     logger.log('Sent out automated reminders')  
     console.log(data)

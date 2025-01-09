@@ -44,7 +44,7 @@ export const handler = async () => {
   );
 
   const startDate = new Date(datePST(new Date()));
-
+console.log(process.env.END_DATE);
   await recommitmentCycleRepository.save(
     recommitmentCycleRepository.create(
       new RecommitmentCycleEntity(
@@ -55,8 +55,10 @@ export const handler = async () => {
     ),
   );
   const recommitmentService = app.get(RecommitmentService);
+  console.log(process.env.TEST_EMAILS); 
   const testEmails = process.env.TEST_EMAILS.split(',');
-  
+
+
   if (process.env.ENV !== 'production') {
     const data = await recommitmentService.handleStartRecommitment(
       true,
