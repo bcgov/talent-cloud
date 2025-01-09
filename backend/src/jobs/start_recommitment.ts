@@ -42,21 +42,23 @@ export const handler = async () => {
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
+  console.log(process.env.END_DATE);
+  const startDate = datePST(new Date());
+  const endDate = datePST(new Date(process.env.END_DATE))
 
-  const startDate = new Date(datePST(new Date()));
-console.log(process.env.END_DATE);
+
   await recommitmentCycleRepository.save(
     recommitmentCycleRepository.create(
       new RecommitmentCycleEntity(
         startDate,
-        new Date(process.env.END_DATE),
+        endDate,
         new Date().getFullYear(),
       ),
     ),
   );
   const recommitmentService = app.get(RecommitmentService);
-  console.log(process.env.TEST_EMAILS); 
-  const testEmails = process.env.TEST_EMAILS.split(',');
+  console.log(process.env.TEST_EMAIL); 
+  const testEmails = process.env.TEST_EMAIL.split(',');
 
 
   if (process.env.ENV !== 'production') {
