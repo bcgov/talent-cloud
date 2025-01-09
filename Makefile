@@ -297,8 +297,7 @@ run-nibble-fe:
 
 start-recommitment:
 	@echo "Trigger recommitment job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts").handler($(END_DATE),$(TEST_EMAIL))'
-	./node_modules/.bin/ts-node -e "./src/jobs/start_recommitment.js $(END_DATE) $(TEST_EMAIL)
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts")'
 
 end-recommitment:
 	@echo "Trigger end recommitment job"

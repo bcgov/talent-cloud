@@ -55,11 +55,12 @@ export const handler = async () => {
     ),
   );
   const recommitmentService = app.get(RecommitmentService);
-
+  const testEmails = process.env.TEST_EMAILS.split(',');
+  
   if (process.env.ENV !== 'production') {
     const data = await recommitmentService.handleStartRecommitment(
       true,
-      process.env.TEST_EMAIL,
+      testEmails,
     );
     logger.log(JSON.stringify(data));
     logger.log('Recommitment job completed', 'Recommitment');
