@@ -6,7 +6,7 @@ import { AppModule } from '../app.module';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { datePST } from '../common/helpers';
-import { TestingModule } from '@nestjs/testing';
+
 
 export const handler = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

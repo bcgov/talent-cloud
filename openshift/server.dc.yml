@@ -186,11 +186,6 @@ objects:
                     secretKeyRef:
                       key: bcws_token
                       name: ${APP_NAME}-bcws
-                - name: END_DATE
-                  valueFrom:
-                    configMapKeyRef:
-                      key: end_date
-                      name: ${APP_NAME}-recommitment
                 - name: TEST_EMAIL
                   valueFrom:
                     configMapKeyRef:
