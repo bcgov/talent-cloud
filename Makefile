@@ -301,11 +301,11 @@ start-recommitment:
 
 end-recommitment:
 	@echo "Trigger end recommitment job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/end_recommitment.ts").handler($(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/end_recommitment.ts")'
 
 send-notification:
 	@echo "Trigger send notification job"
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts").handler($(TEST_EMAIL))'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts")'
 
 start-recommitment-oc:
 	@echo "Trigger recommitment job"
