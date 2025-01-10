@@ -1,12 +1,12 @@
 <div class="button-div">
 {% if dev %}
-  <a id="link-button" href="https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/profile">Get Started</a>
+  <a id="link-button" href="https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/profile">Go to My Dashboard (dev)</a>
 {% elif test %}
-    <a id="link-button" href="https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca/profile">Get Started</a>
+    <a id="link-button" href="https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca/profile">Go to My Dashboard (test)</a>
 {% elif production %}
-    <a id="link-button" href="https://coreteam.gov.bc.ca/profile">Get Started</a>
+    <a id="link-button" href="https://coreteam.gov.bc.ca/profile">Go to My Dashboard</a>
 {% else %}
-    <a id="link-button" href="http://localhost:3000/profile">Get Started</a>
+    <a id="link-button" href="http://localhost:3000/profile">Go to My Dashboard (local)</a>
 {% endif %}
 </div>
 

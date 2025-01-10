@@ -48,10 +48,10 @@ objects:
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
                   limits:
-                    cpu: 75m
+                    cpu: 15m
                     memory: 256Mi
                   requests:
-                    cpu: 35m
+                    cpu: 10m
                     memory: 128Mi
                 terminationMessagePath: /dev/termination-log
                 terminationMessagePolicy: File

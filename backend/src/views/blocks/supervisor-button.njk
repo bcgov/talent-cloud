@@ -1,12 +1,12 @@
 <div class="button-div">
 {% if dev %}
-  <a id="link-button" href="https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/supervisor">Go To Supervisor Portal</a>
+  <a id="link-button" href="https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/supervisor">Go To Supervisor Portal (dev)</a>
 {% elif test %}
-    <a id="link-button" href="https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca/supervisor">Go To Supervisor Portal</a>
+    <a id="link-button" href="https://tcloud-client-cd4869-test.apps.gold.devops.gov.bc.ca/supervisor">Go To Supervisor Portal (test)</a>
 {% elif production %}
     <a id="link-button" href="https://coreteam.gov.bc.ca/supervisor">Go To Supervisor Portal</a>
 {% else %}
-    <a id="link-button" href="http://localhost:3000/supervisor">Go To Supervisor Portal</a>
+    <a id="link-button" href="http://localhost:3000/supervisor">Go To Supervisor Portal (local)</a>
 {% endif %}
 </div>
 

@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import axios, { AxiosBasicCredentials, AxiosInstance } from 'axios';
 import { format } from 'date-fns';
 import * as nunjucks from 'nunjucks';
-import { EmailTemplates, envs, TemplateType } from './constants';
+import { EmailSubjects, EmailTags, EmailTemplates, envs, TemplateType } from './constants';
 import { MailDto } from './mail.dto';
 import { Program } from '../auth/interface';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
+
 
 @Injectable()
 export class MailService {
@@ -81,55 +82,54 @@ export class MailService {
    * @returns
    */
   generateTemplate(
-    template: EmailTemplates,
+    tag: EmailTags,
     templateType: TemplateType,
     records: RecommitmentRO[],
     endDate: Date,
     program?: Program,
   ) {
+    
     return new MailDto({
-      subject: '{{subject}}',
-      body: nunjucks.render(template, {
+      subject: EmailSubjects[tag],
+      body: nunjucks.render(EmailTemplates[tag], {
         program: '{{program}}',
-        reason: '{{reason}}',
+        year: '{{year}}',
         date: '{{date}}',
         member: '{{member}}',
-        year: '{{year}}',
+        reason: '{{reason}}',
+        
         emcr_contact: '{{emcr_contact}}',
         bcws_contact: '{{bcws_contact}}',
         supervisor: '{{supervisor}}',
+        emcr: program === Program.EMCR,
+        bcws: program === Program.BCWS,
         ...envs,
       }),
       attachments: [],
       contexts: records.map((record) => ({
         to: [
           templateType === TemplateType.MEMBER
-            ? record.personnel?.email
-            : record.personnel.supervisorEmail,
+            ? record?.personnel?.email
+            : record?.personnel?.supervisorEmail,
         ],
         cc: [],
         bcc: [],
-        tag:
-          templateType === TemplateType.MEMBER
-            ? `${template}_${record.personnel?.id}`
-            : `${template}_${record.personnel?.supervisorEmail}`,
+        tag: tag,
         delayTS: 0,
         context: {
-          program: program?.toUpperCase(),
-          year: record.year,
+          program: program === Program.ALL ? 'EMCR/BCWS' : program?.toUpperCase(),
+          year: `${record?.year}`,
           date: format(endDate, 'MMMM do, yyyy'),
-          member: `${record.personnel.firstName} ${record.personnel.lastName}`,
+          member: `${record?.personnel?.firstName} ${record?.personnel?.lastName}`,
           reason:
-            template === EmailTemplates.MEMBER_DECLINED
-              ? record.supervisorReason
-              : record.memberReason,
-          subject:
-            templateType === TemplateType.SUPERVISOR
-              ? `${record.personnel.supervisorFirstName} ${record.personnel.supervisorLastName}`
-              : `${record.personnel.firstName} ${record.personnel.lastName}`,
-          supervisor: `${record.personnel.supervisorFirstName} ${record.personnel.supervisorLastName}`,
+            tag === EmailTags.MEMBER_DECLINED
+              ? `${record?.memberReason}`
+              : `${record?.supervisorReason}`,
+          supervisor: `${record?.personnel?.supervisorFirstName} ${record?.personnel?.supervisorLastName}`,
           emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
           bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
+          emcr: program === Program.EMCR,
+          bcws: program === Program.BCWS,
           ...envs,
         },
       })),
@@ -138,19 +138,22 @@ export class MailService {
 
   /**
    * Send email, passing in the email data with body template and values
-   * @param body MailDto
+   * @param mail MailDto
    * @returns
    */
 
-  async sendMail(body: MailDto) {
+  async sendMail(mail: MailDto) {
     const token = await this.getToken();
-
     this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+    if(mail.contexts.length === 0) {
+      this.logger.log('No emails to send');
+      return { data: 'No emails to  send' };
+    }
     try {
-      const { data } = await this.mailApi.post('/emailMerge', body);
+      const { data } = await this.mailApi.post('/emailMerge', mail);
       return data;
     } catch (e) {
+      e.response.data?.errors?.map(itm => this.logger.log(itm))
       this.logger.error(e.message);
       this.logger.error(e.status);
       throw new Error(e);

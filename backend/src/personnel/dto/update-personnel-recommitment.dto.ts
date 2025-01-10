@@ -23,10 +23,16 @@ export class UpdatePersonnelRecommitmentDTO {
   status: RecommitmentStatus;
 
   @ApiProperty({
-    description: 'supervisor reason for updating emcr',
+    description: 'member reason for declining',
     required: false,
   })
-  reason?: string;
+  memberReason?: string;
+
+  @ApiProperty({
+    description: 'supervisor reason for declining',
+    required: false,
+  })
+  supervisorReason?: string;
 }
 
 export class PersonnelRecommitmentDTO {
