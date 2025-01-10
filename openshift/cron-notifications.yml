@@ -36,12 +36,13 @@ objects:
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
+          activeDeadlineSeconds: 450
           template:
             metadata:
               labels:
                 parent: 'cronjobpi'
             spec:
-              activeDeadlineSeconds: 900
+              
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-notifications
@@ -49,7 +50,7 @@ objects:
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
                   limits:
-                    cpu: 15m
+                    cpu: 20m
                     memory: 256Mi
                   requests:
                     cpu: 10m
