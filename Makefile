@@ -331,3 +331,11 @@ create-notifications-cron:
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
 	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)"}}'
+
+check-request-limit:
+	@echo "Check request limit"
+	@oc get quota compute-long-running-quota -o=custom-columns=Requests:.status.used."requests\.cpu"
+
+check-pod-cpu:
+	@echo "Check pod cpu"
+	@oc adm top pod

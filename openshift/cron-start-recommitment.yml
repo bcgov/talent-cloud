@@ -36,12 +36,12 @@ objects:
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
+          activeDeadlineSeconds: 450
           template:
             metadata:
               labels:
                 parent: 'cronjobpi'
             spec:
-              activeDeadlineSeconds: 900
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-start-recommitment

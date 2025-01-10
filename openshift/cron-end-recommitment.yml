@@ -41,7 +41,7 @@ objects:
               labels:
                 parent: 'cronjobpi'
             spec:
-              activeDeadlineSeconds: 900
+              activeDeadlineSeconds: 450
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-end-recommitment
