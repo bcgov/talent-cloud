@@ -42,7 +42,7 @@ export enum EmailSubjects {
   MEMBER_SUPERVISOR_NO_RESPONSE = 'CORE TEAM: Notice for Change in Member Status',
   SUPERVISOR_ANNUAL = 'CORE Team {{year}} Annual Recommitment Period Has Started',
   SUPERVISOR_REQUEST = 'ACTION REQUIRED: Supervisor Approval Needed for {{year}} CORE Member Recommitment',
-  SUPERVISOR_REMINDER = 'ACTION REQUIRED: Supervisor Approval Needed for {{year}} CORE Member Recommitment',
+  SUPERVISOR_REMINDER = 'ACTION REQUIRED: Supervisor Approval Still Needed for {{year}} CORE Member Recommitment',
 }
 export const envs = {
   dev: process.env.MODE === 'development',
