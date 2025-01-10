@@ -30,10 +30,10 @@ objects:
       name: ${APP_NAME}-cronjob-end-recommitment
     spec:
       schedule: ${END_RECOMMITMENT_SCHEDULE}
-      concurrencyPolicy: 'Replace'
+      concurrencyPolicy: Replace
       startingDeadlineSeconds: 10
       successfulJobsHistoryLimit: 3
-      failedJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
           template:
@@ -41,6 +41,7 @@ objects:
               labels:
                 parent: 'cronjobpi'
             spec:
+              activeDeadlineSeconds: 900
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-end-recommitment
