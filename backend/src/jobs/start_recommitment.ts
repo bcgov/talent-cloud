@@ -96,6 +96,10 @@ export const handler = async () => {
 
   if (process.env.ENV !== 'production') {
     const testEmails = process.env.TEST_EMAIL.split(',');
+    if(!testEmails) {
+      logger.error('No test emails found', 'Recommitment');
+      return await app.close();
+    }
     logger.log(testEmails, 'Recommitment');
     const data = await recommitmentService.handleStartRecommitment(
       true,
