@@ -67,7 +67,7 @@ export const RecommitmentProfileBanner = ({
     statusText: 'Pending Supervisor Approval',
     statusBg: 'bg-warningBannerDark',
     statusTextBg: 'white',
-    onClick: () => alert("Clicked on 'Decline Recommitment'"),
+    onClick: handleClick,
     onClose: handleCloseBanner,
     type: BannerType.RECOMMITMENT,
   };
@@ -83,7 +83,7 @@ export const RecommitmentProfileBanner = ({
         <span className="font-bold">{endDate}</span>
       </p>
     ),
-    onClick: () => alert("Clicked on 'Accept Recommitment'"),
+    onClick: handleClick,
     onClose: handleCloseBanner,
     buttonText: 'Change Decision',
     statusText: 'Declined',
