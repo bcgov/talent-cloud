@@ -14,12 +14,14 @@ export const ApprovalCell = ({
   recommitmentStatus,
   handleShowSuccessBanner,
   handleShowWarningBanner,
+
   year,
 }: {
   personnel: Personnel;
   program: Program;
   handleShowSuccessBanner: (banner?: boolean) => void;
   handleShowWarningBanner: (banner?: boolean) => void;
+
   recommitmentStatus: RecommitmentStatus;
   year: number;
 }) => {
@@ -79,7 +81,7 @@ export const ApprovalCell = ({
         [program]: {
           status: values.status,
           program,
-          reason,
+          supervisorReason: reason,
           year,
         },
       });
@@ -135,6 +137,7 @@ export const ApprovalCell = ({
       console.log(e);
     }
   };
+
   return (
     <>
       <div className="flex flex-row gap-x-4 pr-12">

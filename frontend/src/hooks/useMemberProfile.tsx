@@ -5,6 +5,8 @@ import { useAxios } from './useAxios';
 import { Program } from '@/common';
 
 const useMemberProfile = (): {
+  openRecommitmentForm: boolean;
+  handleOpenRecommitmentForm: () => void;
   personnel?: MemberProfile;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
   loading: boolean;
@@ -12,10 +14,10 @@ const useMemberProfile = (): {
 } => {
   const [personnel, setPersonnel] = useState<MemberProfile>();
   const { AxiosPrivate } = useAxios();
-
+  const [refetch, setRefetch] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [program, setProgram] = useState<Program>();
-
+  const [openRecommitmentForm, setOpenRecommitmentForm] = useState(false);
   const getProfileDetails = async () => {
     setIsLoading(true);
     try {
@@ -37,21 +39,25 @@ const useMemberProfile = (): {
 
   useEffect(() => {
     getProfileDetails();
-  }, []);
+  }, [refetch]);
 
   const updatePersonnel = async (personnel: FormikValues | MemberProfile) => {
     try {
-      const res =
-        program && (await AxiosPrivate.patch(encodeURI(`/personnel`), personnel));
-      if (res) {
-        setPersonnel(res.data);
-      }
+      await AxiosPrivate.patch(encodeURI(`/personnel`), personnel);
+
+      setRefetch(!refetch);
     } catch (e) {
       console.log(e);
     }
   };
 
+  const handleOpenRecommitmentForm = () => {
+    setOpenRecommitmentForm(!openRecommitmentForm);
+    if (openRecommitmentForm) setRefetch(!refetch);
+  };
   return {
+    openRecommitmentForm,
+    handleOpenRecommitmentForm,
     personnel,
     loading,
     updatePersonnel,

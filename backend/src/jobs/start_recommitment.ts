@@ -10,7 +10,7 @@ import { datePST } from '../common/helpers';
 
 import { RecommitmentService } from '../recommitment/recommitment.service';
 
-export const handler = async () => {
+(async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -47,31 +47,44 @@ export const handler = async () => {
 
   let endDate;
   if (process.env.ENV !== 'production') {
-    
-    const endHour = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[1];
+    const endDateSplit = process.env.END_RECOMMITMENT_SCHEDULE.replace(
+      /"/g,
+      '',
+    ).split(' ');
+    const endHour = endDateSplit[1];
+    const endDateTest = endDateSplit[2];
+    const endMonth = endDateSplit[3];
+    const endMinute = endDateSplit[0];
+
     endDate = new Date(
       startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDate(),
+      parseInt(endMonth) - 1,
+      parseInt(endDateTest),
       parseInt(endHour),
-      0,
-      0,
+      parseInt(endMinute),
       0,
     );
-    logger.log(endDate, 'END DATE - TEST RUN');
+    logger.log(startDate, 'START DATE - TEST');
+    logger.log(endDate, 'END DATE - TEST');
   } else {
-    const endHour = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[1];
-    const endDateProd = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[2];
-    const endMonth = process.env.END_RECOMMITMENT_SCHEDULE.split(' ')[3];
+    const endDateSplit = process.env.END_RECOMMITMENT_SCHEDULE.replace(
+      /"/g,
+      '',
+    ).split(' ');
+    const endHour = endDateSplit[1];
+    const endDateProd = endDateSplit[2];
+    const endMonth = endDateSplit[3];
+    const endMinute = endDateSplit[0];
+
     endDate = new Date(
       startDate.getFullYear(),
-      parseInt(endMonth),
+      parseInt(endMonth) - 1,
       parseInt(endDateProd),
       parseInt(endHour),
-      0,
-      0,
+      parseInt(endMinute),
       0,
     );
+    logger.log(startDate, 'START DATE - PROD');
     logger.log(endDate, 'END DATE - PROD');
   }
   await recommitmentCycleRepository.save(
@@ -81,22 +94,45 @@ export const handler = async () => {
   );
   const recommitmentService = app.get(RecommitmentService);
 
-  const testEmails = process.env.TEST_EMAIL.split(',');
-
   if (process.env.ENV !== 'production') {
+    const testEmails = process.env.TEST_EMAIL.split(',');
+    if(!testEmails) {
+      logger.error('No test emails found', 'Recommitment');
+      return await app.close();
+    }
+    logger.log(testEmails, 'Recommitment');
     const data = await recommitmentService.handleStartRecommitment(
       true,
       testEmails,
     );
-    logger.log(JSON.stringify(data));
+    logger.log('Supervisor TEST emails:');
+    logger.log(`TxtId: ${data.supervisor.txId}`);
+
+    data.supervisor?.messages?.forEach((supervisor) => {
+      logger.log(`Supervisor: ${supervisor.to}`);
+    });
+    logger.log('Member TEST emails:');
+    logger.log(`TxtId: ${data.member.txId}`);
+    data.member?.messages?.forEach((member) => {
+      logger.log(`Member: ${member.to}`);
+    });
     logger.log('Recommitment job completed', 'Recommitment');
+    return await app.close();
   } else {
     const data = await recommitmentService.handleStartRecommitment();
-    logger.log(JSON.stringify(data));
+    logger.log(
+      `Supervisor emails sent: ${data.supervisor.messages.length}`,
+      'Recommitment',
+    );
+    logger.log(`TxId: ${data.supervisor.txId}`, 'Recommitment');
+
+    logger.log(
+      `Member emails sent: ${data.member.messages.length}`,
+      'Recommitment',
+    );
+    logger.log(`TxId: ${data.member.txId}`, 'Recommitment');
     logger.log('Recommitment job completed', 'Recommitment');
+    return await app.close();
   }
+})();
 
-  return app.close();
-};
-
-handler();

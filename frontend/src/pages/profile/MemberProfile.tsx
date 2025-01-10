@@ -16,14 +16,17 @@ import { RecommitmentFormBase } from '@/components/recommitment';
 import { format } from 'date-fns';
 
 const MemberProfile = () => {
-  const { personnel, program, loading, updatePersonnel } = useMemberProfile();
+  const {
+    personnel,
+    program,
+    loading,
+    updatePersonnel,
+    openRecommitmentForm,
+    handleOpenRecommitmentForm,
+  } = useMemberProfile();
   const [showBanner, setShowBanner] = useState(true);
-  const [openRecommitmentForm, setOpenRecommitmentForm] = useState(false);
-  const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
 
-  const handleOpenRecommitmentForm = () => {
-    setOpenRecommitmentForm(!openRecommitmentForm);
-  };
+  const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
 
   const handleCloseBanner = () => {
     setShowBanner(false);
@@ -36,7 +39,7 @@ const MemberProfile = () => {
   const handleTabChange = (index: string) => {
     setActiveTab(index);
   };
-  
+
   if (loading) {
     return <Loading />;
   }
@@ -82,7 +85,7 @@ const MemberProfile = () => {
                     </div>
                   </Transition>
                 </div>
-               )} 
+              )}
               <TabsBody placeholder={undefined}>
                 <TabPanel value={TabIndexes.AVAILABILITY}>
                   {personnel && (
@@ -120,7 +123,7 @@ const MemberProfile = () => {
           <RecommitmentFormBase
             program={program}
             personnel={personnel}
-            onClose={() => setOpenRecommitmentForm(false)}
+            onClose={handleOpenRecommitmentForm}
           />
         </DialogUI>
       )}

@@ -320,17 +320,14 @@ send-notification-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
 
 create-start-recommitment-cron:
-	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE=$(START_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE="$(START_RECOMMITMENT_SCHEDULE)" | oc apply -n $(TARGET_NAMESPACE) -f -
 
 create-end-recommitment-cron:
-	@oc process -f openshift/cron-end-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE=$(END_RECOMMITMENT_SCHEDULE) | oc apply -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/cron-end-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) END_RECOMMITMENT_SCHEDULE="$(END_RECOMMITMENT_SCHEDULE)" | oc apply -n $(TARGET_NAMESPACE) -f -
 
 create-notifications-cron:
-	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE=$(NOTIFICATION_SCHEDULE)| oc apply -n $(TARGET_NAMESPACE) -f -
+	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE="$(NOTIFICATION_SCHEDULE)"| oc apply -n $(TARGET_NAMESPACE) -f -
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":$(TEST_EMAIL),"end_recommitment_schedule": $(END_RECOMMITMENT_SCHEDULE),"start_recommitment_schedule": $(START_RECOMMITMENT_SCHEDULE),"notification_schedule": $(NOTIFICATION_SCHEDULE)}}'
-
-
-
+	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)"}}'

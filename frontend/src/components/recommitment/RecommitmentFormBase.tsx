@@ -284,7 +284,7 @@ export const RecommitmentFormBase = ({
       status,
       year: currentYear,
       program: programType,
-      ...(includeReason && { reason: reasons }),
+      ...(includeReason && { memberReason: reasons }),
     });
 
     const decisionMap = {
