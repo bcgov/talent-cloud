@@ -11,6 +11,7 @@ import { datePST } from '../common/helpers';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 
 (async () => {
+  try{
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -134,5 +135,10 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     logger.log('Recommitment job completed', 'Recommitment');
     return await app.close();
   }
+}catch(e){
+  console.error(e);
+} finally {
+  process.exit(0);
+}
 })();
 
