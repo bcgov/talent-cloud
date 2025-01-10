@@ -45,7 +45,7 @@ export class RecommitmentController {
     @Body() update: PersonnelRecommitmentDTO,
   ): Promise<Record<'personnel', PersonnelRO>> {
     this.logger.log(`Updating personnel ${id}`);
-    console.log('update', update);
+    
     const personnel =
       await this.recommitmentService.updateMemberRecommitmentStatus(
         id,
