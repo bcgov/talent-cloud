@@ -7,7 +7,7 @@ import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { datePST } from '../common/helpers';
 
-export const handler = async () => {
+(async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
     bufferLogs: true,
@@ -95,6 +95,4 @@ export const handler = async () => {
 
     return await app.close();
   }
-};
-
-handler();
+})()
