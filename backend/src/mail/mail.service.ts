@@ -88,6 +88,8 @@ export class MailService {
     endDate: Date,
     program?: Program,
   ) {
+
+    
     
     return new MailDto({
       subject: EmailSubjects[tag],
@@ -109,8 +111,8 @@ export class MailService {
       contexts: records.map((record) => ({
         to: [
           templateType === TemplateType.MEMBER
-            ? record?.personnel?.email
-            : record?.personnel?.supervisorEmail,
+            ? record.personnel?.email
+            : record.personnel?.supervisorEmail,
         ],
         cc: [],
         bcc: [],
@@ -118,14 +120,14 @@ export class MailService {
         delayTS: 0,
         context: {
           program: program === Program.ALL ? 'EMCR/BCWS' : program?.toUpperCase(),
-          year: `${record?.year}`,
+          year: `${record.year}`,
           date: format(endDate, 'MMMM do, yyyy'),
-          member: `${record?.personnel?.firstName} ${record?.personnel?.lastName}`,
+          member: `${record.personnel?.firstName} ${record.personnel?.lastName}`,
           reason:
             tag === EmailTags.MEMBER_DECLINED
-              ? `${record?.memberReason}`
-              : `${record?.supervisorReason}`,
-          supervisor: `${record?.personnel?.supervisorFirstName} ${record?.personnel?.supervisorLastName}`,
+              ? `${record.memberReason}`
+              : `${record.supervisorReason}`,
+          supervisor: `${record.personnel?.supervisorFirstName} ${record.personnel?.supervisorLastName}`,
           emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
           bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
           emcr: program === Program.EMCR,
