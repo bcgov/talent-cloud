@@ -30,7 +30,7 @@ objects:
       name: ${APP_NAME}-cronjob-start-recommitment
     spec:
       schedule: ${START_RECOMMITMENT_SCHEDULE}
-      concurrencyPolicy: Replace
+      concurrencyPolicy: 'Replace'
       startingDeadlineSeconds: 10
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 1
@@ -45,10 +45,10 @@ objects:
               containers:
               - name: ${APP_NAME}-cron-start-recommitment
                 restartPolicy: OnFailure
-                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
+                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:dev
                 resources:
                   limits:
-                    cpu: 20m
+                    cpu: 40m
                     memory: 256Mi
                   requests:
                     cpu: 10m
