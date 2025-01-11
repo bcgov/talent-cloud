@@ -46,12 +46,9 @@ jobs:
 
       - name: migrate
         run: make migration-run
-      
-      - name: Seed Data
-        run: make seed-local
 
       - name: Seed Test Data
-        run: make seed-local-personnel
+        run: make seed-ci-personnel
       
       - name: Run Frontend Tests
         run: make test-frontend-pipeline
