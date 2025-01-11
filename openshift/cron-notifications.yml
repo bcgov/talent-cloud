@@ -30,13 +30,12 @@ objects:
       name: ${APP_NAME}-cronjob-notifications
     spec:
       schedule: ${NOTIFICATION_SCHEDULE}
-      concurrencyPolicy: Replace
+      concurrencyPolicy: 'Replace'
       startingDeadlineSeconds: 10
-      successfulJobsHistoryLimit: 3
+      successfulJobsHistoryLimit: 1
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
-          activeDeadlineSeconds: 450
           template:
             metadata:
               labels:
@@ -47,10 +46,10 @@ objects:
               containers:
               - name: ${APP_NAME}-cron-notifications
                 restartPolicy: OnFailure
-                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
+                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:dev
                 resources:
                   limits:
-                    cpu: 20m
+                    cpu: 30m
                     memory: 256Mi
                   requests:
                     cpu: 10m
