@@ -18,7 +18,7 @@ import { ToolsEntity } from '../entities/personnel/tools.entity';
 
 
 export const createPersonnelHandler = (
-  status: Status, 
+  
   locations?: LocationEntity[],
   tools?: ToolsEntity[],
   certs?: CertificationEntity[],
@@ -66,7 +66,7 @@ export const createPersonnelHandler = (
       ]),
     ),
     availability:
-      status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
+      availability() as AvailabilityEntity[],
   };
   return { personnelData };
 };

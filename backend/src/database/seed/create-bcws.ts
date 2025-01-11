@@ -6,7 +6,7 @@ import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
 
 export const createBCWShandler = (
   roles: BcwsRoleEntity[],
-  status: Status,
+  
   dateApplied: Date,
 ): {
   bcwsData: CreatePersonnelBcwsDTO;
@@ -21,7 +21,14 @@ export const createBCWShandler = (
   if (secondRoleSection !== firstChoiceSection) {
     secondChoiceSection = secondRoleSection;
   }
-
+  const status =
+    Status[
+      faker.helpers.arrayElement([
+        Status.ACTIVE,
+        Status.INACTIVE,
+        Status.PENDING,
+      ])
+    ];
   const bcwsData: CreatePersonnelBcwsDTO = {
     dateApplied: dateApplied,
     dateApproved:

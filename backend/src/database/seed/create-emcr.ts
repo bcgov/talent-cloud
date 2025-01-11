@@ -11,11 +11,19 @@ import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
 export const createEMCRhandler = (
   functions: EmcrFunctionEntity[],
   trainings: EmcrTrainingEntity[],
-  status: Status,
+  
   dateApplied: Date,
 ): {
   emcrData: CreatePersonnelEmcrDTO;
 } => {
+  const status =
+    Status[
+      faker.helpers.arrayElement([
+        Status.ACTIVE,
+        Status.INACTIVE,
+        Status.PENDING,
+      ])
+    ];
   const emcrData: CreatePersonnelEmcrDTO = {
     dateApplied: dateApplied,
     logisticsNotes: faker.lorem.paragraph(),

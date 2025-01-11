@@ -19,24 +19,16 @@ export const handler = async () => {
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
   const dateApplied = faker.date.past();
 
-  const status =
-  Status[
-    faker.helpers.arrayElement([
-      Status.ACTIVE,
-      Status.INACTIVE,
-      Status.PENDING,
-    ])
-  ];
-
+  
   
   try {
     const { personnelData } = createPersonnelHandler(
-      status,
+      
       locations,
       tools,
       certs,
     );
-    const { bcwsData } = createBCWShandler(roles, status, dateApplied);
+    const { bcwsData } = createBCWShandler(roles, dateApplied);
 
     const person = await personnelRepo.save(
       personnelRepo.create(
@@ -58,7 +50,7 @@ export const handler = async () => {
     for (let i = 0; i < 50; i++) {
       const dateApplied = faker.date.past();
       const { personnelData } = createPersonnelHandler(
-        status,
+        
         locations,
         tools,
         certs,
@@ -66,7 +58,7 @@ export const handler = async () => {
       
       
       
-      const { bcwsData } = createBCWShandler(roles, status, dateApplied);
+      const { bcwsData } = createBCWShandler(roles, dateApplied);
 
       const person = await personnelRepo.save(
         personnelRepo.create(new PersonnelEntity(personnelData)),

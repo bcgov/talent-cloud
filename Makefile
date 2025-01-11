@@ -252,6 +252,8 @@ seed-local-emcr:
 
 seed-local-personnel:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-both.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-bcws.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-emcr.ts")'
 
 
 
@@ -260,6 +262,8 @@ seed-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed.js")'
 	
 seed-oc-personnel:
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-bcws.js")'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-emcr.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-both.js")'
 
 seed-oc-bcws:
