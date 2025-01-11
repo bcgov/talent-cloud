@@ -15,8 +15,6 @@ export const FormField = ({
   const { getFieldProps, values, setValues } = useFormikContext<Partial<any>>();
   const fieldProps = { ...getFieldProps(field.name) };
 
-  //TODO change Personnel to a generic type
-
   return (
     <>
       {field.type === 'text' || field.type === 'tel' ? (
@@ -28,6 +26,8 @@ export const FormField = ({
         />
       ) : field.type === 'textarea' ? (
         <TextArea
+          {...fieldProps}
+          {...field}
           onChange={handleChange}
           className={
             'placeholder:text-dark text-dark textarea resize flex flex-row  p-2.5 w-full font-normal bg-white min-h-[150px] rounded-sm border border-[#606060]  outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 disabled:text-dark'
