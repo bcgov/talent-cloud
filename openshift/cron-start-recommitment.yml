@@ -36,7 +36,6 @@ objects:
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
-          activeDeadlineSeconds: 450
           template:
             metadata:
               labels:

@@ -45,8 +45,8 @@ export enum EmailSubjects {
   SUPERVISOR_REMINDER = 'ACTION REQUIRED: Supervisor Approval Still Needed for {{year}} CORE Member Recommitment',
 }
 export const envs = {
-  dev: process.env.MODE === 'development',
-  test: process.env.MODE === 'test',
-  production: process.env.MODE === 'production',
-  local: process.env.MODE === 'local',
+  dev: process.env.ENV === 'dev',
+  test: process.env.ENV === 'test',
+  production: process.env.ENV === 'production',
+  local: process.env.ENV === 'local',
 };
