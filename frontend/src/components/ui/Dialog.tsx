@@ -21,9 +21,10 @@ export const DialogUI = ({
 }: DialogProps) => {
   return (
     <Dialog
+      transition
+      className="relative z-50 origin-top transition duration-200 ease-out data-[closed]:-translate-y-6 data-[closed]:opacity-0"
       open={open}
       onClose={(...props: any) => onClose(props.event)}
-      className="relative z-50"
     >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
