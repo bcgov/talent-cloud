@@ -45,7 +45,7 @@ export const ApprovalCell = ({
         ...prev,
         comments: {
           name: 'comments',
-          label: 'Comments',
+          label: 'Additional Comments',
           type: 'textarea',
           required: true,
           error: '',
