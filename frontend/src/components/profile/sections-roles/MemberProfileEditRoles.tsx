@@ -530,9 +530,9 @@ export const MemberProfileEditPreferences = ({
     handleClose();
   };
 
-  const [openBcwsRoles, setOpenBcwsRoles] = useState(false);
-  const showBcwsRoles = () => {
-    setOpenBcwsRoles(!openBcwsRoles);
+  const [openRoles, setOpenRoles] = useState(false);
+  const showRoles = () => {
+    setOpenRoles(!openRoles);
   };
 
   return (
@@ -542,7 +542,7 @@ export const MemberProfileEditPreferences = ({
           <div className="flex flex-row items-center justify-start space-x-2">
             <QuestionIcon />
             <button
-              onClick={showBcwsRoles}
+              onClick={showRoles}
               className="text-info cursor-pointer underline"
             >
               See Section Definitions
@@ -592,9 +592,9 @@ export const MemberProfileEditPreferences = ({
       </div>
 
       <DialogUI
-        open={openBcwsRoles}
-        onClose={showBcwsRoles}
-        handleOpen={showBcwsRoles}
+        open={openRoles}
+        onClose={showRoles}
+        handleOpen={showRoles}
         title={
           bcws && !emcr
             ? 'BCWS Role Definitions'
