@@ -54,17 +54,17 @@ import { datePST } from '../common/helpers';
       );
 
       logger.log('Supervisor TEST emails:', 'Recommitment');
-      logger.log(`TxId: ${data.supervisor.txId}`, 'Recommitment');
+      logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
 
       data.supervisor?.messages?.forEach((supervisor) => {
-        logger.log(`Supervisor: ${supervisor.to}`, 'Recommitment');
+        logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
       });
 
       logger.log('Member TEST emails:', 'Recommitment');
-      logger.log(`TxId: ${data.member.txId}`, 'Recommitment');
+      logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
 
       data.member?.messages?.forEach((member) => {
-        logger.log(`Member: ${member.to}`, 'Recommitment');
+        logger.log(`Member: ${member?.to}`, 'Recommitment');
       });
 
       logger.log('Recommitment job completed', 'Recommitment');

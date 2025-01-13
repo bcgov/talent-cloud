@@ -30,9 +30,9 @@ objects:
       name: ${APP_NAME}-cronjob-end-recommitment
     spec:
       schedule: ${END_RECOMMITMENT_SCHEDULE}
-      concurrencyPolicy: Replace
+      concurrencyPolicy: 'Replace'
       startingDeadlineSeconds: 10
-      successfulJobsHistoryLimit: 3
+      successfulJobsHistoryLimit: 1
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
@@ -41,7 +41,6 @@ objects:
               labels:
                 parent: 'cronjobpi'
             spec:
-              activeDeadlineSeconds: 450
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-end-recommitment
@@ -49,7 +48,7 @@ objects:
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
                   limits:
-                    cpu: 20m
+                    cpu: 40m
                     memory: 256Mi
                   requests:
                     cpu: 10m
