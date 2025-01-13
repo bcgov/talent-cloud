@@ -1,6 +1,7 @@
 import type { ButtonProps } from '@/common';
 import { ButtonTypes } from '@/common';
 import { button } from './classes';
+import { ButtonLoading } from './Loading';
 
 export const Button = ({
   id,
@@ -9,6 +10,7 @@ export const Button = ({
   text,
   onClick,
   disabled,
+  loading,
 }: ButtonProps) => {
   const buttonClass = () => {
     if (variant === ButtonTypes.PRIMARY) {
@@ -35,7 +37,7 @@ export const Button = ({
       aria-label={text}
       className={buttonClass()}
     >
-      {text}
+      {loading ? <ButtonLoading /> : text}
     </button>
   );
 };

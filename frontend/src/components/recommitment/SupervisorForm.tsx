@@ -74,7 +74,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
         {/* Email */}
         <div className="col-span-1">
           <label htmlFor="email" className="block text-sm font-bold text-black mb-1">
-            Email
+            Supervisor Email<span className="text-red-300">*</span>
           </label>
           <input
             type="email"
@@ -89,7 +89,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
         {/* Phone */}
         <div className="col-span-1">
           <label htmlFor="phone" className="block text-sm font-bold text-black mb-1">
-            Phone Number
+            Supervisor Phone Number
           </label>
           <input
             type="tel"

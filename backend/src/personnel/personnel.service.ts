@@ -53,6 +53,17 @@ export class PersonnelService {
    * @returns
    */
 
+  async updatePersonnelSupervisorInformation(personnel, supervisorInformation){
+      const qb = this.personnelRepository.createQueryBuilder('personnel');  
+      
+    qb.update(PersonnelEntity)
+    .set({
+        ...supervisorInformation
+    })
+    .where("id = :id", { id: personnel.id })
+    .execute()
+  }
+
   async findOne(id: string): Promise<PersonnelEntity> {
     const person = await this.personnelRepository.findOneOrFail({
       where: { id },
@@ -63,7 +74,6 @@ export class PersonnelService {
         'tools.tool',
         'homeLocation',
         'bcws',
-
         'emcr',
         'recommitment',
         'recommitment.recommitmentCycle',
@@ -116,7 +126,7 @@ export class PersonnelService {
       console.log(e);
     }
   }
-
+  
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,
     req: RequestWithRoles,
