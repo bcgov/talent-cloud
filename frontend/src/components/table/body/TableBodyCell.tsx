@@ -18,15 +18,59 @@ import { Link } from 'react-router-dom';
 import { Status, StatusNames } from '@/common';
 import type { TravelPreference } from '../../../common/enums/travel-preference.enum';
 import { TravelPreferenceText } from '../../../common/enums/travel-preference.enum';
+import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
+const renderRecommitmentStatus = (
+  recommitmentStatus: RecommitmentStatus,
+  isRecommitmentCycleOpen?: boolean,
+) => {
+  switch (recommitmentStatus) {
+    case RecommitmentStatus.SUPERVISOR_APPROVED:
+      if (isRecommitmentCycleOpen) {
+        return (
+          <span className="bg-infoBannerLight px-2 rounded-full ml-2">
+            Recommitted
+          </span>
+        );
+      }
+      break;
+    case RecommitmentStatus.MEMBER_NO_RESPONSE:
+    case RecommitmentStatus.SUPERVISOR_NO_RESPONSE:
+      return (
+        <span className="bg-errorBannerLight px-2 rounded-full ml-2 text-error">
+          Missed Deadline
+        </span>
+      );
+    case RecommitmentStatus.MEMBER_DENIED:
+    case RecommitmentStatus.SUPERVISOR_DENIED:
+      return (
+        <span className="bg-errorBannerLight px-2 rounded-full ml-2 text-error">
+          Not Returning
+        </span>
+      );
+    case RecommitmentStatus.PENDING:
+      if (!isRecommitmentCycleOpen) {
+        return (
+          <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+            Reactivated
+          </span>
+        );
+      }
+      break;
+  }
+};
 export const TableBodyCell = ({
   cell,
   id,
   status,
+  recommitmentStatus,
+  isRecommitmentCycleOpen,
 }: {
   cell: Cell;
   id: string;
   status?: Status;
+  recommitmentStatus?: RecommitmentStatus;
+  isRecommitmentCycleOpen?: boolean;
 }) => {
   switch (cell.columnName) {
     case DashboardColumns.NAME:
@@ -45,6 +89,8 @@ export const TableBodyCell = ({
               {StatusNames.NEW}
             </span>
           )}
+          {recommitmentStatus &&
+            renderRecommitmentStatus(recommitmentStatus, isRecommitmentCycleOpen)}
         </span>
       );
     case DashboardColumns.AVAILABILITY:

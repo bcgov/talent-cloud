@@ -204,6 +204,11 @@ export class EmcrService {
         query.page,
         query.status,
       );
+      personnel.forEach(person => {
+        if(person.personnel.recommitment){
+        person.personnel.recommitment = person?.personnel?.recommitment?.filter(itm => itm.program === Program.EMCR)
+        }
+      })
     return { personnel, count };
   }
   /**

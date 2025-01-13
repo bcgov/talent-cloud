@@ -32,6 +32,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
         ({ id, status, newMember, ...personnel }: Personnel) => ({
           key: id,
           status: newMember ? Status.NEW : status,
+          recommitmentStatus: personnel.recommitment?.[0]?.status,
           cells:
             program &&
             renderCells(

@@ -1,5 +1,6 @@
 import type { Cell, Row } from '@/components';
 import { Loading, TableBodyCell } from '@/components';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import type { ReactElement } from 'react';
 
 export const Table = ({
@@ -13,6 +14,7 @@ export const Table = ({
   columns?: any[];
   auto?: boolean;
 }) => {
+  const { isRecommitmentCycleOpen } = useRecommitmentCycle();
   return (
     <table
       className={`${auto ? 'table-auto ' : 'table-fixed '} w-full border-collapse border border-slate-500`}
@@ -62,6 +64,8 @@ export const Table = ({
                         cell={itm}
                         id={row.key}
                         status={row.status}
+                        recommitmentStatus={row?.recommitmentStatus}
+                        isRecommitmentCycleOpen={isRecommitmentCycleOpen}
                       />
                     </td>
                     {itm.nested && itm.nested.length > 0 && (

@@ -52,6 +52,7 @@ module.exports = withMT({
           700: '#3B8FDD',
           // Info text, background
           800: '#1A5A96',
+          900: '#003366'
         },
         ink: {
           300: '#007FFF',

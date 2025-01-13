@@ -178,6 +178,12 @@ export class BcwsService {
         query.page,
         query.status,
       );
+      personnel.forEach(person => {
+        if(person.personnel.recommitment){
+        person.personnel.recommitment = person?.personnel?.recommitment?.filter(itm => itm.program === Program.BCWS)
+        }
+      })
+
     return { personnel, count };
   }
 
