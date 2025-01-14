@@ -82,12 +82,19 @@ export class RecommitmentService {
           memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
           memberReason: recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
           supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
-          status: recommitmentUpdate[key].status,
+          status: recommitmentUpdate[key]?.status,
         },
       );
-      this.triggerEmailNotification(id, recommitmentUpdate[key]);
+      // If recomitted to both, only send one email to supervisor
+      if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
+        this.logger.log(`${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`);
+      } else {
+        this.triggerEmailNotification(id, recommitmentUpdate[key]);
+      } 
     }
-
+    if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
+      this.triggerEmailNotification(id, {year: new Date().getFullYear(), status: RecommitmentStatus.MEMBER_COMMITTED, program: Program.ALL});
+    }
     return await this.personnelService.findOne(id);
   }
   filterRecommitmentList(
