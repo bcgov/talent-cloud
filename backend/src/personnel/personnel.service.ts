@@ -359,6 +359,16 @@ export class PersonnelService {
           `personnel.id not IN (${allAvailable.getQuery()})`,
           allAvailable.getParameters(),
         );
+
+        queryBuilder.leftJoinAndSelect(
+          'personnel.availability',
+          'availability',
+          'availability.date >= :from AND availability.date <= :to',
+          {
+            from: new Date(availabilityFromDate),
+            to: new Date(availabilityToDate),
+          },
+        );
       } else {
         const allAvailable =
           this.availabilityRepository.createQueryBuilder('availability');
@@ -372,15 +382,6 @@ export class PersonnelService {
           allAvailable.getParameters(),
         );
       }
-      queryBuilder.leftJoinAndSelect(
-        'personnel.availability',
-        'availability',
-        'availability.date >= :from AND availability.date <= :to',
-        {
-          from: new Date(availabilityFromDate),
-          to: new Date(availabilityToDate),
-        },
-      );
     } else {
       queryBuilder.leftJoinAndSelect(
         'personnel.availability',
