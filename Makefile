@@ -115,7 +115,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-2 5432
+	@oc port-forward $(APP_NAME)-patroni-0 5432
 
 ### Openshift Setup
 db-prep:
