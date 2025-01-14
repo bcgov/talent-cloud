@@ -1,4 +1,5 @@
 import type { Status } from '@/common';
+import type { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
 export interface Cell {
   key: string;
@@ -17,6 +18,7 @@ export interface Row {
   key: string;
   cells: Cell[];
   status: Status;
+  recommitmentStatus?: RecommitmentStatus;
 }
 
 export interface TabCount {
