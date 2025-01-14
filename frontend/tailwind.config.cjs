@@ -85,11 +85,7 @@ module.exports = withMT({
           800: '#262729',
           900: '#000000',
         },
-        yellow:{
-          100: '#FDFAE6',
-          200:'#F9F1C6',
-          900: '#6C4A00'
-        },
+        
         forest: {
           500: '#81917A',
           700: '#576D4D',
@@ -126,13 +122,17 @@ module.exports = withMT({
           700: '#D8292F',
         },
         yellow: {
+          100: '#FDFAE6',
           //Warning banner background
           200: '#F9F1C6',
           //BC Gov Primary Yellow
           300: '#FCBA19',
           400: '#D18F00',
           // Warning banner text
-          900: '#6C4A00',
+          
+          
+          
+          900: '#6C4A00'
         },
         purple: {
           100: '#EFE8F4',
