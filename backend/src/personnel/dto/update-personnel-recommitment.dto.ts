@@ -33,6 +33,24 @@ export class UpdatePersonnelRecommitmentDTO {
     required: false,
   })
   supervisorReason?: string;
+
+  @ApiProperty({
+    description: 'supervisor email',
+    required: false,
+  })
+  supervisorIdir?: string;
+
+  @ApiProperty({
+    description: 'member decision date',
+    required: false,
+  })
+  memberDecisionDate?: Date;
+
+  @ApiProperty({
+    description: 'supervisor decision date',
+    required: false,
+  })
+  supervisorDecisionDate?: Date;
 }
 
 export class PersonnelRecommitmentDTO {

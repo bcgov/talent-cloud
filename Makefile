@@ -115,7 +115,7 @@ push-prod:
 open-db-tunnel:
 	@oc project $(TARGET_NAMESPACE)
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-0 5432
+	@oc port-forward $(APP_NAME)-patroni-2 5432
 
 ### Openshift Setup
 db-prep:
@@ -296,7 +296,7 @@ run-nibble-fe:
 
 
 start-recommitment:
-	@echo "Trigger recommitment job"
+	@echo "Trigger recommitment job ${ENV}"
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts")'
 
 end-recommitment:
@@ -308,7 +308,7 @@ send-notification:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts")'
 
 start-recommitment-oc:
-	@echo "Trigger recommitment job"
+	@echo "Trigger recommitment job ${ENV}"
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
 
 end-recommitment-oc:

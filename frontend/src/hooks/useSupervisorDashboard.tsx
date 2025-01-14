@@ -12,13 +12,11 @@ export const useSupervisorDashboard = () => {
   const [loading, setLoading] = useState(false);
 
   const [count, setCount] = useState(0);
-  const [refetch, setRefetch] = useState(false);
+
   const [showSuccessMessage, setShowSuccessBanner] = useState(false);
 
   const [showWarningBanner, setShowWarningBanner] = useState(true);
-  const handleRefetch = () => {
-    setRefetch(!refetch);
-  };
+
   const handleShowSuccessBanner = (banner?: boolean) => {
     setShowSuccessBanner(banner ?? !showSuccessMessage);
   };
@@ -54,7 +52,7 @@ export const useSupervisorDashboard = () => {
       const splitPersonnel = personnel.map((person: Personnel) => ({
         key: person.id,
         memberName: `${person.firstName} ${person.lastName}`,
-        bcws: person.bcws
+        bcws: person.recommitment?.find((itm) => itm.program === Program.BCWS)
           ? {
               name: `${person.firstName} ${person.lastName}`,
               employeeId: person.employeeId,
@@ -83,7 +81,6 @@ export const useSupervisorDashboard = () => {
                   }
                   handleShowSuccessBanner={handleShowSuccessBanner}
                   handleShowWarningBanner={handleShowWarningBanner}
-                  handleRefetch={handleRefetch}
                   year={
                     person.recommitment?.find((itm) => itm.program === Program.BCWS)
                       ?.recommitmentCycle?.year ?? new Date().getFullYear()
@@ -93,7 +90,7 @@ export const useSupervisorDashboard = () => {
             }
           : null,
 
-        emcr: person.emcr
+        emcr: person.recommitment?.find((itm) => itm.program === Program.EMCR)
           ? {
               name: `${person.firstName} ${person.lastName}`,
               employeeId: person.employeeId,
@@ -122,7 +119,6 @@ export const useSupervisorDashboard = () => {
                   program={Program.EMCR}
                   handleShowSuccessBanner={handleShowSuccessBanner}
                   handleShowWarningBanner={handleShowWarningBanner}
-                  handleRefetch={handleRefetch}
                   year={
                     person.recommitment?.find((itm) => itm.program === Program.EMCR)
                       ?.recommitmentCycle.year ?? new Date().getFullYear()
@@ -143,7 +139,7 @@ export const useSupervisorDashboard = () => {
 
   useEffect(() => {
     getData();
-  }, [searchParamsUrl, showSuccessMessage, refetch]);
+  }, [searchParamsUrl, showSuccessMessage]);
 
   return {
     totalRows: count,

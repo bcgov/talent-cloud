@@ -51,16 +51,16 @@ import { recommitmentCycleHandler } from './seed-recommitment';
     logger.log('Starting recommitment job', 'Recommitment');
     const data = await recommitmentService.handleStartRecommitment();
     logger.log(
-      `Supervisor emails sent: ${data.supervisor.messages.length}`,
+      `Supervisor emails sent: ${data?.supervisor?.messages?.length}`,
       'Recommitment',
     );
-    logger.log(`TxId: ${data.supervisor.txId}`, 'Recommitment');
+    logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
 
     logger.log(
-      `Member emails sent: ${data.member.messages.length}`,
+      `Member emails sent: ${data?.member?.messages?.length}`,
       'Recommitment',
     );
-    logger.log(`TxId: ${data.member.txId}`, 'Recommitment');
+    logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
     logger.log('Recommitment job completed', 'Recommitment');
     return await app.close();
   }
@@ -76,7 +76,7 @@ import { recommitmentCycleHandler } from './seed-recommitment';
 const testRun = async (recommitmentService: RecommitmentService) => {
   const logger = new AppLogger();
   logger.log('Starting recommitment job TEST run', 'Recommitment');
-console.log(process.env.END_RECOMMITMENT_SCHEDULE, 'END_RECOMMITMENT_SCHEDULE');
+  console.log(process.env.END_RECOMMITMENT_SCHEDULE, 'END_RECOMMITMENT_SCHEDULE');
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );

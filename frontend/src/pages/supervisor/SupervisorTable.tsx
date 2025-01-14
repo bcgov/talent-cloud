@@ -3,7 +3,7 @@ export const SupervisorTable = ({
   rows,
   columns,
 }: {
-  rows: any[];
+  rows: { key: string; memberName: string; bcws?: any; emcr?: any }[];
   columns: { key: string; label: string }[];
 }) => {
   return (
@@ -29,62 +29,64 @@ export const SupervisorTable = ({
         </tr>
       </thead>
       <tbody>
-        {rows?.map((row: any) => (
-          <>
-            <tr>
-              {row.bcws && row.emcr ? (
-                <td
-                  scope="column"
-                  className={` text-nowrap truncate max-w-[250px] text-gray-800 pb-[55px]`}
-                  key="memberName"
-                >
-                  {row.memberName}
-                </td>
-              ) : (
-                <td
-                  scope="column"
-                  className={` text-nowrap truncate max-w-[250px] text-gray-800 `}
-                  key="memberName"
-                >
-                  {row.memberName}
-                </td>
-              )}
+        {rows?.map(
+          (row: { key: string; memberName: string; bcws?: any; emcr?: any }) => (
+            <>
+              <tr>
+                {row.bcws && row.emcr ? (
+                  <td
+                    scope="column"
+                    className={` text-nowrap truncate max-w-[250px] text-gray-800 pb-[55px]`}
+                    key="memberName"
+                  >
+                    {row.memberName}
+                  </td>
+                ) : (
+                  <td
+                    scope="column"
+                    className={` text-nowrap truncate max-w-[250px] text-gray-800 `}
+                    key="memberName"
+                  >
+                    {row.memberName}
+                  </td>
+                )}
 
-              {columns.slice(1, columns.length).map((itm) => (
-                <td scope="column" key={itm.key}>
-                  <table>
-                    {row?.bcws && (
-                      <tr className={`py-4   text-nowrap truncate max-w-[250px]`}>
-                        <td
-                          className={`py-4   text-nowrap truncate max-w-[250px] text-gray-800`}
-                          key={itm.key}
-                        >
-                          {row.bcws?.[itm.key]}
-                        </td>
-                      </tr>
-                    )}
-                    {row?.emcr && (
-                      <tr>
-                        <td
-                          className={`py-4 text-nowrap truncate max-w-[250px] text-gray-800 `}
-                          key={itm.key}
-                        >
-                          {row?.emcr?.[itm.key]}
-                        </td>
-                      </tr>
-                    )}
-                  </table>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td
-                className={`border-b-2 border-slate-500`}
-                colSpan={columns?.length}
-              ></td>
-            </tr>
-          </>
-        ))}
+                {columns.slice(1, columns.length).map((itm) => (
+                  <td scope="column" key={itm.key}>
+                    <table>
+                      {row?.bcws && (
+                        <tr className={`py-4   text-nowrap truncate max-w-[250px]`}>
+                          <td
+                            className={`py-4   text-nowrap truncate max-w-[250px] text-gray-800`}
+                            key={itm.key}
+                          >
+                            {row.bcws?.[itm.key]}
+                          </td>
+                        </tr>
+                      )}
+                      {row?.emcr && (
+                        <tr>
+                          <td
+                            className={`py-4 text-nowrap truncate max-w-[250px] text-gray-800 `}
+                            key={itm.key}
+                          >
+                            {row?.emcr?.[itm.key]}
+                          </td>
+                        </tr>
+                      )}
+                    </table>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td
+                  className={`border-b-2 border-slate-500`}
+                  colSpan={columns?.length}
+                ></td>
+              </tr>
+            </>
+          ),
+        )}
       </tbody>
     </table>
   );
