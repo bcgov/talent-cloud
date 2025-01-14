@@ -42,7 +42,7 @@ import { datePST } from '../common/helpers';
   logger.log(`Automated Reminders Job: ${today}`, 'Recommitment');
 
   if (
-    today < recommitment_cycle.endDate ||
+    today < recommitment_cycle.endDate &&
     today > recommitment_cycle.startDate
   ) {
     if (process.env.ENV !== 'production') {
