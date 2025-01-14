@@ -10,6 +10,7 @@ import { datePST } from '../common/helpers';
 
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { recommitmentCycleHandler } from './seed-recommitment';
+import { DataSource } from 'typeorm';
 
 (async () => {
   try{
@@ -45,7 +46,7 @@ import { recommitmentCycleHandler } from './seed-recommitment';
 
   if (process.env.ENV !== 'production') {
     await recommitmentCycleHandler()
-    await testRun(recommitmentService)
+    await testRun(recommitmentService, datasource)
     await app.close()
   } else {
     logger.log('Starting recommitment job', 'Recommitment');
@@ -73,10 +74,10 @@ import { recommitmentCycleHandler } from './seed-recommitment';
 
 
 
-const testRun = async (recommitmentService: RecommitmentService) => {
+const testRun = async (recommitmentService: RecommitmentService, datasource: DataSource) => {
   const logger = new AppLogger();
-  logger.log('Starting recommitment job TEST run', 'Recommitment');
-  console.log(process.env.END_RECOMMITMENT_SCHEDULE, 'END_RECOMMITMENT_SCHEDULE');
+  logger.log('Starting recommitment job' + process.env.ENV, 'Recommitment');
+  
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
