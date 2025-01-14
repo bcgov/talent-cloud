@@ -35,13 +35,11 @@ export const useFilters = () => {
       clearSearchParams('availabilityFromDate');
       clearSearchParams('availabilityToDate');
     } else {
-      setSearchUrlParams((prev: any) => ({
-        ...prev,
-        availabilityFromDate: range.from ? datePST(range.from, true) : undefined,
-        availabilityToDate: range?.to
-          ? datePST(range.to, true)
-          : range.from && datePST(range.from, true),
-      }));
+      searchParamsUrl.set('availabilityFromDate', datePST(range.from, true));
+      if (range.to) {
+        searchParamsUrl.set('availabilityToDate', datePST(range.to, true));
+      }
+      setSearchUrlParams(searchParamsUrl);
     }
   };
 

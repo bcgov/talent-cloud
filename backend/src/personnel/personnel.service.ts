@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format, eachDayOfInterval, parse } from 'date-fns';
+import { format, eachDayOfInterval, parse, differenceInDays } from 'date-fns';
 import {
   Brackets,
   DeleteResult,
@@ -53,15 +53,15 @@ export class PersonnelService {
    * @returns
    */
 
-  async updatePersonnelSupervisorInformation(personnel, supervisorInformation){
-      const qb = this.personnelRepository.createQueryBuilder('personnel');  
-      
+  async updatePersonnelSupervisorInformation(personnel, supervisorInformation) {
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+
     qb.update(PersonnelEntity)
-    .set({
-        ...supervisorInformation
-    })
-    .where("id = :id", { id: personnel.id })
-    .execute()
+      .set({
+        ...supervisorInformation,
+      })
+      .where('id = :id', { id: personnel.id })
+      .execute();
   }
 
   async findOne(id: string): Promise<PersonnelEntity> {
@@ -126,7 +126,7 @@ export class PersonnelService {
       console.log(e);
     }
   }
-  
+
   async updatePersonnel(
     personnel: Partial<CreatePersonnelDTO>,
     req: RequestWithRoles,
@@ -345,8 +345,16 @@ export class PersonnelService {
             to: new Date(availabilityToDate),
           },
         );
+        allAvailable.groupBy('personnel');
+        // If we are searching for 6 days, exclude anyone who is unavailable for half (6/2 = 3) days or more of the 6 days searched
+        // differenceInDays + 1 because the function does not seem inclusive of the last day; makes sense if it's 00:00
+        allAvailable.having('count(*) >= :numDays', {
+          numDays: Math.floor(
+            (differenceInDays(availabilityToDate, availabilityFromDate) + 1) /
+              2,
+          ),
+        });
 
-        // // TODO - return partial match
         queryBuilder.andWhere(
           `personnel.id not IN (${allAvailable.getQuery()})`,
           allAvailable.getParameters(),
@@ -364,6 +372,15 @@ export class PersonnelService {
           allAvailable.getParameters(),
         );
       }
+      queryBuilder.leftJoinAndSelect(
+        'personnel.availability',
+        'availability',
+        'availability.date >= :from AND availability.date <= :to',
+        {
+          from: new Date(availabilityFromDate),
+          to: new Date(availabilityToDate),
+        },
+      );
     } else {
       queryBuilder.leftJoinAndSelect(
         'personnel.availability',
@@ -738,29 +755,33 @@ export class PersonnelService {
     rows: number,
     page: number,
   ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
-    
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    
+
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
     qb.where('personnel.supervisorEmail = :email', { email: req.idir });
     qb.andWhere('recommitment.status is not null');
-    qb.orderBy('personnel.lastName', 'ASC');  
+    qb.orderBy('personnel.lastName', 'ASC');
     qb.addOrderBy('personnel.firstName', 'ASC');
-    
-    
-    const count = await qb.getCount();
-    const personnel = await qb.take(rows)
-    .skip((page - 1) * rows).getMany();
-    
-    this.logger.log(`FOUND: ${count} for supervisor ${req.idir}`);
-    this.logger.log(`Returning: ${personnel.length} for supervisor ${req.idir}`);
 
-        
+    const count = await qb.getCount();
+    const personnel = await qb
+      .take(rows)
+      .skip((page - 1) * rows)
+      .getMany();
+
+    this.logger.log(`FOUND: ${count} for supervisor ${req.idir}`);
+    this.logger.log(
+      `Returning: ${personnel.length} for supervisor ${req.idir}`,
+    );
+
     return { personnel, count };
   }
 
-  async findActivePersonnel(): Promise<{emcr: PersonnelEntity[], bcws: PersonnelEntity[]}> {
+  async findActivePersonnel(): Promise<{
+    emcr: PersonnelEntity[];
+    bcws: PersonnelEntity[];
+  }> {
     const activeEmcrPersonnel = await this.personnelRepository.find({
       where: { emcr: { status: Status.ACTIVE } },
     });
