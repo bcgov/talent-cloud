@@ -3,6 +3,7 @@ import type { MemberProfile } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui';
+import type { SupervisorInformation } from './';
 import {
   Assertions,
   InitialRecommitmentDropdown,
@@ -64,12 +65,13 @@ export const RecommitmentFormBase = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [currentParQStep, setCurrentParQStep] = useState(0);
   const [recommitmentAnswer, setRecommitmentAnswer] = useState<string>();
-  const [supervisorInformation, setSupervisorInformation] = useState<any>({
-    firstName: personnel.supervisorFirstName,
-    lastName: personnel.supervisorLastName,
-    email: personnel.supervisorEmail,
-    phone: personnel.supervisorPhone,
-  });
+  const [supervisorInformation, setSupervisorInformation] =
+    useState<SupervisorInformation>({
+      firstName: personnel.supervisorFirstName,
+      lastName: personnel.supervisorLastName,
+      email: personnel.supervisorEmail,
+      phone: personnel.supervisorPhone,
+    });
   const [parqGeneralAnswers, setParqGeneralAnswers] = useState<
     Record<string, boolean | null>
   >({});
@@ -272,7 +274,9 @@ export const RecommitmentFormBase = ({
   }, [recommitmentAnswer]);
 
   const handleSubmitRecommitment = async () => {
-    const selectedReasons = unableToJoinReasons.selectedReasons.map(r => reasonDefinitions[r as keyof typeof reasonDefinitions]);
+    const selectedReasons = unableToJoinReasons.selectedReasons.map(
+      (r) => reasonDefinitions[r as keyof typeof reasonDefinitions],
+    );
     const reasons = [...selectedReasons, unableToJoinReasons.otherReason].join(', ');
     const currentYear = new Date().getFullYear();
 
@@ -284,6 +288,7 @@ export const RecommitmentFormBase = ({
       status,
       year: currentYear,
       program: programType,
+
       ...(includeReason && { memberReason: reasons }),
     });
 
@@ -318,10 +323,10 @@ export const RecommitmentFormBase = ({
 
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
-    await updateRecommitment(personnel.id, decision);
+    await updateRecommitment(personnel.id, { ...decision, supervisorInformation });
     onClose();
   };
-
+  const [buttonLoading, setButtonLoading] = useState(false);
   const handleNext = () => {
     const currentComponentType = currentComponent.type;
 
@@ -341,6 +346,7 @@ export const RecommitmentFormBase = ({
     }
 
     if (currentComponentType === Assertions) {
+      setButtonLoading(true);
       handleSubmitRecommitment();
     }
 
@@ -507,6 +513,7 @@ export const RecommitmentFormBase = ({
         )}
         <Button
           variant={ButtonTypes.TERTIARY}
+          loading={buttonLoading}
           text={getButtonText()}
           type="button"
           onClick={handleNext}

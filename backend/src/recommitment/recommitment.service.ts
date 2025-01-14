@@ -9,7 +9,7 @@ import { RecommitmentCycleEntity } from '../database/entities/recommitment/recom
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
 import { AppLogger } from '../logger/logger.service';
-import { TemplateType, EmailTemplates, EmailTags } from '../mail/constants';
+import { TemplateType, EmailTags } from '../mail/constants';
 import { MailDto } from '../mail/mail.dto';
 import { MailService } from '../mail/mail.service';
 import {
@@ -95,6 +95,20 @@ export class RecommitmentService {
     if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
       this.triggerEmailNotification(id, {year: new Date().getFullYear(), status: RecommitmentStatus.MEMBER_COMMITTED, program: Program.ALL});
     }
+
+    if (recommitmentUpdate.supervisorInformation) {
+      await this.personnelService.updatePersonnelSupervisorInformation(
+        personnel,
+        {
+          supervisorEmail: recommitmentUpdate.supervisorInformation.email,
+          supervisorFirstName:
+            recommitmentUpdate.supervisorInformation.firstName,
+          supervisorLastName: recommitmentUpdate.supervisorInformation.lastName,
+          supervisorPhone: recommitmentUpdate.supervisorInformation.phone,
+        },
+      );
+    }
+
     return await this.personnelService.findOne(id);
   }
   filterRecommitmentList(
@@ -400,8 +414,6 @@ export class RecommitmentService {
         supervisorDenied.map((itm) => itm.toResponseObject()),
       );
     }
-
-    
 
     const pendingMembers = this.filterRecommitmentList(
       memberPending,

@@ -19,6 +19,7 @@ export type ButtonProps = {
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   id?: string;
+  loading?: boolean;
 };
 
 export type NavProps = {

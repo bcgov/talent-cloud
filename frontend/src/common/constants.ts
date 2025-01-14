@@ -178,7 +178,7 @@ export interface Personnel {
   email: string;
   supervisorFirstName: string;
   supervisorLastName: string;
-  supervisorEmail?: string;
+  supervisorEmail: string;
   supervisorPhone?: string;
   approvedBySupervisor: boolean;
   icsTraining?: boolean;

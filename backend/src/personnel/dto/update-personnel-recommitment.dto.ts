@@ -1,6 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Program } from '../../auth/interface';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
+import { IsEmail, IsString } from 'class-validator';
+
+export class SupervisorInformationDTO {
+  @ApiProperty()
+  @IsEmail()
+  email?: string;
+
+  @ApiProperty()
+  @IsString()
+  firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  lastName: string;
+
+  @ApiProperty()
+  @IsString()
+  phone?: string;
+}
 
 export class UpdatePersonnelRecommitmentDTO {
   @ApiProperty({ name: 'year', type: 'integer' })
@@ -53,7 +72,24 @@ export class UpdatePersonnelRecommitmentDTO {
   supervisorDecisionDate?: Date;
 }
 
+
+
 export class PersonnelRecommitmentDTO {
+  @ApiProperty({
+    type: SupervisorInformationDTO,
+    required: false,
+  })
+  supervisorInformation?: SupervisorInformationDTO;
+
+  @ApiProperty({
+    type: UpdatePersonnelRecommitmentDTO,
+    required: false,
+  })
   bcws?: UpdatePersonnelRecommitmentDTO;
+
+  @ApiProperty({
+    type: UpdatePersonnelRecommitmentDTO,
+    required: false,
+  })
   emcr?: UpdatePersonnelRecommitmentDTO;
 }

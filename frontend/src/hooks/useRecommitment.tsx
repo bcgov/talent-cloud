@@ -2,6 +2,8 @@ import type { Program, RecommitmentCycle } from '@/common';
 import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
 import type { RecommitmentStatus } from '@/common/enums/recommitment-status';
+import { offsetTimezoneDate } from '@/utils';
+import type { SupervisorInformation } from '@/components/recommitment';
 
 export interface RecommitmentDecision {
   program: Program;
@@ -32,10 +34,15 @@ export const useRecommitmentCycle = () => {
     decisions: {
       bcws?: RecommitmentDecision;
       emcr?: RecommitmentDecision;
+      supervisorInformation?: SupervisorInformation;
     },
   ) => {
     try {
-      await AxiosPrivate.patch(`/recommitment/${personnelId}`, decisions);
+      const { data } = await AxiosPrivate.patch(
+        `/recommitment/${personnelId}`,
+        decisions,
+      );
+      console.log(data);
     } catch (e) {
       console.error(e);
     }
@@ -45,8 +52,8 @@ export const useRecommitmentCycle = () => {
     recommitmentCycle,
     isRecommitmentCycleOpen:
       recommitmentCycle &&
-      new Date(recommitmentCycle.endDate) >= new Date() &&
-      new Date(recommitmentCycle.startDate) <= new Date(),
+      offsetTimezoneDate(recommitmentCycle.endDate) >= new Date() &&
+      offsetTimezoneDate(recommitmentCycle.startDate) <= new Date(),
     updateRecommitment,
   };
 };

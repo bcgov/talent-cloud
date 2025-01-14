@@ -5,10 +5,19 @@ interface Reason {
   id: string;
   text: string;
 }
+export interface SupervisorInformation {
+  email: string;
+
+  firstName: string;
+
+  lastName: string;
+
+  phone?: string;
+}
 
 export const reasonDefinitions = {
-  'commitments': 'Work commitments from base position',
-  'leave': 'Extended leave',
+  commitments: 'Work commitments from base position',
+  leave: 'Extended leave',
 };
 
 const REASONS: Reason[] = [

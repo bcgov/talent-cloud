@@ -117,7 +117,7 @@ const MemberProfile = () => {
           open={openRecommitmentForm}
           onClose={updatePersonnel}
           handleOpen={handleOpenRecommitmentForm}
-          title={'Confirm Recommitment Status'}
+          title={`Confirm Recommitment Status for ${program === Program.ALL ? 'BCWS and EMCR' : program}`}
           style={'lg:w-2/3 xl:w-1/2'}
         >
           <RecommitmentFormBase
