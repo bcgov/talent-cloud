@@ -7,6 +7,7 @@ import { AppLogger } from '../logger/logger.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
 import { datasource } from '../database/datasource';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
+import { datePST } from '../common/helpers';
 
 (async () => {
   try {
@@ -45,7 +46,7 @@ import { RecommitmentCycleEntity } from '../database/entities/recommitment/recom
 
     await recommitmentCycleRepository.update(
       { year: recommitment_cycle.year },
-      { endDate: new Date() },
+      { endDate: datePST(new Date()) },
     );
 
     if (process.env.ENV !== 'production') {
