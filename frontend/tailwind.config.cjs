@@ -85,6 +85,11 @@ module.exports = withMT({
           800: '#262729',
           900: '#000000',
         },
+        yellow:{
+          100: '#FDFAE6',
+          200:'#F9F1C6',
+          900: '#6C4A00'
+        },
         forest: {
           500: '#81917A',
           700: '#576D4D',
@@ -190,7 +195,7 @@ module.exports = withMT({
         errorBannerLight: '#F2DEDE',
         successBannerDark: '#2D4821',
         successBannerLight: '#E5F3E0',
-        warningBannerDark: '#6C4A00',
+        warningBannerDark: '#F9F1C6',
         warningBannerLight: '#FDFAE6',
         infoBannerDark: '#1A5A96',
         infoBannerLight: '#ECF5FB',
