@@ -49,21 +49,23 @@ export class RecommitmentService {
   ): Promise<PersonnelEntity> {
     const programsToUpdate = Object.keys(recommitmentUpdate);
     const personnel = await this.personnelService.findOne(id);
-
+    
     for (const key of programsToUpdate) {
-      const recommitment = await this.recommitmentRepository.findOneOrFail({
+      const recommitment = await this.recommitmentRepository.findOne({
         where: {
-          personnelId: id,
-          recommitmentCycleId: recommitmentUpdate[key].year,
+          personnel: {id},
+          recommitmentCycle: {year: recommitmentUpdate[key].year},
           program: recommitmentUpdate[key].program,
         },
+        relations: ['personnel', 'recommitmentCycle'],
       });
 
       // If update request is sent by the member, log the member decision date, otherwise log the supervisor decision date.
       if (req.idir === personnel.email) {
-        recommitment.memberDecisionDate = new Date();
+        recommitmentUpdate[key].memberDecisionDate = new Date();
       } else if (req.idir === personnel.supervisorEmail) {
-        recommitment.supervisorDecisionDate = new Date();
+        recommitmentUpdate[key].supervisorDecisionDate = new Date();
+        recommitmentUpdate[key].supervisorIdir = req.idir;
       }
 
       // Update the recommitment status
@@ -75,14 +77,24 @@ export class RecommitmentService {
         },
         {
           ...recommitment,
-          memberReason: recommitmentUpdate[key]?.memberReason?.replace(',', ''),
-          supervisorReason: recommitmentUpdate[key]?.supervisorReason,
-          status: recommitmentUpdate[key].status,
+          supervisorIdir: recommitmentUpdate[key]?.supervisorIdir, 
+          supervisorDecisionDate: recommitmentUpdate[key].supervisorDecisionDate,
+          memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
+          memberReason: recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
+          supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
+          status: recommitmentUpdate[key]?.status,
         },
       );
-      this.triggerEmailNotification(id, recommitmentUpdate[key]);
+      // If recomitted to both, only send one email to supervisor
+      if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
+        this.logger.log(`${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`);
+      } else {
+        this.triggerEmailNotification(id, recommitmentUpdate[key]);
+      } 
     }
-
+    if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
+      this.triggerEmailNotification(id, {year: new Date().getFullYear(), status: RecommitmentStatus.MEMBER_COMMITTED, program: Program.ALL});
+    }
     return await this.personnelService.findOne(id);
   }
   filterRecommitmentList(
@@ -100,20 +112,20 @@ export class RecommitmentService {
 
     const recommitmentRO = recommitment.map((itm) => itm.toResponseObject());
 
-    const memberList = recommitmentRO.filter((itm) =>
-      uniqueIds.find((r) => itm.personnel.id === r),
+    const memberList = uniqueIds.map((itm) =>
+      recommitmentRO.find((r) => r.personnel.id === itm),
     );
 
-    const testList = recommitmentRO.filter((itm) =>
-      testEmail.find((r) => itm.personnel.email === r),
+    const testList = memberList.filter((itm) =>
+      testEmail.find((r) => itm.personnel.email === r)
     );
 
-    const supervisorList = recommitmentRO.filter((itm) =>
-      uniqueSupervisors.find((r) => itm.personnel.supervisorEmail === r),
+    const supervisorList = uniqueSupervisors.map((itm) =>
+      recommitmentRO.find((r) => r.personnel.supervisorEmail === itm),
     );
 
-    const testSupervisorList = recommitmentRO.filter((itm) =>
-      testEmail.find((r) => itm.personnel.supervisorEmail === r),
+    const testSupervisorList = supervisorList.filter((itm) =>
+      testEmail.find((r) => itm.personnel.supervisorEmail === r)
     );
 
     return {

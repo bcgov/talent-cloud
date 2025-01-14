@@ -23,6 +23,10 @@ const SupervisorDashboard = () => {
     handleShowWarningBanner,
   } = useSupervisorDashboard();
 
+  if (rows.length === 0) {
+    handleChangePage('page', '1');
+  }
+
   const { recommitmentCycle } = useRecommitmentCycle();
 
   if (loading) return <Loading />;

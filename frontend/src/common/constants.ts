@@ -143,7 +143,7 @@ export interface RecommitmentCycle {
 }
 
 export interface Recommitment {
-  memberId: string;
+  personnelId: string;
   recommitmentCycle: RecommitmentCycle;
   status: RecommitmentStatus;
   program: Program;
@@ -152,6 +152,8 @@ export interface Recommitment {
   supervisorIdir?: string;
   supervisorDecisionDate?: Date;
   supervisorReason?: string | null;
+  personnel: Personnel;
+  year: number;
 }
 
 export interface Personnel {

@@ -728,19 +728,25 @@ export class PersonnelService {
     rows: number,
     page: number,
   ): Promise<{ personnel: PersonnelEntity[]; count: number }> {
+    
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.leftJoinAndSelect('personnel.emcr', 'emcr');
-    qb.leftJoinAndSelect('personnel.bcws', 'bcws');
+    
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
-
     qb.where('personnel.supervisorEmail = :email', { email: req.idir });
-    qb.limit(rows);
-    qb.offset((page - 1) * rows);
-
-    const personnel = await qb.getMany();
+    qb.andWhere('recommitment.status is not null');
+    qb.orderBy('personnel.lastName', 'ASC');  
+    qb.addOrderBy('personnel.firstName', 'ASC');
+    
+    
     const count = await qb.getCount();
-    this.logger.log(personnel);
+    const personnel = await qb.take(rows)
+    .skip((page - 1) * rows).getMany();
+    
+    this.logger.log(`FOUND: ${count} for supervisor ${req.idir}`);
+    this.logger.log(`Returning: ${personnel.length} for supervisor ${req.idir}`);
+
+        
     return { personnel, count };
   }
 

@@ -1,5 +1,5 @@
-import type { Personnel } from '@/common';
-import { ButtonTypes, Program } from '@/common';
+import type { Personnel, Program } from '@/common';
+import { ButtonTypes } from '@/common';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { Button, DialogUI, Form } from '@/components/ui';
 import { useState } from 'react';
@@ -108,19 +108,7 @@ export const ApprovalCell = ({
     }
   };
 
-  const disabled =
-    (program === Program.BCWS &&
-      personnel.bcws &&
-      personnel.recommitment?.find((itm) => itm.program === Program.BCWS)?.status !==
-        RecommitmentStatus.MEMBER_COMMITTED &&
-      personnel.recommitment?.find((itm) => itm.program === Program.BCWS)?.status !==
-        RecommitmentStatus.SUPERVISOR_DENIED) ||
-    (program === Program.EMCR &&
-      personnel.emcr &&
-      personnel.recommitment?.find((itm) => itm.program === Program.EMCR)?.status !==
-        RecommitmentStatus.MEMBER_COMMITTED &&
-      personnel.recommitment?.find((itm) => itm.program === Program.EMCR)?.status !==
-        RecommitmentStatus.SUPERVISOR_DENIED);
+  const disabled = recommitmentStatus !== RecommitmentStatus.MEMBER_COMMITTED;
 
   const revertDecision = async () => {
     try {

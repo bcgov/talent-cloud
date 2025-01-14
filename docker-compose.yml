@@ -94,6 +94,7 @@ services:
       TEST_EMAIL: ${TEST_EMAIL}
       CHOKIDAR_USEPOLLING: true
       ALLOW_EMPTY_PASSWORD: "yes"
+      ENV: ${ENV}
     networks:
       - tc
   keycloak:

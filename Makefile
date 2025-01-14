@@ -296,7 +296,7 @@ run-nibble-fe:
 
 
 start-recommitment:
-	@echo "Trigger recommitment job"
+	@echo "Trigger recommitment job ${ENV}"
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/start_recommitment.ts")'
 
 end-recommitment:
@@ -308,7 +308,7 @@ send-notification:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts")'
 
 start-recommitment-oc:
-	@echo "Trigger recommitment job"
+	@echo "Trigger recommitment job ${ENV}"
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
 
 end-recommitment-oc:
