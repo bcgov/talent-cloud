@@ -142,9 +142,6 @@ export class PersonnelService {
     const person = await this.findOneByEmail(req.idir);
     const bcws = person.bcws;
     const emcr = person.emcr;
-    this.logger.log('start');
-    this.logger.log(person.bcws);
-    this.logger.log(person.emcr);
 
     if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
       const allTools = await this.toolsRepository.find();
@@ -226,10 +223,6 @@ export class PersonnelService {
       });
     }
 
-    this.logger.log(person);
-    this.logger.log('????');
-    this.logger.log(emcr);
-    this.logger.log('!!!');
     await this.personnelRepository.save(person);
 
     return this.getPersonnel(req);
