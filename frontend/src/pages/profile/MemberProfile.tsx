@@ -37,13 +37,16 @@ const MemberProfile = () => {
   const profileData = memberData(personnel);
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const handleTabChange = (index: string) => {
-    if (![TabsEnum.AVAILABILITY, TabsEnum.PROFILE, TabsEnum.TRAINING].includes(index as TabsEnum)) {
+    if (
+      ![TabsEnum.AVAILABILITY, TabsEnum.PROFILE, TabsEnum.TRAINING].includes(
+        index as TabsEnum,
+      )
+    ) {
       setActiveTab(TabsEnum.AVAILABILITY);
     } else {
       setActiveTab(index);
     }
   };
-
 
   if (loading) {
     return <Loading />;
@@ -122,7 +125,7 @@ const MemberProfile = () => {
           open={openRecommitmentForm}
           onClose={updatePersonnel}
           handleOpen={handleOpenRecommitmentForm}
-          title={`Confirm Recommitment Status for ${program === Program.ALL ? 'BCWS and EMCR' : program}`}
+          title={`Confirm Recommitment Status for ${program === Program.ALL ? 'BCWS and EMCR' : program.toUpperCase()}`}
           style={'lg:w-2/3 xl:w-1/2'}
         >
           <RecommitmentFormBase
