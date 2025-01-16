@@ -1,10 +1,10 @@
-import { Fragment, useState } from 'react';
+import { Fragment, ReactElement, useState } from 'react';
 import DetailsSection from '../profile/details/DetailsSection';
 import { ProfileSectionHeader } from '../profile/common';
-import { DialogUI } from '@/components/ui';
+import { Button, DialogUI } from '@/components/ui';
 import { MemberProfileEditForm } from '../profile/forms';
 import type { Personnel } from '@/common';
-import { Program } from '@/common';
+import { ButtonTypes, Program } from '@/common';
 import type { FormikValues } from 'formik';
 
 export const MemberProfileDetails = ({
@@ -16,7 +16,11 @@ export const MemberProfileDetails = ({
   profileData: any;
   updatePersonnel: (personnel: FormikValues) => Promise<void>;
 }) => {
-  const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
+  const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState<boolean>(false);
+  const [tooltip, setTooltip] = useState<{
+    title: string;
+    content: ReactElement;
+  }>();
   const [sectionToEdit, setSectionToEdit] = useState<string>('');
 
   const openEditSection = (sectionKey: string) => {
@@ -74,7 +78,11 @@ export const MemberProfileDetails = ({
               callToActionType="button"
               onCallToActionClick={() => openEditSection(itm.key)}
             >
-              <DetailsSection columns={itm.columns} />
+              <DetailsSection
+                columns={itm.columns}
+                tooltipClicked={setTooltip}
+                tooltipClosed={() => setTooltip(undefined)}
+              />
             </ProfileSectionHeader>
           </Fragment>
         ))}
@@ -94,6 +102,25 @@ export const MemberProfileDetails = ({
           sectionKey={sectionToEdit}
           program={Program.ALL}
         />
+      </DialogUI>
+      <DialogUI
+        open={!!tooltip}
+        onClose={() => setTooltip(undefined)}
+        handleOpen={() => setTooltip(undefined)}
+        title={tooltip?.title || ''}
+        style={'lg:w-1/3'}
+      >
+        <>
+          {tooltip?.content || <></>}
+          <div className="flex flex-row py-4 justify-end px-8 border-t-2 border-gray-300">
+            <Button
+              variant={ButtonTypes.PRIMARY}
+              text="Close"
+              type="button"
+              onClick={() => setTooltip(undefined)}
+            />
+          </div>
+        </>
       </DialogUI>
     </>
   );

@@ -53,7 +53,7 @@ export const emcrData = (personnel?: Personnel) => {
         title: 'Employee ID',
         content: personnel?.employeeId,
       },
-      { title: 'Paylist', content: personnel?.paylistId },
+      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
       {
         title: 'Emergency Contact First Name',
         content: personnel?.emergencyContactFirstName ?? 'Not Listed',
@@ -232,7 +232,7 @@ export const bcwsData = (personnel?: Personnel) => {
         title: 'Employee ID',
         content: personnel?.employeeId,
       },
-      { title: 'Paylist', content: personnel?.paylistId },
+      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
     ],
     contact: [
       {
@@ -286,7 +286,7 @@ export const bcwsData = (personnel?: Personnel) => {
         content: `${personnel?.division ?? 'Not Listed'}`,
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
-      { title: 'Paylist', content: personnel?.paylistId },
+      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
       {
         title: 'Liaison First Name',
         content: personnel?.liaisonFirstName ?? 'Not Listed',
@@ -364,7 +364,7 @@ export const memberData = (personnel?: Personnel) => {
         title: 'Employee ID',
         content: personnel?.employeeId,
       },
-      { title: 'Paylist', content: personnel?.paylistId },
+      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
     ],
     contact: [
       {
@@ -394,7 +394,7 @@ export const memberData = (personnel?: Personnel) => {
         content: personnel?.supervisorEmail ?? '--',
       },
       {
-        title: 'Supervisor Phone',
+        title: 'Supervisor Phone Number',
         content: formatPhone(personnel?.supervisorPhone) ?? '--',
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
@@ -404,6 +404,15 @@ export const memberData = (personnel?: Personnel) => {
           personnel?.liaisonFirstName && personnel?.liaisonLastName
             ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
             : '--',
+        tooltipTitle: 'How can I find my liaison?',
+        tooltipContent:
+          <div className="py-2">
+            <div className="flex flex-col gap-y-4 px-8 py-4">
+              <p className="text-sm text-gray-600 leading-relaxed">If you are unsure who your liaison is, please reach out to your supervisor or manager.</p>
+              <p className="text-sm text-gray-600 leading-relaxed">For more information on liaisons, please reach out to your Fire Centre, or refer to the <a href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/core_team_guidelines.pdf" target="_blank">CORE Team Guidelines</a>. Note that this should not be confused with the Liaison section in a PECC/PREOC.</p>
+              <p className="text-sm text-gray-600 leading-relaxed">You do NOT need to provide liaison information if you are only a member of EMCR.</p>
+            </div>
+          </div>,
       },
       { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '--' },
       {

@@ -6,6 +6,10 @@ import type { ReactElement } from 'react';
 export type ProfileDetail = {
   title?: string;
   content?: string | ReactElement;
+  tooltipTitle?: string;
+  tooltipContent?: ReactElement;
+  tooltipClicked?: (tooltip: { title: string; content: ReactElement }) => void;
+  tooltipClosed?: () => void;
 };
 export type ProfileData = {
   intakeRequirements?: ProfileDetail[];
