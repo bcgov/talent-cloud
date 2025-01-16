@@ -1,4 +1,22 @@
 import { SupervisorReason } from '@/common/enums/supervisor-decision.enum';
+import * as Yup from 'yup';
+
+export const supervisorDeclinedValidation = Yup.object().shape({
+  memberName: Yup.string().required('Please provide the member name'),
+  memberID: Yup.string().required('Please provide the member ID'),
+  year: Yup.string().required('Please provide the recommitment year'),
+  program: Yup.string().required('Please provide the program'),
+  reason: Yup.string().required('Please select a reason for declining this member'),
+  comments: Yup.string().when('reason', {
+    is: (val: SupervisorReason) => val === SupervisorReason.OTHER.toString(),
+    then: () =>
+      Yup.string()
+        .required('Please provide additional comments')
+        .max(100, 'Comments must be less than 500 characters')
+        .min(10, 'Comments must be at least 10 characters'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+});
 
 export const declineFormFields = {
   name: {
