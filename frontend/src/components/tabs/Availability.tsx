@@ -193,6 +193,7 @@ export const MemberAvailabilityTab = ({
                   sectionChoices: {
                     firstChoiceSection: personnel.bcws?.firstChoiceSection,
                     secondChoiceSection: personnel.bcws?.secondChoiceSection,
+                    thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
                   },
                 }
               : undefined
@@ -202,7 +203,11 @@ export const MemberAvailabilityTab = ({
               ? {
                   allFunctions: functions,
                   originalExperiences: personnel.emcr.experiences || [],
-                  sectionChoices: {},
+                  sectionChoices: {
+                    firstChoiceSection: personnel.emcr?.firstChoiceFunction,
+                    secondChoiceSection: personnel.emcr?.secondChoiceFunction,
+                    thirdChoiceSection: personnel.emcr?.thirdChoiceFunction,
+                  },
                 }
               : undefined
           }

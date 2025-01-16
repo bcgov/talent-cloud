@@ -193,6 +193,7 @@ export interface Personnel {
   lastDeployed?: string;
   firstChoiceSection?: Section;
   secondChoiceSection?: Section;
+  thirdChoiceSection?: Section;
   division?: string;
   orientation?: boolean;
   willingnessStatement?: boolean;
@@ -210,6 +211,9 @@ export interface Personnel {
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
   emergencyContactRelationship?: string;
+  firstChoiceFunction?: string;
+  secondChoiceFunction?: string;
+  thirdChoiceFunction?: string;
   tools?: PersonnelTool[];
   languages?: Languages[];
   roles?: BcwsPersonnelRoleInterface[];

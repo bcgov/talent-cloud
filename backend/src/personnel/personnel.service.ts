@@ -90,7 +90,10 @@ export class PersonnelService {
    * @returns
    */
   async findOneByEmail(email: string): Promise<PersonnelEntity> {
-    return this.personnelRepository.findOne({ where: { email } });
+    return this.personnelRepository.findOne({
+      where: { email },
+      relations: ['emcr', 'bcws'],
+    });
   }
 
   /**

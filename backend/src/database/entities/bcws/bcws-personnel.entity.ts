@@ -30,7 +30,6 @@ export class BcwsPersonnelEntity {
   @Column({ name: 'status', type: 'enum', enum: Status, enumName: 'status' })
   status: Status;
 
-  
   @Column({ name: 'date_applied', type: 'timestamp', nullable: true })
   dateApplied: Date;
 
@@ -42,7 +41,6 @@ export class BcwsPersonnelEntity {
 
   @Column({ name: 'purchase_card_holder', type: 'boolean', default: false })
   purchaseCardHolder: boolean;
-
 
   @Column({
     name: 'liason_first_name',
@@ -116,6 +114,15 @@ export class BcwsPersonnelEntity {
   })
   secondChoiceSection?: Section;
 
+  @Column({
+    name: 'third_choice_section',
+    type: 'enum',
+    enum: Section,
+    enumName: 'section',
+    nullable: true,
+  })
+  thirdChoiceSection?: Section;
+
   @OneToMany(() => BcwsSectionsAndRolesEntity, (s) => s.personnel, {
     cascade: true,
   })
@@ -132,7 +139,7 @@ export class BcwsPersonnelEntity {
 
     const data = {
       ...personnelData,
-      
+
       dateApplied: this.dateApplied,
       dateApproved: this.dateApproved,
       coordinatorNotes: this.coordinatorNotes,
@@ -152,10 +159,16 @@ export class BcwsPersonnelEntity {
       orientation: this.orientation,
       firstChoiceSection: this.firstChoiceSection,
       secondChoiceSection: this.secondChoiceSection,
+      thirdChoiceSection: this.thirdChoiceSection,
       travelPreference: this.travelPreference,
-      roles: this.roles?.sort((a, b) =>
-        Object.values(Section).indexOf(b.role.section) - Object.values(Section).indexOf(a.role.section))
-        .map((role) => role.toResponseObject()) ?? [],
+      roles:
+        this.roles
+          ?.sort(
+            (a, b) =>
+              Object.values(Section).indexOf(b.role.section) -
+              Object.values(Section).indexOf(a.role.section),
+          )
+          .map((role) => role.toResponseObject()) ?? [],
     };
 
     Object.keys(data).forEach((itm) => (response[itm] = data[itm]));

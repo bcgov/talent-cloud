@@ -3,7 +3,6 @@ import {
   IsArray,
   IsEmail,
   IsEnum,
-  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -146,4 +145,13 @@ export class CreatePersonnelBcwsDTO {
   })
   @IsOptional()
   secondChoiceSection?: Section;
+
+  @ApiProperty({
+    description: 'Third Choice Section',
+    required: false,
+    enum: Section,
+    example: Section.OPERATIONS,
+  })
+  @IsOptional()
+  thirdChoiceSection?: Section;
 }
