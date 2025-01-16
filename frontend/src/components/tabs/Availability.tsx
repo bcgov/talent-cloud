@@ -72,9 +72,6 @@ export const MemberAvailabilityTab = ({
     <>
       <ProfileSectionHeader
         title="My Schedule"
-        callToAction="Show Upcoming Deployments"
-        callToActionType="text"
-        onCallToActionClick={() => {}}
         description={<ScheduleDescription />}
       >
         <MemberScheduler personnelId={personnel.id} />
