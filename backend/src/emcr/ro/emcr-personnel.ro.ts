@@ -10,7 +10,7 @@ export class EmcrRO {
   secondChoiceFunction?: string;
 
   @ApiProperty()
-  thirdChocieFunction?: string;
+  thirdChoiceSection?: string;
 
   @ApiProperty({
     description: 'Notes about Personnel - Only vieweable by coordinators',
