@@ -52,11 +52,11 @@ export const MemberSchedulerControl = ({
           className="bg-calBlue p-2"
           onClick={() => {
             const fromDate = dayjs(`${fromYear}/${fromMonth}/01`).subtract(
-              numMonths,
+              1,
               'months',
             );
             const toDate = dayjs(`${toYear}/${toMonth}/01`).subtract(
-              numMonths,
+              1,
               'months',
             );
             setFromMonth(fromDate.month() + 1);
@@ -74,10 +74,10 @@ export const MemberSchedulerControl = ({
           className="bg-calBlue p-2"
           onClick={() => {
             const fromDate = dayjs(`${fromYear}/${fromMonth}/01`).add(
-              numMonths,
+              1,
               'months',
             );
-            const toDate = dayjs(`${toYear}/${toMonth}/01`).add(numMonths, 'months');
+            const toDate = dayjs(`${toYear}/${toMonth}/01`).add(1, 'months');
             setFromMonth(fromDate.month() + 1);
             setFromYear(fromDate.year());
             setToMonth(toDate.month() + 1);
@@ -86,7 +86,9 @@ export const MemberSchedulerControl = ({
         >
           <ChevronRightIcon className="h-4 w-4" />
         </Button>
-        {dayjs(`${fromYear}/${fromMonth}/1`).format('MMMM, YYYY')}
+      </div>
+      <div className="pl-2">
+        <p>{dayjs(`${fromYear}/${fromMonth}/1`).format('MMMM, YYYY')}</p>
       </div>
       <div className="grow" />
       <div className="w-32">
