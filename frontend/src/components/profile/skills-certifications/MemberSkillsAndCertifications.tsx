@@ -87,6 +87,7 @@ export const MemberSkillsAndCertifications = ({
                   key: 'proficiency',
                 },
               ]}
+              displayEmpty={true}
             />
           </TabPanel>
           <TabPanel value="tools" className="px-0">
@@ -108,6 +109,7 @@ export const MemberSkillsAndCertifications = ({
                   key: 'proficiency',
                 },
               ]}
+              displayEmpty={true}
             />
           </TabPanel>
           <TabPanel value="certifications" className="px-0">
@@ -129,6 +131,7 @@ export const MemberSkillsAndCertifications = ({
                   key: 'expiry',
                 },
               ]}
+              displayEmpty={true}
             />
           </TabPanel>
         </TabsBody>

@@ -11,6 +11,7 @@ export const MemberItemList = ({
   preferences,
   columns,
   data,
+  displayEmpty = false,
 }: {
   preferences?: {
     first?: string;
@@ -22,6 +23,7 @@ export const MemberItemList = ({
     id: string | number;
     [key: string]: string | number;
   }[];
+  displayEmpty?: boolean;
 }) => {
   const firstChoiceSection = preferences?.first;
   const secondChoiceSection = preferences?.second;
@@ -57,6 +59,17 @@ export const MemberItemList = ({
     </div>
   );
 
+  const NoSkills = () => (
+    <div className="flex flex-col py-8 gap-2">
+      <div className="text-center">
+        <h6 className="text-sm font-bold text-primaryBlue">No Skills Shown</h6>
+      </div>
+      <div className="text-center">
+        <p className="text-sm">You have not indicated any skills here.</p>
+      </div>
+    </div>
+  );  
+
   return (
     <>
       <section>
@@ -69,6 +82,7 @@ export const MemberItemList = ({
           !data.map((d) => d.section).includes(secondChoiceSection) && (
             <EmptyChoiceSection section={secondChoiceSection} />
           )}
+        {displayEmpty === true && data.length === 0 && <NoSkills />}
         {data.map((row, i) => {
           // sort by section name
           const notFirstRowOfSection =
