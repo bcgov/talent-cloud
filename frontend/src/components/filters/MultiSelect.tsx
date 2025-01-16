@@ -2,7 +2,7 @@ import { classes } from './classes';
 import { Checkbox } from '../ui/Checkbox';
 import { Menu, MenuButton, MenuHandler, MenuList } from '../ui';
 import type { FieldInterface, Option } from '../table';
-import { Filters, FireCentreName, Program, RegionName } from '@/common';
+import { Filters, FireCentreName, Program } from '@/common';
 import { Chip as MuiChip, Typography, MenuItem } from '@material-tailwind/react';
 import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
 
