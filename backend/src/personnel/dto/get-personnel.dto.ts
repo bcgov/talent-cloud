@@ -48,17 +48,6 @@ export class GetPersonnelDTO extends QueryDTO {
   })
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value }) => {
-    if (typeof value === 'boolean') {
-      return value;
-    }
-    if (value?.toString()?.toLowerCase() === 'false') {
-      return false;
-    }
-    if (value?.toString()?.toLowerCase() === 'true') {
-      return true;
-    }
-    return undefined;
-  })
+  @Transform(({ value }) => Boolean(value))
   includeTravel: boolean;
 }

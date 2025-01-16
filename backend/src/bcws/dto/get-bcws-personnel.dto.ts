@@ -1,8 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
-
-import { BcwsRole, FireCentre, ExperienceLevel } from '../../common/enums/bcws';
+import { IsEnum, IsOptional } from 'class-validator';
+import {
+  ExperienceLevel,
+  FireCentre,
+  BcwsRole,
+} from '../../common/enums/bcws';
 import { GetPersonnelDTO } from '../../personnel/dto/get-personnel.dto';
 
 export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
@@ -11,14 +14,13 @@ export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
     example: `${FireCentre.CARIBOO},${FireCentre.COASTAL}`,
   })
   @IsOptional()
-  @IsArray()
   @IsEnum(FireCentre, { each: true })
   @Transform(({ value }) =>
     Array.isArray(value)
       ? value
       : value
           .trim()
-          .split(', ')
+          .split(',')
           .map((type) => FireCentre[type]),
   )
   fireCentre: FireCentre; // Home Fire Centre
@@ -28,15 +30,8 @@ export class GetBcwsPersonnelDTO extends GetPersonnelDTO {
     example: `Abbotsford, Victoria`,
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
   @Transform(({ value }) =>
-    Array.isArray(value)
-      ? value
-      : value
-          .trim()
-          .split(', ')
-          .map((type) => type),
+    Array.isArray(value) ? value : value.split(','), 
   )
   location: string;
 

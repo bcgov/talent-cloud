@@ -2,7 +2,7 @@ import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
 import { ErrorMessage, useField } from 'formik';
 import { formatPhone } from './helpers';
-import type { FieldType } from '@/pages/profile';
+import type { FieldType } from '@/components/profile/forms/types';
 
 export const TextInput = ({ ...props }: FieldInputProps<string> & FieldType) => {
   const { name, label, required, disabled, type } = props;
@@ -32,6 +32,7 @@ export const TextInput = ({ ...props }: FieldInputProps<string> & FieldType) => 
         disabled={disabled}
         className={getClass()}
         type={type}
+        id={name}
       />
       <ErrorMessage name={name}>
         {(msg) => <div className="font-normal text-errorRed">{msg}</div>}

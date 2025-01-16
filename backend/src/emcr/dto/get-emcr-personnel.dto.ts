@@ -1,7 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
-
+import {  IsEnum, IsOptional } from 'class-validator';
 import { Experience, FunctionName, Region } from '../../common/enums/emcr';
 import { GetPersonnelDTO } from '../../personnel/dto/get-personnel.dto';
 
@@ -11,14 +10,13 @@ export class GetEmcrPersonnelDTO extends GetPersonnelDTO {
     example: `${Region.NEA},${Region.NWE}`,
   })
   @IsOptional()
-  @IsArray()
   @IsEnum(Region, { each: true })
   @Transform(({ value }) =>
     Array.isArray(value)
       ? value
       : value
           .trim()
-          .split(', ')
+          .split(',')
           .map((type) => Region[type]),
   )
   region: Region;
@@ -28,16 +26,7 @@ export class GetEmcrPersonnelDTO extends GetPersonnelDTO {
     example: `Abbotsford, Victoria`,
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @Transform(({ value }) =>
-    Array.isArray(value)
-      ? value
-      : value
-          .trim()
-          .split(', ')
-          .map((type) => type),
-  )
+  @Transform(({ value }) => (Array.isArray(value) ? value : value.split(',')))
   location: string;
 
   @ApiPropertyOptional({

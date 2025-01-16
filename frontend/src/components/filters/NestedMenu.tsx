@@ -1,8 +1,8 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { classes } from './classes';
-import { Menu } from '../ui';
-import { MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
+import { MenuHandler, MenuList, MenuItem, Menu } from '@material-tailwind/react';
+import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
 
 export const NestedMenu = ({
   field,
@@ -13,22 +13,27 @@ export const NestedMenu = ({
   field: any;
   option: { label: string; value: string };
   nestedField: any;
-  handleChange: (name: string, value: string) => void;
+  handleChange: (value: { name: string; value: string }[]) => void;
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
     <Menu
+      {...propTypesMenuProps}
       key={option.value}
       placement="right-start"
       open={openMenu}
       handler={setOpenMenu}
       allowHover
       offset={15}
-      dismiss={{ itemPress: false }}
+      dismiss={{
+        outsidePress: true,
+        itemPress: false,
+        isRequired: { outsidePress: true, itemPress: true },
+      }}
     >
       <MenuHandler className="w-full" id={option}>
-        <MenuItem placeholder={option} className="w-full">
+        <MenuItem className="w-full">
           <div className="flex items-center justify-between w-full space-x-24">
             <span id={option.value} className={classes.menu.listItem}>
               {option.label}
@@ -42,17 +47,17 @@ export const NestedMenu = ({
           </div>
         </MenuItem>
       </MenuHandler>
-      <MenuList placeholder={option}>
+      <MenuList>
         {nestedField.options.map(
-          (nestedOption: { label: string; value: string }) => (
-            <MenuItem key={option.value} placeholder={undefined}>
+          (nestedOption: { label: string; value: string }, index: number) => (
+            <MenuItem key={option.value + index.toString()} placeholder={undefined}>
               <label className={classes.menu.listItem} htmlFor={option.label}>
                 <button
                   onClick={() =>
-                    [
+                    handleChange([
                       { name: field.name, value: option.value },
                       { name: nestedField.name, value: nestedOption.value },
-                    ].forEach((itm) => handleChange(itm.name, itm.value))
+                    ])
                   }
                 >
                   {nestedOption.label}

@@ -1,29 +1,30 @@
 import { NestedMenu } from './NestedMenu';
-import { MenuButton, Chip, Menu, MenuList, MenuHandler } from '../ui';
+import { MenuButton, Menu, MenuList, MenuHandler } from '../ui';
 import { ExperienceName, FunctionName, Program } from '@/common';
 import { classes } from './classes';
 import type { BcwsRole, Section } from '@/common/enums/sections.enum';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
-import { DashboardFilterNames } from '@/common';
+import { Chip as MuiChip, Typography } from '@material-tailwind/react';
+import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
 
 export const CascadingMenu = ({
   value,
-  onChange,
-  handleClose,
   label,
   field,
   nestedField,
   nestedValue,
   program,
+  setSearchParams,
+  searchParams,
 }: {
-  onChange: (name: string, value: string) => void;
-  handleClose: (name: string, nestedName: string) => any;
   label: string;
   field: any;
   nestedField: any;
   value?: string;
   nestedValue?: string | BcwsRole;
   program?: Program;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: any) => any;
 }) => {
   const displayValue = (value: string) => {
     if (value === FunctionName.EMERGENCY_SUPPORT_SERVICES) {
@@ -36,7 +37,7 @@ export const CascadingMenu = ({
   };
 
   const renderDisplay = (value: string) => {
-    if (field.name === DashboardFilterNames.SECTION) {
+    if (program === Program.BCWS) {
       return nestedValue
         ? `${SectionName[value as Section]}: ${BcwsRoleName[nestedValue as BcwsRole]}`
         : `${value}: All`;
@@ -47,17 +48,41 @@ export const CascadingMenu = ({
     }
   };
 
+  const handleChange = (value: { name: string; value: string }[]) => {
+    searchParams.set(value[0].name, value[0].value);
+    searchParams.set(value[1].name, value[1].value);
+    setSearchParams({ ...Object.fromEntries(searchParams) });
+  };
+
   return (
     <>
       <span className="label">{label}</span>
-      <Menu dismiss={{ itemPress: false, outsidePress: true }}>
+      <Menu
+        {...propTypesMenuProps}
+        dismiss={{
+          outsidePress: true,
+          itemPress: false,
+          isRequired: { outsidePress: true, itemPress: true },
+        }}
+      >
         <MenuHandler field={field} id={field.name}>
           {value ? (
-            <Chip
-              handleClose={() => handleClose(field.name, nestedField.name)}
-              name={field.name}
-              value={value}
-              label={renderDisplay(value)}
+            <MuiChip
+              value={
+                <Typography
+                  variant="small"
+                  className="font-bold text-info capitalize leading-none"
+                >
+                  {renderDisplay(value)}
+                </Typography>
+              }
+              variant="ghost"
+              className={classes.menu.chip}
+              onClose={() => {
+                searchParams.delete(field.name);
+                searchParams.delete(nestedField.name);
+                setSearchParams({ ...Object.fromEntries(searchParams) });
+              }}
             />
           ) : (
             <p className={classes.menu.placeholder}>
@@ -72,7 +97,7 @@ export const CascadingMenu = ({
               (option: { label: string; value: string }, index: number) => (
                 <NestedMenu
                   field={field}
-                  handleChange={onChange}
+                  handleChange={handleChange}
                   nestedField={{
                     ...nestedField,
                     options:
@@ -81,7 +106,7 @@ export const CascadingMenu = ({
                         : nestedField.options,
                   }}
                   option={option}
-                  key={option.value}
+                  key={option.value + index.toString()}
                 />
               ),
             )}
