@@ -29,15 +29,15 @@ export const MultiSelect = ({
         <MenuHandler field={field} id={field.name}>
           <MenuChips
             chips={
-              field.name === 'region'
+              field.name === 'fireCentre'
                 ? values.map((itm) => ({
-                    label: itm,
-                    value: itm,
-                  }))
-                : values.map((itm) => ({
                     value: itm,
                     label: FireCentreName[itm as FireCentre],
                   }))
+                : values?.map((itm) => ({
+                    label: itm,
+                    value: itm,
+                  })) || []
             }
             placeholder={field.placeholder ?? ''}
             handleClose={handleClose}
