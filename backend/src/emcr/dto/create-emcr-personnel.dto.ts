@@ -20,12 +20,14 @@ export class CreatePersonnelEmcrDTO {
   @IsOptional()
   approvedBySupervisor?: boolean;
 
+  @IsOptional()
   @ApiProperty({
     description: 'First Choice Section',
     required: false,
   })
   firstChoiceSection?: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'Second Choice Section',
     required: false,
@@ -33,6 +35,7 @@ export class CreatePersonnelEmcrDTO {
   @IsOptional()
   secondChoiceSection?: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'Third Choice Section',
     required: false,
