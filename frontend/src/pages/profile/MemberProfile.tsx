@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
 import { useRoleContext } from '@/providers';
-import { Program, Status } from '@/common';
+import { Program, Status, Tabs as TabsEnum } from '@/common';
 import { DialogUI, Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
@@ -37,8 +37,13 @@ const MemberProfile = () => {
   const profileData = memberData(personnel);
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const handleTabChange = (index: string) => {
-    setActiveTab(index);
+    if (![TabsEnum.AVAILABILITY, TabsEnum.PROFILE, TabsEnum.TRAINING].includes(index as TabsEnum)) {
+      setActiveTab(TabsEnum.AVAILABILITY);
+    } else {
+      setActiveTab(index);
+    }
   };
+
 
   if (loading) {
     return <Loading />;
@@ -46,7 +51,7 @@ const MemberProfile = () => {
 
   return (
     <div
-      className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
+      className={`min-h-screen w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
       <div
         className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}

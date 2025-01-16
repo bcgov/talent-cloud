@@ -15,7 +15,7 @@ import { EmcrTrainingEntity } from './emcr-training.entity';
 import { PersonnelEntity } from '../personnel/personnel.entity';
 import { Role } from '../../../auth/interface';
 import { ICS_TRAINING_NAME } from '../../../common/const';
-import { Status } from '../../../common/enums/status.enum';
+import { Status } from '../../../common/enums';
 import { TravelPreference } from '../../../common/enums/travel-preference.enum';
 import { CreatePersonnelEmcrDTO } from '../../../emcr/dto';
 import { EmcrRO } from '../../../emcr/ro';
@@ -38,6 +38,27 @@ export class EmcrPersonnelEntity {
 
   @Column({ name: 'approved_by_supervisor', type: 'boolean', default: false })
   approvedBySupervisor: boolean;
+
+  @Column({
+    name: 'first_choice_section',
+    type: 'varchar',
+    nullable: true,
+  })
+  firstChoiceSection?: string;
+
+  @Column({
+    name: 'second_choice_section',
+    type: 'varchar',
+    nullable: true,
+  })
+  secondChoiceSection?: string;
+
+  @Column({
+    name: 'third_choice_section',
+    type: 'varchar',
+    nullable: true,
+  })
+  thirdChoiceSection?: string;
 
   @Column({
     name: 'coordinator_notes',
@@ -126,6 +147,9 @@ export class EmcrPersonnelEntity {
       ...personnelData,
       dateApplied: this.dateApplied ?? '',
       dateApproved: this.dateApproved ?? '',
+      firstChoiceFunction: this.firstChoiceSection,
+      secondChoiceFunction: this.secondChoiceSection,
+      thirdChoiceFunction: this.thirdChoiceSection,
       coordinatorNotes: this.coordinatorNotes,
       logisticsNotes: this.logisticsNotes,
       approvedBySupervisor: this.approvedBySupervisor,

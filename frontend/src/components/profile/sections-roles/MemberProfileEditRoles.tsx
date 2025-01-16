@@ -34,12 +34,14 @@ interface RoleSelectProps {
 interface RoleChanges {
   firstChoiceSection?: Section;
   secondChoiceSection?: Section;
+  thirdChoiceSection?: Section;
   roles: BcwsRoleInterface[];
 }
 
 interface FunctionChanges {
   firstChoiceSection?: string;
   secondChoiceSection?: string;
+  thirdChoiceSection?: string;
   functions: FunctionType[];
 }
 
@@ -201,7 +203,7 @@ const MemberProfileEditRoles = ({
 }: {
   allRoles: BcwsRoleInterface[];
   originalRoles: BcwsPersonnelRoleInterface[];
-  sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section };
+  sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section; thirdChoiceSection?: Section };
   handleChange: (rolesToSave: RoleChanges) => void;
 }) => {
   const [currentRoles, setCurrentRoles] = useState<BcwsRoleInterface[]>(
@@ -217,20 +219,24 @@ const MemberProfileEditRoles = ({
   const [secondChoiceSection, setSecondChoiceSection] = useState(
     sectionChoices.secondChoiceSection,
   );
+  const [thirdChoiceSection, setThirdChoiceSection] = useState(
+    sectionChoices.thirdChoiceSection,
+  );
 
   useEffect(() => {
     handleChange({
       firstChoiceSection,
       secondChoiceSection,
+      thirdChoiceSection,
       roles: currentRoles,
     });
-  }, [currentRoles, firstChoiceSection, secondChoiceSection]);
+  }, [currentRoles, firstChoiceSection, secondChoiceSection, thirdChoiceSection]);
 
   return (
     <>
       <div className="px-12 pt-4">
         <ProfileSectionHeader title="Rank your Top 3 Sections">
-          <div className="flex flex-row gap-8">
+          <div className="grid grid-cols-2 gap-8">
             <div className="flex flex-col basis-1/2">
               <p className="font-bold text-sm pb-2">
                 1st Choice
@@ -241,6 +247,7 @@ const MemberProfileEditRoles = ({
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setFirstChoiceSection(e.target.value as Section)}
               >
+                <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
                   <option value={s} key={s} disabled={s === secondChoiceSection}>
                     {SectionName[s as keyof typeof SectionName]}
@@ -254,6 +261,21 @@ const MemberProfileEditRoles = ({
                 value={secondChoiceSection}
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setSecondChoiceSection(e.target.value as Section)}
+              >
+                <option value={''}>None</option>
+                {Object.keys(Section).map((s) => (
+                  <option value={s} key={s} disabled={s === firstChoiceSection}>
+                    {SectionName[s as keyof typeof SectionName]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col basis-1/2">
+              <p className="font-bold text-sm pb-2">3rd Choice</p>
+              <select
+                value={thirdChoiceSection}
+                className="rounded-md w-full font-normal basis-1/2"
+                onChange={(e) => setThirdChoiceSection(e.target.value as Section)}
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
@@ -333,6 +355,9 @@ const MemberProfileEditFunctions = ({
   const [secondChoiceSection, setSecondChoiceSection] = useState(
     sectionChoices.secondChoiceSection,
   );
+  const [thirdChoiceSection, setThirdChoiceSection] = useState(
+    sectionChoices.thirdChoiceSection,
+  );
   const [currentFunctions, setCurrentFunctions] = useState<FunctionType[]>(
     originalExperiences.map((e) => ({
       id: e.function.id,
@@ -345,16 +370,17 @@ const MemberProfileEditFunctions = ({
     handleChange({
       firstChoiceSection,
       secondChoiceSection,
+      thirdChoiceSection,
       functions: currentFunctions,
     });
-  }, [currentFunctions, firstChoiceSection, secondChoiceSection]);
+  }, [currentFunctions, firstChoiceSection, secondChoiceSection, thirdChoiceSection]);
 
   return (
     <>
       <div className="px-12 pt-4">
         <ProfileSectionHeader title="Rank your Top 3 Sections">
-          <div className="flex flex-row gap-8">
-            <div className="flex flex-col basis-1/2">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="flex flex-col">
               <p className="font-bold text-sm pb-2">
                 1st Choice
                 <span className="text-red-300">*</span>
@@ -364,18 +390,19 @@ const MemberProfileEditFunctions = ({
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setFirstChoiceSection(e.target.value)}
               >
+                <option value={''}>None</option>
                 {allFunctions.map((s) => (
                   <option
-                    value={s.id}
+                    value={s.name}
                     key={s.id}
-                    disabled={s.name === secondChoiceSection}
+                    disabled={[secondChoiceSection, thirdChoiceSection].includes(s.name)}
                   >
                     {s.name}
                   </option>
                 ))}
               </select>
             </div>
-            <div className="flex flex-col basis-1/2">
+            <div className="flex flex-col">
               <p className="font-bold text-sm pb-2">2nd Choice</p>
               <select
                 value={secondChoiceSection}
@@ -385,9 +412,28 @@ const MemberProfileEditFunctions = ({
                 <option value={''}>None</option>
                 {allFunctions.map((s) => (
                   <option
-                    value={s.id}
+                    value={s.name}
                     key={s.id}
-                    disabled={s.name === secondChoiceSection}
+                    disabled={[firstChoiceSection, thirdChoiceSection].includes(s.name)}
+                  >
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-bold text-sm pb-2">3rd Choice</p>
+              <select
+                value={thirdChoiceSection}
+                className="rounded-md w-full font-normal basis-1/2"
+                onChange={(e) => setThirdChoiceSection(e.target.value)}
+              >
+                <option value={''}>None</option>
+                {allFunctions.map((s) => (
+                  <option
+                    value={s.name}
+                    key={s.id}
+                    disabled={[firstChoiceSection, secondChoiceSection].includes(s.name)}
                   >
                     {s.name}
                   </option>
@@ -446,7 +492,7 @@ export const MemberProfileEditPreferences = ({
   bcws?: {
     allRoles: BcwsRoleInterface[];
     originalRoles: BcwsPersonnelRoleInterface[];
-    sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section };
+    sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section; thirdChoiceSection?: Section; };
   };
   emcr?: {
     allFunctions: FunctionType[];
@@ -463,11 +509,13 @@ export const MemberProfileEditPreferences = ({
   const [rolesToSave, setRolesToSave] = useState<RoleChanges>({
     firstChoiceSection: bcws?.sectionChoices?.firstChoiceSection,
     secondChoiceSection: bcws?.sectionChoices?.secondChoiceSection,
+    thirdChoiceSection: bcws?.sectionChoices?.thirdChoiceSection,
     roles: [],
   });
   const [functionsToSave, setFunctionsToSave] = useState<FunctionChanges>({
-    firstChoiceSection: undefined,
-    secondChoiceSection: undefined,
+    firstChoiceSection: emcr?.sectionChoices.firstChoiceSection,
+    secondChoiceSection: emcr?.sectionChoices.secondChoiceSection,
+    thirdChoiceSection: emcr?.sectionChoices.thirdChoiceSection,
     functions: [],
   });
   const onSave = async () => {
@@ -493,6 +541,7 @@ export const MemberProfileEditPreferences = ({
       personnelUpdate.bcws = {
         firstChoiceSection: rolesToSave.firstChoiceSection,
         secondChoiceSection: rolesToSave.secondChoiceSection,
+        thirdChoiceSection: rolesToSave.thirdChoiceSection,
         roles: updateRoles,
       };
     }
@@ -518,8 +567,9 @@ export const MemberProfileEditPreferences = ({
         ...functionsExcludingRemoved,
       ];
       personnelUpdate.emcr = {
-        // firstChoiceSection,
-        // secondChoiceSection,
+        firstChoiceSection: functionsToSave.firstChoiceSection,
+        secondChoiceSection: functionsToSave.secondChoiceSection,
+        thirdChoiceSection: functionsToSave.thirdChoiceSection,
         experiences: updateFunctions,
       };
     }

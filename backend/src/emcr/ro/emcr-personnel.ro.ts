@@ -3,6 +3,15 @@ import { Expose } from 'class-transformer';
 import { EmcrExperienceRO } from './experience.ro';
 
 export class EmcrRO {
+  @ApiProperty()
+  firstChoiceFunction?: string;
+
+  @ApiProperty()
+  secondChoiceFunction?: string;
+
+  @ApiProperty()
+  thirdChocieFunction?: string;
+
   @ApiProperty({
     description: 'Notes about Personnel - Only vieweable by coordinators',
     required: false,

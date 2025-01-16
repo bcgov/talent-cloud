@@ -115,6 +115,9 @@ export class BcwsRO {
   @ApiProperty()
   secondChoiceSection?: Section;
 
+  @ApiProperty()
+  thirdChocieSection?: Section;
+
   @ApiProperty({
     description: 'Notes about Personnel - Only vieweable by coordinators',
     required: false,
