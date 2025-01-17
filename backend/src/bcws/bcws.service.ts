@@ -28,7 +28,21 @@ export class BcwsService {
   ) {
     this.logger.setContext(PersonnelService.name);
   }
+  /**
+   * Find personnel by id
+   * @param id
+   * @returns
+   */
 
+  async updatePersonnelAfterRecommitment(id: string, status: Status) {
+    const qb =
+      this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
+
+    qb.update(BcwsPersonnelEntity)
+      .set({ status })
+      .where('personnel_id = :id', { id: id })
+      .execute();
+  }
   /**
    * update personnel/bcws personnel
    * @param id
@@ -105,9 +119,8 @@ export class BcwsService {
     qb.leftJoinAndSelect('bcws_personnel.roles', 'roles');
     qb.leftJoinAndSelect('roles.role', 'role');
     qb.leftJoinAndSelect('personnel.homeLocation', 'location');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment')
-    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle')
-    
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
 
     await this.personnelService.addQueryBuilderCommonFilters(
       qb,
@@ -178,11 +191,13 @@ export class BcwsService {
         query.page,
         query.status,
       );
-      personnel.forEach(person => {
-        if(person.personnel.recommitment){
-        person.personnel.recommitment = person?.personnel?.recommitment?.filter(itm => itm.program === Program.BCWS)
-        }
-      })
+    personnel.forEach((person) => {
+      if (person.personnel.recommitment) {
+        person.personnel.recommitment = person?.personnel?.recommitment?.filter(
+          (itm) => itm.program === Program.BCWS,
+        );
+      }
+    });
 
     return { personnel, count };
   }
@@ -222,7 +237,7 @@ export class BcwsService {
    * @returns {RolesDataRO} List of roles
    */
   async getRoles(): Promise<BcwsSectionsRO> {
-    const roles = await this.roleRepository.find({ order: { section: 'ASC' }});
+    const roles = await this.roleRepository.find({ order: { section: 'ASC' } });
 
     const sectionsAndRoles = roles.reduce((acc, role) => {
       const key = role.section;

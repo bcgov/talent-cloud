@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import axios, { AxiosBasicCredentials, AxiosInstance } from 'axios';
 import { format } from 'date-fns';
 import * as nunjucks from 'nunjucks';
-import { EmailSubjects, EmailTags, EmailTemplates, envs, TemplateType } from './constants';
+import {
+  EmailSubjects,
+  EmailTags,
+  EmailTemplates,
+  envs,
+  TemplateType,
+} from './constants';
 import { MailDto } from './mail.dto';
 import { Program } from '../auth/interface';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
-
 
 @Injectable()
 export class MailService {
@@ -88,18 +93,18 @@ export class MailService {
     endDate: Date,
     program?: Program,
   ) {
-
-    
-    
     return new MailDto({
-      subject: EmailSubjects[tag],
+      subject:
+        process.env.ENV === 'production' || process.env.ENV == 'test'
+          ? EmailSubjects[tag]
+          : 'TEST',
       body: nunjucks.render(EmailTemplates[tag], {
         program: '{{program}}',
         year: '{{year}}',
         date: '{{date}}',
         member: '{{member}}',
         reason: '{{reason}}',
-        
+
         emcr_contact: '{{emcr_contact}}',
         bcws_contact: '{{bcws_contact}}',
         supervisor: '{{supervisor}}',
@@ -119,7 +124,8 @@ export class MailService {
         tag: tag,
         delayTS: 0,
         context: {
-          program: program === Program.ALL ? 'EMCR/BCWS' : program?.toUpperCase(),
+          program:
+            program === Program.ALL ? 'EMCR/BCWS' : program?.toUpperCase(),
           year: `${record.year}`,
           date: format(endDate, 'MMMM do, yyyy'),
           member: `${record.personnel?.firstName} ${record.personnel?.lastName}`,
@@ -147,7 +153,7 @@ export class MailService {
   async sendMail(mail: MailDto) {
     const token = await this.getToken();
     this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    if(mail.contexts.length === 0) {
+    if (mail.contexts.length === 0) {
       this.logger.log('No emails to send');
       return { data: 'No emails to  send' };
     }
@@ -155,7 +161,7 @@ export class MailService {
       const { data } = await this.mailApi.post('/emailMerge', mail);
       return data;
     } catch (e) {
-      e.response.data?.errors?.map(itm => this.logger.log(itm))
+      e.response.data?.errors?.map((itm) => this.logger.log(itm));
       this.logger.error(e.message);
       this.logger.error(e.status);
       throw new Error(e);

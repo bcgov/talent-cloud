@@ -28,6 +28,9 @@ export const createPersonnelHandler = (
 
   const lastName = faker.person.lastName();
   const firstName = faker.person.firstName();
+  const supervisorFirstName = faker.person.firstName();
+  const supervisorLastName = faker.person.lastName();
+
   const personnelData: CreatePersonnelDTO = {
     homeLocation: faker.helpers.arrayElement(locations),
     workLocation: faker.helpers.arrayElement(locations),
@@ -35,19 +38,15 @@ export const createPersonnelHandler = (
     division: divisionAndMinistry.division,
     ministry: Ministry[divisionAndMinistry.ministry],
     lastName: lastName,
-    email: faker.internet.email({
-      firstName: firstName,
-      lastName: lastName,
-      provider: 'yopmail.com',
-    }),
+    email: `${firstName}.${lastName}@yopmail.com`,
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
     workPhone: faker.string.numeric('##########'),
     unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
     jobTitle: faker.company.buzzNoun(),
-    supervisorEmail: faker.internet.email(),
-    supervisorLastName: faker.person.lastName(),
-    supervisorFirstName: faker.person.firstName(),
+    supervisorEmail: `${supervisorFirstName}.${supervisorLastName}@yopmail.com`,
+    supervisorLastName: supervisorLastName,
+    supervisorFirstName: supervisorFirstName,
     supervisorPhone: faker.string.numeric('##########'),
     employeeId: faker.string.numeric('######'),
     paylistId: faker.string.numeric('########'),

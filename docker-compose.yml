@@ -129,6 +129,7 @@ services:
       HTTP_ENABLED: "true"
       METRICS_ENABLED: "true"
       TEST_EMAIL: ${TEST_EMAIL}
+      TEST_RUN: ${TEST_RUN}
     depends_on:
       - db
     ports:

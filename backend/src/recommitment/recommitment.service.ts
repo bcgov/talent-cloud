@@ -2,12 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Program, RequestWithRoles } from '../auth/interface';
+import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { RecommitmentEntity } from '../database/entities/recommitment/recommitment.entity';
+import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { TemplateType, EmailTags } from '../mail/constants';
 import { MailDto } from '../mail/mail.dto';
@@ -29,6 +31,10 @@ export class RecommitmentService {
     private readonly recommitmentCycleRepository: Repository<RecommitmentCycleEntity>,
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
+    @Inject(BcwsService)
+    private readonly bcwsService: BcwsService,
+    @Inject(EmcrService)
+    private readonly emcrService: EmcrService,
     @Inject(MailService) private readonly mailService: MailService,
     private readonly logger: AppLogger,
   ) {
@@ -158,16 +164,16 @@ export class RecommitmentService {
       recommitmentRO.find((r) => r.personnel.id === itm),
     );
 
-    const testList = memberList.filter((itm) =>
-      testEmail.find((r) => itm.personnel.email === r),
+    const testList = memberList.filter(
+      (itm) => testEmail?.find((r) => itm.personnel.email === r),
     );
 
     const supervisorList = uniqueSupervisors.map((itm) =>
       recommitmentRO.find((r) => r.personnel.supervisorEmail === itm),
     );
 
-    const testSupervisorList = supervisorList.filter((itm) =>
-      testEmail.find((r) => itm.personnel.supervisorEmail === r),
+    const testSupervisorList = supervisorList.filter(
+      (itm) => testEmail?.find((r) => itm.personnel.supervisorEmail === r),
     );
 
     return {
@@ -184,9 +190,7 @@ export class RecommitmentService {
     id: string,
     recommitmentUpdate: UpdatePersonnelRecommitmentDTO,
   ): Promise<void> {
-    if (1) {
-      return;
-    }
+    this.logger.log(recommitmentUpdate);
     const personnel = await this.recommitmentRepository.findOneOrFail({
       where: { personnelId: id },
       relations: ['personnel'],
@@ -199,8 +203,10 @@ export class RecommitmentService {
       recommitmentCycle.endDate,
       recommitmentUpdate.program,
     );
+    this.logger.log(emailTemplate);
     if (emailTemplate) {
-      await this.mailService.sendMail(emailTemplate);
+      const email = await this.mailService.sendMail(emailTemplate);
+      this.logger.log(email);
     }
   }
 
@@ -494,15 +500,29 @@ export class RecommitmentService {
     supervisorDenied: RecommitmentRO[],
   ): Promise<void> {
     for (const recommitment of [...memberPending]) {
-      await this.recommitmentRepository.update(recommitment.personnelId, {
-        status: RecommitmentStatus.MEMBER_NO_RESPONSE,
-      });
+      await this.recommitmentRepository.update(
+        {
+          personnelId: recommitment.personnelId,
+          recommitmentCycleId: recommitment.year,
+          program: recommitment.program,
+        },
+        {
+          status: RecommitmentStatus.MEMBER_NO_RESPONSE,
+        },
+      );
     }
 
     for (const recommitment of [...memberCommitted]) {
-      await this.recommitmentRepository.update(recommitment.personnelId, {
-        status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
-      });
+      await this.recommitmentRepository.update(
+        {
+          personnelId: recommitment.personnelId,
+          recommitmentCycleId: recommitment.year,
+          program: recommitment.program,
+        },
+        {
+          status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
+        },
+      );
     }
 
     const membersToInactive = [
@@ -515,15 +535,19 @@ export class RecommitmentService {
     for (const recommitment of [
       ...membersToInactive.filter((itm) => itm.program === Program.BCWS),
     ]) {
-      recommitment.personnel.bcws.status = Status.INACTIVE;
-      await this.personnelService.save(recommitment.personnel);
+      await this.bcwsService.updatePersonnelAfterRecommitment(
+        recommitment.personnel.id,
+        Status.INACTIVE,
+      );
     }
 
     for (const recommitment of [
       ...membersToInactive.filter((itm) => itm.program === Program.EMCR),
     ]) {
-      recommitment.personnel.emcr.status = Status.INACTIVE;
-      await this.personnelService.save(recommitment.personnel);
+      await this.emcrService.updatePersonnelAfterRecommitment(
+        recommitment.personnel.id,
+        Status.INACTIVE,
+      );
     }
   }
 

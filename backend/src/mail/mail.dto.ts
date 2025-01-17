@@ -104,7 +104,11 @@ export class MailDto {
     Object.assign(this, data);
 
     this.encoding = data?.encoding ?? 'utf-8';
-    this.from = data?.from ?? 'noreply-core@gov.bc.ca';
+    this.from =
+      process.env.TEST_RUN === 'true'
+        ? 'coretest@yopmail.com'
+        : 'noreply-core@gov.bc.ca';
+
     this.priority = data?.priority ?? 'normal';
     this.bodyType = data.bodyType ?? 'html';
     this.attachments = data.attachments
