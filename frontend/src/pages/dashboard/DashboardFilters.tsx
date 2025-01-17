@@ -1,10 +1,10 @@
 import {
   MultiSelectGroup,
   CascadingMenu,
-  MultiSelect,
   Search,
   DatePicker,
   Button,
+  GroupedMultiSelect,
 } from '@/components';
 import { SingleSelect } from '@/components/filters/SingleSelect';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
@@ -36,7 +36,7 @@ export const DashboardFilters = ({
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
-            <MultiSelect
+            <GroupedMultiSelect
               field={program === Program.BCWS ? fields.fireCentre : fields.region}
               program={program}
               label={program === Program.BCWS ? 'Fire Centre' : 'Region'}
