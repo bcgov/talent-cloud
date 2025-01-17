@@ -1,4 +1,4 @@
-import { ChevronLeftIcon } from '@heroicons/react/24/solid';
+import { ArrowTopRightOnSquareIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
 import type { MemberProfile } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import { useEffect, useState } from 'react';
@@ -507,8 +507,9 @@ export const RecommitmentFormBase = ({
             variant={ButtonTypes.PRIMARY}
             type="button"
             onClick={downloadParQ}
-            text="Download PDF"
+            text="Download Response"
             disabled={!isDeclarationComplete()}
+            textIcon={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
           />
         )}
         <Button
