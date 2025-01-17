@@ -11,23 +11,48 @@ import {
 } from '@headlessui/react';
 import { Chip } from '../ui';
 import type { AvailabilityType } from '@/common';
-import { AvailabilityTypeName } from '@/common';
+import { AvailabilityTypeName, Filters } from '@/common';
+import { format } from 'date-fns';
 
 export const SingleSelect = ({
-  onChange,
   label,
   field,
   handleClose,
   value,
+  searchParams,
+  setSearchParams,
 }: {
-  onChange: (name: string, value: string) => any;
   label: string;
   field: any;
   handleClose: () => void;
   value?: string;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: any) => any;
 }) => {
   const placeholder = 'Select availability type';
-
+  const onChange = (value: string) => {
+    const date = new Date();
+    searchParams.set(field.name, value);
+    if (!searchParams.get(Filters.AVAILABILITY_FROM_DATE)) {
+      searchParams.set(
+        Filters.AVAILABILITY_FROM_DATE,
+        format(
+          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          'yyyy-MM-dd',
+        ),
+      );
+    }
+    if (!searchParams.get(Filters.AVAILABILITY_TO_DATE)) {
+      searchParams.set(
+        Filters.AVAILABILITY_TO_DATE,
+        format(
+          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          'yyyy-MM-dd',
+        ),
+      );
+    }
+    setSearchParams({ ...Object.fromEntries(searchParams) });
+  };
   return (
     <>
       <span className="label">{label}</span>
@@ -88,7 +113,7 @@ export const SingleSelect = ({
                     <MenuItem key={itm.value}>
                       <button
                         aria-label="Single Select Menu Button"
-                        onClick={() => onChange(field.name, itm.value)}
+                        onClick={() => onChange(itm.value)}
                         className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                       >
                         {itm.label}

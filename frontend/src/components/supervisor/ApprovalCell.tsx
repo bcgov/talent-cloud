@@ -5,7 +5,7 @@ import { Button, DialogUI, Form } from '@/components/ui';
 import { useState } from 'react';
 import { useAxios } from '../../hooks/useAxios';
 import { SupervisorReason } from '@/common/enums/supervisor-decision.enum';
-import { declineFormFields } from './constants';
+import { declineFormFields, supervisorDeclinedValidation } from './constants';
 import { CheckIcon } from '../ui/Icons';
 
 export const ApprovalCell = ({
@@ -219,7 +219,7 @@ export const ApprovalCell = ({
               year: new Date().getFullYear(),
             }}
             onSubmit={handleSubmitDenial}
-            validationSchema={undefined}
+            validationSchema={supervisorDeclinedValidation}
             handleClose={handleShowDeclineModal}
             fields={{
               ...fields,

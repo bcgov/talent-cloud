@@ -24,8 +24,8 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
           <Tab key={value}>
             {({ selected }) => (
               <>
-                <button
-                  className={`font-normal px-2 py-2 my-.5 md:px-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'} ${selected ? 'text-dark-700' : 'text-dark-600'}`}
+                <div
+                  className={`cursor-pointer font-normal px-2 py-2 my-.5 md:px-6 ${index === 1 ? 'border-l border-r  border-gray-400' : 'border-0'} ${selected ? 'text-dark-700' : 'text-dark-600'}`}
                 >
                   {' '}
                   {label}{' '}
@@ -34,7 +34,7 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
                   >
                     {count}
                   </span>
-                </button>
+                </div>
                 {selected && (
                   <div className="border border-b w-full border-blue-900"></div>
                 )}

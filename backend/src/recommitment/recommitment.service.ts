@@ -61,11 +61,12 @@ export class RecommitmentService {
       });
 
       // If update request is sent by the member, log the member decision date, otherwise log the supervisor decision date.
-      if (req.idir === personnel.email) {
+      if ([RecommitmentStatus.MEMBER_COMMITTED, RecommitmentStatus.MEMBER_DENIED].includes(recommitmentUpdate[key].status)) {
         recommitmentUpdate[key].memberDecisionDate = new Date();
-      } else if (req.idir === personnel.supervisorEmail) {
+      } else if ([RecommitmentStatus.SUPERVISOR_APPROVED, RecommitmentStatus.SUPERVISOR_DENIED].includes(recommitmentUpdate[key].status)) {
         recommitmentUpdate[key].supervisorDecisionDate = new Date();
         recommitmentUpdate[key].supervisorIdir = req.idir;
+      
       }
 
       // Update the recommitment status

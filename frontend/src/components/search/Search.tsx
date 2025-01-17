@@ -1,26 +1,23 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
+import { Filters } from '@/common';
 
 export const Search = ({
-  searchValue,
-  setSearchValue,
+  searchParams,
+  setSearchParams,
   field,
-  handleChange,
-  handleClose,
 }: {
-  searchValue: string;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: any) => any;
   field: FieldInterface;
-  setSearchValue: (value: string) => void;
-  handleChange: (name: string, value: string) => void;
-  handleClose: (name: string) => void;
 }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
     if (e.target.value === '') {
-      handleClose(e.target.name);
+      searchParams.delete(Filters.NAME);
+      setSearchParams({ ...Object.fromEntries(searchParams) });
     } else {
-      setTimeout(() => handleChange(e.target.name, e.target.value), 1000);
+      setSearchParams({ ...Object.fromEntries(searchParams), name: e.target.value });
     }
   };
 
@@ -33,7 +30,7 @@ export const Search = ({
           <input
             id={field.name}
             autoComplete="name"
-            value={searchValue}
+            value={searchParams.get(Filters.NAME) ?? ''}
             type="text"
             className={classes.menu.container}
             name={field.name}

@@ -8,98 +8,69 @@ import {
 } from '@/components';
 import { SingleSelect } from '@/components/filters/SingleSelect';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
-import { ButtonTypes, Program } from '@/common';
-import { useFilters } from '@/hooks/useFilters';
-import type { DateRange } from 'react-day-picker';
-import { useState } from 'react';
+import { ButtonTypes, Filters, Program } from '@/common';
 import { Checkbox } from '@material-tailwind/react';
+import { format, parse } from 'date-fns';
 
-export const DashboardFilters = ({ program }: { program?: Program }) => {
-  const { filters } = useProgramFieldData(program);
-
-  const {
-    filterValues,
-    availabilityDates,
-    setAvailabilityDates,
-    onClear,
-    handleRemove,
-    handleSetDates,
-    handleChangeOne,
-    clearSearchParams,
-    handleChange,
-    searchValue,
-    setSearchValue,
-    disabled,
-  } = useFilters();
-
-  const [experienceCheckbox, setExperienceCheckbox] = useState<
-    'PREVIOUSLY_DEPLOYED' | 'INTERESTED' | null
-  >();
-  const [includeTravel, setIncludeTravel] = useState<boolean>(
-    filterValues.includeTravel === 'true',
-  );
+export const DashboardFilters = ({
+  searchParams,
+  setSearchParams,
+  program,
+}: {
+  searchParams: URLSearchParams;
+  setSearchParams: (params: any) => any;
+  program?: Program;
+}) => {
+  const { fields } = useProgramFieldData(program);
 
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1 lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
       <div className="col-span-1 lg:col-span-2">
         <Search
-          field={filters.name}
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          handleChange={handleChangeOne}
-          handleClose={clearSearchParams}
+          field={fields.name}
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
             <MultiSelect
-              field={program === Program.BCWS ? filters.fireCentre : filters.region}
-              values={
-                program === Program.BCWS ? filterValues.fireCentre : filterValues.region
-              }
+              field={program === Program.BCWS ? fields.fireCentre : fields.region}
+              program={program}
               label={program === Program.BCWS ? 'Fire Centre' : 'Region'}
-              handleChange={handleChange}
-              handleClose={handleRemove}
-              handleCloseMany={clearSearchParams}
               maxChips={1}
+              setSearchParams={setSearchParams}
+              searchParams={searchParams}
+              groupedField={fields.location}
             />
           </div>
           <div className="col-span-1 md:col-span-3">
             <MultiSelectGroup
-              onChange={handleChange}
-              handleClose={handleRemove}
-              handleCloseMany={clearSearchParams}
-              field={{
-                ...filters.location,
-                groupedOptions:
-                  filterValues[program === Program.BCWS ? 'fireCentre' : 'region']
-                    .length > 0
-                    ? filters.location.groupedOptions?.filter((itm: any) =>
-                        filterValues[
-                          program === Program.BCWS ? 'fireCentre' : 'region'
-                        ]?.includes(itm.value.toString()),
-                      )
-                    : filters.location.groupedOptions,
-              }}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              field={fields.location}
               label="Home Location"
-              values={filterValues.location}
-              groupValues={
-                filterValues[program === Program.BCWS ? 'fireCentre' : 'region']
+              program={program}
+              groupedField={
+                program === Program.BCWS ? fields.fireCentre : fields.region
               }
-              groupField={program === Program.BCWS ? filters.fireCentre : filters.region}
             />
             <Checkbox
               crossOrigin=""
               label="Show members willing to travel to the selected location(s)"
-              checked={includeTravel && !!filterValues.location?.length}
+              checked={searchParams.get(Filters.INCLUDE_TRAVEL) === 'true'}
               name="includeTravel"
-              disabled={!filterValues.location?.length}
+              disabled={
+                program === Program.BCWS
+                  ? searchParams.getAll(Filters.FIRE_CENTRE).length === 0
+                  : searchParams.getAll(Filters.REGION).length === 0
+              }
               iconProps={{ color: 'primaryBlue' }}
               onChange={(e) => {
-                setIncludeTravel(e.target.checked);
-                handleChangeOne(e.target.name, e.target.checked ? 'true' : 'false');
+                searchParams.set(e.target.name, e.target.checked.toString());
+                setSearchParams({ ...Object.fromEntries(searchParams) });
               }}
             />
           </div>
@@ -109,59 +80,52 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
       {/** lg - column 2 start */}
       <div className="col-span-1 lg:col-span-3">
         <CascadingMenu
-          field={program === Program.BCWS ? filters.section : filters.function}
-          nestedField={program === Program.BCWS ? filters.role : filters.experience}
+          field={program === Program.BCWS ? fields.section : fields.function}
+          nestedField={program === Program.BCWS ? fields.role : fields.experience}
           nestedValue={
-            program === Program.BCWS ? filterValues.role : filterValues.experience
+            searchParams.get(
+              program === Program.BCWS ? Filters.ROLE : Filters.EXPERIENCE,
+            ) ?? ''
+          }
+          value={
+            searchParams.get(program === Program.BCWS ? 'section' : 'function') ?? ''
           }
           label={
             program === Program.BCWS ? 'Section/Role' : 'Function & Experience Level'
           }
-          onChange={handleChangeOne}
-          handleClose={(name, nestedName) => {
-            clearSearchParams(name);
-            clearSearchParams(nestedName);
-          }}
-          value={program === Program.BCWS ? filterValues.section : filterValues.function}
           program={program}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
         />
         {program === Program.BCWS && (
           <div className="flex flex-row gap-8">
             <Checkbox
               crossOrigin=""
               label="Show experienced only"
-              checked={
-                experienceCheckbox === 'PREVIOUSLY_DEPLOYED' &&
-                !!filterValues.section
-              }
+              checked={searchParams.get('experience') === 'PREVIOUSLY_DEPLOYED'}
               name="experience"
-              disabled={!filterValues.role || !filterValues.section}
+              disabled={!searchParams.get('role') || !searchParams.get('section')}
               iconProps={{ color: 'primaryBlue' }}
               onChange={(e) => {
-                if (e.target.checked) {
-                  setExperienceCheckbox('PREVIOUSLY_DEPLOYED');
-                  handleChangeOne(e.target.name, 'PREVIOUSLY_DEPLOYED');
-                } else {
-                  setExperienceCheckbox(null);
-                  handleRemove(e.target.name, 'PREVIOUSLY_DEPLOYED');
-                }
+                searchParams.get('experience') === 'PREVIOUSLY_DEPLOYED'
+                  ? searchParams.delete('experience')
+                  : searchParams.set(e.target.name, 'PREVIOUSLY_DEPLOYED');
+
+                setSearchParams({ ...Object.fromEntries(searchParams) });
               }}
             />
             <Checkbox
               crossOrigin=""
               label="Show interested only"
-              checked={experienceCheckbox === 'INTERESTED' && !!filterValues.section}
+              checked={searchParams.get('experience') === 'INTERESTED'}
               name="experience"
-              disabled={!filterValues.role || !filterValues.section}
+              disabled={!searchParams.get('role') || !searchParams.get('section')}
               iconProps={{ color: 'primaryBlue' }}
               onChange={(e) => {
-                if (e.target.checked) {
-                  setExperienceCheckbox('INTERESTED');
-                  handleChangeOne(e.target.name, 'INTERESTED');
-                } else {
-                  setExperienceCheckbox(null);
-                  handleRemove(e.target.name, 'INTERESTED');
-                }
+                searchParams.get('experience') === 'INTERESTED'
+                  ? searchParams.delete('experience')
+                  : searchParams.set(e.target.name, 'INTERESTED');
+                setSearchParams({ ...Object.fromEntries(searchParams) });
               }}
             />
           </div>
@@ -171,38 +135,45 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3">
           <div className="col-span-1">
             <SingleSelect
-              field={filters.availabilityType}
+              field={fields.availabilityType}
               label="Availability"
-              value={filterValues.availabilityType}
-              onChange={handleChangeOne}
+              value={searchParams.get('availabilityType') ?? ''}
+              setSearchParams={setSearchParams}
+              searchParams={searchParams}
               handleClose={() => {
-                const range: DateRange | undefined = {
-                  from: undefined,
-                  to: undefined,
-                };
-                clearSearchParams('availabilityType');
-                clearSearchParams('availabilityFromDate');
-                clearSearchParams('availabilityToDate');
-                setAvailabilityDates(range);
+                searchParams.delete('availabilityType');
+                searchParams.delete('availabilityFromDate');
+                searchParams.delete('availabilityToDate');
+                setSearchParams({ ...Object.fromEntries(searchParams) });
               }}
             />
           </div>
           <div className="col-span-1 md:col-span-2">
             <DatePicker
-              field={filters.availabilityDates}
+              field={fields.availabilityDates}
               label="Availability Date Range"
-              value={availabilityDates}
-              onChange={handleSetDates}
-              disabled={!filterValues.availabilityType}
+              value={{
+                from: parse(
+                  searchParams.get('availabilityFromDate') ??
+                    format(new Date(), 'yyyy-MM-dd'),
+                  'yyyy-MM-dd',
+                  new Date(),
+                ),
+                to: parse(
+                  searchParams.get('availabilityToDate') ??
+                    format(new Date(), 'yyyy-MM-dd'),
+                  'yyyy-MM-dd',
+                  new Date(),
+                ),
+              }}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              disabled={!searchParams.get('availabilityType')}
               reset={() => {
-                const range: DateRange | undefined = {
-                  from: undefined,
-                  to: undefined,
-                };
-                clearSearchParams('availabilityFromDate');
-                clearSearchParams('availabilityToDate');
-                clearSearchParams('availabilityType');
-                setAvailabilityDates(range);
+                searchParams.delete('availabilityToDate');
+                searchParams.delete('availabilityFromDate');
+                searchParams.delete('availabilityType');
+                setSearchParams({ ...Object.fromEntries(searchParams) });
               }}
             />
           </div>
@@ -218,8 +189,13 @@ export const DashboardFilters = ({ program }: { program?: Program }) => {
         <Button
           variant={ButtonTypes.SECONDARY}
           text="Clear All"
-          onClick={onClear}
-          disabled={disabled}
+          onClick={() => {
+            setSearchParams({
+              page: '1',
+              rows: searchParams.get('rows') ?? '10',
+              status: searchParams.get('status') ?? 'ACTIVE',
+            });
+          }}
         />
       </div>
     </div>
