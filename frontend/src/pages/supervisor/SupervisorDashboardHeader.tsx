@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { FAQ } from '../constants';
-import { ChevronDownIcon } from '@/components/ui/Icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 
 export const SupervisorDashboardHeaderBanner = ({
   recommitmentYear,
@@ -29,7 +29,7 @@ export const SupervisorDashboardHeaderBanner = ({
       >
         <p className="w-full flex flex-row flex-nowrap no text-nowrap items-center justify-start space-x-2 font-bold text-blue-800 text-sm ">
           <span className="underline">{showFAQs ? 'Hide FAQs' : 'Show FAQs'}</span>
-          <ChevronDownIcon />
+          {showFAQs ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </p>
       </button>
       <Transition

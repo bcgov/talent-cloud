@@ -57,7 +57,7 @@ const SupervisorDashboard = () => {
             onClose={() => handleShowSuccessBanner(false)}
             title={'Supervisor Decision for Recommitment Successfully Submitted'}
             content={
-              'Thank you for your submission. Your employee and their coordinator will be notified. If approved, You’ll be informed if they are called for deployment to provide approval.'
+              "Thank you for your submission. Your employee and their coordinator will be notified. If approved, You'll be informed if they are called for deployment to provide approval."
             }
             type={BannerType.SUCCESS}
           />

@@ -12,7 +12,7 @@ export const supervisorDeclinedValidation = Yup.object().shape({
     then: () =>
       Yup.string()
         .required('Please provide additional comments')
-        .max(100, 'Comments must be less than 500 characters')
+        .max(100, 'Comments must be less than 100 characters')
         .min(10, 'Comments must be at least 10 characters'),
     otherwise: () => Yup.string().notRequired(),
   }),

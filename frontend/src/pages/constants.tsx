@@ -11,6 +11,7 @@ export const FAQ = [
           "At the start of each year, we'll request your initial approval for your employees' return to CORE. After that, we still need you to approve or decline each member deployment."
         }
         <strong>
+          {' '}
           {
             "Approving members' participation in the CORE program does NOT mean you have to approve all their deployments."
           }
@@ -41,10 +42,10 @@ export const FAQ = [
     content: (
       <p>
         {
-          "If you have declined your employee's recommitment, they will be marked as 'Inactive' for the upcoming season. This means they will not be called for deployments for the remaining of the year. Your employee and their regional CORE coordinator will be notified of your declined approval. You will be asked to provide a reason why you have declined a recommitment request. Note that"
+          "If you have declined your employee's recommitment, they will be marked as 'Inactive' for the upcoming season. This means they will not be called for deployments for the remaining of the year. Your employee and their regional CORE coordinator will be notified of your declined approval. You will be asked to provide a reason why you have declined a recommitment request. Note thats"
         }
-        <strong>only CORE coordinators</strong>
-        {"can see your reason for declining your employee's recommitment."}
+        <strong> only CORE coordinators </strong>
+        {"scan see your reason for declining your employee's recommitment."}
       </p>
     ),
   },
@@ -59,16 +60,28 @@ export const FAQ = [
     content: (
       <p>
         {'Selecting '}
-        <strong>{'YES'}</strong>
+        <strong>{'APPROVE'}</strong>
         {
           ' for an employees recommitment is a final action and cannot be undone. However, if you initially selected '
         }
-        <strong>{'NO'}</strong>
-        {', you can only change it '}
-        <strong>{'once'}</strong>
+        <strong>{'DECLINE'}</strong>
         {
-          ' within 5 days since your submission. After 5 days, please reach out to [CORE Team email address] if you wish to change your decision.'
-        }
+          ', you can change it before the recommitment deadline. After the deadline, please reach out to'
+        }{' '}
+        <a
+          style={{ color: '#1A5A96', textDecoration: 'underline' }}
+          href="mailto:EMCR.CORETeam@gov.bc.ca"
+        >
+          EMCR.CORETeam@gov.bc.ca
+        </a>{' '}
+        {'or'}{' '}
+        <a
+          style={{ color: '#1A5A96', textDecoration: 'underline' }}
+          href="mailto:BCWS.CORETeam@gov.bc.ca"
+        >
+          BCWS.CORETeam@gov.bc.ca
+        </a>{' '}
+        {'if you wish to change your decision.'}
       </p>
     ),
   },
