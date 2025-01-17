@@ -204,8 +204,8 @@ export const MultiSelectGroup = ({
           transition
           className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
         >
-          <div className="py-1">
-            <span className="label pl-4 pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
+          <div className="p-4">
+            <span className="label pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
             <div className="grid grid-cols-4 gap-y-4 gap-x-2">
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div
@@ -213,7 +213,7 @@ export const MultiSelectGroup = ({
                   className={`${group.label === FireCentreName.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
                 >
                   <div className="col-span-2">
-                    <MenuItem>
+                    <MenuItem disabled>
                       <span className={classes.menu.listLabel}>
                         <Checkbox
                           id={group.value}
@@ -242,7 +242,7 @@ export const MultiSelectGroup = ({
                   </div>
                   <div className="col-span-1">
                     {group.options.slice(0, 20).map((option: any) => (
-                      <MenuItem key={option}>
+                      <MenuItem key={option} as="div" className="py-1" disabled>
                         <label
                           className={classes.menu.listItem}
                           htmlFor={option.name}
