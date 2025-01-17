@@ -1,3 +1,4 @@
+import type { Program } from '@/common';
 import { ButtonTypes } from '@/common';
 import { Banner } from '../ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
@@ -13,6 +14,7 @@ export const RecommitmentBanner = ({
   buttonText,
   onClick,
   onClose,
+  program,
 }: {
   content: ReactElement;
   statusText: string;
@@ -22,6 +24,7 @@ export const RecommitmentBanner = ({
   buttonText?: string;
   onClick?: () => void;
   onClose?: () => void;
+  program?: Program;
 }) => {
   return (
     <Banner
@@ -30,12 +33,12 @@ export const RecommitmentBanner = ({
           <div className="flex flex-row justify-between items-start w-full">
             {content}
             <p className="flex flex-row flex-nowrap items-baseline">
-              <span className=" font-bold text-sm pl-16 pr-4">Status:</span>
+              <span className=" font-bold text-sm pl-40 pr-4">Status:</span>
 
               <span
                 className={`${statusBg} text-sm rounded-xl px-3 text-nowrap items-center justify-center flex py-1 text-${statusTextBg}`}
               >
-                {statusText}
+                {program?.toUpperCase()} {statusText}
               </span>
             </p>
           </div>
