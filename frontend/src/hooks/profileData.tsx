@@ -1,4 +1,4 @@
-import { Status } from '@/common';
+import { Program, Status } from '@/common';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { Tools } from '@/common/enums/tools.enum';
 import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
@@ -10,7 +10,8 @@ import { TravelPreferenceText } from '../common/enums/travel-preference.enum';
 import type { DriverLicense } from '../common/enums/driver-license.enum';
 import { DriverLicenseName } from '../common/enums/driver-license.enum';
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
-import { formatDate } from 'date-fns';
+import { format, formatDate } from 'date-fns';
+import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
 const formatDriversLicenses = (driverLicenses: string[]): string => {
   const licensesFormatted = driverLicenses.map(
@@ -332,6 +333,133 @@ export const bcwsData = (personnel?: Personnel) => {
     ],
   };
 };
+const renderRecommitmentStatus = (
+  recommitmentStatus: RecommitmentStatus,
+  isRecommitmentCycleOpen?: boolean,
+) => {
+  switch (recommitmentStatus) {
+    case RecommitmentStatus.SUPERVISOR_APPROVED:
+      return (
+        <span className="bg-infoBannerLight px-2 rounded-full ml-2">
+          Recommitted
+        </span>
+      );
+
+    case RecommitmentStatus.MEMBER_NO_RESPONSE:
+    case RecommitmentStatus.SUPERVISOR_NO_RESPONSE:
+      return (
+        <span className="bg-errorBannerLight px-2 rounded-full ml-2 text-error">
+          Missed Deadline
+        </span>
+      );
+    case RecommitmentStatus.MEMBER_DENIED:
+    case RecommitmentStatus.SUPERVISOR_DENIED:
+      return (
+        <span className="bg-errorBannerLight px-2 rounded-full ml-2 text-error">
+          Not Returning
+        </span>
+      );
+    case RecommitmentStatus.MEMBER_COMMITTED:
+      return (
+        <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+          Pending Approval
+        </span>
+      );
+
+    case RecommitmentStatus.PENDING:
+      if (!isRecommitmentCycleOpen) {
+        return (
+          <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+            Reactivated
+          </span>
+        );
+      } else {
+        return (
+          <span className="bg-infoBannerLight px-2 rounded-full ml-2">Pending</span>
+        );
+      }
+  }
+};
+const getMembershipDetails = (personnel: Personnel) => {
+  const bcwsStatus = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.BCWS,
+  )?.status;
+
+  const emcrStatus = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.EMCR,
+  )?.status;
+
+  const supervisorDecisionDateBcws = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.BCWS,
+  )?.supervisorDecisionDate;
+
+  const supervisorDecisionDateEmcr = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.EMCR,
+  )?.supervisorDecisionDate;
+
+  const bcwsMembership = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.BCWS,
+  ) && [
+    {
+      title: 'Program',
+      content: Program.BCWS.toUpperCase(),
+    },
+    {
+      title: 'Status',
+      content: bcwsStatus && renderRecommitmentStatus(bcwsStatus, true),
+    },
+    {
+      title: 'Annual Recommitment',
+      content:
+        bcwsStatus === RecommitmentStatus.SUPERVISOR_APPROVED &&
+        supervisorDecisionDateBcws
+          ? `Returned ${format(supervisorDecisionDateBcws, 'yyyy-MM-dd')}`
+          : '--',
+    },
+    {
+      title: 'Member since',
+      content: personnel?.bcws?.dateApproved
+        ? formatDate(personnel?.bcws?.dateApproved, 'yyyy-MM-dd')
+        : '--',
+    },
+  ];
+
+  const emcrMembership = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.EMCR,
+  ) && [
+    {
+      title: 'Program',
+      content: Program.EMCR.toUpperCase(),
+    },
+    {
+      title: 'Status',
+      content: emcrStatus && renderRecommitmentStatus(emcrStatus, true),
+    },
+
+    {
+      title: 'Annual Recommitment',
+      content:
+        emcrStatus === RecommitmentStatus.SUPERVISOR_APPROVED &&
+        supervisorDecisionDateEmcr
+          ? `Returned ${format(supervisorDecisionDateEmcr, 'yyyy-MM-dd')}`
+          : '--',
+    },
+    {
+      title: 'Member since',
+      content: personnel?.emcr?.dateApproved
+        ? formatDate(personnel?.emcr?.dateApproved, 'yyyy-MM-dd')
+        : '--',
+    },
+  ];
+  if (bcwsMembership && !emcrMembership) {
+    return bcwsMembership;
+  } else if (!bcwsMembership && emcrMembership) {
+    return emcrMembership;
+  } else if (bcwsMembership && emcrMembership) {
+    return [...bcwsMembership, ...emcrMembership];
+  }
+  return [];
+};
 
 export const memberData = (personnel?: Personnel) => {
   return {
@@ -405,14 +533,33 @@ export const memberData = (personnel?: Personnel) => {
             ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
             : '--',
         tooltipTitle: 'How can I find my liaison?',
-        tooltipContent:
+        tooltipContent: (
           <div className="py-2">
             <div className="flex flex-col gap-y-4 px-8 py-4">
-              <p className="text-sm text-gray-600 leading-relaxed">If you are unsure who your liaison is, please reach out to your supervisor or manager.</p>
-              <p className="text-sm text-gray-600 leading-relaxed">For more information on liaisons, please reach out to your Fire Centre, or refer to the <a href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/core_team_guidelines.pdf" target="_blank">CORE Team Guidelines</a>. Note that this should not be confused with the Liaison section in a PECC/PREOC.</p>
-              <p className="text-sm text-gray-600 leading-relaxed">You do NOT need to provide liaison information if you are only a member of EMCR.</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                If you are unsure who your liaison is, please reach out to your
+                supervisor or manager.
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                For more information on liaisons, please reach out to your Fire
+                Centre, or refer to the{' '}
+                <a
+                  href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/core_team_guidelines.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  CORE Team Guidelines
+                </a>
+                . Note that this should not be confused with the Liaison section in a
+                PECC/PREOC.
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                You do NOT need to provide liaison information if you are only a
+                member of EMCR.
+              </p>
             </div>
-          </div>,
+          </div>
+        ),
       },
       { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '--' },
       {
@@ -441,22 +588,8 @@ export const memberData = (personnel?: Personnel) => {
         content: personnel?.emergencyContactRelationship,
       },
     ],
-    membership: [
-      {
-        title: 'Program',
-        content: 'EMCR', // TODO
-      },
-      {
-        title: 'Annual Recommitment',
-        content: 'Returned 2025-01-25', // TODO
-      },
-      {
-        title: 'Member since',
-        content: personnel?.dateApplied
-          ? formatDate(personnel?.dateApplied, 'yyyy-MM-dd')
-          : '--',
-      },
-    ],
+    membership: personnel && getMembershipDetails(personnel),
+
     skills: [
       {
         title: 'Languages',
