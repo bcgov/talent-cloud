@@ -89,7 +89,14 @@ export const TableBodyCell = ({
               {StatusNames.NEW}
             </span>
           )}
+          {/* Only show Active Persons recommitment status during recommitment period */}
+          {isRecommitmentCycleOpen &&
+            recommitmentStatus &&
+            status === Status.ACTIVE &&
+            renderRecommitmentStatus(recommitmentStatus, isRecommitmentCycleOpen)}
+          {/* Always show inactive Persons recommitment status */}
           {recommitmentStatus &&
+            status === Status.INACTIVE &&
             renderRecommitmentStatus(recommitmentStatus, isRecommitmentCycleOpen)}
         </span>
       );
