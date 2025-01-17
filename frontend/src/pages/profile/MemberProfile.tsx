@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Tabs, TabsBody, TabPanel } from '@material-tailwind/react';
 import useMemberProfile from '@/hooks/useMemberProfile';
-import { useRoleContext } from '@/providers';
 import { Program, Status, Tabs as TabsEnum } from '@/common';
 import { DialogUI, Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
@@ -31,7 +30,7 @@ const MemberProfile = () => {
   const handleCloseBanner = () => {
     setShowBanner(false);
   };
-  const { roles } = useRoleContext();
+
   const [activeTab, setActiveTab] = useState('availability');
 
   const profileData = memberData(personnel);
@@ -61,17 +60,13 @@ const MemberProfile = () => {
       >
         <Tabs value={activeTab} onChange={handleTabChange}>
           {personnel && (
-            <ProfileMemberHeader
-              personnel={personnel}
-              currentTab={activeTab}
-              roles={roles}
-            />
+            <ProfileMemberHeader personnel={personnel} currentTab={activeTab} />
           )}
 
           <div className="bg-white w-full">
             <div className="mx-auto w-auto">
               {personnel && recommitmentCycle && (
-                <div className="py-24">
+                <div className="pt-12 pb-6">
                   <Transition
                     show={isRecommitmentCycleOpen && showBanner}
                     appear={true}

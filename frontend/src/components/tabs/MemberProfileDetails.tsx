@@ -1,4 +1,5 @@
-import { Fragment, ReactElement, useState } from 'react';
+import type { ReactElement } from 'react';
+import { useState } from 'react';
 import DetailsSection from '../profile/details/DetailsSection';
 import { ProfileSectionHeader } from '../profile/common';
 import { Button, DialogUI } from '@/components/ui';
@@ -69,9 +70,12 @@ export const MemberProfileDetails = ({
 
   return (
     <>
-      <section className="bg-white">
+      <section>
         {sections.map((itm: any) => (
-          <Fragment key={itm.title}>
+          <div
+            key={itm.title}
+            className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm"
+          >
             <ProfileSectionHeader
               title={itm.title}
               callToAction={itm.editable ? 'Edit Info' : undefined}
@@ -84,7 +88,7 @@ export const MemberProfileDetails = ({
                 tooltipClosed={() => setTooltip(undefined)}
               />
             </ProfileSectionHeader>
-          </Fragment>
+          </div>
         ))}
       </section>
       <DialogUI

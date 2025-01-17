@@ -33,7 +33,7 @@ export const MemberItemList = ({
     <div className="flex flex-row p-2 bg-grayBackground">
       {columnNames.map((columnName) => (
         <div className={`basis-1/${columnNames.length}`} key={columnName}>
-          <span className="text-darkGray font-bold">{columnName}</span>
+          <span className="text-blue-900 font-bold">{columnName}</span>
         </div>
       ))}
     </div>
@@ -68,7 +68,7 @@ export const MemberItemList = ({
         <p className="text-sm">You have not indicated any skills here.</p>
       </div>
     </div>
-  );  
+  );
 
   return (
     <>
@@ -105,14 +105,14 @@ export const MemberItemList = ({
                           row.section === firstChoiceSection && (
                             <Chip
                               value="1st Choice"
-                              className="rounded-full capitalize"
+                              className="rounded-full capitalize font-normal"
                             />
                           )}
                         {!notFirstRowOfSection &&
                           row.section === secondChoiceSection && (
                             <Chip
                               value="2nd Choice"
-                              className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                              className="rounded-full bg-warningBannerLight text-warning font-normal capitalize"
                             />
                           )}
                       </p>

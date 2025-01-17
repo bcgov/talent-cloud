@@ -70,174 +70,180 @@ export const MemberAvailabilityTab = ({
 
   return (
     <>
-      <ProfileSectionHeader
-        title="My Schedule"
-        description={<ScheduleDescription />}
-      >
-        <MemberScheduler personnelId={personnel.id} />
-      </ProfileSectionHeader>
-      <ProfileSectionHeader
-        title="Section Preferences" // make this depend on bcws / emcr
-        description={<ProfileDescription />}
-        buttonText="+ Add Preference"
-        onButtonClick={handleOpenEditSections}
-      >
-        <Tabs value={activeSectionRolesTab}>
-          {personnel.bcws && personnel.emcr && (
-            <TabsHeader
-              className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
-              indicatorProps={{
-                className:
-                  'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
-              }}
-            >
-              <Tab
-                className={`${activeSectionRolesTab === Program.BCWS ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
-                value={Program.BCWS}
-                onClick={() => setActiveSectionRolesTab(Program.BCWS)}
+      <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
+        <ProfileSectionHeader
+          title="My Schedule"
+          description={<ScheduleDescription />}
+        >
+          <MemberScheduler personnelId={personnel.id} />
+        </ProfileSectionHeader>
+      </div>
+      <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
+        <ProfileSectionHeader
+          title="Section Preferences" // make this depend on bcws / emcr
+          description={<ProfileDescription />}
+          buttonText="+ Add Preference"
+          onButtonClick={handleOpenEditSections}
+        >
+          <Tabs value={activeSectionRolesTab}>
+            {personnel.bcws && personnel.emcr && (
+              <TabsHeader
+                className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
+                indicatorProps={{
+                  className:
+                    'bg-transparent border-b-2 border-primaryBlue shadow-none rounded-none',
+                }}
               >
-                BCWS Roles
-              </Tab>
-              <Tab
-                className={`${activeSectionRolesTab === Program.EMCR ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
-                value={Program.EMCR}
-                onClick={() => setActiveSectionRolesTab(Program.EMCR)}
-              >
-                EMCR Sections
-              </Tab>
-            </TabsHeader>
-          )}
-          <TabsBody>
-            {personnel.bcws && (
-              <TabPanel value="bcws" className="px-0">
-                <MemberItemList
-                  data={
-                    personnel.bcws.roles?.map((r) => ({
-                      id: r.id,
-                      section: SectionName[r.section],
-                      role: BcwsRoleName[r.role],
-                      experience: 'none',
-                    })) || []
-                  }
-                  columns={[
-                    {
-                      name: 'Section Name',
-                      key: 'section',
-                    },
-                    {
-                      name: 'Role',
-                      key: 'role',
-                    },
-                  ]}
-                  preferences={{
-                    first:
-                      personnel.bcws?.firstChoiceSection &&
-                      SectionName[personnel.bcws.firstChoiceSection],
-                    second:
-                      personnel.bcws?.secondChoiceSection &&
-                      SectionName[personnel.bcws.secondChoiceSection],
-                    third: undefined, // TODO
-                  }}
-                />
-              </TabPanel>
+                <Tab
+                  className={`${activeSectionRolesTab === Program.BCWS ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                  value={Program.BCWS}
+                  onClick={() => setActiveSectionRolesTab(Program.BCWS)}
+                >
+                  BCWS Roles
+                </Tab>
+                <Tab
+                  className={`${activeSectionRolesTab === Program.EMCR ? 'text-primaryBlue font-bold' : 'text-gray-600'}`}
+                  value={Program.EMCR}
+                  onClick={() => setActiveSectionRolesTab(Program.EMCR)}
+                >
+                  EMCR Sections
+                </Tab>
+              </TabsHeader>
             )}
-            {personnel.emcr && (
-              <TabPanel value="emcr" className="px-0">
-                <MemberItemList
-                  data={
-                    personnel.emcr.experiences?.map((e) => ({
-                      id: e.function.id,
-                      section: e.function.name,
-                      experience: 'none',
-                    })) || []
-                  }
-                  columns={[
-                    {
-                      name: 'Section Name',
-                      key: 'section',
-                    },
-                  ]}
-                />
-              </TabPanel>
-            )}
-          </TabsBody>
-        </Tabs>
-      </ProfileSectionHeader>
-      <ProfileSectionHeader
-        title="Other Skills"
-        buttonText="Edit Skills"
-        description="&nbsp;"
-        onButtonClick={handleOpenEditSkills}
-      >
-        <MemberSkillsAndCertifications
-          personnel={personnel}
-          profileData={profileData}
-          allowEditing={true}
-          updatePersonnel={() => {}}
-        />
-      </ProfileSectionHeader>
+            <TabsBody>
+              {personnel.bcws && (
+                <TabPanel value="bcws" className="px-0">
+                  <MemberItemList
+                    data={
+                      personnel.bcws.roles?.map((r) => ({
+                        id: r.id,
+                        section: SectionName[r.section],
+                        role: BcwsRoleName[r.role],
+                        experience: 'none',
+                      })) || []
+                    }
+                    columns={[
+                      {
+                        name: 'Section Name',
+                        key: 'section',
+                      },
+                      {
+                        name: 'Role',
+                        key: 'role',
+                      },
+                    ]}
+                    preferences={{
+                      first:
+                        personnel.bcws?.firstChoiceSection &&
+                        SectionName[personnel.bcws.firstChoiceSection],
+                      second:
+                        personnel.bcws?.secondChoiceSection &&
+                        SectionName[personnel.bcws.secondChoiceSection],
+                      third: undefined, // TODO
+                    }}
+                  />
+                </TabPanel>
+              )}
+              {personnel.emcr && (
+                <TabPanel value="emcr" className="px-0">
+                  <MemberItemList
+                    data={
+                      personnel.emcr.experiences?.map((e) => ({
+                        id: e.function.id,
+                        section: e.function.name,
+                        experience: 'none',
+                      })) || []
+                    }
+                    columns={[
+                      {
+                        name: 'Section Name',
+                        key: 'section',
+                      },
+                    ]}
+                  />
+                </TabPanel>
+              )}
+            </TabsBody>
+          </Tabs>
+        </ProfileSectionHeader>
+      </div>
+      <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
+        <ProfileSectionHeader
+          title="Other Skills"
+          buttonText="Edit Skills"
+          description="&nbsp;"
+          onButtonClick={handleOpenEditSkills}
+        >
+          <MemberSkillsAndCertifications
+            personnel={personnel}
+            profileData={profileData}
+            allowEditing={true}
+            updatePersonnel={() => {}}
+          />
+        </ProfileSectionHeader>
 
-      <DialogUI
-        open={openEditSections}
-        onClose={handleOpenEditSections}
-        handleOpen={handleOpenEditSections}
-        title={'Edit Preferences'}
-        style={'lg:w-2/3 xl:w-1/2'}
-      >
-        <MemberProfileEditPreferences
-          bcws={
-            personnel.bcws
-              ? {
-                  allRoles: bcwsRoles,
-                  originalRoles: personnel.bcws.roles || [],
-                  sectionChoices: {
-                    firstChoiceSection: personnel.bcws?.firstChoiceSection,
-                    secondChoiceSection: personnel.bcws?.secondChoiceSection,
-                    thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
-                  },
-                }
-              : undefined
-          }
-          emcr={
-            personnel.emcr
-              ? {
-                  allFunctions: functions,
-                  originalExperiences: personnel.emcr.experiences || [],
-                  sectionChoices: {
-                    firstChoiceSection: personnel.emcr?.firstChoiceFunction,
-                    secondChoiceSection: personnel.emcr?.secondChoiceFunction,
-                    thirdChoiceSection: personnel.emcr?.thirdChoiceFunction,
-                  },
-                }
-              : undefined
-          }
-          handleClose={handleOpenEditSections}
-          handleSave={updatePersonnel}
-        />
-      </DialogUI>
-      {/* Skills and Certs */}
-      <DialogUI
-        open={openEditSkills}
-        onClose={handleOpenEditSkills}
-        handleOpen={handleOpenEditSkills}
-        title="Edit Skills & Certifications"
-        style="w-5/6"
-      >
-        <ProfileEditSkills
-          originalLanguages={personnel.languages || []}
-          originalTools={personnel.tools || []}
-          originalCerts={personnel.certifications || []}
-          handleClose={handleOpenEditSkills}
-          handleSave={(newSkills) => {
-            updatePersonnel({
-              languages: newSkills.newLanguages,
-              tools: newSkills.newTools,
-              certifications: newSkills.newCertifications,
-            });
-            setOpenEditSkills(false);
-          }}
-        />
-      </DialogUI>
+        <DialogUI
+          open={openEditSections}
+          onClose={handleOpenEditSections}
+          handleOpen={handleOpenEditSections}
+          title={'Edit Preferences'}
+          style={'lg:w-2/3 xl:w-1/2'}
+        >
+          <MemberProfileEditPreferences
+            bcws={
+              personnel.bcws
+                ? {
+                    allRoles: bcwsRoles,
+                    originalRoles: personnel.bcws.roles || [],
+                    sectionChoices: {
+                      firstChoiceSection: personnel.bcws?.firstChoiceSection,
+                      secondChoiceSection: personnel.bcws?.secondChoiceSection,
+                      thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
+                    },
+                  }
+                : undefined
+            }
+            emcr={
+              personnel.emcr
+                ? {
+                    allFunctions: functions,
+                    originalExperiences: personnel.emcr.experiences || [],
+                    sectionChoices: {
+                      firstChoiceSection: personnel.emcr?.firstChoiceFunction,
+                      secondChoiceSection: personnel.emcr?.secondChoiceFunction,
+                      thirdChoiceSection: personnel.emcr?.thirdChoiceFunction,
+                    },
+                  }
+                : undefined
+            }
+            handleClose={handleOpenEditSections}
+            handleSave={updatePersonnel}
+          />
+        </DialogUI>
+        {/* Skills and Certs */}
+        <DialogUI
+          open={openEditSkills}
+          onClose={handleOpenEditSkills}
+          handleOpen={handleOpenEditSkills}
+          title="Edit Skills & Certifications"
+          style="w-5/6"
+        >
+          <ProfileEditSkills
+            originalLanguages={personnel.languages || []}
+            originalTools={personnel.tools || []}
+            originalCerts={personnel.certifications || []}
+            handleClose={handleOpenEditSkills}
+            handleSave={(newSkills) => {
+              updatePersonnel({
+                languages: newSkills.newLanguages,
+                tools: newSkills.newTools,
+                certifications: newSkills.newCertifications,
+              });
+              setOpenEditSkills(false);
+            }}
+          />
+        </DialogUI>
+      </div>
     </>
   );
 };

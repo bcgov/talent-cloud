@@ -26,12 +26,12 @@ export const MemberSchedulerControl = ({
   }, [fromMonth, fromYear, toMonth, toYear, numMonths]);
 
   return (
-    <div className="flex flex-row">
-      <div className="w-40 pt-1">
+    <div className="flex flex-row items-center">
+      <div>
         <Button
           variant="text"
           size="sm"
-          className="bg-calBlue normal-case"
+          className="text-blue-800 normal-case font-normal underline text-sm"
           placeholder={''}
           onClick={() => {
             const fromDate = dayjs(new Date());
@@ -49,34 +49,28 @@ export const MemberSchedulerControl = ({
         <Button
           variant="text"
           size="sm"
-          className="bg-calBlue p-2"
+          className="bg-calBlue p-1 mr-2"
           onClick={() => {
             const fromDate = dayjs(`${fromYear}/${fromMonth}/01`).subtract(
               1,
               'months',
             );
-            const toDate = dayjs(`${toYear}/${toMonth}/01`).subtract(
-              1,
-              'months',
-            );
+            const toDate = dayjs(`${toYear}/${toMonth}/01`).subtract(1, 'months');
             setFromMonth(fromDate.month() + 1);
             setFromYear(fromDate.year());
             setToMonth(toDate.month() + 1);
             setToYear(toDate.year());
           }}
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeftIcon className="h-4 w-4 text-gray-600" />
         </Button>
 
         <Button
           variant="text"
           size="sm"
-          className="bg-calBlue p-2"
+          className="bg-calBlue p-1"
           onClick={() => {
-            const fromDate = dayjs(`${fromYear}/${fromMonth}/01`).add(
-              1,
-              'months',
-            );
+            const fromDate = dayjs(`${fromYear}/${fromMonth}/01`).add(1, 'months');
             const toDate = dayjs(`${toYear}/${toMonth}/01`).add(1, 'months');
             setFromMonth(fromDate.month() + 1);
             setFromYear(fromDate.year());
@@ -84,18 +78,20 @@ export const MemberSchedulerControl = ({
             setToYear(toDate.year());
           }}
         >
-          <ChevronRightIcon className="h-4 w-4" />
+          <ChevronRightIcon className="h-4 w-4  text-gray-600" />
         </Button>
       </div>
-      <div className="pl-2">
-        <p>{dayjs(`${fromYear}/${fromMonth}/1`).format('MMMM, YYYY')}</p>
+      <div className="pl-6">
+        <p className="text-sm font-bold">
+          {dayjs(`${fromYear}/${fromMonth}/1`).format('MMMM, YYYY')}
+        </p>
       </div>
       <div className="grow" />
-      <div className="w-32">
+      <div className="w-32 pb-2">
         <Select
           value={`${numMonths}`}
           placeholder={''}
-          className="border-none"
+          className="border-gray-200 rounded-sm"
           labelProps={{ className: 'hidden' }}
           aria-label="Select Number of Months"
           containerProps={{ className: 'min-w-px' }}

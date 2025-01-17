@@ -178,12 +178,19 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
       const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
       const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
       const availabilityType = status.availabilityType;
-      
+
       if (status.availabilityType === AvailabilityType.AVAILABLE) {
         // Use actualStartDate / actualEndDate if it exists
         const min = lastBreakIndex > -1 ? firstDate : undefined;
         const max = nextBreakIndex > -1 ? lastDate : undefined;
-        openSchedulerDialog(status.date, status.date, availabilityType, undefined, min, max);
+        openSchedulerDialog(
+          status.date,
+          status.date,
+          availabilityType,
+          undefined,
+          min,
+          max,
+        );
       } else {
         // Use actualStartDate / actualEndDate if it exists
         const deploymentCode = status.deploymentCode;
@@ -201,28 +208,28 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
       default:
         return 'Set Unavailability';
     }
-  }
+  };
 
   return (
     <>
       <section className="bg-white">
-        <div className="pt-6">
-          <MemberSchedulerControl
-            onChangeAvailabilityDates={onChangeAvailabilityQuery}
-          />
-          <MemberSchedulerHeader />
-          {schedulerRows &&
-            Object.keys(schedulerRows).map((month) => (
-              <SchedulerRow
-                key={month}
-                year={dayjs(schedulerRows[month][0].date).format('YYYY')}
-                month={month}
-                data={schedulerRows[month]}
-                cellClick={cellClick}
-              />
-            ))}
-          <MemberSchedulerKey />
-        </div>
+        <MemberSchedulerControl
+          onChangeAvailabilityDates={onChangeAvailabilityQuery}
+        />
+        <MemberSchedulerHeader />
+
+        {schedulerRows &&
+          Object.keys(schedulerRows).map((month) => (
+            <SchedulerRow
+              key={month}
+              year={dayjs(schedulerRows[month][0].date).format('YYYY')}
+              month={month}
+              data={schedulerRows[month]}
+              cellClick={cellClick}
+            />
+          ))}
+
+        <MemberSchedulerKey />
       </section>
       <DialogUI
         open={schedulerDialogOpen}

@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { Tab, TabsHeader } from '@material-tailwind/react';
 import type { Personnel } from '@/common';
-import { Role, Tabs, TabNames } from '@/common';
-import { PersonnelStatus } from '@/components';
+import { Tabs, TabNames } from '@/common';
+import { renderStatus } from './helpers';
 
 export const ProfileMemberHeader = ({
   currentTab = Tabs.AVAILABILITY,
   personnel,
-  roles,
 }: {
   currentTab: string;
   personnel: Personnel;
-  roles?: Role[];
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
 
@@ -30,11 +28,8 @@ export const ProfileMemberHeader = ({
           <h2 className="font-semibold px-2">
             {personnel.firstName} {personnel.lastName}
           </h2>
-          {roles?.includes(Role.COORDINATOR) && (
-            <span>
-              <PersonnelStatus status={personnel?.status} />
-            </span>
-          )}
+
+          <div className="flex flex-col space-y-2">{renderStatus(personnel)}</div>
         </div>
         <div className="w-fit">
           <TabsHeader
