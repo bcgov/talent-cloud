@@ -17,6 +17,25 @@ export const ChevronDownIcon = () => {
   );
 };
 
+export const ChevronUpIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke={'currentColor'}
+      strokeWidth={3}
+      className={`h-4 w-4 stroke-4`}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m4.5 15.75 7.5-7.5 7.5 7.5"
+      />
+    </svg>
+  );
+};
+
 export const CloseIcon = ({ color }: { color: string }) => {
   return (
     <span className={`${color}`}>
