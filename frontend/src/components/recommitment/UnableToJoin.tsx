@@ -88,7 +88,7 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
 
             {reason.id === 'other' && selectedReasons.includes('other') && (
               <div className="mt-6 ml-7">
-                <p className="text-sm font-semibold pb-2">Please provide details for "Other reasons".<span className="text-red-900">*</span></p>
+                <p className="text-sm font-semibold pb-2">Please provide details for &quot;Other reasons&quot;.<span className="text-red-900">*</span></p>
                 <textarea
                   id="otherReason"
                   value={otherReason}
