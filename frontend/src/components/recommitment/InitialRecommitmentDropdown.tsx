@@ -60,6 +60,9 @@ export const InitialRecommitmentDropdown = ({
           </Option>
         ))}
       </Select>
+      {initialValue && !['yes-emcr', 'yes-bcws', 'yes-both'].includes(initialValue) && 
+        <p className="text-xs text-gray-600 pb-1 pt-4 pl-1">You must provide a reason for declining recommitment to each program in the next step.</p>
+      }
     </div>
   );
 };

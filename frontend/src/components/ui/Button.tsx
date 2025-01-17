@@ -11,6 +11,7 @@ export const Button = ({
   onClick,
   disabled,
   loading,
+  textIcon,
 }: ButtonProps) => {
   const buttonClass = () => {
     if (variant === ButtonTypes.PRIMARY) {
@@ -37,7 +38,7 @@ export const Button = ({
       aria-label={text}
       className={buttonClass()}
     >
-      {loading ? <ButtonLoading /> : text}
+      {loading ? <ButtonLoading /> : <div className="flex flex-row gap-1">{textIcon}{text}</div>}
     </button>
   );
 };
