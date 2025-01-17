@@ -10,6 +10,7 @@ import {
   Param,
   Req,
   Patch,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
@@ -20,12 +21,12 @@ import { PersonnelService } from './personnel.service';
 import { PersonnelRO } from './ro';
 import { AvailabilityRO } from './ro/availability.ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
+import { AuditService } from '../audit/audit.service';
 import { RequestWithRoles, Role, TokenType } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
-
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -35,6 +36,8 @@ export class PersonnelController {
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
     private readonly logger: AppLogger,
+    @Inject(AuditService)
+    private readonly auditService: AuditService,
   ) {
     this.logger.setContext(PersonnelController.name);
   }
@@ -88,8 +91,29 @@ export class PersonnelController {
     deleted?: DeleteResult;
   }> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    if (req.roles.length === 1 && req.roles.includes(Role.MEMBER) && req.idir) {
+      const personnel = await this.personnelService.findOneByEmail(req.idir);
+      if (personnel.id !== id) {
+        this.logger.error('Member updating availability for wrong member id');
+        throw new ForbiddenException('Members can only edit own availability');
+      }
+    }
 
-    return await this.personnelService.updateAvailability(id, availability);
+    const availabilityUpdate = await this.personnelService.updateAvailability(
+      id,
+      availability,
+    );
+    this.auditService.logAudit(
+      'NULL',
+      `availability type ${availability.type} from ${availability.from} to ${
+        availability.to
+      } with removals from ${availability.removeFrom || 'NULL'} to ${
+        availability.removeTo || 'NULL'
+      } updated`,
+      'AvailabilityEntity',
+      id,
+    );
+    return availabilityUpdate;
   }
 
   @ApiOperation({

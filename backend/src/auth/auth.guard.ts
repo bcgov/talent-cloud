@@ -7,9 +7,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import jwt from 'jsonwebtoken';
 
+import { ClsService } from 'nestjs-cls';
 import { AuthService } from './auth.service';
 import { AUTH_SERVER, AUTH_REALM } from './const';
-import { Token } from './interface';
+import { Role, Token } from './interface';
 import { Metadata } from './metadata';
 import { AppLogger } from '../logger/logger.service';
 
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate {
   private readonly logger: AppLogger;
   constructor(
     private reflector: Reflector,
-
+    private clsService: ClsService,
     private readonly authService: AuthService,
   ) {
     this.logger = new AppLogger();
@@ -65,13 +66,32 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    const primaryRole = (roles: Role[]): Role | undefined => {
+      if (roles.includes(Role.COORDINATOR)) {
+        return Role.COORDINATOR;
+      } else if (roles.includes(Role.LOGISTICS)) {
+        return Role.LOGISTICS;
+      } else if (roles.includes(Role.SUPERVISOR)) {
+        return Role.SUPERVISOR;
+      } else if (roles.includes(Role.MEMBER)) {
+        return Role.MEMBER;
+      }
+      return undefined;
+    };
+
     try {
       const valid = this.validateToken(token);
       if (!valid) {
         throw new UnauthorizedException();
       }
 
-      return await this.authService.setRequestUserInfo(token, request);
+      const userInfo = await this.authService.setRequestUserInfo(
+        token,
+        request,
+      );
+      this.clsService.set('email', request.idir);
+      this.clsService.set('primaryRole', primaryRole(request.roles));
+      return userInfo;
     } catch {
       throw new UnauthorizedException();
     }
