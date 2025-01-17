@@ -22,7 +22,7 @@ export const reasonDefinitions = {
 
 const REASONS: Reason[] = [
   { id: 'commitments', text: 'Work commitments from base position' },
-  { id: 'leave', text: 'Extended leave' },
+  { id: 'leave', text: 'Extended leave (e.g. Annual, Sickness, Maternity, etc.)' },
   { id: 'other', text: 'Other reasons' },
 ];
 
@@ -87,12 +87,13 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
             </div>
 
             {reason.id === 'other' && selectedReasons.includes('other') && (
-              <div className="mt-2 ml-7">
+              <div className="mt-6 ml-7">
+                <p className="text-sm font-semibold pb-2">Please provide details for "Other reasons".<span className="text-red-900">*</span></p>
                 <textarea
                   id="otherReason"
                   value={otherReason}
                   onChange={handleOtherReasonChange}
-                  placeholder="Please specify..."
+                  placeholder="Add a comment"
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
