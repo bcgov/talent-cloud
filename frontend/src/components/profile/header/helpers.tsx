@@ -1,3 +1,7 @@
+import type { Personnel } from '@/common';
+import { Program } from '@/common';
+import { PersonnelStatus } from '@/components/ui';
+
 export function HorizontalLine() {
   return (
     <svg
@@ -11,3 +15,27 @@ export function HorizontalLine() {
     </svg>
   );
 }
+export const renderStatus = (personnel: Personnel) => {
+  if (
+    personnel.bcws?.status &&
+    personnel.emcr?.status &&
+    personnel.bcws.status === personnel.emcr.status
+  ) {
+    return <PersonnelStatus status={personnel?.bcws.status} />;
+  } else if (
+    personnel.bcws?.status &&
+    personnel.emcr?.status &&
+    personnel.bcws.status !== personnel.emcr.status
+  ) {
+    return (
+      <div>
+        <PersonnelStatus status={personnel?.emcr.status} program={Program.EMCR} />
+        <PersonnelStatus status={personnel?.bcws.status} program={Program.BCWS} />
+      </div>
+    );
+  } else if (personnel.bcws?.status && !personnel.emcr?.status) {
+    return <PersonnelStatus status={personnel?.bcws.status} />;
+  } else if (personnel.emcr?.status && !personnel.bcws?.status) {
+    return <PersonnelStatus status={personnel?.emcr.status} />;
+  }
+};

@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import type { ProfileDetail } from '@/pages/profile/types';
 import { Detail } from './Detail';
 
@@ -14,7 +14,7 @@ const DetailsSection = ({
   title?: string;
 }) => {
   return (
-    <div className="pt-5 pb-16 px-1">
+    <>
       {title && <h5 className="font-bold text-info">{title}</h5>}
       <div className={'grid lg:grid-cols-4 gap-y-2'}>
         {columns?.map((column) => (
@@ -30,7 +30,7 @@ const DetailsSection = ({
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

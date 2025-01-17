@@ -25,14 +25,14 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
     <div className="w-full">
       {/* Top row with header and call to action */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <h2 className="text-lg font-semibold text-blue-900">{title}</h2>
         {callToAction && (
           <Button
             onClick={onCallToActionClick}
             className={
               callToActionType === 'text'
-                ? 'text-sm text-linkBlue underline hover:text-gray-700 transition-colors cursor-pointer normal-case'
-                : 'bg-primaryBlue normal-case text-md rounded-none py-1'
+                ? 'text-sm text-blue-900 underline hover:text-gray-700 transition-colors cursor-pointer normal-case'
+                : 'bg-blue-900 normal-case text-md rounded-none py-1'
             }
             variant={callToActionType === 'text' ? 'text' : 'filled'}
           >
@@ -48,7 +48,7 @@ export const ProfileSectionHeader: React.FC<ProfileSectionHeaderProps> = ({
           {buttonText && (
             <Button
               variant="filled"
-              className="bg-primaryBlue normal-case text-md rounded-none py-1"
+              className="bg-blue-900 normal-case text-md rounded-none py-1"
               onClick={onButtonClick}
             >
               {buttonText}

@@ -1,6 +1,6 @@
 export const MemberSchedulerHeader = () => {
   return (
-    <div>
+    <div className="pt-2">
       <div className="grid grid-cols-32">
         <div className="bg-white text-xs text-linkBlue">Mos</div>
         {[...Array(32).keys()].slice(1).map((dayOfMonth) => {
