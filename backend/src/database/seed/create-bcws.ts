@@ -1,16 +1,17 @@
 import { faker } from '@faker-js/faker';
+import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
 import { CreatePersonnelBcwsDTO } from '../../bcws/dto/create-bcws-personnel.dto';
 import { Status, ExperienceLevel } from '../../common/enums';
 import { TravelPreference } from '../../common/enums/travel-preference.enum';
-import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
 
 export const createBCWShandler = (
   roles: BcwsRoleEntity[],
-  status: Status,
+
   dateApplied: Date,
 ): {
   bcwsData: CreatePersonnelBcwsDTO;
 } => {
+  const status = faker.helpers.arrayElement(Object.values(Status)); //
   const personnelRoles = createRoles(roles);
   const firstChoiceSection = roles.find(
     (r) => r.id === personnelRoles[0].roleId,

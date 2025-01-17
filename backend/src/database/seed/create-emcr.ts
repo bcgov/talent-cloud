@@ -1,21 +1,22 @@
 import { faker } from '@faker-js/faker';
-import { Experience, FirstAid, Status } from '../../common/enums';
-import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import {
   EmcrExperienceEntity,
   EmcrFunctionEntity,
   EmcrTrainingEntity,
 } from '../entities/emcr';
+import { Experience, FirstAid, Status } from '../../common/enums';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 import { CreatePersonnelEmcrDTO } from '../../emcr/dto';
 
 export const createEMCRhandler = (
   functions: EmcrFunctionEntity[],
   trainings: EmcrTrainingEntity[],
-  status: Status,
   dateApplied: Date,
 ): {
   emcrData: CreatePersonnelEmcrDTO;
 } => {
+  const status = faker.helpers.arrayElement(Object.values(Status)); //
+
   const emcrData: CreatePersonnelEmcrDTO = {
     dateApplied: dateApplied,
     logisticsNotes: faker.lorem.paragraph(),
@@ -38,10 +39,7 @@ export const createEMCRhandler = (
           })
         : undefined,
     status: status,
-    experiences:
-      status !== Status.PENDING
-        ? (experiences(functions) as EmcrExperienceEntity[])
-        : [],
+    experiences: experiences(functions) as EmcrExperienceEntity[],
     travelPreference: faker.helpers.arrayElement([
       TravelPreference.REMOTE_ONLY,
       TravelPreference.WILLING_TO_TRAVEL_HOME_LOCATION,

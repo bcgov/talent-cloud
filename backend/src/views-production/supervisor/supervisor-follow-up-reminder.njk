@@ -1,0 +1,18 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+
+<p>Hello {{supervisor}},</p>
+
+<p>This is just a reminder to give or decline approval for employee(s) who have requested to recommit to the CORE program for {{year}}.</p>
+
+{% include "blocks/steps.njk" %}
+
+{% include "blocks/supervisor-button.njk" %}
+
+{% include "blocks/supervisor-resources.njk" %}
+
+{% endblock %}
+
+
+ 

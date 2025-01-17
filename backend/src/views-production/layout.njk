@@ -100,19 +100,29 @@ h1 {
 <body>
   <div class="container">
 
-
+    <div class="header">
+      {% include "logo.njk" %}
+    </div>
     {% include "blocks/env.njk" %}
     <div class="content-wrapper">
       <div class="content">
         
         {% block content %}{% endblock %}
-        
+        <p>Sincerely,</p>
+        <p>BC CORE Team</p>
 
       </div>
     </div>
     
 
 
+    <div class="footer">
+      <p>The BC Public Service acknowledges the territories of First Nations around B.C. and is grateful to carry
+        out our work on these lands. We acknowledge the rights, interests, priorities and concerns of all
+        Indigenous Peoples (First Nations, Métis and Inuit), respecting and acknowledging their distinct
+        cultures, histories, rights, laws and governments.
+      </p>
+    </div>
 
   </div>
 </body>
