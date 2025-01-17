@@ -34,8 +34,8 @@ export const renderStatus = (personnel: Personnel) => {
       </div>
     );
   } else if (personnel.bcws?.status && !personnel.emcr?.status) {
-    <PersonnelStatus status={personnel?.bcws.status} />;
+    return <PersonnelStatus status={personnel?.bcws.status} />;
   } else if (personnel.emcr?.status && !personnel.bcws?.status) {
-    <PersonnelStatus status={personnel?.emcr.status} />;
+    return <PersonnelStatus status={personnel?.emcr.status} />;
   }
 };
