@@ -16,6 +16,7 @@ export const Select = ({ ...props }: FieldInputProps<string> & FieldType) => {
         disabled={props.disabled}
         multiple={props.multiple}
         className={props.disabled ? classes.menu.disabled : classes.menu.container}
+        id={props.name}
       >
         {!props.required && <option value={undefined}></option>}
 

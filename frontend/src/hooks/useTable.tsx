@@ -1,33 +1,41 @@
 import { useState, useEffect } from 'react';
 import type { DashboardColumns, Program } from '@/common';
-import { type Personnel } from '@/common';
+import { Filters, type Personnel } from '@/common';
 import { renderCells } from './helpers';
 import { useAxios } from './useAxios';
 import { Status, StatusNames } from '@/common';
 import { activeCols, pendingColumns } from '@/pages/dashboard/columns';
 import { renderName } from '@/components/ui/helpers';
+import { useSearchParams } from 'react-router-dom';
 
-export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) => {
+export const useTable = (program?: Program) => {
   const { AxiosPrivate } = useAxios();
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState<DashboardColumns[]>();
   const [tabCount, setTabCount] = useState();
-  const status = searchParamsUrl.get('status');
 
-  /**
-   * This function is used to dynamically render the columns based on the selected filter values values
-   * @param columns
-   * @returns
-   */
+  const [searchParams, setSearchParams] = useSearchParams({
+    rows: '25',
+    page: '1',
+    status: Status.ACTIVE,
+  });
 
-  const applyFilters = async (program: Program) => {
+  const status = searchParams.get(Filters.STATUS) ?? Status.ACTIVE;
+
+  const applyFilters = async () => {
     const isPending = status === Status.PENDING;
+
+    if (rows.length === 0) {
+      searchParams.set(Filters.PAGE, '1');
+      setSearchParams({ ...Object.fromEntries(searchParams) });
+    }
 
     try {
       const {
         data: { personnel, count },
-      } = await AxiosPrivate.get(`/${program}?${searchParamsUrl}`);
+      } = await AxiosPrivate.get(`/${program}?${searchParams}`);
+
       const rows = personnel.map(
         ({ id, status, newMember, ...personnel }: Personnel) => ({
           key: id,
@@ -37,12 +45,13 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
             program &&
             renderCells(
               { id, status, newMember, ...personnel },
-              searchParamsUrl,
+              searchParams,
               isPending,
               program,
             ),
         }),
       );
+
       const columns = isPending
         ? pendingColumns[program as keyof typeof pendingColumns]
         : activeCols[program as keyof typeof pendingColumns];
@@ -58,15 +67,13 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
   };
 
   useEffect(() => {
-    if (program) {
-      applyFilters(program);
-    }
-  }, [searchParamsUrl, program]);
+    applyFilters();
+  }, [searchParams]);
 
   return {
     totalRows: status && tabCount ? tabCount[status] : 0,
-    currentPage: parseInt(searchParamsUrl.get('page') ?? '1'),
-    rowsPerPage: parseInt(searchParamsUrl.get('rows') ?? '25'),
+    currentPage: parseInt(searchParams.get(Filters.PAGE) ?? '1'),
+    rowsPerPage: parseInt(searchParams.get(Filters.ROWS) ?? '25'),
     rows,
     loading,
     tabs: [
@@ -91,5 +98,7 @@ export const useTable = (searchParamsUrl: URLSearchParams, program?: Program) =>
     ],
     columns: columns?.map((itm) => renderName(itm)),
     setLoading: (loading: boolean) => setLoading(loading),
+    searchParams,
+    setSearchParams,
   };
 };

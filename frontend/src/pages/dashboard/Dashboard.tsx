@@ -1,9 +1,7 @@
-import { DashboardFilters } from './DashboardFilters';
 import { useTable } from '@/hooks';
 import { useRoleContext } from '@/providers';
 import type { Status } from '@/common';
-import { Role } from '@/common';
-import { useFilters } from '@/hooks/useFilters';
+import { Filters, Role } from '@/common';
 import {
   DialogUI,
   Table,
@@ -17,12 +15,13 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { button as buttonClass } from '@/components/ui/classes';
 import { useState } from 'react';
 import { MemberStatusGuide } from './MemberStatusGuide';
+import { DashboardFilters } from './DashboardFilters';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
   const { program, roles } = useRoleContext();
-  const { searchParamsUrl, handleChangeOne } = useFilters();
+
   const {
     totalRows,
     rowsPerPage,
@@ -32,11 +31,9 @@ const Dashboard = () => {
     columns,
     loading,
     setLoading,
-  } = useTable(searchParamsUrl, program);
-
-  if (rows.length === 0) {
-    handleChangeOne('page', '1');
-  }
+    searchParams,
+    setSearchParams,
+  } = useTable(program);
 
   return (
     <>
@@ -48,7 +45,11 @@ const Dashboard = () => {
           />
         )}
         <h1 className="pt-16 text-left font-bold">Personnel</h1>
-        <DashboardFilters program={program} />
+        <DashboardFilters
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          program={program}
+        />
         <div className="overflow-x-scroll border border-slate-500 rounded-md">
           <div className="mt-2  bg-white w-full">
             <div className="text-left py-8  caption-top bg-white">
@@ -59,7 +60,8 @@ const Dashboard = () => {
                 <Tabs
                   tabs={tabs}
                   changeTab={(value: unknown) => {
-                    handleChangeOne('status', value as Status);
+                    searchParams.set(Filters.STATUS, value as Status);
+                    setSearchParams({ ...Object.fromEntries(searchParams) });
                     !loading && setLoading(true);
                   }}
                 />
@@ -83,18 +85,20 @@ const Dashboard = () => {
               <TableFooterPageSelect
                 totalRows={totalRows}
                 rowsPerPage={rowsPerPage}
-                handleChangeNumRows={(e: React.ChangeEvent<any>) =>
-                  handleChangeOne('rows', e.target.value)
-                }
+                handleChangeNumRows={(e: React.ChangeEvent<any>) => {
+                  searchParams.set(Filters.ROWS, e.target.value);
+                  setSearchParams({ ...Object.fromEntries(searchParams) });
+                }}
               />
 
               <TableFooterNav
                 totalRows={totalRows}
                 rowsPerPage={rowsPerPage}
                 currentPage={currentPage}
-                handleChangePage={(page: number) =>
-                  handleChangeOne('page', page.toString())
-                }
+                handleChangePage={(page: number) => {
+                  searchParams.set(Filters.PAGE, page.toString());
+                  setSearchParams({ ...Object.fromEntries(searchParams) });
+                }}
               />
             </div>
           </div>

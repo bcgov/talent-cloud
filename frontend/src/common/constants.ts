@@ -27,7 +27,7 @@ import type { DateRange } from 'react-day-picker';
 import type { TravelPreference } from './enums/travel-preference.enum';
 import type { RecommitmentStatus } from './enums/recommitment-status';
 
-export enum DashboardFilterNames {
+export enum Filters {
   REGION = 'region',
   LOCATION = 'location',
   NAME = 'name',
@@ -38,6 +38,12 @@ export enum DashboardFilterNames {
   FIRE_CENTRE = 'fireCentre',
   SECTION = 'section',
   ROLE = 'role',
+  AVAILABILITY_FROM_DATE = 'availabilityFromDate',
+  AVAILABILITY_TO_DATE = 'availabilityToDate',
+  STATUS = 'status',
+  INCLUDE_TRAVEL = 'includeTravel',
+  PAGE = 'page',
+  ROWS = 'rows',
 }
 
 export enum DashboardColumns {
@@ -73,7 +79,7 @@ export interface SectionType {
 }
 
 export const dashboardToggle = {
-  name: DashboardFilterNames.SHOW_INACTIVE,
+  name: Filters.SHOW_INACTIVE,
   label: 'Show Inactive',
 };
 export interface Location {

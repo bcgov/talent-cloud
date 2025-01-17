@@ -12,23 +12,50 @@ import {
 import { DatePickerHeader } from './DatePickerHeader';
 import { Tooltip } from '@/components/ui';
 import { CalendarDaysIcon } from '@heroicons/react/24/solid';
-import { getDateDisplay } from './helpers';
+import { format } from 'date-fns';
+import { Filters } from '@/common';
 
 export const DatePicker = ({
   value,
-  onChange,
   label,
   field,
   disabled,
   reset,
+  searchParams,
+  setSearchParams,
 }: {
-  onChange: (range: DateRange | undefined) => void;
   label: string;
   field: any;
-  value: DateRange | undefined;
+  value: DateRange;
   disabled?: boolean;
   reset?: () => void;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: any) => any;
 }) => {
+  const onChange = (newValue?: DateRange) => {
+    newValue?.from &&
+      searchParams.set(
+        Filters.AVAILABILITY_FROM_DATE,
+        format(newValue.from, 'yyyy-MM-dd'),
+      );
+    newValue?.to &&
+      searchParams.set(
+        Filters.AVAILABILITY_TO_DATE,
+        format(newValue.to, 'yyyy-MM-dd'),
+      );
+    if (!newValue && value.from) {
+      searchParams.set(
+        Filters.AVAILABILITY_FROM_DATE,
+        format(value?.from, 'yyyy-MM-dd'),
+      );
+      searchParams.set(
+        Filters.AVAILABILITY_TO_DATE,
+        format(value?.from, 'yyyy-MM-dd'),
+      );
+    }
+    setSearchParams({ ...Object.fromEntries(searchParams) });
+  };
+
   return (
     <>
       <span className="label">{label}</span>
@@ -44,7 +71,14 @@ export const DatePicker = ({
               disabled={disabled}
               className={menuItemClass[disabled ? 'disabled' : field.name]}
             >
-              <span>{getDateDisplay(value)} </span>
+              <span>
+                {format(value.from ?? new Date(), 'yyyy-MM-dd') ===
+                  format(value.to ?? new Date(), 'yyyy-MM-dd') &&
+                format(value.to ?? new Date(), 'yyyy-MM-dd') ===
+                  format(new Date(), 'yyyy-MM-dd')
+                  ? `${format(value.from ?? new Date(), 'yyyy-MM-dd')} (Today)`
+                  : `${format(value.from ?? new Date(), 'yyyy-MM-dd')} - ${format(value.to ?? new Date(), 'yyyy-MM-dd')}`}{' '}
+              </span>
 
               <CalendarDaysIcon className="h-6 w-6 text-defaultGray" />
             </MenuButton>

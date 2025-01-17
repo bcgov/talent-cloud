@@ -1,7 +1,7 @@
 import type { Cell, Row } from '@/components';
 import { Loading, TableBodyCell } from '@/components';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import type { ReactElement } from 'react';
+import { Fragment, type ReactElement } from 'react';
 
 export const Table = ({
   loading,
@@ -27,7 +27,7 @@ export const Table = ({
               scope="col"
               className={`px-2 bg-white  border-t-2 border-t-slate-500 text-nowrap  text-dark text-left h-[64px] py-2 border-b-2 border-b-primaryBlue`}
             >
-              {col}
+              {col.props.children}
             </th>
           ))}
         </tr>
@@ -42,7 +42,7 @@ export const Table = ({
           </tr>
         ) : (
           rows?.map((row: Row, index: number) => (
-            <>
+            <Fragment key={index}>
               {index !== 0 && (
                 <tr>
                   <td
@@ -53,7 +53,7 @@ export const Table = ({
               )}
               <tr key={row.key} id={row.key}>
                 {row.cells.map((itm: Cell) => (
-                  <>
+                  <Fragment key={itm.key}>
                     <td
                       key={itm.key}
                       scope="row"
@@ -89,10 +89,10 @@ export const Table = ({
                         ))}
                       </table>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tr>
-            </>
+            </Fragment>
           ))
         )}
       </tbody>

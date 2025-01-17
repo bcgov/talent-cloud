@@ -13,10 +13,10 @@ import type {
   Location,
   SectionType,
 } from '@/common';
-import { DashboardFilterNames } from '@/common';
+import { Filters } from '@/common';
 import { useEffect, useMemo, useState } from 'react';
 import { useAxios } from './useAxios';
-import type { FireCentre } from '@/common/enums/firecentre.enum';
+import { FireCentre } from '@/common/enums/firecentre.enum';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { Section } from '@/common/enums/sections.enum';
 import { SectionName } from '@/common/enums/sections.enum';
@@ -78,26 +78,26 @@ export const useProgramFieldData = (program?: Program) => {
     })();
   }, [program]);
 
-  const filters: { [key: string]: FieldInterface } = useMemo(() => {
+  const fields: { [key: string]: FieldInterface } = useMemo(() => {
     return {
       name: {
-        name: DashboardFilterNames.NAME,
+        name: Filters.NAME,
       },
       fireCentre: {
-        name: DashboardFilterNames.FIRE_CENTRE,
+        name: Filters.FIRE_CENTRE,
         options: fireCentre.map((itm) => ({
           label: FireCentreName[itm],
-          value: itm,
+          value: FireCentre[itm],
         })),
         placeholder: 'Select fire centre(s)',
       },
       region: {
-        name: DashboardFilterNames.REGION,
+        name: Filters.REGION,
         options: regions.map((itm) => ({ label: RegionName[itm], value: itm })),
         placeholder: 'Select region(s)',
       },
       location: {
-        name: DashboardFilterNames.LOCATION,
+        name: Filters.LOCATION,
         placeholder: 'Select home location(s)',
         groupedOptions:
           program === Program.BCWS
@@ -122,7 +122,7 @@ export const useProgramFieldData = (program?: Program) => {
       },
       function: {
         placeholder: 'Select function and experience levels',
-        name: DashboardFilterNames.FUNCTION,
+        name: Filters.FUNCTION,
         label: 'Function & Experience Level',
         options: functions.map((itm: FunctionType) => ({
           label: itm.name,
@@ -130,7 +130,7 @@ export const useProgramFieldData = (program?: Program) => {
         })),
       },
       experience: {
-        name: DashboardFilterNames.EXPERIENCE,
+        name: Filters.EXPERIENCE,
         options: [
           {
             label: ExperienceName.INTERESTED,
@@ -148,7 +148,7 @@ export const useProgramFieldData = (program?: Program) => {
         ],
       },
       section: {
-        name: DashboardFilterNames.SECTION,
+        name: Filters.SECTION,
         options: Object.keys(sections).map((itm) => ({
           label: SectionName[itm as Section],
           value: itm,
@@ -156,7 +156,7 @@ export const useProgramFieldData = (program?: Program) => {
         label: 'Select section and role',
       },
       role: {
-        name: DashboardFilterNames.ROLE,
+        name: Filters.ROLE,
         label: '',
         options: Object.keys(sections).map((itm) =>
           Object.values(sections[itm as keyof typeof sections]).map((role) => ({
@@ -167,7 +167,7 @@ export const useProgramFieldData = (program?: Program) => {
       },
       availabilityType: {
         placeholder: 'Select availability type',
-        name: DashboardFilterNames.AVAILABILITY_TYPE,
+        name: Filters.AVAILABILITY_TYPE,
         options: [
           {
             label: AvailabilityTypeName.AVAILABLE,
@@ -194,7 +194,7 @@ export const useProgramFieldData = (program?: Program) => {
   return {
     functions,
     bcwsRoles,
-    filters,
+    fields,
     locations,
     regions,
     fireCentre,

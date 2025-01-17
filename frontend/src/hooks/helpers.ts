@@ -18,9 +18,12 @@ export const getAvailabilityValue = (
   availabilityDates: DateRange,
   availability: Availability[],
 ) => {
-  const totalAvailableDays = availability.filter(
-    (itm) => itm.availabilityType === availabilityType,
-  ).length;
+  const totalAvailableDays =
+    availabilityType === AvailabilityType.AVAILABLE
+      ? availability.filter((itm) => itm.availabilityType !== availabilityType)
+          .length
+      : availability.filter((itm) => itm.availabilityType === availabilityType)
+          .length;
   const totalDaysSearched =
     differenceInDays(
       availabilityDates.to ?? new Date(),
@@ -53,13 +56,6 @@ const renderAvailability = (personnel: Personnel, filterValues: URLSearchParams)
     personnel?.availability &&
     personnel?.availability?.length > 0
   ) {
-    if (
-      AvailabilityType[
-        filterValues?.get('availabilityType') as keyof typeof AvailabilityType
-      ] === AvailabilityType.AVAILABLE
-    ) {
-      return { availability: AvailabilityTypeName.AVAILABLE };
-    }
     return getAvailabilityValue(
       filterValues.get('availabilityType') as AvailabilityType,
       {

@@ -5,7 +5,7 @@ import { classes } from '../filters/classes';
 
 export const MenuButton = () => {
   const { open } = useMenu();
-
+  open && document.body.classList.toggle('overflow-y-hidden', open);
   return (
     <div className={classes.menu.buttonContainer}>
       {open ? (

@@ -334,28 +334,32 @@ export class PersonnelService {
           date: datePST(new Date()),
         });
       }
-    } else if (availabilityType === AvailabilityTypeLabel.AVAILABLE) {
-      this.logger.log(availabilityFromDate, availabilityToDate);
-
-      if (availabilityFromDate && availabilityToDate) {
+    } else if (availabilityType === AvailabilityTypeLabel.AVAILABLE) {      
+      
+      const start = parse(availabilityFromDate, 'yyyy-MM-dd', new Date());
+      const end = parse(availabilityToDate, 'yyyy-MM-dd', new Date());
+      
+      this.logger.log(`Availability From Date: ${start}`);
+      this.logger.log(`Availability From Date: ${end}`);
+      this.logger.log(`Difference In Days: ${differenceInDays(availabilityToDate, availabilityFromDate)}`)
+      
+      if (differenceInDays(availabilityToDate, availabilityFromDate) >= 1) {
         const allAvailable =
           this.availabilityRepository.createQueryBuilder('availability');
         allAvailable.select('personnel');
         allAvailable.where(
           'availability.date >= :from AND availability.date <= :to',
           {
-            from: new Date(availabilityFromDate),
-            to: new Date(availabilityToDate),
+            from: start,
+            to: end,
           },
         );
         allAvailable.groupBy('personnel');
+
         // If we are searching for 6 days, exclude anyone who is unavailable for half (6/2 = 3) days or more of the 6 days searched
         // differenceInDays + 1 because the function does not seem inclusive of the last day; makes sense if it's 00:00
         allAvailable.having('count(*) >= :numDays', {
-          numDays: Math.floor(
-            (differenceInDays(availabilityToDate, availabilityFromDate) + 1) /
-              2,
-          ),
+          numDays: differenceInDays(availabilityToDate, availabilityFromDate)
         });
 
         queryBuilder.andWhere(
@@ -368,16 +372,18 @@ export class PersonnelService {
           'availability',
           'availability.date >= :from AND availability.date <= :to',
           {
-            from: new Date(availabilityFromDate),
-            to: new Date(availabilityToDate),
+            from: start,
+            to: end,
           },
         );
       } else {
+      
+        this.logger.log('Availability Query - Available - Today');  
         const allAvailable =
           this.availabilityRepository.createQueryBuilder('availability');
         allAvailable.select('personnel');
         allAvailable.andWhere('availability.date = :date', {
-          date: datePST(new Date()),
+          date: start,
         });
 
         queryBuilder.where(
@@ -386,9 +392,10 @@ export class PersonnelService {
         );
       }
     } else {
+      this.logger.log('Availability Query - No Type Specified');  
       queryBuilder.leftJoinAndSelect(
         'personnel.availability',
-        'availability',
+        'availability',  
         'availability.date = :date',
         { date: datePST(new Date()) },
       );
@@ -513,9 +520,9 @@ export class PersonnelService {
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
-
+    this.logger.log(`Availability From Date: ${start}`);
     const end = parse(query.to, 'yyyy-MM-dd', new Date());
-
+    this.logger.log(`Availability From Date: ${end}`);
     // We are always returning the full month, so set the start date to the first of the month and the end date to the last day of the month
     start.setDate(1);
 

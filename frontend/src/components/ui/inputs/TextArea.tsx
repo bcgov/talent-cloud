@@ -20,6 +20,7 @@ export const TextArea = ({
       {required && <span className="text-error">*</span>}
       <textarea
         {...field}
+        id={field.name}
         required={required}
         placeholder={placeholder ?? ''}
         disabled={disabled}
