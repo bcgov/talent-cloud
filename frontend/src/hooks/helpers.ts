@@ -174,12 +174,12 @@ export const renderCells = (
     ],
     [Program.BCWS]: [
       cells.name,
-      cells.dateApproved,
       cells.fireCentre,
       cells.location,
       cells.availability,
       cells.travelPreference,
       cells.unionMembership,
+      cells.ministry,
     ],
   };
 

@@ -4,12 +4,12 @@ import { DashboardColumns } from '@/common';
 export const activeCols = {
   [Program.BCWS]: [
     DashboardColumns.NAME,
-    DashboardColumns.DATE_APPROVED,
     DashboardColumns.FIRE_CENTRE,
     DashboardColumns.LOCATION,
     DashboardColumns.AVAILABILITY,
     DashboardColumns.TRAVEL_PREFERENCE,
     DashboardColumns.UNION_MEMBERSHIP,
+    DashboardColumns.MINISTRY,
   ],
   [Program.EMCR]: [
     DashboardColumns.NAME,
