@@ -34,7 +34,6 @@ export const RecommitmentProfileBanner = ({
     onClick: handleClick,
     type: BannerType.RECOMMITMENT,
   };
-
   const ApprovedContent = {
     content: (
       <p className="text-sm">
@@ -111,40 +110,44 @@ export const RecommitmentProfileBanner = ({
     onClose: handleCloseBanner,
   };
 
-  const renderBanner = () => {
-    const emcrStatus = personnel?.recommitment?.find(
-      (itm) => itm.program === Program.EMCR,
-    )?.status;
-    const bcwsStatus = personnel?.recommitment?.find(
-      (itm) => itm.program === Program.BCWS,
-    )?.status;
+  const emcrStatus = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.EMCR,
+  )?.status;
+  const bcwsStatus = personnel?.recommitment?.find(
+    (itm) => itm.program === Program.BCWS,
+  )?.status;
 
-    if (
-      emcrStatus === RecommitmentStatus.PENDING ||
-      bcwsStatus === RecommitmentStatus.PENDING
-    )
-      return <RecommitmentBanner {...PendingContent} />;
-    if (
-      emcrStatus === RecommitmentStatus.MEMBER_DENIED ||
-      bcwsStatus === RecommitmentStatus.MEMBER_DENIED
-    )
-      return <RecommitmentBanner {...DeclinedContent} />;
-    if (
-      emcrStatus === RecommitmentStatus.MEMBER_COMMITTED ||
-      bcwsStatus === RecommitmentStatus.MEMBER_COMMITTED
-    )
-      return <RecommitmentBanner {...AcceptedContent} />;
-    if (
-      emcrStatus === RecommitmentStatus.SUPERVISOR_APPROVED ||
-      bcwsStatus === RecommitmentStatus.SUPERVISOR_APPROVED
-    )
-      return <RecommitmentBanner {...ApprovedContent} />;
-    if (
-      emcrStatus === RecommitmentStatus.SUPERVISOR_DENIED ||
-      bcwsStatus === RecommitmentStatus.SUPERVISOR_DENIED
-    )
-      return <RecommitmentBanner {...RejectedContent} />;
+  const renderProgramBanner = (status: RecommitmentStatus, program?: Program) => {
+    switch (status) {
+      case RecommitmentStatus.PENDING:
+        return <RecommitmentBanner program={program} {...PendingContent} />;
+      case RecommitmentStatus.MEMBER_COMMITTED:
+        return <RecommitmentBanner program={program} {...AcceptedContent} />;
+      case RecommitmentStatus.MEMBER_DENIED:
+        return <RecommitmentBanner program={program} {...DeclinedContent} />;
+      case RecommitmentStatus.SUPERVISOR_APPROVED:
+        return <RecommitmentBanner program={program} {...ApprovedContent} />;
+      case RecommitmentStatus.SUPERVISOR_DENIED:
+        return <RecommitmentBanner program={program} {...RejectedContent} />;
+    }
   };
 
-  return renderBanner();
+  if (emcrStatus && bcwsStatus && emcrStatus === bcwsStatus) {
+    return renderProgramBanner(emcrStatus);
+  }
+  if (!emcrStatus && bcwsStatus) {
+    return renderProgramBanner(bcwsStatus, Program.BCWS);
+  }
+  if (!bcwsStatus && emcrStatus) {
+    return renderProgramBanner(emcrStatus, Program.EMCR);
+  }
+
+  if (emcrStatus && bcwsStatus && emcrStatus !== bcwsStatus) {
+    return (
+      <div className="flex flex-col space-y-4">
+        {renderProgramBanner(emcrStatus, Program.EMCR)}
+        {renderProgramBanner(bcwsStatus, Program.BCWS)}
+      </div>
+    );
+  }
 };
