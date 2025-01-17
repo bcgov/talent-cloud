@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BcwsController } from './bcws.controller';
 import { BcwsService } from './bcws.service';
+import { AuditModule } from '../audit/audit.module';
+import { BcwsPersonnelSubscriber } from '../audit/subscribers/bcws-personnel.subscriber';
 import {
   BcwsPersonnelEntity,
   BcwsSectionsAndRolesEntity,
@@ -18,10 +20,11 @@ import { PersonnelModule } from '../personnel/personnel.module';
       BcwsRoleEntity,
     ]),
     PersonnelModule,
+    AuditModule,
   ],
 
   controllers: [BcwsController],
-  providers: [BcwsService, AppLogger],
+  providers: [BcwsService, AppLogger, BcwsPersonnelSubscriber],
   exports: [TypeOrmModule, BcwsService],
 })
 export class BcwsModule {}

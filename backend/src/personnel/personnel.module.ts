@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonnelController } from './personnel.controller';
 import { PersonnelService } from './personnel.service';
 import { SupervisorController } from './supervisor.controller';
+import { AuditModule } from '../audit/audit.module';
+import { PersonnelSubscriber } from '../audit/subscribers/personnel.subscriber';
 import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
@@ -16,6 +18,7 @@ import { MailModule } from '../mail/mail.module';
   imports: [
     LoggerModule,
     MailModule,
+    AuditModule,
     TypeOrmModule.forFeature([
       PersonnelEntity,
       AvailabilityEntity,
@@ -27,7 +30,7 @@ import { MailModule } from '../mail/mail.module';
     ]),
   ],
   controllers: [PersonnelController, SupervisorController],
-  providers: [PersonnelService],
+  providers: [PersonnelService, PersonnelSubscriber],
   exports: [TypeOrmModule, PersonnelService],
 })
 export class PersonnelModule {}

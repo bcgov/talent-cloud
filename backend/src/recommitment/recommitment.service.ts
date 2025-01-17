@@ -11,6 +11,7 @@ import { RecommitmentEntity } from '../database/entities/recommitment/recommitme
 import { AppLogger } from '../logger/logger.service';
 import { TemplateType, EmailTags } from '../mail/constants';
 import { MailDto } from '../mail/mail.dto';
+import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
 import {
   PersonnelRecommitmentDTO,
@@ -18,7 +19,6 @@ import {
 } from '../personnel/dto/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
-import { MailRO } from '../mail/mail.ro';
 
 @Injectable()
 export class RecommitmentService {
@@ -47,26 +47,37 @@ export class RecommitmentService {
     recommitmentUpdate: PersonnelRecommitmentDTO,
     req: RequestWithRoles,
   ): Promise<PersonnelEntity> {
-    const programsToUpdate = Object.keys(recommitmentUpdate);
+    const programsToUpdate = Object.keys(recommitmentUpdate).filter((key) =>
+      [Program.BCWS, Program.EMCR].includes(key as Program),
+    );
     const personnel = await this.personnelService.findOne(id);
-    
+
     for (const key of programsToUpdate) {
       const recommitment = await this.recommitmentRepository.findOne({
         where: {
-          personnel: {id},
-          recommitmentCycle: {year: recommitmentUpdate[key].year},
+          personnel: { id },
+          recommitmentCycle: { year: recommitmentUpdate[key].year },
           program: recommitmentUpdate[key].program,
         },
         relations: ['personnel', 'recommitmentCycle'],
       });
 
       // If update request is sent by the member, log the member decision date, otherwise log the supervisor decision date.
-      if ([RecommitmentStatus.MEMBER_COMMITTED, RecommitmentStatus.MEMBER_DENIED].includes(recommitmentUpdate[key].status)) {
+      if (
+        [
+          RecommitmentStatus.MEMBER_COMMITTED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ].includes(recommitmentUpdate[key].status)
+      ) {
         recommitmentUpdate[key].memberDecisionDate = new Date();
-      } else if ([RecommitmentStatus.SUPERVISOR_APPROVED, RecommitmentStatus.SUPERVISOR_DENIED].includes(recommitmentUpdate[key].status)) {
+      } else if (
+        [
+          RecommitmentStatus.SUPERVISOR_APPROVED,
+          RecommitmentStatus.SUPERVISOR_DENIED,
+        ].includes(recommitmentUpdate[key].status)
+      ) {
         recommitmentUpdate[key].supervisorDecisionDate = new Date();
         recommitmentUpdate[key].supervisorIdir = req.idir;
-      
       }
 
       // Update the recommitment status
@@ -78,23 +89,39 @@ export class RecommitmentService {
         },
         {
           ...recommitment,
-          supervisorIdir: recommitmentUpdate[key]?.supervisorIdir, 
-          supervisorDecisionDate: recommitmentUpdate[key].supervisorDecisionDate,
+          supervisorIdir: recommitmentUpdate[key]?.supervisorIdir,
+          supervisorDecisionDate:
+            recommitmentUpdate[key].supervisorDecisionDate,
           memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
-          memberReason: recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
+          memberReason:
+            recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
           supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
           status: recommitmentUpdate[key]?.status,
         },
       );
       // If recomitted to both, only send one email to supervisor
-      if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
-        this.logger.log(`${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`);
+      if (
+        recommitmentUpdate?.bcws?.status ===
+          RecommitmentStatus.MEMBER_COMMITTED &&
+        recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
+      ) {
+        this.logger.log(
+          `${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`,
+        );
       } else {
         this.triggerEmailNotification(id, recommitmentUpdate[key]);
-      } 
+      }
     }
-    if(recommitmentUpdate?.bcws?.status === RecommitmentStatus.MEMBER_COMMITTED && recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED){
-      this.triggerEmailNotification(id, {year: new Date().getFullYear(), status: RecommitmentStatus.MEMBER_COMMITTED, program: Program.ALL});
+    if (
+      recommitmentUpdate?.bcws?.status ===
+        RecommitmentStatus.MEMBER_COMMITTED &&
+      recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
+    ) {
+      this.triggerEmailNotification(id, {
+        year: new Date().getFullYear(),
+        status: RecommitmentStatus.MEMBER_COMMITTED,
+        program: Program.ALL,
+      });
     }
 
     if (recommitmentUpdate.supervisorInformation) {
@@ -132,7 +159,7 @@ export class RecommitmentService {
     );
 
     const testList = memberList.filter((itm) =>
-      testEmail.find((r) => itm.personnel.email === r)
+      testEmail.find((r) => itm.personnel.email === r),
     );
 
     const supervisorList = uniqueSupervisors.map((itm) =>
@@ -140,7 +167,7 @@ export class RecommitmentService {
     );
 
     const testSupervisorList = supervisorList.filter((itm) =>
-      testEmail.find((r) => itm.personnel.supervisorEmail === r)
+      testEmail.find((r) => itm.personnel.supervisorEmail === r),
     );
 
     return {
@@ -157,6 +184,9 @@ export class RecommitmentService {
     id: string,
     recommitmentUpdate: UpdatePersonnelRecommitmentDTO,
   ): Promise<void> {
+    if (1) {
+      return;
+    }
     const personnel = await this.recommitmentRepository.findOneOrFail({
       where: { personnelId: id },
       relations: ['personnel'],

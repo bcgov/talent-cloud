@@ -3,7 +3,9 @@ import { APP_FILTER } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ClsModule } from 'nestjs-cls';
 import { AppController } from './app.controller';
+import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { BcwsModule } from './bcws/bcws.module';
 import { DatabaseModule } from './database/database.module';
@@ -36,6 +38,13 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
     FormModule,
     RegionsAndLocationsModule,
     RecommitmentModule,
+    AuditModule,
+    ClsModule.forRoot({
+      global: true,
+      middleware: {
+        mount: true,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
