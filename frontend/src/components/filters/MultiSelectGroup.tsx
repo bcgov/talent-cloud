@@ -1,10 +1,12 @@
 import type { FieldGroupedOption, FieldInterface } from '@/components';
-import { Checkbox, Menu, MenuButton, MenuHandler, MenuList } from '@/components';
+import { Checkbox } from '@/components';
 import { classes } from './classes';
 import { FireCentreName } from '@/common/enums/firecentre.enum';
 import { Filters, type Program } from '@/common';
-import { MenuItem, Typography, Chip as MuiChip } from '@material-tailwind/react';
-import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
+import { Typography, Chip as MuiChip } from '@material-tailwind/react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { menuItemClass } from '../filters/classes';
+import { ChevronDownIcon } from '../ui/Icons';
 
 export const MultiSelectGroup = ({
   searchParams,
@@ -152,60 +154,58 @@ export const MultiSelectGroup = ({
   return (
     <>
       <span className="label">{label}</span>
-      <Menu
-        {...propTypesMenuProps}
-        dismiss={{
-          outsidePress: true,
-          itemPress: false,
-          isRequired: { outsidePress: true, itemPress: false },
-        }}
-      >
-        <MenuHandler field={field} id={field.name}>
-          {values?.length ? (
-            <div className={classes.menu.chipsContainer}>
-              {values.length > 3 ? (
-                <MuiChip
-                  value={
-                    <Typography
-                      placeholder={undefined}
-                      variant="small"
-                      className="font-bold text-info capitalize leading-none"
-                    >
-                      {values.length} Selected
-                    </Typography>
-                  }
-                  variant="ghost"
-                  className={classes.menu.chip}
-                  onClose={handleCloseMaxChips}
-                />
-              ) : (
-                values?.map((itm) => (
+      <Menu as="div" className="relative">
+        <MenuButton className="w-full">
+          <div className={menuItemClass[field?.name]}>
+            {values?.length ? (
+              <div className={classes.menu.chipsContainer}>
+                {values.length > 3 ? (
                   <MuiChip
-                    key={itm}
                     value={
                       <Typography
                         placeholder={undefined}
                         variant="small"
                         className="font-bold text-info capitalize leading-none"
                       >
-                        {itm}
+                        {values.length} Selected
                       </Typography>
                     }
                     variant="ghost"
                     className={classes.menu.chip}
-                    onClose={() => handleCloseChip(itm)}
+                    onClose={handleCloseMaxChips}
                   />
-                ))
-              )}
-            </div>
-          ) : (
-            <span className={classes.menu.placeholder}>{field.placeholder}</span>
-          )}
-          <MenuButton />
-        </MenuHandler>
-        <MenuList className={field.name}>
-          <div className="flex flex-col p-4">
-            <span className="label pl-4 pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
+                ) : (
+                  values?.map((itm) => (
+                    <MuiChip
+                      key={itm}
+                      value={
+                        <Typography
+                          placeholder={undefined}
+                          variant="small"
+                          className="font-bold text-info capitalize leading-none"
+                        >
+                          {itm}
+                        </Typography>
+                      }
+                      variant="ghost"
+                      className={classes.menu.chip}
+                      onClose={() => handleCloseChip(itm)}
+                    />
+                  ))
+                )}
+              </div>
+            ) : (
+              <span className={classes.menu.placeholder}>{field.placeholder}</span>
+            )}
+            <ChevronDownIcon />
+          </div>
+        </MenuButton>
+        <MenuItems
+          transition
+          className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        >
+          <div className="p-4">
+            <span className="label pb-4">{`Select ${label.toLowerCase()}(s):`}</span>
             <div className="grid grid-cols-4 gap-y-4 gap-x-2">
               {field?.groupedOptions?.map((group: FieldGroupedOption) => (
                 <div
@@ -213,7 +213,7 @@ export const MultiSelectGroup = ({
                   className={`${group.label === FireCentreName.COASTAL ? 'col-span-2 grid grid-cols-2' : 'col-span-1'}`}
                 >
                   <div className="col-span-2">
-                    <MenuItem>
+                    <MenuItem disabled>
                       <span className={classes.menu.listLabel}>
                         <Checkbox
                           id={group.value}
@@ -242,7 +242,7 @@ export const MultiSelectGroup = ({
                   </div>
                   <div className="col-span-1">
                     {group.options.slice(0, 20).map((option: any) => (
-                      <MenuItem key={option}>
+                      <MenuItem key={option} as="div" className="py-1" disabled>
                         <label
                           className={classes.menu.listItem}
                           htmlFor={option.name}
@@ -281,7 +281,7 @@ export const MultiSelectGroup = ({
               ))}
             </div>
           </div>
-        </MenuList>
+        </MenuItems>
       </Menu>
     </>
   );

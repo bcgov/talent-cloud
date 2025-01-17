@@ -29,7 +29,8 @@ export const menuItemClass: { [key: string]: string } = {
   driverLicense: classes.menu.container,
   fireCentre: classes.menu.container + ' md:rounded-tr-none md:rounded-br-none',
   location:
-    classes.menu.container + ' md:rounded-tl-none md:rounded-bl-none md:border-l-0',
+    classes.menu.container +
+    ' md:rounded-tl-none md:rounded-bl-none md:border-l-0 w-full',
   function: classes.menu.container,
   section: classes.menu.container,
   role: classes.menu.container,
