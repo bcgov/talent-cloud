@@ -26,10 +26,6 @@ export class RecommitmentSubscriber
 
   afterUpdate(event: UpdateEvent<RecommitmentEntity>): void {
     delete event.entity.personnel;
-    if (!this.clsService.get('primaryRole')) {
-      // This could happen in automated jobs from the system
-      this.clsService.set('email', 'SYSTEM');
-    }
 
     // No database entity here?
     this.auditService.logAudit(

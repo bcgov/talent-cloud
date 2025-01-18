@@ -22,7 +22,7 @@ export class AuditService {
     const updatedBy =
       this.clsService.get('primaryRole') === Role.MEMBER
         ? 'member'
-        : this.clsService.get('email');
+        : this.clsService.get('email') || 'SYSTEM';
     await this.auditRepository.save({
       data: {
         before,
