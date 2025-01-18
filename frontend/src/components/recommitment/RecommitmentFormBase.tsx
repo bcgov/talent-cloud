@@ -248,11 +248,6 @@ export const RecommitmentFormBase = ({
             onUpdate={setUnableToJoinReasons}
             key="unable"
           />,
-          <Assertions
-            program={Program.ALL}
-            onUpdate={setAssertionsChecked}
-            key="assertions"
-          />,
         ];
       default:
         return [
@@ -345,7 +340,10 @@ export const RecommitmentFormBase = ({
       }
     }
 
-    if (currentComponentType === Assertions) {
+    if (
+      currentComponentType === Assertions ||
+      currentComponentType === UnableToJoin && recommitmentAnswer === 'no'
+    ) {
       setButtonLoading(true);
       handleSubmitRecommitment();
     }
@@ -460,7 +458,10 @@ export const RecommitmentFormBase = ({
 
   const getButtonText = () => {
     const currentComponentType = currentComponent.type;
-    if (currentComponentType === Assertions) {
+    if (
+      currentComponentType === Assertions ||
+      currentComponentType === UnableToJoin && recommitmentAnswer === 'no'
+    ) {
       return 'Submit Decision';
     }
     if (currentComponentType === ParQBase && currentParQStep === 3) {
