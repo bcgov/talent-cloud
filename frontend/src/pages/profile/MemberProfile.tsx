@@ -18,6 +18,7 @@ const MemberProfile = () => {
   const {
     personnel,
     program,
+    recommitmentProgram,
     loading,
     updatePersonnel,
     openRecommitmentForm,
@@ -120,11 +121,11 @@ const MemberProfile = () => {
           open={openRecommitmentForm}
           onClose={updatePersonnel}
           handleOpen={handleOpenRecommitmentForm}
-          title={`Confirm Recommitment Status for ${program === Program.ALL ? 'BCWS and EMCR' : program.toUpperCase()}`}
+          title={`Confirm Recommitment Status for ${recommitmentProgram === Program.ALL ? 'BCWS and EMCR' : recommitmentProgram?.toUpperCase()}`}
           style={'lg:w-2/3 xl:w-1/2'}
         >
           <RecommitmentFormBase
-            program={program}
+            program={recommitmentProgram}
             personnel={personnel}
             onClose={handleOpenRecommitmentForm}
           />

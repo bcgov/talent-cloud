@@ -23,7 +23,7 @@ interface StepIndicatorProps {
 }
 
 interface RecommitmentFormProps {
-  program: Program.BCWS | Program.EMCR | Program.ALL;
+  program?: Program;
   personnel: MemberProfile;
   onClose: () => void;
 }
