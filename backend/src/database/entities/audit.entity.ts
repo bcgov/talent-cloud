@@ -20,6 +20,6 @@ export class AuditEntity {
   @Column('varchar')
   updatedBy: string;
 
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   entityId?: string; // Typically personnel id
 }
