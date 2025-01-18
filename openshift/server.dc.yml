@@ -206,6 +206,11 @@ objects:
                     configMapKeyRef:
                       key: end_recommitment_schedule
                       name: ${APP_NAME}-recommitment
+                - name: TEST_RUN
+                  valueFrom:
+                    configMapKeyRef:
+                      key: test_run
+                      name: ${APP_NAME}-recommitment
               image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
               ports:
                 - containerPort: '${{SERVER_PORT}}'
