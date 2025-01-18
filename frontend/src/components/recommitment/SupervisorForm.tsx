@@ -5,13 +5,13 @@ interface SupervisorFormProps {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phone?: string;
   };
   onUpdate: (data: {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phone?: string;
   }) => void;
 }
 

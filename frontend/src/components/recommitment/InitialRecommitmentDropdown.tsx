@@ -7,7 +7,7 @@ export const InitialRecommitmentDropdown = ({
   handleChange,
 }: {
   initialValue?: string;
-  program: Program;
+  program?: Program;
   handleChange: (v: string | undefined) => void;
 }) => {
   const getText = () => {

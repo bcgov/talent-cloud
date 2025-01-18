@@ -72,6 +72,7 @@ export const TableBodyCell = ({
   recommitmentStatus?: RecommitmentStatus;
   isRecommitmentCycleOpen?: boolean;
 }) => {
+  
   switch (cell.columnName) {
     case DashboardColumns.NAME:
       return (
@@ -84,13 +85,11 @@ export const TableBodyCell = ({
           >
             {cell.value}
           </Link>
-          {status && status === Status.NEW && (
+          {status && status === Status.NEW ? (
             <span className="bg-warningBannerLight px-2 rounded-full ml-2">
               {StatusNames.NEW}
-            </span>
-          )}
-          {/* Only show Active Persons recommitment status during recommitment period */}
-          {isRecommitmentCycleOpen &&
+            </span>) : 
+          isRecommitmentCycleOpen &&
             recommitmentStatus &&
             status === Status.ACTIVE &&
             renderRecommitmentStatus(recommitmentStatus, isRecommitmentCycleOpen)}

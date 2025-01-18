@@ -91,10 +91,11 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       MODE: ${MODE}
       END_RECOMMITMENT_SCHEDULE: ${END_RECOMMITMENT_SCHEDULE}
-      TEST_EMAIL: ${TEST_EMAIL}
       CHOKIDAR_USEPOLLING: true
       ALLOW_EMPTY_PASSWORD: "yes"
       ENV: ${ENV}
+      TEST_EMAIL: ${TEST_EMAIL}
+      TEST_RUN: ${TEST_RUN}
     networks:
       - tc
   keycloak:
@@ -128,8 +129,6 @@ services:
       HEALTH_ENABLED: "true"
       HTTP_ENABLED: "true"
       METRICS_ENABLED: "true"
-      TEST_EMAIL: ${TEST_EMAIL}
-      TEST_RUN: ${TEST_RUN}
     depends_on:
       - db
     ports:

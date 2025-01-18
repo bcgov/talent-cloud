@@ -164,7 +164,8 @@ export class EmcrPersonnelEntity {
       status: this.status,
       travelPreference: this.travelPreference,
       newMember:
-        Status.ACTIVE && differenceInDays(new Date(), this.dateApproved) < 6,
+        this.status === Status.ACTIVE &&
+        differenceInDays(new Date(), this.dateApproved) < 6,
       icsTraining:
         this.trainings?.some((t) => t.name === ICS_TRAINING_NAME) || false,
       experiences:

@@ -451,6 +451,7 @@ export class PersonnelService {
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
       } else if (status === Status.ACTIVE) {
+        //TODO - Fix this (not sure if the order by is being added here)
         queryBuilder.addSelect(
           `CASE WHEN emcr_personnel.dateApproved > current_date - interval '5' day THEN emcr_personnel.dateApproved ELSE null END`,
           'new_member',
