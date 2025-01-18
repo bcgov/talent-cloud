@@ -499,7 +499,32 @@ export class RecommitmentService {
     memberDeclined: RecommitmentRO[],
     supervisorDenied: RecommitmentRO[],
   ): Promise<void> {
-    for (const recommitment of [...memberPending]) {
+    const membersToInactive = [
+      ...memberPending,
+      ...memberCommitted,
+      ...memberDeclined,
+      ...supervisorDenied,
+    ];
+
+    for await (const recommitment of [
+      ...membersToInactive.filter((itm) => itm.program === Program.BCWS),
+    ]) {
+      await this.bcwsService.updatePersonnelAfterRecommitment(
+        recommitment.personnel.id,
+        Status.INACTIVE,
+      );
+    }
+
+    for await (const recommitment of [
+      ...membersToInactive.filter((itm) => itm.program === Program.EMCR),
+    ]) {
+      await this.emcrService.updatePersonnelAfterRecommitment(
+        recommitment.personnel.id,
+        Status.INACTIVE,
+      );
+    }
+
+    for await (const recommitment of [...memberPending]) {
       await this.recommitmentRepository.update(
         {
           personnelId: recommitment.personnelId,
@@ -512,7 +537,7 @@ export class RecommitmentService {
       );
     }
 
-    for (const recommitment of [...memberCommitted]) {
+    for await (const recommitment of [...memberCommitted]) {
       await this.recommitmentRepository.update(
         {
           personnelId: recommitment.personnelId,
@@ -522,31 +547,6 @@ export class RecommitmentService {
         {
           status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
         },
-      );
-    }
-
-    const membersToInactive = [
-      ...memberPending,
-      ...memberCommitted,
-      ...memberDeclined,
-      ...supervisorDenied,
-    ];
-
-    for (const recommitment of [
-      ...membersToInactive.filter((itm) => itm.program === Program.BCWS),
-    ]) {
-      await this.bcwsService.updatePersonnelAfterRecommitment(
-        recommitment.personnel.id,
-        Status.INACTIVE,
-      );
-    }
-
-    for (const recommitment of [
-      ...membersToInactive.filter((itm) => itm.program === Program.EMCR),
-    ]) {
-      await this.emcrService.updatePersonnelAfterRecommitment(
-        recommitment.personnel.id,
-        Status.INACTIVE,
       );
     }
   }

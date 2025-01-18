@@ -50,7 +50,7 @@ export class EmcrService {
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
     qb.update(EmcrPersonnelEntity)
       .set({ status })
-      .where('personnel_id = :id', { personnel_id: id })
+      .where('personnel_id = :id', { id })
       .execute();
   }
 
