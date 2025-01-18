@@ -56,25 +56,34 @@ export class BcwsService {
     role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
-    const person = await this.personnelService.findOne(id);
-    const bcws = await this.bcwsPersonnelRepository.findOne({
-      where: { personnel: { id } },
+    personnel.bcws = {
+      ...personnel.bcws,
+      roles: personnel.roles,
+      logisticsNotes: personnel.logisticsNotes,
+      coordinatorNotes: personnel.coordinatorNotes,
+      liaisonFirstName: personnel.liaisonFirstName,
+      liaisonLastName: personnel.liaisonLastName,
+      liaisonPhoneNumber: personnel.liaisonPhoneNumber,
+      liaisonEmail: personnel.liaisonEmail,
+      approvedBySupervisor: personnel.approvedBySupervisor,
+      dateApproved: personnel.dateApproved,
+      status: personnel.status,
+      firstChoiceSection: personnel.firstChoiceSection,
+      secondChoiceSection: personnel.secondChoiceSection,
+      thirdChoiceSection: personnel.thirdChoiceSection,
+      travelPreference: personnel.travelPreference,
+    };
+    Object.keys(personnel.bcws).forEach((key) => {
+      if (personnel.bcws[key] === undefined) {
+        delete personnel.bcws[key];
+      }
     });
-
-    Object.keys(personnel).forEach((key) => {
-      person[key] = personnel[key];
-      bcws[key] = personnel[key];
-    });
-
-    try {
-      // This is a 'save' rather than 'update' to allow for updating many-to-many relations
-      await this.personnelService.save(person);
-      await this.bcwsPersonnelRepository.save(bcws);
-
-      return this.getBcwsPersonnelById(role, id);
-    } catch (e) {
-      console.log(e);
-    }
+    const person = await this.personnelService.findOneById(id);
+    await this.personnelService.updatePersonnelDatabase(
+      person.email,
+      personnel,
+    );
+    return this.getBcwsPersonnelById(role, id);
   }
 
   /**
