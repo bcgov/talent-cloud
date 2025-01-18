@@ -40,6 +40,21 @@ export class EmcrService {
   }
 
   /**
+   * Find personnel by id
+   * @param id
+   * @returns
+   */
+
+  async updatePersonnelAfterRecommitment(id: string, status: Status) {
+    const qb =
+      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    qb.update(EmcrPersonnelEntity)
+      .set({ status })
+      .where('personnel_id = :id', { id })
+      .execute();
+  }
+
+  /**
    * Update a personnel entity
    * @param id
    * @param personnel
@@ -204,11 +219,13 @@ export class EmcrService {
         query.page,
         query.status,
       );
-      personnel.forEach(person => {
-        if(person.personnel.recommitment){
-        person.personnel.recommitment = person?.personnel?.recommitment?.filter(itm => itm.program === Program.EMCR)
-        }
-      })
+    personnel.forEach((person) => {
+      if (person.personnel.recommitment) {
+        person.personnel.recommitment = person?.personnel?.recommitment?.filter(
+          (itm) => itm.program === Program.EMCR,
+        );
+      }
+    });
     return { personnel, count };
   }
   /**
@@ -220,7 +237,7 @@ export class EmcrService {
     role: Role[],
     id: string,
   ): Promise<Record<string, EmcrRO>> {
-    const person = await this.personnelService.findOne(id)
+    const person = await this.personnelService.findOne(id);
     const emcr = await this.emcrPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
       relations: [
@@ -238,7 +255,7 @@ export class EmcrService {
 
     const lastDeployed = await this.personnelService.getLastDeployedDate(id);
     emcr.personnel = person;
-    
+
     return emcr.toResponseObject(role, lastDeployed);
   }
   async getTrainingsByNames(names: string[]): Promise<EmcrTrainingEntity[]> {

@@ -190,3 +190,10 @@ objects:
                     configMapKeyRef:
                       key: end_recommitment_schedule
                       name: ${APP_NAME}-recommitment
+                - name: TEST_RUN
+                  valueFrom:
+                    configMapKeyRef:
+                      key: test_run
+                      name: ${APP_NAME}-recommitment
+            
+  

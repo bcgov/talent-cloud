@@ -82,6 +82,7 @@ objects:
       start_recommitment_schedule: ${START_RECOMMITMENT_SCHEDULE}
       end_recommitment_schedule: ${END_RECOMMIMENT_SCHEDULE}
       notification_schedule: ${NOTIFICATION_SCHEDULE}
+      test_run: ${TEST_RUN}
 
 
 
