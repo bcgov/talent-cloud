@@ -25,7 +25,7 @@ jobs:
         run: cp .env.example .env
       - name: Cache OpenShift CLI
         id: cache-oc
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /usr/local/bin/oc
           key: ${{ runner.os }}-oc
@@ -35,7 +35,7 @@ jobs:
           wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
-
+          
       - name: Run migrations
         run: |
           cd "$GITHUB_WORKSPACE"

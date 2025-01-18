@@ -1,10 +1,9 @@
-import { Status } from '../../common/enums';
+import { faker } from '@faker-js/faker';
 import { datasource } from '../datasource';
-import { BcwsPersonnelEntity } from '../entities/bcws';
-import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 import { createBCWShandler } from './create-bcws';
 import { createPersonnelHandler } from './create-personnel';
-import { faker } from '@faker-js/faker';
+import { BcwsPersonnelEntity } from '../entities/bcws';
+import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handler = async () => {
   if (!datasource.isInitialized) {
@@ -17,56 +16,13 @@ export const handler = async () => {
   const roles = await datasource.query('SELECT * FROM bcws_role');
   const personnelRepo = datasource.getRepository(PersonnelEntity);
   const bcwsPersonnelRepo = datasource.getRepository(BcwsPersonnelEntity);
-  const dateApplied = faker.date.past();
 
-  const status =
-  Status[
-    faker.helpers.arrayElement([
-      Status.ACTIVE,
-      Status.INACTIVE,
-      Status.PENDING,
-    ])
-  ];
-
-  
   try {
-    const { personnelData } = createPersonnelHandler(
-      status,
-      locations,
-      tools,
-      certs,
-    );
-    const { bcwsData } = createBCWShandler(roles, status, dateApplied);
-
-    const person = await personnelRepo.save(
-      personnelRepo.create(
-        new PersonnelEntity({
-          ...personnelData,
-          email: 'bcws-coordinator@gov.bc.ca',
-          supervisorEmail: 'supervisor@gov.bc.ca',
-        }),
-      ),
-    );
-
-    bcwsData.personnelId = person.id;
-    await bcwsPersonnelRepo.save(
-      bcwsPersonnelRepo.create(
-        new BcwsPersonnelEntity({ ...bcwsData, personnelId: person.id }),
-      ),
-    );
-
     for (let i = 0; i < 50; i++) {
       const dateApplied = faker.date.past();
-      const { personnelData } = createPersonnelHandler(
-        status,
-        locations,
-        tools,
-        certs,
-      );
-      
-      
-      
-      const { bcwsData } = createBCWShandler(roles, status, dateApplied);
+      const { personnelData } = createPersonnelHandler(locations, tools, certs);
+
+      const { bcwsData } = createBCWShandler(roles, dateApplied);
 
       const person = await personnelRepo.save(
         personnelRepo.create(new PersonnelEntity(personnelData)),

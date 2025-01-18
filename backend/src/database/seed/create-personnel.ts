@@ -1,10 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { divisionsAndMinistries } from '../../common/const';
-import { CreatePersonnelDTO } from '../../personnel';
-import { DriverLicense } from '../../common/enums/driver-license.enum';
-import { Ministry } from '../../common/enums/ministry.enum';
-import { Status } from '../../common/enums/status.enum';
-import { UnionMembership } from '../../common/enums/union-membership.enum';
 import {
   createTools,
   createCertifications,
@@ -15,38 +9,44 @@ import { LocationEntity } from '../entities/location.entity';
 import { AvailabilityEntity } from '../entities/personnel/availability.entity';
 import { CertificationEntity } from '../entities/personnel/certifications.entity';
 import { ToolsEntity } from '../entities/personnel/tools.entity';
-
+import { divisionsAndMinistries } from '../../common/const';
+import { DriverLicense } from '../../common/enums/driver-license.enum';
+import { Ministry } from '../../common/enums/ministry.enum';
+import { UnionMembership } from '../../common/enums/union-membership.enum';
+import { CreatePersonnelDTO } from '../../personnel';
 
 export const createPersonnelHandler = (
-  status: Status, 
   locations?: LocationEntity[],
   tools?: ToolsEntity[],
   certs?: CertificationEntity[],
 ): {
   personnelData: CreatePersonnelDTO;
 } => {
-  
   const divisionAndMinistry = faker.helpers.arrayElement(
     divisionsAndMinistries,
   );
-  
+
+  const lastName = faker.person.lastName();
+  const firstName = faker.person.firstName();
+  const supervisorFirstName = faker.person.firstName();
+  const supervisorLastName = faker.person.lastName();
 
   const personnelData: CreatePersonnelDTO = {
     homeLocation: faker.helpers.arrayElement(locations),
     workLocation: faker.helpers.arrayElement(locations),
-    firstName: faker.person.firstName(),
+    firstName: firstName,
     division: divisionAndMinistry.division,
     ministry: Ministry[divisionAndMinistry.ministry],
-    lastName: faker.person.lastName(),
-    email: faker.internet.email(),
+    lastName: lastName,
+    email: `${firstName}.${lastName}@yopmail.com`,
     primaryPhone: faker.string.numeric('##########'),
     secondaryPhone: faker.string.numeric('##########'),
     workPhone: faker.string.numeric('##########'),
     unionMembership: faker.helpers.arrayElement(Object.values(UnionMembership)),
     jobTitle: faker.company.buzzNoun(),
-    supervisorEmail: faker.internet.email(),
-    supervisorLastName: faker.person.lastName(),
-    supervisorFirstName: faker.person.firstName(),
+    supervisorEmail: `${supervisorFirstName}.${supervisorLastName}@yopmail.com`,
+    supervisorLastName: supervisorLastName,
+    supervisorFirstName: supervisorFirstName,
     supervisorPhone: faker.string.numeric('##########'),
     employeeId: faker.string.numeric('######'),
     paylistId: faker.string.numeric('########'),
@@ -65,8 +65,7 @@ export const createPersonnelHandler = (
         faker.helpers.arrayElement(Object.values(DriverLicense)),
       ]),
     ),
-    availability:
-      status !== Status.PENDING ? (availability() as AvailabilityEntity[]) : [],
+    availability: availability() as AvailabilityEntity[],
   };
   return { personnelData };
 };

@@ -43,3 +43,5 @@ jobs:
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
           make seed-oc-personnel
+          make seed-oc-bcws
+          make seed-oc-emcr
