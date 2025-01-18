@@ -26,10 +26,6 @@ export class EmcrPersonnelSubscriber
   }
 
   afterInsert(event: InsertEvent<EmcrPersonnelEntity>) {
-    if (!this.clsService.get('primaryRole')) {
-      // Typically, insertion of personnel would be from the CHEFS form, hence SYSTEM
-      this.clsService.set('email', 'SYSTEM');
-    }
     this.auditService.logAudit(
       'NULL',
       JSON.stringify(event.entity),
@@ -39,10 +35,6 @@ export class EmcrPersonnelSubscriber
   }
 
   afterUpdate(event: UpdateEvent<EmcrPersonnelEntity>): void {
-    if (!this.clsService.get('primaryRole')) {
-      // This could happen in automated jobs from the system
-      this.clsService.set('email', 'SYSTEM');
-    }
     this.auditService.logAudit(
       JSON.stringify(event.databaseEntity),
       JSON.stringify(event.entity),
