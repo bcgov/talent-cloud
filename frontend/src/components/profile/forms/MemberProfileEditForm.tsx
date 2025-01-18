@@ -78,6 +78,26 @@ export const MemberProfileEditForm = ({
       }
     }
 
+    if (values.liaisonFirstName || values.liaisonLastName || values.liaisonEmail) {
+      if (!values.bcws) {
+        values.bcws = {};
+      }
+      
+      if (values.liaisonFirstName) {
+        values.bcws.liaisonFirstName = values.liaisonFirstName;
+      }
+      if (values.liaisonLastName) {
+        values.bcws.liaisonLastName = values.liaisonLastName;
+      }
+      if (values.liaisonEmail) {
+        values.bcws.liaisonEmail = values.liaisonEmail;
+    }
+  
+      delete values.liaisonFirstName;
+      delete values.liaisonLastName;
+      delete values.liaisonEmail;
+    }
+
     delete values.dateApplied;
     delete values.dateApproved;
     delete values.employeeId; // Cannot be changed

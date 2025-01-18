@@ -529,8 +529,8 @@ export const memberData = (personnel?: Personnel) => {
       {
         title: 'Liaison Name',
         content:
-          personnel?.liaisonFirstName && personnel?.liaisonLastName
-            ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
+          personnel?.bcws?.liaisonFirstName && personnel?.bcws?.liaisonLastName
+            ? `${personnel?.bcws?.liaisonFirstName} ${personnel?.bcws?.liaisonLastName}`
             : '--',
         tooltipTitle: 'How can I find my liaison?',
         tooltipContent: (
@@ -561,7 +561,7 @@ export const memberData = (personnel?: Personnel) => {
           </div>
         ),
       },
-      { title: 'Liaison Email', content: personnel?.liaisonEmail ?? '--' },
+      { title: 'Liaison Email', content: personnel?.bcws?.liaisonEmail ?? '--' },
       {
         title: 'Ministry',
         content: `${personnel?.ministry}`,
