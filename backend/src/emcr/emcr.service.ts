@@ -60,16 +60,48 @@ export class EmcrService {
    * @param personnel
    * @returns
    */
-  async updatePersonnel(
+  async updateEmcrPersonnel(
     id: string,
     personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
   ) {
+    /**
+     * update personnel/bcws personnel
+     * @param id
+     * @param personnel
+     * @param role
+     * @returns
+     */
     this.logger.log(`Updating personnel ${id}`);
-    try {
-      return await this.personnelService.updatePersonnelDatabase(id, personnel);
-    } catch (e) {
-      console.log(e);
-    }
+    personnel.emcr = {
+      ...personnel.emcr,
+      experiences: personnel.experiences,
+      firstNationExperienceLiving: personnel?.firstNationExperienceLiving,
+      firstNationExperienceWorking: personnel?.firstNationExperienceWorking,
+      peccExperience: personnel?.peccExperience,
+      preocExperience: personnel?.preocExperience,
+      emergencyExperience: personnel?.emergencyExperience,
+      icsTraining: personnel?.icsTraining,
+      firstAidLevel: personnel?.firstAidLevel,
+      firstAidExpiry: personnel?.firstAidExpiry,
+      psychologicalFirstAid: personnel?.psychologicalFirstAid,
+      trainings: personnel.trainings,
+      logisticsNotes: personnel.logisticsNotes,
+      coordinatorNotes: personnel.coordinatorNotes,
+      approvedBySupervisor: personnel.approvedBySupervisor,
+      dateApproved: personnel.dateApproved,
+      status: personnel.status,
+      firstChoiceSection: personnel.firstChoiceSection,
+      secondChoiceSection: personnel.secondChoiceSection,
+      thirdChoiceSection: personnel.thirdChoiceSection,
+      travelPreference: personnel.travelPreference,
+    };
+    Object.keys(personnel.emcr).forEach((key) => {
+      if (personnel.emcr[key] === undefined) {
+        delete personnel.emcr[key];
+      }
+    });
+
+    return await this.personnelService.updatePersonnelDatabase(id, personnel);
   }
 
   /**
