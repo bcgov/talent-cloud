@@ -31,10 +31,13 @@ async function bootstrap() {
     }),
   );
 
-  
-  app.useStaticAssets(join(__dirname,  'views'));
-  app.setBaseViewsDir(join(__dirname,  'views'));
-  nunjucks.configure(join(__dirname,  'views'), {
+  const viewsPath =
+    process.env.ENV === 'production' || process.env.ENV === 'test'
+      ? 'views'
+      : 'views/test';
+  app.useStaticAssets(join(__dirname, viewsPath));
+  app.setBaseViewsDir(join(__dirname, viewsPath));
+  nunjucks.configure(join(__dirname, viewsPath), {
     autoescape: true,
     throwOnUndefined: false,
     trimBlocks: false,
@@ -46,7 +49,7 @@ async function bootstrap() {
 
   app.engine('njk', nunjucks.render);
   app.set('view cache', true);
-  app.setViewEngine('njk');  
+  app.setViewEngine('njk');
 
   Documentation(app);
 
