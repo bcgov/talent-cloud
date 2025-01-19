@@ -142,8 +142,7 @@ export class PersonnelService {
     id: string,
     personnel: Partial<CreatePersonnelDTO>,
   ): Promise<PersonnelEntity> {
-    const person = await this.findOne(id);
-    delete person.recommitment;
+    const person = await this.findOneById(id);
 
     if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
       const allTools = await this.toolsRepository.find();
