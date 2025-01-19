@@ -71,7 +71,6 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
 
   const handleOtherReasonChange = (program: Program, newOtherReason: string) => {
     setReasons((prev) => {
-      const programPreviousReasons = prev[program]?.selectedReasons || [];
       return {
         ...prev,
         [program]: {
@@ -85,7 +84,7 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
   return (
     <div className="px-8 min-h-[500px]">
       {programs.map(program => (
-        <div className="py-2">
+        <div key={program} className="py-2">
           <h6 className="text-sm font-semibold mb-4">
             I am unable to join {program.toUpperCase()} because:
           </h6>
