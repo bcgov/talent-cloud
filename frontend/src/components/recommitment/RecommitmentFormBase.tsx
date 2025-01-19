@@ -240,7 +240,7 @@ export const RecommitmentFormBase = ({
             key="initial"
           />,
           <UnableToJoin
-            program={Program.ALL}
+            program={program}
             onUpdate={setUnableToJoinReasons}
             key="unable"
           />,
