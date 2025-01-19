@@ -23,9 +23,14 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 
     const recommitmentService = app.get(RecommitmentService);
 
-    app.useStaticAssets(join(__dirname, '..', 'views'));
-    app.setBaseViewsDir(join(__dirname, '..', 'views'));
-    nunjucks.configure(join(__dirname, '..', 'views'), {
+    const viewsPath =
+      process.env.ENV === 'production' || process.env.ENV === 'test'
+        ? 'views'
+        : 'views/test';
+
+    app.useStaticAssets(join(__dirname, '..', viewsPath));
+    app.setBaseViewsDir(join(__dirname, '..', viewsPath));
+    nunjucks.configure(join(__dirname, '..', viewsPath), {
       autoescape: true,
       throwOnUndefined: false,
       trimBlocks: false,
