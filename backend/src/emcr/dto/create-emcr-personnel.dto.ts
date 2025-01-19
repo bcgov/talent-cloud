@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsEnum,
   IsOptional,
@@ -18,6 +19,7 @@ export class CreatePersonnelEmcrDTO {
 
   @ApiProperty()
   @IsOptional()
+  @Transform(({ value }) => Boolean(value))
   approvedBySupervisor?: boolean;
 
   @IsOptional()

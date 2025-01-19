@@ -139,12 +139,10 @@ export class PersonnelService {
   }
 
   async updatePersonnelDatabase(
-    email: string,
+    id: string,
     personnel: Partial<CreatePersonnelDTO>,
   ): Promise<PersonnelEntity> {
-    const person = await this.findOneByEmail(email);
-    const bcws = person.bcws;
-    const emcr = person.emcr;
+    const person = await this.findOneById(id);
 
     if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
       const allTools = await this.toolsRepository.find();
@@ -218,19 +216,18 @@ export class PersonnelService {
       }
       person[key] = personnel[key];
     });
+
     if (personnel.bcws && person.bcws) {
       Object.keys(personnel.bcws).forEach((key) => {
-        bcws[key] = personnel.bcws[key];
+        person.bcws[key] = personnel.bcws[key];
       });
-      console.log(bcws);
     }
     if (personnel.emcr && person.emcr) {
       Object.keys(personnel.emcr).forEach((key) => {
-        emcr[key] = personnel.emcr[key];
+        person.emcr[key] = personnel.emcr[key];
       });
     }
-
-    return this.personnelRepository.save(person);
+    return await this.personnelRepository.save(person);
   }
 
   async updatePersonnel(
@@ -238,11 +235,11 @@ export class PersonnelService {
     req: RequestWithRoles,
   ): Promise<Record<string, PersonnelRO>> {
     this.logger.log(`${JSON.stringify(personnel)}`);
-    await this.personnelRepository.findOneOrFail({
+    const person = await this.personnelRepository.findOneOrFail({
       where: { email: req.idir },
     });
 
-    await this.updatePersonnelDatabase(req.idir, personnel);
+    await this.updatePersonnelDatabase(person.id, personnel);
     return this.getPersonnel(req);
   }
   /**

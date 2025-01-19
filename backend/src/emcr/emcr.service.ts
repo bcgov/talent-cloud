@@ -60,33 +60,48 @@ export class EmcrService {
    * @param personnel
    * @returns
    */
-  async updatePersonnel(
+  async updateEmcrPersonnel(
     id: string,
     personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
-    role: Role[],
   ) {
+    /**
+     * update personnel/bcws personnel
+     * @param id
+     * @param personnel
+     * @param role
+     * @returns
+     */
     this.logger.log(`Updating personnel ${id}`);
-    const person = await this.personnelService.findOne(id);
-    const emcr = await this.emcrPersonnelRepository.findOne({
-      where: { personnel: { id } },
+    personnel.emcr = {
+      ...personnel.emcr,
+      experiences: personnel.experiences,
+      firstNationExperienceLiving: personnel?.firstNationExperienceLiving,
+      firstNationExperienceWorking: personnel?.firstNationExperienceWorking,
+      peccExperience: personnel?.peccExperience,
+      preocExperience: personnel?.preocExperience,
+      emergencyExperience: personnel?.emergencyExperience,
+      icsTraining: personnel?.icsTraining,
+      firstAidLevel: personnel?.firstAidLevel,
+      firstAidExpiry: personnel?.firstAidExpiry,
+      psychologicalFirstAid: personnel?.psychologicalFirstAid,
+      trainings: personnel.trainings,
+      logisticsNotes: personnel.logisticsNotes,
+      coordinatorNotes: personnel.coordinatorNotes,
+      approvedBySupervisor: personnel.approvedBySupervisor,
+      dateApproved: personnel.dateApproved,
+      status: personnel.status,
+      firstChoiceSection: personnel.firstChoiceSection,
+      secondChoiceSection: personnel.secondChoiceSection,
+      thirdChoiceSection: personnel.thirdChoiceSection,
+      travelPreference: personnel.travelPreference,
+    };
+    Object.keys(personnel.emcr).forEach((key) => {
+      if (personnel.emcr[key] === undefined) {
+        delete personnel.emcr[key];
+      }
     });
 
-    this.logger.log(`${JSON.stringify(personnel)}`);
-
-    Object.keys(personnel).forEach((key) => {
-      person[key] = personnel[key];
-      emcr[key] = personnel[key];
-    });
-
-    try {
-      // This is a 'save' rather than 'update' to allow for updating many-to-many relations
-      await this.personnelService.save(person);
-      await this.emcrPersonnelRepository.save(emcr);
-
-      return this.getEmcrPersonnelById(role, id);
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.personnelService.updatePersonnelDatabase(id, personnel);
   }
 
   /**

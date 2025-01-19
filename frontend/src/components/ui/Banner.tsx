@@ -58,7 +58,7 @@ export const CustomBanner = ({
     {onClick && (
       <button
         aria-label="banner button"
-        className={`bg-${textColor}Dark flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm h-12`}
+        className={`bg-${textColor} flex flex-row flex-nowrap whitespace-nowrap rounded-md text-white leading-loose font-normal text-center px-4 py-2 text-sm h-12`}
         onClick={onClick}
       >
         {buttonText}
@@ -109,7 +109,7 @@ export const Banner = ({
             content={content}
             title={title}
             onClick={onClick}
-            textColor={'warning'}
+            textColor={'yellow-900'}
             bgColor={'warningBannerLight'}
             link={link}
             buttonText={buttonText}

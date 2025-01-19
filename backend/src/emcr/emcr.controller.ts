@@ -114,15 +114,15 @@ export class EmcrController {
 
     // For now, these are distinct and will not be updated at the same time
     if (experiences) {
-      return this.personnelService.updatePersonnelExperiences(
+      return await this.personnelService.updatePersonnelExperiences(
         id,
         experiences,
         req.roles,
       );
     } else if (Object.keys(details).length > 0) {
-      return this.personnelService.updatePersonnel(id, details, req.roles);
+      return await this.personnelService.updateEmcrPersonnel(id, details);
     } else {
-      return this.personnelService.getEmcrPersonnelById(req.roles, id);
+      return await this.personnelService.getEmcrPersonnelById(req.roles, id);
     }
   }
 }

@@ -19,7 +19,7 @@ const usePersonnel = (): {
   const { roles, program, loading } = useRoleContext();
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
-
+  const [refetch, setRefetch] = useState(false)
   const { profileId } = useParams();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const usePersonnel = (): {
         console.log(e);
       }
     })();
-  }, [profileId, program, AxiosPrivate]);
+  }, [refetch]);
 
   const updatePersonnel = async (personnel: FormikValues) => {
     if (personnel?.newRoles) {
@@ -42,7 +42,8 @@ const usePersonnel = (): {
       const res =
         program &&
         (await AxiosPrivate.patch(encodeURI(`/${program}/${profileId}`), personnel));
-      res && setPersonnel(res.data);
+        // update endpoint does not return the same data as the GET endpoint, so triggering refetch
+        res && setRefetch(!refetch);
     } catch (e) {
       //TODO error toast
     }

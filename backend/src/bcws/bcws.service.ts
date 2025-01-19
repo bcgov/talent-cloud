@@ -59,13 +59,17 @@ export class BcwsService {
     personnel.bcws = {
       ...personnel.bcws,
       roles: personnel.roles,
+      approvedBySupervisor: personnel?.approvedBySupervisor,
+      parQ: personnel?.parQ,
+      respectfulWorkplacePolicy: personnel?.respectfulWorkplacePolicy,
+      willingnessStatement: personnel?.willingnessStatement,
+      orientation: personnel?.orientation,
       logisticsNotes: personnel.logisticsNotes,
       coordinatorNotes: personnel.coordinatorNotes,
       liaisonFirstName: personnel.liaisonFirstName,
       liaisonLastName: personnel.liaisonLastName,
       liaisonPhoneNumber: personnel.liaisonPhoneNumber,
       liaisonEmail: personnel.liaisonEmail,
-      approvedBySupervisor: personnel.approvedBySupervisor,
       dateApproved: personnel.dateApproved,
       status: personnel.status,
       firstChoiceSection: personnel.firstChoiceSection,
@@ -78,11 +82,7 @@ export class BcwsService {
         delete personnel.bcws[key];
       }
     });
-    const person = await this.personnelService.findOneById(id);
-    await this.personnelService.updatePersonnelDatabase(
-      person.email,
-      personnel,
-    );
+    await this.personnelService.updatePersonnelDatabase(id, personnel);
     return this.getBcwsPersonnelById(role, id);
   }
 

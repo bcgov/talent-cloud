@@ -113,7 +113,7 @@ const purchaseCardHolder = Yup.string().required('This field is required.');
 
 const employeeId = Yup.string().optional().nullable();
 
-const paylistId = Yup.string().required('This field is required.');
+const paylistId = Yup.string().optional().nullable();
 
 const liaisonFirstName = Yup.string().optional();
 
