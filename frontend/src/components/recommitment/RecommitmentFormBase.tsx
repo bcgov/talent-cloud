@@ -90,12 +90,8 @@ export const RecommitmentFormBase = ({
   const [parQDownloaded, setParQDownloaded] = useState(false);
 
   const [unableToJoinReasons, setUnableToJoinReasons] = useState<{
-    selectedReasons: string[];
-    otherReason: string;
-  }>({
-    selectedReasons: [],
-    otherReason: '',
-  });
+    [key in Program]?: { selectedReasons: string[]; otherReason: string };
+  }>({});
   const [assertionsChecked, setAssertionsChecked] = useState<boolean>(false);
 
   const isDeclarationComplete = (): boolean => {
@@ -269,11 +265,17 @@ export const RecommitmentFormBase = ({
   }, [recommitmentAnswer]);
 
   const handleSubmitRecommitment = async () => {
-    const selectedReasons = unableToJoinReasons.selectedReasons.map(
-      (r) => reasonDefinitions[r as keyof typeof reasonDefinitions],
-    );
-    const reasons = [...selectedReasons, unableToJoinReasons.otherReason].join(', ');
     const currentYear = new Date().getFullYear();
+
+    const getReasons = (program: Program) => {
+      const selectedReasons = (unableToJoinReasons[program]?.selectedReasons || []).map(
+        (r) => reasonDefinitions[r as keyof typeof reasonDefinitions],
+      ).filter(r => !!r);
+      if (unableToJoinReasons[program]?.otherReason) {
+        return [...selectedReasons, unableToJoinReasons[program]?.otherReason].join('; ');
+      }
+      return selectedReasons.join('; ');
+    }
 
     const createDecision = (
       status: RecommitmentStatus,
@@ -283,8 +285,7 @@ export const RecommitmentFormBase = ({
       status,
       year: currentYear,
       program: programType,
-
-      ...(includeReason && { memberReason: reasons }),
+      ...(includeReason && { memberReason: getReasons(programType) }),
     });
 
     const decisionMap = {
@@ -318,6 +319,7 @@ export const RecommitmentFormBase = ({
 
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
+    console.log(decision);
     await updateRecommitment(personnel.id, { ...decision, supervisorInformation });
     onClose();
   };
@@ -385,24 +387,26 @@ export const RecommitmentFormBase = ({
   const nextClickable = (): boolean => {
     const currentComponentType = currentComponent.type;
 
-    // For InitialRecommitmentDropdown, require a selection
     if (currentComponentType === InitialRecommitmentDropdown) {
       return recommitmentAnswer !== undefined;
     }
 
-    // For UnableToJoin, require at least one reason selected and other reason text if 'other' is selected
     if (currentComponentType === UnableToJoin) {
-      const hasSelectedReasons = unableToJoinReasons.selectedReasons.length > 0;
-      const needsOtherReason = unableToJoinReasons.selectedReasons.includes('other');
-
-      if (!hasSelectedReasons) {
+      const programs = Object.keys(unableToJoinReasons);
+      if (programs.length === 0) {
         return false;
       }
-
-      if (needsOtherReason && !unableToJoinReasons.otherReason.trim()) {
-        return false;
+      for (const program of programs) {
+        if ((unableToJoinReasons[program as Program]?.selectedReasons || []).length === 0) {
+          return false;
+        }
+        if (
+          (unableToJoinReasons[program as Program]?.selectedReasons || []).includes('other') &&
+          !unableToJoinReasons[program as Program]?.otherReason?.trim()
+        ) {
+          return false;
+        }
       }
-
       return true;
     }
 

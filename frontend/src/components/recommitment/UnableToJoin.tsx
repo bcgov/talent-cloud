@@ -1,5 +1,5 @@
 import { Program } from '@/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Reason {
   id: string;
@@ -7,11 +7,8 @@ interface Reason {
 }
 export interface SupervisorInformation {
   email: string;
-
   firstName: string;
-
   lastName: string;
-
   phone?: string;
 }
 
@@ -25,83 +22,110 @@ const REASONS: Reason[] = [
   { id: 'leave', text: 'Extended leave (e.g. Annual, Sickness, Maternity, etc.)' },
   { id: 'other', text: 'Other reasons' },
 ];
-
 interface UnableToJoinProps {
-  program: string;
-  onUpdate: (data: { selectedReasons: string[]; otherReason: string }) => void;
+  program: Program;
+  onUpdate: (data: {
+    [key in Program]?: { selectedReasons: string[]; otherReason: string };
+  }) => void;
 }
 
 export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
-  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  const [otherReason, setOtherReason] = useState('');
+  const programs = program === Program.ALL ? [Program.BCWS, Program.EMCR] : [program];
+  const [reasons, setReasons] = useState<{
+    [key in Program]?: {
+      selectedReasons: string[];
+      otherReason: string;
+    }
+  }>(() => {
+    const initialReasons: { [key in Program]?: { selectedReasons: string[]; otherReason: string } } = {};
+    programs.forEach((prog) => {
+      initialReasons[prog] = { selectedReasons: [], otherReason: '' };
+    });
+    return initialReasons;
+  });
 
-  const handleCheckboxChange = (reasonId: string) => {
-    setSelectedReasons((prev) => {
-      const newReasons = prev.includes(reasonId)
-        ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId];
+  useEffect(() => {
+    onUpdate(reasons);
+  }, [reasons]);
 
-      // If unchecking 'other', clear the textarea
-      if (reasonId === 'other' && prev.includes(reasonId)) {
-        setOtherReason('');
-        onUpdate({ selectedReasons: newReasons, otherReason: '' });
-      } else {
-        onUpdate({ selectedReasons: newReasons, otherReason });
-      }
+  const handleCheckboxChange = (program: Program, reasonId: string) => {
+    setReasons((prev) => {
+      const programPreviousReasons = prev[program]?.selectedReasons || [];
+      const newReasons = programPreviousReasons.includes(reasonId)
+        ? programPreviousReasons.filter((id) => id !== reasonId)
+        : [...programPreviousReasons, reasonId];
 
-      return newReasons;
+      const otherReason = reasonId === 'other' && programPreviousReasons.includes(reasonId) ?
+        '' :
+        prev[program]?.otherReason || '';
+
+      return {
+        ...prev,
+        [program]: {
+          selectedReasons: newReasons,
+          otherReason,
+        },
+      };
     });
   };
 
-  const handleOtherReasonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newOtherReason = e.target.value;
-    setOtherReason(newOtherReason);
-    onUpdate({ selectedReasons, otherReason: newOtherReason });
+  const handleOtherReasonChange = (program: Program, newOtherReason: string) => {
+    setReasons((prev) => {
+      return {
+        ...prev,
+        [program]: {
+          ...prev[program],
+          otherReason: newOtherReason,
+        },
+      }
+    });
   };
 
   return (
     <div className="px-8 min-h-[500px]">
-      <h6 className="text-sm font-semibold mb-4">
-        I am unable to join
-        {program !== Program.ALL ? ` ${program.toUpperCase()} ` : ' '}this year
-        because:
-      </h6>
+      {programs.map(program => (
+        <div key={program} className="py-2">
+          <h6 className="text-sm font-semibold mb-4">
+            I am unable to join {program.toUpperCase()} because:
+          </h6>
 
-      <div className="space-y-4">
-        {REASONS.map((reason) => (
-          <div key={reason.id}>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id={reason.id}
-                checked={selectedReasons.includes(reason.id)}
-                onChange={() => handleCheckboxChange(reason.id)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                htmlFor={reason.id}
-                className="ml-3 text-sm font-medium text-gray-700"
-              >
-                {reason.text}
-              </label>
-            </div>
+          <div className="space-y-4">
+            {REASONS.map((reason) => (
+              <div key={`${program}-${reason.id}`}>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`${program}-${reason.id}`}
+                    checked={(reasons[program as Program]?.selectedReasons || []).includes(reason.id)}
+                    onChange={() => handleCheckboxChange(program as Program, reason.id)}
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor={`${program}-${reason.id}`}
+                    className="ml-3 text-sm font-medium text-gray-700"
+                  >
+                    {reason.text}
+                  </label>
+                </div>
 
-            {reason.id === 'other' && selectedReasons.includes('other') && (
-              <div className="mt-6 ml-7">
-                <p className="text-sm font-semibold pb-2">Please provide details for &quot;Other reasons&quot;.<span className="text-red-900">*</span></p>
-                <textarea
-                  id="otherReason"
-                  value={otherReason}
-                  onChange={handleOtherReasonChange}
-                  placeholder="Add a comment"
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                />
+                {reason.id === 'other' && (reasons[program as Program]?.selectedReasons || []).includes('other') && (
+                  <div className="mt-6 ml-7">
+                    <p className="text-sm font-semibold pb-2">Please provide details for &quot;Other reasons&quot;.<span className="text-red-900">*</span></p>
+                    <textarea
+                      id={`${program}-otherReason`}
+                      value={reasons[program as Program]?.otherReason || ''}
+                      onChange={(e) => handleOtherReasonChange(program as Program, e.target.value)}
+                      placeholder="Add a comment"
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

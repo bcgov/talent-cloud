@@ -547,6 +547,7 @@ export const memberData = (personnel?: Personnel) => {
                   href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/core_team_guidelines.pdf"
                   target="_blank"
                   rel="noreferrer"
+                  className="text-blue-700 underline"
                 >
                   CORE Team Guidelines
                 </a>
