@@ -4,6 +4,7 @@ import { format, eachDayOfInterval, parse, differenceInDays } from 'date-fns';
 import {
   Brackets,
   DeleteResult,
+  In,
   Repository,
   SelectQueryBuilder,
   UpdateResult,
@@ -96,6 +97,13 @@ export class PersonnelService {
     });
   }
 
+  async findOneById(id: string): Promise<PersonnelEntity> {
+    return this.personnelRepository.findOne({
+      where: { id },
+      relations: ['emcr', 'bcws'],
+    });
+  }
+
   /**
    * Save personnel data
    * @param person
@@ -130,16 +138,11 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnel(
+  async updatePersonnelDatabase(
+    email: string,
     personnel: Partial<CreatePersonnelDTO>,
-    req: RequestWithRoles,
-  ): Promise<Record<string, PersonnelRO>> {
-    this.logger.log(`${JSON.stringify(personnel)}`);
-    const { id } = await this.personnelRepository.findOneOrFail({
-      where: { email: req.idir },
-    });
-
-    const person = await this.findOneByEmail(req.idir);
+  ): Promise<PersonnelEntity> {
+    const person = await this.findOneByEmail(email);
     const bcws = person.bcws;
     const emcr = person.emcr;
 
@@ -156,21 +159,24 @@ export class PersonnelService {
 
     if (personnel.languages?.length) {
       const currentLanguages = await this.languageRepository.find({
-        where: { personnel: { id } },
+        where: { personnel: { id: person.id } },
       });
       const updatedLanguageNames = personnel.languages.map((l) => l.language);
       const deletedLanguagesIds = currentLanguages
         .filter((cl) => !updatedLanguageNames.includes(cl.language))
         .map((cl) => cl.id);
       if (deletedLanguagesIds.length) {
-        await this.languageRepository.delete(deletedLanguagesIds);
+        await this.languageRepository.delete({
+          id: In(deletedLanguagesIds),
+          personnelId: person.id,
+        });
       }
 
       const currentLanguagesNames = currentLanguages.map((cl) => cl.language);
       const newLanguages = personnel.languages
         .filter((l) => !currentLanguagesNames.includes(l.language))
         .map((l) => ({
-          personnelId: id,
+          personnelId: person.id,
           ...l,
         }));
       await this.languageRepository.save(newLanguages);
@@ -216,6 +222,7 @@ export class PersonnelService {
       Object.keys(personnel.bcws).forEach((key) => {
         bcws[key] = personnel.bcws[key];
       });
+      console.log(bcws);
     }
     if (personnel.emcr && person.emcr) {
       Object.keys(personnel.emcr).forEach((key) => {
@@ -223,8 +230,19 @@ export class PersonnelService {
       });
     }
 
-    await this.personnelRepository.save(person);
+    return this.personnelRepository.save(person);
+  }
 
+  async updatePersonnel(
+    personnel: Partial<CreatePersonnelDTO>,
+    req: RequestWithRoles,
+  ): Promise<Record<string, PersonnelRO>> {
+    this.logger.log(`${JSON.stringify(personnel)}`);
+    await this.personnelRepository.findOneOrFail({
+      where: { email: req.idir },
+    });
+
+    await this.updatePersonnelDatabase(req.idir, personnel);
     return this.getPersonnel(req);
   }
   /**
