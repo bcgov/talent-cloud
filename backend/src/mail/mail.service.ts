@@ -154,6 +154,9 @@ export class MailService {
       this.logger.log('No emails to send');
       return { data: 'No emails to  send' };
     }
+    const mailContext = mail.contexts.filter((itm) => !itm.to.includes(null));
+    mail.contexts = mailContext;
+
     try {
       const { data } = await this.mailApi.post('/emailMerge', mail);
       return data;
