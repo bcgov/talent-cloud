@@ -387,26 +387,28 @@ export const RecommitmentFormBase = ({
   const nextClickable = (): boolean => {
     const currentComponentType = currentComponent.type;
 
-    // For InitialRecommitmentDropdown, require a selection
     if (currentComponentType === InitialRecommitmentDropdown) {
       return recommitmentAnswer !== undefined;
     }
 
-    // For UnableToJoin, require at least one reason selected and other reason text if 'other' is selected
-    // if (currentComponentType === UnableToJoin) {
-    //   const hasSelectedReasons = unableToJoinReasons.selectedReasons.length > 0;
-    //   const needsOtherReason = unableToJoinReasons.selectedReasons.includes('other');
-
-    //   if (!hasSelectedReasons) {
-    //     return false;
-    //   }
-
-    //   if (needsOtherReason && !unableToJoinReasons.otherReason.trim()) {
-    //     return false;
-    //   }
-
-    //   return true;
-    // }
+    if (currentComponentType === UnableToJoin) {
+      const programs = Object.keys(unableToJoinReasons);
+      if (programs.length === 0) {
+        return false;
+      }
+      for (const program of programs) {
+        if ((unableToJoinReasons[program as Program]?.selectedReasons || []).length === 0) {
+          return false;
+        }
+        if (
+          (unableToJoinReasons[program as Program]?.selectedReasons || []).includes('other') &&
+          !unableToJoinReasons[program as Program]?.otherReason?.trim()
+        ) {
+          return false;
+        }
+      }
+      return true;
+    }
 
     if (currentComponentType === ParQBase) {
       // For ParQ General, ensure all 7 questions have been answered

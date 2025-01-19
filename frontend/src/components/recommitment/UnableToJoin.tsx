@@ -23,7 +23,7 @@ const REASONS: Reason[] = [
   { id: 'other', text: 'Other reasons' },
 ];
 interface UnableToJoinProps {
-  program: string;
+  program: Program;
   onUpdate: (data: {
     [key in Program]?: { selectedReasons: string[]; otherReason: string };
   }) => void;
@@ -36,7 +36,13 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
       selectedReasons: string[];
       otherReason: string;
     }
-  }>({});
+  }>(() => {
+    const initialReasons: { [key in Program]?: { selectedReasons: string[]; otherReason: string } } = {};
+    programs.forEach((prog) => {
+      initialReasons[prog] = { selectedReasons: [], otherReason: '' };
+    });
+    return initialReasons;
+  });
 
   useEffect(() => {
     onUpdate(reasons);
