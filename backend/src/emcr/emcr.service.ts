@@ -66,22 +66,14 @@ export class EmcrService {
     role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
+
     const person = await this.personnelService.findOne(id);
-    const emcr = await this.emcrPersonnelRepository.findOne({
-      where: { personnel: { id } },
-    });
-
-    this.logger.log(`${JSON.stringify(personnel)}`);
-
-    Object.keys(personnel).forEach((key) => {
-      person[key] = personnel[key];
-      emcr[key] = personnel[key];
-    });
 
     try {
-      // This is a 'save' rather than 'update' to allow for updating many-to-many relations
-      await this.personnelService.save(person);
-      await this.emcrPersonnelRepository.save(emcr);
+      await this.personnelService.updatePersonnelDatabase(
+        person.email,
+        personnel,
+      );
 
       return this.getEmcrPersonnelById(role, id);
     } catch (e) {

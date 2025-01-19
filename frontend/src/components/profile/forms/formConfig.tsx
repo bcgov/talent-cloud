@@ -180,12 +180,13 @@ export const formConfig = (
     status: personnel.status,
     email: personnel.email,
     approvedBySupervisor: personnel.approvedBySupervisor,
+    payListId: personnel.paylistId ?? '',
   };
 
   const bcwsValues = {
     ...initialFormValues,
-    purchaseCardHolder: personnel.purchaseCardHolder,
-    paylistId: personnel.paylistId,
+    purchaseCardHolder: personnel.purchaseCardHolder ?? false,
+    paylistId: personnel.paylistId ?? '',
     liaisonFirstName: personnel.liaisonFirstName ?? '',
     liaisonLastName: personnel.liaisonLastName ?? '',
     liaisonPhoneNumber: personnel.liaisonPhoneNumber,
