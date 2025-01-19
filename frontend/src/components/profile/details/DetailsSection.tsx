@@ -9,8 +9,8 @@ const DetailsSection = ({
   tooltipClosed,
 }: {
   columns: ProfileDetail[];
-  tooltipClicked: (tooltip: { title: string; content: ReactElement }) => void;
-  tooltipClosed: () => void;
+  tooltipClicked?: (tooltip: { title: string; content: ReactElement }) => void;
+  tooltipClosed?: () => void;
   title?: string;
 }) => {
   return (

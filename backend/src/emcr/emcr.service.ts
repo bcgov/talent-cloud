@@ -63,19 +63,10 @@ export class EmcrService {
   async updatePersonnel(
     id: string,
     personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
-    role: Role[],
   ) {
     this.logger.log(`Updating personnel ${id}`);
-
-    const person = await this.personnelService.findOne(id);
-
     try {
-      await this.personnelService.updatePersonnelDatabase(
-        person.email,
-        personnel,
-      );
-
-      return this.getEmcrPersonnelById(role, id);
+      return await this.personnelService.updatePersonnelDatabase(id, personnel);
     } catch (e) {
       console.log(e);
     }
