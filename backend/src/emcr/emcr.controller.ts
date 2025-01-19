@@ -120,11 +120,7 @@ export class EmcrController {
         req.roles,
       );
     } else if (Object.keys(details).length > 0) {
-      return await this.personnelService.updatePersonnel(
-        id,
-        details,
-        req.roles,
-      );
+      return await this.personnelService.updatePersonnel(id, details);
     } else {
       return await this.personnelService.getEmcrPersonnelById(req.roles, id);
     }
