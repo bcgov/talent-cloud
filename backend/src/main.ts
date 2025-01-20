@@ -32,7 +32,7 @@ async function bootstrap() {
   );
 
   const viewsPath =
-    process.env.ENV === 'production' || process.env.ENV === 'test'
+    process.env.ENV === 'prod' || process.env.ENV === 'test'
       ? 'views'
       : 'views/test';
   app.useStaticAssets(join(__dirname, viewsPath));
