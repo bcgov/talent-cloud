@@ -55,7 +55,12 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     } else {
       logger.log('Starting recommitment job', 'Start Recommitment');
 
-      const data = await recommitmentService.handleStartRecommitment();
+      const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+      const data = await recommitmentService.handleStartRecommitment(
+        false,
+        undefined,
+        ministry,
+      );
 
       logger.log('Supervisor emails:', 'Supervisor Start Recommitment');
       logger.log(

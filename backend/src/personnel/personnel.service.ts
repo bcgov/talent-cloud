@@ -21,6 +21,7 @@ import {
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/create-personnel-languages.dto';
+import { Ministry } from '../common/enums';
 import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
@@ -808,16 +809,40 @@ export class PersonnelService {
     return { personnel, count };
   }
 
-  async findActivePersonnel(): Promise<{
+  async findActivePersonnel(ministry?: string): Promise<{
     emcr: PersonnelEntity[];
     bcws: PersonnelEntity[];
+    ministry?: Ministry;
   }> {
-    const activeEmcrPersonnel = await this.personnelRepository.find({
-      where: { emcr: { status: Status.ACTIVE } },
-    });
-    const activeBcwsPersonnel = await this.personnelRepository.find({
-      where: { bcws: { status: Status.ACTIVE } },
-    });
+    const activeEmcrPersonnelQb =
+      this.personnelRepository.createQueryBuilder('personnel');
+    activeEmcrPersonnelQb.innerJoin(
+      'personnel.emcr',
+      'emcr',
+      'emcr.status = :status',
+      { status: Status.ACTIVE },
+    );
+    if (!!ministry) {
+      activeEmcrPersonnelQb.andWhere('personnel.ministry = :ministry', {
+        ministry,
+      });
+    }
+    const activeEmcrPersonnel = await activeEmcrPersonnelQb.getMany();
+
+    const activeBcwsPersonnelQb =
+      this.personnelRepository.createQueryBuilder('personnel');
+    activeBcwsPersonnelQb.innerJoin(
+      'personnel.bcws',
+      'bcws',
+      'bcws.status = :status',
+      { status: Status.ACTIVE },
+    );
+    if (!!ministry) {
+      activeBcwsPersonnelQb.andWhere('personnel.ministry = :ministry', {
+        ministry,
+      });
+    }
+    const activeBcwsPersonnel = await activeBcwsPersonnelQb.getMany();
 
     return { emcr: activeEmcrPersonnel, bcws: activeBcwsPersonnel };
   }

@@ -282,6 +282,7 @@ export class RecommitmentService {
   async handleStartRecommitment(
     dryRun: boolean = false,
     testEmail?: string[],
+    ministry?: string,
   ): Promise<{ member: MailRO; supervisor: MailRO }> {
     if (dryRun) {
       this.logger.log('TEST RUN: Emails will only be sent to test email');
@@ -290,7 +291,9 @@ export class RecommitmentService {
       where: { year: new Date().getFullYear() },
     });
 
-    const { emcr, bcws } = await this.personnelService.findActivePersonnel();
+    const { emcr, bcws } = await this.personnelService.findActivePersonnel(
+      ministry,
+    );
 
     this.logger.log(`Found ${bcws.length} active BCWS personnel`);
     this.logger.log(`Found ${emcr.length} active EMCR personnel`);
@@ -298,10 +301,20 @@ export class RecommitmentService {
     await this.saveRecommitmentEntities(emcr, cycle.year, Program.EMCR);
     await this.saveRecommitmentEntities(bcws, cycle.year, Program.BCWS);
 
-    const recommitment = await this.recommitmentRepository.find({
-      where: { recommitmentCycle: { year: cycle.year } },
-      relations: ['personnel'],
-    });
+    const recommitmentQb =
+      this.recommitmentRepository.createQueryBuilder('recommitment');
+    recommitmentQb.leftJoinAndSelect('recommitment.personnel', 'personnel');
+    recommitmentQb.leftJoinAndSelect(
+      'recommitment.recommitmentCycle',
+      'recommitmentCycle',
+      'recommitmentCycle = :year',
+      { year: cycle.year },
+    );
+    if (!!ministry) {
+      recommitmentQb.andWhere('personnel.ministry = :ministry', { ministry });
+    }
+    const recommitment = await recommitmentQb.getMany();
+
     const { memberList, supervisorList } = this.filterRecommitmentList(
       recommitment,
       testEmail,
