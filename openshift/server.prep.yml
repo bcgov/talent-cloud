@@ -83,6 +83,7 @@ objects:
       end_recommitment_schedule: ${END_RECOMMIMENT_SCHEDULE}
       notification_schedule: ${NOTIFICATION_SCHEDULE}
       test_run: ${TEST_RUN}
+      recommitment_ministry: ${RECOMMITMENT_MINISTRY}
 
 
 

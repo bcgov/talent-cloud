@@ -48,14 +48,20 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       await datasource.initialize();
     }
 
+    const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+    logger.log(`Recommiting for ministry ${ministry}`);
     if (process.env.TEST_RUN === 'true') {
       await recommitmentCycleHandler();
-      await testRun(recommitmentService, datasource);
+      await testRun(recommitmentService, datasource, ministry);
       await app.close();
     } else {
       logger.log('Starting recommitment job', 'Start Recommitment');
 
-      const data = await recommitmentService.handleStartRecommitment();
+      const data = await recommitmentService.handleStartRecommitment(
+        false,
+        undefined,
+        ministry,
+      );
 
       logger.log('Supervisor emails:', 'Supervisor Start Recommitment');
       logger.log(
@@ -90,6 +96,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 const testRun = async (
   recommitmentService: RecommitmentService,
   datasource: DataSource,
+  ministry?: string,
 ) => {
   const logger = new AppLogger();
   logger.log('Starting recommitment job' + process.env.ENV, 'Recommitment');
@@ -130,6 +137,7 @@ const testRun = async (
   const data = await recommitmentService.handleStartRecommitment(
     true,
     testEmails,
+    ministry,
   );
   logger.log('Supervisor TEST emails:');
   logger.log(`TxtId: ${data.supervisor.txId}`);
