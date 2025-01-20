@@ -58,14 +58,14 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     } else {
       const data = await recommitmentService.handleEndRecommitment();
 
-      logger.log('Supervisor TEST emails:', 'Recommitment');
+      logger.log('Supervisor emails:', 'Recommitment');
       logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
 
       data.supervisor?.messages?.forEach((supervisor) => {
         logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
       });
 
-      logger.log('Member TEST emails:', 'Recommitment');
+      logger.log('Member emails:', 'Recommitment');
       logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
 
       data.member?.messages?.forEach((member) => {

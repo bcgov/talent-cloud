@@ -41,7 +41,6 @@ objects:
               labels:
                 parent: 'cronjobpi'
             spec:
-              
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-notifications
