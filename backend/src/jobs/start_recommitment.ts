@@ -24,7 +24,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     const recommitmentService = app.get(RecommitmentService);
 
     const viewsPath =
-      process.env.ENV === 'production' || process.env.ENV === 'test'
+      process.env.ENV === 'prod' || process.env.ENV === 'test'
         ? 'views'
         : 'views/test';
 

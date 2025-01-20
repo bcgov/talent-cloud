@@ -32,7 +32,7 @@ export enum EmailTemplates {
 }
 
 export enum EmailSubjects {
-  MEMBER_DECLINED = 'CORE Team: You have declined your {{year}} recommitment', 
+  MEMBER_DECLINED = 'CORE Team: You have declined your {{year}} recommitment',
   MEMBER_DENIED_BY_SUPERVISOR = 'Your CORE Recommitment Status for {{year}} has been updated',
   MEMBER_APPROVED = 'You CORE Recommitment for {{year}} has been approved by your supervisor',
   MEMBER_FOLLOW_UP = 'ACTION REQUIRED: Reminder to Update your CORE Recommitment status for {{year}}',
@@ -47,6 +47,6 @@ export enum EmailSubjects {
 export const envs = {
   dev: process.env.ENV === 'dev',
   test: process.env.ENV === 'test',
-  production: process.env.ENV === 'production',
+  production: process.env.ENV === 'prod',
   local: process.env.ENV === 'local',
 };
