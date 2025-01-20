@@ -46,7 +46,7 @@ objects:
               containers:
               - name: ${APP_NAME}-cron-start-recommitment
                 restartPolicy: OnFailure
-                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:dev
+                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
                   limits:
                     cpu: 60m
