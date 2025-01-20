@@ -81,21 +81,27 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       } else {
         const data = await recommitmentService.handleSendAutomatedReminders();
 
+        logger.log('Supervisor emails:', 'Supervisor Notification');
         logger.log(
-          `Supervisor emails sent: ${data.supervisor?.messages?.length}`,
-          'Recommitment',
+          `TxId: ${data?.supervisor?.txId}`,
+          'Supervisor Notification',
         );
 
-        logger.log(`TxId: ${data.supervisor?.txId}`, 'Recommitment');
+        data.supervisor?.messages?.forEach((supervisor) => {
+          logger.log(
+            `Supervisor: ${supervisor?.to}`,
+            'Supervisor Notification',
+          );
+        });
 
-        logger.log(
-          `Member emails sent: ${data.member?.messages?.length}`,
-          'Recommitment',
-        );
+        logger.log('Member emails:', 'Member Notification');
+        logger.log(`TxId: ${data?.member?.txId}`, 'Member Notification');
 
-        logger.log(`TxId: ${data.member?.txId}`, 'Recommitment');
+        data.member?.messages?.forEach((member) => {
+          logger.log(`Member: ${member?.to}`, 'Member Notification');
+        });
 
-        logger.log('Automated Reminder job completed', 'Recommitment');
+        logger.log('Automated Reminder job completed', 'Member Notification');
 
         return await app.close();
       }

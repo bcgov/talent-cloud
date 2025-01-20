@@ -41,7 +41,6 @@ objects:
               labels:
                 parent: 'cronjobpi'
             spec:
-              
               restartPolicy: OnFailure
               containers:
               - name: ${APP_NAME}-cron-notifications
@@ -49,10 +48,10 @@ objects:
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:dev
                 resources:
                   limits:
-                    cpu: 30m
+                    cpu: 50m
                     memory: 256Mi
                   requests:
-                    cpu: 10m
+                    cpu: 30m
                     memory: 128Mi
                 terminationMessagePath: /dev/termination-log
                 terminationMessagePolicy: File

@@ -36,6 +36,7 @@ objects:
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
+          activeDeadlineSeconds: 1200
           template:
             metadata:
               labels:
@@ -48,10 +49,10 @@ objects:
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
                   limits:
-                    cpu: 40m
+                    cpu: 50m
                     memory: 256Mi
                   requests:
-                    cpu: 10m
+                    cpu: 30m
                     memory: 128Mi
                 terminationMessagePath: /dev/termination-log
                 terminationMessagePolicy: File

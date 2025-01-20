@@ -58,20 +58,21 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     } else {
       const data = await recommitmentService.handleEndRecommitment();
 
-      logger.log(
-        `Supervisor emails sent: ${data.supervisor?.messages?.length}`,
-        'Recommitment',
-      );
-
+      logger.log('Supervisor emails:', 'Recommitment');
       logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
 
-      logger.log(
-        `Member emails sent: ${data.member?.messages?.length}`,
-        'Recommitment',
-      );
+      data.supervisor?.messages?.forEach((supervisor) => {
+        logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
+      });
 
-      logger.log(`TxId: ${data.member?.txId}`, 'Recommitment');
+      logger.log('Member emails:', 'Recommitment');
+      logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
 
+      data.member?.messages?.forEach((member) => {
+        logger.log(`Member: ${member?.to}`, 'Recommitment');
+      });
+
+      logger.log('Recommitment job completed', 'Recommitment');
       logger.log('Recommitment job completed', 'Recommitment');
 
       return await app.close();

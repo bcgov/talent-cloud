@@ -53,20 +53,31 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       await testRun(recommitmentService, datasource);
       await app.close();
     } else {
-      logger.log('Starting recommitment job', 'Recommitment');
-      const data = await recommitmentService.handleStartRecommitment();
-      logger.log(
-        `Supervisor emails sent: ${data?.supervisor?.messages?.length}`,
-        'Recommitment',
-      );
-      logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
+      logger.log('Starting recommitment job', 'Start Recommitment');
 
+      const data = await recommitmentService.handleStartRecommitment();
+
+      logger.log('Supervisor emails:', 'Supervisor Start Recommitment');
       logger.log(
-        `Member emails sent: ${data?.member?.messages?.length}`,
-        'Recommitment',
+        `TxId: ${data?.supervisor?.txId}`,
+        'Supervisor Start Recommitment',
       );
-      logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
-      logger.log('Recommitment job completed', 'Recommitment');
+
+      data.supervisor?.messages?.forEach((supervisor) => {
+        logger.log(
+          `Supervisor: ${supervisor?.to}`,
+          'Supervisor Start Recommitment',
+        );
+      });
+
+      logger.log('Member emails:', 'Member Start Recommitment');
+      logger.log(`TxId: ${data?.member?.txId}`, 'Member Start Recommitment');
+
+      data.member?.messages?.forEach((member) => {
+        logger.log(`Member: ${member?.to}`, 'Member Start Recommitment');
+      });
+
+      logger.log('Recommitment job completed', 'Start Recommitment');
       return await app.close();
     }
   } catch (e) {
