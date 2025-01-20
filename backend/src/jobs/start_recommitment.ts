@@ -56,6 +56,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       logger.log('Starting recommitment job', 'Start Recommitment');
 
       const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+      logger.log(`Recommiting for ministry ${ministry}`);
       const data = await recommitmentService.handleStartRecommitment(
         false,
         undefined,
