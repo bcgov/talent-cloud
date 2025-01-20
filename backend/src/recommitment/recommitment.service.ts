@@ -307,7 +307,7 @@ export class RecommitmentService {
     recommitmentQb.leftJoinAndSelect(
       'recommitment.recommitmentCycle',
       'recommitmentCycle',
-      'recommitmentCycle = :year',
+      'recommitmentCycle.year = :year',
       { year: cycle.year },
     );
     if (!!ministry) {
