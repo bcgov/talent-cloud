@@ -49,6 +49,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     }
 
     const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+    logger.log(`Recommiting for ministry ${ministry}`);
     if (process.env.TEST_RUN === 'true') {
       await recommitmentCycleHandler();
       await testRun(recommitmentService, datasource, ministry);
@@ -56,7 +57,6 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     } else {
       logger.log('Starting recommitment job', 'Start Recommitment');
 
-      logger.log(`Recommiting for ministry ${ministry}`);
       const data = await recommitmentService.handleStartRecommitment(
         false,
         undefined,
