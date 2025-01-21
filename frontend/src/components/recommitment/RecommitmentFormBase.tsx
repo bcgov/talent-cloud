@@ -445,7 +445,7 @@ export const RecommitmentFormBase = ({
     // For SupervisorForm, require first name, last name, and email
     if (currentComponentType === SupervisorForm) {
       const { firstName, lastName, email } = supervisorInformation;
-      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(email);
 
       return Boolean(
         firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail,

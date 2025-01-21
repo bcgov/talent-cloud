@@ -84,6 +84,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
+          <p className="text-xs text-gray-600">Must be a valid @gov.bc.ca email</p>
         </div>
 
         {/* Phone */}

@@ -145,6 +145,10 @@ export class PersonnelService {
   ): Promise<PersonnelEntity> {
     const person = await this.findOneById(id);
 
+    if (!!personnel.supervisorEmail) {
+      personnel.supervisorEmail = personnel.supervisorEmail.toLowerCase();
+    }
+
     if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
       const allTools = await this.toolsRepository.find();
       const personnelTools = personnel.tools.map((t) => ({
