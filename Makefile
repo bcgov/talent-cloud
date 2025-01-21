@@ -331,7 +331,7 @@ create-notifications-cron:
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)","test_run": "$(TEST_RUN)"}}'
+	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)","test_run": "$(TEST_RUN)","recommitment_ministry": "$(RECOMMITMENT_MINISTRY)"}}'
 
 check-request-limit:
 	@echo "Check request limit"
@@ -340,3 +340,15 @@ check-request-limit:
 check-pod-cpu:
 	@echo "Check pod cpu"
 	@oc adm top pod
+
+check-long-running:
+	@echo "Check long running"
+	@oc describe resourcequotas compute-long-running-quota
+
+check-timebound:
+	@echo "Check time bound"
+	@oc describe resourcequotas compute-time-bound-quota
+
+check-timebound-limit:
+	@echo "Check request limit"
+	@oc get quota compute-time-bound-quota -o=custom-columns=Requests:.status.used."requests\.cpu"
