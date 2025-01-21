@@ -448,7 +448,7 @@ export const RecommitmentFormBase = ({
       const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
       return Boolean(
-        firstName.trim() && lastName.trim() && email.trim() && isValidEmail,
+        firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail,
       );
     }
 
