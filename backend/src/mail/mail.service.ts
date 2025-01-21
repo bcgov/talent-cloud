@@ -10,6 +10,7 @@ import {
   TemplateType,
 } from './constants';
 import { MailDto } from './mail.dto';
+import { MailRO } from './mail.ro';
 import { Program } from '../auth/interface';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
@@ -92,6 +93,7 @@ export class MailService {
     records: RecommitmentRO[],
     endDate: Date,
     program?: Program,
+    ministry = 'ALL',
   ) {
     return new MailDto({
       subject: EmailSubjects[tag],
@@ -118,7 +120,7 @@ export class MailService {
         ],
         cc: [],
         bcc: [],
-        tag: tag,
+        tag: `${tag}_${ministry}_process.env.ENV`,
         delayTS: 0,
         context: {
           program:
@@ -147,19 +149,21 @@ export class MailService {
    * @returns
    */
 
-  async sendMail(mail: MailDto) {
-    const token = await this.getToken();
-    this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  async sendMail(mail: MailDto): Promise<MailRO> {
     if (mail.contexts.length === 0) {
       this.logger.log('No emails to send');
-      return { data: 'No emails to  send' };
+      return;
     }
+    const token = await this.getToken();
+    this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const mailContext = mail.contexts.filter((itm) => !itm.to.includes(null));
     mail.contexts = mailContext;
 
     try {
-      const { data } = await this.mailApi.post('/emailMerge', mail);
-      return data;
+      const res = await this.mailApi.post('/emailMerge', mail);
+      this.logger.log(res.data);
+      return res.data;
     } catch (e) {
       e?.response?.data?.errors?.map((itm) => this.logger.log(itm));
       this.logger.error(e?.message);
