@@ -161,9 +161,9 @@ export class MailService {
       const { data } = await this.mailApi.post('/emailMerge', mail);
       return data;
     } catch (e) {
-      e.response.data?.errors?.map((itm) => this.logger.log(itm));
-      this.logger.error(e.message);
-      this.logger.error(e.status);
+      e?.response?.data?.errors?.map((itm) => this.logger.log(itm));
+      this.logger.error(e?.message);
+      this.logger.error(e?.status);
       throw new Error(e);
     }
   }
