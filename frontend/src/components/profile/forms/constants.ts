@@ -85,7 +85,7 @@ const supervisorLastName = Yup.string()
 const supervisorEmail = Yup.string()
   .optional()
   .nullable()
-  .email('Invalid email format.');
+  .email('Invalid email format.').matches(/^[^\s@]+@gov.bc.ca+$/, 'Invalid email format. Must be a gov.bc.ca email address.');
 
 const supervisorPhone = Yup.string()
   .optional()
@@ -214,6 +214,7 @@ export const memberValidationSchema = {
     supervisorFirstName,
     supervisorLastName,
     supervisorPhone,
+    supervisorEmail,
     unionMembership,
     liaisonFirstName,
     liaisonLastName,
