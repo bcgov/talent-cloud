@@ -216,6 +216,11 @@ objects:
                     configMapKeyRef:
                       key: test_run
                       name: ${APP_NAME}-recommitment
+                - name: VIEWS
+                  valueFrom:
+                    configMapKeyRef:
+                      key: views
+                      name: ${APP_NAME}-recommitment
               image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
               ports:
                 - containerPort: '${{SERVER_PORT}}'

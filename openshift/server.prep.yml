@@ -84,6 +84,7 @@ objects:
       notification_schedule: ${NOTIFICATION_SCHEDULE}
       test_run: ${TEST_RUN}
       recommitment_ministry: ${RECOMMITMENT_MINISTRY}
+      views: ${VIEWS}
 
 
 

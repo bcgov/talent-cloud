@@ -198,5 +198,11 @@ objects:
                     configMapKeyRef:
                       key: test_run
                       name: ${APP_NAME}-recommitment
+                - name: VIEWS
+                  valueFrom:
+                    configMapKeyRef:
+                      key: views
+                      name: ${APP_NAME}-recommitment
+  
             
   

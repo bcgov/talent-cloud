@@ -38,6 +38,8 @@ export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
 export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
 export TEST_EMAIL:=$(TEST_EMAIL)
 export TEST_RUN:=$(TEST_RUN)
+export VIEWS:=$(VIEWS)
+export RECOMMITMENT_MINISTRY:=$(RECOMMITMENT_MINISTRY)
 
 
 # Docker compose v2 for GHA
@@ -331,7 +333,7 @@ create-notifications-cron:
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
-	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)","test_run": "$(TEST_RUN)","recommitment_ministry": "$(RECOMMITMENT_MINISTRY)"}}'
+	@oc patch configmap tcloud-recommitment -p='{"data":{"test_email":"$(TEST_EMAIL)","end_recommitment_schedule": "$(END_RECOMMITMENT_SCHEDULE)","start_recommitment_schedule": "$(START_RECOMMITMENT_SCHEDULE)","notification_schedule": "$(NOTIFICATION_SCHEDULE)","test_run": "$(TEST_RUN)", "views": "$(VIEWS)", "recommitment_ministry": "$(RECOMMITMENT_MINISTRY)"}}'
 
 check-request-limit:
 	@echo "Check request limit"

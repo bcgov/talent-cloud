@@ -272,6 +272,26 @@ export class RecommitmentService {
     this.logger.log(cycle);
     return cycle;
   }
+  /**
+   * Splits the list of emails into groups of 30.
+   * @param list
+   * @returns
+   */
+  private chunkEmails(list: unknown[]): RecommitmentRO[][] {
+    const maxContexts = 30;
+    return Object.values(
+      list.reduce((splitList, item, index) => {
+        const groupIndex = Math.floor(index / maxContexts);
+
+        if (!splitList[groupIndex]) {
+          splitList[groupIndex] = [];
+        }
+        splitList[groupIndex].push(item);
+
+        return splitList;
+      }, []),
+    );
+  }
 
   /**
    * Initiates the recommitment process for all active personnel.
@@ -284,22 +304,9 @@ export class RecommitmentService {
     testEmail?: string[],
     ministry?: string,
   ): Promise<{ member: MailRO; supervisor: MailRO }> {
-    if (dryRun) {
-      this.logger.log('TEST RUN: Emails will only be sent to test email');
-    }
     const cycle = await this.recommitmentCycleRepository.findOne({
       where: { year: new Date().getFullYear() },
     });
-
-    const { emcr, bcws } = await this.personnelService.findActivePersonnel(
-      ministry,
-    );
-
-    this.logger.log(`Found ${bcws.length} active BCWS personnel`);
-    this.logger.log(`Found ${emcr.length} active EMCR personnel`);
-
-    await this.saveRecommitmentEntities(emcr, cycle.year, Program.EMCR);
-    await this.saveRecommitmentEntities(bcws, cycle.year, Program.BCWS);
 
     const recommitmentQb =
       this.recommitmentRepository.createQueryBuilder('recommitment');
@@ -320,43 +327,46 @@ export class RecommitmentService {
       testEmail,
       dryRun,
     );
-
-    const memberTemplate = this.mailService.generateTemplate(
-      EmailTags.MEMBER_ANNUAL,
-      TemplateType.MEMBER,
-      memberList,
-      cycle.endDate,
-      Program.ALL,
-    );
-
+    this.logger.log(`Found: ${memberList.length} Members`, 'Member Annual');
     this.logger.log(
-      `Generated ${memberTemplate.contexts.length} member annual reminder emails`,
+      `Found: ${supervisorList.length} Supervisors`,
+      'Supervisor Annual',
     );
 
-    const supervisorTemplate = this.mailService.generateTemplate(
-      EmailTags.SUPERVISOR_ANNUAL,
-      TemplateType.SUPERVISOR,
-      supervisorList,
-      cycle.endDate,
-      Program.ALL,
+    const memberListGroups = this.chunkEmails(memberList);
+    const supervisorListGroups = this.chunkEmails(supervisorList);
+
+    const memberTemplates = memberListGroups.map((itm) =>
+      this.mailService.generateTemplate(
+        EmailTags.MEMBER_ANNUAL,
+        TemplateType.MEMBER,
+        itm,
+        cycle.endDate,
+        Program.ALL,
+        ministry,
+      ),
     );
 
-    this.logger.log(
-      `Generated ${supervisorTemplate.contexts.length} supervisor annual reminder emails`,
+    const supervisorTemplates = supervisorListGroups.map((itm) =>
+      this.mailService.generateTemplate(
+        EmailTags.SUPERVISOR_ANNUAL,
+        TemplateType.SUPERVISOR,
+        itm,
+        cycle.endDate,
+        Program.ALL,
+        ministry,
+      ),
     );
 
-    const sentTemplates = await this.mailService.sendMail(memberTemplate);
-    const sentSupervisorTemplates = await this.mailService.sendMail(
-      supervisorTemplate,
-    );
+    for await (const template of memberTemplates) {
+      await this.mailService.sendMail(template);
+    }
 
-    return {
-      member: { messages: sentTemplates.messages, txId: sentTemplates.txId },
-      supervisor: {
-        messages: sentSupervisorTemplates.messages,
-        txId: sentSupervisorTemplates.txId,
-      },
-    };
+    for await (const template of supervisorTemplates) {
+      await this.mailService.sendMail(template);
+    }
+
+    return;
   }
 
   /**

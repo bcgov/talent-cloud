@@ -96,6 +96,7 @@ services:
       ENV: ${ENV}
       TEST_EMAIL: ${TEST_EMAIL}
       TEST_RUN: ${TEST_RUN}
+      VIEWS: ${VIEWS}
       RECOMMITMENT_MINISTRY: ${RECOMMITMENT_MINISTRY}
     networks:
       - tc
