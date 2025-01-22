@@ -158,7 +158,6 @@ export class MailService {
     this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const isValid = (email: string) => {
-      this.logger.log(`Checking email: ${email}`);
       const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
       if (!isValidEmail) {
         this.logger.error(`Invalid email address: ${email}`);
