@@ -1,5 +1,7 @@
 import { Switch } from '@headlessui/react';
+
 import { Fragment } from 'react';
+import { Tooltip } from '../ui';
 
 export const Toggle = ({
   value,
@@ -13,8 +15,10 @@ export const Toggle = ({
   disabled?: boolean;
 }) => {
   return (
-    <>
+    
+      <>
       {label && <p className="label px-4">{label}</p>}
+      <Tooltip content="During the recommitment period no member status may be changed"  placement={'bottom-right'}>
       <Switch
         checked={value}
         onChange={handleToggle}
@@ -40,6 +44,8 @@ export const Toggle = ({
           </button>
         )}
       </Switch>
-    </>
+      </Tooltip>
+      </>
+
   );
 };
