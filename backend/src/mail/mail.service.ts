@@ -157,8 +157,18 @@ export class MailService {
     const token = await this.getToken();
     this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+    const isValid = (email: string) => {
+      this.logger.log(`Checking email: ${email}`);
+      const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+      if (!isValidEmail) {
+        this.logger.error(`Invalid email address: ${email}`);
+      }
+      return isValidEmail;
+    };
+
     const mailContext = mail.contexts.filter((itm) => !itm.to.includes(null));
-    mail.contexts = mailContext;
+
+    mail.contexts = mailContext.filter((itm) => isValid(itm.to[0]));
 
     try {
       const res = await this.mailApi.post('/emailMerge', mail);
