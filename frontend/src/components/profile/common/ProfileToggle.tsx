@@ -6,10 +6,12 @@ export const ProfileToggle = ({
   personnel,
   roles,
   updatePersonnel,
+  disabled
 }: {
   personnel: Personnel;
   roles?: Role[];
   updatePersonnel: ({ status }: { status: Status }) => void;
+  disabled?: boolean;
 }) => {
   return (
     <div className=" pb-12 bg-white w-full pt-4  ">
@@ -24,6 +26,7 @@ export const ProfileToggle = ({
                 })
               }
               label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
+              disabled={disabled} 
             />
           )}
       </div>

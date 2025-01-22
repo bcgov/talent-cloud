@@ -5,10 +5,12 @@ export const Toggle = ({
   value,
   handleToggle,
   label,
+  disabled,
 }: {
   value: boolean;
   handleToggle: (checked: boolean) => void;
   label?: string;
+  disabled?: boolean;
 }) => {
   return (
     <>
@@ -19,13 +21,14 @@ export const Toggle = ({
         name={'showInactive'}
         defaultChecked={false}
         as={Fragment}
+        disabled={disabled}
       >
         {({ checked }) => (
           <button
             id={label}
             aria-label="toggle switch"
             className={`${
-              checked ? 'bg-backgroundBlue' : 'bg-gray-200'
+              !checked || disabled ?  'bg-gray-200':'bg-backgroundBlue'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span className="sr-only">{'showInactive'}</span>

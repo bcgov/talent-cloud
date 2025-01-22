@@ -16,11 +16,13 @@ import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { useRoleContext } from '@/providers';
 import { RecommitmentDetails } from '@/components/profile/details/RecommitmentDetails';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 const Profile = () => {
   const { loading, roles, personnel, updatePersonnel, profileData } = usePersonnel();
   const { program } = useRoleContext();
   const { functions, bcwsRoles } = useProgramFieldData(program);
+  const {isRecommitmentCycleOpen} = useRecommitmentCycle();
 
   if (loading) {
     return <Loading />;
@@ -54,6 +56,7 @@ const Profile = () => {
               personnel={personnel}
               roles={roles}
               updatePersonnel={updatePersonnel}
+              disabled = {isRecommitmentCycleOpen}
             />
           )}
           {personnel && <RecommitmentDetails/>}
