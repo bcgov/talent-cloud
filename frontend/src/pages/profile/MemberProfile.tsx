@@ -42,7 +42,7 @@ const MemberProfile = () => {
   const [activeTab, setActiveTab] = useState('availability');
 
   const profileData = memberData(personnel);
-  const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
+  const { recommitmentCycle } = useRecommitmentCycle();
   const handleTabChange = (index: string) => {
     if (
       ![TabsEnum.AVAILABILITY, TabsEnum.PROFILE, TabsEnum.TRAINING].includes(
