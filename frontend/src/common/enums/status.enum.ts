@@ -10,4 +10,6 @@ export enum StatusNames {
   INACTIVE = 'Inactive',
   PENDING = 'Pending',
   NEW = 'New',
+  RECOMMITTED = 'Recommitted',
+  ALL = 'All',
 }

@@ -180,6 +180,8 @@ export class EmcrService {
       query.availabilityType,
       query.availabilityFromDate,
       query.availabilityToDate,
+      query.availableStatus,
+      Program.EMCR,
     );
 
     if (query.region?.length && !query.location?.length) {

@@ -12,6 +12,7 @@ export type TabProps = {
 };
 
 export const Tabs = ({ tabs, changeTab }: TabProps) => {
+  
   return (
     <TabGroup
       selectedIndex={tabs?.indexOf(
@@ -32,7 +33,7 @@ export const Tabs = ({ tabs, changeTab }: TabProps) => {
                   <span
                     className={`mx-4 px-1.5 border border-gray-400 rounded-md py-1 ${selected ? 'bg-primaryBlue text-white' : 'text-defaultGray '}`}
                   >
-                    {count}
+                    {count === '' ? 0 : count}
                   </span>
                 </div>
                 {selected && (

@@ -77,7 +77,7 @@ export const TableFooterNav = ({
       })}
 
       {truncateRight && <span>...</span>}
-      {lastPage !== 1 && (
+      {lastPage !== 1 && lastPage !== 0 && (
         <button
           aria-label={`navigate to page ${lastPage}`}
           disabled={currentPage === lastPage}
