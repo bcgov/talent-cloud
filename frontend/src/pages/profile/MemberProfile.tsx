@@ -9,7 +9,6 @@ import { Tabs as TabIndexes } from '@/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { memberData } from '@/hooks/profileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import { Transition } from '@headlessui/react';
 import { useProgramFieldData } from '@/hooks';
 import { RecommitmentFormBase } from '@/components/recommitment';
 import { format } from 'date-fns';
@@ -24,12 +23,20 @@ const MemberProfile = () => {
     openRecommitmentForm,
     handleOpenRecommitmentForm,
   } = useMemberProfile();
+  const [showEmcrBanner, setShowEmcrBanner] = useState(true);
+  const [showBcwsBanner, setShowBcwsBanner] = useState(true);
   const [showBanner, setShowBanner] = useState(true);
 
   const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
 
-  const handleCloseBanner = () => {
-    setShowBanner(false);
+  const handleCloseBanner = (program?: Program) => {
+    if (program === Program.ALL || !program) {
+      setShowBanner(false);
+    } else if (program === Program.BCWS) {
+      setShowBcwsBanner(false);
+    } else {
+      setShowEmcrBanner(false);
+    }
   };
 
   const [activeTab, setActiveTab] = useState('availability');
@@ -68,26 +75,16 @@ const MemberProfile = () => {
             <div className="mx-auto w-auto">
               {personnel && recommitmentCycle && (
                 <div className="pt-12 pb-6">
-                  <Transition
-                    show={isRecommitmentCycleOpen && showBanner}
-                    appear={true}
-                    enter="ease-out duration-100"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
-                  >
-                    <div>
-                      <RecommitmentProfileBanner
-                        year={recommitmentCycle?.year}
-                        endDate={format(recommitmentCycle.endDate, 'MMMM do, yyyy')}
-                        personnel={personnel}
-                        handleClick={handleOpenRecommitmentForm}
-                        handleCloseBanner={handleCloseBanner}
-                      />
-                    </div>
-                  </Transition>
+                  <RecommitmentProfileBanner
+                    year={recommitmentCycle?.year}
+                    endDate={format(recommitmentCycle.endDate, 'MMMM do, yyyy')}
+                    personnel={personnel}
+                    handleClick={handleOpenRecommitmentForm}
+                    handleCloseBanner={handleCloseBanner}
+                    showBanner={showBanner}
+                    showEmcrBanner={showEmcrBanner}
+                    showBcwsBanner={showBcwsBanner}
+                  />
                 </div>
               )}
               <TabsBody placeholder={undefined}>
