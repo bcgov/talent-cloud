@@ -58,6 +58,19 @@ export class RecommitmentService {
     );
     const personnel = await this.personnelService.findOne(id);
 
+    if (recommitmentUpdate.supervisorInformation) {
+      await this.personnelService.updatePersonnelSupervisorInformation(
+        personnel,
+        {
+          supervisorEmail: recommitmentUpdate.supervisorInformation.email,
+          supervisorFirstName:
+            recommitmentUpdate.supervisorInformation.firstName,
+          supervisorLastName: recommitmentUpdate.supervisorInformation.lastName,
+          supervisorPhone: recommitmentUpdate.supervisorInformation.phone,
+        },
+      );
+    }
+
     for (const key of programsToUpdate) {
       const recommitment = await this.recommitmentRepository.findOne({
         where: {
@@ -128,19 +141,6 @@ export class RecommitmentService {
         status: RecommitmentStatus.MEMBER_COMMITTED,
         program: Program.ALL,
       });
-    }
-
-    if (recommitmentUpdate.supervisorInformation) {
-      await this.personnelService.updatePersonnelSupervisorInformation(
-        personnel,
-        {
-          supervisorEmail: recommitmentUpdate.supervisorInformation.email,
-          supervisorFirstName:
-            recommitmentUpdate.supervisorInformation.firstName,
-          supervisorLastName: recommitmentUpdate.supervisorInformation.lastName,
-          supervisorPhone: recommitmentUpdate.supervisorInformation.phone,
-        },
-      );
     }
 
     return await this.personnelService.findOne(id);
