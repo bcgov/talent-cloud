@@ -15,11 +15,17 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     });
 
     const logger = new AppLogger();
-    app.useLogger(logger);
-    const viewsPath =
-      process.env.ENV === 'prod' || process.env.ENV === 'test'
-        ? 'views'
-        : 'views/test';
+
+    const testEmails = process.env?.TEST_EMAIL?.split(',') || undefined;
+    const viewsPath = process.env.VIEWS;
+    const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+    const testRun = process.env.TEST_RUN === 'true';
+
+    logger.log(`Views path: ${viewsPath}`, 'Start Recommitment');
+    logger.log(`Recommiting for ministry ${ministry}`, 'Start Recommitment');
+    logger.log(`Test run: ${testRun}`, 'Start Recommitment');
+    logger.log(`Test Emails: ${testEmails}`, 'Start Recommitment');
+
     app.useStaticAssets(join(__dirname, '..', viewsPath));
     app.setBaseViewsDir(join(__dirname, '..', viewsPath));
     nunjucks.configure(join(__dirname, '..', viewsPath), {
@@ -37,78 +43,24 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     app.setViewEngine('njk');
 
     const recommitmentService = app.get(RecommitmentService);
-    const recommitment_cycle =
-      await recommitmentService.checkRecommitmentPeriod();
 
     const today = datePST(new Date());
-
-    logger.log(`Automated Reminders Job: ${today}`, 'Recommitment');
-
+    const recommitment_cycle =
+      await recommitmentService.checkRecommitmentPeriod();
     if (
       today < recommitment_cycle.endDate &&
       today > recommitment_cycle.startDate
     ) {
-      if (process.env.TEST_RUN === 'true') {
-        const testEmails = process.env?.TEST_EMAIL?.split(',');
-
-        if (!testEmails) {
-          logger.error('No test emails found', 'Recommitment');
-          return await app.close();
-        }
-
-        const data = await recommitmentService.handleSendAutomatedReminders(
-          true,
-          testEmails,
-        );
-
-        logger.log('Supervisor TEST emails:', 'Recommitment');
-        logger.log(`TxId: ${data.supervisor?.txId}`, 'Recommitment');
-
-        data.supervisor?.messages?.forEach((supervisor) => {
-          logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
-        });
-
-        logger.log('Member TEST emails:', 'Recommitment');
-        logger.log(`TxId: ${data.member?.txId}`, 'Recommitment');
-
-        data.member?.messages?.forEach((member) => {
-          logger.log(`Member: ${member?.to}`, 'Recommitment');
-        });
-
-        logger.log('Automated Reminder job completed', 'Recommitment');
-
-        return await app.close();
-      } else {
-        const data = await recommitmentService.handleSendAutomatedReminders();
-
-        logger.log('Supervisor emails:', 'Supervisor Notification');
-        logger.log(
-          `TxId: ${data?.supervisor?.txId}`,
-          'Supervisor Notification',
-        );
-
-        data.supervisor?.messages?.forEach((supervisor) => {
-          logger.log(
-            `Supervisor: ${supervisor?.to}`,
-            'Supervisor Notification',
-          );
-        });
-
-        logger.log('Member emails:', 'Member Notification');
-        logger.log(`TxId: ${data?.member?.txId}`, 'Member Notification');
-
-        data.member?.messages?.forEach((member) => {
-          logger.log(`Member: ${member?.to}`, 'Member Notification');
-        });
-
-        logger.log('Automated Reminder job completed', 'Member Notification');
-
-        return await app.close();
-      }
+      await recommitmentService.handleSendAutomatedReminders(
+        testRun,
+        testEmails,
+        ministry,
+      );
+      logger.log('Job completed', 'Automated Reminder');
+      return;
     } else {
-      logger.warn('Not in recommitment period');
-
-      return await app.close();
+      logger.log('Not in recommitment period', 'Automated Recommitment');
+      return;
     }
   } catch (e) {
     console.error(e);
