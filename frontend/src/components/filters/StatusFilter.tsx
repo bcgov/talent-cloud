@@ -7,7 +7,7 @@ import {
 } from '@headlessui/react';
 import { classes } from '@/components/filters/classes';
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-import { Filters, Status, StatusNames } from '@/common';
+import { Filters,  StatusNames } from '@/common';
 import { Fragment } from 'react';
 
 export const StatusFilter = ({
