@@ -137,6 +137,7 @@ export class BcwsService {
       query.availabilityType,
       query.availabilityFromDate,
       query.availabilityToDate,
+      Program.BCWS,
     );
 
     if (query.fireCentre?.length && !query.location?.length) {
