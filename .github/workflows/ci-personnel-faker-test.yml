@@ -37,11 +37,21 @@ jobs:
           wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
-      - name: Seed Data Personnel
+      - name: Seed Personnel Data
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
           make seed-oc-personnel
-          make seed-oc-bcws
-          make seed-oc-emcr
+      - name: Seed BCWS Data
+        run: |
+            cd "$GITHUB_WORKSPACE"
+            oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
+            export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
+            make seed-oc-bcws
+      - name: Seed EMCR Data
+        run: |
+              cd "$GITHUB_WORKSPACE"
+              oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
+              export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
+              make seed-oc-emcr
