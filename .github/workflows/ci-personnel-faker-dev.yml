@@ -16,7 +16,7 @@ jobs:
     name: Seed dev faker data
     environment: dev
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     env:
       OS_NAMESPACE_SUFFIX: dev
       AUTH_TOKEN: ${{ secrets.OC_AUTH_TOKEN }}
