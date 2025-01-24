@@ -9,12 +9,18 @@ export const RecommitmentProfileBanner = ({
   personnel,
   handleClick,
   handleCloseBanner,
+  showBanner,
+  showEmcrBanner,
+  showBcwsBanner,
 }: {
   year: number;
   endDate: string;
   personnel: Personnel;
   handleClick: () => void;
-  handleCloseBanner: () => void;
+  handleCloseBanner: (program?: Program) => void;
+  showBanner: boolean;
+  showEmcrBanner: boolean;
+  showBcwsBanner: boolean;
 }) => {
   const PendingContent = {
     content: (
@@ -117,36 +123,70 @@ export const RecommitmentProfileBanner = ({
     (itm) => itm.program === Program.BCWS,
   )?.status;
 
-  const renderProgramBanner = (status: RecommitmentStatus, program?: Program) => {
+  const renderProgramBanner = (
+    status: RecommitmentStatus,
+    showBanner: boolean,
+    program?: Program,
+  ) => {
     switch (status) {
       case RecommitmentStatus.PENDING:
-        return <RecommitmentBanner program={program} {...PendingContent} />;
+        return (
+          <RecommitmentBanner
+            program={program}
+            showBanner={showBanner}
+            {...PendingContent}
+          />
+        );
       case RecommitmentStatus.MEMBER_COMMITTED:
-        return <RecommitmentBanner program={program} {...AcceptedContent} />;
+        return (
+          <RecommitmentBanner
+            program={program}
+            showBanner={showBanner}
+            {...AcceptedContent}
+          />
+        );
       case RecommitmentStatus.MEMBER_DENIED:
-        return <RecommitmentBanner program={program} {...DeclinedContent} />;
+        return (
+          <RecommitmentBanner
+            program={program}
+            showBanner={showBanner}
+            {...DeclinedContent}
+          />
+        );
       case RecommitmentStatus.SUPERVISOR_APPROVED:
-        return <RecommitmentBanner program={program} {...ApprovedContent} />;
+        return (
+          <RecommitmentBanner
+            program={program}
+            showBanner={showBanner}
+            {...ApprovedContent}
+          />
+        );
       case RecommitmentStatus.SUPERVISOR_DENIED:
-        return <RecommitmentBanner program={program} {...RejectedContent} />;
+        return (
+          <RecommitmentBanner
+            program={program}
+            showBanner={showBanner}
+            {...RejectedContent}
+          />
+        );
     }
   };
 
   if (emcrStatus && bcwsStatus && emcrStatus === bcwsStatus) {
-    return renderProgramBanner(emcrStatus);
+    return renderProgramBanner(emcrStatus, showBanner, Program.ALL);
   }
   if (!emcrStatus && bcwsStatus) {
-    return renderProgramBanner(bcwsStatus, Program.BCWS);
+    return renderProgramBanner(bcwsStatus, showBcwsBanner, Program.BCWS);
   }
   if (!bcwsStatus && emcrStatus) {
-    return renderProgramBanner(emcrStatus, Program.EMCR);
+    return renderProgramBanner(emcrStatus, showEmcrBanner, Program.EMCR);
   }
 
   if (emcrStatus && bcwsStatus && emcrStatus !== bcwsStatus) {
     return (
       <div className="flex flex-col space-y-4">
-        {renderProgramBanner(emcrStatus, Program.EMCR)}
-        {renderProgramBanner(bcwsStatus, Program.BCWS)}
+        {renderProgramBanner(emcrStatus, showEmcrBanner, Program.EMCR)}
+        {renderProgramBanner(bcwsStatus, showBcwsBanner, Program.BCWS)}
       </div>
     );
   }
