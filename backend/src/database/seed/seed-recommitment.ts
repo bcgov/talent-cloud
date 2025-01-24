@@ -26,14 +26,11 @@ export const handler = async (startDate, endDate) => {
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
   const personnelRepository = datasource.getRepository(PersonnelEntity);
 
-  const emcrPersonnelQB = personnelRepository.createQueryBuilder('personnel');
-  emcrPersonnelQB
-    .leftJoinAndSelect('personnel.emcr', 'emcr')
+  const emcrPersonnelQB = personnelRepository
+    .createQueryBuilder('emcr_personnel')
     .where('status = :status', { status: Status.ACTIVE });
-
-  const bcwsPersonnelQB = personnelRepository.createQueryBuilder('personnel');
-  bcwsPersonnelQB
-    .leftJoinAndSelect('personnel.bcws', 'bcws')
+  const bcwsPersonnelQB = personnelRepository
+    .createQueryBuilder('bcws_personnel')
     .where('status = :status', { status: Status.ACTIVE });
 
   const emcrPersonnel = await emcrPersonnelQB.getMany();
