@@ -311,13 +311,19 @@ export class PersonnelService {
     program?: Program,
   ): Promise<SelectQueryBuilder<T>> {
     if (availableStatus && availableStatus === 'New') {
-      program === Program.BCWS
-        ? queryBuilder.andWhere(
-            `bcws_personnel.dateApproved > current_date - interval '5' day `,
-          )
-        : queryBuilder.andWhere(
-            `emcr_personnel.dateApproved > current_date - interval '5' day`,
-          );
+      if (program === Program.BCWS) {
+        queryBuilder.andWhere(
+          `bcws_personnel.dateApproved > current_date - interval '5' day `,
+        );
+      } else if (program === Program.EMCR) {
+        queryBuilder.andWhere(
+          `emcr_personnel.dateApproved > current_date - interval '5' day`,
+        );
+      } else {
+        queryBuilder.andWhere(
+          `bcws_personnel.dateApproved > current_date - interval '5' day OR emcr_personnel.dateApproved > current_date - interval '5' day`,
+        );
+      }
     }
     if (availableStatus && availableStatus === 'Recommitted') {
       queryBuilder.andWhere('recommitment.program = :program', {
