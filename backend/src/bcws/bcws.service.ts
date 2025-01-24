@@ -137,6 +137,7 @@ export class BcwsService {
       query.availabilityType,
       query.availabilityFromDate,
       query.availabilityToDate,
+      query.availableStatus,
       Program.BCWS,
     );
 

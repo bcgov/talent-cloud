@@ -326,6 +326,9 @@ export class PersonnelService {
       queryBuilder.andWhere('recommitment.status = :recommitment_status', {
         recommitment_status: RecommitmentStatus.SUPERVISOR_APPROVED,
       });
+      queryBuilder.andWhere('recommitment.year = :year', {
+        year: new Date().getFullYear(),
+      });
     }
 
     if (name) {
