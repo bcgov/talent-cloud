@@ -1,4 +1,4 @@
-import type { Program } from '@/common';
+import { Program } from '@/common';
 import { ButtonTypes } from '@/common';
 import { Banner } from '../ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
@@ -52,7 +52,7 @@ export const RecommitmentBanner = ({
                   <span
                     className={`${statusBg} text-sm rounded-xl px-3 text-nowrap items-center justify-center flex py-1 text-${statusTextBg}`}
                   >
-                    {program?.toUpperCase()} {statusText}
+                    {program !== Program.ALL && program?.toUpperCase()} {statusText}
                   </span>
                 </p>
               </div>
