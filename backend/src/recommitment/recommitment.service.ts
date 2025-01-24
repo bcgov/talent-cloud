@@ -370,32 +370,6 @@ export class RecommitmentService {
   }
 
   /**
-   * Saves recommitment entities for the given personnel.
-   * @param {PersonnelEntity[]} personnel - The personnel array.
-   * @param {number} year - The recommitment cycle year.
-   * @param {Program} program - The program.
-   */
-  private async saveRecommitmentEntities(
-    personnel: PersonnelEntity[],
-    year: number,
-    program: Program,
-  ): Promise<void> {
-    for (const person of personnel) {
-      await this.recommitmentRepository.save(
-        this.recommitmentRepository.create({
-          personnelId: person.id,
-          recommitmentCycleId: year,
-          status: RecommitmentStatus.PENDING,
-          memberDecisionDate: null,
-          supervisorIdir: null,
-          supervisorDecisionDate: null,
-          program,
-        }),
-      );
-    }
-  }
-
-  /**
    * Sends automated reminders to members and supervisors.
    * @param {boolean} dryRun - If true, the process will not make any changes.
    * @param {string} [testEmail] - The test email address.

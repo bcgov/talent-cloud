@@ -40,7 +40,8 @@ export TEST_EMAIL:=$(TEST_EMAIL)
 export TEST_RUN:=$(TEST_RUN)
 export VIEWS:=$(VIEWS)
 export RECOMMITMENT_MINISTRY:=$(RECOMMITMENT_MINISTRY)
-
+export START_DATE:=$(START_DATE)
+export END_DATE:=$(END_DATE)
 
 # Docker compose v2 for GHA
 build-test:
@@ -245,7 +246,7 @@ seed-local-ci:
 	@docker exec  tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed.ts")'
 
 seed-local-recommitment:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-recommitment.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-recommitment.ts").handler("$(START_DATE)", "$(END_DATE)")'
 
 seed-local-bcws:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-bcws.ts")'
