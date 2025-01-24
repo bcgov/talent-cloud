@@ -116,10 +116,20 @@ push-prod:
 	@docker push $(CONTAINER_REGISTRY)/frontend:latest
 	@docker push $(CONTAINER_REGISTRY)/backend:latest
 
-open-db-tunnel:
-	@oc project $(TARGET_NAMESPACE)
+open-db-tunnel-dev:
+	@oc project $(OS_NAMESPACE_PREFIX)-dev
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
 	@oc port-forward $(APP_NAME)-patroni-0 5432
+
+open-db-tunnel-test:
+	@oc project $(OS_NAMESPACE_PREFIX)-test
+# Use patroni-0 to make EDIT changes, patroni-2 for READ ONLY
+	@oc port-forward $(APP_NAME)-patroni-2 5432
+
+open-db-tunnel-prod:
+	@oc project $(OS_NAMESPACE_PREFIX)-prod
+# Use patroni-1 for READ ONLY - use patroni-0 to make EDIT changes (please access with caution)
+	@oc port-forward $(APP_NAME)-patroni-1 5432
 
 ### Openshift Setup
 db-prep:
