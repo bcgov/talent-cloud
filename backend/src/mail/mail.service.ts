@@ -120,7 +120,7 @@ export class MailService {
         ],
         cc: [],
         bcc: [],
-        tag: `${tag}_${ministry}_process.env.ENV`,
+        tag: `${tag}_${ministry}_${process.env.ENV}`,
         delayTS: 0,
         context: {
           program:

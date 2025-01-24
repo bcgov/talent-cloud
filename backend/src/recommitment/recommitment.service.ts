@@ -404,11 +404,13 @@ export class RecommitmentService {
   async handleSendAutomatedReminders(
     dryRun: boolean = false,
     testEmail?: string[],
-  ): Promise<{ member: MailRO; supervisor: MailRO }> {
+    ministry?: string,
+  ) {
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
     const { memberPending, memberCommitted } =
       await this.findMembersByRecommitmentStatus();
+
     const { memberList } = this.filterRecommitmentList(
       memberPending,
       testEmail,
@@ -420,34 +422,40 @@ export class RecommitmentService {
       dryRun,
     );
 
-    const pendingMembersTemplate = this.mailService.generateTemplate(
-      EmailTags.MEMBER_FOLLOW_UP,
-      TemplateType.MEMBER,
-      memberList,
-      recommitmentCycle.endDate,
-      Program.ALL,
+    const memberListGroups = this.chunkEmails(memberList);
+    const supervisorListGroups = this.chunkEmails(supervisorList);
+
+    const memberTemplates = memberListGroups.map((itm) =>
+      this.mailService.generateTemplate(
+        EmailTags.MEMBER_FOLLOW_UP,
+        TemplateType.MEMBER,
+        itm,
+        recommitmentCycle.endDate,
+        Program.ALL,
+        ministry,
+      ),
     );
 
-    this.logger.log(
-      `Generated ${pendingMembersTemplate.contexts.length} emails for pending members`,
+    const supervisorTemplates = supervisorListGroups.map((itm) =>
+      this.mailService.generateTemplate(
+        EmailTags.SUPERVISOR_REMINDER,
+        TemplateType.SUPERVISOR,
+        itm,
+        recommitmentCycle.endDate,
+        Program.ALL,
+        ministry,
+      ),
     );
 
-    const committedMembersTemplate = this.mailService.generateTemplate(
-      EmailTags.SUPERVISOR_REMINDER,
-      TemplateType.SUPERVISOR,
-      supervisorList,
-      recommitmentCycle.endDate,
-      Program.ALL,
-    );
+    for await (const template of memberTemplates) {
+      await this.mailService.sendMail(template);
+    }
 
-    this.logger.log(
-      `Generated ${committedMembersTemplate.contexts.length} emails for supervisors of committed members`,
-    );
+    for await (const template of supervisorTemplates) {
+      await this.mailService.sendMail(template);
+    }
 
-    return {
-      member: await this.mailService.sendMail(pendingMembersTemplate),
-      supervisor: await this.mailService.sendMail(committedMembersTemplate),
-    };
+    return;
   }
 
   /**
