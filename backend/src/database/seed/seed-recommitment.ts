@@ -1,5 +1,6 @@
 import { datasource } from '../datasource';
-import { PersonnelEntity } from '../entities/personnel/personnel.entity';
+import { BcwsPersonnelEntity } from '../entities/bcws';
+import { EmcrPersonnelEntity } from '../entities/emcr';
 import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
 import { Program } from '../../auth/interface';
@@ -24,13 +25,16 @@ export const handler = async (startDate, endDate) => {
     }),
   );
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
-  const personnelRepository = datasource.getRepository(PersonnelEntity);
+  const emcrPersonnelRepository = datasource.getRepository(EmcrPersonnelEntity);
+  const bcwsPersonnelRepository = datasource.getRepository(BcwsPersonnelEntity);
 
-  const emcrPersonnelQB = personnelRepository
+  const emcrPersonnelQB = emcrPersonnelRepository
     .createQueryBuilder('emcr_personnel')
+    .leftJoinAndSelect('emcr_personnel.personnel', 'personnel')
     .where('status = :status', { status: Status.ACTIVE });
-  const bcwsPersonnelQB = personnelRepository
+  const bcwsPersonnelQB = bcwsPersonnelRepository
     .createQueryBuilder('bcws_personnel')
+    .leftJoinAndSelect('bcws_personnel.personnel', 'personnel')
     .where('status = :status', { status: Status.ACTIVE });
 
   const emcrPersonnel = await emcrPersonnelQB.getMany();
@@ -41,7 +45,7 @@ export const handler = async (startDate, endDate) => {
   for (const person of emcrPersonnel) {
     await recommitmentRepository.save(
       recommitmentRepository.create({
-        personnelId: person.id,
+        personnelId: person.personnel.id,
         recommitmentCycleId: cycle.year,
         status: RecommitmentStatus.PENDING,
         memberDecisionDate: null,
@@ -57,7 +61,7 @@ export const handler = async (startDate, endDate) => {
   for (const person of bcwsPersonnel) {
     await recommitmentRepository.save(
       recommitmentRepository.create({
-        personnelId: person.id,
+        personnelId: person.personnel.id,
         recommitmentCycleId: cycle.year,
         status: RecommitmentStatus.PENDING,
         memberDecisionDate: null,
