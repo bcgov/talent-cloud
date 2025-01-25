@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
 import { format } from 'date-fns';
 import { AvailabilityTypeLabel } from '../../common/enums/availability-type.enum';
-import { Status } from '../../common/enums/status.enum';
+import { Status, StatusNames } from '../../common/enums/status.enum';
 import { QueryDTO } from '../../common/query.dto';
 
 export class GetPersonnelDTO extends QueryDTO {
@@ -50,4 +50,12 @@ export class GetPersonnelDTO extends QueryDTO {
   @IsBoolean()
   @Transform(({ value }) => Boolean(value))
   includeTravel: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Available Status',
+    example: 'Recommitted',
+  })
+  @IsOptional()
+  @IsEnum(StatusNames)
+  availableStatus: StatusNames;
 }

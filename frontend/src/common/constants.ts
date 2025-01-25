@@ -44,6 +44,7 @@ export enum Filters {
   INCLUDE_TRAVEL = 'includeTravel',
   PAGE = 'page',
   ROWS = 'rows',
+  AVAILABLE_STATUS = 'availableStatus',
 }
 
 export enum DashboardColumns {

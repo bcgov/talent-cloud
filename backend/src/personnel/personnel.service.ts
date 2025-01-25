@@ -22,6 +22,7 @@ import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/create-personnel-languages.dto';
 import { Ministry } from '../common/enums';
+import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
 import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
@@ -306,7 +307,36 @@ export class PersonnelService {
     availabilityType?: AvailabilityTypeLabel,
     availabilityFromDate?: string,
     availabilityToDate?: string,
+    availableStatus?: string,
+    program?: Program,
   ): Promise<SelectQueryBuilder<T>> {
+    if (availableStatus && availableStatus === 'New') {
+      if (program === Program.BCWS) {
+        queryBuilder.andWhere(
+          `bcws_personnel.dateApproved > current_date - interval '5' day `,
+        );
+      } else if (program === Program.EMCR) {
+        queryBuilder.andWhere(
+          `emcr_personnel.dateApproved > current_date - interval '5' day`,
+        );
+      } else {
+        queryBuilder.andWhere(
+          `bcws_personnel.dateApproved > current_date - interval '5' day OR emcr_personnel.dateApproved > current_date - interval '5' day`,
+        );
+      }
+    }
+    if (availableStatus && availableStatus === 'Recommitted') {
+      queryBuilder.andWhere('recommitment.program = :program', {
+        program,
+      });
+      queryBuilder.andWhere('recommitment.status = :recommitment_status', {
+        recommitment_status: RecommitmentStatus.SUPERVISOR_APPROVED,
+      });
+      queryBuilder.andWhere('recommitment.year = :year', {
+        year: new Date().getFullYear(),
+      });
+    }
+
     if (name) {
       queryBuilder.andWhere(
         new Brackets((qb) => {
@@ -471,7 +501,6 @@ export class PersonnelService {
         queryBuilder.addOrderBy('personnel.lastName', 'ASC');
         queryBuilder.addOrderBy('personnel.firstName', 'ASC');
       } else if (status === Status.ACTIVE) {
-        //TODO - Fix this (not sure if the order by is being added here)
         queryBuilder.addSelect(
           `CASE WHEN emcr_personnel.dateApproved > current_date - interval '5' day THEN emcr_personnel.dateApproved ELSE null END`,
           'new_member',

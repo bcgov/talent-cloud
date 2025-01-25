@@ -34,14 +34,22 @@ export const Table = ({
       </thead>
 
       <tbody>
-        {loading ? (
-          <tr>
+        
+        {loading && 
+              <tr>
             <td colSpan={columns?.length}>
               <Loading />
             </td>
           </tr>
-        ) : (
-          rows?.map((row: Row, index: number) => (
+
+            
+          } 
+            
+          {rows.length === 0 ? <>
+          
+          <tr className='h-36'><td colSpan={columns?.length}><h6 className="text-center">No Data Found...</h6></td></tr>
+          
+          </> : rows?.map((row: Row, index: number) => (
             <Fragment key={index}>
               {index !== 0 && (
                 <tr>
@@ -94,7 +102,7 @@ export const Table = ({
               </tr>
             </Fragment>
           ))
-        )}
+        }
       </tbody>
     </table>
   );

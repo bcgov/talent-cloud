@@ -1,6 +1,6 @@
 import { useTable } from '@/hooks';
 import { useRoleContext } from '@/providers';
-import type { Status } from '@/common';
+import { Status } from '@/common';
 import { Filters, Role } from '@/common';
 import {
   DialogUI,
@@ -16,6 +16,7 @@ import { button as buttonClass } from '@/components/ui/classes';
 import { useState } from 'react';
 import { MemberStatusGuide } from './MemberStatusGuide';
 import { DashboardFilters } from './DashboardFilters';
+import { StatusFilter } from '@/components/filters/StatusFilter';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
@@ -79,6 +80,13 @@ const Dashboard = () => {
                 </button>
               )}
             </div>
+
+            {searchParams.get(Filters.STATUS) === Status.ACTIVE && (
+              <StatusFilter
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+              />
+            )}
             <Table rows={rows} columns={columns} loading={loading} auto={true} />
 
             <div className="flex flex-row justify-between p-4">
