@@ -4,6 +4,7 @@
 name: OpenShift Deploy/Promotion to Test
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - test
