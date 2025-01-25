@@ -283,7 +283,7 @@ seed-oc-emcr:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-emcr.js")'
 
 seed-oc-recommitment:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js")'
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js").handler("$(START_DATE)", "$(END_DATE)")'
 
 
 delete-db:
