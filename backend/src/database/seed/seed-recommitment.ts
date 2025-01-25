@@ -1,15 +1,13 @@
 import { datasource } from '../datasource';
-
-import { BcwsPersonnelEntity } from '../entities/bcws';
-import { EmcrPersonnelEntity } from '../entities/emcr';
+import { PersonnelEntity } from '../entities/personnel/personnel.entity';
 import { RecommitmentCycleEntity } from '../entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentEntity } from '../entities/recommitment/recommitment.entity';
 import { Program } from '../../auth/interface';
+import { Status } from '../../common/enums';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
-import { datePST } from '../../common/helpers';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const handler = async () => {
+export const handler = async (startDate, endDate) => {
+  console.log('seeding recommitment...');
   if (!datasource.isInitialized) {
     await datasource.initialize();
   }
@@ -17,48 +15,57 @@ export const handler = async () => {
   const recommitmentCycleRepository = datasource.getRepository(
     RecommitmentCycleEntity,
   );
-
+  console.log('...seeding cycle...');
+  const cycle = await recommitmentCycleRepository.save(
+    recommitmentCycleRepository.create({
+      year: 2025,
+      startDate: startDate,
+      endDate: endDate,
+    }),
+  );
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
-  const startDate = new Date(datePST(new Date()));
-  await recommitmentCycleRepository.save(recommitmentCycleRepository.create(new RecommitmentCycleEntity(startDate, new Date(), new Date().getFullYear()) ));
+  const personnelRepository = datasource.getRepository(PersonnelEntity);
 
+  const emcrPersonnelQB = personnelRepository
+    .createQueryBuilder('emcr_personnel')
+    .where('status = :status', { status: Status.ACTIVE });
+  const bcwsPersonnelQB = personnelRepository
+    .createQueryBuilder('bcws_personnel')
+    .where('status = :status', { status: Status.ACTIVE });
 
-  const bcwsPersonnelRepository = datasource.getRepository(BcwsPersonnelEntity);
-  const emcrPersonnelRepository = datasource.getRepository(EmcrPersonnelEntity);
+  const emcrPersonnel = await emcrPersonnelQB.getMany();
+  const bcwsPersonnel = await bcwsPersonnelQB.getMany();
+  console.log('...');
+  console.log('...seeding emcr...');
+  console.log('...');
+  for (const person of emcrPersonnel) {
+    await recommitmentRepository.save(
+      recommitmentRepository.create({
+        personnelId: person.id,
+        recommitmentCycleId: cycle.year,
+        status: RecommitmentStatus.PENDING,
+        memberDecisionDate: null,
+        supervisorIdir: null,
+        supervisorDecisionDate: null,
+        program: Program.EMCR,
+      }),
+    );
+  }
 
-  const bcwsPersonnelRepositoryQB =
-    bcwsPersonnelRepository.createQueryBuilder('bcwsPersonnel');
-  const emcrPersonnelRepositoryQB =
-    emcrPersonnelRepository.createQueryBuilder('emcrPersonnel');
-  const bcwsPersonnel = await bcwsPersonnelRepositoryQB.getMany();
-  const emcrPersonnel = await emcrPersonnelRepositoryQB.getMany();
-
-  emcrPersonnel.forEach(async (person: EmcrPersonnelEntity) => {
-    const emcrRecommitment = recommitmentRepository.create({
-      personnelId: person.personnelId,
-      recommitmentCycleId: new Date().getFullYear(),
-      status: RecommitmentStatus.PENDING,
-      memberDecisionDate: null,
-      memberReason: null,
-      supervisorIdir: null,
-      supervisorDecisionDate: null,
-      program: Program.EMCR,
-    });
-    await recommitmentRepository.save(emcrRecommitment);
-  });
-  bcwsPersonnel.forEach(async (person: BcwsPersonnelEntity) => {
-    const bcwsRecommitment = recommitmentRepository.create({
-      personnelId: person.personnelId,
-      recommitmentCycleId: new Date().getFullYear(),
-      status: RecommitmentStatus.PENDING,
-      memberDecisionDate: null,
-      memberReason: null,
-      supervisorIdir: null,
-      supervisorDecisionDate: null,
-      program: Program.BCWS,
-    });
-    await recommitmentRepository.save(bcwsRecommitment);
-  });
+  console.log('...seeding bcws...');
+  console.log('...');
+  for (const person of bcwsPersonnel) {
+    await recommitmentRepository.save(
+      recommitmentRepository.create({
+        personnelId: person.id,
+        recommitmentCycleId: cycle.year,
+        status: RecommitmentStatus.PENDING,
+        memberDecisionDate: null,
+        supervisorIdir: null,
+        supervisorDecisionDate: null,
+        program: Program.BCWS,
+      }),
+    );
+  }
+  console.log('...seeding recommitment complete');
 };
-
-handler();

@@ -40,7 +40,8 @@ export TEST_EMAIL:=$(TEST_EMAIL)
 export TEST_RUN:=$(TEST_RUN)
 export VIEWS:=$(VIEWS)
 export RECOMMITMENT_MINISTRY:=$(RECOMMITMENT_MINISTRY)
-
+export START_DATE:=$(START_DATE)
+export END_DATE:=$(END_DATE)
 
 # Docker compose v2 for GHA
 build-test:
@@ -115,10 +116,20 @@ push-prod:
 	@docker push $(CONTAINER_REGISTRY)/frontend:latest
 	@docker push $(CONTAINER_REGISTRY)/backend:latest
 
-open-db-tunnel:
-	@oc project $(TARGET_NAMESPACE)
+open-db-tunnel-dev:
+	@oc project $(OS_NAMESPACE_PREFIX)-dev
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
 	@oc port-forward $(APP_NAME)-patroni-0 5432
+
+open-db-tunnel-test:
+	@oc project $(OS_NAMESPACE_PREFIX)-test
+# Use patroni-0 to make EDIT changes, patroni-2 for READ ONLY
+	@oc port-forward $(APP_NAME)-patroni-2 5432
+
+open-db-tunnel-prod:
+	@oc project $(OS_NAMESPACE_PREFIX)-prod
+# Use patroni-1 for READ ONLY - use patroni-0 to make EDIT changes (please access with caution)
+	@oc port-forward $(APP_NAME)-patroni-1 5432
 
 ### Openshift Setup
 db-prep:
@@ -245,7 +256,7 @@ seed-local-ci:
 	@docker exec  tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed.ts")'
 
 seed-local-recommitment:
-	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-recommitment.ts")'
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-recommitment.ts").handler("$(START_DATE)", "$(END_DATE)")'
 
 seed-local-bcws:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-bcws.ts")'

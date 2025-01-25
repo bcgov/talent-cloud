@@ -27,7 +27,7 @@ export const handler = async () => {
   const emcrPersonnelRepo = datasource.getRepository(EmcrPersonnelEntity);
 
   try {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 500; i++) {
       const dateApplied = faker.date.past();
 
       const { personnelData } = createPersonnelHandler(locations, tools, certs);

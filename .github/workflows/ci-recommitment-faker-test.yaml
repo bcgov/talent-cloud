@@ -10,6 +10,8 @@ env:
   TOOLS_TOKEN: ${{ secrets.OC_TOOLS_TOKEN }}
   PROJECT: tcloud
   ENV: test
+  START_DATE: 2025-01-20
+  END_DATE: 2025-02-21
 
 jobs:
   seed_faker_data:
@@ -42,4 +44,6 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           oc login --token="${{ env.AUTH_TOKEN }}" --server="$CLUSTER"
           export OS_NAMESPACE_SUFFIX=${{ env.OS_NAMESPACE_SUFFIX }}
+          export START_DATE=${{ env.START_DATE }}
+          export END_DATE=${{ env.END_DATE }}
           make seed-oc-recommitment
