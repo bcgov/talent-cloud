@@ -227,30 +227,38 @@ export class MailService {
       .andWhere('mail.date > :date', {
         date: new Date(new Date().setDate(new Date().getDate() - 7)),
       });
+    if (
+      [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
+        templateType,
+      )
+    ) {
+      this.logger.log(
+        'Filtering existing emails for automated notifications in the last 7 days',
+      );
+      const existingMail = await mailQB.getMany();
 
-    const existingMail = await mailQB.getMany();
+      const existingEmails = existingMail?.map((itm) => itm.email);
 
-    const existingEmails = existingMail?.map((itm) => itm.email);
+      this.logger.log(
+        `Total existing emails to filter: ${existingEmails?.length}`,
+      );
 
-    this.logger.log(
-      `Total existing emails to filter: ${existingEmails?.length}`,
-    );
+      const filteredContexts = mail.contexts.filter(
+        (itm) => !existingEmails.includes(itm.to[0]),
+      );
 
-    const filteredContexts = mail.contexts.filter(
-      (itm) => !existingEmails.includes(itm.to[0]),
-    );
+      if (existingEmails.length > 0) {
+        mail.contexts = filteredContexts;
+      }
 
-    if (existingEmails.length > 0) {
-      mail.contexts = filteredContexts;
-    }
+      this.logger.log(
+        `Total emails to be sent (after filter existing): ${mail.contexts?.length}`,
+      );
 
-    this.logger.log(
-      `Total emails to be sent (after filter existing): ${mail.contexts?.length}`,
-    );
-
-    if (mail.contexts.length === 0) {
-      this.logger.log('No valid emails to send');
-      return;
+      if (mail.contexts.length === 0) {
+        this.logger.log('No valid emails to send');
+        return;
+      }
     }
 
     try {
