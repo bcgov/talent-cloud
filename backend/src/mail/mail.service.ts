@@ -195,8 +195,8 @@ export class MailService {
       }
       return isValidEmail;
     };
-
-    this.logger.log(`Email Template: ${templateType}`);
+    this.logger.log(`\n`);
+    this.logger.log(`***Email Template: ${templateType}***\n`);
 
     this.logger.log(`Total emails to be sent: ${mail.contexts.length}`);
 
@@ -216,6 +216,38 @@ export class MailService {
 
     this.logger.log(`Total invalid emails filtered: ${invalidEmails?.length}`);
 
+    const mailQB = this.mailRepository
+      .createQueryBuilder('mail')
+      .leftJoinAndSelect('mail.tx', 'tx');
+    mailQB
+      .where('mail.email IN (:...emails)', {
+        emails: mail.contexts.map((itm) => itm.to[0]),
+      })
+      .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
+      .andWhere('mail.date > :date', {
+        date: new Date(new Date().setDate(new Date().getDate() - 7)),
+      });
+
+    const existingMail = await mailQB.getMany();
+
+    const existingEmails = existingMail?.map((itm) => itm.email);
+
+    this.logger.log(
+      `Total existing emails to filter: ${existingEmails?.length}`,
+    );
+
+    const filteredContexts = mail.contexts.filter(
+      (itm) => !existingEmails.includes(itm.to[0]),
+    );
+
+    if (existingEmails.length > 0) {
+      mail.contexts = filteredContexts;
+    }
+
+    this.logger.log(
+      `Total emails to be sent (after filter existing): ${mail.contexts?.length}`,
+    );
+
     if (mail.contexts.length === 0) {
       this.logger.log('No valid emails to send');
       return;
@@ -223,6 +255,7 @@ export class MailService {
 
     try {
       const res = await this.mailApi.post('/emailMerge', mail);
+
       this.logger.log(
         `Emails sent for ${templateType}: ${res.data.messages.length}`,
       );
