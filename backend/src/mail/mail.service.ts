@@ -196,11 +196,25 @@ export class MailService {
       return isValidEmail;
     };
 
+    this.logger.log(`Email Template: ${templateType}`);
+
+    this.logger.log(`Total emails to be sent: ${mail.contexts.length}`);
+
     const mailContext = mail.contexts.filter((itm) => !itm.to.includes(null));
 
-    mail.contexts = mailContext.filter((itm) => isValid(itm.to[0]));
+    this.logger.log(
+      `Total emails to be sent (after filter null): ${mailContext.length}`,
+    );
+
+    mail.contexts = mailContext.filter((itm) => isValid(itm?.to[0]));
+
+    this.logger.log(
+      `Total emails to be sent (after filter invalid): ${mail.contexts?.length}`,
+    );
 
     const invalidEmails = mailContext.filter((itm) => !isValid(itm.to[0]));
+
+    this.logger.log(`Total invalid emails filtered: ${invalidEmails?.length}`);
 
     if (mail.contexts.length === 0) {
       this.logger.log('No valid emails to send');
@@ -209,32 +223,56 @@ export class MailService {
 
     try {
       const res = await this.mailApi.post('/emailMerge', mail);
-      this.logger.log(res.data);
-
-      await this.mailBatchRepository.save(
-        this.mailBatchRepository.create({
-          txId: res.data.txId,
-          tag: mail.contexts[0].tag,
-          template: templateType,
-        }),
+      this.logger.log(
+        `Emails sent for ${templateType}: ${res.data.messages.length}`,
       );
 
-      const mails = res.data.messages.map((msg) => {
-        return this.mailRepository.create({
-          ...msg,
-        });
-      });
+      if (!res.data.txId) {
+        this.logger.error('No txId returned');
+        this.logger.log(res?.data);
+        return;
+      }
 
-      const invalidMail = invalidEmails.map((itm) => {
-        return this.mailRepository.create({
-          email: itm.to[0],
-          msgId: `${res.data.txId}_invalid`,
-          sent: false,
-          txId: res.data.txId,
-        });
-      });
+      this.logger.log(res?.data);
 
-      await this.mailRepository.save({ ...mails, ...invalidMail });
+      const batch =
+        res.data.txId &&
+        (await this.mailBatchRepository.save(
+          this.mailBatchRepository.create({
+            txId: res.data.txId,
+            tag: mail.contexts[0].tag,
+            template: templateType,
+          }),
+        ));
+
+      const mails =
+        batch &&
+        res.data.messages.map((msg) => {
+          return this.mailRepository.create({
+            email: msg.to[0],
+            msgId: msg.msgId,
+            sent: true,
+            txId: batch.txId,
+            tx: batch,
+          });
+        });
+
+      mails.length > 0 && (await this.mailRepository.save(mails));
+
+      const invalidMail =
+        batch &&
+        invalidEmails.length > 0 &&
+        invalidEmails.map((itm) => {
+          return this.mailRepository.create({
+            email: itm.to[0],
+            msgId: `${batch.txId}_invalid`,
+            sent: false,
+            txId: batch.txId,
+            tx: batch,
+          });
+        });
+
+      invalidMail.length > 0 && (await this.mailRepository.save(invalidMail));
 
       return res.data;
     } catch (e) {
