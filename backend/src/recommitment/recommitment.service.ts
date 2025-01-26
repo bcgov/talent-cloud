@@ -360,12 +360,12 @@ export class RecommitmentService {
 
     return;
   }
-
   /**
-   * Sends automated reminders to members and supervisors.
-   * @param {boolean} dryRun - If true, the process will not make any changes.
-   * @param {string} [testEmail] - The test email address.
-   * @returns {Promise<void>}
+   *
+   * @param dryRun
+   * @param testEmail
+   * @param ministry
+   * @returns
    */
   async handleSendAutomatedReminders(
     dryRun: boolean = false,

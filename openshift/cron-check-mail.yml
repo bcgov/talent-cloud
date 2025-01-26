@@ -20,8 +20,8 @@ parameters:
   - name: CONFIG_VERSION
     description: The github repository version of Config (Commit SHA)
     value: default
-  - name: NOTIFICATION_SCHEDULE
-    description: Scheduled date and time to send automated notifcation reminders
+  - name: CHECK_MAIL_SCHEDULE 
+    description: Scheduled date and time to check sent mail status
     required: true
 objects:
   - apiVersion: batch/v1
@@ -206,7 +206,7 @@ objects:
                 - name: CHECK_MAIL_SCHEDULE 
                   valueFrom:
                     configMapKeyRef:
-                      key: views
+                      key: check_mail_schedule
                       name: ${APP_NAME}-recommitment
             
   

@@ -201,6 +201,12 @@ export class MailService {
     mail.contexts = mailContext.filter((itm) => isValid(itm.to[0]));
 
     const filteredMail = mailContext.filter((itm) => !isValid(itm.to[0]));
+    console.log(filteredMail.length);
+
+    if (mail.contexts.length === 0) {
+      this.logger.log('No valid emails to send');
+      return;
+    }
 
     try {
       const res = await this.mailApi.post('/emailMerge', mail);
