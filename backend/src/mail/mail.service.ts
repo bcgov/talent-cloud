@@ -225,7 +225,7 @@ export class MailService {
       })
       .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
       .andWhere('mail.date > :date', {
-        date: new Date(new Date().setDate(new Date().getDate() - 7)),
+        date: new Date(new Date().setDate(new Date().getDate() - 6)),
       });
     if (
       [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
@@ -233,7 +233,7 @@ export class MailService {
       )
     ) {
       this.logger.log(
-        'Filtering existing emails for automated notifications in the last 7 days',
+        'Filtering existing emails for automated notifications in the last 6 days',
       );
       const existingMail = await mailQB.getMany();
 
