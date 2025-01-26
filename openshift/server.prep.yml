@@ -81,10 +81,12 @@ objects:
       test_email: ${TEST_EMAIL}
       start_recommitment_schedule: ${START_RECOMMITMENT_SCHEDULE}
       end_recommitment_schedule: ${END_RECOMMIMENT_SCHEDULE}
+      check_mail_schedule: ${CHECK_MAIL_SCHEDULE} 
       notification_schedule: ${NOTIFICATION_SCHEDULE}
       test_run: ${TEST_RUN}
       recommitment_ministry: ${RECOMMITMENT_MINISTRY}
       views: ${VIEWS}
+      
 
 
 
