@@ -200,8 +200,7 @@ export class MailService {
 
     mail.contexts = mailContext.filter((itm) => isValid(itm.to[0]));
 
-    const filteredMail = mailContext.filter((itm) => !isValid(itm.to[0]));
-    console.log(filteredMail.length);
+    const invalidEmails = mailContext.filter((itm) => !isValid(itm.to[0]));
 
     if (mail.contexts.length === 0) {
       this.logger.log('No valid emails to send');
@@ -220,27 +219,22 @@ export class MailService {
         }),
       );
 
-      for await (const itm of res.data.messages) {
-        await this.mailRepository.save(
-          this.mailRepository.create({
-            email: itm.to[0],
-            msgId: itm.msgId,
-            sent: true,
-            txId: res.data.txId,
-          }),
-        );
-      }
+      const mails = res.data.messages.map((msg) => {
+        return this.mailRepository.create({
+          ...msg,
+        });
+      });
 
-      for await (const itm of filteredMail) {
-        await this.mailRepository.save(
-          this.mailRepository.create({
-            email: itm.to[0],
-            msgId: `${res.data.txId}_invalid`,
-            sent: false,
-            txId: res.data.txId,
-          }),
-        );
-      }
+      const invalidMail = invalidEmails.map((itm) => {
+        return this.mailRepository.create({
+          email: itm.to[0],
+          msgId: `${res.data.txId}_invalid`,
+          sent: false,
+          txId: res.data.txId,
+        });
+      });
+
+      await this.mailRepository.save({ ...mails, ...invalidMail });
 
       return res.data;
     } catch (e) {
