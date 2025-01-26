@@ -36,6 +36,7 @@ export GIT_LOCAL_BRANCH := $(or $(GIT_LOCAL_BRANCH),dev)
 export END_RECOMMITMENT_SCHEDULE:=$(END_RECOMMITMENT_SCHEDULE)
 export START_RECOMMITMENT_SCHEDULE:=$(START_RECOMMITMENT_SCHEDULE)
 export NOTIFICATION_SCHEDULE:=$(NOTIFICATION_SCHEDULE)
+export CHECK_MAIL_SCHEDULE:=$(CHECK_MAIL_SCHEDULE)
 export TEST_EMAIL:=$(TEST_EMAIL)
 export TEST_RUN:=$(TEST_RUN)
 export VIEWS:=$(VIEWS)
@@ -267,8 +268,6 @@ seed-local-emcr:
 seed-local-personnel:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-both.ts")'
 
-
-
 seed-oc:
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed.js")'
@@ -321,6 +320,10 @@ send-notification:
 	@echo "Trigger send notification job"
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/automated_reminders.ts")'
 
+check-mail-status:
+	@echo "Trigger check mail status Job"
+	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/jobs/mail-status.ts")'
+
 start-recommitment-oc:
 	@echo "Trigger recommitment job ${ENV}"
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
@@ -333,6 +336,10 @@ send-notification-oc:
 	@echo "Trigger send notification job"
 	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
 
+check-mail-status-oc:
+	@echo "Trigger check mail status Job"
+	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/mail-status.js")'
+
 create-start-recommitment-cron:
 	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE="$(START_RECOMMITMENT_SCHEDULE)" | oc apply -n $(TARGET_NAMESPACE) -f -
 
@@ -341,6 +348,9 @@ create-end-recommitment-cron:
 
 create-notifications-cron:
 	@oc process -f openshift/cron-notifications.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) NOTIFICATION_SCHEDULE="$(NOTIFICATION_SCHEDULE)"| oc apply -n $(TARGET_NAMESPACE) -f -
+
+create-check-mail-cron:
+	@oc process -f openshift/cron-check-mail.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) CHECK_MAIL_SCHEDULE="$(CHECK_MAIL_SCHEDULE)"| oc apply -n $(TARGET_NAMESPACE) -f -
 
 update-recommitment-configmap:
 	@echo "Update recommitment configmap"
