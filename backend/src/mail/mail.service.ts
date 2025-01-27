@@ -11,7 +11,7 @@ import {
   envs,
   TemplateType,
 } from './constants';
-import { MailDto } from './mail.dto';
+import { Contexts, MailDto } from './mail.dto';
 import { MailRO } from './mail.ro';
 import { Program } from '../auth/interface';
 import { MailBatchEntity } from '../database/entities/mail-batch.entity';
@@ -174,6 +174,45 @@ export class MailService {
     });
   }
 
+  async checkForSentMail(contexts: Contexts[], templateType?: EmailTags) {
+    if (
+      [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
+        templateType,
+      )
+    ) {
+      this.logger.log(
+        'Filtering existing emails for automated notifications in the last 6 days',
+      );
+      const mailQB = this.mailRepository
+        .createQueryBuilder('mail')
+        .leftJoinAndSelect('mail.tx', 'tx');
+      mailQB
+        .where('mail.email IN (:...emails)', {
+          emails: contexts.map((itm) => itm.to[0]),
+        })
+        .andWhere('tx.template = :template', { template: templateType })
+        .andWhere('mail.date > :date', {
+          date: new Date(new Date().setDate(new Date().getDate() - 6)),
+        });
+
+      const existingMail = await mailQB.getMany();
+
+      const existingEmails = existingMail?.map((itm) => itm.email);
+
+      this.logger.log(
+        `Total existing emails to filter: ${existingEmails?.length}`,
+      );
+
+      const filteredContexts = contexts.filter(
+        (itm) => !existingEmails?.includes(itm.to[0]),
+      );
+
+      this.logger.log(
+        `Total emails to be sent (after filter existing): ${filteredContexts?.length}`,
+      );
+      return filteredContexts;
+    }
+  }
   /**
    * Send email, passing in the email data with body template and values
    * @param mail MailDto
@@ -216,52 +255,16 @@ export class MailService {
 
     this.logger.log(`Total invalid emails filtered: ${invalidEmails?.length}`);
 
-    if (
-      [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
-        templateType,
-      )
-    ) {
-      this.logger.log(
-        'Filtering existing emails for automated notifications in the last 6 days',
-      );
-      const mailQB = this.mailRepository
-        .createQueryBuilder('mail')
-        .leftJoinAndSelect('mail.tx', 'tx');
-      mailQB
-        .where('mail.email IN (:...emails)', {
-          emails: mail.contexts.map((itm) => itm.to[0]),
-        })
-        .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
-        .andWhere('mail.date > :date', {
-          date: new Date(new Date().setDate(new Date().getDate() - 6)),
-        });
+    const alreadySentMail = await this.checkForSentMail(
+      mail.contexts,
+      templateType,
+    );
 
-      const existingMail = await mailQB.getMany();
+    mail.contexts = alreadySentMail;
 
-      if (existingMail?.length > 0) {
-        const existingEmails = existingMail.map((itm) => itm.email);
-
-        this.logger.log(
-          `Total existing emails to filter: ${existingEmails?.length}`,
-        );
-
-        const filteredContexts = mail.contexts.filter(
-          (itm) => !existingEmails?.includes(itm.to[0]),
-        );
-
-        if (filteredContexts?.length > 0) {
-          mail.contexts = filteredContexts;
-        }
-
-        this.logger.log(
-          `Total emails to be sent (after filter existing): ${mail.contexts?.length}`,
-        );
-      }
-
-      if (mail.contexts?.length === 0) {
-        this.logger.log('No valid emails to send');
-        return;
-      }
+    if (mail.contexts?.length === 0) {
+      this.logger.log('No valid emails to send');
+      return;
     }
 
     try {
