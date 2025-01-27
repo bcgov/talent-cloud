@@ -12,7 +12,6 @@ import { RecommitmentEntity } from '../database/entities/recommitment/recommitme
 import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { TemplateType, EmailTags } from '../mail/constants';
-import { MailDto } from '../mail/mail.dto';
 import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
 import {
@@ -196,16 +195,20 @@ export class RecommitmentService {
       relations: ['personnel'],
     });
     const recommitmentCycle = await this.checkRecommitmentPeriod();
-
-    const emailTemplate = this.getEmailTemplate(
+    const { templateType, templateRecipient } = this.getEmailTemplate(
       recommitmentUpdate.status,
-      personnel,
+    );
+
+    const emailTemplate = this.mailService.generateTemplate(
+      templateType,
+      templateRecipient,
+      [personnel.toResponseObject()],
       recommitmentCycle.endDate,
       recommitmentUpdate.program,
     );
 
     if (emailTemplate) {
-      await this.mailService.sendMail(emailTemplate);
+      await this.mailService.sendMail(emailTemplate, templateType);
     }
   }
 
@@ -217,45 +220,34 @@ export class RecommitmentService {
    * @param {Program} program - The program.
    * @returns {MailDto} - The generated email template.
    */
-  private getEmailTemplate(
-    status: RecommitmentStatus,
-    personnel: RecommitmentEntity,
-    endDate: Date,
-    program: Program,
-  ): MailDto {
+  private getEmailTemplate(status: RecommitmentStatus): {
+    templateType: EmailTags;
+    templateRecipient: TemplateType;
+  } {
     switch (status) {
       case RecommitmentStatus.MEMBER_COMMITTED:
-        return this.mailService.generateTemplate(
-          EmailTags.SUPERVISOR_REQUEST,
-          TemplateType.SUPERVISOR,
-          [personnel.toResponseObject()],
-          endDate,
-          program,
-        );
+        return {
+          templateType: EmailTags.SUPERVISOR_REQUEST,
+          templateRecipient: TemplateType.SUPERVISOR,
+        };
       case RecommitmentStatus.MEMBER_DENIED:
-        return this.mailService.generateTemplate(
-          EmailTags.MEMBER_DECLINED,
-          TemplateType.MEMBER,
-          [personnel.toResponseObject()],
-          endDate,
-          program,
-        );
+        return {
+          templateType: EmailTags.MEMBER_DECLINED,
+          templateRecipient: TemplateType.MEMBER,
+        };
+
       case RecommitmentStatus.SUPERVISOR_APPROVED:
-        return this.mailService.generateTemplate(
-          EmailTags.MEMBER_APPROVED,
-          TemplateType.MEMBER,
-          [personnel.toResponseObject()],
-          endDate,
-          program,
-        );
+        return {
+          templateType: EmailTags.MEMBER_APPROVED,
+          templateRecipient: TemplateType.MEMBER,
+        };
+
       case RecommitmentStatus.SUPERVISOR_DENIED:
-        return this.mailService.generateTemplate(
-          EmailTags.MEMBER_DENIED_BY_SUPERVISOR,
-          TemplateType.MEMBER,
-          [personnel.toResponseObject()],
-          endDate,
-          program,
-        );
+        return {
+          templateType: EmailTags.MEMBER_DENIED_BY_SUPERVISOR,
+          templateRecipient: TemplateType.MEMBER,
+        };
+
       default:
         return null;
     }
@@ -359,21 +351,21 @@ export class RecommitmentService {
     );
 
     for await (const template of memberTemplates) {
-      await this.mailService.sendMail(template);
+      await this.mailService.sendMail(template, EmailTags.MEMBER_ANNUAL);
     }
 
     for await (const template of supervisorTemplates) {
-      await this.mailService.sendMail(template);
+      await this.mailService.sendMail(template, EmailTags.SUPERVISOR_ANNUAL);
     }
 
     return;
   }
-
   /**
-   * Sends automated reminders to members and supervisors.
-   * @param {boolean} dryRun - If true, the process will not make any changes.
-   * @param {string} [testEmail] - The test email address.
-   * @returns {Promise<void>}
+   *
+   * @param dryRun
+   * @param testEmail
+   * @param ministry
+   * @returns
    */
   async handleSendAutomatedReminders(
     dryRun: boolean = false,
@@ -422,11 +414,11 @@ export class RecommitmentService {
     );
 
     for await (const template of memberTemplates) {
-      await this.mailService.sendMail(template);
+      await this.mailService.sendMail(template, EmailTags.MEMBER_FOLLOW_UP);
     }
 
     for await (const template of supervisorTemplates) {
-      await this.mailService.sendMail(template);
+      await this.mailService.sendMail(template, EmailTags.SUPERVISOR_REMINDER);
     }
 
     return;
@@ -483,8 +475,14 @@ export class RecommitmentService {
     );
     try {
       return {
-        member: await this.mailService.sendMail(memberNoResponseEmails),
-        supervisor: await this.mailService.sendMail(supervisorNoResponseEmails),
+        member: await this.mailService.sendMail(
+          memberNoResponseEmails,
+          EmailTags.MEMBER_NO_RESPONSE,
+        ),
+        supervisor: await this.mailService.sendMail(
+          supervisorNoResponseEmails,
+          EmailTags.MEMBER_SUPERVISOR_NO_RESPONSE,
+        ),
       };
     } catch (e) {
       this.logger.error(e);

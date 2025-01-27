@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosBasicCredentials, AxiosInstance } from 'axios';
 import { format } from 'date-fns';
 import * as nunjucks from 'nunjucks';
+import { Repository } from 'typeorm';
 import {
   EmailSubjects,
   EmailTags,
@@ -12,6 +14,8 @@ import {
 import { MailDto } from './mail.dto';
 import { MailRO } from './mail.ro';
 import { Program } from '../auth/interface';
+import { MailBatchEntity } from '../database/entities/mail-batch.entity';
+import { MailEntity } from '../database/entities/mail.entity';
 import { AppLogger } from '../logger/logger.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
 
@@ -19,7 +23,13 @@ import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
 export class MailService {
   private mailApi: AxiosInstance;
   private mailAuthApi: AxiosInstance;
-  constructor(private readonly logger: AppLogger) {
+  constructor(
+    private readonly logger: AppLogger,
+    @InjectRepository(MailEntity)
+    private mailRepository: Repository<MailEntity>,
+    @InjectRepository(MailBatchEntity)
+    private mailBatchRepository: Repository<MailBatchEntity>,
+  ) {
     this.logger.setContext(MailService.name);
     this.mailApi = axios.create({
       baseURL: process.env.CHES_API,
@@ -36,16 +46,35 @@ export class MailService {
     });
   }
 
-  // TODO - finish building this out
-  async getUnsentMail(tag: string) {
+  /**
+   * Get the status of sent emails
+   * @returns
+   */
+  async checkMailStatus() {
     const token = await this.getToken();
-    try {
-      this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const response = await this.mailApi.get(`/status?tag=${tag}`);
-      return response.data;
-    } catch (e) {
-      this.logger.error(e);
+
+    const incompleteMail = await this.mailRepository.find({
+      where: { completed: false },
+      relations: ['tx'],
+    });
+
+    const txIds = Array.from(new Set(incompleteMail.map((itm) => itm.txId)));
+
+    this.mailApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    for await (const txId of txIds) {
+      const response = await this.mailApi.get(`/status?txId=${txId}`);
+
+      for await (const itm of response.data) {
+        if (itm.status === 'completed') {
+          await this.mailRepository.update(
+            { txId, msgId: itm.msgId },
+            { completed: true },
+          );
+        }
+      }
     }
+    return await this.mailRepository.find({ where: { completed: false } });
   }
   /**
    * Get token for mail service
@@ -53,7 +82,9 @@ export class MailService {
    */
   async getToken() {
     this.logger.log('Getting token');
+
     const urlencoded = new URLSearchParams();
+
     urlencoded.append('grant_type', 'client_credentials');
 
     try {
@@ -149,7 +180,7 @@ export class MailService {
    * @returns
    */
 
-  async sendMail(mail: MailDto): Promise<MailRO> {
+  async sendMail(mail: MailDto, templateType?: EmailTags): Promise<MailRO> {
     if (mail.contexts.length === 0) {
       this.logger.log('No emails to send');
       return;
@@ -164,14 +195,133 @@ export class MailService {
       }
       return isValidEmail;
     };
+    this.logger.log(`\n`);
+    this.logger.log(`***Email Template: ${templateType}***\n`);
+
+    this.logger.log(`Total emails to be sent: ${mail.contexts.length}`);
 
     const mailContext = mail.contexts.filter((itm) => !itm.to.includes(null));
 
-    mail.contexts = mailContext.filter((itm) => isValid(itm.to[0]));
+    this.logger.log(
+      `Total emails to be sent (after filter null): ${mailContext.length}`,
+    );
+
+    mail.contexts = mailContext.filter((itm) => isValid(itm?.to[0]));
+
+    this.logger.log(
+      `Total emails to be sent (after filter invalid): ${mail.contexts?.length}`,
+    );
+
+    const invalidEmails = mailContext.filter((itm) => !isValid(itm.to[0]));
+
+    this.logger.log(`Total invalid emails filtered: ${invalidEmails?.length}`);
+
+    if (
+      [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
+        templateType,
+      )
+    ) {
+      this.logger.log(
+        'Filtering existing emails for automated notifications in the last 6 days',
+      );
+      const mailQB = this.mailRepository
+        .createQueryBuilder('mail')
+        .leftJoinAndSelect('mail.tx', 'tx');
+      mailQB
+        .where('mail.email IN (:...emails)', {
+          emails: mail.contexts.map((itm) => itm.to[0]),
+        })
+        .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
+        .andWhere('mail.date > :date', {
+          date: new Date(new Date().setDate(new Date().getDate() - 6)),
+        });
+
+      const existingMail = await mailQB.getMany();
+
+      if (existingMail?.length > 0) {
+        const existingEmails = existingMail.map((itm) => itm.email);
+
+        this.logger.log(
+          `Total existing emails to filter: ${existingEmails?.length}`,
+        );
+
+        const filteredContexts = mail.contexts.filter(
+          (itm) => !existingEmails?.includes(itm.to[0]),
+        );
+
+        if (filteredContexts?.length > 0) {
+          mail.contexts = filteredContexts;
+        }
+
+        this.logger.log(
+          `Total emails to be sent (after filter existing): ${mail.contexts?.length}`,
+        );
+      }
+
+      if (mail.contexts?.length === 0) {
+        this.logger.log('No valid emails to send');
+        return;
+      }
+    }
 
     try {
       const res = await this.mailApi.post('/emailMerge', mail);
-      this.logger.log(res.data);
+
+      this.logger.log(
+        `Emails sent for ${templateType}: ${res?.data?.messages?.length}`,
+      );
+
+      if (
+        !res?.data?.txId ||
+        res?.data?.txId === undefined ||
+        res?.data?.txId === ''
+      ) {
+        this.logger.error('No txId returned');
+        this.logger.log(res?.data);
+        return;
+      }
+
+      this.logger.log(res?.data);
+
+      const batch = await this.mailBatchRepository.save(
+        this.mailBatchRepository.create({
+          txId: res.data.txId,
+          tag: mail.contexts[0].tag,
+          template: templateType,
+        }),
+      );
+
+      if (batch?.txId && res.data?.messages?.length > 0) {
+        const mails = res.data.messages.map((msg) => {
+          return this.mailRepository.create({
+            email: msg.to[0],
+            msgId: msg.msgId,
+            sent: true,
+            txId: batch.txId,
+            tx: batch,
+          });
+        });
+
+        if (mails.length > 0) {
+          await this.mailRepository.save(mails);
+        }
+
+        if (invalidEmails.length > 0) {
+          const invalidMail = invalidEmails.map((itm, index) => {
+            return this.mailRepository.create({
+              email: itm.to[0],
+              msgId: `${batch.txId}_invalid_${index}`,
+              sent: false,
+              txId: batch.txId,
+              tx: batch,
+            });
+          });
+          if (invalidMail.length > 0) {
+            await this.mailRepository.save(invalidMail);
+          }
+        }
+      }
+
       return res.data;
     } catch (e) {
       e?.response?.data?.errors?.map((itm) => this.logger.log(itm));
