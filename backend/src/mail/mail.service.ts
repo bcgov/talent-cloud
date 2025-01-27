@@ -216,17 +216,6 @@ export class MailService {
 
     this.logger.log(`Total invalid emails filtered: ${invalidEmails?.length}`);
 
-    const mailQB = this.mailRepository
-      .createQueryBuilder('mail')
-      .leftJoinAndSelect('mail.tx', 'tx');
-    mailQB
-      .where('mail.email IN (:...emails)', {
-        emails: mail.contexts.map((itm) => itm.to[0]),
-      })
-      .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
-      .andWhere('mail.date > :date', {
-        date: new Date(new Date().setDate(new Date().getDate() - 6)),
-      });
     if (
       [EmailTags.MEMBER_FOLLOW_UP, EmailTags.SUPERVISOR_REMINDER].includes(
         templateType,
@@ -235,16 +224,29 @@ export class MailService {
       this.logger.log(
         'Filtering existing emails for automated notifications in the last 6 days',
       );
+      const mailQB = this.mailRepository
+        .createQueryBuilder('mail')
+        .leftJoinAndSelect('mail.tx', 'tx');
+      mailQB
+        .where('mail.email IN (:...emails)', {
+          emails: mail.contexts.map((itm) => itm.to[0]),
+        })
+        .andWhere('tx.tag = :tag', { tag: mail.contexts[0].tag })
+        .andWhere('mail.date > :date', {
+          date: new Date(new Date().setDate(new Date().getDate() - 6)),
+        });
+
       const existingMail = await mailQB.getMany();
 
-      const existingEmails = existingMail?.map((itm) => itm.email);
+      const existingEmails =
+        existingMail.length > 0 && existingMail.map((itm) => itm.email);
 
       this.logger.log(
         `Total existing emails to filter: ${existingEmails?.length}`,
       );
 
       const filteredContexts = mail.contexts.filter(
-        (itm) => !existingEmails.includes(itm.to[0]),
+        (itm) => !existingEmails?.includes(itm.to[0]),
       );
 
       if (existingEmails.length > 0) {
@@ -265,10 +267,14 @@ export class MailService {
       const res = await this.mailApi.post('/emailMerge', mail);
 
       this.logger.log(
-        `Emails sent for ${templateType}: ${res.data.messages.length}`,
+        `Emails sent for ${templateType}: ${res?.data?.messages?.length}`,
       );
 
-      if (!res.data.txId) {
+      if (
+        !res?.data?.txId ||
+        res?.data?.txId === undefined ||
+        res?.data?.txId === ''
+      ) {
         this.logger.error('No txId returned');
         this.logger.log(res?.data);
         return;
@@ -276,19 +282,16 @@ export class MailService {
 
       this.logger.log(res?.data);
 
-      const batch =
-        res.data.txId &&
-        (await this.mailBatchRepository.save(
-          this.mailBatchRepository.create({
-            txId: res.data.txId,
-            tag: mail.contexts[0].tag,
-            template: templateType,
-          }),
-        ));
+      const batch = await this.mailBatchRepository.save(
+        this.mailBatchRepository.create({
+          txId: res.data.txId,
+          tag: mail.contexts[0].tag,
+          template: templateType,
+        }),
+      );
 
-      const mails =
-        batch &&
-        res.data.messages.map((msg) => {
+      if (batch.txId && res.data?.messages.length > 0) {
+        const mails = res.data.messages.map((msg) => {
           return this.mailRepository.create({
             email: msg.to[0],
             msgId: msg.msgId,
@@ -298,22 +301,25 @@ export class MailService {
           });
         });
 
-      mails.length > 0 && (await this.mailRepository.save(mails));
+        if (mails.length > 0) {
+          await this.mailRepository.save(mails);
+        }
 
-      const invalidMail =
-        batch &&
-        invalidEmails.length > 0 &&
-        invalidEmails.map((itm) => {
-          return this.mailRepository.create({
-            email: itm.to[0],
-            msgId: `${batch.txId}_invalid`,
-            sent: false,
-            txId: batch.txId,
-            tx: batch,
+        if (invalidEmails.length > 0) {
+          const invalidMail = invalidEmails.map((itm) => {
+            return this.mailRepository.create({
+              email: itm.to[0],
+              msgId: `${batch.txId}_invalid`,
+              sent: false,
+              txId: batch.txId,
+              tx: batch,
+            });
           });
-        });
-
-      invalidMail.length > 0 && (await this.mailRepository.save(invalidMail));
+          if (invalidMail.length > 0) {
+            await this.mailRepository.save(invalidMail);
+          }
+        }
+      }
 
       return res.data;
     } catch (e) {
