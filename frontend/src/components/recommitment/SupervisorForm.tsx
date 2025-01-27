@@ -103,7 +103,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
-          {formData?.phone && !(/(\d{3})(\d{3})(\d{4})/).test(formData?.phone) && <p className="text-xs text-error">Please enter 10 digit phone number</p>}
+          {formData?.phone && !(/(\d{3})(\d{3})(\d{4})/).test(formData?.phone) && <p className="text-xs text-error">Please enter only 10 digits for phone number</p>}
         </div>
       </div>
     </div>
