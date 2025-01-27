@@ -5,8 +5,9 @@ import DetailsSection from './DetailsSection';
 import usePersonnel from '@/hooks/usePersonnel';
 import { useRoleContext } from '@/providers';
 import { datePST } from '@/utils';
-import { RecommitmentStatusLabel } from '@/common/enums/recommitment-status';
+import { RecommitmentStatus, RecommitmentStatusLabel } from '@/common/enums/recommitment-status';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import {  Recommitment, RecommitmentCycle } from '@/common';
 
 export const RecommitmentDetails = () => {
   const { personnel } = usePersonnel();
@@ -14,12 +15,52 @@ export const RecommitmentDetails = () => {
   const { recommitmentCycle } = useRecommitmentCycle();
   const [open, setOpen] = useState(true);
 
-  const recommitment = personnel?.recommitment?.find(
+  const recommitment: Recommitment | undefined = personnel?.recommitment?.find(
     (itm) => itm.program === program,
   );
 
   const handleOpen = (open: boolean) => setOpen(!open);
-
+  
+  if(!recommitment) return null;
+  const getFieldData = (recommitment: Recommitment, recommitmentCycle?: RecommitmentCycle) => {  
+  switch(recommitment.status){
+    case RecommitmentStatus.SUPERVISOR_APPROVED:
+    case RecommitmentStatus.SUPERVISOR_DENIED:
+      return {
+        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
+        decisionDate: {title: "Date Recommitted", content: recommitment?.supervisorDecisionDate ? datePST(new Date(recommitment?.supervisorDecisionDate)):'--'},
+        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
+        reason: {title: "Supervisor Reason", content: '--'},
+        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
+      }
+    case RecommitmentStatus.MEMBER_DENIED:
+      return {
+        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
+        decisionDate: {title: "Date Declined", content: recommitment?.memberDecisionDate ? datePST(new Date(recommitment?.memberDecisionDate)):'--'},
+        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
+        reason: {title: "Member Reason", content: '--'},
+        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
+      }
+    case RecommitmentStatus.MEMBER_NO_RESPONSE:
+    case RecommitmentStatus.SUPERVISOR_NO_RESPONSE:
+      return {
+        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
+        decisionDate: {title: "Date Recommitted", content: '--'},
+        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
+        reason: {title: "Reason (if declined/denied)", content: '--'},
+        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
+      }
+    default:
+      return {
+        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
+        decisionDate: {title: "Date Recommitted", content: '--'},
+        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
+        reason: {title: "Reason (if declined/denied)", content: '--'},
+        year: {title: "Upoming Year", content: recommitmentCycle?.year},
+      }
+  }
+}
+  const fieldData = getFieldData(recommitment, recommitmentCycle);
   return (
     <>
       <section className="bg-white">
@@ -53,38 +94,30 @@ export const RecommitmentDetails = () => {
                     title={''}
                     columns={[
                       {
-                        title: 'Upcoming Year',
-                        content: recommitmentCycle?.year ? (
-                          <p>{recommitmentCycle.year}</p>
-                        ) : (
-                          '--'
-                        ),
+                        title: fieldData.year.title,
+                        content: 
+                          <p>{fieldData.year.content}</p>
+                        
                       },
                       {
-                        title: 'Status',
+                        title: fieldData.status.title,
                         content: (
                           <p>
-                            {
-                              RecommitmentStatusLabel[
-                                recommitment?.status as keyof typeof RecommitmentStatusLabel
-                              ]
-                            }
+                            {fieldData.status.content}
                           </p>
                         ),
                       },
                       {
-                        title: 'Date Recommitted',
-                        content: recommitment?.supervisorDecisionDate
-                          ? datePST(new Date(recommitment?.supervisorDecisionDate))
-                          : '--',
+                        title: fieldData.decisionDate.title,
+                        content: <p>{fieldData.decisionDate.content}</p>
                       },
                       {
-                        title: 'Declined By',
-                        content: recommitment?.supervisorIdir ?? '--',
+                        title: fieldData.supervisor.title,
+                        content: <p>{fieldData.supervisor.content}</p>
                       },
                       {
-                        title: 'Reason for Declining',
-                        content: <p>{recommitment?.supervisorReason ?? '--'}</p>,
+                        title: fieldData.reason.title,
+                        content: <p>{fieldData.reason.content}</p>,
                       },
                     ]}
                   />
