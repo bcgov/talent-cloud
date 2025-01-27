@@ -1,4 +1,7 @@
-import { ArrowTopRightOnSquareIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowTopRightOnSquareIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/24/solid';
 import type { MemberProfile } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import { useEffect, useState } from 'react';
@@ -16,6 +19,9 @@ import { QUESTIONS as PARQ_FOLLOWUP_QUESTIONS } from './parq/ParQFollowUp';
 import { fillInAndDownloadParQ } from '@/utils';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
+import { Transition } from '@headlessui/react';
+import { Banner } from '../ui/Banner';
+import { BannerType } from '@/common/enums/banner-enum';
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -240,7 +246,7 @@ export const RecommitmentFormBase = ({
             key="initial"
           />,
           <UnableToJoin
-            program={program}
+            program={program ?? Program.ALL}
             onUpdate={setUnableToJoinReasons}
             key="unable"
           />,
@@ -259,7 +265,7 @@ export const RecommitmentFormBase = ({
 
   const steps = getSteps();
   const currentComponent = steps[currentStep];
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   useEffect(() => {
     setNumSteps(getSteps().length);
   }, [recommitmentAnswer]);
@@ -268,14 +274,16 @@ export const RecommitmentFormBase = ({
     const currentYear = new Date().getFullYear();
 
     const getReasons = (program: Program) => {
-      const selectedReasons = (unableToJoinReasons[program]?.selectedReasons || []).map(
-        (r) => reasonDefinitions[r as keyof typeof reasonDefinitions],
-      ).filter(r => !!r);
+      const selectedReasons = (unableToJoinReasons[program]?.selectedReasons || [])
+        .map((r) => reasonDefinitions[r as keyof typeof reasonDefinitions])
+        .filter((r) => !!r);
       if (unableToJoinReasons[program]?.otherReason) {
-        return [...selectedReasons, unableToJoinReasons[program]?.otherReason].join('; ');
+        return [...selectedReasons, unableToJoinReasons[program]?.otherReason].join(
+          '; ',
+        );
       }
       return selectedReasons.join('; ');
-    }
+    };
 
     const createDecision = (
       status: RecommitmentStatus,
@@ -320,8 +328,15 @@ export const RecommitmentFormBase = ({
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
     console.log(decision);
-    await updateRecommitment(personnel.id, { ...decision, supervisorInformation });
-    onClose();
+    const res = await updateRecommitment(personnel.id, {
+      ...decision,
+      supervisorInformation,
+    });
+    if (res.error) {
+      setErrorMessage(res.error.message);
+    } else {
+      onClose();
+    }
   };
   const [buttonLoading, setButtonLoading] = useState(false);
   const handleNext = () => {
@@ -344,7 +359,7 @@ export const RecommitmentFormBase = ({
 
     if (
       currentComponentType === Assertions ||
-      currentComponentType === UnableToJoin && recommitmentAnswer === 'no'
+      (currentComponentType === UnableToJoin && recommitmentAnswer === 'no')
     ) {
       setButtonLoading(true);
       handleSubmitRecommitment();
@@ -397,11 +412,16 @@ export const RecommitmentFormBase = ({
         return false;
       }
       for (const program of programs) {
-        if ((unableToJoinReasons[program as Program]?.selectedReasons || []).length === 0) {
+        if (
+          (unableToJoinReasons[program as Program]?.selectedReasons || []).length ===
+          0
+        ) {
           return false;
         }
         if (
-          (unableToJoinReasons[program as Program]?.selectedReasons || []).includes('other') &&
+          (unableToJoinReasons[program as Program]?.selectedReasons || []).includes(
+            'other',
+          ) &&
           !unableToJoinReasons[program as Program]?.otherReason?.trim()
         ) {
           return false;
@@ -444,11 +464,11 @@ export const RecommitmentFormBase = ({
 
     // For SupervisorForm, require first name, last name, and email
     if (currentComponentType === SupervisorForm) {
-      const { firstName, lastName, email } = supervisorInformation;
+      const { firstName, lastName, email, phone } = supervisorInformation;
       const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(email);
-
+      const isValidPhone = phone && phone !== '' ?  /(\d{3})(\d{3})(\d{4})/.test(phone) : true
       return Boolean(
-        firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail,
+        firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail && isValidPhone,
       );
     }
 
@@ -464,7 +484,7 @@ export const RecommitmentFormBase = ({
     const currentComponentType = currentComponent.type;
     if (
       currentComponentType === Assertions ||
-      currentComponentType === UnableToJoin && recommitmentAnswer === 'no'
+      (currentComponentType === UnableToJoin && recommitmentAnswer === 'no')
     ) {
       return 'Submit Decision';
     }
@@ -486,46 +506,74 @@ export const RecommitmentFormBase = ({
   };
 
   return (
-    <div className="w-full py-8 min-h-[500px] flex flex-col">
-      <StepIndicator currentStep={currentStep} totalSteps={numSteps} />
-      {currentStep > 0 && (
-        <button
-          onClick={handleBack}
-          className="flex items-center text-sm text-blue-800 hover:text-defaultGray underline px-8 mb-4"
-        >
-          <ChevronLeftIcon className="w-4 h-4" />
-          Previous
-        </button>
-      )}
+    <>
+      <div className="w-full py-8 min-h-[500px] flex flex-col">
+        <StepIndicator currentStep={currentStep} totalSteps={numSteps} />
+        {currentStep > 0 && (
+          <button
+            onClick={handleBack}
+            className="flex items-center text-sm text-blue-800 hover:text-defaultGray underline px-8 mb-4"
+          >
+            <ChevronLeftIcon className="w-4 h-4" />
+            Previous
+          </button>
+        )}
 
-      {currentComponent}
+        {currentComponent}
+        <Transition
+        show={errorMessage !== null}
+        appear={true}
+        enter="ease-out duration-100"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+      >
+        <div>
+          {errorMessage && (
+            <Banner
+              title={'Error'}
+              content={errorMessage}
+              type={BannerType.ERROR}
+              onClose={() => {
+                setErrorMessage(null);
+                onClose();
+              }}
+            />
+          )}
+        </div>
+      </Transition>
 
-      <div className="flex flex-row space-x-6 pt-4 justify-end px-8 border-t-2 border-defaultGray">
-        <Button
-          variant={ButtonTypes.PRIMARY}
-          type="button"
-          onClick={onClose}
-          text="Cancel"
-        />
-        {currentComponent.type === ParQBase && currentParQStep === 3 && (
+        <div className="flex flex-row space-x-6 pt-4 justify-end px-8 border-t-2 border-defaultGray">
           <Button
             variant={ButtonTypes.PRIMARY}
             type="button"
-            onClick={downloadParQ}
-            text="Download Response"
-            disabled={!isDeclarationComplete()}
-            textIcon={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
+            onClick={onClose}
+            text="Cancel"
           />
-        )}
-        <Button
-          variant={ButtonTypes.TERTIARY}
-          loading={buttonLoading}
-          text={getButtonText()}
-          type="button"
-          onClick={handleNext}
-          disabled={!nextClickable()}
-        />
+
+          {currentComponent.type === ParQBase && currentParQStep === 3 && (
+            <Button
+              variant={ButtonTypes.PRIMARY}
+              type="button"
+              onClick={downloadParQ}
+              text="Download Response"
+              disabled={!isDeclarationComplete()}
+              textIcon={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
+            />
+          )}
+          <Button
+            variant={ButtonTypes.TERTIARY}
+            loading={buttonLoading}
+            text={getButtonText()}
+            type="button"
+            onClick={handleNext}
+            disabled={!nextClickable()}
+          />
+        </div>
       </div>
-    </div>
+      
+    </>
   );
 };
