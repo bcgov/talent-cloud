@@ -7,7 +7,7 @@ import { useRoleContext } from '@/providers';
 import { datePST } from '@/utils';
 import { RecommitmentStatus, RecommitmentStatusLabel } from '@/common/enums/recommitment-status';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import { Program, Recommitment, RecommitmentCycle } from '@/common';
+import {  Recommitment, RecommitmentCycle } from '@/common';
 
 export const RecommitmentDetails = () => {
   const { personnel } = usePersonnel();
