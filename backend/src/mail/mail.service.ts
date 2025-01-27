@@ -240,6 +240,7 @@ export class MailService {
 
       if (existingMail?.length > 0) {
         const existingEmails = existingMail.map((itm) => itm.email);
+
         this.logger.log(
           `Total existing emails to filter: ${existingEmails?.length}`,
         );
@@ -248,7 +249,7 @@ export class MailService {
           (itm) => !existingEmails?.includes(itm.to[0]),
         );
 
-        if (existingEmails?.length > 0) {
+        if (filteredContexts?.length > 0) {
           mail.contexts = filteredContexts;
         }
 
@@ -257,7 +258,7 @@ export class MailService {
         );
       }
 
-      if (mail.contexts.length === 0) {
+      if (mail.contexts?.length === 0) {
         this.logger.log('No valid emails to send');
         return;
       }
@@ -290,7 +291,7 @@ export class MailService {
         }),
       );
 
-      if (batch.txId && res.data?.messages.length > 0) {
+      if (batch?.txId && res.data?.messages?.length > 0) {
         const mails = res.data.messages.map((msg) => {
           return this.mailRepository.create({
             email: msg.to[0],
