@@ -307,10 +307,10 @@ export class MailService {
         }
 
         if (invalidEmails.length > 0) {
-          const invalidMail = invalidEmails.map((itm) => {
+          const invalidMail = invalidEmails.map((itm, index) => {
             return this.mailRepository.create({
               email: itm.to[0],
-              msgId: `${batch.txId}_invalid`,
+              msgId: `${batch.txId}_invalid_${index}`,
               sent: false,
               txId: batch.txId,
               tx: batch,
