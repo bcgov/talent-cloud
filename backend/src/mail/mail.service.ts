@@ -210,7 +210,13 @@ export class MailService {
       this.logger.log(
         `Total emails to be sent (after filter existing): ${filteredContexts?.length}`,
       );
-      return filteredContexts;
+      if (filteredContexts.length > 0) {
+        return filteredContexts;
+      } else {
+        return contexts;
+      }
+    } else {
+      return contexts;
     }
   }
   /**
