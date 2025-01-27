@@ -42,9 +42,10 @@ export const useRecommitmentCycle = () => {
         `/recommitment/${personnelId}`,
         decisions,
       );
-      console.log(data);
-    } catch (e) {
+      return data
+    } catch (e: any) {
       console.error(e);
+      return {error:{message: 'An error has occurred. Please check your submission and try again'}}
     }
   };
 

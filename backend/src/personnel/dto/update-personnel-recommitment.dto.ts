@@ -1,24 +1,51 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  Length,
+  ValidateIf,
+  ValidateNested,
+} from 'class-validator';
 import { Program } from '../../auth/interface';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status.enum';
-import { IsEmail, IsString } from 'class-validator';
 
 export class SupervisorInformationDTO {
-  @ApiProperty()
-  @IsEmail()
-  email?: string;
-
-  @ApiProperty()
+  @ApiProperty({
+    description: "Name of personnel's supervisor",
+    example: 'River Cartwright',
+  })
   @IsString()
+  @Length(2, 50)
   firstName: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Name of personnel's supervisor",
+    example: 'River Cartwright',
+  })
   @IsString()
+  @Length(2, 50)
   lastName: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'Supervisor phone number',
+    example: '2503334444',
+  })
+  @Length(10, 10)
+  @IsOptional()
+  @ValidateIf((o) => o.phone !== '')
   phone?: string;
+
+  @ApiProperty({
+    description: "Name of personnel's supervisor",
+    example: 'River Cartwright',
+  })
+  @IsEmail()
+  @ValidateIf((o) => o.email !== '')
+  @Length(2, 50)
+  @IsOptional()
+  email?: string;
 }
 
 export class UpdatePersonnelRecommitmentDTO {
@@ -72,24 +99,31 @@ export class UpdatePersonnelRecommitmentDTO {
   supervisorDecisionDate?: Date;
 }
 
-
-
 export class PersonnelRecommitmentDTO {
   @ApiProperty({
     type: SupervisorInformationDTO,
     required: false,
   })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SupervisorInformationDTO)
   supervisorInformation?: SupervisorInformationDTO;
 
   @ApiProperty({
     type: UpdatePersonnelRecommitmentDTO,
     required: false,
   })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdatePersonnelRecommitmentDTO)
   bcws?: UpdatePersonnelRecommitmentDTO;
 
   @ApiProperty({
     type: UpdatePersonnelRecommitmentDTO,
     required: false,
   })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdatePersonnelRecommitmentDTO)
   emcr?: UpdatePersonnelRecommitmentDTO;
 }
