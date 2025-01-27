@@ -270,7 +270,7 @@ export class RecommitmentService {
    * @returns
    */
   private chunkEmails(list: unknown[]): RecommitmentRO[][] {
-    const maxContexts = 30;
+    const maxContexts = 20;
     return Object.values(
       list.reduce((splitList, item, index) => {
         const groupIndex = Math.floor(index / maxContexts);

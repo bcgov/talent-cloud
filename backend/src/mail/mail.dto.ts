@@ -5,7 +5,7 @@ class Context {
   [key: string]: unknown;
 }
 
-class Contexts {
+export class Contexts {
   @ApiProperty({ required: false, default: 0 })
   @IsNumber()
   @IsOptional()
