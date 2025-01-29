@@ -249,7 +249,7 @@ const MemberProfileEditRoles = ({
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={s === secondChoiceSection}>
+                  <option value={s} key={s} disabled={[secondChoiceSection, thirdChoiceSection].includes(s as Section)}>
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -264,7 +264,7 @@ const MemberProfileEditRoles = ({
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={s === firstChoiceSection}>
+                  <option value={s} key={s} disabled={[firstChoiceSection, thirdChoiceSection].includes(s as Section)}>
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -279,7 +279,7 @@ const MemberProfileEditRoles = ({
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={s === firstChoiceSection}>
+                  <option value={s} key={s} disabled={[firstChoiceSection, secondChoiceSection].includes(s as Section)}>
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -379,7 +379,7 @@ const MemberProfileEditFunctions = ({
     <>
       <div className="px-12 pt-4">
         <ProfileSectionHeader title="Rank your Top 3 Sections">
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 gap-8 pb-4">
             <div className="flex flex-col">
               <p className="font-bold text-sm pb-2">
                 1st Choice

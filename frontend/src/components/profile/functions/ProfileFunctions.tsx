@@ -125,7 +125,28 @@ export const ProfileFunctions = ({
                     className="flex flex-row border-b-2 border-gray-100 py-2 items-center"
                   >
                     <div className="basis-1/2">
-                      <span>{f.name}</span>
+                      <p className="flex flex-row gap-2">
+                        {f.name}
+                        {f.name === personnel.firstChoiceFunction &&
+                          <Chip
+                            value="1st Choice"
+                            className="rounded-full capitalize"
+                          />
+                        }
+                        {f.name === personnel.secondChoiceFunction &&
+                          <Chip
+                            value="2nd Choice"
+                            className="rounded-full bg-warningBannerLight text-ministry capitalize"
+                          />
+                        }
+                        {f.name === personnel.thirdChoiceFunction &&
+                          <Chip
+                            value="3rd Choice"
+                            className="rounded-full bg-green-100 text-ministry capitalize"
+                          />
+                        }
+                      </p>
+                      <span></span>
                     </div>
                     <div>
                       {renderExperienceLevel(
