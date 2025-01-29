@@ -27,7 +27,7 @@ export const MemberItemList = ({
 }) => {
   const firstChoiceSection = preferences?.first;
   const secondChoiceSection = preferences?.second;
-  // const thirdChoiceSection = preferences?.third;
+  const thirdChoiceSection = preferences?.third;
 
   const Header = ({ columnNames }: { columnNames: string[] }) => (
     <div className="flex flex-row p-2 bg-grayBackground">
@@ -45,14 +45,24 @@ export const MemberItemList = ({
         <div className="basis-1/3 text-darkGray px-2">
           <p className="flex flex-row gap-2">
             {section}
-            <Chip
-              value={section === firstChoiceSection ? '1st Choice' : '2nd Choice'}
-              className={
-                section === firstChoiceSection
-                  ? 'rounded-full capitalize'
-                  : 'rounded-full capitalize bg-infoBannerLight text-ministry'
-              }
-            />
+            {section === firstChoiceSection && (
+              <Chip
+                value="1st Choice"
+                className="rounded-full capitalize"
+              />
+            )}
+            {section === secondChoiceSection && (
+              <Chip
+                value="2nd Choice"
+                className="rounded-full capitalize bg-infoBannerLight text-ministry"
+              />
+            )}
+            {section === thirdChoiceSection && (
+              <Chip
+                value="3rd Choice"
+                className="rounded-full capitalize bg-green-100 text-ministry"
+              />
+            )}
           </p>
         </div>
       </div>
@@ -82,6 +92,10 @@ export const MemberItemList = ({
           !data.map((d) => d.section).includes(secondChoiceSection) && (
             <EmptyChoiceSection section={secondChoiceSection} />
           )}
+        {thirdChoiceSection &&
+          !data.map((d) => d.section).includes(thirdChoiceSection) && (
+            <EmptyChoiceSection section={thirdChoiceSection} />
+          )}
         {displayEmpty === true && data.length === 0 && <NoSkills />}
         {data.map((row, i) => {
           // sort by section name
@@ -105,14 +119,21 @@ export const MemberItemList = ({
                           row.section === firstChoiceSection && (
                             <Chip
                               value="1st Choice"
-                              className="rounded-full capitalize font-normal"
+                              className="rounded-full capitalize"
                             />
                           )}
                         {!notFirstRowOfSection &&
                           row.section === secondChoiceSection && (
                             <Chip
                               value="2nd Choice"
-                              className="rounded-full bg-warningBannerLight text-warning font-normal capitalize"
+                              className="rounded-full bg-warningBannerLight text-ministry capitalize"
+                            />
+                          )}
+                        {!notFirstRowOfSection &&
+                          row.section === thirdChoiceSection && (
+                            <Chip
+                              value="3rd Choice"
+                              className="rounded-full bg-green-100 text-ministry capitalize"
                             />
                           )}
                       </p>

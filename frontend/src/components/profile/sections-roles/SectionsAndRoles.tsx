@@ -32,6 +32,7 @@ export const SectionsAndRoles = ({
   const [openEditRolesPopUp, setOpenEditRolesPopUp] = useState(false);
   const firstChoiceSection = personnel.firstChoiceSection;
   const secondChoiceSection = personnel.secondChoiceSection;
+  const thirdChoiceSection = personnel.thirdChoiceSection;
   const handleOpenEditRoles = () => {
     setOpenEditRolesPopUp(!openEditRolesPopUp);
   };
@@ -62,14 +63,24 @@ export const SectionsAndRoles = ({
         <div className="basis-1/3 text-darkGray px-8">
           <p className="flex flex-row gap-2">
             {SectionName[section]}
-            <Chip
-              value={section === firstChoiceSection ? '1st Choice' : '2nd Choice'}
-              className={
-                section === firstChoiceSection
-                  ? 'rounded-full capitalize'
-                  : 'rounded-full capitalize bg-infoBannerLight text-ministry'
-              }
-            />
+            {section === firstChoiceSection && (
+              <Chip
+                value="1st Choice"
+                className="rounded-full capitalize"
+              />
+            )}
+            {section === secondChoiceSection && (
+              <Chip
+                value="2nd Choice"
+                className="rounded-full capitalize bg-infoBannerLight text-ministry"
+              />
+            )}
+            {section === thirdChoiceSection && (
+              <Chip
+                value="3rd Choice"
+                className="rounded-full capitalize bg-green-100 text-ministry"
+              />
+            )}
           </p>
         </div>
       </div>
@@ -110,6 +121,11 @@ export const SectionsAndRoles = ({
                 !Object.keys(sections).includes(secondChoiceSection) && (
                   <EmptyChoiceSection section={secondChoiceSection} />
                 )}
+              {thirdChoiceSection &&
+                sections &&
+                !Object.keys(sections).includes(thirdChoiceSection) && (
+                  <EmptyChoiceSection section={thirdChoiceSection} />
+                )}
               {sections &&
                 Object.keys(sections).map((section) => (
                   <div key={section} className="border-b-2 border-gray-100">
@@ -132,6 +148,12 @@ export const SectionsAndRoles = ({
                                 <Chip
                                   value="2nd Choice"
                                   className="rounded-full bg-infoBannerLight text-ministry capitalize"
+                                />
+                              )}
+                              {section === thirdChoiceSection && (
+                                <Chip
+                                  value="3rd Choice"
+                                  className="rounded-full bg-green-500 text-ministry capitalize"
                                 />
                               )}
                             </p>

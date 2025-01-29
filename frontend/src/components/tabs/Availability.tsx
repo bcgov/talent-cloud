@@ -82,7 +82,7 @@ export const MemberAvailabilityTab = ({
         <ProfileSectionHeader
           title="Section Preferences" // make this depend on bcws / emcr
           description={<ProfileDescription />}
-          buttonText="+ Add Preference"
+          buttonText="Edit Preferences"
           onButtonClick={handleOpenEditSections}
         >
           <Tabs value={activeSectionRolesTab}>
@@ -139,7 +139,9 @@ export const MemberAvailabilityTab = ({
                       second:
                         personnel.bcws?.secondChoiceSection &&
                         SectionName[personnel.bcws.secondChoiceSection],
-                      third: undefined, // TODO
+                      third:
+                        personnel.bcws?.thirdChoiceSection &&
+                        SectionName[personnel.bcws.thirdChoiceSection],
                     }}
                   />
                 </TabPanel>
@@ -160,6 +162,14 @@ export const MemberAvailabilityTab = ({
                         key: 'section',
                       },
                     ]}
+                    preferences={{
+                      first:
+                        personnel.emcr?.firstChoiceFunction,
+                      second:
+                        personnel.emcr?.secondChoiceFunction,
+                      third:
+                        personnel.emcr?.thirdChoiceFunction,
+                    }}
                   />
                 </TabPanel>
               )}
