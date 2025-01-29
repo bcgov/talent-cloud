@@ -294,7 +294,7 @@ export class FormService {
       primaryPhone: data.primaryPhone.replace(/[(]|-|[)]|\s/gi, ''),
       secondaryPhone: data?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, ''),
       workPhone: data?.workPhone?.replace(/[(]|-|[)]|\s/gi, ''),
-      supervisorEmail: data.supervisorEmail,
+      supervisorEmail: data.supervisorEmail?.toLowerCase().trim(),
       supervisorLastName: data.supervisorLastName,
       supervisorFirstName: data.supervisorFirstName,
       supervisorPhone: data?.supervisorPhoneNumber?.replace(
