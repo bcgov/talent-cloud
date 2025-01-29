@@ -61,7 +61,9 @@ export class RecommitmentService {
       await this.personnelService.updatePersonnelSupervisorInformation(
         personnel,
         {
-          supervisorEmail: recommitmentUpdate.supervisorInformation.email,
+          supervisorEmail: recommitmentUpdate.supervisorInformation.email
+            .toLowerCase()
+            .trim(),
           supervisorFirstName:
             recommitmentUpdate.supervisorInformation.firstName,
           supervisorLastName: recommitmentUpdate.supervisorInformation.lastName,
