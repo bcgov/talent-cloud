@@ -128,7 +128,7 @@ export const ApprovalCell = ({
 
   return (
     <>
-      <div className="flex flex-row gap-x-4 pr-12">
+      <div className="flex flex-col lg:flex-row gap-2 lg:gap-x-8 w-full">
         <select
           disabled={
             disabled ||
@@ -136,7 +136,7 @@ export const ApprovalCell = ({
               ?.status === RecommitmentStatus.SUPERVISOR_DENIED
           }
           className={[
-            'rounded-sm  outline-none w-40 text-sm ',
+            'rounded-sm  outline-none w-full text-sm lg:min-w-[150px] ',
             disabled
               ? 'bg-gray-200 border-none outline-none text-gray-500 '
               : 'text-gray-600 bg-white border-1.5 border-gray-400',

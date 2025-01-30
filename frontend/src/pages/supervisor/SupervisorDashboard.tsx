@@ -32,7 +32,7 @@ const SupervisorDashboard = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="xl:px-32">
+    <div className="xl:px-32 pb-32">
       {recommitmentCycle && (
         <SupervisorDashboardHeaderBanner
           recommitmentDate={

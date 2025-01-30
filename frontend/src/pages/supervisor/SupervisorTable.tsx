@@ -7,14 +7,14 @@ export const SupervisorTable = ({
   columns: { key: string; label: string }[];
 }) => {
   return (
-    <table className={`table-fixed w-full`}>
+    <table className={`md:table-fixed lg:table-auto w-full`}>
       <thead>
         <tr>
-          {columns.map((itm) => (
+          {columns.map((itm, index) => (
             <th
               scope="column"
               key={itm.key}
-              className={` bg-infoBannerLight flex-col justify-start  items-start text-wrap  text-info text-left h-[64px] `}
+              className={` bg-infoBannerLight flex-col justify-start  items-start align-text-top text-left py-1 text-wrap  text-info px-4 ` + (index === columns.length -1 ? " xl:pr-40" : "")}
             >
               {['program', 'status', 'year'].includes(itm.key) ? (
                 <>
@@ -22,8 +22,8 @@ export const SupervisorTable = ({
                   <div>{itm.label.split(' ')[1]}</div>
                 </>
               ) : (
-                <div className={'  self-start justify-start pb-6'}>{itm.label}</div>
-              )}
+                <div>{itm.label}</div>
+               )} 
             </th>
           ))}
         </tr>
@@ -36,7 +36,7 @@ export const SupervisorTable = ({
                 {row.bcws && row.emcr ? (
                   <td
                     scope="column"
-                    className={` text-nowrap truncate max-w-[250px] text-gray-800 pb-[55px]`}
+                    className={` text-nowrap truncate  text-gray-800 pb-[55px] xl:pr-24 pl-4`}
                     key="memberName"
                   >
                     {row.memberName}
@@ -44,20 +44,20 @@ export const SupervisorTable = ({
                 ) : (
                   <td
                     scope="column"
-                    className={` text-nowrap truncate max-w-[250px] text-gray-800 `}
+                    className={` text-nowrap truncate  text-gray-800 xl:pr-24 pl-4`}
                     key="memberName"
                   >
                     {row.memberName}
                   </td>
                 )}
 
-                {columns.slice(1, columns.length).map((itm) => (
-                  <td scope="column" key={itm.key}>
+                {columns.slice(1, columns.length).map((itm, index) => (
+                  <td scope="column" key={itm.key} className={index !== columns.length -2 || index !== columns.length - 3 ? " xl:pr-24" : " xl:w-32"}>
                     <table>
                       {row?.bcws && (
-                        <tr className={`py-4   text-nowrap truncate max-w-[250px]`}>
+                        <tr className={`py-4   text-nowrap truncate px-4`}>
                           <td
-                            className={`py-4   text-nowrap truncate max-w-[250px] text-gray-800`}
+                            className={`py-4   text-nowrap truncate  text-gray-800 px-4`}
                             key={itm.key}
                           >
                             {row.bcws?.[itm.key]}
@@ -67,7 +67,7 @@ export const SupervisorTable = ({
                       {row?.emcr && (
                         <tr>
                           <td
-                            className={`py-4 text-nowrap truncate max-w-[250px] text-gray-800 `}
+                            className={`py-4 text-nowrap truncate  text-gray-800 px-4`}
                             key={itm.key}
                           >
                             {row?.emcr?.[itm.key]}

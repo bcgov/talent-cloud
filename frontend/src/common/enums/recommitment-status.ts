@@ -37,11 +37,11 @@ export enum RecommitmentStatusLabel {
 
   // temporary status set after member has committed to recommit
   // initiate communication for supervisor approval
-  MEMBER_COMMITTED = 'Requested Supervisor Approval',
+  MEMBER_COMMITTED = 'Approval Required',
 
   // 1 of 4 final status for member for a program
   // at end of recommitment period member will be set as INACTIVE in the particular program
-  MEMBER_DENIED = 'Declined By Member',
+  MEMBER_DENIED = 'Member Declined',
 
   // 1 of 4 final status for member for a program
   // automatically set if no member response by end_date of recommitment period
@@ -54,7 +54,7 @@ export enum RecommitmentStatusLabel {
 
   // 1 of 4 final status for member for a program
   // at end of recommitment period member will be set as INACTIVE in the particular program
-  SUPERVISOR_DENIED = 'Declined',
+  SUPERVISOR_DENIED = 'Denied',
 
   // 1 of 4 final status for member for a program
   // automatically set if no supervisor response by end_date of recommitment period
