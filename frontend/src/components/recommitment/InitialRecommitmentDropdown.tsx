@@ -20,6 +20,18 @@ export const InitialRecommitmentDropdown = ({
     }
   };
 
+  const getWarningText = () => {
+    if (initialValue === 'no') {
+      if (program === Program.ALL) {
+        return 'You must provide a reason for declining recommitment to each program in the next step.';
+      } else {
+        return `You must provide a reason for declining recommitment to the ${program?.toUpperCase()} program in the next step.`;
+      }
+    } else {
+      return `You must provide a reason for declining recommitment to the ${initialValue === 'bcws-only' ? 'EMCR' : 'BCWS'} program in the next step.`;
+    }
+  }
+
   const EMCR_ONLY_OPTIONS = [
     { value: 'yes-emcr', label: 'Yes' },
     { value: 'no', label: `No, I am not returning this year` },
@@ -61,7 +73,7 @@ export const InitialRecommitmentDropdown = ({
         ))}
       </Select>
       {initialValue && !['yes-emcr', 'yes-bcws', 'yes-both'].includes(initialValue) && 
-        <p className="text-xs text-gray-600 pb-1 pt-4 pl-1">You must provide a reason for declining recommitment to each program in the next step.</p>
+        <p className="text-xs text-gray-600 pb-1 pt-4 pl-1">{getWarningText()}</p>
       }
     </div>
   );
