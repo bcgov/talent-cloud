@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   if(error ) {
     return <PublicLayout><div className="h-3/4 pt-40 lg:pt-16  sm:px-8 md:px-12  lg:px-0 2xl:px-64">
     <div className="flex gap-12 flex-col items-center justify-center text-center lg:py-24 lg:px-16 2xl:px-64">
-      <h2>Error: 500</h2><p>We are currently experiencing technical difficulties.</p></div></div></PublicLayout>  
+      <h2>Error:</h2><p>We are currently experiencing technical difficulties.</p></div></div></PublicLayout>  
   }
 
   return (
