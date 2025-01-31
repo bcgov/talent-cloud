@@ -117,8 +117,14 @@ export const UnableToJoin = ({ program, onUpdate }: UnableToJoinProps) => {
                       onChange={(e) => handleOtherReasonChange(program as Program, e.target.value)}
                       placeholder="Add a comment"
                       rows={3}
+                      maxLength={100}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
+                    {(reasons[program as Program]?.otherReason || '').length === 100 &&
+                      <p className="text-sm text-red-600">
+                        Maximum character limit of 100
+                      </p>
+                    }
                   </div>
                 )}
               </div>
