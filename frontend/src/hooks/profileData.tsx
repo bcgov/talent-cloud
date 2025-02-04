@@ -1,4 +1,4 @@
-import { Program, Status } from '@/common';
+import { Program, RegionName, Status } from '@/common';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { Tools } from '@/common/enums/tools.enum';
 import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
@@ -462,19 +462,47 @@ const getMembershipDetails = (personnel: Personnel) => {
 };
 
 export const memberData = (personnel?: Personnel) => {
+  let homeLocationTitle;
+  let workLocationTitle;
+  let homeLocation;
+  let workLocation;
+  if (personnel?.bcws && personnel?.emcr) {
+    homeLocationTitle = 'Home Location/Region/Fire Centre';
+    workLocationTitle = 'Work Location/Region/Fire Centre';
+    homeLocation = personnel?.homeLocation
+      ? `${personnel.homeLocation.locationName} / ${RegionName[personnel.homeLocation.region]} / ${FireCentreName[personnel.homeLocation.fireCentre]}`
+      : 'Not Listed';
+    workLocation = personnel?.workLocation
+      ? `${personnel.workLocation.locationName} / ${RegionName[personnel.workLocation.region]} / ${FireCentreName[personnel.workLocation.fireCentre]}`
+      : 'Not Listed';
+  } else if (personnel?.bcws) {
+    homeLocationTitle = 'Home Location/Fire Centre';
+    workLocationTitle = 'Work Location/Fire Centre';
+    homeLocation = personnel?.homeLocation
+      ? `${personnel.homeLocation.locationName} / ${FireCentreName[personnel.homeLocation.fireCentre]}`
+      : 'Not Listed';
+    workLocation = personnel?.workLocation
+      ? `${personnel.workLocation.locationName} / ${FireCentreName[personnel.workLocation.fireCentre]}`
+      : 'Not Listed';
+  } else {
+    homeLocationTitle = 'Home Location/Region';
+    workLocationTitle = 'Work Location/Region';
+    homeLocation = personnel?.homeLocation
+      ? `${personnel.homeLocation.locationName} / ${RegionName[personnel.homeLocation.region]}`
+      : 'Not Listed';
+    workLocation = personnel?.workLocation
+      ? `${personnel.workLocation.locationName} / ${RegionName[personnel.workLocation.region]}`
+      : 'Not Listed';
+  }
   return {
     generalInformation: [
       {
-        title: 'Home Location/Region',
-        content: personnel?.homeLocation
-          ? `${personnel.homeLocation.locationName}, ${FireCentreName[personnel.homeLocation.fireCentre]}`
-          : 'Not Listed',
+        title: homeLocationTitle,
+        content: homeLocation,
       },
       {
-        title: 'Work Location/Region',
-        content: personnel?.workLocation
-          ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
-          : 'Not Listed',
+        title: workLocationTitle,
+        content: workLocation,
       },
       {
         title: 'Travel Preference',
