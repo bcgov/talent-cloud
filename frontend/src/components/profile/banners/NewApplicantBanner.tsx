@@ -115,6 +115,7 @@ export const NewApplicantBanner = ({
         onConfirm={() =>
           updatePersonnel({
             status: Status.ACTIVE,
+            dateApproved: new Date(),
           })
         }
       />
