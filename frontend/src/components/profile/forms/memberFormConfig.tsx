@@ -51,9 +51,11 @@ export const memberFormConfig = (
         header: 'Edit General Information',
         fields: [
           fields.homeLocation.locationName,
-          fields.homeLocation.region,
           fields.workLocation.locationName,
-          fields.workLocation.region,
+          ...(!!personnelData.emcr ? [fields.homeLocation.region] : []),
+          ...(!!personnelData.emcr ? [fields.workLocation.region] : []),
+          ...(!!personnelData.bcws ? [fields.homeLocation.fireCentre] : []),
+          ...(!!personnelData.bcws ? [fields.workLocation.fireCentre] : []),
           fields.emcrTravelPreference,
           fields.driverLicense,
           fields.employeeId,
