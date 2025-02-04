@@ -5,6 +5,7 @@ import {
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import axios from 'axios';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
 import { BcwsService } from './bcws/bcws.service';
@@ -114,5 +115,44 @@ export class AppController {
   @Get('/recommitment')
   async checkRecommitmentPeriod() {
     return await this.recommitmentService.checkRecommitmentPeriod();
+  }
+
+  @Public()
+  @Get('/chips')
+  async chips() {
+    try {
+      const response = await axios.get(`${process.env.CHIPS_API}/?$top=100`, {
+        headers: {
+          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+        },
+      });
+      return response;
+    } catch (e) {
+      this.logger.error(e);
+      return 'error';
+    }
+  }
+
+  @Public()
+  @Get('/chipstraining')
+  async training() {
+    this.logger.log('TRAINING');
+    try {
+      const response = await axios.get(
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=100`,
+        {
+          headers: {
+            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+          },
+        },
+      );
+      this.logger.log('SUCCESS');
+      this.logger.log(response);
+      return response.data;
+    } catch (e) {
+      this.logger.error('ERROR');
+      this.logger.error(e);
+      return 'error';
+    }
   }
 }
