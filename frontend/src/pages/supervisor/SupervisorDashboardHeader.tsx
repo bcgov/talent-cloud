@@ -42,8 +42,8 @@ export const SupervisorDashboardHeaderBanner = ({
         leaveTo="opacity-0"
       >
         <div>
-          {FAQ.map((itm: any) => (
-            <Fragment key={itm}>
+          {FAQ.map((itm: any, index: number) => (
+            <Fragment key={itm.content + index.toString()}>
               <div className="pt-6 pb-3">{itm.title}</div>
               <div>{itm.content}</div>
             </Fragment>

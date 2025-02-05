@@ -35,8 +35,10 @@ export const CustomBanner = ({
     >
       <div className="pt-3">{icon}</div>
       <div className="flex flex-col">
-        {title && <p className={`text-sm font-bold text-${textColor}`}>{title}</p>}
-        <p className={`text-sm pt-2 text-${textColor}`}>{content}</p>
+        {title && (
+          <div className={`text-sm font-bold text-${textColor}`}>{title}</div>
+        )}
+        <div className={`text-sm pt-2 text-${textColor}`}>{content}</div>
       </div>
     </div>
     {onClose && (

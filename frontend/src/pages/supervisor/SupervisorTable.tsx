@@ -55,16 +55,23 @@ export const SupervisorTable = ({
                   }
                 >
                   <table>
-                    {...row.programs.map((item, index) => (
-                      <tr className={`py-4   text-nowrap truncate px-4`} key={index}>
-                        <td
-                          className={`py-4   text-nowrap truncate  text-gray-800 px-4`}
-                          key={itm.key}
+                    <thead></thead>
+
+                    <tbody>
+                      {...row.programs.map((item, index) => (
+                        <tr
+                          className={`py-4   text-nowrap truncate px-4`}
+                          key={index}
                         >
-                          {item[itm.key]}
-                        </td>
-                      </tr>
-                    ))}
+                          <td
+                            className={`py-4   text-nowrap truncate  text-gray-800 px-4`}
+                            key={itm.key}
+                          >
+                            {item[itm.key]}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </td>
               ))}
