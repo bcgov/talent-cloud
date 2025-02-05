@@ -2,7 +2,6 @@ import {
   Controller,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Inject,
   Request,
   Get,
   HttpStatus,
@@ -36,7 +35,7 @@ export class AuthController {
       roles: req?.roles,
       program: req?.program,
       username: `${req?.username}`,
-      idir: req?.idir,
+      idir: req?.idir.toLowerCase(),  
     };
   }
 }

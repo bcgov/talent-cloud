@@ -32,13 +32,13 @@ export class AuthService {
       request['username'] = '';
     }
     if (payload.email) {
-      request['idir'] = payload.email;
+      request['idir'] = payload.email.toLowerCase();
     } else {
       request['idir'] = '';
     }
     const roles = [];
     const { isMember, isSupervisor } =
-      await this.personnelService.verifyMemberOrSupervisor(payload.email);
+      await this.personnelService.verifyMemberOrSupervisor(payload.email.toLowerCase());
 
     if (isMember) {
       roles.push(Role.MEMBER);

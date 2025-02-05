@@ -760,7 +760,7 @@ export class PersonnelService {
 
       .leftJoinAndSelect('experiences.function', 'function');
 
-    qb.where('personnel.email = :email', { email: req.idir });
+    qb.where('LOWER(personnel.email) = :email', { email: req.idir.toLowerCase() });
 
     const personnelData = await qb.getOne();
     this.logger.log(`User is a member`);
@@ -771,15 +771,15 @@ export class PersonnelService {
     email: string,
   ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.where('personnel.email = :email', { email: email }).orWhere(
-      'personnel.supervisorEmail = :email',
-      { email: email },
+    qb.where('LOWER(personnel.email) = :email', { email: email.toLowerCase() }).orWhere(
+      'LOWER(personnel.supervisorEmail) = :email',
+      { email: email.toLowerCase() }, 
     );
     const people = await qb.getMany();
-    const isMember = people.map((itm) => itm.email).includes(email);
+    const isMember = people.map((itm) => itm.email.toLocaleLowerCase()).includes(email.toLowerCase());
     const isSupervisor = people
-      .map((itm) => itm.supervisorEmail)
-      .includes(email);
+      .map((itm) => itm.supervisorEmail.toLowerCase())
+      .includes(email.toLowerCase());
 
     return {
       isMember,
