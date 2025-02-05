@@ -55,7 +55,9 @@ export const SupervisorTable = ({
                   }
                 >
                   <table>
-                    <thead></thead>
+                    <thead>
+                      <tr></tr>
+                    </thead>
 
                     <tbody>
                       {...row.programs.map((item, index) => (
