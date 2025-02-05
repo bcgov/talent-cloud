@@ -26,7 +26,7 @@ export const SupervisorApprovalForm = ({
   year: number;
   personnelId: string;
   program: Program;
-  handleShowSuccessBanner: () => void;
+  handleShowSuccessBanner: (banner: boolean) => void;
 
   name: string;
 }) => {
@@ -54,7 +54,7 @@ export const SupervisorApprovalForm = ({
         [program]: values,
       });
       setShowDeclineModal(false);
-      handleShowSuccessBanner();
+      handleShowSuccessBanner(true);
     } catch (e) {
       console.error(e);
     }
@@ -92,7 +92,10 @@ export const SupervisorApprovalForm = ({
               ? 'bg-gray-200 border-none outline-none text-gray-500 '
               : 'text-gray-600 bg-white border-1.5 border-gray-400',
           ].join(', ')}
-          onChange={(e) => setStatus(e.target.value as RecommitmentStatus)}
+          onChange={(e) => {
+            setStatus(e.target.value as RecommitmentStatus);
+            handleShowSuccessBanner(false);
+          }}
         >
           <option value="" className="text-sm">
             {status === RecommitmentStatus.SUPERVISOR_APPROVED

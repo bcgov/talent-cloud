@@ -24,8 +24,8 @@ export const useSupervisorDashboard = () => {
 
   const [showWarningBanner, setShowWarningBanner] = useState(true);
 
-  const handleShowSuccessBanner = () => {
-    setShowSuccessBanner(!showSuccessMessage);
+  const handleShowSuccessBanner = (banner: boolean) => {
+    setShowSuccessBanner(banner);
   };
 
   const handleShowWarningBanner = () => {
