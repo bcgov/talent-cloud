@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { FAQ } from '../constants';
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 
@@ -43,10 +43,10 @@ export const SupervisorDashboardHeaderBanner = ({
       >
         <div>
           {FAQ.map((itm: any) => (
-            <>
+            <Fragment key={itm}>
               <div className="pt-6 pb-3">{itm.title}</div>
               <div>{itm.content}</div>
-            </>
+            </Fragment>
           ))}
         </div>
       </Transition>

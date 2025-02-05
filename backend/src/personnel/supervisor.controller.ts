@@ -14,6 +14,7 @@ import { PersonnelRO } from './ro';
 import { GetPersonnelRO } from './ro/get-personnel.ro';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
+import { QueryDTO } from '../common/query.dto';
 import { AppLogger } from '../logger/logger.service';
 
 @Controller('supervisor')
@@ -39,7 +40,7 @@ export class SupervisorController {
   })
   async getSupervisorPersonnel(
     @Req() req: RequestWithRoles,
-    @Query() query: { rows: number; page: number },
+    @Query() query: QueryDTO,
   ): Promise<{ personnel: Record<string, PersonnelRO>[]; count: number }> {
     const { personnel, count } =
       await this.personnelService.getSupervisorPersonnel(

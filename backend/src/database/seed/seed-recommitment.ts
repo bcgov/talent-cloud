@@ -20,8 +20,8 @@ export const handler = async (startDate, endDate) => {
   const cycle = await recommitmentCycleRepository.save(
     recommitmentCycleRepository.create({
       year: 2025,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
     }),
   );
   const recommitmentRepository = datasource.getRepository(RecommitmentEntity);
