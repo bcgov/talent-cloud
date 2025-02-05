@@ -12,7 +12,7 @@ export const useSupervisorDashboard = () => {
     rows: '5',
     page: '1',
   });
-
+  const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
 
@@ -26,6 +26,10 @@ export const useSupervisorDashboard = () => {
 
   const handleShowSuccessBanner = (banner: boolean) => {
     setShowSuccessBanner(banner);
+  };
+
+  const handleRefetch = () => {
+    setRefetch(!refetch);
   };
 
   const handleShowWarningBanner = () => {
@@ -54,7 +58,7 @@ export const useSupervisorDashboard = () => {
         programs: person?.recommitment?.map((itm) => ({
           employeeId: person.employeeId,
           year: itm.year,
-          program: itm.program,
+          program: itm.program.toUpperCase(),
           status: <RecommitmentStatusChip status={itm.status} />,
           select: (
             <SupervisorApprovalForm
@@ -64,6 +68,7 @@ export const useSupervisorDashboard = () => {
               status={itm.status}
               program={itm.program}
               handleShowSuccessBanner={handleShowSuccessBanner}
+              handleRefetch={handleRefetch}
               name={`${person.firstName} ${person.lastName}`}
             />
           ),
@@ -81,7 +86,7 @@ export const useSupervisorDashboard = () => {
 
   useEffect(() => {
     getData();
-  }, [searchParams, showSuccessMessage]);
+  }, [searchParams, refetch]);
 
   return {
     totalRows: count,

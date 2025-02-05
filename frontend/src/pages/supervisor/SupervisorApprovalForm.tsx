@@ -18,7 +18,7 @@ export const SupervisorApprovalForm = ({
   program,
   status,
   handleShowSuccessBanner,
-
+  handleRefetch,
   name,
 }: {
   memberId: string;
@@ -26,6 +26,7 @@ export const SupervisorApprovalForm = ({
   year: number;
   personnelId: string;
   program: Program;
+  handleRefetch: () => void;
   handleShowSuccessBanner: (banner: boolean) => void;
 
   name: string;
@@ -45,7 +46,7 @@ export const SupervisorApprovalForm = ({
     const values = {
       program,
       year: year,
-      status: selectedStatus ?? status,
+      status: status ?? selectedStatus,
       reason: supervisorDeclinedReason ?? '',
     };
 
@@ -55,6 +56,7 @@ export const SupervisorApprovalForm = ({
       });
       setShowDeclineModal(false);
       handleShowSuccessBanner(true);
+      handleRefetch();
     } catch (e) {
       console.error(e);
     }
@@ -94,7 +96,6 @@ export const SupervisorApprovalForm = ({
           ].join(', ')}
           onChange={(e) => {
             setStatus(e.target.value as RecommitmentStatus);
-            handleShowSuccessBanner(false);
           }}
         >
           <option value="" className="text-sm">
@@ -128,10 +129,7 @@ export const SupervisorApprovalForm = ({
       ) : (
         <Button
           disabled={
-            ![
-              RecommitmentStatus.SUPERVISOR_DENIED,
-              RecommitmentStatus.MEMBER_COMMITTED,
-            ].includes(status)
+            !selectedStatus || status !== RecommitmentStatus.MEMBER_COMMITTED
           }
           variant={ButtonTypes.TERTIARY}
           text={'Submit'}
