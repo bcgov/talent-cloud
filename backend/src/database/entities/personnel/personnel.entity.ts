@@ -217,7 +217,7 @@ export class PersonnelEntity extends BaseEntity {
       unionMembership: this.unionMembership,
       supervisorFirstName: this.supervisorFirstName,
       supervisorLastName: this.supervisorLastName,
-      supervisorEmail: this.supervisorEmail.toLowerCase(),
+      supervisorEmail: this.supervisorEmail?.toLowerCase(),
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',

@@ -776,9 +776,9 @@ export class PersonnelService {
       { email: email.toLowerCase() }, 
     );
     const people = await qb.getMany();
-    const isMember = people.map((itm) => itm.email.toLocaleLowerCase()).includes(email.toLowerCase());
+    const isMember = people.map((itm) => itm.email.toLowerCase()).includes(email.toLowerCase());
     const isSupervisor = people
-      .map((itm) => itm.supervisorEmail.toLowerCase())
+      .map((itm) => itm.supervisorEmail?.toLowerCase())
       .includes(email.toLowerCase());
 
     return {
