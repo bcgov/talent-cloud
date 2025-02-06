@@ -26,14 +26,14 @@ export const RecommitmentProfileBanner = ({
     content: (
       <p className="text-sm">
         <span className="font-bold text-sm">
-          Confirm your recommitment status for the upcoming year.
+          Confirm or decline your recommitment status for the upcoming year.
         </span>{' '}
         Please ensure that your profile details are up-to-date, before confirming
         your recommitment to CORE for {year} by{' '}
         <span className="font-bold text-sm">{endDate}</span>
       </p>
     ),
-    buttonText: 'Start Recommitment',
+    buttonText: 'Make Recommitment Decision',
     statusText: 'Not Started',
     statusBg: 'bg-errorBannerLight',
     statusTextBg: 'error',

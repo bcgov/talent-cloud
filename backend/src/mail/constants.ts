@@ -34,10 +34,10 @@ export enum EmailTemplates {
 export enum EmailSubjects {
   MEMBER_DECLINED = 'CORE Team: You have declined your {{year}} recommitment',
   MEMBER_DENIED_BY_SUPERVISOR = 'Your CORE Recommitment Status for {{year}} has been updated',
-  MEMBER_APPROVED = 'You CORE Recommitment for {{year}} has been approved by your supervisor',
-  MEMBER_FOLLOW_UP = 'ACTION REQUIRED: Reminder to Update your CORE Recommitment status for {{year}}',
+  MEMBER_APPROVED = 'Your CORE Recommitment for {{year}} has been approved by your supervisor',
+  MEMBER_FOLLOW_UP = 'ACTION REQUIRED: Confirm or Decline Recommitment for the {{year}} CORE Program',
   MEMBER_NO_RESPONSE = 'CORE TEAM: Notice for Change in Member Status',
-  MEMBER_ANNUAL = 'ACTION REQUIRED: Annual Recommitment Reminder for the {{year}} Core Program',
+  MEMBER_ANNUAL = 'ACTION REQUIRED: Annual Recommitment Reminder. Confirm or Decline Recommitment for the {{year}} CORE Program',
   MEMBER_REACTIVATE = 'ACTION REQUIRED: Update your CORE Recommitment status for {{year}}',
   MEMBER_SUPERVISOR_NO_RESPONSE = 'CORE TEAM: Notice for Member Status Change',
   SUPERVISOR_ANNUAL = 'CORE Team {{year}} Annual Recommitment Period Has Started',
