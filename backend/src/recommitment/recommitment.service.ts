@@ -251,7 +251,10 @@ export class RecommitmentService {
         };
 
       default:
-        return null;
+        return {
+          templateType: undefined,
+          templateRecipient: undefined,
+        };
     }
   }
 

@@ -23,10 +23,6 @@ const SupervisorDashboard = () => {
     handleShowWarningBanner,
   } = useSupervisorDashboard();
 
-  if (rows.length === 0) {
-    handleChangePage('page', '1');
-  }
-
   const { recommitmentCycle } = useRecommitmentCycle();
 
   if (loading) return <Loading />;
@@ -76,7 +72,7 @@ const SupervisorDashboard = () => {
       >
         <div className="pt-12">
           <Banner
-            onClose={() => handleShowWarningBanner(false)}
+            onClose={handleShowWarningBanner}
             content={
               'Approved recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
             }

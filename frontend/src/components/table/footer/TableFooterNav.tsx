@@ -25,8 +25,8 @@ export const TableFooterNav = ({
   const totalPages = Math.ceil(totalRows / rowsPerPage);
   const lastPage = totalPages;
 
-  const truncateLeft = currentPage > 3;
-  const truncateRight = currentPage < lastPage - 2;
+  const truncateLeft = currentPage > 3 && totalPages > 4;
+  const truncateRight = currentPage < lastPage - 2 && totalPages > 4;
   return (
     <nav
       className="isolate inline-flex -space-x-px rounded-md shadow-sm"
