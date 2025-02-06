@@ -327,10 +327,9 @@ export const RecommitmentFormBase = ({
 
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
-    console.log(decision);
     const res = await updateRecommitment(personnel.id, {
       ...decision,
-      supervisorInformation,
+      ...(recommitmentAnswer !== 'no' && { supervisorInformation }),
     });
     if (res.error) {
       setErrorMessage(res.error.message);
