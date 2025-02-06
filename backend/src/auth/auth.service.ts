@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Program, Role, Token } from './interface';
-import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentService } from '../recommitment/recommitment.service';
@@ -10,9 +9,7 @@ export class AuthService {
   constructor(
     @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
-    @Inject(RecommitmentService)
-    private readonly recommitmentService: RecommitmentService,
-    private readonly logger: AppLogger,
+    private readonly logger: AppLogger
   ) {
     this.logger.setContext(AuthService.name);
   }
@@ -81,19 +78,5 @@ export class AuthService {
     return true;
   }
 
-  async verifyMemberOrSupervisor(email: string): Promise<{
-    isMember: boolean;
-    isSupervisor: boolean;
-    recommitment: RecommitmentCycleRO;
-  }> {
-    const { isMember, isSupervisor } =
-      await this.personnelService.verifyMemberOrSupervisor(email);
-    const recommitment =
-      await this.recommitmentService.checkRecommitmentPeriod();
-    return {
-      isMember,
-      isSupervisor,
-      recommitment,
-    };
-  }
+
 }
