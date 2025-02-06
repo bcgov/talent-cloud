@@ -56,14 +56,6 @@ export const RecommitmentBanner = ({
                   </span>
                 </p>
               </div>
-              {statusText === 'Not Started' && (
-                <div className="pt-4 text-sm">
-                  <span className="font-bold text-sm text-infoDark pr-2">
-                    Estimated Duration:
-                  </span>
-                  <span>10 minutes</span>
-                </div>
-              )}
               <div
                 className={`flex flex-row space-x-12 items-baseline ${onClose && !onClick ? 'pt-6' : 'pt-1'}`}
               >
