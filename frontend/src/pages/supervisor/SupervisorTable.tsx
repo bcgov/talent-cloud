@@ -57,7 +57,7 @@ export const SupervisorTable = ({
                   <table>
                     <thead>
                       <tr>
-                        <td scope="column"></td>
+                        <th scope="column"></th>
                       </tr>
                     </thead>
 
