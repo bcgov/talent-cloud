@@ -31,7 +31,7 @@ export const SupervisorApprovalForm = ({
 
   name: string;
 }) => {
-  const [selectedStatus, setStatus] = useState<RecommitmentStatus>();
+  const [selectedStatus, setStatus] = useState<RecommitmentStatus | string>();
 
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
     useState<SupervisorReason>();
@@ -41,6 +41,10 @@ export const SupervisorApprovalForm = ({
   const [showDeclineModal, setShowDeclineModal] = useState(false);
 
   const { AxiosPrivate } = useAxios();
+
+  const handleShowDeclineModal = () => {
+    setShowDeclineModal(!showDeclineModal);
+  };
 
   const submit = async (status?: RecommitmentStatus) => {
     const values = {
@@ -54,7 +58,11 @@ export const SupervisorApprovalForm = ({
       await AxiosPrivate.patch(`/recommitment/${personnelId}`, {
         [program]: values,
       });
-      setShowDeclineModal(false);
+      if (status === RecommitmentStatus.MEMBER_COMMITTED) {
+        setStatus('Select');
+      } else {
+        handleShowDeclineModal();
+      }
       handleShowSuccessBanner(true);
       handleRefetch();
     } catch (e) {
@@ -142,8 +150,8 @@ export const SupervisorApprovalForm = ({
       )}
       <DialogUI
         open={showDeclineModal}
-        onClose={() => setShowDeclineModal(false)}
-        handleOpen={() => setShowDeclineModal(true)}
+        onClose={handleShowDeclineModal}
+        handleOpen={handleShowDeclineModal}
         title={'Reason for Declining CORE Recommitment'}
       >
         <div className="flex flex-col max-w-screen-sm">
