@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { debounce } from 'lodash';
 import { Filters } from '@/common';
 
@@ -18,22 +18,19 @@ export const Search = ({
     searchParams.get(Filters.NAME) || '',
   );
 
-  const sendRequest = useCallback((value: string) => {
+  const sendRequest = (value: string) => {
     if (value === '') {
       searchParams.delete(Filters.NAME);
       setSearchParams({ ...Object.fromEntries(searchParams) });
     } else {
-      setSearchParams({ ...Object.fromEntries(searchParams), name: value });
+      searchParams.set(Filters.NAME, value);
+      setSearchParams({ ...Object.fromEntries(searchParams) });
     }
-  }, []);
-
-  const debouncedSearch = useMemo(() => {
-    return debounce(sendRequest, 500);
-  }, [sendRequest]);
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    debouncedSearch(e.target.value);
+    debounce(sendRequest, 500)(e.target.value);
   };
   return (
     <div className="relative w-full">
