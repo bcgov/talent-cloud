@@ -1,6 +1,8 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
+import { useState } from 'react';
+import { debounce } from 'lodash';
 import { Filters } from '@/common';
 
 export const Search = ({
@@ -12,15 +14,24 @@ export const Search = ({
   setSearchParams: (searchParams: any) => any;
   field: FieldInterface;
 }) => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === '') {
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get(Filters.NAME) || '',
+  );
+
+  const sendRequest = (value: string) => {
+    if (value === '') {
       searchParams.delete(Filters.NAME);
       setSearchParams({ ...Object.fromEntries(searchParams) });
     } else {
-      setSearchParams({ ...Object.fromEntries(searchParams), name: e.target.value });
+      searchParams.set(Filters.NAME, value);
+      setSearchParams({ ...Object.fromEntries(searchParams) });
     }
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    debounce(sendRequest, 500)(e.target.value);
+  };
   return (
     <div className="relative w-full">
       <label>
@@ -30,7 +41,7 @@ export const Search = ({
           <input
             id={field.name}
             autoComplete="name"
-            value={searchParams.get(Filters.NAME) ?? ''}
+            value={searchValue}
             type="text"
             className={classes.menu.container}
             name={field.name}
