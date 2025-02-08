@@ -109,21 +109,27 @@ export const SupervisorApprovalForm = ({
 
   return (
     <div className="flex flex-col gap-y-1 lg:gap-y-0 lg:flex-row">
-      <div className="flex flex-row gap-x-4 pr-12 relative">
+      <div className="flex flex-row gap-x-4 pr-12">
         <select
           disabled={status !== RecommitmentStatus.MEMBER_COMMITTED}
-          onChange={(e) => setValue(e.target.value as RecommitmentStatus)}
           className={[
             'rounded-sm  outline-none w-40 text-sm ',
             status !== RecommitmentStatus.MEMBER_COMMITTED
               ? 'bg-gray-200 border-none outline-none text-gray-500 '
               : 'text-gray-600 bg-white border-1.5 border-gray-400',
           ].join(', ')}
+          onChange={(e) => setValue(e.target.value as RecommitmentStatus)}
           value={value}
         >
-          <option value="">Select</option>
-          <option value={RecommitmentStatus.SUPERVISOR_APPROVED}>Approve</option>
-          <option value={RecommitmentStatus.SUPERVISOR_DENIED}>Decline</option>
+          <option value="" className="text-sm">
+            Select
+          </option>
+          <option value={RecommitmentStatus.SUPERVISOR_APPROVED} className="text-sm">
+            Approve
+          </option>
+          <option value={RecommitmentStatus.SUPERVISOR_DENIED} className="text-sm">
+            Decline
+          </option>
         </select>
       </div>
 
@@ -142,7 +148,7 @@ export const SupervisorApprovalForm = ({
         />
       ) : (
         <Button
-          disabled={status !== RecommitmentStatus.MEMBER_COMMITTED}
+          disabled={status !== RecommitmentStatus.MEMBER_COMMITTED || !value}
           variant={ButtonTypes.TERTIARY}
           text={'Submit'}
           onClick={() => {
