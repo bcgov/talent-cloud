@@ -55,4 +55,15 @@ export const declineFormFields = {
     ],
     span: 'col-span-2',
   },
+  comments: {
+    name: 'comments',
+    label: 'Additional Comments',
+    type: 'textarea',
+    required: false,
+    error: '',
+    span: 'col-span-2',
+    value: 'comments',
+    hidden: true,
+    placeholder: 'If you selected “Other”, please provide more details here.',
+  },
 };

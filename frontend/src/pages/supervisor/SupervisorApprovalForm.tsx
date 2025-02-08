@@ -31,8 +31,6 @@ export const SupervisorApprovalForm = ({
 
   name: string;
 }) => {
-  const [selectedStatus, setStatus] = useState<RecommitmentStatus | string>();
-
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
     useState<SupervisorReason>();
 
@@ -46,11 +44,13 @@ export const SupervisorApprovalForm = ({
     setShowDeclineModal(!showDeclineModal);
   };
 
-  const submit = async (status?: RecommitmentStatus) => {
+  const [value, setValue] = useState<RecommitmentStatus | string>(status);
+
+  const submit = async (selectedStatus: RecommitmentStatus) => {
     const values = {
       program,
       year: year,
-      status: status ?? selectedStatus,
+      status: selectedStatus,
       reason: supervisorDeclinedReason ?? '',
     };
 
@@ -58,11 +58,11 @@ export const SupervisorApprovalForm = ({
       await AxiosPrivate.patch(`/recommitment/${personnelId}`, {
         [program]: values,
       });
-      if (status === RecommitmentStatus.MEMBER_COMMITTED) {
-        setStatus('Select');
-      } else {
+
+      if (selectedStatus === RecommitmentStatus.SUPERVISOR_DENIED) {
         handleShowDeclineModal();
       }
+
       handleShowSuccessBanner(true);
       handleRefetch();
     } catch (e) {
@@ -82,6 +82,22 @@ export const SupervisorApprovalForm = ({
           label: 'Additional Comments',
           type: 'textarea',
           required: true,
+          hidden: false,
+          error: '',
+          span: 'col-span-2',
+          value: 'comments',
+          placeholder: 'If you selected “Other”, please provide more details here.',
+        },
+      }));
+    } else {
+      setFields((prev) => ({
+        ...prev,
+        comments: {
+          name: 'comments',
+          label: 'Additional Comments',
+          type: 'textarea',
+          required: false,
+          hidden: true,
           error: '',
           span: 'col-span-2',
           value: 'comments',
@@ -93,32 +109,21 @@ export const SupervisorApprovalForm = ({
 
   return (
     <div className="flex flex-col gap-y-1 lg:gap-y-0 lg:flex-row">
-      <div className="flex flex-row gap-x-4 pr-12">
+      <div className="flex flex-row gap-x-4 pr-12 relative">
         <select
           disabled={status !== RecommitmentStatus.MEMBER_COMMITTED}
+          onChange={(e) => setValue(e.target.value as RecommitmentStatus)}
           className={[
             'rounded-sm  outline-none w-40 text-sm ',
             status !== RecommitmentStatus.MEMBER_COMMITTED
               ? 'bg-gray-200 border-none outline-none text-gray-500 '
               : 'text-gray-600 bg-white border-1.5 border-gray-400',
           ].join(', ')}
-          onChange={(e) => {
-            setStatus(e.target.value as RecommitmentStatus);
-          }}
+          value={value}
         >
-          <option value="" className="text-sm">
-            {status === RecommitmentStatus.SUPERVISOR_APPROVED
-              ? 'Approved'
-              : status === RecommitmentStatus.SUPERVISOR_DENIED
-                ? 'Declined'
-                : 'Select'}
-          </option>
-          <option className="text-sm" value={RecommitmentStatus.SUPERVISOR_APPROVED}>
-            Approve
-          </option>
-          <option className="text-sm" value={RecommitmentStatus.SUPERVISOR_DENIED}>
-            Decline
-          </option>
+          <option value="">Select</option>
+          <option value={RecommitmentStatus.SUPERVISOR_APPROVED}>Approve</option>
+          <option value={RecommitmentStatus.SUPERVISOR_DENIED}>Decline</option>
         </select>
       </div>
 
@@ -131,20 +136,19 @@ export const SupervisorApprovalForm = ({
           variant={ButtonTypes.TERTIARY}
           text={'Unlock'}
           onClick={() => {
+            setValue('');
             submit(RecommitmentStatus.MEMBER_COMMITTED);
           }}
         />
       ) : (
         <Button
-          disabled={
-            !selectedStatus || status !== RecommitmentStatus.MEMBER_COMMITTED
-          }
+          disabled={status !== RecommitmentStatus.MEMBER_COMMITTED}
           variant={ButtonTypes.TERTIARY}
           text={'Submit'}
           onClick={() =>
-            selectedStatus === RecommitmentStatus.SUPERVISOR_DENIED
+            value === RecommitmentStatus.SUPERVISOR_DENIED
               ? setShowDeclineModal(true)
-              : submit()
+              : value && submit(RecommitmentStatus.SUPERVISOR_APPROVED)
           }
         />
       )}
