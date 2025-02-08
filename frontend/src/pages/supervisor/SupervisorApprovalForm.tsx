@@ -145,11 +145,26 @@ export const SupervisorApprovalForm = ({
           disabled={status !== RecommitmentStatus.MEMBER_COMMITTED}
           variant={ButtonTypes.TERTIARY}
           text={'Submit'}
-          onClick={() =>
-            value === RecommitmentStatus.SUPERVISOR_DENIED
-              ? setShowDeclineModal(true)
-              : value && submit(RecommitmentStatus.SUPERVISOR_APPROVED)
-          }
+          onClick={() => {
+            if (value === RecommitmentStatus.SUPERVISOR_DENIED) {
+              setFields((prev) => ({
+                ...prev,
+                comments: {
+                  name: 'comments',
+                  label: 'Additional Comments',
+                  type: 'textarea',
+                  required: false,
+                  hidden: true,
+                  error: '',
+                  span: 'col-span-2',
+                  value: 'comments',
+                  placeholder:
+                    'If you selected “Other”, please provide more details here.',
+                },
+              }));
+              setShowDeclineModal(true);
+            } else value && submit(RecommitmentStatus.SUPERVISOR_APPROVED);
+          }}
         />
       )}
       <DialogUI
