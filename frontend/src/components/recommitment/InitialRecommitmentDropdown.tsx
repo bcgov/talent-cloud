@@ -64,7 +64,7 @@ export const InitialRecommitmentDropdown = ({
 
   return (
     <div className="px-6 flex-grow">
-      <p className="text-sm font-bold pb-1 pl-1">{getText()}</p>
+      <p className="text-sm font-bold pb-1 pl-1">{getText()} <span className="text-red-300">*</span></p>
       <Select value={initialValue} onChange={handleChange} label="Select an option">
         {getOptions().map((o) => (
           <Option value={o.value} key={o.value}>
