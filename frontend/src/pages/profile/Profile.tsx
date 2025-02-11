@@ -20,7 +20,8 @@ import { useRoleContext } from '@/providers';
 import { RecommitmentDetails } from '@/components/profile/details/RecommitmentDetails';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status';
-import { RecommitmentConfirmation } from './RecommitmentConfirmation';
+import { RecommitmentReinitiationConfirmation } from './RecommitmentReinitiationConfirmation';
+import { offsetTimezoneDate } from '../../utils';
 
 const Profile = () => {
   const { loading, roles, personnel, updatePersonnel, profileData, fetch } =
@@ -28,44 +29,17 @@ const Profile = () => {
   const { program } = useRoleContext();
   const { functions, bcwsRoles } = useProgramFieldData(program);
   const {
+    recommitmentCycle,
     isRecommitmentCycleOpen,
     isRecommitmentReinitiationOpen,
     updateRecommitment,
+    getProfileRecommitmentStatusText,
   } = useRecommitmentCycle();
   const [confirmReinitiateOpen, setConfirmReinitiateOpen] = useState(false);
 
   if (loading) {
     return <Loading />;
   }
-
-  const recommitmentStatusText = () => {
-    const recommitment = personnel?.recommitment?.find(
-      (r) => r.year === new Date().getFullYear(),
-    );
-    if (!recommitment) {
-      return 'Was inactive before start of recommitment cycle.';
-    }
-    if (
-      [
-        RecommitmentStatus.MEMBER_NO_RESPONSE,
-        RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
-      ].includes(recommitment.status)
-    ) {
-      return 'Recommitment deadline missed by member or their supervisor.';
-    }
-    if (
-      [
-        RecommitmentStatus.MEMBER_DENIED,
-        RecommitmentStatus.SUPERVISOR_DENIED,
-      ].includes(recommitment.status)
-    ) {
-      return 'Member or their supervisor denied recommitment.';
-    }
-    if (recommitment.status === RecommitmentStatus.PENDING) {
-      return 'Awaiting member decision on recommitment.';
-    }
-    return '';
-  };
 
   const reinitiateRecommitment = async () => {
     const decision =
@@ -117,7 +91,9 @@ const Profile = () => {
           {personnel && (
             <div className="flex flex-row pt-4 pb-12 bg-white gap-12">
               {personnel.status === Status.INACTIVE &&
-                isRecommitmentReinitiationOpen && <p>{recommitmentStatusText()}</p>}
+                isRecommitmentReinitiationOpen && (
+                  <p>{getProfileRecommitmentStatusText(personnel)}</p>
+                )}
               {personnel.status === Status.INACTIVE &&
                 isRecommitmentReinitiationOpen && (
                   <Button
@@ -178,12 +154,17 @@ const Profile = () => {
           )}
         </div>
       </div>
-      <RecommitmentConfirmation
-        open={confirmReinitiateOpen}
-        handleOpen={() => setConfirmReinitiateOpen(!confirmReinitiateOpen)}
-        onClose={() => setConfirmReinitiateOpen(false)}
-        onConfirm={reinitiateRecommitment}
-      />
+      {isRecommitmentReinitiationOpen && recommitmentCycle?.reinitiationEndDate && (
+        <RecommitmentReinitiationConfirmation
+          open={confirmReinitiateOpen}
+          reinitiationEndDate={offsetTimezoneDate(
+            recommitmentCycle?.reinitiationEndDate,
+          )}
+          handleOpen={() => setConfirmReinitiateOpen(!confirmReinitiateOpen)}
+          onClose={() => setConfirmReinitiateOpen(false)}
+          onConfirm={reinitiateRecommitment}
+        />
+      )}
     </div>
   );
 };
