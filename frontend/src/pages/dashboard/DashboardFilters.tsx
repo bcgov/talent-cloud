@@ -23,6 +23,30 @@ export const DashboardFilters = ({
 }) => {
   const { fields } = useProgramFieldData(program);
 
+  const handleChange = (value: string) => {
+    const date = new Date();
+    searchParams.set(fields.availabilityType.name, value);
+    if (!searchParams.get(Filters.AVAILABILITY_FROM_DATE)) {
+      searchParams.set(
+        Filters.AVAILABILITY_FROM_DATE,
+        format(
+          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          'yyyy-MM-dd',
+        ),
+      );
+    }
+    if (!searchParams.get(Filters.AVAILABILITY_TO_DATE)) {
+      searchParams.set(
+        Filters.AVAILABILITY_TO_DATE,
+        format(
+          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          'yyyy-MM-dd',
+        ),
+      );
+    }
+    setSearchParams({ ...Object.fromEntries(searchParams) });
+  };
+  
   return (
     <div className="shadow-sm rounded-sm mx-auto bg-grayBackground mb-16 mt-8 p-12 grid grid-cols-1 lg:grid-cols-7 gap-12">
       {/** lg - column 1 start */}
@@ -138,8 +162,9 @@ export const DashboardFilters = ({
               field={fields.availabilityType}
               label="Availability"
               value={searchParams.get('availabilityType') ?? ''}
-              setSearchParams={setSearchParams}
-              searchParams={searchParams}
+              placeholder="Select availability type"
+              useChip={true}
+              handleChange={handleChange}
               handleClose={() => {
                 searchParams.delete('availabilityType');
                 searchParams.delete('availabilityFromDate');

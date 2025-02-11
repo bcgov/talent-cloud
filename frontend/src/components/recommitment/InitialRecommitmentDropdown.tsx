@@ -1,14 +1,14 @@
-import { Select, Option } from '@material-tailwind/react';
+import { SingleSelect } from '../filters/SingleSelect';
 import { Program } from '@/common';
 
 export const InitialRecommitmentDropdown = ({
+  handleChange,
   initialValue,
   program,
-  handleChange,
 }: {
+  handleChange: (v: string | undefined) => void;
   initialValue?: string;
   program?: Program;
-  handleChange: (v: string | undefined) => void;
 }) => {
   const getText = () => {
     if (program === Program.ALL) {
@@ -30,7 +30,7 @@ export const InitialRecommitmentDropdown = ({
     } else {
       return `You must provide a reason for declining recommitment to the ${initialValue === 'bcws-only' ? 'EMCR' : 'BCWS'} program in the next step.`;
     }
-  }
+  };
 
   const EMCR_ONLY_OPTIONS = [
     { value: 'yes-emcr', label: 'Yes' },
@@ -64,17 +64,23 @@ export const InitialRecommitmentDropdown = ({
 
   return (
     <div className="px-6 flex-grow">
-      <p className="text-sm font-bold pb-1 pl-1">{getText()} <span className="text-red-300">*</span></p>
-      <Select value={initialValue} onChange={handleChange} label="Select an option">
-        {getOptions().map((o) => (
-          <Option value={o.value} key={o.value}>
-            {o.label}
-          </Option>
-        ))}
-      </Select>
-      {initialValue && !['yes-emcr', 'yes-bcws', 'yes-both'].includes(initialValue) && 
-        <p className="text-xs text-gray-600 pb-1 pt-4 pl-1">{getWarningText()}</p>
-      }
+      <p className="text-sm font-bold pb-1 pl-1">
+        {getText()} <span className="text-red-300">*</span>
+      </p>
+      <div className="flex-grow">
+        <SingleSelect
+          field={{ name: 'singleSelect', options: getOptions() }}
+          handleChange={handleChange}
+          openColor="skyline"
+          placeholder={'Select an option'}
+          value={initialValue}
+        />
+      </div>
+
+      {initialValue &&
+        !['yes-emcr', 'yes-bcws', 'yes-both'].includes(initialValue) && (
+          <p className="text-xs text-gray-600 pb-1 pt-4 pl-1">{getWarningText()}</p>
+        )}
     </div>
   );
 };
