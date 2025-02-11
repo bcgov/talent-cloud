@@ -16,10 +16,16 @@ export const DashboardFilters = ({
   searchParams,
   setSearchParams,
   program,
+  resetParams,
+  handleChangeSearch,
+  searchInputValue,
 }: {
   searchParams: URLSearchParams;
   setSearchParams: (params: any) => any;
   program?: Program;
+  resetParams: () => void;
+  handleChangeSearch: (value: string) => void;
+  searchInputValue: string;
 }) => {
   const { fields } = useProgramFieldData(program);
 
@@ -31,6 +37,8 @@ export const DashboardFilters = ({
           field={fields.name}
           setSearchParams={setSearchParams}
           searchParams={searchParams}
+          handleChangeSearch={handleChangeSearch}
+          searchInputValue={searchInputValue}
         />
       </div>
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
@@ -189,13 +197,7 @@ export const DashboardFilters = ({
         <Button
           variant={ButtonTypes.SECONDARY}
           text="Clear All"
-          onClick={() => {
-            setSearchParams({
-              page: '1',
-              rows: searchParams.get('rows') ?? '10',
-              status: searchParams.get('status') ?? 'ACTIVE',
-            });
-          }}
+          onClick={resetParams}
         />
       </div>
     </div>

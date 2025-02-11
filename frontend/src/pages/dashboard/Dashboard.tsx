@@ -34,6 +34,9 @@ const Dashboard = () => {
     setLoading,
     searchParams,
     setSearchParams,
+    resetParams,
+    handleChangeSearch,
+    searchInputValue,
   } = useTable(program);
 
   return (
@@ -50,6 +53,9 @@ const Dashboard = () => {
           searchParams={searchParams}
           setSearchParams={setSearchParams}
           program={program}
+          resetParams={resetParams}
+          handleChangeSearch={handleChangeSearch}
+          searchInputValue={searchInputValue}
         />
         <div className="overflow-x-scroll border border-slate-500 rounded-md">
           <div className="mt-2  bg-white w-full">

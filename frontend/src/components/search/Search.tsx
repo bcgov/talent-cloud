@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
-import { useState } from 'react';
 import { debounce } from 'lodash';
 import { Filters } from '@/common';
 
@@ -9,15 +8,15 @@ export const Search = ({
   searchParams,
   setSearchParams,
   field,
+  handleChangeSearch,
+  searchInputValue,
 }: {
   searchParams: URLSearchParams;
   setSearchParams: (searchParams: any) => any;
   field: FieldInterface;
+  handleChangeSearch: (value: string) => void;
+  searchInputValue: string;
 }) => {
-  const [searchValue, setSearchValue] = useState(
-    searchParams.get(Filters.NAME) || '',
-  );
-
   const sendRequest = (value: string) => {
     if (value === '') {
       searchParams.delete(Filters.NAME);
@@ -29,7 +28,7 @@ export const Search = ({
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    handleChangeSearch(e.target.value);
     debounce(sendRequest, 500)(e.target.value);
   };
   return (
@@ -41,7 +40,7 @@ export const Search = ({
           <input
             id={field.name}
             autoComplete="name"
-            value={searchValue}
+            value={searchInputValue}
             type="text"
             className={classes.menu.container}
             name={field.name}

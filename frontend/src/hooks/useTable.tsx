@@ -15,6 +15,8 @@ export const useTable = (program?: Program) => {
   const [columns, setColumns] = useState<DashboardColumns[]>();
   const [tabCount, setTabCount] = useState();
 
+  const [searchInputValue, setSearchInputValue] = useState('');
+
   const [searchParams, setSearchParams] = useSearchParams({
     rows: '25',
     page: '1',
@@ -22,7 +24,9 @@ export const useTable = (program?: Program) => {
   });
 
   const status = searchParams.get(Filters.STATUS) ?? Status.ACTIVE;
-
+  const handleChangeSearch = (value: string) => {
+    setSearchInputValue(value);
+  };
   const applyFilters = async () => {
     const isPending = status === Status.PENDING;
 
@@ -70,6 +74,19 @@ export const useTable = (program?: Program) => {
     applyFilters();
   }, [searchParams]);
 
+  const resetParams = () => {
+    const params = searchParams.entries();
+    for (const [key] of params) {
+      searchParams.delete(key);
+    }
+    handleChangeSearch('');
+    setSearchParams({
+      rows: '25',
+      page: '1',
+      status: Status.ACTIVE,
+    });
+  };
+
   return {
     totalRows: status && tabCount ? tabCount[status] : 0,
     currentPage: parseInt(searchParams.get(Filters.PAGE) ?? '1'),
@@ -100,5 +117,8 @@ export const useTable = (program?: Program) => {
     setLoading: (loading: boolean) => setLoading(loading),
     searchParams,
     setSearchParams,
+    resetParams,
+    searchInputValue,
+    handleChangeSearch,
   };
 };
