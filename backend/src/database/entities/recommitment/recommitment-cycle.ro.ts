@@ -9,4 +9,7 @@ export class RecommitmentCycleRO {
 
   @ApiProperty()
   endDate: Date;
+
+  @ApiProperty()
+  reinitiationEndDate?: Date;
 }

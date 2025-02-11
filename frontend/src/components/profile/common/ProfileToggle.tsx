@@ -6,7 +6,7 @@ export const ProfileToggle = ({
   personnel,
   roles,
   updatePersonnel,
-  disabled
+  disabled,
 }: {
   personnel: Personnel;
   roles?: Role[];
@@ -14,8 +14,8 @@ export const ProfileToggle = ({
   disabled?: boolean;
 }) => {
   return (
-    <div className=" pb-12 bg-white w-full pt-4  ">
-      <div className="flex flex-row justify-start md:items-center md:mr-12 lg:ml-48">
+    <div className="w-full">
+      <div className="flex flex-row justify-start">
         {roles?.includes(Role.COORDINATOR) &&
           personnel.status !== Status.PENDING && (
             <Toggle
@@ -26,7 +26,7 @@ export const ProfileToggle = ({
                 })
               }
               label={`Switch to ${personnel.status === Status.ACTIVE ? 'Inactive' : 'Active'}`}
-              disabled={disabled} 
+              disabled={disabled}
             />
           )}
       </div>

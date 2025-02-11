@@ -42,10 +42,15 @@ export const useRecommitmentCycle = () => {
         `/recommitment/${personnelId}`,
         decisions,
       );
-      return data
+      return data;
     } catch (e: any) {
       console.error(e);
-      return {error:{message: 'An error has occurred. Please check your submission and try again'}}
+      return {
+        error: {
+          message:
+            'An error has occurred. Please check your submission and try again',
+        },
+      };
     }
   };
 
@@ -55,6 +60,11 @@ export const useRecommitmentCycle = () => {
       recommitmentCycle &&
       offsetTimezoneDate(recommitmentCycle.endDate) >= new Date() &&
       offsetTimezoneDate(recommitmentCycle.startDate) <= new Date(),
+    isRecommitmentReinitiationOpen:
+      recommitmentCycle &&
+      recommitmentCycle.reinitiationEndDate &&
+      offsetTimezoneDate(recommitmentCycle.endDate) <= new Date() &&
+      offsetTimezoneDate(recommitmentCycle.reinitiationEndDate) >= new Date(),
     updateRecommitment,
   };
 };

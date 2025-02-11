@@ -11,6 +11,7 @@ import { useParams } from 'react-router';
 const usePersonnel = (): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
+  fetch: () => void;
   profileData: ProfileData;
   roles?: Role[];
   loading?: boolean;
@@ -19,7 +20,7 @@ const usePersonnel = (): {
   const { roles, program, loading } = useRoleContext();
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
-  const [refetch, setRefetch] = useState(false)
+  const [refetch, setRefetch] = useState(false);
   const { profileId } = useParams();
 
   useEffect(() => {
@@ -28,11 +29,16 @@ const usePersonnel = (): {
         const response =
           program && (await AxiosPrivate.get(`/${program}/${profileId}`));
         response && setPersonnel(response.data);
+        setRefetch(false);
       } catch (e) {
         console.log(e);
       }
     })();
   }, [refetch]);
+
+  const fetch = () => {
+    setRefetch(true);
+  };
 
   const updatePersonnel = async (personnel: FormikValues) => {
     if (personnel?.newRoles) {
@@ -42,8 +48,8 @@ const usePersonnel = (): {
       const res =
         program &&
         (await AxiosPrivate.patch(encodeURI(`/${program}/${profileId}`), personnel));
-        // update endpoint does not return the same data as the GET endpoint, so triggering refetch
-        res && setRefetch(!refetch);
+      // update endpoint does not return the same data as the GET endpoint, so triggering refetch
+      res && setRefetch(!refetch);
     } catch (e) {
       //TODO error toast
     }
@@ -52,6 +58,7 @@ const usePersonnel = (): {
   return {
     personnel,
     updatePersonnel,
+    fetch,
     roles,
     loading,
     profileData:
