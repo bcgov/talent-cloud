@@ -26,8 +26,8 @@ export const SingleSelect = ({
   handleChange,
   handleClose = () => {},
   label,
-  openColor = 'default',
   placeholder = 'placeholder',
+  styleProp,
   useChip = false,
   value,
 }: {
@@ -35,18 +35,13 @@ export const SingleSelect = ({
   handleChange?: any;
   handleClose?: () => void;
   label?: string;
-  openColor?: string;
   placeholder?: string;
+  styleProp?: string;
   useChip?: boolean;
   value?: string;
 }) => {
   // set menu style
-  let menuStyle = field.name ? menuItemClass[field.name] : classes.menu.container;
-  let menuOpenStyle = menuStyle;
-  let menuClosedStyle = menuStyle;
-  if (openColor === 'skyline') {
-    menuOpenStyle = menuStyle + ' border-skyline-200 border-2';
-  }
+  const menuStyle = field.name ? menuItemClass[field.name] : classes.menu.container;
 
   return (
     <>
@@ -69,7 +64,7 @@ export const SingleSelect = ({
                 <MenuButton
                   aria-label="Single Select Menu Button"
                   id={field.name}
-                  className={open ? menuOpenStyle : menuClosedStyle}
+                  className={open ? `${menuStyle} ${styleProp}` : menuStyle}
                 >
                   <p className={classes.menu.listItem}>
                     {getLabelFromValue(field.options, value)}
@@ -84,7 +79,7 @@ export const SingleSelect = ({
             ) : (
               <MenuButton
                 id={field.name}
-                className={open ? menuOpenStyle : menuClosedStyle}
+                className={open ? `${menuStyle} ${styleProp}` : menuStyle}
                 aria-label="Single Select Menu Button"
               >
                 <p className={classes.menu.placeholder}>{placeholder}</p>

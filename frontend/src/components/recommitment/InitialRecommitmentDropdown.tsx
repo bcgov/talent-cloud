@@ -6,7 +6,7 @@ export const InitialRecommitmentDropdown = ({
   initialValue,
   program,
 }: {
-  handleChange: (v: string | undefined) => void;
+  handleChange: (v?: string) => void;
   initialValue?: string;
   program?: Program;
 }) => {
@@ -71,8 +71,8 @@ export const InitialRecommitmentDropdown = ({
         <SingleSelect
           field={{ name: 'singleSelect', options: getOptions() }}
           handleChange={handleChange}
-          openColor="skyline"
           placeholder={'Select an option'}
+          styleProp="border-skyline-200 border-2"
           value={initialValue}
         />
       </div>
