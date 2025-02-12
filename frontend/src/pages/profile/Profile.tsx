@@ -10,23 +10,60 @@ import {
   ProfileHeader,
   ProfileNotes,
   Loading,
+  Button,
 } from '@/components';
-import { Status, Role, Program } from '@/common';
+import { useState } from 'react';
+import { Status, Role, Program, ButtonTypes } from '@/common';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { useRoleContext } from '@/providers';
 import { RecommitmentDetails } from '@/components/profile/details/RecommitmentDetails';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status';
+import { RecommitmentReinitiationConfirmation } from './RecommitmentReinitiationConfirmation';
+import { offsetTimezoneDate } from '../../utils';
 
 const Profile = () => {
-  const { loading, roles, personnel, updatePersonnel, profileData } = usePersonnel();
+  const { loading, roles, personnel, updatePersonnel, profileData, fetch } =
+    usePersonnel();
   const { program } = useRoleContext();
   const { functions, bcwsRoles } = useProgramFieldData(program);
-  const {isRecommitmentCycleOpen} = useRecommitmentCycle();
+  const {
+    recommitmentCycle,
+    isRecommitmentCycleOpen,
+    isRecommitmentReinitiationOpen,
+    updateRecommitment,
+    getProfileRecommitmentStatusText,
+  } = useRecommitmentCycle();
+  const [confirmReinitiateOpen, setConfirmReinitiateOpen] = useState(false);
 
   if (loading) {
     return <Loading />;
   }
+
+  const reinitiateRecommitment = async () => {
+    const decision =
+      program === Program.BCWS
+        ? {
+            bcws: {
+              program: Program.BCWS,
+              year: new Date().getFullYear(),
+              status: RecommitmentStatus.PENDING,
+              reason: '',
+            },
+          }
+        : {
+            emcr: {
+              program: Program.EMCR,
+              year: new Date().getFullYear(),
+              status: RecommitmentStatus.PENDING,
+              reason: '',
+            },
+          };
+    await updateRecommitment(personnel!.id, decision);
+    fetch();
+    setConfirmReinitiateOpen(false);
+  };
 
   return (
     <div
@@ -52,14 +89,33 @@ const Profile = () => {
             />
           )}
           {personnel && (
-            <ProfileToggle
-              personnel={personnel}
-              roles={roles}
-              updatePersonnel={updatePersonnel}
-              disabled = {isRecommitmentCycleOpen}
-            />
+            <div className="flex flex-row pt-4 pb-12 bg-white gap-12">
+              {personnel.status === Status.INACTIVE &&
+                isRecommitmentReinitiationOpen && (
+                  <p>{getProfileRecommitmentStatusText(personnel)}</p>
+                )}
+              {personnel.status === Status.INACTIVE &&
+                isRecommitmentReinitiationOpen && (
+                  <Button
+                    variant={ButtonTypes.PRIMARY}
+                    text="Restart Recommitment"
+                    onClick={() => setConfirmReinitiateOpen(true)}
+                    disabled={
+                      personnel.recommitment?.find(
+                        (r) => r.year === new Date().getFullYear(),
+                      )?.status === RecommitmentStatus.PENDING
+                    }
+                  />
+                )}
+              <ProfileToggle
+                personnel={personnel}
+                roles={roles}
+                updatePersonnel={updatePersonnel}
+                disabled={isRecommitmentCycleOpen}
+              />
+            </div>
           )}
-          {personnel && <RecommitmentDetails/>}
+          {personnel && <RecommitmentDetails />}
           {personnel && <ProfileDetails />}
           {personnel && program === Program.EMCR && (
             <ProfileFunctions
@@ -98,6 +154,17 @@ const Profile = () => {
           )}
         </div>
       </div>
+      {isRecommitmentReinitiationOpen && recommitmentCycle?.reinitiationEndDate && (
+        <RecommitmentReinitiationConfirmation
+          open={confirmReinitiateOpen}
+          reinitiationEndDate={offsetTimezoneDate(
+            recommitmentCycle?.reinitiationEndDate,
+          )}
+          handleOpen={() => setConfirmReinitiateOpen(!confirmReinitiateOpen)}
+          onClose={() => setConfirmReinitiateOpen(false)}
+          onConfirm={reinitiateRecommitment}
+        />
+      )}
     </div>
   );
 };

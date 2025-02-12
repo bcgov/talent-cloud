@@ -147,6 +147,7 @@ export interface RecommitmentCycle {
   year: number;
   startDate: string;
   endDate: string;
+  reinitiationEndDate?: string;
 }
 
 export interface Recommitment {

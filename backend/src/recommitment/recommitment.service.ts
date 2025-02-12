@@ -127,35 +127,45 @@ export class RecommitmentService {
         recommitmentUpdate[key].supervisorIdir = req.idir;
       }
 
-      // Update the recommitment status
-      await this.recommitmentRepository.update(
-        {
+      if (recommitment) {
+        // Update the recommitment status
+        await this.recommitmentRepository.update(
+          {
+            personnelId: id,
+            recommitmentCycleId: recommitmentUpdate[key].year,
+            program: recommitmentUpdate[key].program,
+          },
+          {
+            ...recommitment,
+            supervisorIdir: recommitmentUpdate[key]?.supervisorIdir,
+            supervisorDecisionDate:
+              recommitmentUpdate[key].supervisorDecisionDate,
+            memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
+            memberReason:
+              recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
+            supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
+            status: recommitmentUpdate[key]?.status,
+          },
+        );
+        // If recomitted to both, only send one email to supervisor
+        if (
+          recommitmentUpdate?.bcws?.status ===
+            RecommitmentStatus.MEMBER_COMMITTED &&
+          recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
+        ) {
+          this.logger.log(
+            `${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`,
+          );
+        } else {
+          this.triggerEmailNotification(id, recommitmentUpdate[key]);
+        }
+      } else {
+        await this.recommitmentRepository.save({
           personnelId: id,
           recommitmentCycleId: recommitmentUpdate[key].year,
           program: recommitmentUpdate[key].program,
-        },
-        {
-          ...recommitment,
-          supervisorIdir: recommitmentUpdate[key]?.supervisorIdir,
-          supervisorDecisionDate:
-            recommitmentUpdate[key].supervisorDecisionDate,
-          memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
-          memberReason:
-            recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
-          supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
           status: recommitmentUpdate[key]?.status,
-        },
-      );
-      // If recomitted to both, only send one email to supervisor
-      if (
-        recommitmentUpdate?.bcws?.status ===
-          RecommitmentStatus.MEMBER_COMMITTED &&
-        recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
-      ) {
-        this.logger.log(
-          `${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`,
-        );
-      } else {
+        });
         this.triggerEmailNotification(id, recommitmentUpdate[key]);
       }
     }

@@ -14,11 +14,15 @@ export class RecommitmentCycleEntity extends BaseEntity {
   @Column({ name: 'end_date', type: 'timestamp' })
   endDate: Date;
 
+  @Column({ name: 'reinitiation_end_date', type: 'timestamp', nullable: true })
+  reinitiationEndDate: Date;
+
   toResponseObject(): RecommitmentCycleRO {
     return {
       year: this.year,
       startDate: this.startDate,
       endDate: this.endDate,
+      reinitiationEndDate: this.reinitiationEndDate,
     };
   }
 
