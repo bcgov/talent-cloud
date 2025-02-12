@@ -11,7 +11,7 @@ import { useParams } from 'react-router';
 const usePersonnel = (): {
   personnel: Personnel | undefined;
   updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
-  fetch: () => void;
+  fetch: () => Promise<void>;
   profileData: ProfileData;
   roles?: Role[];
   loading?: boolean;
