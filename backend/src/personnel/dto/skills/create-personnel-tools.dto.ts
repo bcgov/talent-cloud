@@ -1,13 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { ToolsProficiency } from '../../common/enums/bcws';
+import { ToolsName, ToolsProficiency } from '../../../common/enums/bcws';
 
 export class CreatePersonnelToolsDTO {
   @ApiProperty({
     description: 'Tool id',
     required: true,
   })
-  toolId: number;
+  toolId?: number;
+
+  @ApiProperty({
+    description: 'Tool id',
+    required: true,
+  })
+  name?: ToolsName;
 
   @ApiProperty({
     description: 'Proficiency level',

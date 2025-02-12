@@ -3,6 +3,12 @@ import { IsOptional } from 'class-validator';
 
 export class PersonnelCertificationRO {
   @ApiProperty({
+    description: 'Certification ID',
+    required: true,
+  })
+  id?: number;
+
+  @ApiProperty({
     description: 'Certification name',
     required: true,
   })
