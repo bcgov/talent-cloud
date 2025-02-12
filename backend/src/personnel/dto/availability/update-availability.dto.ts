@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AvailabilityType } from '../../common/enums/availability-type.enum';
+import { AvailabilityType } from '../../../common/enums/availability-type.enum';
 
 export class UpdateAvailabilityDTO {
   @ApiProperty({
