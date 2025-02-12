@@ -1,7 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Program, RequestWithRoles } from '../auth/interface';
+import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
@@ -56,6 +56,33 @@ export class RecommitmentService {
       [Program.BCWS, Program.EMCR].includes(key as Program),
     );
     const personnel = await this.personnelService.findOne(id);
+
+    if (!req.roles.includes(Role.COORDINATOR)) {
+      if (
+        req.roles.includes(Role.MEMBER) &&
+        !req.roles.includes(Role.SUPERVISOR) &&
+        id !== personnel.id
+      ) {
+        throw new ForbiddenException('Members can only edit their own recommitment.');
+      }
+    
+      if (
+        req.roles.includes(Role.SUPERVISOR) &&
+        !req.roles.includes(Role.MEMBER) &&
+        req.idir !== personnel.supervisorEmail
+      ) {
+        throw new ForbiddenException(`Supervisors can only edit their member's recommitment.`);
+      }
+    
+      if (
+        req.roles.includes(Role.MEMBER) &&
+        req.roles.includes(Role.SUPERVISOR) &&
+        id !== personnel.id &&
+        req.idir !== personnel.supervisorEmail
+      ) {
+        throw new ForbiddenException('No permission to edit this profile.');
+      }
+    }
 
     if (recommitmentUpdate.supervisorInformation) {
       await this.personnelService.updatePersonnelSupervisorInformation(
