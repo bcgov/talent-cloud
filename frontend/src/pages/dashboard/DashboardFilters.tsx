@@ -6,7 +6,7 @@ import {
   Button,
   GroupedMultiSelect,
 } from '@/components';
-import { SingleSelect } from '@/components/filters/SingleSelect';
+import { SingleSelect } from '@/components/ui/SingleSelect';
 import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ButtonTypes, Filters, Program } from '@/common';
 import { Checkbox } from '@material-tailwind/react';

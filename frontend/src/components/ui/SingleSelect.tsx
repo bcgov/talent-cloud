@@ -11,8 +11,8 @@ import {
 // ui
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
-import { Chip } from '../ui';
-import { classes, menuItemClass } from './classes';
+import { Chip } from '.';
+import { classes, menuItemClass } from '../filters/classes';
 
 // types
 import type { AvailabilityType } from '@/common';

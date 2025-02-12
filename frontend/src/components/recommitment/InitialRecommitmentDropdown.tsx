@@ -1,4 +1,4 @@
-import { SingleSelect } from '../filters/SingleSelect';
+import { SingleSelect } from '../ui/SingleSelect';
 import { Program } from '@/common';
 
 export const InitialRecommitmentDropdown = ({
