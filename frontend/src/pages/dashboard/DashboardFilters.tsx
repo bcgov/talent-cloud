@@ -1,16 +1,17 @@
+// ui
+import { AvailabilityFilter } from '@/components/filters/AvailabilityFilter';
 import {
-  MultiSelectGroup,
-  CascadingMenu,
-  Search,
-  DatePicker,
   Button,
+  CascadingMenu,
   GroupedMultiSelect,
+  MultiSelectGroup,
+  Search,
 } from '@/components';
-import { SingleSelect } from '@/components/filters/SingleSelect';
-import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ButtonTypes, Filters, Program } from '@/common';
 import { Checkbox } from '@material-tailwind/react';
-import { format, parse } from 'date-fns';
+
+// hooks
+import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 
 export const DashboardFilters = ({
   searchParams,
@@ -41,6 +42,7 @@ export const DashboardFilters = ({
           searchInputValue={searchInputValue}
         />
       </div>
+
       <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-5">
         <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-4">
           <div className="col-span-1">
@@ -139,54 +141,13 @@ export const DashboardFilters = ({
           </div>
         )}
       </div>
-      <div className="col-span-1 mt-12 lg:mt-0 lg:col-span-3">
-        <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3">
-          <div className="col-span-1">
-            <SingleSelect
-              field={fields.availabilityType}
-              label="Availability"
-              value={searchParams.get('availabilityType') ?? ''}
-              setSearchParams={setSearchParams}
-              searchParams={searchParams}
-              handleClose={() => {
-                searchParams.delete('availabilityType');
-                searchParams.delete('availabilityFromDate');
-                searchParams.delete('availabilityToDate');
-                setSearchParams({ ...Object.fromEntries(searchParams) });
-              }}
-            />
-          </div>
-          <div className="col-span-1 md:col-span-2">
-            <DatePicker
-              field={fields.availabilityDates}
-              label="Availability Date Range"
-              value={{
-                from: parse(
-                  searchParams.get('availabilityFromDate') ??
-                    format(new Date(), 'yyyy-MM-dd'),
-                  'yyyy-MM-dd',
-                  new Date(),
-                ),
-                to: parse(
-                  searchParams.get('availabilityToDate') ??
-                    format(new Date(), 'yyyy-MM-dd'),
-                  'yyyy-MM-dd',
-                  new Date(),
-                ),
-              }}
-              searchParams={searchParams}
-              setSearchParams={setSearchParams}
-              disabled={!searchParams.get('availabilityType')}
-              reset={() => {
-                searchParams.delete('availabilityToDate');
-                searchParams.delete('availabilityFromDate');
-                searchParams.delete('availabilityType');
-                setSearchParams({ ...Object.fromEntries(searchParams) });
-              }}
-            />
-          </div>
-        </div>
-      </div>
+
+      <AvailabilityFilter
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        program={program}
+      />
+
       <div
         className={
           program === Program.BCWS

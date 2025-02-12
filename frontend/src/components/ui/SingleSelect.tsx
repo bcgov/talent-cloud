@@ -1,7 +1,5 @@
+// react
 import { Fragment } from 'react';
-import { classes, menuItemClass } from './classes';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import {
   Menu,
   MenuButton,
@@ -9,76 +7,79 @@ import {
   MenuItems,
   Transition,
 } from '@headlessui/react';
-import { Chip } from '../ui';
+
+// ui
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronUpIcon } from '@heroicons/react/24/solid';
+import { Chip } from '.';
+import { classes, menuItemClass } from '../filters/classes';
+
+// types
 import type { AvailabilityType } from '@/common';
-import { AvailabilityTypeName, Filters } from '@/common';
-import { format } from 'date-fns';
+import { AvailabilityTypeName } from '@/common';
+
+// util
+import { getLabelFromValue } from '@/utils';
 
 export const SingleSelect = ({
-  label,
   field,
-  handleClose,
+  handleChange,
+  handleClose = () => {},
+  label,
+  placeholder = 'placeholder',
+  styleProp,
+  useChip = false,
   value,
-  searchParams,
-  setSearchParams,
 }: {
-  label: string;
   field: any;
-  handleClose: () => void;
+  handleChange?: any;
+  handleClose?: () => void;
+  label?: string;
+  placeholder?: string;
+  styleProp?: string;
+  useChip?: boolean;
   value?: string;
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: any) => any;
 }) => {
-  const placeholder = 'Select availability type';
-  const onChange = (value: string) => {
-    const date = new Date();
-    searchParams.set(field.name, value);
-    if (!searchParams.get(Filters.AVAILABILITY_FROM_DATE)) {
-      searchParams.set(
-        Filters.AVAILABILITY_FROM_DATE,
-        format(
-          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-          'yyyy-MM-dd',
-        ),
-      );
-    }
-    if (!searchParams.get(Filters.AVAILABILITY_TO_DATE)) {
-      searchParams.set(
-        Filters.AVAILABILITY_TO_DATE,
-        format(
-          new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-          'yyyy-MM-dd',
-        ),
-      );
-    }
-    setSearchParams({ ...Object.fromEntries(searchParams) });
-  };
+  // set menu style
+  const menuStyle = field.name ? menuItemClass[field.name] : classes.menu.container;
+
   return (
     <>
-      <span className="label">{label}</span>
+      {label && <span className="label">{label}</span>}
       <Menu as="div" className="relative inline-block text-left w-full">
         {({ open }) => (
           <>
             {value ? (
-              <div className={menuItemClass[field.name]}>
-                <Chip
-                  value={value}
-                  label={AvailabilityTypeName[value as AvailabilityType]}
-                  name={field.name}
-                  handleClose={handleClose}
-                />
-                <MenuButton aria-label="Single Select Menu Button" id={field.name}>
+              useChip ? (
+                <div className={menuStyle}>
+                  {' '}
+                  <Chip
+                    value={value}
+                    label={AvailabilityTypeName[value as AvailabilityType]}
+                    name={field.name}
+                    handleClose={handleClose}
+                  />
+                </div>
+              ) : (
+                <MenuButton
+                  aria-label="Single Select Menu Button"
+                  id={field.name}
+                  className={open ? `${menuStyle} ${styleProp}` : menuStyle}
+                >
+                  <p className={classes.menu.listItem}>
+                    {getLabelFromValue(field.options, value)}
+                  </p>
                   <ChevronDownIcon
                     className="-mr-1 h-5 w-5 text-icon"
                     aria-hidden="true"
                     aria-label="close"
                   />
                 </MenuButton>
-              </div>
+              )
             ) : (
               <MenuButton
                 id={field.name}
-                className={menuItemClass[field.name]}
+                className={open ? `${menuStyle} ${styleProp}` : menuStyle}
                 aria-label="Single Select Menu Button"
               >
                 <p className={classes.menu.placeholder}>{placeholder}</p>
@@ -113,7 +114,9 @@ export const SingleSelect = ({
                     <MenuItem key={itm.value}>
                       <button
                         aria-label="Single Select Menu Button"
-                        onClick={() => onChange(itm.value)}
+                        onClick={() => {
+                          handleChange && handleChange(itm.value);
+                        }}
                         className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                       >
                         {itm.label}

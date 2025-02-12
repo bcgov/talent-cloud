@@ -35,3 +35,15 @@ export const formatPhone = (value?: string): string | undefined => {
     return value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   else return undefined;
 };
+
+export const getLabelFromValue = (
+  options: [{ value: string; label: string }],
+  value: string,
+) => {
+  for (const option of options) {
+    if (option.value === value) {
+      return option.label;
+    }
+  }
+  return '';
+};
