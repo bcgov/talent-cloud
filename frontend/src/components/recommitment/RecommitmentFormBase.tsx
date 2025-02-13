@@ -465,9 +465,14 @@ export const RecommitmentFormBase = ({
     if (currentComponentType === SupervisorForm) {
       const { firstName, lastName, email, phone } = supervisorInformation;
       const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(email);
-      const isValidPhone = phone && phone !== '' ?  /(\d{3})(\d{3})(\d{4})/.test(phone) : true
+      const isValidPhone =
+        phone && phone !== '' ? /(\d{3})(\d{3})(\d{4})/.test(phone) : true;
       return Boolean(
-        firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail && isValidPhone,
+        firstName?.trim() &&
+          lastName?.trim() &&
+          email?.trim() &&
+          isValidEmail &&
+          isValidPhone,
       );
     }
 
@@ -520,31 +525,31 @@ export const RecommitmentFormBase = ({
 
         {currentComponent}
         <Transition
-        show={errorMessage !== null}
-        appear={true}
-        enter="ease-out duration-100"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="ease-in duration-200"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <div>
-          {errorMessage && (
-            <Banner
-              title={'Error'}
-              content={errorMessage}
-              type={BannerType.ERROR}
-              onClose={() => {
-                setErrorMessage(null);
-                onClose();
-              }}
-            />
-          )}
-        </div>
-      </Transition>
+          show={errorMessage !== null}
+          appear={true}
+          enter="ease-out duration-100"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            {errorMessage && (
+              <Banner
+                title={'Error'}
+                content={errorMessage}
+                type={BannerType.ERROR}
+                onClose={() => {
+                  setErrorMessage(null);
+                  onClose();
+                }}
+              />
+            )}
+          </div>
+        </Transition>
 
-        <div className="flex flex-row space-x-6 pt-4 justify-end px-8 border-t-2 border-defaultGray">
+        <div className="flex flex-row space-x-6 pt-4 justify-end px-8 border-t-2 border-dark-500">
           <Button
             variant={ButtonTypes.PRIMARY}
             type="button"
@@ -572,7 +577,6 @@ export const RecommitmentFormBase = ({
           />
         </div>
       </div>
-      
     </>
   );
 };
