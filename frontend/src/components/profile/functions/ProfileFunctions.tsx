@@ -14,6 +14,7 @@ import type { ExperienceInterface, FunctionType, Personnel } from '@/common';
 import { Experience } from '@/common';
 import { ProfileFunctionEdit } from './ProfileFunctionEdit';
 import { DialogUI } from '@/components/ui';
+import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
 
 export const ProfileFunctions = ({
   functions,
@@ -23,7 +24,7 @@ export const ProfileFunctions = ({
 }: {
   functions: FunctionType[];
   personnel: Personnel;
-  updatePersonnel: (props: Partial<Personnel>) => void;
+  updatePersonnel: (props: Partial<Personnel>, endpoint?: PersonnelEndpoint) => void;
   allowEditing: boolean;
 }) => {
   const [open, setOpen] = useState(1);
@@ -65,7 +66,7 @@ export const ProfileFunctions = ({
   };
   const [openEditFunctionsPopUp, setOpenEditFunctionsPopUp] = useState(false);
   const savePersonnelExperiences = async (experiences: ExperienceInterface[]) => {
-    await updatePersonnel({ experiences });
+    updatePersonnel({ experiences }, PersonnelEndpoint.Experiences);
     setOpenEditFunctionsPopUp(false);
   };
   const handleOpenEditFunctionsPopUp = (e: React.MouseEvent<HTMLElement>) => {
@@ -127,24 +128,24 @@ export const ProfileFunctions = ({
                     <div className="basis-1/2">
                       <p className="flex flex-row gap-2">
                         {f.name}
-                        {f.name === personnel.firstChoiceFunction &&
+                        {f.name === personnel.firstChoiceFunction && (
                           <Chip
                             value="1st Choice"
                             className="rounded-full capitalize"
                           />
-                        }
-                        {f.name === personnel.secondChoiceFunction &&
+                        )}
+                        {f.name === personnel.secondChoiceFunction && (
                           <Chip
                             value="2nd Choice"
                             className="rounded-full bg-warningBannerLight text-ministry capitalize"
                           />
-                        }
-                        {f.name === personnel.thirdChoiceFunction &&
+                        )}
+                        {f.name === personnel.thirdChoiceFunction && (
                           <Chip
                             value="3rd Choice"
                             className="rounded-full bg-green-100 text-ministry capitalize"
                           />
-                        }
+                        )}
                       </p>
                       <span></span>
                     </div>

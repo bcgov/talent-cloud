@@ -4,18 +4,18 @@ import DetailsSection from '../profile/details/DetailsSection';
 import { ProfileSectionHeader } from '../profile/common';
 import { Button, DialogUI } from '@/components/ui';
 import { MemberProfileEditForm } from '../profile/forms';
-import type { Personnel } from '@/common';
+import type { Member } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import type { FormikValues } from 'formik';
 
 export const MemberProfileDetails = ({
-  personnel,
+  member,
   profileData,
-  updatePersonnel,
+  updateMember,
 }: {
-  personnel: Personnel;
+  member: Member;
   profileData: any;
-  updatePersonnel: (personnel: FormikValues) => Promise<void>;
+  updateMember: (member: FormikValues) => Promise<void>;
 }) => {
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState<boolean>(false);
   const [tooltip, setTooltip] = useState<{
@@ -99,10 +99,10 @@ export const MemberProfileDetails = ({
         style={'lg:w-2/3 xl:w-1/2'}
       >
         <MemberProfileEditForm
-          personnel={personnel}
+          member={member}
           open={openEditProfilePopUp}
           handleClose={handleOpenEditProfilePopUp}
-          updatePersonnel={updatePersonnel}
+          updateMember={updateMember}
           sectionKey={sectionToEdit}
           program={Program.ALL}
         />

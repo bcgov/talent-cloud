@@ -7,12 +7,11 @@ import {
   MemberProfileEditPreferences,
   ProfileEditSkills,
 } from '@/components';
-import type { BcwsRoleInterface, FunctionType, Personnel } from '@/common';
+import type { BcwsRoleInterface, FunctionType, Member } from '@/common';
 import {
   Program,
   // type BcwsRoleInterface,
   // type FunctionType,
-  type MemberProfile,
 } from '@/common';
 import { useState } from 'react';
 import { ProfileSectionHeader } from '../profile/common';
@@ -21,17 +20,17 @@ import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 export const MemberAvailabilityTab = ({
   bcwsRoles,
   functions,
-  personnel,
+  member,
   profileData,
-  updatePersonnel,
+  updateMember,
 }: {
   bcwsRoles: BcwsRoleInterface[];
   functions: FunctionType[];
-  personnel: MemberProfile;
+  member: Member;
   profileData: any;
-  updatePersonnel: (personnel: Partial<Personnel>) => Promise<void>;
+  updateMember: (member: Member, endpoint?: string) => Promise<void>;
 }) => {
-  const defaultTab = personnel.bcws ? Program.BCWS : Program.EMCR;
+  const defaultTab = member.bcws ? Program.BCWS : Program.EMCR;
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
   const [openEditSections, setOpenEditSections] = useState(false);
   const [openEditSkills, setOpenEditSkills] = useState(false);
@@ -75,7 +74,7 @@ export const MemberAvailabilityTab = ({
           title="My Schedule"
           description={<ScheduleDescription />}
         >
-          <MemberScheduler personnelId={personnel.id} />
+          <MemberScheduler memberId={member.id} />
         </ProfileSectionHeader>
       </div>
       <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
@@ -86,7 +85,7 @@ export const MemberAvailabilityTab = ({
           onButtonClick={handleOpenEditSections}
         >
           <Tabs value={activeSectionRolesTab}>
-            {personnel.bcws && personnel.emcr && (
+            {member.bcws && member.emcr && (
               <TabsHeader
                 className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 whitespace-nowrap w-fit gap-6"
                 indicatorProps={{
@@ -111,11 +110,11 @@ export const MemberAvailabilityTab = ({
               </TabsHeader>
             )}
             <TabsBody>
-              {personnel.bcws && (
+              {member.bcws && (
                 <TabPanel value="bcws" className="px-0">
                   <MemberItemList
                     data={
-                      personnel.bcws.roles?.map((r) => ({
+                      member.bcws.roles?.map((r) => ({
                         id: r.id,
                         section: SectionName[r.section],
                         role: BcwsRoleName[r.role],
@@ -134,26 +133,26 @@ export const MemberAvailabilityTab = ({
                     ]}
                     preferences={{
                       first:
-                        personnel.bcws?.firstChoiceSection &&
-                        SectionName[personnel.bcws.firstChoiceSection],
+                        member.bcws?.firstChoiceSection &&
+                        SectionName[member.bcws.firstChoiceSection],
                       second:
-                        personnel.bcws?.secondChoiceSection &&
-                        SectionName[personnel.bcws.secondChoiceSection],
+                        member.bcws?.secondChoiceSection &&
+                        SectionName[member.bcws.secondChoiceSection],
                       third:
-                        personnel.bcws?.thirdChoiceSection &&
-                        SectionName[personnel.bcws.thirdChoiceSection],
+                        member.bcws?.thirdChoiceSection &&
+                        SectionName[member.bcws.thirdChoiceSection],
                     }}
                   />
                 </TabPanel>
               )}
-              {personnel.emcr && (
+              {member.emcr && (
                 <TabPanel value="emcr" className="px-0">
                   <MemberItemList
                     data={
-                      personnel.emcr.experiences?.map((e) => ({
+                      member.emcr.experiences?.map((e) => ({
                         id: e.function.id,
                         section: e.function.name,
-                        experience: 'none',
+                        experience: e.experienceType,
                       })) || []
                     }
                     columns={[
@@ -163,12 +162,9 @@ export const MemberAvailabilityTab = ({
                       },
                     ]}
                     preferences={{
-                      first:
-                        personnel.emcr?.firstChoiceFunction,
-                      second:
-                        personnel.emcr?.secondChoiceFunction,
-                      third:
-                        personnel.emcr?.thirdChoiceFunction,
+                      first: member.emcr?.firstChoiceFunction,
+                      second: member.emcr?.secondChoiceFunction,
+                      third: member.emcr?.thirdChoiceFunction,
                     }}
                   />
                 </TabPanel>
@@ -185,10 +181,10 @@ export const MemberAvailabilityTab = ({
           onButtonClick={handleOpenEditSkills}
         >
           <MemberSkillsAndCertifications
-            personnel={personnel}
+            member={member}
             profileData={profileData}
             allowEditing={true}
-            updatePersonnel={() => {}}
+            updateMember={() => {}}
           />
         </ProfileSectionHeader>
 
@@ -201,33 +197,33 @@ export const MemberAvailabilityTab = ({
         >
           <MemberProfileEditPreferences
             bcws={
-              personnel.bcws
+              member.bcws
                 ? {
                     allRoles: bcwsRoles,
-                    originalRoles: personnel.bcws.roles || [],
+                    originalRoles: member.bcws.roles || [],
                     sectionChoices: {
-                      firstChoiceSection: personnel.bcws?.firstChoiceSection,
-                      secondChoiceSection: personnel.bcws?.secondChoiceSection,
-                      thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
+                      firstChoiceSection: member.bcws?.firstChoiceSection,
+                      secondChoiceSection: member.bcws?.secondChoiceSection,
+                      thirdChoiceSection: member.bcws?.thirdChoiceSection,
                     },
                   }
                 : undefined
             }
             emcr={
-              personnel.emcr
+              member.emcr
                 ? {
                     allFunctions: functions,
-                    originalExperiences: personnel.emcr.experiences || [],
+                    originalExperiences: member.emcr.experiences || [],
                     sectionChoices: {
-                      firstChoiceSection: personnel.emcr?.firstChoiceFunction,
-                      secondChoiceSection: personnel.emcr?.secondChoiceFunction,
-                      thirdChoiceSection: personnel.emcr?.thirdChoiceFunction,
+                      firstChoiceSection: member.emcr?.firstChoiceFunction,
+                      secondChoiceSection: member.emcr?.secondChoiceFunction,
+                      thirdChoiceSection: member.emcr?.thirdChoiceFunction,
                     },
                   }
                 : undefined
             }
             handleClose={handleOpenEditSections}
-            handleSave={updatePersonnel}
+            handleSave={updateMember}
           />
         </DialogUI>
         {/* Skills and Certs */}
@@ -239,16 +235,20 @@ export const MemberAvailabilityTab = ({
           style="w-5/6"
         >
           <ProfileEditSkills
-            originalLanguages={personnel.languages || []}
-            originalTools={personnel.tools || []}
-            originalCerts={personnel.certifications || []}
+            originalLanguages={member.languages || []}
+            originalTools={member.tools || []}
+            originalCerts={member.certifications || []}
             handleClose={handleOpenEditSkills}
             handleSave={(newSkills) => {
-              updatePersonnel({
-                languages: newSkills.newLanguages,
-                tools: newSkills.newTools,
-                certifications: newSkills.newCertifications,
-              });
+              updateMember(
+                {
+                  ...member,
+                  languages: newSkills.newLanguages,
+                  tools: newSkills.newTools,
+                  certifications: newSkills.newCertifications,
+                },
+                'skills',
+              );
               setOpenEditSkills(false);
             }}
           />

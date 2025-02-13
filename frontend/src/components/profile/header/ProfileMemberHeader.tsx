@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Tab, TabsHeader } from '@material-tailwind/react';
-import type { Personnel } from '@/common';
+import type { Member } from '@/common';
 import { Tabs, TabNames } from '@/common';
 import { renderStatus } from './helpers';
 
 export const ProfileMemberHeader = ({
   currentTab = Tabs.AVAILABILITY,
-  personnel,
+  member,
 }: {
   currentTab: string;
-  personnel: Personnel;
+  member: Member;
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
 
@@ -18,18 +18,18 @@ export const ProfileMemberHeader = ({
       <div className="px-8 float-left hidden lg:inline-block">
         <div className="w-32 h-32 grid rounded-full bg-primaryBlue justify-center content-center">
           <h1 className="text-white font-bold text-5xl">
-            {personnel.firstName?.charAt(0)}
-            {personnel.lastName?.charAt(0)}
+            {member.firstName?.charAt(0)}
+            {member.lastName?.charAt(0)}
           </h1>
         </div>
       </div>
       <div className="flex flex-col">
         <div className="flex flex-col content-center items-start pl-8 lg:pl-0 space-y-6 py-12 h-auto lg:flex-row lg:space-y-0 lg:py-0 lg:items-center lg:pb-4">
           <h2 className="font-semibold px-2">
-            {personnel.firstName} {personnel.lastName}
+            {member.firstName} {member.lastName}
           </h2>
 
-          <div className="flex flex-col space-y-2">{renderStatus(personnel)}</div>
+          <div className="flex flex-col space-y-2">{renderStatus(member)}</div>
         </div>
         <div className="w-fit">
           <TabsHeader

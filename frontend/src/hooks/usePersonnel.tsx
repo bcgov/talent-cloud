@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import type { Personnel, Role } from '@/common';
+import type { BcwsPersonnelRoleInterface, ExperienceInterface, Personnel, Role, UpdateBcwsRoles } from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { useRoleContext } from '@/providers';
-import { bcwsData, emcrData } from './profileData';
+import { bcwsData, emcrData } from './coordinatorProfileData';
 import type { ProfileData } from '@/pages/profile/types';
 import { Program } from '@/common';
 import { useParams } from 'react-router';
+import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
+import { Training } from '@/common/enums/trainings.enum';
 
 const usePersonnel = (): {
   personnel: Personnel | undefined;
@@ -21,6 +23,8 @@ const usePersonnel = (): {
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
   const { profileId } = useParams();
+  const [refetch, setRefetch] = useState(false);  
+
 
   const fetch = async () => {
     try {
@@ -36,19 +40,44 @@ const usePersonnel = (): {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [refetch]);
 
-  const updatePersonnel = async (personnel: FormikValues) => {
-    if (personnel?.newRoles) {
-      personnel.roles = personnel.newRoles;
+  const updatePersonnel = async (personnel: FormikValues, endpoint = '') => {
+    //TODO: refactor this to use the training array on the FE or set as a single field on the emcr personnel in the BE
+    if(personnel.icsTraining){
+      if(personnel.icsTraining === 'true' || personnel.icsTraining === true){
+        personnel.trainings = [{name: Training.ICS_TRAINING_NAME}];
+        delete personnel.icsTraining;
+      } else {
+        personnel.trainings = [];
+        delete personnel.icsTraining;
+      }
+    }
+if (endpoint === PersonnelEndpoint.Roles) {
+      const roles:       UpdateBcwsRoles[]
+      = personnel.roles.map((r: BcwsPersonnelRoleInterface) => ({
+        roleId: r.id,
+        expLevel: r.expLevel,
+      }));
+      personnel = {...personnel, roles};
+} 
+    if (endpoint === PersonnelEndpoint.Experiences) {
+      personnel = personnel.experiences.map((e: ExperienceInterface) => ({
+        functionId: e.id,
+        id: e.id,
+        experienceType: e.experienceType,
+      }));
     }
     try {
       const res =
         program &&
-        (await AxiosPrivate.patch(encodeURI(`/${program}/${profileId}`), personnel));
+        (await AxiosPrivate.patch(
+          encodeURI(`/${program}/${profileId}/${endpoint}`),
+          personnel,
+        ));
       // update endpoint does not return the same data as the GET endpoint, so triggering refetch
-      if (res) {
-        await fetch();
+      if(res){
+        setRefetch(!refetch);
       }
     } catch (e) {
       //TODO error toast

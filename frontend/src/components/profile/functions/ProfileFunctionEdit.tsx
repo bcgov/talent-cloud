@@ -50,6 +50,7 @@ export const ProfileFunctionEdit = ({
             id,
             experienceType: Experience[experienceType as keyof typeof Experience],
             functionName: allFunctions.find((f) => f.id === id)!.name,
+            function: allFunctions.find((f) => f.id === id)!
           },
         ]);
       }
