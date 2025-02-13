@@ -1,3 +1,4 @@
+// react
 import {
   Menu,
   MenuButton,
@@ -5,25 +6,39 @@ import {
   MenuItems,
   Transition,
 } from '@headlessui/react';
+import { Fragment, useEffect } from 'react';
+
+// ui
 import { classes } from '@/components/filters/classes';
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-import { Filters,  StatusNames } from '@/common';
-import { Fragment } from 'react';
+
+// common
+import { Filters, StatusNames } from '@/common';
+
+// util
+import { getStatusLabel } from '@/utils';
 
 export const StatusFilter = ({
   searchParams,
   setSearchParams,
+  statusFilter,
 }: {
   searchParams: any;
   setSearchParams: (searchParams: any) => any;
+  statusFilter: StatusNames[];
 }) => {
-  const statusFilter = [StatusNames.ALL, StatusNames.NEW, StatusNames.RECOMMITTED];
   const value = searchParams.get(Filters.AVAILABLE_STATUS) ?? StatusNames.ALL;
+  const tab = searchParams.get(Filters.STATUS);
 
   const onChange = (value: string) => {
     searchParams.set(Filters.AVAILABLE_STATUS, value);
     setSearchParams({ ...Object.fromEntries(searchParams) });
   };
+
+  // reset filters on tab change
+  useEffect(() => {
+    searchParams.set(Filters.AVAILABLE_STATUS, StatusNames.ALL);
+  }, [tab]);
   return (
     <>
       <div className="w-full border border-slate-500"></div>
@@ -35,7 +50,7 @@ export const StatusFilter = ({
                 className={classes.menu.container}
                 aria-label="Single Select Menu Button"
               >
-                <p className={classes.menu.placeholder}>{value}</p>
+                <p className={classes.menu.placeholder}>{getStatusLabel(value)}</p>
                 {open ? (
                   <ChevronUpIcon aria-hidden="true" aria-label="open" />
                 ) : (
@@ -61,7 +76,7 @@ export const StatusFilter = ({
                           onClick={() => onChange(itm)}
                           className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                         >
-                          {itm}
+                          {getStatusLabel(itm)}
                         </button>
                       </MenuItem>
                     ))}

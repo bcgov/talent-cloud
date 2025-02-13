@@ -336,6 +336,10 @@ export class PersonnelService {
         year: new Date().getFullYear(),
       });
     }
+    // if (availableStatus && availableStatus === 'Missed') {...}
+    // if (availableStatus && availableStatus === 'MemberDeclined') {...}
+    // if (availableStatus && availableStatus === 'SupervisorDeclined') {...}
+    // if (availableStatus && availableStatus === 'Other') {...}
 
     if (name) {
       queryBuilder.andWhere(
@@ -760,7 +764,9 @@ export class PersonnelService {
 
       .leftJoinAndSelect('experiences.function', 'function');
 
-    qb.where('LOWER(personnel.email) = :email', { email: req.idir.toLowerCase() });
+    qb.where('LOWER(personnel.email) = :email', {
+      email: req.idir.toLowerCase(),
+    });
 
     const personnelData = await qb.getOne();
     this.logger.log(`User is a member`);
@@ -771,12 +777,15 @@ export class PersonnelService {
     email: string,
   ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.where('LOWER(personnel.email) = :email', { email: email.toLowerCase() }).orWhere(
-      'LOWER(personnel.supervisorEmail) = :supervisorEmail',
-      { supervisorEmail: email.toLowerCase() }, 
-    );
+    qb.where('LOWER(personnel.email) = :email', {
+      email: email.toLowerCase(),
+    }).orWhere('LOWER(personnel.supervisorEmail) = :supervisorEmail', {
+      supervisorEmail: email.toLowerCase(),
+    });
     const people = await qb.getMany();
-    const isMember = people.map((itm) => itm.email.toLowerCase()).includes(email.toLowerCase());
+    const isMember = people
+      .map((itm) => itm.email.toLowerCase())
+      .includes(email.toLowerCase());
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail?.toLowerCase())
       .includes(email.toLowerCase());

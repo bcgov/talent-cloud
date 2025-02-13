@@ -1,7 +1,16 @@
-import { useTable } from '@/hooks';
+// react
+import { useState } from 'react';
+
+// hooks
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { useRoleContext } from '@/providers';
-import { Status } from '@/common';
+import { useTable } from '@/hooks';
+
+// common
 import { Filters, Role } from '@/common';
+import { Status, StatusNames } from '@/common';
+
+// ui
 import {
   DialogUI,
   Table,
@@ -9,14 +18,14 @@ import {
   TableFooterPageSelect,
   Tabs,
 } from '@/components';
-import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
-import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
-import { button as buttonClass } from '@/components/ui/classes';
-import { useState } from 'react';
-import { MemberStatusGuide } from './MemberStatusGuide';
 import { DashboardFilters } from './DashboardFilters';
+import { MemberStatusGuide } from './MemberStatusGuide';
+import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
 import { StatusFilter } from '@/components/filters/StatusFilter';
+import { button as buttonClass } from '@/components/ui/classes';
+
+// icons
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
@@ -86,9 +95,28 @@ const Dashboard = () => {
                 </button>
               )}
             </div>
-
+            {/* Status filter for ACTIVE tab*/}
             {searchParams.get(Filters.STATUS) === Status.ACTIVE && (
               <StatusFilter
+                statusFilter={[
+                  StatusNames.ALL,
+                  StatusNames.NEW,
+                  StatusNames.RECOMMITTED,
+                ]}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+              />
+            )}
+            {/* Status filter for INACTIVE tab */}
+            {searchParams.get(Filters.STATUS) === Status.INACTIVE && (
+              <StatusFilter
+                statusFilter={[
+                  StatusNames.ALL,
+                  StatusNames.MISSED,
+                  StatusNames.MEMBER_DECLINED,
+                  StatusNames.SUPERVISOR_DECLINED,
+                  StatusNames.OTHER,
+                ]}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
               />

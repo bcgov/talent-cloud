@@ -1,3 +1,6 @@
+// common
+import { StatusLabels, StatusNames } from '@/common';
+
 /**
  * offsetTimezoneDate
  * We tend to deal with dates as strings, but since the database stores them as dates as UTC, this helper function
@@ -46,4 +49,14 @@ export const getLabelFromValue = (
     }
   }
   return '';
+};
+
+export const getKeyByValue = (value: string, e: Object) => {
+  const indexOf = Object.values(e).indexOf(value);
+
+  return Object.keys(e)[indexOf];
+};
+
+export const getStatusLabel = (name: string) => {
+  return StatusLabels[getKeyByValue(name, StatusNames)];
 };
