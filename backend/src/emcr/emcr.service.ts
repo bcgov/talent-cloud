@@ -1,11 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, Brackets } from 'typeorm';
+import { Repository, In, Brackets, UpdateResult } from 'typeorm';
 import {
-  UpdateEmcrPersonnelDTO,
-  EmcrPersonnelExperienceDTO,
   CreatePersonnelEmcrDTO,
   GetEmcrPersonnelDTO,
+  UpdateEmcrPersonnelDTO,
 } from './dto';
 import { EmcrRO } from './ro';
 import { Role, Program } from '../auth/interface';
@@ -18,8 +17,8 @@ import {
   EmcrFunctionEntity,
 } from '../database/entities/emcr';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
 
 @Injectable()
 export class EmcrService {
@@ -28,8 +27,6 @@ export class EmcrService {
     private readonly personnelService: PersonnelService,
     @InjectRepository(EmcrPersonnelEntity)
     private readonly emcrPersonnelRepository: Repository<EmcrPersonnelEntity>,
-    @InjectRepository(EmcrExperienceEntity)
-    private readonly experiencesRepository: Repository<EmcrExperienceEntity>,
     @InjectRepository(EmcrTrainingEntity)
     private readonly trainingRepository: Repository<EmcrTrainingEntity>,
     @InjectRepository(EmcrFunctionEntity)
@@ -40,68 +37,50 @@ export class EmcrService {
   }
 
   /**
-   * Find personnel by id
+   * Update personnel after recommitment
    * @param id
-   * @returns
+   * @param status
    */
-
-  async updatePersonnelAfterRecommitment(id: string, status: Status) {
+  async updatePersonnelAfterRecommitment(
+    id: string,
+    status: Status,
+  ): Promise<UpdateResult> {
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
     qb.update(EmcrPersonnelEntity)
       .set({ status })
-      .where('personnel_id = :id', { id })
-      .execute();
+      .where('personnel_id = :id', { id });
+    return await qb.execute();
   }
-
   /**
-   * Update a personnel entity
+   *
+   * @param trainings
    * @param id
-   * @param personnel
    * @returns
    */
-  async updateEmcrPersonnel(
+  async updateTraining(
+    trainings: Partial<EmcrTrainingEntity>[],
     id: string,
-    personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
-  ) {
-    /**
-     * update personnel/bcws personnel
-     * @param id
-     * @param personnel
-     * @param role
-     * @returns
-     */
-    this.logger.log(`Updating personnel ${id}`);
-    personnel.emcr = {
-      ...personnel.emcr,
-      experiences: personnel.experiences,
-      firstNationExperienceLiving: personnel?.firstNationExperienceLiving,
-      firstNationExperienceWorking: personnel?.firstNationExperienceWorking,
-      peccExperience: personnel?.peccExperience,
-      preocExperience: personnel?.preocExperience,
-      emergencyExperience: personnel?.emergencyExperience,
-      icsTraining: personnel?.icsTraining,
-      firstAidLevel: personnel?.firstAidLevel,
-      firstAidExpiry: personnel?.firstAidExpiry,
-      psychologicalFirstAid: personnel?.psychologicalFirstAid,
-      trainings: personnel.trainings,
-      logisticsNotes: personnel.logisticsNotes,
-      coordinatorNotes: personnel.coordinatorNotes,
-      approvedBySupervisor: personnel.approvedBySupervisor,
-      dateApproved: personnel.dateApproved,
-      status: personnel.status,
-      firstChoiceSection: personnel.firstChoiceSection,
-      secondChoiceSection: personnel.secondChoiceSection,
-      thirdChoiceSection: personnel.thirdChoiceSection,
-      travelPreference: personnel.travelPreference,
-    };
-    Object.keys(personnel.emcr).forEach((key) => {
-      if (personnel.emcr[key] === undefined) {
-        delete personnel.emcr[key];
-      }
+  ): Promise<EmcrTrainingEntity[]> {
+    const emcrPerson = await this.emcrPersonnelRepository.findOneByOrFail({
+      personnelId: id,
     });
-
-    return await this.personnelService.updatePersonnelDatabase(id, personnel);
+    emcrPerson.trainings = trainings.map(
+      (training) => new EmcrTrainingEntity(training),
+    );
+    const updatedPerson = await this.emcrPersonnelRepository.save(emcrPerson);
+    return updatedPerson.trainings;
+  }
+  /**
+   * Update EMCR Personnel
+   * @param emcrPerson
+   * @param id
+   */
+  async updateEmcrPersonnel(
+    emcrPerson: UpdateEmcrPersonnelDTO,
+    id: string,
+  ): Promise<UpdateResult> {
+    return await this.emcrPersonnelRepository.update(id, emcrPerson);
   }
 
   /**
@@ -113,18 +92,25 @@ export class EmcrService {
    */
   async updatePersonnelExperiences(
     id: string,
-    experiences: EmcrPersonnelExperienceDTO[],
-    role: Role[],
-  ) {
-    const experienceEntities = experiences.map((e) => ({
-      functionId: e.id,
-      personnelId: id,
-      experienceType: e.experienceType,
-    }));
+    experiences: UpdateEmcrExperiencesDTO[],
+  ): Promise<EmcrExperienceEntity[]> {
+    const experienceEntities = experiences.map(
+      (e) =>
+        new EmcrExperienceEntity({
+          functionId: e.id,
+          personnelId: id,
+          experienceType: e.experienceType,
+        }),
+    );
+
+    const personnel = await this.emcrPersonnelRepository.findOneOrFail({
+      where: { personnelId: id },
+      relations: ['experiences'],
+    });
+    personnel.experiences = experienceEntities;
     try {
-      await this.experiencesRepository.delete({ personnelId: id });
-      await this.experiencesRepository.save(experienceEntities);
-      return this.getEmcrPersonnelById(role, id);
+      await this.emcrPersonnelRepository.save(personnel);
+      return personnel.experiences;
     } catch (e) {
       console.log(e);
     }

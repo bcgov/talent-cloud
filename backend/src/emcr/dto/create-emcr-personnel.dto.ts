@@ -77,8 +77,7 @@ export class CreatePersonnelEmcrDTO {
     example: ['ICS Training', 'THE_CORE', 'WEBEOC'],
   })
   @IsOptional()
-  @Type(() => EmcrTrainingEntity)
-  trainings: EmcrTrainingEntity[];
+  trainings: Partial<EmcrTrainingEntity>[];
 
   @ApiProperty({
     description: 'Experiences this personnel has had in specific functions',

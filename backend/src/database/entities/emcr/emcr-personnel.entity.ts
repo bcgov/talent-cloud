@@ -116,6 +116,7 @@ export class EmcrPersonnelEntity {
 
   @OneToMany(() => EmcrExperienceEntity, (e) => e.personnel, {
     cascade: true,
+    orphanedRowAction: 'delete'
   })
   experiences: EmcrExperienceEntity[];
 

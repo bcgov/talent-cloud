@@ -28,6 +28,7 @@ export class PersonnelCertificationEntity {
 
   toResponseObject(): PersonnelCertificationRO {
     return {
+      id: this.certificationId, 
       name: this.certification.name,
       expiry: this.expiry ?? null,
     };

@@ -7,7 +7,7 @@ import { EmcrExperienceRO } from '../../../emcr/ro';
 
 @Entity('emcr_function_experience')
 export class EmcrExperienceEntity {
-  @ManyToOne(() => EmcrPersonnelEntity, (e) => e.experiences)
+  @ManyToOne(() => EmcrPersonnelEntity, (e) => e.experiences, {orphanedRowAction: 'delete'})
   @JoinColumn({ name: 'personnel_id', referencedColumnName: 'personnelId' })
   personnel: EmcrPersonnelEntity;
 
@@ -29,11 +29,15 @@ export class EmcrExperienceEntity {
   })
   experienceType: Experience;
 
+  constructor(data?: Partial<EmcrExperienceEntity>) {
+    Object.assign(this, data);
+  }
+  
   toResponseObject(): EmcrExperienceRO {
     return {
       id: this.functionId,
       experienceType: this.experienceType,
-      function: this.function.toResponseObject(), 
+      function: this.function.toResponseObject(),
     };
   }
 }

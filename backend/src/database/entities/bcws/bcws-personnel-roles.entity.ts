@@ -3,6 +3,7 @@ import { BcwsPersonnelEntity } from './bcws-personnel.entity';
 import { BcwsRoleEntity } from './bcws-role.entity';
 import { BcwsPersonnelRoleRO } from '../../../bcws/ro';
 import { BcwsRoleName, ExperienceLevel } from '../../../common/enums/bcws';
+import { CreateBcwsPersonnelRolesDTO } from '../../../bcws/dto';
 
 @Entity('bcws_personnel_roles')
 export class BcwsSectionsAndRolesEntity {
@@ -27,7 +28,6 @@ export class BcwsSectionsAndRolesEntity {
     enumName: 'role-experience-level',
   })
   expLevel: ExperienceLevel;
-
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
       id: this.roleId,

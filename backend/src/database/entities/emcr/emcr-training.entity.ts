@@ -7,4 +7,8 @@ export class EmcrTrainingEntity {
 
   @Column({ name: 'name', type: 'varchar', length: 100 })
   name: string;
+
+  constructor(data: Partial<EmcrTrainingEntity>) {
+    Object.assign(this, data);
+  }
 }
