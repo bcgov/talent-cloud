@@ -126,7 +126,7 @@ export class AppController {
     this.logger.log('CHIPS');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$top=10`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$top=3`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -152,7 +152,7 @@ export class AppController {
     this.logger.log('TRAINING');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=10`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=3`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
