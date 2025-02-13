@@ -117,6 +117,7 @@ export class AppController {
     return await this.recommitmentService.checkRecommitmentPeriod();
   }
 
+  @Public()
   @Get('/chips')
   async chips() {
     if (process.env.ENV !== 'dev') {
