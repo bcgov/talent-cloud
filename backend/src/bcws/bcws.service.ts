@@ -3,17 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { CreatePersonnelBcwsDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
-import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { BcwsRO } from './ro';
 import { BcwsSectionsRO } from './ro/bcws-sections.ro';
 import { Role, Program } from '../auth/interface';
 import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
 import { TravelPreference } from '../common/enums/travel-preference.enum';
-import { BcwsPersonnelEntity } from '../database/entities/bcws';
+import {
+  BcwsPersonnelEntity,
+  BcwsSectionsAndRolesEntity,
+} from '../database/entities/bcws';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO } from '../personnel';
 import { PersonnelService } from '../personnel/personnel.service';
+import {
+  UpdateBcwsRolesAndPreferencesDTO,
+  UpdateBcwsRolesDTO,
+} from './dto/update-bcws-personnel-roles.dto';
+import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 
 @Injectable()
 export class BcwsService {
@@ -28,12 +34,12 @@ export class BcwsService {
   ) {
     this.logger.setContext(PersonnelService.name);
   }
-  /**
-   * Find personnel by id
-   * @param id
-   * @returns
-   */
-
+  
+/**
+ * Update personnel after recommitment
+ * @param id 
+ * @param status 
+ */
   async updatePersonnelAfterRecommitment(id: string, status: Status) {
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
@@ -42,48 +48,6 @@ export class BcwsService {
       .set({ status })
       .where('personnel_id = :id', { id })
       .execute();
-  }
-  /**
-   * update personnel/bcws personnel
-   * @param id
-   * @param personnel
-   * @param role
-   * @returns
-   */
-  async updateBcwsPersonnel(
-    id: string,
-    personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
-    role: Role[],
-  ) {
-    this.logger.log(`Updating personnel ${id}`);
-    personnel.bcws = {
-      ...personnel.bcws,
-      roles: personnel.roles,
-      approvedBySupervisor: personnel?.approvedBySupervisor,
-      parQ: personnel?.parQ,
-      respectfulWorkplacePolicy: personnel?.respectfulWorkplacePolicy,
-      willingnessStatement: personnel?.willingnessStatement,
-      orientation: personnel?.orientation,
-      logisticsNotes: personnel.logisticsNotes,
-      coordinatorNotes: personnel.coordinatorNotes,
-      liaisonFirstName: personnel.liaisonFirstName,
-      liaisonLastName: personnel.liaisonLastName,
-      liaisonPhoneNumber: personnel.liaisonPhoneNumber,
-      liaisonEmail: personnel.liaisonEmail,
-      dateApproved: personnel.dateApproved,
-      status: personnel.status,
-      firstChoiceSection: personnel.firstChoiceSection,
-      secondChoiceSection: personnel.secondChoiceSection,
-      thirdChoiceSection: personnel.thirdChoiceSection,
-      travelPreference: personnel.travelPreference,
-    };
-    Object.keys(personnel.bcws).forEach((key) => {
-      if (personnel.bcws[key] === undefined) {
-        delete personnel.bcws[key];
-      }
-    });
-    await this.personnelService.updatePersonnelDatabase(id, personnel);
-    return this.getBcwsPersonnelById(role, id);
   }
 
   /**
@@ -103,6 +67,44 @@ export class BcwsService {
         new BcwsPersonnelEntity(bcwsPersonnel),
       ),
     );
+  }
+  /**
+   * 
+   * @param bcws Update BCWS Personnel Data
+   * @param id 
+   */
+  async updateBcwsPersonnel(bcws: UpdateBcwsPersonnelDTO, id: string){
+    await this.bcwsPersonnelRepository.update(id, bcws);
+  }
+/**
+ * Update BCWS Roles
+ * @param id 
+ * @param preferences 
+ * @returns 
+ */
+  async updateRoles(
+    id: string,
+    preferences: UpdateBcwsRolesAndPreferencesDTO,
+  ): Promise<UpdateBcwsRolesDTO[]> {
+    const person = await this.bcwsPersonnelRepository.findOneOrFail({
+      where: { personnelId: id },
+    });
+    
+    
+
+    person.firstChoiceSection = preferences.firstChoiceSection ?? null;
+    person.secondChoiceSection = preferences.secondChoiceSection ?? null;
+    person.roles = preferences.roles.map(
+      (role) =>
+        new BcwsSectionsAndRolesEntity({
+          ...role,
+          personnelId: id,
+        }),
+    );
+
+    await this.bcwsPersonnelRepository.save(person);
+
+    return preferences.roles
   }
 
   /**

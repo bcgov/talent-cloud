@@ -14,12 +14,10 @@ import { AppLogger } from '../logger/logger.service';
 import { TemplateType, EmailTags } from '../mail/constants';
 import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
-import {
-  PersonnelRecommitmentDTO,
-  UpdatePersonnelRecommitmentDTO,
-} from '../personnel/dto/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
+import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
+import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
 
 @Injectable()
 export class RecommitmentService {
@@ -86,15 +84,15 @@ export class RecommitmentService {
 
     if (recommitmentUpdate.supervisorInformation) {
       await this.personnelService.updatePersonnelSupervisorInformation(
-        personnel,
+        personnel.id,
         {
-          supervisorEmail: recommitmentUpdate.supervisorInformation.email
+          supervisorEmail: recommitmentUpdate.supervisorInformation.supervisorEmail
             .toLowerCase()
             .trim(),
           supervisorFirstName:
-            recommitmentUpdate.supervisorInformation.firstName,
-          supervisorLastName: recommitmentUpdate.supervisorInformation.lastName,
-          supervisorPhone: recommitmentUpdate.supervisorInformation.phone,
+            recommitmentUpdate.supervisorInformation.supervisorFirstName,
+          supervisorLastName: recommitmentUpdate.supervisorInformation.supervisorLastName,
+          supervisorPhone: recommitmentUpdate.supervisorInformation.supervisorPhone,
         },
       );
     }
@@ -226,7 +224,7 @@ export class RecommitmentService {
    */
   async triggerEmailNotification(
     id: string,
-    recommitmentUpdate: UpdatePersonnelRecommitmentDTO,
+    recommitmentUpdate: ProgramRecommitmentDTO,
   ): Promise<void> {
     this.logger.log(recommitmentUpdate);
     const personnel = await this.recommitmentRepository.findOneOrFail({

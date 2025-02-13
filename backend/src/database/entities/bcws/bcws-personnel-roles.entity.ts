@@ -27,7 +27,9 @@ export class BcwsSectionsAndRolesEntity {
     enumName: 'role-experience-level',
   })
   expLevel: ExperienceLevel;
-
+constructor(data: Partial<BcwsSectionsAndRolesEntity>){
+    Object.assign(this, data);
+}
   toResponseObject(): BcwsPersonnelRoleRO {
     return {
       id: this.roleId,

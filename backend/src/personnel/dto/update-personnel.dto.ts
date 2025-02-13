@@ -39,3 +39,4 @@ export class UpdatePersonnelDTO extends IntersectionType(
   UpdateSupervisorInformationDTO,
   UpdateSkillsDTO,
 ) {}
+

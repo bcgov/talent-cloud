@@ -4,14 +4,13 @@ import { format, eachDayOfInterval, parse, differenceInDays } from 'date-fns';
 import {
   Brackets,
   DeleteResult,
-  In,
   Repository,
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
 import { CreatePersonnelDTO } from './dto/create-personnel.dto';
-import { GetAvailabilityDTO } from './dto/get-availability.dto';
-import { UpdateAvailabilityDTO } from './dto/update-availability.dto';
+import { GetAvailabilityDTO } from './dto/availability/get-availability.dto';
+import { UpdateAvailabilityDTO } from './dto/availability/update-availability.dto';
 import { AvailabilityRO, PersonnelRO } from './ro';
 import { Program, RequestWithRoles } from '../auth/interface';
 import {
@@ -20,16 +19,22 @@ import {
 } from '../common/enums/availability-type.enum';
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
-import { CreatePersonnelLanguagesDTO } from './dto/create-personnel-languages.dto';
-import { Ministry } from '../common/enums';
+import { CreatePersonnelLanguagesDTO } from './dto/skills/create-personnel-languages.dto';
+import {  Ministry } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
-import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { AppLogger } from '../logger/logger.service';
+import { UpdatePersonnelDTO } from './dto';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
+import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
+import { UpdatePreferencesDTO } from './update-preferences.dto';
+import { BcwsSectionsAndRolesEntity } from '../database/entities/bcws';
+import { UpdatePersonnelDetailsDTO } from './dto/details/update-personnel-details.dto';
+import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
 
 @Injectable()
 export class PersonnelService {
@@ -42,31 +47,30 @@ export class PersonnelService {
     private toolsRepository: Repository<ToolsEntity>,
     @InjectRepository(CertificationEntity)
     private certificationRepository: Repository<CertificationEntity>,
-    @InjectRepository(LanguageEntity)
-    private languageRepository: Repository<LanguageEntity>,
-    @InjectRepository(EmcrExperienceEntity)
-    private experiencesRepository: Repository<EmcrExperienceEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
   }
   /**
-   * Find personnel by id
+   * Update Supervisor Information
    * @param id
    * @returns
    */
 
-  async updatePersonnelSupervisorInformation(personnel, supervisorInformation) {
+  async updatePersonnelSupervisorInformation(id: string, supervisorInformation: UpdateSupervisorInformationDTO): Promise<UpdateResult> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-
     qb.update(PersonnelEntity)
-      .set({
-        ...supervisorInformation,
-      })
-      .where('id = :id', { id: personnel.id })
-      .execute();
+    .set({
+      ...supervisorInformation,
+    })
+    .where('id = :id', { id })
+    return await qb.execute();
   }
-
+/**
+ * Find personnel by id
+ * @param id 
+ * @returns 
+ */
   async findOne(id: string): Promise<PersonnelEntity> {
     const person = await this.personnelRepository.findOneOrFail({
       where: { id },
@@ -76,8 +80,7 @@ export class PersonnelService {
         'tools',
         'tools.tool',
         'homeLocation',
-        'bcws',
-        'emcr',
+        'workLocation',
         'recommitment',
         'recommitment.recommitmentCycle',
         'languages',
@@ -140,113 +143,144 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnelDatabase(
-    id: string,
-    personnel: Partial<CreatePersonnelDTO>,
-  ): Promise<PersonnelEntity> {
-    const person = await this.findOneById(id);
-
-    if (!!personnel.supervisorEmail) {
-      personnel.supervisorEmail = personnel.supervisorEmail.toLowerCase();
-    }
-
-    if (personnel.tools?.[0]?.hasOwnProperty('tool')) {
-      const allTools = await this.toolsRepository.find();
-      const personnelTools = personnel.tools.map((t) => ({
-        toolId: allTools.find((at) => at.name === t.tool).id,
-        proficiencyLevel: t.proficiencyLevel,
-      }));
-      personnel.tools = personnelTools;
-    } else {
-      delete person.tools;
-    }
-
-    if (personnel.languages?.length) {
-      const currentLanguages = await this.languageRepository.find({
-        where: { personnel: { id: person.id } },
-      });
-      const updatedLanguageNames = personnel.languages.map((l) => l.language);
-      const deletedLanguagesIds = currentLanguages
-        .filter((cl) => !updatedLanguageNames.includes(cl.language))
-        .map((cl) => cl.id);
-      if (deletedLanguagesIds.length) {
-        await this.languageRepository.delete({
-          id: In(deletedLanguagesIds),
-          personnelId: person.id,
-        });
-      }
-
-      const currentLanguagesNames = currentLanguages.map((cl) => cl.language);
-      const newLanguages = personnel.languages
-        .filter((l) => !currentLanguagesNames.includes(l.language))
-        .map((l) => ({
-          personnelId: person.id,
-          ...l,
-        }));
-      await this.languageRepository.save(newLanguages);
-      delete personnel.languages;
-    } else {
-      delete person.languages;
-    }
-
-    if (personnel.certifications?.[0]?.hasOwnProperty('name')) {
-      const allCertifications = await this.certificationRepository.find();
-      const personnelCerts = personnel.certifications.map((c) => ({
-        certificationId: allCertifications.find((ac) => ac.name === c.name).id,
-        expiry: c.expiry,
-      }));
-      personnel.certifications = personnelCerts;
-    } else {
-      delete person.certifications;
-    }
-
-    if (personnel.bcws?.roles?.length) {
-      personnel.bcws.roles = personnel.bcws.roles.map((r) => ({
-        roleId: r.roleId,
-        expLevel: r.expLevel,
-      }));
-    }
-
-    if (personnel.emcr?.experiences?.length) {
-      await this.experiencesRepository.delete({ personnelId: person.id });
-      personnel.emcr.experiences = personnel.emcr.experiences.map((e) => ({
-        functionId: e.id,
-        experienceType: e.experienceType,
-        id: e.id,
-      }));
-    }
-
-    Object.keys(personnel).forEach((key) => {
-      if (['bcws', 'emcr'].includes(key)) {
-        return;
-      }
-      person[key] = personnel[key];
+  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string, req: RequestWithRoles): Promise<Record<string, PersonnelRO>> {
+    
+    const person = await this.personnelRepository.findOne({
+      where: { id },
+      relations: {
+        languages: updateDTO.languages ? true : false,
+        certifications: updateDTO.certifications ? true : false,
+        tools: updateDTO.tools ? true : false,
+      },
     });
 
-    if (personnel.bcws && person.bcws) {
-      Object.keys(personnel.bcws).forEach((key) => {
-        person.bcws[key] = personnel.bcws[key];
-      });
+    if (updateDTO.certifications) {
+      const certs = await this.certificationRepository.find();
+      updateDTO.certifications = updateDTO.certifications.map(
+        (itm) =>
+          ({
+            certificationId: certs.find((cert) => itm.name === cert.name).id,
+            personnelId: person.id,
+          }),
+      );
     }
-    if (personnel.emcr && person.emcr) {
-      Object.keys(personnel.emcr).forEach((key) => {
-        person.emcr[key] = personnel.emcr[key];
-      });
+
+    if (updateDTO.tools) {
+      const tools = await this.toolsRepository.find();
+      updateDTO.tools = updateDTO.tools.map(
+        (itm) =>
+          ({
+            proficiencyLevel: itm.proficiencyLevel,
+            toolId: tools.find((tool) => itm.tool === tool.name).id,
+            personnelId: person.id,
+          }),
+      );
     }
-    return await this.personnelRepository.save(person);
+
+    if (updateDTO.languages) {
+      updateDTO.languages = updateDTO.languages.map(
+        (itm) => new LanguageEntity(itm),
+      );
+    }
+    await this.personnelRepository.save({ ...person, ...updateDTO });
+    return await this.findOneById(id).then((person) => person.toResponseObject(req.roles));
+  }
+
+  async updatePersonnelPreferences(
+    preferences: UpdatePreferencesDTO,
+    req: RequestWithRoles,
+  ): Promise<Record<'Member', PersonnelRO>> {
+    const person = await this.personnelRepository.findOne({
+      where: { email: req.idir },
+      relations: {
+        bcws: preferences.bcws.roles
+          ? {
+              roles: true,
+            }
+          : false,
+        emcr: preferences.emcr.experiences
+          ? {
+              experiences: true,
+            }
+          : false,
+      },
+    });
+    if (preferences.bcws) {
+      
+      const bcwsRoles = preferences.bcws.roles.map(
+      (role) =>
+        new BcwsSectionsAndRolesEntity({
+          ...role,
+          personnelId: person.id,
+        }),
+    )
+      Object.keys(preferences.bcws).forEach((key) => person.bcws[key] = preferences.bcws[key]);
+      person.bcws.roles = bcwsRoles;
+      
+    } else {
+      delete preferences.bcws;
+    }
+
+    if (preferences.emcr) {
+      
+      const experienceEntities = preferences.emcr.experiences.map(
+        (e) =>
+          new EmcrExperienceEntity({
+            functionId: e.id,
+            personnelId: person.id,
+            experienceType: e.experienceType,
+          }),
+      );
+
+      Object.keys(preferences.emcr).forEach((key) => person.emcr[key] = preferences.emcr[key]);
+      person.emcr.experiences = experienceEntities;
+    } else {
+      delete preferences.emcr;
+    }
+    
+    const member = await this.personnelRepository.save(person);
+    return member.toResponseObject(req.roles);
+
+  }
+
+  async updatePersonnelDetails(
+    updateDTO: UpdatePersonnelDetailsDTO,
+    id: string,
+  ): Promise<UpdateResult> {
+    const person = await this.personnelRepository.findOne({
+      where: { id },
+      relations: {
+        homeLocation: updateDTO.homeLocation ? true : false,
+        workLocation: updateDTO.workLocation ? true : false,
+      }});
+
+    return await this.personnelRepository.update(person.id,  updateDTO);
   }
 
   async updatePersonnel(
-    personnel: Partial<CreatePersonnelDTO>,
+    updateDTO: UpdatePersonnelDTO,
     req: RequestWithRoles,
-  ): Promise<Record<string, PersonnelRO>> {
-    this.logger.log(`${JSON.stringify(personnel)}`);
-    const person = await this.personnelRepository.findOneOrFail({
-      where: { email: req.idir },
+    id: string,
+  ): Promise<Record<'Member', PersonnelRO>> {
+  
+    const person = await this.personnelRepository.findOne({
+      where: { id },
+      relations: {
+        bcws: updateDTO.bcws ? true : false,
+        emcr: updateDTO.emcr ? {
+          trainings: true,
+        } : false,
+        homeLocation: updateDTO.homeLocation ? true : false,
+        workLocation: updateDTO.workLocation ? true : false,
+      },
     });
 
-    await this.updatePersonnelDatabase(person.id, personnel);
-    return this.getPersonnel(req);
+    await this.personnelRepository.save({
+      ...person,
+      ...updateDTO,
+    });
+
+    return await this.findOneById(id).then((person) => person.toResponseObject(req.roles));
   }
   /**
    * Format Languages for saving in the database
@@ -736,10 +770,14 @@ export class PersonnelService {
       lastName: p.lastName,
     }));
   }
-
+/**
+ * Returns the personnel data for the profile view  
+ * @param req 
+ * @returns 
+ */
   async getPersonnel(
     req: RequestWithRoles,
-  ): Promise<Record<string, PersonnelRO>> {
+  ): Promise<Record<'Member', PersonnelRO>> {
     const qb = this.personnelRepository
       .createQueryBuilder('personnel')
       .leftJoinAndSelect('personnel.workLocation', 'workLocation')
@@ -760,7 +798,9 @@ export class PersonnelService {
 
       .leftJoinAndSelect('experiences.function', 'function');
 
-    qb.where('LOWER(personnel.email) = :email', { email: req.idir.toLowerCase() });
+    qb.where('LOWER(personnel.email) = :email', {
+      email: req.idir.toLowerCase(),
+    });
 
     const personnelData = await qb.getOne();
     this.logger.log(`User is a member`);
@@ -771,12 +811,15 @@ export class PersonnelService {
     email: string,
   ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.where('LOWER(personnel.email) = :email', { email: email.toLowerCase() }).orWhere(
-      'LOWER(personnel.supervisorEmail) = :supervisorEmail',
-      { supervisorEmail: email.toLowerCase() }, 
-    );
+    qb.where('LOWER(personnel.email) = :email', {
+      email: email.toLowerCase(),
+    }).orWhere('LOWER(personnel.supervisorEmail) = :supervisorEmail', {
+      supervisorEmail: email.toLowerCase(),
+    });
     const people = await qb.getMany();
-    const isMember = people.map((itm) => itm.email.toLowerCase()).includes(email.toLowerCase());
+    const isMember = people
+      .map((itm) => itm.email.toLowerCase())
+      .includes(email.toLowerCase());
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail?.toLowerCase())
       .includes(email.toLowerCase());
@@ -841,7 +884,11 @@ export class PersonnelService {
 
     return { personnel, count };
   }
-
+/**
+ * Returns all ACTIVE  personnel in the system
+ * @param ministry 
+ * @returns 
+ */
   async findActivePersonnel(ministry?: string): Promise<{
     emcr: PersonnelEntity[];
     bcws: PersonnelEntity[];

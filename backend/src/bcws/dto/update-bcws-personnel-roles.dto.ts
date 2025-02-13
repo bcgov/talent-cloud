@@ -2,7 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsOptional, ValidateIf } from 'class-validator';
-import { Section } from 'src/common/enums';
+import { Section } from '../../common/enums';
 import { CreateBcwsPersonnelRolesDTO } from './create-bcws-personnel-roles.dto';
 
 export class UpdateBcwsRolesDTO extends PartialType(

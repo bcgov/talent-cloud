@@ -34,7 +34,7 @@ import { CreatePersonnelEmcrDTO } from '../emcr/dto';
 import { EmcrService } from '../emcr/emcr.service';
 import { AppLogger } from '../logger/logger.service';
 import { CreatePersonnelDTO } from '../personnel';
-import { CreateCertificationsDTO } from '../personnel/dto/create-certifications.dto';
+import { CreateCertificationsDTO } from '../personnel/dto/skills/create-certifications.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 
 @Injectable()
