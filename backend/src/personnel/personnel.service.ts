@@ -375,6 +375,10 @@ export class PersonnelService {
         year: new Date().getFullYear(),
       });
     }
+    // if (availableStatus && availableStatus === 'Missed') {...}
+    // if (availableStatus && availableStatus === 'MemberDeclined') {...}
+    // if (availableStatus && availableStatus === 'SupervisorDeclined') {...}
+    // if (availableStatus && availableStatus === 'Other') {...}
 
     if (name) {
       queryBuilder.andWhere(

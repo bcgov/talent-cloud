@@ -7,9 +7,26 @@ export enum Status {
 
 export enum StatusNames {
   ACTIVE = 'Active',
-  INACTIVE = 'Inactive',
-  PENDING = 'Pending',
-  NEW = 'New',
-  RECOMMITTED = 'Recommitted',
   ALL = 'All',
+  INACTIVE = 'Inactive',
+  MEMBER_DECLINED = 'MemberDeclined',
+  MISSED = 'Missed',
+  NEW = 'New',
+  OTHER = 'Other',
+  PENDING = 'Pending',
+  RECOMMITTED = 'Recommitted',
+  SUPERVISOR_DECLINED = 'SupervisorDeclined',
 }
+
+export const StatusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  ALL: 'All',
+  INACTIVE: 'Inactive',
+  MEMBER_DECLINED: 'Member Declined - Not Returning',
+  MISSED: 'Missed Recommitment',
+  NEW: 'New',
+  OTHER: 'Other',
+  PENDING: 'Pending',
+  RECOMMITTED: 'Recommitted',
+  SUPERVISOR_DECLINED: 'Supervisor Declined - Not Returning',
+};
