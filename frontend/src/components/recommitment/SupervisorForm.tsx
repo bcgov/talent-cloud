@@ -2,16 +2,16 @@ import { useState } from 'react';
 
 interface SupervisorFormProps {
   initialData: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone?: string;
+    supervisorFirstName: string;
+    supervisorLastName: string;
+    supervisorEmail: string;
+    supervisorPhone?: string;
   };
   onUpdate: (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone?: string;
+    supervisorFirstName: string;
+    supervisorLastName: string;
+    supervisorEmail: string;
+    supervisorPhone?: string;
   }) => void;
 }
 
@@ -50,7 +50,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             type="text"
             id="firstName"
             name="firstName"
-            value={formData.firstName}
+            value={formData.supervisorFirstName}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
@@ -68,7 +68,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             type="text"
             id="lastName"
             name="lastName"
-            value={formData.lastName}
+            value={formData.supervisorLastName}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
@@ -83,7 +83,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             type="email"
             id="email"
             name="email"
-            value={formData.email}
+            value={formData.supervisorEmail}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
@@ -99,11 +99,11 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             type="tel"
             id="phone"
             name="phone"
-            value={formData.phone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
+            value={formData.supervisorPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
-          {formData?.phone && !(/(\d{3})(\d{3})(\d{4})/).test(formData?.phone) && <p className="text-xs text-error">Please enter only 10 digits for phone number</p>}
+          {formData?.supervisorPhone && !(/(\d{3})(\d{3})(\d{4})/).test(formData?.supervisorPhone) && <p className="text-xs text-error">Please enter only 10 digits for phone number</p>}
         </div>
       </div>
     </div>

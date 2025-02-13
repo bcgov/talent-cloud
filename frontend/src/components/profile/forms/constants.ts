@@ -10,7 +10,6 @@ import {
 import * as Yup from 'yup';
 
 import { DriverLicense, DriverLicenseName, Program } from '@/common/enums';
-import type { TravelPreference } from '@/common/enums/travel-preference.enum';
 import {
   BcwsTravelPreference,
   EmcrTravelPreference,
@@ -45,8 +44,6 @@ const homeLocation = Yup.object().shape({
   region: Yup.string(),
   fireCentre: Yup.string(),
 });
-
-const travelPreference = Yup.string().required('This field is required.');
 
 const primaryPhone = Yup.string()
   .required('This field is required.')
@@ -85,7 +82,11 @@ const supervisorLastName = Yup.string()
 const supervisorEmail = Yup.string()
   .optional()
   .nullable()
-  .email('Invalid email format.').matches(/^[^\s@]+@gov.bc.ca+$/, 'Invalid email format. Must be a gov.bc.ca email address.');
+  .email('Invalid email format.')
+  .matches(
+    /^[^\s@]+@gov.bc.ca+$/,
+    'Invalid email format. Must be a gov.bc.ca email address.',
+  );
 
 const supervisorPhone = Yup.string()
   .optional()
@@ -154,12 +155,12 @@ const orientation = Yup.boolean().required('This field is required.');
 
 export const editProfileValidationSchema = Yup.object().shape({
   paylistId,
+
   employeeId,
   firstName,
   lastName,
   workLocation,
   homeLocation,
-  travelPreference,
   primaryPhone,
   secondaryPhone,
   workPhone,
@@ -202,12 +203,28 @@ export const bcwsPendingValidationSchema = Yup.object().shape({
 export const emcrValidationSchema = Yup.object().shape({
   ...editProfileValidationSchema.fields,
 });
+const emcr = Yup.object().shape({
+  travelPreference: Yup.string().optional(),
+});
+const bcws = Yup.object().shape({
+  liaisonFirstName: Yup.string().optional(),
+  liaisonLastName: Yup.string().optional(),
+  liaisonPhoneNumber: Yup.string().optional(),
+  liaisonEmail: Yup.string().optional(),
+  travelPreference: Yup.string().optional(),
+});
 
 export const memberValidationSchema = {
   general: Yup.object().shape({
     workLocation,
     homeLocation,
-    travelPreference,
+    emcr,
+    bcws: Yup.object().shape({
+      liaisonFirstName: Yup.string().optional(),
+      liaisonLastName: Yup.string().optional(),
+      liaisonEmail: Yup.string().optional(),
+      travelPreference: Yup.string().optional(),
+    }),
     driversLicense,
   }),
   employee: Yup.object().shape({
@@ -216,9 +233,7 @@ export const memberValidationSchema = {
     supervisorPhone,
     supervisorEmail,
     unionMembership,
-    liaisonFirstName,
-    liaisonLastName,
-    liaisonEmail,
+    bcws,
     ministry,
     division,
   }),
@@ -278,6 +293,7 @@ export const workLocationField = {
     })),
   },
 };
+
 export const homeLocationField = {
   locationName: {
     name: 'homeLocation.locationName',
@@ -422,32 +438,6 @@ export const fields = {
     disabled: true,
     required: true,
     status: Status.ACTIVE,
-  },
-
-  bcwsTravelPreference: {
-    name: 'travelPreference',
-    label: 'Travel Preference',
-    required: true,
-    type: 'select',
-    autoComplete: 'off',
-    disabled: false,
-    options: Object.keys(BcwsTravelPreference).map((itm) => ({
-      label: TravelPreferenceText[itm as keyof typeof TravelPreference],
-      value: itm,
-    })),
-  },
-
-  emcrTravelPreference: {
-    name: 'travelPreference',
-    label: 'Travel Preference',
-    required: true,
-    type: 'select',
-    autoComplete: 'off',
-    disabled: false,
-    options: Object.keys(EmcrTravelPreference).map((itm) => ({
-      label: TravelPreferenceText[itm as keyof typeof TravelPreference],
-      value: itm,
-    })),
   },
 
   employeeId: {
@@ -614,9 +604,8 @@ export const fields = {
       value: itm.toString(),
     })),
   },
-
   liaisonFirstName: {
-    name: 'liaisonFirstName',
+    name: 'bcws.liaisonFirstName',
     label: 'Liaison First Name',
     type: 'text',
     autoComplete: 'off',
@@ -625,7 +614,7 @@ export const fields = {
     program: Program.BCWS,
   },
   liaisonLastName: {
-    name: 'liaisonLastName',
+    name: 'bcws.liaisonLastName',
     label: 'Liaison Last Name',
     type: 'text',
     autoComplete: 'off',
@@ -635,7 +624,7 @@ export const fields = {
   },
 
   liaisonPhoneNumber: {
-    name: 'liaisonPhoneNumber',
+    name: 'bcws.liaisonPhoneNumber',
     label: 'Liaison Number',
     type: 'tel',
     autoComplete: 'off',
@@ -644,7 +633,7 @@ export const fields = {
     program: Program.BCWS,
   },
   liaisonEmail: {
-    name: 'liaisonEmail',
+    name: 'bcws.liaisonEmail',
     label: 'Liaison Email',
     type: 'text',
     autoComplete: 'off',
@@ -653,8 +642,48 @@ export const fields = {
     break: true,
     program: Program.BCWS,
   },
+
   homeLocation: homeLocationField,
   workLocation: workLocationField,
+  emcr: {
+    travelPreference: {
+      name: 'emcr.travelPreference',
+      label: 'EMCR Travel Preference',
+      required: false,
+      disabled: false,
+      type: 'select',
+      autoComplete: 'off',
+      options: Object.values(EmcrTravelPreference).map((itm) => ({
+        label: TravelPreferenceText[itm],
+        value: itm.toString(),
+      })),
+    },
+  },
+
+  travelPreference: {
+    name: 'travelPreference',
+    label: 'Travel Preference',
+    disabled: false,
+    required: false,
+    type: 'select',
+    autoComplete: 'off',
+    options: [{ label: '', value: '' }],
+  },
+
+  bcws: {
+    travelPreference: {
+      name: 'bcws.travelPreference',
+      label: 'BCWS Travel Preference',
+      disabled: false,
+      required: false,
+      type: 'select',
+      autoComplete: 'off',
+      options: Object.values(BcwsTravelPreference).map((itm) => ({
+        label: TravelPreferenceText[itm],
+        value: itm.toString(),
+      })),
+    },
+  },
 
   firstName: {
     name: 'firstName',

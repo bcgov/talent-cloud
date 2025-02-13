@@ -89,14 +89,15 @@ export class BcwsService {
     const person = await this.bcwsPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
     });
-    
-    
-
+  
     person.firstChoiceSection = preferences.firstChoiceSection ?? null;
     person.secondChoiceSection = preferences.secondChoiceSection ?? null;
     
 
-    await this.bcwsPersonnelRepository.save(person);
+    await this.bcwsPersonnelRepository.save({
+      ...person,
+      ...preferences,
+    });
 
     return preferences.roles
   }

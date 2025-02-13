@@ -1,4 +1,4 @@
-import type { Personnel } from '@/common';
+import type { Member } from '@/common';
 import { Program } from '@/common';
 import { PersonnelStatus } from '@/components/ui';
 
@@ -15,7 +15,7 @@ export function HorizontalLine() {
     </svg>
   );
 }
-export const renderStatus = (personnel: Personnel) => {
+export const renderStatus = (personnel: Member) => {
   if (
     personnel.bcws?.status &&
     personnel.emcr?.status &&

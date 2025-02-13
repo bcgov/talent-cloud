@@ -2,7 +2,7 @@ import {
   ArrowTopRightOnSquareIcon,
   ChevronLeftIcon,
 } from '@heroicons/react/24/solid';
-import type { MemberProfile } from '@/common';
+import type { Member } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui';
@@ -30,7 +30,7 @@ interface StepIndicatorProps {
 
 interface RecommitmentFormProps {
   program?: Program;
-  personnel: MemberProfile;
+  member: Member;
   onClose: () => void;
 }
 
@@ -63,7 +63,7 @@ const StepIndicator = ({ currentStep, totalSteps = 3 }: StepIndicatorProps) => {
 
 export const RecommitmentFormBase = ({
   program,
-  personnel,
+  member,
   onClose,
 }: RecommitmentFormProps) => {
   const { updateRecommitment } = useRecommitmentCycle();
@@ -73,10 +73,10 @@ export const RecommitmentFormBase = ({
   const [recommitmentAnswer, setRecommitmentAnswer] = useState<string>();
   const [supervisorInformation, setSupervisorInformation] =
     useState<SupervisorInformation>({
-      firstName: personnel.supervisorFirstName,
-      lastName: personnel.supervisorLastName,
-      email: personnel.supervisorEmail,
-      phone: personnel.supervisorPhone,
+      supervisorFirstName: member.supervisorFirstName,
+      supervisorLastName: member.supervisorLastName,
+      supervisorEmail: member.supervisorEmail,
+      supervisorPhone: member.supervisorPhone,
     });
   const [parqGeneralAnswers, setParqGeneralAnswers] = useState<
     Record<string, boolean | null>
@@ -327,7 +327,7 @@ export const RecommitmentFormBase = ({
 
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
-    const res = await updateRecommitment(personnel.id, {
+    const res = await updateRecommitment(member.id, {
       ...decision,
       ...(recommitmentAnswer !== 'no' && { supervisorInformation }),
     });
@@ -463,11 +463,16 @@ export const RecommitmentFormBase = ({
 
     // For SupervisorForm, require first name, last name, and email
     if (currentComponentType === SupervisorForm) {
-      const { firstName, lastName, email, phone } = supervisorInformation;
-      const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(email);
-      const isValidPhone = phone && phone !== '' ?  /(\d{3})(\d{3})(\d{4})/.test(phone) : true
+      const { supervisorFirstName, supervisorLastName, supervisorEmail,  supervisorPhone } = supervisorInformation;
+      const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(supervisorEmail);
+      const isValidPhone =
+      supervisorPhone && supervisorPhone !== '' ? /(\d{3})(\d{3})(\d{4})/.test(supervisorPhone) : true;
       return Boolean(
-        firstName?.trim() && lastName?.trim() && email?.trim() && isValidEmail && isValidPhone,
+        supervisorFirstName?.trim() &&
+        supervisorLastName?.trim() &&
+        supervisorEmail?.trim() &&
+          isValidEmail &&
+          isValidPhone,
       );
     }
 
@@ -520,29 +525,29 @@ export const RecommitmentFormBase = ({
 
         {currentComponent}
         <Transition
-        show={errorMessage !== null}
-        appear={true}
-        enter="ease-out duration-100"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="ease-in duration-200"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <div>
-          {errorMessage && (
-            <Banner
-              title={'Error'}
-              content={errorMessage}
-              type={BannerType.ERROR}
-              onClose={() => {
-                setErrorMessage(null);
-                onClose();
-              }}
-            />
-          )}
-        </div>
-      </Transition>
+          show={errorMessage !== null}
+          appear={true}
+          enter="ease-out duration-100"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            {errorMessage && (
+              <Banner
+                title={'Error'}
+                content={errorMessage}
+                type={BannerType.ERROR}
+                onClose={() => {
+                  setErrorMessage(null);
+                  onClose();
+                }}
+              />
+            )}
+          </div>
+        </Transition>
 
         <div className="flex flex-row space-x-6 pt-4 justify-end px-8 border-t-2 border-defaultGray">
           <Button
@@ -572,7 +577,6 @@ export const RecommitmentFormBase = ({
           />
         </div>
       </div>
-      
     </>
   );
 };

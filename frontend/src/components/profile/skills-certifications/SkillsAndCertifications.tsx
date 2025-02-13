@@ -8,12 +8,8 @@ import { format } from 'date-fns';
 import { DialogUI } from '@/components/ui';
 import { useState } from 'react';
 import { ProfileEditSkills } from './ProfileEditSkills';
-import type {
-  BcwsCertification,
-  BcwsLanguages,
-  BcwsPersonnelTool,
-  Personnel,
-} from '@/common';
+import type { Certification, Languages, PersonnelTool, Personnel } from '@/common';
+import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
 
 export type SkillsProps = {
   title?: string;
@@ -36,7 +32,7 @@ export const SkillsAndCertifications = ({
   profileData,
 }: {
   allowEditing: boolean;
-  updatePersonnel: (props: Partial<Personnel>) => void;
+  updatePersonnel: (props: Partial<Personnel>, endpoint?: string) => void;
   personnel: Personnel;
   profileData: any;
 }) => {
@@ -48,15 +44,18 @@ export const SkillsAndCertifications = ({
   };
 
   const handleSave = (skills: {
-    newLanguages: BcwsLanguages[];
-    newTools: BcwsPersonnelTool[];
-    newCertifications: BcwsCertification[];
+    newLanguages: Languages[];
+    newTools: PersonnelTool[];
+    newCertifications: Certification[];
   }) => {
-    updatePersonnel({
-      languages: skills.newLanguages,
-      tools: skills.newTools,
-      certifications: skills.newCertifications,
-    });
+    updatePersonnel(
+      {
+        languages: skills.newLanguages,
+        tools: skills.newTools,
+        certifications: skills.newCertifications,
+      },
+      PersonnelEndpoint.Skills,
+    );
     setOpenEditSkillsPopUp(false);
   };
 

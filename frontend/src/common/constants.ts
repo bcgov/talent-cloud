@@ -24,7 +24,10 @@ import type {
 } from '@/common/enums/sections.enum';
 import type { Tools, ToolsProficiency } from '@/common/enums/tools.enum';
 import type { DateRange } from 'react-day-picker';
-import type { TravelPreference } from './enums/travel-preference.enum';
+import type {
+  BcwsTravelPreference,
+  TravelPreference,
+} from './enums/travel-preference.enum';
 import type { RecommitmentStatus } from './enums/recommitment-status';
 
 export enum Filters {
@@ -92,6 +95,7 @@ export interface Location {
 
 export interface ExperienceInterface {
   experienceType: Experience;
+  functionName?: string;
   function: {
     id: number;
     name: string;
@@ -114,29 +118,33 @@ export interface BcwsPersonnelRoleInterface {
   expLevel?: ExperienceLevel;
 }
 
+export interface UpdateBcwsRoles {
+  roleId: number;
+  expLevel: ExperienceLevel;
+}
+
 export interface BcwsRoleInterface {
   id: number;
   name: BcwsRole;
   section: Section;
 }
 
-export interface BcwsLanguages {
-  language: string;
-  type: LanguageLevelType;
-  level: LanguageProficiency;
-}
-
 export interface PersonnelTool {
+  key?: string | number;
+  id: number | string;
   tool: Tools;
   proficiencyLevel: ToolsProficiency;
 }
 
 export interface Certification {
+  key?: string | number;
+  id?: number | string;
   name: string;
   expiry?: string;
 }
 
 export interface Languages {
+  key?: string | number;
   id: number;
   language: string;
   type: LanguageLevelType;
@@ -160,26 +168,20 @@ export interface Recommitment {
   supervisorIdir?: string;
   supervisorDecisionDate?: Date;
   supervisorReason?: string | null;
-  personnel: Personnel;
+  personnel: PersonnelInfo;
   year: number;
 }
 
-export interface Personnel {
-  program?: Program;
+export interface PersonnelInfo {
   id: string;
   firstName: string;
   lastName: string;
   workLocation?: Location;
   homeLocation: Location;
-  experiences?: ExperienceInterface[];
+
   availability?: Availability[];
-  status: Status;
-  newMember?: boolean;
-  travelPreference: TravelPreference;
   unionMembership: string;
   ministry?: Ministry;
-  dateApplied?: Date | string;
-  dateApproved?: Date | string;
   primaryPhone: string;
   secondaryPhone?: string;
   workPhone?: string;
@@ -189,48 +191,73 @@ export interface Personnel {
   supervisorEmail: string;
   supervisorPhone?: string;
   approvedBySupervisor: boolean;
-  icsTraining?: boolean;
-  reviewed: boolean;
-  date: string;
-  availabilityType: AvailabilityType;
-  deploymentCode?: string;
-  actualStartDate?: string;
-  actualEndDate?: string;
-  logisticsNotes?: string;
-  coordinatorNotes?: string;
-  lastDeployed?: string;
-  firstChoiceSection?: Section;
-  secondChoiceSection?: Section;
-  thirdChoiceSection?: Section;
+
   division?: string;
-  orientation?: boolean;
-  willingnessStatement?: boolean;
-  parQ?: boolean;
-  respectfulWorkplacePolicy?: boolean;
   employeeId?: string;
   paylistId?: string;
-  liaisonFirstName?: string;
-  liaisonLastName?: string;
-  liaisonPhoneNumber?: string;
-  liaisonEmail?: string;
   purchaseCardHolder?: boolean;
   driverLicense?: string[];
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
   emergencyContactRelationship?: string;
+  tools?: PersonnelTool[];
+  languages?: Languages[];
+  certifications?: Certification[];
+  recommitment?: Recommitment[];
+  lastDeployed?: string;
+}
+
+export interface EmcrMember {
+  experiences?: ExperienceInterface[];
+  dateApplied?: Date | string;
+  dateApproved?: Date | string;
   firstChoiceFunction?: string;
   secondChoiceFunction?: string;
   thirdChoiceFunction?: string;
-  tools?: PersonnelTool[];
-  languages?: Languages[];
-  roles?: BcwsPersonnelRoleInterface[];
-  certifications?: Certification[];
-  bcws?: Partial<Personnel>;
-  emcr?: Partial<Personnel>;
-  skills: PersonnelTool[] | Certification[] | Languages[];
-  recommitment?: Recommitment[];
+  travelPreference?: TravelPreference;
+  icsTraining?: boolean;
+  reviewed: boolean;
+  status: Status;
+  newMember?: boolean;
+  logisticsNotes?: string;
+  coordinatorNotes?: string;
 }
+
+export interface BcwsMember {
+  status: Status;
+  dateApplied?: Date | string;
+  dateApproved?: Date | string;
+  reviewed: boolean;
+  firstChoiceSection?: Section;
+  secondChoiceSection?: Section;
+  thirdChoiceSection?: Section;
+  orientation?: boolean;
+  willingnessStatement?: boolean;
+  parQ?: boolean;
+  respectfulWorkplacePolicy?: boolean;
+  roles?: BcwsPersonnelRoleInterface[];
+  liaisonFirstName?: string;
+  liaisonLastName?: string;
+  liaisonPhoneNumber?: string;
+  liaisonEmail?: string;
+  travelPreference?: BcwsTravelPreference;
+  newMember?: boolean;
+  logisticsNotes?: string;
+  coordinatorNotes?: string;
+}
+
+// member view of personnel
+export interface Member extends PersonnelInfo {
+  bcws?: BcwsMember;
+  emcr?: EmcrMember;
+}
+
+// coordinator view of personnel
+export interface BcwsPersonnel extends PersonnelInfo, BcwsMember {}
+export interface EmcrPersonnel extends PersonnelInfo, EmcrMember {}
+
+export type Personnel = BcwsPersonnel & EmcrPersonnel;
 
 export interface AvailabilityRange {
   from: string;
@@ -273,9 +300,4 @@ export interface DashboardFilters {
   fireCentre?: string[];
   section?: Section;
   role?: BcwsRole;
-}
-
-export interface MemberProfile extends Personnel {
-  bcws?: Partial<Personnel>;
-  emcr?: Partial<Personnel>;
 }
