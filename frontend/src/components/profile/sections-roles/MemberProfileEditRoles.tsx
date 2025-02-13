@@ -579,9 +579,9 @@ export const MemberProfileEditPreferences = ({
         ...rolesExcludingRemoved,
       ];
       personnelUpdate.bcws = {
-        firstChoiceSection: rolesToSave.firstChoiceSection,
-        secondChoiceSection: rolesToSave.secondChoiceSection,
-        thirdChoiceSection: rolesToSave.thirdChoiceSection,
+        firstChoiceSection: Section[rolesToSave.firstChoiceSection as keyof typeof Section] || null,
+        secondChoiceSection: Section[rolesToSave.secondChoiceSection as keyof typeof Section] || null,
+        thirdChoiceSection: Section[rolesToSave.thirdChoiceSection as keyof typeof Section] || null,
         roles: updateRoles,
       };
     }
@@ -612,6 +612,15 @@ export const MemberProfileEditPreferences = ({
         thirdChoiceSection: functionsToSave.thirdChoiceSection,
         experiences: updateFunctions,
       };
+      if(personnelUpdate.emcr.firstChoiceSection === '') {
+        delete personnelUpdate.emcr.firstChoiceSection;
+      }
+      if(personnelUpdate.emcr.secondChoiceSection === '') {
+        delete personnelUpdate.emcr.secondChoiceSection;
+      }
+      if(personnelUpdate.emcr.thirdChoiceSection === '') {
+        delete personnelUpdate.emcr.thirdChoiceSection;
+      }
     }
 
     if (Object.keys(personnelUpdate).length) {
