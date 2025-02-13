@@ -94,13 +94,7 @@ export class BcwsService {
 
     person.firstChoiceSection = preferences.firstChoiceSection ?? null;
     person.secondChoiceSection = preferences.secondChoiceSection ?? null;
-    person.roles = preferences.roles.map(
-      (role) =>
-        new BcwsSectionsAndRolesEntity({
-          ...role,
-          personnelId: id,
-        }),
-    );
+    
 
     await this.bcwsPersonnelRepository.save(person);
 

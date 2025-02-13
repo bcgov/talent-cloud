@@ -27,6 +27,7 @@ import { BcwsUpdateAdapter } from './dto/helpers';
 import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
 import { UpdateResult } from 'typeorm';
 import { Roles } from '../auth/roles.decorator';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @Controller('bcws')
 @ApiTags('BCWS Personnel API')
@@ -47,7 +48,7 @@ export class BcwsController {
     status: HttpStatus.ACCEPTED,
   })
   @Programs(Program.BCWS)
-  @Roles(Role.COORDINATOR)
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @Patch('/:id')
   async updateBcwsPersonnel(
     @Body() personnel: UpdateBcwsPersonnelDTO & UpdatePersonnelDTO,
@@ -101,7 +102,7 @@ export class BcwsController {
     @Body() skills: UpdateSkillsDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
-  ): Promise<Record<string, PersonnelRO>> {
+  ): Promise<PersonnelEntity> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.personnelService.updatePersonnelSkills(
@@ -110,6 +111,7 @@ export class BcwsController {
       req,
     );
   }
+
 
   @ApiOperation({
     summary: 'BCWS Coordinator/Logistics Get Personnel Endpoint',

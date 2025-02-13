@@ -30,6 +30,7 @@ import { EmcrUpdateAdapter } from './dto/helpers';
 import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UpdateResult } from 'typeorm';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
@@ -100,7 +101,7 @@ export class EmcrController {
     status: HttpStatus.ACCEPTED,
   })
   @Programs(Program.EMCR)
-  @Roles(Role.COORDINATOR)
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @Patch(':id')
   async updatePersonnel(
     @Body() personnel: UpdateEmcrPersonnelDTO & UpdatePersonnelDTO,
@@ -158,7 +159,7 @@ export class EmcrController {
     @Body() personnel: UpdateSkillsDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
-  ): Promise<Record<'Personnel', PersonnelRO>>{
+  ): Promise<PersonnelEntity>{
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.personnelService.updatePersonnelSkills(

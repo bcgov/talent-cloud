@@ -20,7 +20,7 @@ import {
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/skills/create-personnel-languages.dto';
-import {  Ministry } from '../common/enums';
+import {  Ministry, Section } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
@@ -143,7 +143,7 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string, req: RequestWithRoles): Promise<Record<string, PersonnelRO>> {
+  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string, req: RequestWithRoles): Promise<PersonnelEntity> {
     
     const person = await this.personnelRepository.findOne({
       where: { id },
@@ -182,14 +182,14 @@ export class PersonnelService {
         (itm) => new LanguageEntity(itm),
       );
     }
-    await this.personnelRepository.save({ ...person, ...updateDTO });
-    return await this.findOneById(id).then((person) => person.toResponseObject(req.roles));
+    return await this.personnelRepository.save({ ...person, ...updateDTO });
+    
   }
 
   async updatePersonnelPreferences(
     preferences: UpdatePreferencesDTO,
     req: RequestWithRoles,
-  ): Promise<Record<'Member', PersonnelRO>> {
+  ): Promise<PersonnelEntity> {
     const person = await this.personnelRepository.findOne({
       where: { email: req.idir },
       relations: {
@@ -205,25 +205,27 @@ export class PersonnelService {
           : false,
       },
     });
+    
     if (preferences.bcws) {
       
-      const bcwsRoles = preferences.bcws.roles.map(
+      preferences.bcws.roles = preferences.bcws.roles.map(
       (role) =>
-        new BcwsSectionsAndRolesEntity({
+        ({
           ...role,
+          roleId: role.roleId,
           personnelId: person.id,
         }),
     )
-      Object.keys(preferences.bcws).forEach((key) => person.bcws[key] = preferences.bcws[key]);
-      person.bcws.roles = bcwsRoles;
       
-    } else {
-      delete preferences.bcws;
-    }
+      preferences.bcws.firstChoiceSection  = Section[preferences.bcws.firstChoiceSection as keyof typeof Section ] ?? null;
+      preferences.bcws.secondChoiceSection  = Section[preferences.bcws.secondChoiceSection as keyof typeof Section ] ?? null;
+      preferences.bcws.thirdChoiceSection  = Section[preferences.bcws.thirdChoiceSection as keyof typeof Section ] ?? null;
+      
+    } 
 
     if (preferences.emcr) {
       
-      const experienceEntities = preferences.emcr.experiences.map(
+      preferences.emcr.experiences =  preferences.emcr.experiences.map(
         (e) =>
           new EmcrExperienceEntity({
             functionId: e.id,
@@ -232,15 +234,15 @@ export class PersonnelService {
           }),
       );
 
-      Object.keys(preferences.emcr).forEach((key) => person.emcr[key] = preferences.emcr[key]);
-      person.emcr.experiences = experienceEntities;
-    } else {
-      delete preferences.emcr;
-    }
+      preferences.emcr.firstChoiceSection = preferences.emcr.firstChoiceSection ?? null;
+      preferences.emcr.secondChoiceSection = preferences.emcr.secondChoiceSection ?? null;
+      preferences.emcr.thirdChoiceSection = preferences.emcr.thirdChoiceSection ?? null;
+    } 
     
-    const member = await this.personnelRepository.save(person);
-    return member.toResponseObject(req.roles);
+    const bcwsPerson = {...person.bcws, ...preferences.bcws};
+    const emcrPerson = {...person.emcr, ...preferences.emcr};
 
+    return await this.personnelRepository.save({...person, emcr: emcrPerson, bcws: bcwsPerson});
   }
 
   async updatePersonnelDetails(

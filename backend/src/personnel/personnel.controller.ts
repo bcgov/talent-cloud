@@ -28,6 +28,7 @@ import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -98,7 +99,7 @@ export class PersonnelController {
   async updatePersonnelPreferences(
     @Req() req: RequestWithRoles,
     @Body() preferences: UpdatePreferencesDTO,
-  ): Promise<Record<'Member', PersonnelRO>> {
+  ): Promise<PersonnelEntity> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     return await this.personnelService.updatePersonnelPreferences(
       preferences,
@@ -119,7 +120,7 @@ export class PersonnelController {
   async updatePersonnelSkills(
     @Req() req: RequestWithRoles,
     @Body() skills: UpdatePersonnelDTO,
-  ): Promise<Record<string, PersonnelRO>> {
+  ): Promise<PersonnelEntity> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     const person = await this.personnelService.findOneByEmail(req.idir);
     return await this.personnelService.updatePersonnelSkills(
