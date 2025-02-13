@@ -32,7 +32,6 @@ import { UpdatePersonnelDTO } from './dto';
 import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
-import { BcwsSectionsAndRolesEntity } from '../database/entities/bcws';
 import { UpdatePersonnelDetailsDTO } from './dto/details/update-personnel-details.dto';
 import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
 
