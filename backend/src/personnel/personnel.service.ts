@@ -142,7 +142,7 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string, req: RequestWithRoles): Promise<PersonnelEntity> {
+  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string): Promise<PersonnelEntity> {
     
     const person = await this.personnelRepository.findOne({
       where: { id },

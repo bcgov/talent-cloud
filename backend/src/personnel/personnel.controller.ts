@@ -130,7 +130,7 @@ export class PersonnelController {
         languages: skills.languages,
       },
       person.id,
-      req,
+      
     );
   }
 

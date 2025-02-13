@@ -165,7 +165,7 @@ export class EmcrController {
     return await this.personnelService.updatePersonnelSkills(
       personnel,
       id,
-      req,
+      
     );
   }
 }

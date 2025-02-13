@@ -108,7 +108,7 @@ export class BcwsController {
     return await this.personnelService.updatePersonnelSkills(
       skills,
       id,
-      req,
+      
     );
   }
 
