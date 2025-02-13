@@ -14,10 +14,10 @@ import { AppLogger } from '../logger/logger.service';
 import { TemplateType, EmailTags } from '../mail/constants';
 import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
+import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
+import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
-import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
-import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
 
 @Injectable()
 export class RecommitmentService {
@@ -61,17 +61,21 @@ export class RecommitmentService {
         !req.roles.includes(Role.SUPERVISOR) &&
         id !== personnel.id
       ) {
-        throw new ForbiddenException('Members can only edit their own recommitment.');
+        throw new ForbiddenException(
+          'Members can only edit their own recommitment.',
+        );
       }
-    
+
       if (
         req.roles.includes(Role.SUPERVISOR) &&
         !req.roles.includes(Role.MEMBER) &&
         req.idir !== personnel.supervisorEmail
       ) {
-        throw new ForbiddenException(`Supervisors can only edit their member's recommitment.`);
+        throw new ForbiddenException(
+          `Supervisors can only edit their member's recommitment.`,
+        );
       }
-    
+
       if (
         req.roles.includes(Role.MEMBER) &&
         req.roles.includes(Role.SUPERVISOR) &&
@@ -86,13 +90,16 @@ export class RecommitmentService {
       await this.personnelService.updatePersonnelSupervisorInformation(
         personnel.id,
         {
-          supervisorEmail: recommitmentUpdate.supervisorInformation.supervisorEmail
-            .toLowerCase()
-            .trim(),
+          supervisorEmail:
+            recommitmentUpdate.supervisorInformation.supervisorEmail
+              .toLowerCase()
+              .trim(),
           supervisorFirstName:
             recommitmentUpdate.supervisorInformation.supervisorFirstName,
-          supervisorLastName: recommitmentUpdate.supervisorInformation.supervisorLastName,
-          supervisorPhone: recommitmentUpdate.supervisorInformation.supervisorPhone,
+          supervisorLastName:
+            recommitmentUpdate.supervisorInformation.supervisorLastName,
+          supervisorPhone:
+            recommitmentUpdate.supervisorInformation.supervisorPhone,
         },
       );
     }
@@ -134,7 +141,7 @@ export class RecommitmentService {
             program: recommitmentUpdate[key].program,
           },
           {
-            ...recommitment,
+            ...recommitment[key],
             supervisorIdir: recommitmentUpdate[key]?.supervisorIdir,
             supervisorDecisionDate:
               recommitmentUpdate[key].supervisorDecisionDate,
@@ -149,7 +156,8 @@ export class RecommitmentService {
         if (
           recommitmentUpdate?.bcws?.status ===
             RecommitmentStatus.MEMBER_COMMITTED &&
-          recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
+          recommitmentUpdate?.emcr?.status ===
+            RecommitmentStatus.MEMBER_COMMITTED
         ) {
           this.logger.log(
             `${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`,

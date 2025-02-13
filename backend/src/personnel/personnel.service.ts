@@ -8,11 +8,14 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
-import { CreatePersonnelDTO } from './dto/create-personnel.dto';
+import { UpdatePersonnelDTO } from './dto';
 import { GetAvailabilityDTO } from './dto/availability/get-availability.dto';
 import { UpdateAvailabilityDTO } from './dto/availability/update-availability.dto';
+import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { AvailabilityRO, PersonnelRO } from './ro';
+import { UpdatePreferencesDTO } from './update-preferences.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
+import { Ministry, Section } from '../common/enums';
 import {
   AvailabilityType,
   AvailabilityTypeLabel,
@@ -20,19 +23,16 @@ import {
 import { Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/skills/create-personnel-languages.dto';
-import {  Ministry, Section } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
+import { EmcrExperienceEntity } from '../database/entities/emcr';
+import { UpdatePersonnelDetailsDTO } from './dto/details/update-personnel-details.dto';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO } from './dto';
-import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
-import { UpdatePreferencesDTO } from './update-preferences.dto';
-import { UpdatePersonnelDetailsDTO } from './dto/details/update-personnel-details.dto';
 import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
 
 @Injectable()
@@ -56,20 +56,17 @@ export class PersonnelService {
    * @returns
    */
 
-  async updatePersonnelSupervisorInformation(id: string, supervisorInformation: UpdateSupervisorInformationDTO): Promise<UpdateResult> {
-    const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.update(PersonnelEntity)
-    .set({
-      ...supervisorInformation,
-    })
-    .where('id = :id', { id })
-    return await qb.execute();
+  async updatePersonnelSupervisorInformation(
+    id: string,
+    supervisorInformation: UpdateSupervisorInformationDTO,
+  ): Promise<UpdateResult> {
+    return await this.personnelRepository.update(id, supervisorInformation);
   }
-/**
- * Find personnel by id
- * @param id 
- * @returns 
- */
+  /**
+   * Find personnel by id
+   * @param id
+   * @returns
+   */
   async findOne(id: string): Promise<PersonnelEntity> {
     const person = await this.personnelRepository.findOneOrFail({
       where: { id },
@@ -142,8 +139,10 @@ export class PersonnelService {
     }
   }
 
-  async updatePersonnelSkills(updateDTO: UpdateSkillsDTO, id: string): Promise<PersonnelEntity> {
-    
+  async updatePersonnelSkills(
+    updateDTO: UpdateSkillsDTO,
+    id: string,
+  ): Promise<PersonnelEntity> {
     const person = await this.personnelRepository.findOne({
       where: { id },
       relations: {
@@ -155,25 +154,19 @@ export class PersonnelService {
 
     if (updateDTO.certifications) {
       const certs = await this.certificationRepository.find();
-      updateDTO.certifications = updateDTO.certifications.map(
-        (itm) =>
-          ({
-            certificationId: certs.find((cert) => itm.name === cert.name).id,
-            personnelId: person.id,
-          }),
-      );
+      updateDTO.certifications = updateDTO.certifications.map((itm) => ({
+        certificationId: certs.find((cert) => itm.name === cert.name).id,
+        personnelId: person.id,
+      }));
     }
 
     if (updateDTO.tools) {
       const tools = await this.toolsRepository.find();
-      updateDTO.tools = updateDTO.tools.map(
-        (itm) =>
-          ({
-            proficiencyLevel: itm.proficiencyLevel,
-            toolId: tools.find((tool) => itm.tool === tool.name).id,
-            personnelId: person.id,
-          }),
-      );
+      updateDTO.tools = updateDTO.tools.map((itm) => ({
+        proficiencyLevel: itm.proficiencyLevel,
+        toolId: tools.find((tool) => itm.tool === tool.name).id,
+        personnelId: person.id,
+      }));
     }
 
     if (updateDTO.languages) {
@@ -182,7 +175,6 @@ export class PersonnelService {
       );
     }
     return await this.personnelRepository.save({ ...person, ...updateDTO });
-    
   }
 
   async updatePersonnelPreferences(
@@ -204,27 +196,27 @@ export class PersonnelService {
           : false,
       },
     });
-    
+
     if (preferences.bcws) {
-      
-      preferences.bcws.roles = preferences.bcws.roles.map(
-      (role) =>
-        ({
-          ...role,
-          roleId: role.roleId,
-          personnelId: person.id,
-        }),
-    )
-      
-      preferences.bcws.firstChoiceSection  = Section[preferences.bcws.firstChoiceSection as keyof typeof Section ] ?? null;
-      preferences.bcws.secondChoiceSection  = Section[preferences.bcws.secondChoiceSection as keyof typeof Section ] ?? null;
-      preferences.bcws.thirdChoiceSection  = Section[preferences.bcws.thirdChoiceSection as keyof typeof Section ] ?? null;
-      
-    } 
+      preferences.bcws.roles = preferences.bcws.roles.map((role) => ({
+        ...role,
+        roleId: role.roleId,
+        personnelId: person.id,
+      }));
+
+      preferences.bcws.firstChoiceSection =
+        Section[preferences.bcws.firstChoiceSection as keyof typeof Section] ??
+        null;
+      preferences.bcws.secondChoiceSection =
+        Section[preferences.bcws.secondChoiceSection as keyof typeof Section] ??
+        null;
+      preferences.bcws.thirdChoiceSection =
+        Section[preferences.bcws.thirdChoiceSection as keyof typeof Section] ??
+        null;
+    }
 
     if (preferences.emcr) {
-      
-      preferences.emcr.experiences =  preferences.emcr.experiences.map(
+      preferences.emcr.experiences = preferences.emcr.experiences.map(
         (e) =>
           new EmcrExperienceEntity({
             functionId: e.id,
@@ -233,15 +225,22 @@ export class PersonnelService {
           }),
       );
 
-      preferences.emcr.firstChoiceSection = preferences.emcr.firstChoiceSection ?? null;
-      preferences.emcr.secondChoiceSection = preferences.emcr.secondChoiceSection ?? null;
-      preferences.emcr.thirdChoiceSection = preferences.emcr.thirdChoiceSection ?? null;
-    } 
-    
-    const bcwsPerson = {...person.bcws, ...preferences.bcws};
-    const emcrPerson = {...person.emcr, ...preferences.emcr};
+      preferences.emcr.firstChoiceSection =
+        preferences.emcr.firstChoiceSection ?? null;
+      preferences.emcr.secondChoiceSection =
+        preferences.emcr.secondChoiceSection ?? null;
+      preferences.emcr.thirdChoiceSection =
+        preferences.emcr.thirdChoiceSection ?? null;
+    }
 
-    return await this.personnelRepository.save({...person, emcr: emcrPerson, bcws: bcwsPerson});
+    const bcwsPerson = { ...person.bcws, ...preferences.bcws };
+    const emcrPerson = { ...person.emcr, ...preferences.emcr };
+
+    return await this.personnelRepository.save({
+      ...person,
+      emcr: emcrPerson,
+      bcws: bcwsPerson,
+    });
   }
 
   async updatePersonnelDetails(
@@ -253,9 +252,10 @@ export class PersonnelService {
       relations: {
         homeLocation: updateDTO.homeLocation ? true : false,
         workLocation: updateDTO.workLocation ? true : false,
-      }});
+      },
+    });
 
-    return await this.personnelRepository.update(person.id,  updateDTO);
+    return await this.personnelRepository.update(person.id, updateDTO);
   }
 
   async updatePersonnel(
@@ -263,14 +263,15 @@ export class PersonnelService {
     req: RequestWithRoles,
     id: string,
   ): Promise<Record<'Member', PersonnelRO>> {
-  
     const person = await this.personnelRepository.findOne({
       where: { id },
       relations: {
         bcws: updateDTO.bcws ? true : false,
-        emcr: updateDTO.emcr ? {
-          trainings: true,
-        } : false,
+        emcr: updateDTO.emcr
+          ? {
+              trainings: true,
+            }
+          : false,
         homeLocation: updateDTO.homeLocation ? true : false,
         workLocation: updateDTO.workLocation ? true : false,
       },
@@ -281,7 +282,9 @@ export class PersonnelService {
       ...updateDTO,
     });
 
-    return await this.findOneById(id).then((person) => person.toResponseObject(req.roles));
+    return await this.findOneById(id).then((person) =>
+      person.toResponseObject(req.roles),
+    );
   }
   /**
    * Format Languages for saving in the database
@@ -771,11 +774,11 @@ export class PersonnelService {
       lastName: p.lastName,
     }));
   }
-/**
- * Returns the personnel data for the profile view  
- * @param req 
- * @returns 
- */
+  /**
+   * Returns the personnel data for the profile view
+   * @param req
+   * @returns
+   */
   async getPersonnel(
     req: RequestWithRoles,
   ): Promise<Record<'Member', PersonnelRO>> {
@@ -885,11 +888,11 @@ export class PersonnelService {
 
     return { personnel, count };
   }
-/**
- * Returns all ACTIVE  personnel in the system
- * @param ministry 
- * @returns 
- */
+  /**
+   * Returns all ACTIVE  personnel in the system
+   * @param ministry
+   * @returns
+   */
   async findActivePersonnel(ministry?: string): Promise<{
     emcr: PersonnelEntity[];
     bcws: PersonnelEntity[];
