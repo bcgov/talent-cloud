@@ -10,7 +10,7 @@ import {
 import { BcwsRoleEntity } from '../entities/bcws/bcws-role.entity';
 import { CertificationEntity } from '../entities/personnel/certifications.entity';
 import { ToolsEntity } from '../entities/personnel/tools.entity';
-import { CreatePersonnelLanguagesDTO } from '../../personnel/dto/create-personnel-languages.dto';
+import { CreatePersonnelLanguagesDTO } from '../../personnel/dto/skills/create-personnel-languages.dto';
 
 export const threeMonthsArray = () => {
   const today = new Date();

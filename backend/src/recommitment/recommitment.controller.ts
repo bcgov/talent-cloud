@@ -15,7 +15,7 @@ import { RecommitmentService } from './recommitment.service';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { AppLogger } from '../logger/logger.service';
 import { GetPersonnelRO, PersonnelRO } from '../personnel';
-import { PersonnelRecommitmentDTO } from '../personnel/dto/update-personnel-recommitment.dto';
+import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
 
 @Controller('recommitment')
 @ApiTags('Recommitment API')
