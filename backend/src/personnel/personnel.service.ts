@@ -157,6 +157,7 @@ export class PersonnelService {
       updateDTO.certifications = updateDTO.certifications.map((itm) => ({
         certificationId: certs.find((cert) => itm.name === cert.name).id,
         personnelId: person.id,
+        expiry: itm.expiry,
       }));
     }
 
