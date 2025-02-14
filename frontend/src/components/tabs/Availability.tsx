@@ -6,9 +6,11 @@ import {
   DialogUI,
   MemberProfileEditPreferences,
   ProfileEditSkills,
+  Button,
 } from '@/components';
 import type { BcwsRoleInterface, FunctionType, Personnel } from '@/common';
 import {
+  ButtonTypes,
   Program,
   // type BcwsRoleInterface,
   // type FunctionType,
@@ -35,6 +37,11 @@ export const MemberAvailabilityTab = ({
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
   const [openEditSections, setOpenEditSections] = useState(false);
   const [openEditSkills, setOpenEditSkills] = useState(false);
+  const [showConfirmAvailability, setShowConfirmAvailability] = useState(false);
+
+  const openConfirmAvailability = () => {
+    setShowConfirmAvailability(!showConfirmAvailability);
+  };
 
   const handleOpenEditSections = () => {
     setOpenEditSections(!openEditSections);
@@ -44,15 +51,27 @@ export const MemberAvailabilityTab = ({
     setOpenEditSkills(!openEditSkills);
   };
 
-  const ScheduleDescription = () => (
-    <div>
-      <p className="text-defaultGray text-sm">
+  const ScheduleDescription = ({
+    openConfirmAvailability,
+  }: {
+    openConfirmAvailability: () => void;
+  }) => (
+    <div className="w-full flex justify-between">
+      <p className="text-defaultGray text-sm w-2/3">
         Select the calendar dates below to update your availability or view more
-        details.
-      </p>
-      <p className="text-defaultGray text-sm">
+        details.{' '}
+        <strong>
+          {
+            'Remember to click "Confirm and Send" each time after updating your availability.'
+          }
+        </strong>{' '}
         Deployment dates can only be declined and cannot be edited.
       </p>
+      <Button
+        onClick={openConfirmAvailability}
+        text="Confirm Availability"
+        variant={ButtonTypes.TERTIARY}
+      />
     </div>
   );
 
@@ -72,10 +91,16 @@ export const MemberAvailabilityTab = ({
     <>
       <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
         <ProfileSectionHeader
-          title="My Schedule"
-          description={<ScheduleDescription />}
+          title="My Availability"
+          description={
+            <ScheduleDescription openConfirmAvailability={openConfirmAvailability} />
+          }
         >
-          <MemberScheduler personnelId={personnel.id} />
+          <MemberScheduler
+            personnelId={personnel.id}
+            openConfirmAvailability={openConfirmAvailability}
+            showConfirmAvailability={showConfirmAvailability}
+          />
         </ProfileSectionHeader>
       </div>
       <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
@@ -163,12 +188,9 @@ export const MemberAvailabilityTab = ({
                       },
                     ]}
                     preferences={{
-                      first:
-                        personnel.emcr?.firstChoiceFunction,
-                      second:
-                        personnel.emcr?.secondChoiceFunction,
-                      third:
-                        personnel.emcr?.thirdChoiceFunction,
+                      first: personnel.emcr?.firstChoiceFunction,
+                      second: personnel.emcr?.secondChoiceFunction,
+                      third: personnel.emcr?.thirdChoiceFunction,
                     }}
                   />
                 </TabPanel>

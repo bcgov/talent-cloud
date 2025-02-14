@@ -2,8 +2,15 @@ export const MemberSchedulerKey = () => {
   return (
     <div className="flex flex-row gap-12 px-4 pb-6 pt-24">
       <div className="flex items-center">
-        {/* Change to green if not member view */}
-        <span className="px-4 py-1 bg-gray-100 text-sm">Available</span>
+        <span className="px-4 py-1 bg-gray-100 text-sm">
+          Available (Not Confirmed)
+        </span>
+      </div>
+
+      <div className="flex items-center">
+        <span className="px-4 py-1 border-l-4 border-l-green-700 bg-sprout-100 text-sm">
+          Available (Confirmed)
+        </span>
       </div>
 
       <div className="flex items-center">
