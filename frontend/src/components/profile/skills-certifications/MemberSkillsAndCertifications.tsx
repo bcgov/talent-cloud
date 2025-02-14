@@ -4,8 +4,8 @@ import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import type { LanguageProficiencyName } from '@/common/enums/language.enum';
 import type { ExperienceLevel } from '@/common/enums/sections.enum';
 import { useState } from 'react';
-import type { Personnel } from '@/common';
 import { MemberItemList } from '../sections-roles';
+import type { Languages, Member } from '@/common';
 
 export type MemberSkillsProps = {
   title?: string;
@@ -22,12 +22,12 @@ export type MemberSkillsProps = {
 };
 
 export const MemberSkillsAndCertifications = ({
-  personnel,
+  member,
 }: {
-  allowEditing: boolean;
-  updatePersonnel: (props: Partial<Personnel>) => void;
-  personnel: Personnel;
-  profileData: any;
+  allowEditing?: boolean;
+  updateMember?: (props: Member) => void;
+  member: Member;
+  profileData?: any;
 }) => {
   const [activeTab, setActiveTab] = useState('languages');
   const handleTabChange = (index: string) => {
@@ -70,8 +70,8 @@ export const MemberSkillsAndCertifications = ({
           <TabPanel value="languages" className="px-0">
             <MemberItemList
               data={
-                personnel.languages?.map((l) => ({
-                  id: l.id,
+                member.languages?.map((l: Languages) => ({
+                  id: l?.id,
                   language: l.language,
                   proficiency: getLanguageProficiency(l.level, l.type),
                   level: l.level,
@@ -93,7 +93,7 @@ export const MemberSkillsAndCertifications = ({
           <TabPanel value="tools" className="px-0">
             <MemberItemList
               data={
-                personnel.tools?.map((t) => ({
+                member.tools?.map((t) => ({
                   id: t.tool,
                   tool: ToolsName[t.tool],
                   proficiency: ToolsProficiencyName[t.proficiencyLevel],
@@ -115,7 +115,7 @@ export const MemberSkillsAndCertifications = ({
           <TabPanel value="certifications" className="px-0">
             <MemberItemList
               data={
-                personnel.certifications?.map((c) => ({
+                member.certifications?.map((c) => ({
                   id: c.name,
                   certification: c.name,
                   expiry: c.expiry || '--',

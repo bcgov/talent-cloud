@@ -1,13 +1,13 @@
-import type { Personnel, Location } from '@/common';
-import { fields, memberValidationSchema } from './constants';
+import type { Location, Member } from '@/common';
+import {  fields, memberValidationSchema } from './constants';
 import { datePST } from '@/utils';
+import {
+  BcwsTravelPreference,
+  EmcrTravelPreference,
+} from '@/common/enums/travel-preference.enum';
 
-export const memberFormConfig = (
-  personnelData: Partial<Personnel>,
-  locations: Location[],
-) => {
-  delete personnelData?.availability;
-  delete personnelData?.experiences;
+
+export const memberFormConfig = (personnelData: Member, locations: Location[]) => {
 
   const personnel = {
     ...personnelData,
@@ -16,8 +16,28 @@ export const memberFormConfig = (
       '',
     workPhone:
       personnelData.workPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') ?? '',
-    dateApproved: datePST(personnelData.dateApproved as Date, true),
-    dateApplied: datePST(personnelData.dateApplied as Date, true),
+    emcr: {
+      ...personnelData.emcr,
+      dateApproved: datePST(personnelData.emcr?.dateApproved as Date, true),
+      dateApplied: datePST(personnelData.emcr?.dateApplied as Date, true),
+      travelPreference:
+        personnelData?.emcr?.travelPreference &&
+        EmcrTravelPreference[
+          personnelData.emcr.travelPreference as keyof typeof EmcrTravelPreference
+        ],
+      status: personnelData.emcr?.status,
+    },
+    bcws: {
+      ...personnelData.bcws,
+      dateApproved: datePST(personnelData.bcws?.dateApproved as Date, true),
+      dateApplied: datePST(personnelData.bcws?.dateApplied as Date, true),
+      travelPreference:
+        personnelData?.bcws?.travelPreference &&
+        BcwsTravelPreference[
+          personnelData.bcws.travelPreference as keyof typeof BcwsTravelPreference
+        ],
+      status: personnelData.bcws?.status,
+    },
   };
 
   if (personnelData.secondaryPhone) {
@@ -26,8 +46,11 @@ export const memberFormConfig = (
   if (personnelData.supervisorPhone) {
     personnelData.supervisorPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   }
-  if (personnelData.liaisonPhoneNumber) {
-    personnelData.liaisonPhoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+  if (personnelData.bcws?.liaisonPhoneNumber) {
+    personnelData.bcws?.liaisonPhoneNumber?.replace(
+      /(\d{3})(\d{3})(\d{4})/,
+      '($1) $2-$3',
+    );
   }
   if (personnel.emergencyContactPhoneNumber) {
     personnelData.emergencyContactPhoneNumber?.replace(
@@ -56,7 +79,8 @@ export const memberFormConfig = (
           ...(personnelData.emcr ? [fields.workLocation.region] : []),
           ...(personnelData.bcws ? [fields.homeLocation.fireCentre] : []),
           ...(personnelData.bcws ? [fields.workLocation.fireCentre] : []),
-          fields.emcrTravelPreference,
+          ...(personnelData.bcws ? [fields.bcws.travelPreference] : []),
+          ...(personnelData.emcr ? [fields.emcr.travelPreference] : []),
           fields.driverLicense,
           fields.employeeId,
           fields.paylistId,
@@ -110,8 +134,8 @@ export const memberFormConfig = (
       lastName: personnel.lastName,
       homeLocation: personnel.homeLocation,
       workLocation: personnel.workLocation,
-      travelPreference:
-        personnel.bcws?.travelPreference || personnel.emcr?.travelPreference, // TODO: Probably should change this
+      emcr: { travelPreference: personnel.emcr?.travelPreference },
+      bcws: { travelPreference: personnel.bcws?.travelPreference },
       driverLicense: personnel?.driverLicense ?? [],
       employeeId: personnel?.employeeId,
       paylistId: personnel?.paylistId,
@@ -121,9 +145,11 @@ export const memberFormConfig = (
       supervisorLastName: personnel.supervisorLastName,
       supervisorEmail: personnel.supervisorEmail,
       supervisorPhone: personnel.supervisorPhone,
-      liaisonFirstName: personnel?.bcws?.liaisonFirstName ?? '',
-      liaisonLastName: personnel?.bcws?.liaisonLastName ?? '',
-      liaisonEmail: personnel?.bcws?.liaisonEmail ?? '',
+      bcws: {
+        liaisonFirstName: personnel?.bcws?.liaisonFirstName ?? '',
+        liaisonLastName: personnel?.bcws?.liaisonLastName ?? '',
+        liaisonEmail: personnel?.bcws?.liaisonEmail ?? '',
+      },
       ministry: personnel.ministry,
       division: personnel.division ?? '',
       unionMembership: personnel.unionMembership,

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { ProfileEditListSection } from './ProfileEditListSection';
 import { Button } from '@/components';
 import { ButtonTypes } from '@/common';
-import type { BcwsPersonnelRoleInterface, BcwsRoleInterface } from '@/common';
+import type { BcwsPersonnelRoleInterface, BcwsRoleInterface, Personnel } from '@/common';
 import {
+  BcwsRole,
   BcwsRoleName,
   ExperienceLevel,
   ExperienceLevelName,
@@ -22,13 +23,17 @@ export const ProfileEditRoles = ({
 }: {
   allRoles: BcwsRoleInterface[];
   originalRoles: BcwsPersonnelRoleInterface[];
-  sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section };
-  handleClose: () => void;
-  handleSave: (roles: {
-    newRoles: { roleId: number; expLevel: string }[];
+  sectionChoices: {
+    thirdChoiceSection?: Section;
     firstChoiceSection?: Section;
     secondChoiceSection?: Section;
-  }) => void;
+  };
+  handleClose: () => void;
+  handleSave: (
+    roles: Partial<Personnel>
+    
+    
+  ) => void;
 }) => {
   const [currentRoles, setCurrentRoles] = useState<{
     [section: string]: SkillsKeyVal[];
@@ -44,10 +49,10 @@ export const ProfileEditRoles = ({
       return acc;
     }, {}),
   );
-  const [firstChoiceSection, setFirstChoiceSection] = useState(
+  const [firstChoiceSection, setFirstChoiceSection] = useState<Section|undefined>(
     sectionChoices.firstChoiceSection,
   );
-  const [secondChoiceSection, setSecondChoiceSection] = useState(
+  const [secondChoiceSection, setSecondChoiceSection] = useState<Section|undefined>(
     sectionChoices.secondChoiceSection,
   );
 
@@ -74,19 +79,25 @@ export const ProfileEditRoles = ({
       },
       [],
     );
-    const newRoles: { roleId: number; expLevel: string }[] = allCurrentRoles.map(
+
+  
+    const newRoles: BcwsPersonnelRoleInterface[] = allCurrentRoles.map(
       (r) => ({
-        roleId: roleIds[r.key as string],
-        expLevel: r.value as string,
+        section: Section[r.key as keyof typeof Section],
+        id: roleIds[r.key as string],
+        role: BcwsRole[r.key as keyof typeof BcwsRole],
+        expLevel: ExperienceLevel[r.value as keyof typeof ExperienceLevel],
       }),
     );
     const rolesToSave = {
-      newRoles,
+      roles: newRoles,
       firstChoiceSection,
-      secondChoiceSection: secondChoiceSection?.length
-        ? secondChoiceSection
-        : undefined,
+      secondChoiceSection
     };
+    
+    if(!Section[secondChoiceSection as keyof typeof Section]){
+      delete rolesToSave.secondChoiceSection;
+    }
     handleSave(rolesToSave);
   };
 

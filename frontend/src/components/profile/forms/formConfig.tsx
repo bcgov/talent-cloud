@@ -1,18 +1,25 @@
 import { Program, Status } from '@/common';
 import type { Personnel, Location } from '@/common';
 import {
-  fields,
+  
   bcwsProfileValidationSchema,
   emcrPendingValidationSchema,
   bcwsPendingValidationSchema,
   emcrValidationSchema,
+  fields,
 } from './constants';
 import { datePST } from '@/utils';
+import {
+  BcwsTravelPreference,
+  EmcrTravelPreference,
+  TravelPreferenceText,
+} from '@/common/enums/travel-preference.enum';
+
 
 export const formConfig = (
   personnelData: Partial<Personnel>,
   locations: Location[],
-  program: Program,
+  program?: Program,
 ) => {
   delete personnelData?.availability;
   delete personnelData?.experiences;
@@ -37,12 +44,12 @@ export const formConfig = (
   if (personnelData.liaisonPhoneNumber) {
     personnelData.liaisonPhoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   }
-  if (personnel.emergencyContactPhoneNumber) {
-    personnelData.emergencyContactPhoneNumber?.replace(
-      /(\d{3})(\d{3})(\d{4})/,
-      '($1) $2-$3',
-    );
-  }
+    if (personnel.emergencyContactPhoneNumber) {
+      personnelData.emergencyContactPhoneNumber?.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3',
+      );
+    }
 
   fields.homeLocation.locationName.options = locations.map((itm: Location) => ({
     label: itm.locationName,
@@ -52,6 +59,22 @@ export const formConfig = (
     label: itm.locationName,
     value: itm.locationName,
   }));
+
+  if (program === Program.BCWS) {
+    fields.travelPreference.options = Object.values(BcwsTravelPreference).map(
+      (itm) => ({
+        label: TravelPreferenceText[itm],
+        value: itm.toString(),
+      }),
+    );
+  } else if (program === Program.EMCR) {
+    fields.travelPreference.options = Object.values(EmcrTravelPreference).map(
+      (itm) => ({
+        label: TravelPreferenceText[itm],
+        value: itm.toString(),
+      }),
+    );
+  }
 
   const bcwsSections = [
     {
@@ -65,7 +88,7 @@ export const formConfig = (
         fields.lastName,
         fields.dateApplied,
         fields.dateApproved,
-        fields.bcwsTravelPreference,
+        fields.travelPreference,
         fields.homeLocation.locationName,
         fields.homeLocation.fireCentre,
 
@@ -125,7 +148,7 @@ export const formConfig = (
         fields.lastName,
         fields.dateApplied,
         fields.dateApproved,
-        fields.emcrTravelPreference,
+        fields.travelPreference,
         fields.homeLocation.locationName,
         fields.homeLocation.region,
 
@@ -165,10 +188,10 @@ export const formConfig = (
     lastName: personnel.lastName,
     homeLocation: personnel.homeLocation,
     workLocation: personnel.workLocation,
-    travelPreference: personnel.travelPreference,
     primaryPhone: personnel.primaryPhone,
     secondaryPhone: personnel.secondaryPhone,
     workPhone: personnel.workPhone,
+    
     supervisorFirstName: personnel.supervisorFirstName,
     supervisorLastName: personnel.supervisorLastName,
     supervisorEmail: personnel.supervisorEmail,
@@ -177,39 +200,46 @@ export const formConfig = (
     division: personnel.division ?? '',
     unionMembership: personnel.unionMembership,
     driverLicense: personnel?.driverLicense ?? [],
-    status: personnel.status,
     email: personnel.email,
-    approvedBySupervisor: personnel.approvedBySupervisor,
+    emergencyContactFirstName: personnel.emergencyContactFirstName ?? '',
+    emergencyContactLastName: personnel.emergencyContactLastName ?? '',
+    emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
+    emergencyContactRelationship: personnel.emergencyContactRelationship ?? '',
     payListId: personnel.paylistId ?? '',
   };
 
   const bcwsValues = {
     ...initialFormValues,
+    travelPreference: personnel.travelPreference,
     purchaseCardHolder: personnel.purchaseCardHolder ?? false,
-    paylistId: personnel.paylistId ?? '',
     liaisonFirstName: personnel.liaisonFirstName ?? '',
     liaisonLastName: personnel.liaisonLastName ?? '',
     liaisonPhoneNumber: personnel.liaisonPhoneNumber,
     liaisonEmail: personnel.liaisonEmail ?? '',
-    emergencyContactFirstName: personnel.emergencyContactFirstName ?? '',
-    emergencyContactLastName: personnel.emergencyContactLastName ?? '',
-    emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
-    emergencyContactRelationship: personnel.emergencyContactRelationship ?? '',
+    approvedBySupervisor: personnel.approvedBySupervisor,
     dateApproved: personnel.dateApproved,
+    status: personnel.status,
+    
   };
-
+const emcrValues = {
+  ...initialFormValues, 
+  approvedBySupervisor: personnel.approvedBySupervisor,
+  dateApproved: personnel.dateApproved,
+  travelPreference: personnel.travelPreference,
+  status: personnel.status,
+}
   const emcrPendingValues = {
-    ...initialFormValues,
-    dateApplied: personnel.dateApplied,
+    ...emcrValues,
     icsTraining: personnel.icsTraining,
   };
+
   const bcwsPendingValues = {
     ...bcwsValues,
     parQ: personnel.parQ,
     willingnessStatement: personnel.willingnessStatement,
     orientation: personnel.orientation,
-    dateApplied: personnel.dateApplied,
   };
+
   if (program === Program.BCWS) {
     if (personnel.status === Status.PENDING) {
       return {
@@ -229,16 +259,13 @@ export const formConfig = (
       return {
         sections: emcrSections,
         validationSchema: emcrPendingValidationSchema,
-        initialValues: { ...emcrPendingValues },
+        initialValues: emcrPendingValues,
       };
     } else {
       return {
         sections: emcrSections.filter((itm) => itm.header !== 'Intake Requirements'),
         validationSchema: emcrValidationSchema,
-        initialValues: {
-          ...initialFormValues,
-          dateApproved: personnel.dateApproved,
-        },
+        initialValues: emcrValues,
       };
     }
   }

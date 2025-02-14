@@ -7,7 +7,7 @@ import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
 import { Tabs as TabIndexes } from '@/common';
 import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
-import { memberData } from '@/hooks/profileData';
+import { memberData } from '@/hooks/memberProfileData';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { useProgramFieldData } from '@/hooks';
 import { RecommitmentFormBase } from '@/components/recommitment';
@@ -15,11 +15,11 @@ import { format } from 'date-fns';
 
 const MemberProfile = () => {
   const {
-    personnel,
+    member,
     program,
     recommitmentProgram,
     loading,
-    updatePersonnel,
+    updateMember,
     openRecommitmentForm,
     handleOpenRecommitmentForm,
   } = useMemberProfile();
@@ -41,7 +41,7 @@ const MemberProfile = () => {
 
   const [activeTab, setActiveTab] = useState('availability');
 
-  const profileData = memberData(personnel);
+  const profileData = memberData(member);
   const { recommitmentCycle } = useRecommitmentCycle();
   const handleTabChange = (index: string) => {
     if (
@@ -64,21 +64,19 @@ const MemberProfile = () => {
       className={`min-h-screen w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
       <div
-        className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
+        className={`${member?.bcws?.status === Status.PENDING || member?.emcr?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
       >
         <Tabs value={activeTab} onChange={handleTabChange}>
-          {personnel && (
-            <ProfileMemberHeader personnel={personnel} currentTab={activeTab} />
-          )}
+          {member && <ProfileMemberHeader member={member} currentTab={activeTab} />}
 
           <div className="bg-white w-full">
             <div className="mx-auto w-auto">
-              {personnel && recommitmentCycle && (
+              {member && recommitmentCycle && (
                 <div className="pt-12 pb-6">
                   <RecommitmentProfileBanner
                     year={recommitmentCycle?.year}
                     endDate={format(recommitmentCycle.endDate, 'MMMM do, yyyy')}
-                    personnel={personnel}
+                    member={member}
                     handleClick={handleOpenRecommitmentForm}
                     handleCloseBanner={handleCloseBanner}
                     showBanner={showBanner}
@@ -89,22 +87,22 @@ const MemberProfile = () => {
               )}
               <TabsBody placeholder={undefined}>
                 <TabPanel value={TabIndexes.AVAILABILITY}>
-                  {personnel && (
+                  {member && (
                     <MemberAvailabilityTab
                       bcwsRoles={bcwsRoles}
                       functions={functions}
-                      personnel={personnel}
+                      member={member}
                       profileData={profileData}
-                      updatePersonnel={updatePersonnel}
+                      updateMember={updateMember}
                     />
                   )}
                 </TabPanel>
                 <TabPanel value={TabIndexes.PROFILE}>
-                  {personnel && (
+                  {member && (
                     <MemberProfileDetails
                       profileData={profileData}
-                      personnel={personnel}
-                      updatePersonnel={updatePersonnel}
+                      member={member}
+                      updateMember={updateMember}
                     />
                   )}
                 </TabPanel>
@@ -113,17 +111,17 @@ const MemberProfile = () => {
           </div>
         </Tabs>
       </div>
-      {program && personnel && (
+      {program && member && (
         <DialogUI
           open={openRecommitmentForm}
-          onClose={updatePersonnel}
+          onClose={updateMember}
           handleOpen={handleOpenRecommitmentForm}
           title={`Confirm Recommitment Status for ${recommitmentProgram === Program.ALL ? 'BCWS and EMCR' : recommitmentProgram?.toUpperCase()}`}
           style={'lg:w-2/3 xl:w-1/2'}
         >
           <RecommitmentFormBase
             program={recommitmentProgram}
-            personnel={personnel}
+            member={member}
             onClose={handleOpenRecommitmentForm}
           />
         </DialogUI>

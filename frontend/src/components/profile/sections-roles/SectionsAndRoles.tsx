@@ -16,6 +16,7 @@ import type {
   Personnel,
 } from '@/common';
 import { useState } from 'react';
+import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
 
 export const SectionsAndRoles = ({
   allowEditing,
@@ -26,7 +27,7 @@ export const SectionsAndRoles = ({
   allowEditing: boolean;
   bcwsRoles: BcwsRoleInterface[];
   personnel: Personnel;
-  updatePersonnel: (props: Partial<Personnel>) => void;
+  updatePersonnel: (props: Partial<Personnel>, endpoint?: PersonnelEndpoint) => void;
 }) => {
   const title = 'Sections & Roles';
   const [openEditRolesPopUp, setOpenEditRolesPopUp] = useState(false);
@@ -48,12 +49,8 @@ export const SectionsAndRoles = ({
     {},
   );
 
-  const handleSave = (roles: {
-    newRoles: { roleId: number; expLevel: string }[];
-    firstChoiceSection?: Section;
-    secondChoiceSection?: Section;
-  }) => {
-    updatePersonnel(roles);
+  const handleSave = (roles: Partial<Personnel>) => {
+    updatePersonnel(roles, PersonnelEndpoint.Roles);
     setOpenEditRolesPopUp(false);
   };
 
@@ -199,6 +196,7 @@ export const SectionsAndRoles = ({
           sectionChoices={{
             firstChoiceSection,
             secondChoiceSection,
+            thirdChoiceSection,
           }}
           handleClose={handleOpenEditRoles}
           handleSave={handleSave}

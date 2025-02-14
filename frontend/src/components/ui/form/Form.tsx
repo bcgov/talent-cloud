@@ -1,20 +1,16 @@
-import { type MouseEvent } from 'react';
-import type { FormikHelpers, FormikProps, FormikState, FormikValues } from 'formik';
-import { Form as FormikForm, Formik } from 'formik';
 import { ButtonTypes } from '@/common';
 import { Button } from '@/components';
-import { FormSection } from './FormSection';
-import type { Personnel } from '@/common';
-import type { SectionType } from '@/components/profile/forms/constants';
+import type { FormikProps, FormikState, FormikValues } from 'formik';
+import { Formik, Form as FormikForm } from 'formik';
+import { type MouseEvent } from 'react';
 import { FormField } from './FormField';
+import { FormSection } from './FormSection';
+import { SectionType } from '@/components/profile/forms/constants';
+
 
 type FormProps = {
   initialValues: any;
-  onSubmit: (
-    values: FormikValues,
-    helpers: FormikHelpers<Personnel>,
-    ...props: any
-  ) => void;
+  onSubmit: (values: FormikValues, ...props: any) => void;
   validationSchema: any;
   handleClose: (e: MouseEvent<HTMLElement>) => void;
   sections?: SectionType[];
@@ -35,13 +31,12 @@ export default function Form({
 }: FormProps) {
   return (
     <Formik
+      
       validationSchema={validationSchema}
       initialValues={initialValues}
-      onSubmit={(
-        values: FormikValues,
-        helpers: FormikHelpers<Personnel>,
-        ...props: any
-      ) => onSubmit(values, helpers, ...props)}
+      onSubmit={(values: FormikValues, ...props: any) => {
+        onSubmit(values, ...props);
+      }}
     >
       {({
         isSubmitting,
@@ -71,6 +66,7 @@ export default function Form({
                         key={fields[key].name}
                         field={fields[key]}
                         handleChange={fields[key].onChange}
+                        
                       />
                     )}
                   </div>
