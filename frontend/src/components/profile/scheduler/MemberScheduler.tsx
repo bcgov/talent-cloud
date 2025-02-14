@@ -12,7 +12,7 @@ import { AvailabilityType } from '@/common';
 import useAvailability from '@/hooks/useAvailability';
 import { DialogUI } from '@/components/ui';
 
-export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
+export const MemberScheduler = ({ memberId }: { memberId: string }) => {
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
 
   const [schedulerRows, setSchedulerRows] = useState<{
@@ -46,7 +46,7 @@ export const MemberScheduler = ({ personnelId }: { personnelId: string }) => {
   };
 
   const { availability, getAvailability, saveAvailability } = useAvailability({
-    personnelId,
+    personnelId: memberId,
   });
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;

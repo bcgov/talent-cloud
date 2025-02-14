@@ -5,7 +5,6 @@ import { PersonnelService } from './personnel.service';
 import { SupervisorController } from './supervisor.controller';
 import { AuditModule } from '../audit/audit.module';
 import { PersonnelSubscriber } from '../audit/subscribers/personnel.subscriber';
-import { EmcrExperienceEntity } from '../database/entities/emcr';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { CertificationEntity } from '../database/entities/personnel/certifications.entity';
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
@@ -13,6 +12,7 @@ import { PersonnelEntity } from '../database/entities/personnel/personnel.entity
 import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { LoggerModule } from '../logger/logger.module';
 import { MailModule } from '../mail/mail.module';
+import { PersonnelTools } from '../database/entities/personnel/personnel-tools.entity';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { MailModule } from '../mail/mail.module';
       LanguageEntity,
       CertificationEntity,
       ToolsEntity,
-      EmcrExperienceEntity, // TODO: Tech debt, bug in saving experiences through personnel, cannot remove existing
+      PersonnelTools 
     ]),
   ],
   controllers: [PersonnelController, SupervisorController],

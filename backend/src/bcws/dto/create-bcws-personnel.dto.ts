@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
@@ -32,7 +33,7 @@ export class CreatePersonnelBcwsDTO {
   @IsString()
   @Length(2, 1000)
   @IsOptional()
-  @ValidateIf((o) => o.coordinatorNotes !== '')
+  @ValidateIf((o) => o.coordinatorNotes)
   coordinatorNotes?: string;
 
   @ApiProperty({
@@ -42,7 +43,7 @@ export class CreatePersonnelBcwsDTO {
   @IsString()
   @Length(2, 1000)
   @IsOptional()
-  @ValidateIf((o) => o.logisticsNotes !== '')
+  @ValidateIf((o) => o.logisticsNote)
   logisticsNotes?: string;
 
   @ApiProperty({
@@ -127,6 +128,7 @@ export class CreatePersonnelBcwsDTO {
   })
   @IsArray()
   @IsOptional()
+  @Type(() => CreateBcwsPersonnelRolesDTO)
   roles?: CreateBcwsPersonnelRolesDTO[];
 
   @ApiProperty({

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { MemberProfile, Personnel, Recommitment } from '@/common';
+import type { Member, Recommitment } from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { Program } from '@/common';
@@ -7,25 +7,25 @@ import { Program } from '@/common';
 const useMemberProfile = (): {
   openRecommitmentForm: boolean;
   handleOpenRecommitmentForm: () => void;
-  personnel?: MemberProfile;
-  updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
+  member?: Member;
+  updateMember: (person: FormikValues | Member) => Promise<void>;
   loading: boolean;
   program?: Program;
   recommitmentProgram?: Program;
 } => {
-  const [personnel, setPersonnel] = useState<MemberProfile>();
+  const [member, setMember] = useState<Member>();
   const { AxiosPrivate } = useAxios();
   const [refetch, setRefetch] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [program, setProgram] = useState<Program>();
-  const [recommitmentProgram, setRecommitmentProgram] = useState<Program>();  
+  const [recommitmentProgram, setRecommitmentProgram] = useState<Program>();
   const [openRecommitmentForm, setOpenRecommitmentForm] = useState(false);
-  
+
   const getProfileDetails = async () => {
     setIsLoading(true);
     try {
       const response = await AxiosPrivate.get(`/personnel`);
-      response && setPersonnel({ ...response.data });
+      response && setMember({ ...response.data });
       // set program of personnel for personal data
       if (response?.data?.bcws && response?.data?.emcr) {
         setProgram(Program.ALL);
@@ -34,8 +34,12 @@ const useMemberProfile = (): {
       } else if (response?.data?.bcws && !response?.data?.emcr) {
         setProgram(Program.BCWS);
       }
-      const bcwsRecommitment = response?.data?.recommitment?.find((itm: Recommitment) => itm.program === Program.BCWS);
-      const emcrRecommitment = response?.data?.recommitment?.find((itm: Recommitment) => itm.program === Program.EMCR); 
+      const bcwsRecommitment = response?.data?.recommitment?.find(
+        (itm: Recommitment) => itm.program === Program.BCWS,
+      );
+      const emcrRecommitment = response?.data?.recommitment?.find(
+        (itm: Recommitment) => itm.program === Program.EMCR,
+      );
       // set program of recommitment for recommitment data
       if (bcwsRecommitment && emcrRecommitment) {
         setRecommitmentProgram(Program.ALL);
@@ -55,9 +59,9 @@ const useMemberProfile = (): {
     getProfileDetails();
   }, [refetch]);
 
-  const updatePersonnel = async (personnel: FormikValues | MemberProfile) => {
+  const updateMember = async (member: FormikValues, endpoint?: string) => {
     try {
-      await AxiosPrivate.patch(encodeURI(`/personnel`), personnel);
+      await AxiosPrivate.patch(encodeURI(`/personnel/${endpoint ?? ''}`), member);
 
       setRefetch(!refetch);
     } catch (e) {
@@ -72,11 +76,11 @@ const useMemberProfile = (): {
   return {
     openRecommitmentForm,
     handleOpenRecommitmentForm,
-    personnel,
+    member,
     loading,
-    updatePersonnel,
+    updateMember,
     program,
-    recommitmentProgram
+    recommitmentProgram,
   };
 };
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsEnum,
   IsOptional,
@@ -77,7 +77,7 @@ export class CreatePersonnelEmcrDTO {
     example: ['ICS Training', 'THE_CORE', 'WEBEOC'],
   })
   @IsOptional()
-  trainings: EmcrTrainingEntity[];
+  trainings: Partial<EmcrTrainingEntity>[];
 
   @ApiProperty({
     description: 'Experiences this personnel has had in specific functions',
@@ -97,6 +97,7 @@ export class CreatePersonnelEmcrDTO {
     ],
   })
   @IsOptional()
+  @Type(() => EmcrPersonnelExperienceDTO)
   experiences?: EmcrPersonnelExperienceDTO[];
 
   @ApiProperty({

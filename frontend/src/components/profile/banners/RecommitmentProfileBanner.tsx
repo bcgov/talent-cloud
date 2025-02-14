@@ -1,12 +1,13 @@
 import { BannerType } from '@/common/enums/banner-enum';
-import { Program, type Personnel } from '@/common';
+import type { Member } from '@/common';
+import { Program } from '@/common';
 import { RecommitmentBanner } from '../RecommitmentBanner';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 
 export const RecommitmentProfileBanner = ({
   year,
   endDate,
-  personnel,
+  member,
   handleClick,
   handleCloseBanner,
   showBanner,
@@ -15,7 +16,7 @@ export const RecommitmentProfileBanner = ({
 }: {
   year: number;
   endDate: string;
-  personnel: Personnel;
+  member: Member;
   handleClick: () => void;
   handleCloseBanner: (program?: Program) => void;
   showBanner: boolean;
@@ -116,10 +117,10 @@ export const RecommitmentProfileBanner = ({
     onClose: handleCloseBanner,
   };
 
-  const emcrStatus = personnel?.recommitment?.find(
+  const emcrStatus = member?.recommitment?.find(
     (itm) => itm.program === Program.EMCR,
   )?.status;
-  const bcwsStatus = personnel?.recommitment?.find(
+  const bcwsStatus = member?.recommitment?.find(
     (itm) => itm.program === Program.BCWS,
   )?.status;
 

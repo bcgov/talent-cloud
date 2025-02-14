@@ -3,6 +3,7 @@ import type {
   BcwsRoleInterface,
   ExperienceInterface,
   FunctionType,
+  Member,
 } from '@/common';
 import { ButtonTypes, Experience } from '@/common';
 import {
@@ -24,6 +25,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { ProfileSectionHeader } from '../common';
 import { QuestionIcon } from '@/components/ui/Icons';
 import RolesAndFunctionsDescriptionsTabs from './RolesGuide';
+import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
 
 interface RoleSelectProps {
   allRoles: BcwsRoleInterface[];
@@ -203,7 +205,11 @@ const MemberProfileEditRoles = ({
 }: {
   allRoles: BcwsRoleInterface[];
   originalRoles: BcwsPersonnelRoleInterface[];
-  sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section; thirdChoiceSection?: Section };
+  sectionChoices: {
+    firstChoiceSection?: Section;
+    secondChoiceSection?: Section;
+    thirdChoiceSection?: Section;
+  };
   handleChange: (rolesToSave: RoleChanges) => void;
 }) => {
   const [currentRoles, setCurrentRoles] = useState<BcwsRoleInterface[]>(
@@ -247,9 +253,14 @@ const MemberProfileEditRoles = ({
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setFirstChoiceSection(e.target.value as Section)}
               >
-                <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={[secondChoiceSection, thirdChoiceSection].includes(s as Section)}>
+                  <option
+                    value={s}
+                    key={s}
+                    disabled={[secondChoiceSection, thirdChoiceSection].includes(
+                      s as Section,
+                    )}
+                  >
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -258,13 +269,20 @@ const MemberProfileEditRoles = ({
             <div className="flex flex-col basis-1/2">
               <p className="font-bold text-sm pb-2">2nd Choice</p>
               <select
+                disabled={!firstChoiceSection}
                 value={secondChoiceSection}
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setSecondChoiceSection(e.target.value as Section)}
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={[firstChoiceSection, thirdChoiceSection].includes(s as Section)}>
+                  <option
+                    value={s}
+                    key={s}
+                    disabled={[firstChoiceSection, thirdChoiceSection].includes(
+                      s as Section,
+                    )}
+                  >
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -273,13 +291,20 @@ const MemberProfileEditRoles = ({
             <div className="flex flex-col basis-1/2">
               <p className="font-bold text-sm pb-2">3rd Choice</p>
               <select
+                disabled={!secondChoiceSection}
                 value={thirdChoiceSection}
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setThirdChoiceSection(e.target.value as Section)}
               >
                 <option value={''}>None</option>
                 {Object.keys(Section).map((s) => (
-                  <option value={s} key={s} disabled={[firstChoiceSection, secondChoiceSection].includes(s as Section)}>
+                  <option
+                    value={s}
+                    key={s}
+                    disabled={[firstChoiceSection, secondChoiceSection].includes(
+                      s as Section,
+                    )}
+                  >
                     {SectionName[s as keyof typeof SectionName]}
                   </option>
                 ))}
@@ -359,12 +384,13 @@ const MemberProfileEditFunctions = ({
     sectionChoices.thirdChoiceSection,
   );
   const [currentFunctions, setCurrentFunctions] = useState<FunctionType[]>(
-    originalExperiences.map((e) => ({
+    originalExperiences.map((e: ExperienceInterface) => ({
       id: e.function.id,
       name: e.function.name,
       abbreviation: e.function.abbreviation,
     })),
   );
+
 
   useEffect(() => {
     handleChange({
@@ -373,7 +399,12 @@ const MemberProfileEditFunctions = ({
       thirdChoiceSection,
       functions: currentFunctions,
     });
-  }, [currentFunctions, firstChoiceSection, secondChoiceSection, thirdChoiceSection]);
+  }, [
+    currentFunctions,
+    firstChoiceSection,
+    secondChoiceSection,
+    thirdChoiceSection,
+  ]);
 
   return (
     <>
@@ -390,12 +421,13 @@ const MemberProfileEditFunctions = ({
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setFirstChoiceSection(e.target.value)}
               >
-                <option value={''}>None</option>
                 {allFunctions.map((s) => (
                   <option
                     value={s.name}
                     key={s.id}
-                    disabled={[secondChoiceSection, thirdChoiceSection].includes(s.name)}
+                    disabled={[secondChoiceSection, thirdChoiceSection].includes(
+                      s.name,
+                    )}
                   >
                     {s.name}
                   </option>
@@ -405,6 +437,7 @@ const MemberProfileEditFunctions = ({
             <div className="flex flex-col">
               <p className="font-bold text-sm pb-2">2nd Choice</p>
               <select
+                disabled={!firstChoiceSection}
                 value={secondChoiceSection}
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setSecondChoiceSection(e.target.value)}
@@ -414,7 +447,9 @@ const MemberProfileEditFunctions = ({
                   <option
                     value={s.name}
                     key={s.id}
-                    disabled={[firstChoiceSection, thirdChoiceSection].includes(s.name)}
+                    disabled={[firstChoiceSection, thirdChoiceSection].includes(
+                      s.name,
+                    )}
                   >
                     {s.name}
                   </option>
@@ -424,6 +459,7 @@ const MemberProfileEditFunctions = ({
             <div className="flex flex-col">
               <p className="font-bold text-sm pb-2">3rd Choice</p>
               <select
+                disabled={!secondChoiceSection}
                 value={thirdChoiceSection}
                 className="rounded-md w-full font-normal basis-1/2"
                 onChange={(e) => setThirdChoiceSection(e.target.value)}
@@ -433,7 +469,9 @@ const MemberProfileEditFunctions = ({
                   <option
                     value={s.name}
                     key={s.id}
-                    disabled={[firstChoiceSection, secondChoiceSection].includes(s.name)}
+                    disabled={[firstChoiceSection, secondChoiceSection].includes(
+                      s.name,
+                    )}
                   >
                     {s.name}
                   </option>
@@ -492,7 +530,11 @@ export const MemberProfileEditPreferences = ({
   bcws?: {
     allRoles: BcwsRoleInterface[];
     originalRoles: BcwsPersonnelRoleInterface[];
-    sectionChoices: { firstChoiceSection?: Section; secondChoiceSection?: Section; thirdChoiceSection?: Section; };
+    sectionChoices: {
+      firstChoiceSection?: Section;
+      secondChoiceSection?: Section;
+      thirdChoiceSection?: Section;
+    };
   };
   emcr?: {
     allFunctions: FunctionType[];
@@ -504,7 +546,7 @@ export const MemberProfileEditPreferences = ({
     };
   };
   handleClose: () => void;
-  handleSave: (personnel: any) => Promise<void>;
+  handleSave: (personnel: Member, endpoint?: string) => Promise<void>;
 }) => {
   const [rolesToSave, setRolesToSave] = useState<RoleChanges>({
     firstChoiceSection: bcws?.sectionChoices?.firstChoiceSection,
@@ -539,9 +581,9 @@ export const MemberProfileEditPreferences = ({
         ...rolesExcludingRemoved,
       ];
       personnelUpdate.bcws = {
-        firstChoiceSection: rolesToSave.firstChoiceSection,
-        secondChoiceSection: rolesToSave.secondChoiceSection,
-        thirdChoiceSection: rolesToSave.thirdChoiceSection,
+        firstChoiceSection: Section[rolesToSave.firstChoiceSection as keyof typeof Section] || null,
+        secondChoiceSection: Section[rolesToSave.secondChoiceSection as keyof typeof Section] || null,
+        thirdChoiceSection: Section[rolesToSave.thirdChoiceSection as keyof typeof Section] || null,
         roles: updateRoles,
       };
     }
@@ -572,10 +614,19 @@ export const MemberProfileEditPreferences = ({
         thirdChoiceSection: functionsToSave.thirdChoiceSection,
         experiences: updateFunctions,
       };
+      if(personnelUpdate.emcr.firstChoiceSection === '') {
+        delete personnelUpdate.emcr.firstChoiceSection;
+      }
+      if(personnelUpdate.emcr.secondChoiceSection === '') {
+        delete personnelUpdate.emcr.secondChoiceSection;
+      }
+      if(personnelUpdate.emcr.thirdChoiceSection === '') {
+        delete personnelUpdate.emcr.thirdChoiceSection;
+      }
     }
 
     if (Object.keys(personnelUpdate).length) {
-      handleSave(personnelUpdate);
+      handleSave(personnelUpdate, PersonnelEndpoint.Preferences);
     }
     handleClose();
   };

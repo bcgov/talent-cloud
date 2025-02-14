@@ -4,6 +4,12 @@ import { ExperienceLevel } from '../../common/enums/bcws';
 
 export class CreateBcwsPersonnelRolesDTO {
   @ApiProperty({
+    description: 'Personnel Id',
+    required: false,
+  })
+  personnelId?: string;
+
+  @ApiProperty({
     description: 'Role Id',
     required: true,
   })

@@ -9,16 +9,13 @@ import {
   ToolsProficiencyName,
 } from '@/common/enums/tools.enum';
 import { Button } from '@/components';
+import type { PersonnelTool, Certification, Languages } from '@/common';
 import { ButtonTypes } from '@/common';
 import {
   LanguageLevelType,
   LanguageProficiency,
 } from '@/common/enums/language.enum';
-import type {
-  BcwsCertification,
-  BcwsLanguages,
-  BcwsPersonnelTool,
-} from '../../../pages/dashboard';
+
 import { isValid, parse } from 'date-fns';
 
 export const ProfileEditSkills = ({
@@ -37,9 +34,9 @@ export const ProfileEditSkills = ({
   originalCerts: { name: string; expiry?: string }[];
   handleClose: () => void;
   handleSave: (skills: {
-    newLanguages: BcwsLanguages[];
-    newTools: BcwsPersonnelTool[];
-    newCertifications: BcwsCertification[];
+    newLanguages: Languages[];
+    newTools: PersonnelTool[];
+    newCertifications: Certification[];
   }) => void;
 }) => {
   const [languages, setLanguages] = useState<SkillsKeyVal[]>(
@@ -70,14 +67,14 @@ export const ProfileEditSkills = ({
         language: l.key,
         level: l.value!.split('-')[0],
         type: l.value!.split('-')[1],
-      })) as BcwsLanguages[];
+      })) as Languages[];
     const newTools = tools
       .filter((t) => !!t.key && !!t.value)
       .map((t) => ({
         tool: t.key,
         proficiencyLevel: t.value,
-      })) as BcwsPersonnelTool[];
-    const newCertifications = certifications.map((c) => ({
+      })) as PersonnelTool[];
+    const newCertifications: Certification[] = certifications.map((c) => ({
       name: c.key as CertificationName,
       expiry: c.value,
     }));
