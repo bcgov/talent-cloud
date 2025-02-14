@@ -6,10 +6,10 @@ interface Reason {
   text: string;
 }
 export interface SupervisorInformation {
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
+  supervisorFirstName: string;
+  supervisorLastName: string;
+  supervisorEmail: string;
+  supervisorPhone?: string;
 }
 
 export const reasonDefinitions = {

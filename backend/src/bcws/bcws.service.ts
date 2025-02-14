@@ -6,12 +6,8 @@ import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { BcwsRO } from './ro';
 import { BcwsSectionsRO } from './ro/bcws-sections.ro';
 import { Role, Program } from '../auth/interface';
-import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
 import { TravelPreference } from '../common/enums/travel-preference.enum';
-import {
-  BcwsPersonnelEntity,
-  BcwsSectionsAndRolesEntity,
-} from '../database/entities/bcws';
+import { BcwsPersonnelEntity } from '../database/entities/bcws';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
@@ -20,6 +16,7 @@ import {
   UpdateBcwsRolesDTO,
 } from './dto/update-bcws-personnel-roles.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
+import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
 
 @Injectable()
 export class BcwsService {
@@ -34,12 +31,12 @@ export class BcwsService {
   ) {
     this.logger.setContext(PersonnelService.name);
   }
-  
-/**
- * Update personnel after recommitment
- * @param id 
- * @param status 
- */
+
+  /**
+   * Update personnel after recommitment
+   * @param id
+   * @param status
+   */
   async updatePersonnelAfterRecommitment(id: string, status: Status) {
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
@@ -69,19 +66,19 @@ export class BcwsService {
     );
   }
   /**
-   * 
+   *
    * @param bcws Update BCWS Personnel Data
-   * @param id 
+   * @param id
    */
-  async updateBcwsPersonnel(bcws: UpdateBcwsPersonnelDTO, id: string){
+  async updateBcwsPersonnel(bcws: UpdateBcwsPersonnelDTO, id: string) {
     await this.bcwsPersonnelRepository.update(id, bcws);
   }
-/**
- * Update BCWS Roles
- * @param id 
- * @param preferences 
- * @returns 
- */
+  /**
+   * Update BCWS Roles
+   * @param id
+   * @param preferences
+   * @returns
+   */
   async updateRoles(
     id: string,
     preferences: UpdateBcwsRolesAndPreferencesDTO,
@@ -89,16 +86,23 @@ export class BcwsService {
     const person = await this.bcwsPersonnelRepository.findOneOrFail({
       where: { personnelId: id },
     });
-    
-    
 
-    person.firstChoiceSection = preferences.firstChoiceSection ?? null;
-    person.secondChoiceSection = preferences.secondChoiceSection ?? null;
-    
+    if (preferences.firstChoiceSection) {
+      person.firstChoiceSection = preferences.firstChoiceSection ?? null;
+    }
+    if (preferences.secondChoiceSection) {
+      person.secondChoiceSection = preferences.secondChoiceSection ?? null;
+    }
+    if (preferences.thirdChoiceSection) {
+      person.thirdChoiceSection = preferences.thirdChoiceSection ?? null;
+    }
 
-    await this.bcwsPersonnelRepository.save(person);
+    await this.bcwsPersonnelRepository.save({
+      ...person,
+      ...preferences,
+    });
 
-    return preferences.roles
+    return preferences.roles;
   }
 
   /**
