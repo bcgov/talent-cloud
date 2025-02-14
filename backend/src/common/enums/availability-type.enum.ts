@@ -2,6 +2,7 @@ export enum AvailabilityTypeLabel {
   UNAVAILABLE = 'UNAVAILABLE',
   DEPLOYED = 'DEPLOYED',
   AVAILABLE = 'AVAILABLE',
+  NOT_INDICATED = 'NOT_INDICATED',
 }
 
 export enum AvailabilityType {

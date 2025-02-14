@@ -416,10 +416,14 @@ export class PersonnelService {
           numDays: differenceInDays(availabilityToDate, availabilityFromDate),
         });
 
-        queryBuilder.andWhere(
-          `personnel.id not IN (${allAvailable.getQuery()})`,
-          allAvailable.getParameters(),
-        );
+        queryBuilder
+          .andWhere(
+            `personnel.id not IN (${allAvailable.getQuery()})`,
+            allAvailable.getParameters(),
+          )
+          .andWhere('personnel.availability_confirmed_until > :date', {
+            date: end,
+          });
 
         queryBuilder.leftJoinAndSelect(
           'personnel.availability',
@@ -439,10 +443,14 @@ export class PersonnelService {
           date: start,
         });
 
-        queryBuilder.where(
-          `personnel.id not IN (${allAvailable.getQuery()})`,
-          allAvailable.getParameters(),
-        );
+        queryBuilder
+          .where(
+            `personnel.id not IN (${allAvailable.getQuery()})`,
+            allAvailable.getParameters(),
+          )
+          .andWhere('personnel.availabilityConfirmedUntil > :date', {
+            date: end,
+          });
       }
     } else {
       this.logger.log('Availability Query - No Type Specified');
@@ -590,6 +598,7 @@ export class PersonnelService {
     const availability = await qb.getMany();
 
     const dates = eachDayOfInterval({ start, end: endDate });
+    const person = await this.personnelRepository.findOneByOrFail({ id });
 
     const availableDates: AvailabilityRO[] = dates.map(
       (date) =>
@@ -597,7 +606,10 @@ export class PersonnelService {
           .find((itm) => itm.date === format(date, 'yyyy-MM-dd'))
           ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
-          availabilityType: AvailabilityTypeLabel.AVAILABLE,
+          availabilityType:
+            new Date(date) < new Date(person.availabilityConfirmedUntil)
+              ? AvailabilityTypeLabel.AVAILABLE
+              : AvailabilityTypeLabel.NOT_INDICATED,
           deploymentCode: '',
         },
     );
@@ -760,7 +772,9 @@ export class PersonnelService {
 
       .leftJoinAndSelect('experiences.function', 'function');
 
-    qb.where('LOWER(personnel.email) = :email', { email: req.idir.toLowerCase() });
+    qb.where('LOWER(personnel.email) = :email', {
+      email: req.idir.toLowerCase(),
+    });
 
     const personnelData = await qb.getOne();
     this.logger.log(`User is a member`);
@@ -771,12 +785,15 @@ export class PersonnelService {
     email: string,
   ): Promise<{ isMember: boolean; isSupervisor: boolean }> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.where('LOWER(personnel.email) = :email', { email: email.toLowerCase() }).orWhere(
-      'LOWER(personnel.supervisorEmail) = :supervisorEmail',
-      { supervisorEmail: email.toLowerCase() }, 
-    );
+    qb.where('LOWER(personnel.email) = :email', {
+      email: email.toLowerCase(),
+    }).orWhere('LOWER(personnel.supervisorEmail) = :supervisorEmail', {
+      supervisorEmail: email.toLowerCase(),
+    });
     const people = await qb.getMany();
-    const isMember = people.map((itm) => itm.email.toLowerCase()).includes(email.toLowerCase());
+    const isMember = people
+      .map((itm) => itm.email.toLowerCase())
+      .includes(email.toLowerCase());
     const isSupervisor = people
       .map((itm) => itm.supervisorEmail?.toLowerCase())
       .includes(email.toLowerCase());
@@ -840,6 +857,17 @@ export class PersonnelService {
     );
 
     return { personnel, count };
+  }
+  /**
+   * Member confirmation of availability
+   * @param date
+   * @param id
+   * @returns {UpdateResult}
+   */
+  async confirmAvailability(date: Date, id: string): Promise<UpdateResult> {
+    return await this.personnelRepository.update(id, {
+      availabilityConfirmedUntil: date,
+    });
   }
 
   async findActivePersonnel(ministry?: string): Promise<{

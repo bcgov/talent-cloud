@@ -18,6 +18,7 @@ import type { AvailabilityType } from '@/common';
 import { SchedulerPopUp } from './SchedulerPopUp';
 import useAvailability from '@/hooks/useAvailability';
 
+//TODO - use the useScheduler dialog and useAvailability hooks to implement the Scheduler component
 export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
   const [open, setOpen] = useState(1);
   const [schedulerDialogOpen, setSchedulerDialogOpen] = useState(false);
@@ -213,6 +214,7 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
               {`${personnel.firstName}'s Schedule`}
             </AccordionHeader>
             <AccordionBody className="px-8">
+              
               <SchedulerControl
                 onChangeAvailabilityDates={onChangeAvailabilityQuery}
                 addEventClicked={() => openSchedulerDialog()}

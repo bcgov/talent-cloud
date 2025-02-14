@@ -230,6 +230,7 @@ export interface Personnel {
   emcr?: Partial<Personnel>;
   skills: PersonnelTool[] | Certification[] | Languages[];
   recommitment?: Recommitment[];
+  availabilityConfirmedUntil: Date;
 }
 
 export interface AvailabilityRange {

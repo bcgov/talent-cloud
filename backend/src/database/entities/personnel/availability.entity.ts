@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
 import { AvailabilityType, AvailabilityTypeLabel } from '../../../common/enums';
@@ -19,6 +20,9 @@ export class AvailabilityEntity {
     type: 'date',
   })
   date: string;
+
+  @UpdateDateColumn()
+  updated: Date;
 
   @Column({
     name: 'availability_type',

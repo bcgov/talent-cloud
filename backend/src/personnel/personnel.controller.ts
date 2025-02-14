@@ -27,6 +27,7 @@ import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
+import { ConfirmAvailabilityDTO } from './dto/confirm-availability.dto';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -116,6 +117,27 @@ export class PersonnelController {
     return availabilityUpdate;
   }
 
+  @ApiOperation({
+    summary: 'Member Confirmation of Availability',
+    description: 'Update availability',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Roles(Role.MEMBER)
+  @Patch(':id/availability/confirm')
+  async confirmAvailability(
+    @Body() confirmAvailability: ConfirmAvailabilityDTO,
+    @Param() id: string,
+    @Req() req: RequestWithRoles,
+  ) {
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    return await this.personnelService.confirmAvailability(
+      confirmAvailability.date,
+      id,
+    );
+  }
   @ApiOperation({
     summary: 'Get personnel availability for specific dates',
     description: 'Returns the personnel data to the profile view',

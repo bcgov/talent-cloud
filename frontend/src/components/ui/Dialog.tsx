@@ -35,7 +35,7 @@ export const DialogUI = ({
         <div className="flex min-h-full items-center justify-center p-4">
           {/* The actual dialog panel  */}
           <DialogPanel className={`mx-auto rounded bg-white ${style}`}>
-            <DialogTitle className="bg-grayBackground flex flex-row w-full justify-between py-6 px-6">
+            <DialogTitle className="bg-grayBackground flex flex-row w-full justify-between items-start py-4 px-6">
               <h4 className="font-bold">{title}</h4>
               <button
                 aria-label="close"
