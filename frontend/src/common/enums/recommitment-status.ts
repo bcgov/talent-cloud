@@ -61,3 +61,16 @@ export enum RecommitmentStatusLabel {
   // member will be set as INACTIVE in the particular program
   SUPERVISOR_NO_RESPONSE = 'No Supervisor Response',
 }
+
+export enum RecommitmentStatusFilterLabel {
+  ACTIVE = 'Active',
+  ALL = 'All',
+  INACTIVE = 'Inactive',
+  MEMBER_COMMITTED = 'Recommitted',
+  MEMBER_DENIED = 'Member Declined - Not Returning',
+  MEMBER_NO_RESPONSE = 'Missed Recommitment',
+  NEW = 'New',
+  OTHER = 'Other',
+  PENDING = 'Pending',
+  SUPERVISOR_DENIED = 'Supervisor Declined - Not Returning',
+}

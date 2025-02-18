@@ -8,7 +8,8 @@ import { useTable } from '@/hooks';
 
 // common
 import { Filters, Role } from '@/common';
-import { Status, StatusNames } from '@/common';
+import { Status } from '@/common';
+import { RecommitmentStatusFilterLabel } from '@/common/enums/recommitment-status';
 
 // ui
 import {
@@ -99,9 +100,9 @@ const Dashboard = () => {
             {searchParams.get(Filters.STATUS) === Status.ACTIVE && (
               <StatusFilter
                 statusFilter={[
-                  StatusNames.ALL,
-                  StatusNames.NEW,
-                  StatusNames.RECOMMITTED,
+                  RecommitmentStatusFilterLabel.ALL,
+                  RecommitmentStatusFilterLabel.NEW,
+                  RecommitmentStatusFilterLabel.MEMBER_COMMITTED,
                 ]}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
@@ -111,11 +112,11 @@ const Dashboard = () => {
             {searchParams.get(Filters.STATUS) === Status.INACTIVE && (
               <StatusFilter
                 statusFilter={[
-                  StatusNames.ALL,
-                  StatusNames.MISSED,
-                  StatusNames.MEMBER_DECLINED,
-                  StatusNames.SUPERVISOR_DECLINED,
-                  StatusNames.OTHER,
+                  RecommitmentStatusFilterLabel.ALL,
+                  RecommitmentStatusFilterLabel.MEMBER_NO_RESPONSE,
+                  RecommitmentStatusFilterLabel.MEMBER_DENIED,
+                  RecommitmentStatusFilterLabel.SUPERVISOR_DENIED,
+                  RecommitmentStatusFilterLabel.OTHER,
                 ]}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}

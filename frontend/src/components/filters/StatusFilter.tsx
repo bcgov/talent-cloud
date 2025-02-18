@@ -16,7 +16,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 import { Filters, StatusNames } from '@/common';
 
 // util
-import { getStatusLabel } from '@/utils';
+import { getRecommitmentStatus, getRecommitmentStatusFilterLabel } from '@/utils';
+import { RecommitmentStatusFilterLabel } from '@/common/enums/recommitment-status';
 
 export const StatusFilter = ({
   searchParams,
@@ -25,13 +26,13 @@ export const StatusFilter = ({
 }: {
   searchParams: any;
   setSearchParams: (searchParams: any) => any;
-  statusFilter: StatusNames[];
+  statusFilter: RecommitmentStatusFilterLabel[];
 }) => {
   const value = searchParams.get(Filters.AVAILABLE_STATUS) ?? StatusNames.ALL;
   const tab = searchParams.get(Filters.STATUS);
 
   const onChange = (value: string) => {
-    searchParams.set(Filters.AVAILABLE_STATUS, value);
+    searchParams.set(Filters.AVAILABLE_STATUS, getRecommitmentStatus(value));
     setSearchParams({ ...Object.fromEntries(searchParams) });
   };
 
@@ -50,7 +51,9 @@ export const StatusFilter = ({
                 className={classes.menu.container}
                 aria-label="Single Select Menu Button"
               >
-                <p className={classes.menu.placeholder}>{getStatusLabel(value)}</p>
+                <p className={classes.menu.placeholder}>
+                  {getRecommitmentStatusFilterLabel(value)}
+                </p>
                 {open ? (
                   <ChevronUpIcon aria-hidden="true" aria-label="open" />
                 ) : (
@@ -76,7 +79,7 @@ export const StatusFilter = ({
                           onClick={() => onChange(itm)}
                           className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                         >
-                          {getStatusLabel(itm)}
+                          {itm}
                         </button>
                       </MenuItem>
                     ))}
