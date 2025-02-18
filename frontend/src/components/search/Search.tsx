@@ -3,6 +3,7 @@ import type { FieldInterface } from '..';
 import { classes } from '../filters/classes';
 import { debounce } from 'lodash';
 import { Filters } from '@/common';
+import { useCallback } from 'react';
 
 export const Search = ({
   searchParams,
@@ -17,19 +18,22 @@ export const Search = ({
   handleChangeSearch: (value: string) => void;
   searchInputValue: string;
 }) => {
-  const sendRequest = (value: string) => {
-    if (value === '') {
-      searchParams.delete(Filters.NAME);
-      setSearchParams({ ...Object.fromEntries(searchParams) });
-    } else {
-      searchParams.set(Filters.NAME, value);
-      setSearchParams({ ...Object.fromEntries(searchParams) });
-    }
-  };
+  const sendRequest = useCallback(
+    debounce((value: string) => {
+      if (value === '') {
+        searchParams.delete(Filters.NAME);
+        setSearchParams({ ...Object.fromEntries(searchParams) });
+      } else {
+        searchParams.set(Filters.NAME, value);
+        setSearchParams({ ...Object.fromEntries(searchParams) });
+      }
+    }, 500),
+    [searchParams, setSearchParams],
+  );
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChangeSearch(e.target.value);
-    debounce(sendRequest, 500)(e.target.value);
+    sendRequest(e.target.value);
   };
   return (
     <div className="relative w-full">
