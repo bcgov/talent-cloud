@@ -62,15 +62,15 @@ export enum RecommitmentStatusLabel {
   SUPERVISOR_NO_RESPONSE = 'No Supervisor Response',
 }
 
-export enum RecommitmentStatusFilterLabel {
-  ACTIVE = 'Active',
-  ALL = 'All',
-  INACTIVE = 'Inactive',
-  MEMBER_COMMITTED = 'Recommitted',
-  MEMBER_DENIED = 'Member Declined - Not Returning',
-  MEMBER_NO_RESPONSE = 'Missed Recommitment',
-  NEW = 'New',
-  OTHER = 'Other',
-  PENDING = 'Pending',
-  SUPERVISOR_DENIED = 'Supervisor Declined - Not Returning',
-}
+export const RecommitmentStatusFilter = [
+  { value: 'ALL', label: 'All' },
+  { value: 'NEW', label: 'New' },
+  { value: 'ACTIVE', label: 'Active' },
+  { value: 'INACTIVE', label: 'Inactive' },
+  { value: 'MEMBER_COMMITTED', label: 'Recommitted' },
+  { value: 'MEMBER_DENIED', label: 'Member Declined - Not Returning' },
+  { value: 'MEMBER_NO_RESPONSE', label: 'Missed Recommitment' },
+  { value: 'SUPERVISOR_DENIED', label: 'Supervisor Declined - Not Returning' },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'OTHER', label: 'Other' },
+];

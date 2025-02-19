@@ -1,10 +1,3 @@
-// common
-import { StatusLabels, StatusNames } from '@/common';
-import {
-  RecommitmentStatus,
-  RecommitmentStatusFilterLabel,
-} from '@/common/enums/recommitment-status';
-
 /**
  * offsetTimezoneDate
  * We tend to deal with dates as strings, but since the database stores them as dates as UTC, this helper function
@@ -53,39 +46,4 @@ export const getLabelFromValue = (
     }
   }
   return '';
-};
-
-export const getKeyByValue = (value: string, e: Object) => {
-  const indexOf = Object.values(e).indexOf(value);
-
-  return Object.keys(e)[indexOf];
-};
-
-export const getStatusLabel = (name: string) => {
-  return StatusLabels[getKeyByValue(name, StatusNames)];
-};
-
-export const getRecommitmentStatusFilterLabel = (labelKey: string) => {
-  for (const entry of Object.entries(RecommitmentStatusFilterLabel)) {
-    const key = entry[0];
-    const value = entry[1];
-    if (labelKey === key) {
-      return value;
-    }
-  }
-  return labelKey;
-};
-
-export const getRecommitmentStatus = (name: string) => {
-  const labelKey = getKeyByValue(name, RecommitmentStatusFilterLabel);
-
-  for (const entry of Object.entries(RecommitmentStatus)) {
-    const key = entry[0];
-    const value = entry[1];
-    if (labelKey === key) {
-      return value;
-    }
-  }
-
-  return labelKey;
 };

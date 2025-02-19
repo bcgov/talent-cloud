@@ -9,7 +9,7 @@ import { useTable } from '@/hooks';
 // common
 import { Filters, Role } from '@/common';
 import { Status } from '@/common';
-import { RecommitmentStatusFilterLabel } from '@/common/enums/recommitment-status';
+import { RecommitmentStatusFilter } from '@/common/enums/recommitment-status';
 
 // ui
 import {
@@ -77,6 +77,7 @@ const Dashboard = () => {
                 <Tabs
                   tabs={tabs}
                   changeTab={(value: unknown) => {
+                    searchParams.set(Filters.AVAILABLE_STATUS, 'ALL');
                     searchParams.set(Filters.STATUS, value as Status);
                     setSearchParams({ ...Object.fromEntries(searchParams) });
                     !loading && setLoading(true);
@@ -99,11 +100,9 @@ const Dashboard = () => {
             {/* Status filter for ACTIVE tab*/}
             {searchParams.get(Filters.STATUS) === Status.ACTIVE && (
               <StatusFilter
-                statusFilter={[
-                  RecommitmentStatusFilterLabel.ALL,
-                  RecommitmentStatusFilterLabel.NEW,
-                  RecommitmentStatusFilterLabel.MEMBER_COMMITTED,
-                ]}
+                statusFilter={RecommitmentStatusFilter.filter((obj) =>
+                  ['ALL', 'NEW', 'MEMBER_COMMITTED'].includes(obj.value),
+                )}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
               />
@@ -111,13 +110,15 @@ const Dashboard = () => {
             {/* Status filter for INACTIVE tab */}
             {searchParams.get(Filters.STATUS) === Status.INACTIVE && (
               <StatusFilter
-                statusFilter={[
-                  RecommitmentStatusFilterLabel.ALL,
-                  RecommitmentStatusFilterLabel.MEMBER_NO_RESPONSE,
-                  RecommitmentStatusFilterLabel.MEMBER_DENIED,
-                  RecommitmentStatusFilterLabel.SUPERVISOR_DENIED,
-                  RecommitmentStatusFilterLabel.OTHER,
-                ]}
+                statusFilter={RecommitmentStatusFilter.filter((obj) =>
+                  [
+                    'ALL',
+                    'MEMBER_NO_RESPONSE',
+                    'MEMBER_DENIED',
+                    'SUPERVISOR_DENIED',
+                    'OTHER',
+                  ].includes(obj.value),
+                )}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
               />

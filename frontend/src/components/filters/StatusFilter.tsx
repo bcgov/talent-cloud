@@ -6,18 +6,15 @@ import {
   MenuItems,
   Transition,
 } from '@headlessui/react';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 
 // ui
-import { classes } from '@/components/filters/classes';
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
+import { RecommitmentStatusFilter } from '@/common/enums/recommitment-status';
+import { classes } from '@/components/filters/classes';
 
 // common
-import { Filters, StatusNames } from '@/common';
-
-// util
-import { getRecommitmentStatus, getRecommitmentStatusFilterLabel } from '@/utils';
-import { RecommitmentStatusFilterLabel } from '@/common/enums/recommitment-status';
+import { Filters } from '@/common';
 
 export const StatusFilter = ({
   searchParams,
@@ -26,20 +23,15 @@ export const StatusFilter = ({
 }: {
   searchParams: any;
   setSearchParams: (searchParams: any) => any;
-  statusFilter: RecommitmentStatusFilterLabel[];
+  statusFilter: typeof RecommitmentStatusFilter;
 }) => {
-  const value = searchParams.get(Filters.AVAILABLE_STATUS) ?? StatusNames.ALL;
-  const tab = searchParams.get(Filters.STATUS);
+  const value = searchParams.get(Filters.AVAILABLE_STATUS) ?? 'ALL';
 
   const onChange = (value: string) => {
-    searchParams.set(Filters.AVAILABLE_STATUS, getRecommitmentStatus(value));
+    searchParams.set(Filters.AVAILABLE_STATUS, value);
     setSearchParams({ ...Object.fromEntries(searchParams) });
   };
 
-  // reset filters on tab change
-  useEffect(() => {
-    searchParams.set(Filters.AVAILABLE_STATUS, StatusNames.ALL);
-  }, [tab]);
   return (
     <>
       <div className="w-full border border-slate-500"></div>
@@ -52,7 +44,7 @@ export const StatusFilter = ({
                 aria-label="Single Select Menu Button"
               >
                 <p className={classes.menu.placeholder}>
-                  {getRecommitmentStatusFilterLabel(value)}
+                  {statusFilter.filter((obj) => obj.value === value)[0]?.label}
                 </p>
                 {open ? (
                   <ChevronUpIcon aria-hidden="true" aria-label="open" />
@@ -73,13 +65,13 @@ export const StatusFilter = ({
                 <MenuItems className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1 w-full">
                     {statusFilter.map((itm) => (
-                      <MenuItem key={itm}>
+                      <MenuItem key={itm.value}>
                         <button
                           aria-label="Single Select Menu Button"
-                          onClick={() => onChange(itm)}
+                          onClick={() => onChange(itm.value)}
                           className="text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 w-full text-left"
                         >
-                          {itm}
+                          {itm.label}
                         </button>
                       </MenuItem>
                     ))}
