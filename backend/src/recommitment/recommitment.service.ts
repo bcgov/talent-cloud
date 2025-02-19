@@ -287,7 +287,7 @@ export class RecommitmentService {
       case RecommitmentStatus.PENDING:
         return {
           templateType: EmailTags.MEMBER_REACTIVATE,
-          templateRecipient: TemplateType.SUPERVISOR,
+          templateRecipient: TemplateType.MEMBER,
         };
       case RecommitmentStatus.MEMBER_COMMITTED:
         return {
