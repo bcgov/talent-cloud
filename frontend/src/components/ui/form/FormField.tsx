@@ -69,7 +69,6 @@ export const FormField = ({
           {...fieldProps}
           {...field}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            console.log(e.target.value);
             setValues({
               ...values,
               [field.name]: e.target.value,
