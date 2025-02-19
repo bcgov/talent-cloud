@@ -249,6 +249,7 @@ export class RecommitmentService {
 
     const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
     const currentPST = datePST(new Date());
+    // If reinitiation end date exists and current date is between end date & reinit end date, use reinit end date
     const endDate = 
       isAfter(currentPST, dayAfterEndDate) &&
       isAfter(currentPST, recommitmentCycle.startDate) &&
