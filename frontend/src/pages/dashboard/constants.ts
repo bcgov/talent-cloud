@@ -25,13 +25,7 @@ export const statusDescriptions = {
       {
         title: '"NEW"',
         type: 'Active',
-        description: 'New members approved into CORE within the last 5 days.',
-      },
-      {
-        title: '"ACTIVE ONLY"',
-        type: 'Active',
-        description:
-          'Members who are active CORE participants for the current year but with pending recommitment.',
+        description: 'New members approved into CORE, the tag will last for 5 days.',
       },
       {
         title: '"RECOMMITTED"',
@@ -44,12 +38,6 @@ export const statusDescriptions = {
         type: 'Inactive',
         description:
           'Members who turned inactive due to missing the recommitment deadline.',
-      },
-      {
-        title: '"REACTIVATED"',
-        type: 'Inactive',
-        description:
-          'Members who turned inactive due to missing the recommitment deadline, but has their recommitment process temporarily re-initiated beyond the recommitment period.',
       },
       {
         title: '"NOT RETURNING"',
