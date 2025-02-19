@@ -22,6 +22,7 @@ import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status';
 import { RecommitmentReinitiationConfirmation } from './RecommitmentReinitiationConfirmation';
 import { offsetTimezoneDate } from '../../utils';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 
 const Profile = () => {
   const { loading, roles, personnel, updatePersonnel, profileData, fetch } =
@@ -33,7 +34,6 @@ const Profile = () => {
     isRecommitmentCycleOpen,
     isRecommitmentReinitiationOpen,
     updateRecommitment,
-    getProfileRecommitmentStatusText,
   } = useRecommitmentCycle();
   const [confirmReinitiateOpen, setConfirmReinitiateOpen] = useState(false);
 
@@ -65,6 +65,49 @@ const Profile = () => {
     setConfirmReinitiateOpen(false);
   };
 
+  const getProfileRecommitmentStatusText = () => {
+    const recommitment = personnel?.recommitment?.find(
+      (r) => r.year === new Date().getFullYear(),
+    );
+    if (!recommitment) {
+      return <p>Was inactive before start of recommitment cycle.</p>;
+    }
+    if (
+      [
+        RecommitmentStatus.MEMBER_NO_RESPONSE,
+        RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
+      ].includes(recommitment.status)
+    ) {
+      return (
+        <p>
+          <span>Recommitment deadline missed by member or their supervisor.</span>
+          <button onClick={() => {}}>
+            <QuestionMarkCircleIcon className="inline-block text-primaryBlue w-5 mb-1 ml-1" />
+          </button>
+        </p>
+      );
+    }
+    if (
+      [
+        RecommitmentStatus.MEMBER_DENIED,
+        RecommitmentStatus.SUPERVISOR_DENIED,
+      ].includes(recommitment.status)
+    ) {
+      return (
+        <p>
+          <span>Member or their supervisor denied recommitment.</span>
+          <button onClick={() => {}}>
+            <QuestionMarkCircleIcon className="inline-block text-primaryBlue w-5 mb-1 ml-1" />
+          </button>
+        </p>
+      );
+    }
+    if (recommitment.status === RecommitmentStatus.PENDING) {
+      return 'Awaiting member decision on recommitment.';
+    }
+    return '';
+  };
+
   return (
     <div
       className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
@@ -92,7 +135,7 @@ const Profile = () => {
             <div className="flex flex-row pt-4 pb-12 bg-white gap-12">
               {personnel.status === Status.INACTIVE &&
                 isRecommitmentReinitiationOpen && (
-                  <p>{getProfileRecommitmentStatusText(personnel)}</p>
+                  <>{getProfileRecommitmentStatusText()}</>
                 )}
               {personnel.status === Status.INACTIVE &&
                 isRecommitmentReinitiationOpen && (
