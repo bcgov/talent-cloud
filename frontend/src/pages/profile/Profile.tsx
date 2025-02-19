@@ -23,6 +23,7 @@ import { RecommitmentStatus } from '../../common/enums/recommitment-status';
 import { RecommitmentReinitiationConfirmation } from './RecommitmentReinitiationConfirmation';
 import { offsetTimezoneDate } from '../../utils';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { RecommitmentReinitiationTooltip } from './RecommitmentReinitiationTooltip';
 
 const Profile = () => {
   const { loading, roles, personnel, updatePersonnel, profileData, fetch } =
@@ -36,6 +37,7 @@ const Profile = () => {
     updateRecommitment,
   } = useRecommitmentCycle();
   const [confirmReinitiateOpen, setConfirmReinitiateOpen] = useState(false);
+  const [reinitiateTooltipOpen, setReinitiateTooltipOpen] = useState(false);
 
   if (loading) {
     return <Loading />;
@@ -81,7 +83,7 @@ const Profile = () => {
       return (
         <p>
           <span>Recommitment deadline missed by member or their supervisor.</span>
-          <button onClick={() => {}}>
+          <button onClick={() => setReinitiateTooltipOpen(true)}>
             <QuestionMarkCircleIcon className="inline-block text-primaryBlue w-5 mb-1 ml-1" />
           </button>
         </p>
@@ -96,7 +98,7 @@ const Profile = () => {
       return (
         <p>
           <span>Member or their supervisor denied recommitment.</span>
-          <button onClick={() => {}}>
+          <button onClick={() => setReinitiateTooltipOpen(true)}>
             <QuestionMarkCircleIcon className="inline-block text-primaryBlue w-5 mb-1 ml-1" />
           </button>
         </p>
@@ -206,6 +208,12 @@ const Profile = () => {
           handleOpen={() => setConfirmReinitiateOpen(!confirmReinitiateOpen)}
           onClose={() => setConfirmReinitiateOpen(false)}
           onConfirm={reinitiateRecommitment}
+        />
+      )}
+      {reinitiateTooltipOpen && (
+        <RecommitmentReinitiationTooltip
+          open={reinitiateTooltipOpen}
+          onClose={() => setReinitiateTooltipOpen(false)}
         />
       )}
     </div>
