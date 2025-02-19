@@ -18,6 +18,8 @@ import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-p
 import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
+import { addDays, isAfter } from 'date-fns';
+import { datePST } from '../common/helpers';
 
 @Injectable()
 export class RecommitmentService {
@@ -240,15 +242,27 @@ export class RecommitmentService {
       relations: ['personnel'],
     });
     const recommitmentCycle = await this.checkRecommitmentPeriod();
+    
     const { templateType, templateRecipient } = this.getEmailTemplate(
       recommitmentUpdate.status,
     );
+
+    const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
+    const currentPST = datePST(new Date());
+    // If reinitiation end date exists and current date is between end date & reinit end date, use reinit end date
+    const endDate = 
+      isAfter(currentPST, dayAfterEndDate) &&
+      isAfter(currentPST, recommitmentCycle.startDate) &&
+      recommitmentCycle.reinitiationEndDate ?
+      recommitmentCycle.reinitiationEndDate :
+      recommitmentCycle.endDate;
+
 
     const emailTemplate = this.mailService.generateTemplate(
       templateType,
       templateRecipient,
       [personnel.toResponseObject()],
-      recommitmentCycle.endDate,
+      endDate,
       recommitmentUpdate.program,
     );
 
@@ -270,6 +284,11 @@ export class RecommitmentService {
     templateRecipient: TemplateType;
   } {
     switch (status) {
+      case RecommitmentStatus.PENDING:
+        return {
+          templateType: EmailTags.MEMBER_REACTIVATE,
+          templateRecipient: TemplateType.MEMBER,
+        };
       case RecommitmentStatus.MEMBER_COMMITTED:
         return {
           templateType: EmailTags.SUPERVISOR_REQUEST,

@@ -4,6 +4,7 @@ import { useAxios } from './useAxios';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { offsetTimezoneDate } from '@/utils';
 import type { SupervisorInformation } from '@/components/recommitment';
+import { addDays } from 'date-fns';
 
 export interface RecommitmentDecision {
   program: Program;
@@ -92,8 +93,11 @@ export const useRecommitmentCycle = () => {
     isRecommitmentReinitiationOpen:
       recommitmentCycle &&
       recommitmentCycle.reinitiationEndDate &&
-      offsetTimezoneDate(recommitmentCycle.endDate) <= new Date() &&
-      offsetTimezoneDate(recommitmentCycle.reinitiationEndDate) >= new Date(),
+      offsetTimezoneDate(addDays(recommitmentCycle.endDate, 1).toString()) <=
+        new Date() &&
+      offsetTimezoneDate(
+        addDays(recommitmentCycle.reinitiationEndDate, 1).toString(),
+      ) >= new Date(),
     updateRecommitment,
     getProfileRecommitmentStatusText,
   };
