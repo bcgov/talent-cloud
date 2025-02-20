@@ -185,12 +185,12 @@ export class PersonnelService {
     const person = await this.personnelRepository.findOne({
       where: { email: req.idir },
       relations: {
-        bcws: preferences.bcws.roles
+        bcws: preferences.bcws?.roles
           ? {
               roles: true,
             }
           : false,
-        emcr: preferences.emcr.experiences
+        emcr: preferences.emcr?.experiences
           ? {
               experiences: true,
             }
@@ -198,7 +198,7 @@ export class PersonnelService {
       },
     });
 
-    if (preferences.bcws) {
+    if (preferences?.bcws) {
       preferences.bcws.roles = preferences.bcws.roles.map((role) => ({
         ...role,
         roleId: role.roleId,
@@ -216,7 +216,7 @@ export class PersonnelService {
         null;
     }
 
-    if (preferences.emcr) {
+    if (preferences?.emcr) {
       preferences.emcr.experiences = preferences.emcr.experiences.map(
         (e) =>
           new EmcrExperienceEntity({
@@ -236,12 +236,23 @@ export class PersonnelService {
 
     const bcwsPerson = { ...person.bcws, ...preferences.bcws };
     const emcrPerson = { ...person.emcr, ...preferences.emcr };
-
-    return await this.personnelRepository.save({
-      ...person,
-      emcr: emcrPerson,
-      bcws: bcwsPerson,
-    });
+    if (person.emcr && person.bcws) {
+      return await this.personnelRepository.save({
+        ...person,
+        bcws: bcwsPerson,
+        emcr: emcrPerson,
+      });
+    } else if (person.bcws && !person.emcr) {
+      return await this.personnelRepository.save({
+        ...person,
+        bcws: bcwsPerson,
+      });
+    } else if (person.emcr && !person.bcws) {
+      return await this.personnelRepository.save({
+        ...person,
+        emcr: emcrPerson,
+      });
+    }
   }
 
   async updatePersonnelDetails(

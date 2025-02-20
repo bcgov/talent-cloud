@@ -29,7 +29,7 @@ export class BcwsService {
     private roleRepository: Repository<BcwsRoleEntity>,
     private readonly logger: AppLogger,
   ) {
-    this.logger.setContext(PersonnelService.name);
+    this.logger.setContext(BcwsService.name);
   }
 
   /**
@@ -38,10 +38,9 @@ export class BcwsService {
    * @param status
    */
   async updatePersonnelAfterRecommitment(id: string, status: Status) {
-    const qb =
-      this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
-
-    qb.update(BcwsPersonnelEntity)
+    await this.bcwsPersonnelRepository
+      .createQueryBuilder('bcws_personnel')
+      .update(BcwsPersonnelEntity)
       .set({ status })
       .where('personnel_id = :id', { id })
       .execute();
@@ -59,7 +58,7 @@ export class BcwsService {
   ): Promise<BcwsPersonnelEntity> {
     bcwsPersonnel.personnelId = id;
 
-    return await this.bcwsPersonnelRepository.save(
+    return this.bcwsPersonnelRepository.save(
       this.bcwsPersonnelRepository.create(
         new BcwsPersonnelEntity(bcwsPersonnel),
       ),
@@ -120,8 +119,6 @@ export class BcwsService {
       [Status.PENDING]: number;
     };
   }> {
-    this.logger.log(`Query: ${JSON.stringify(query)}`);
-
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
