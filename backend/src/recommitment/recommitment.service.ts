@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { addDays, isAfter } from 'date-fns';
 import { Repository } from 'typeorm';
-import { Program, RequestWithRoles, Role } from '../auth/interface';
+import { Program, RequestWithRoles } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
@@ -17,7 +17,6 @@ import { TemplateType, EmailTags } from '../mail/constants';
 import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
 import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
-import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
 
@@ -39,7 +38,118 @@ export class RecommitmentService {
   ) {
     this.logger.setContext(RecommitmentService.name);
   }
+  /**
+   * Update endpoint for recommitment reinitiation by coordinator.
+   * @param id
+   * @param recommitmentUpdate
+   * @returns
+   */
+  async coordinatorUpdatePersonnelRecommitment(
+    id: string,
+    recommitmentUpdate: PersonnelRecommitmentDTO,
+  ): Promise<PersonnelEntity> {
+    const key = Object.keys(recommitmentUpdate).includes(Program.EMCR)
+      ? Program.EMCR
+      : Program.BCWS;
+    await this.recommitmentRepository.update(
+      {
+        personnelId: id,
+        recommitmentCycleId: new Date().getFullYear(),
+        program: key,
+      },
+      {
+        status: recommitmentUpdate[key]?.status,
+        memberDecisionDate: null,
+        memberReason: null,
+        supervisorIdir: null,
+        supervisorReason: null,
+      },
+    );
 
+    const recommitmentCycle = await this.checkRecommitmentPeriod();
+
+    const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
+    const currentPST = datePST(new Date());
+    const endDate =
+      isAfter(currentPST, dayAfterEndDate) &&
+      isAfter(currentPST, recommitmentCycle.startDate) &&
+      recommitmentCycle.reinitiationEndDate
+        ? recommitmentCycle.reinitiationEndDate
+        : recommitmentCycle.endDate;
+
+    const recommitment = await this.recommitmentRepository.findOneByOrFail({
+      personnelId: id,
+      recommitmentCycleId: new Date().getFullYear(),
+      program: key,
+    });
+
+    const emailTemplate = this.mailService.generateTemplate(
+      EmailTags.MEMBER_REACTIVATE,
+      TemplateType.MEMBER,
+      [recommitment.toResponseObject()],
+      endDate,
+      key,
+    );
+
+    await this.mailService.sendMail(emailTemplate, EmailTags.MEMBER_REACTIVATE);
+    return await this.personnelService.findOne(id);
+  }
+  /**
+   * Update endpoint for recommitment by a supervisor for a member.
+   * @param id
+   * @param recommitmentUpdate
+   * @param req
+   * @returns
+   */
+  async supervisorUpdateMemberRecommitmentStatus(
+    id: string,
+    recommitmentUpdate: PersonnelRecommitmentDTO,
+    req: RequestWithRoles,
+  ): Promise<PersonnelEntity> {
+    const key = Object.keys(recommitmentUpdate).includes(Program.EMCR)
+      ? Program.EMCR
+      : Program.BCWS;
+
+    await this.recommitmentRepository.update(
+      {
+        personnelId: id,
+        recommitmentCycleId: new Date().getFullYear(),
+        program: key,
+      },
+      {
+        supervisorIdir: req.idir,
+        memberReason: null,
+        supervisorReason:
+          recommitmentUpdate[key]?.supervisorReason?.replace(',', '') ?? '',
+        status: recommitmentUpdate[key]?.status,
+      },
+    );
+
+    const recommitment = await this.recommitmentRepository.findOneByOrFail({
+      personnelId: id,
+      recommitmentCycleId: new Date().getFullYear(),
+      program: key,
+    });
+
+    const emailTemplate = this.mailService.generateTemplate(
+      recommitmentUpdate[key].status === RecommitmentStatus.SUPERVISOR_DENIED
+        ? EmailTags.MEMBER_DENIED_BY_SUPERVISOR
+        : EmailTags.MEMBER_APPROVED,
+      TemplateType.MEMBER,
+      [recommitment.toResponseObject()],
+      recommitment.recommitmentCycle.endDate,
+      key,
+    );
+
+    await this.mailService.sendMail(
+      emailTemplate,
+      recommitmentUpdate[key].status === RecommitmentStatus.SUPERVISOR_DENIED
+        ? EmailTags.MEMBER_DENIED_BY_SUPERVISOR
+        : EmailTags.MEMBER_APPROVED,
+    );
+
+    return await this.personnelService.findOne(id);
+  }
   /**
    * Updates the recommitment status of a member.
    * @param {string} id - The ID of the member.
@@ -52,42 +162,12 @@ export class RecommitmentService {
     recommitmentUpdate: PersonnelRecommitmentDTO,
     req: RequestWithRoles,
   ): Promise<PersonnelEntity> {
-    const programsToUpdate = Object.keys(recommitmentUpdate).filter((key) =>
-      [Program.BCWS, Program.EMCR].includes(key as Program),
-    );
     const personnel = await this.personnelService.findOne(id);
-
-    if (!req.roles.includes(Role.COORDINATOR)) {
-      if (
-        req.roles.includes(Role.MEMBER) &&
-        !req.roles.includes(Role.SUPERVISOR) &&
-        id !== personnel.id
-      ) {
-        throw new ForbiddenException(
-          'Members can only edit their own recommitment.',
-        );
-      }
-
-      if (
-        req.roles.includes(Role.SUPERVISOR) &&
-        !req.roles.includes(Role.MEMBER) &&
-        req.idir !== personnel.supervisorEmail
-      ) {
-        throw new ForbiddenException(
-          `Supervisors can only edit their member's recommitment.`,
-        );
-      }
-
-      if (
-        req.roles.includes(Role.MEMBER) &&
-        req.roles.includes(Role.SUPERVISOR) &&
-        id !== personnel.id &&
-        req.idir !== personnel.supervisorEmail
-      ) {
-        throw new ForbiddenException('No permission to edit this profile.');
-      }
+    if (personnel.email !== req.idir) {
+      throw new ForbiddenException(
+        'You are not authorized to perform this action',
+      );
     }
-
     if (recommitmentUpdate.supervisorInformation) {
       await this.personnelService.updatePersonnelSupervisorInformation(
         personnel.id,
@@ -105,92 +185,73 @@ export class RecommitmentService {
         },
       );
     }
+    const recommitment = await this.recommitmentRepository.find({
+      where: {
+        personnel: { id },
+        recommitmentCycle: { year: new Date().getFullYear() },
+      },
+      relations: ['personnel', 'recommitmentCycle'],
+    });
 
-    for (const key of programsToUpdate) {
-      const recommitment = await this.recommitmentRepository.findOne({
-        where: {
-          personnel: { id },
-          recommitmentCycle: { year: recommitmentUpdate[key].year },
-          program: recommitmentUpdate[key].program,
-        },
-        relations: ['personnel', 'recommitmentCycle'],
-      });
-
-      // If update request is sent by the member, log the member decision date, otherwise log the supervisor decision date.
-      if (
-        [
-          RecommitmentStatus.MEMBER_COMMITTED,
-          RecommitmentStatus.MEMBER_DENIED,
-        ].includes(recommitmentUpdate[key].status)
-      ) {
-        recommitmentUpdate[key].memberDecisionDate = new Date();
-      } else if (
-        [
-          RecommitmentStatus.SUPERVISOR_APPROVED,
-          RecommitmentStatus.SUPERVISOR_DENIED,
-        ].includes(recommitmentUpdate[key].status)
-      ) {
-        recommitmentUpdate[key].supervisorDecisionDate = new Date();
-        recommitmentUpdate[key].supervisorIdir = req.idir;
-      }
-
-      if (recommitment) {
-        // Update the recommitment status
-        await this.recommitmentRepository.update(
-          {
-            personnelId: id,
-            recommitmentCycleId: recommitmentUpdate[key].year,
-            program: recommitmentUpdate[key].program,
-          },
-          {
-            ...recommitment[key],
-            supervisorIdir: recommitmentUpdate[key]?.supervisorIdir,
-            supervisorDecisionDate:
-              recommitmentUpdate[key].supervisorDecisionDate,
-            memberDecisionDate: recommitmentUpdate[key].memberDecisionDate,
-            memberReason:
-              recommitmentUpdate[key]?.memberReason?.replace(',', '') ?? '',
-            supervisorReason: recommitmentUpdate[key]?.supervisorReason ?? '',
-            status: recommitmentUpdate[key]?.status,
-          },
-        );
-        // If recomitted to both, only send one email to supervisor
-        if (
-          recommitmentUpdate?.bcws?.status ===
-            RecommitmentStatus.MEMBER_COMMITTED &&
-          recommitmentUpdate?.emcr?.status ===
-            RecommitmentStatus.MEMBER_COMMITTED
-        ) {
-          this.logger.log(
-            `${recommitment[key]?.status} ${recommitment[key]?.program} ${recommitment[key]?.personnel.id}`,
-          );
-        } else {
-          this.triggerEmailNotification(id, recommitmentUpdate[key]);
-        }
-      } else {
-        await this.recommitmentRepository.save({
+    // Update the recommitment status
+    for await (const itm of recommitment) {
+      await this.recommitmentRepository.update(
+        {
           personnelId: id,
-          recommitmentCycleId: recommitmentUpdate[key].year,
-          program: recommitmentUpdate[key].program,
-          status: recommitmentUpdate[key]?.status,
-        });
-        this.triggerEmailNotification(id, recommitmentUpdate[key]);
+          recommitmentCycleId: itm.recommitmentCycle.year,
+          program: itm.program,
+        },
+        {
+          supervisorIdir: personnel.supervisorEmail,
+          memberDecisionDate: new Date(),
+          memberReason:
+            recommitmentUpdate[itm.program]?.memberReason?.replace(',', '') ??
+            '',
+          status: recommitmentUpdate[itm.program]?.status,
+          supervisorDecisionDate: null,
+          supervisorReason: null,
+        },
+      );
+      // send an email to the member to  confirm they have denied the recommitment for this program
+      if (
+        recommitmentUpdate[itm.program]?.status ===
+        RecommitmentStatus.MEMBER_DENIED
+      ) {
+        const emailTemplate = this.mailService.generateTemplate(
+          EmailTags.MEMBER_DECLINED,
+          TemplateType.MEMBER,
+          [recommitment[0].toResponseObject()],
+          recommitment[0].recommitmentCycle.endDate,
+          itm.program,
+        );
+        await this.mailService.sendMail(
+          emailTemplate,
+          EmailTags.MEMBER_DECLINED,
+        );
       }
     }
+    // send one email to supervisor if member has requested approval for either program
     if (
-      recommitmentUpdate?.bcws?.status ===
-        RecommitmentStatus.MEMBER_COMMITTED &&
-      recommitmentUpdate?.emcr?.status === RecommitmentStatus.MEMBER_COMMITTED
+      [
+        recommitmentUpdate.bcws?.status,
+        recommitmentUpdate.emcr?.status,
+      ].includes(RecommitmentStatus.MEMBER_COMMITTED)
     ) {
-      this.triggerEmailNotification(id, {
-        year: new Date().getFullYear(),
-        status: RecommitmentStatus.MEMBER_COMMITTED,
-        program: Program.ALL,
-      });
+      const emailTemplate = this.mailService.generateTemplate(
+        EmailTags.SUPERVISOR_REQUEST,
+        TemplateType.SUPERVISOR,
+        [recommitment[0].toResponseObject()],
+        recommitment[0].recommitmentCycle.endDate,
+      );
+      await this.mailService.sendMail(
+        emailTemplate,
+        EmailTags.SUPERVISOR_REQUEST,
+      );
     }
 
     return await this.personnelService.findOne(id);
   }
+
   filterRecommitmentList(
     recommitment: RecommitmentEntity[],
     testEmail?: string[],

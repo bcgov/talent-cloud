@@ -18,7 +18,7 @@ import { useProgramFieldData } from '@/hooks/useProgramFieldData';
 import { ProfileBreadcrumbs, ProfileToggle } from '@/components/profile/common';
 import { useRoleContext } from '@/providers';
 import { RecommitmentDetails } from '@/components/profile/details/RecommitmentDetails';
-import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { RecommitmentEndpoint, useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '../../common/enums/recommitment-status';
 import { RecommitmentReinitiationConfirmation } from './RecommitmentReinitiationConfirmation';
 import { offsetTimezoneDate } from '../../utils';
@@ -62,7 +62,7 @@ const Profile = () => {
               reason: '',
             },
           };
-    await updateRecommitment(personnel!.id, decision);
+    await updateRecommitment(personnel!.id, decision, RecommitmentEndpoint.Coordinator);
     fetch();
     setConfirmReinitiateOpen(false);
   };
