@@ -1,7 +1,7 @@
-import type { Personnel, Program, RecommitmentCycle } from '@/common';
+import type { Program, RecommitmentCycle } from '@/common';
 import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
-import { RecommitmentStatus } from '@/common/enums/recommitment-status';
+import type { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { offsetTimezoneDate } from '@/utils';
 import type { SupervisorInformation } from '@/components/recommitment';
 import { addDays } from 'date-fns';
@@ -55,35 +55,6 @@ export const useRecommitmentCycle = () => {
     }
   };
 
-  const getProfileRecommitmentStatusText = (personnel: Personnel) => {
-    const recommitment = personnel?.recommitment?.find(
-      (r) => r.year === new Date().getFullYear(),
-    );
-    if (!recommitment) {
-      return 'Was inactive before start of recommitment cycle.';
-    }
-    if (
-      [
-        RecommitmentStatus.MEMBER_NO_RESPONSE,
-        RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
-      ].includes(recommitment.status)
-    ) {
-      return 'Recommitment deadline missed by member or their supervisor.';
-    }
-    if (
-      [
-        RecommitmentStatus.MEMBER_DENIED,
-        RecommitmentStatus.SUPERVISOR_DENIED,
-      ].includes(recommitment.status)
-    ) {
-      return 'Member or their supervisor denied recommitment.';
-    }
-    if (recommitment.status === RecommitmentStatus.PENDING) {
-      return 'Awaiting member decision on recommitment.';
-    }
-    return '';
-  };
-
   return {
     recommitmentCycle,
     isRecommitmentCycleOpen:
@@ -99,6 +70,5 @@ export const useRecommitmentCycle = () => {
         addDays(recommitmentCycle.reinitiationEndDate, 1).toString(),
       ) >= new Date(),
     updateRecommitment,
-    getProfileRecommitmentStatusText,
   };
 };
