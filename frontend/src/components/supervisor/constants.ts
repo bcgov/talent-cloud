@@ -6,7 +6,7 @@ export const supervisorDeclinedValidation = Yup.object().shape({
   memberID: Yup.string().required('Please provide the member ID'),
   year: Yup.string().required('Please provide the recommitment year'),
   program: Yup.string().required('Please provide the program'),
-  reason: Yup.string().required('Please select a reason for declining this member'),
+  supervisorReason: Yup.string().required('Please select a reason for declining this member'),
   comments: Yup.string().when('reason', {
     is: (val: SupervisorReason) => val === SupervisorReason.OTHER.toString(),
     then: () =>
@@ -43,8 +43,8 @@ export const declineFormFields = {
     type: 'text',
     disabled: true,
   },
-  reason: {
-    name: 'reason',
+  supervisorReason: {
+    name: 'supervisorReason',
     label: 'Please indicate your reason for declining this member',
     type: 'select',
     required: true,

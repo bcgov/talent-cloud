@@ -10,6 +10,7 @@ import {
 import { CheckIcon } from '../../components/ui/Icons';
 import { SupervisorReason } from '../../common/enums/supervisor-decision.enum';
 import { useAxios } from '../../hooks/useAxios';
+import { FormikValues } from 'formik';
 
 export const SupervisorApprovalForm = ({
   year,
@@ -32,7 +33,7 @@ export const SupervisorApprovalForm = ({
   name: string;
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
-    useState<SupervisorReason>();
+    useState<string>();
 
   const [fields, setFields] = useState(declineFormFields);
 
@@ -46,17 +47,12 @@ export const SupervisorApprovalForm = ({
 
   const [value, setValue] = useState<RecommitmentStatus | string>(status);
 
-  const submit = async (selectedStatus: RecommitmentStatus) => {
-    const values = {
-      program,
-      year: year,
-      status: selectedStatus,
-      reason: supervisorDeclinedReason ?? '',
-    };
-
+  const submit = async (selectedStatus: RecommitmentStatus, values?: FormikValues) => {
     try {
-      await AxiosPrivate.patch(`/recommitment/${personnelId}`, {
-        [program]: values,
+      await AxiosPrivate.patch(`/recommitment/supervisor/${personnelId}`, {
+        [program]: {
+          ...values, supervisorReason: `${values?.supervisorReason} ${values?.comments}`, status: selectedStatus
+        },
       });
 
       if (selectedStatus === RecommitmentStatus.SUPERVISOR_DENIED) {
@@ -71,9 +67,11 @@ export const SupervisorApprovalForm = ({
   };
 
   const handleSelectReason = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    
     setSupervisorDeclinedReason(
-      SupervisorReason[e.target.value as keyof typeof SupervisorReason],
+      e.target.value,
     );
+
     if (e.target.value === SupervisorReason.OTHER) {
       setFields((prev) => ({
         ...prev,
@@ -198,20 +196,20 @@ export const SupervisorApprovalForm = ({
           </div>
           <Form
             initialValues={{
-              reason: '',
+              supervisorReason: '',
               comments: '',
               year: year,
               memberID: memberId,
               program: program,
               memberName: name,
             }}
-            onSubmit={() => submit(RecommitmentStatus.SUPERVISOR_DENIED)}
+            onSubmit={(values) => submit(RecommitmentStatus.SUPERVISOR_DENIED, values)}
             validationSchema={supervisorDeclinedValidation}
             handleClose={() => setShowDeclineModal(false)}
             fields={{
               ...fields,
-              reason: {
-                ...declineFormFields.reason,
+              supervisorReason: {
+                ...declineFormFields.supervisorReason,
                 onChange: handleSelectReason,
               },
             }}
