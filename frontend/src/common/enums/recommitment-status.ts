@@ -62,15 +62,30 @@ export enum RecommitmentStatusLabel {
   SUPERVISOR_NO_RESPONSE = 'No Supervisor Response',
 }
 
-export const RecommitmentStatusFilter = [
-  { value: 'ALL', label: 'All' },
-  { value: 'NEW', label: 'New' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'INACTIVE', label: 'Inactive' },
-  { value: 'MEMBER_COMMITTED', label: 'Recommitted' },
-  { value: 'MEMBER_DENIED', label: 'Member Declined - Not Returning' },
-  { value: 'MEMBER_NO_RESPONSE', label: 'Missed Recommitment' },
-  { value: 'SUPERVISOR_DENIED', label: 'Supervisor Declined - Not Returning' },
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'OTHER', label: 'Other' },
+export enum AvailabilityTypeStatus {
+  ALL = 'ALL',
+  NEW = 'NEW',
+  SUPERVISOR_APPROVED = 'SUPERVISOR_APPROVED',
+  OTHER = 'OTHER',
+  MEMBER_DENIED = 'MEMBER_DENIED',
+  MISSED = 'MISSED',
+  SUPERVISOR_DENIED = 'SUPERVISOR_DENIED',
+}
+
+
+export const ActiveRecommitmentStatusFilter = [
+  { value: AvailabilityTypeStatus.ALL , label: 'All' },
+  { value: AvailabilityTypeStatus.NEW , label: 'New' },
+  { value: AvailabilityTypeStatus.SUPERVISOR_APPROVED , label: 'Recommitted' },
+  
+  
 ];
+
+
+export const InactiveRecommitmentStatusFilter = [
+  { value: AvailabilityTypeStatus.ALL , label: 'All' },
+  { value: AvailabilityTypeStatus.OTHER , label: 'Other' },
+  { value: AvailabilityTypeStatus.MEMBER_DENIED , label: 'Member Declined - Not Returning' },
+  { value: AvailabilityTypeStatus.MISSED , label: 'Missed Recommitment' },
+  { value: AvailabilityTypeStatus.SUPERVISOR_DENIED , label: 'Supervisor Declined - Not Returning' },
+]
