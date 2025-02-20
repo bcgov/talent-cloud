@@ -32,8 +32,7 @@ export const SupervisorApprovalForm = ({
 
   name: string;
 }) => {
-  const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
-    useState<string>();
+  
 
   const [fields, setFields] = useState(declineFormFields);
 
@@ -68,9 +67,7 @@ export const SupervisorApprovalForm = ({
 
   const handleSelectReason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     
-    setSupervisorDeclinedReason(
-      e.target.value,
-    );
+
 
     if (e.target.value === SupervisorReason.OTHER) {
       setFields((prev) => ({

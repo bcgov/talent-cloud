@@ -192,7 +192,6 @@ export class RecommitmentService {
       },
       relations: ['personnel', 'recommitmentCycle'],
     });
-
     // Update the recommitment status
     for await (const itm of recommitment) {
       await this.recommitmentRepository.update(
