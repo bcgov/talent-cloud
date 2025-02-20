@@ -349,7 +349,6 @@ export class PersonnelService {
     availableStatus?: AvailabilityTypeStatus,
     program?: Program,
   ): Promise<SelectQueryBuilder<T>> {
-    console.log(availableStatus, 'STATUS');
     if (availableStatus && availableStatus === AvailabilityTypeStatus.NEW) {
       if (program === Program.BCWS) {
         queryBuilder.andWhere(
@@ -364,6 +363,20 @@ export class PersonnelService {
           `bcws_personnel.dateApproved > current_date - interval '5' day OR emcr_personnel.dateApproved > current_date - interval '5' day`,
         );
       }
+    }
+    if (availableStatus && availableStatus === AvailabilityTypeStatus.MISSED) {
+      queryBuilder.andWhere('recommitment.program = :program', {
+        program,
+      });
+      queryBuilder.andWhere('recommitment.year = :year', {
+        year: new Date().getFullYear(),
+      });
+      queryBuilder.andWhere('recommitment.status in (:...recommitmentStatus)', {
+        recommitmentStatus: [
+          RecommitmentStatus.MEMBER_NO_RESPONSE,
+          RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
+        ],
+      });
     } else if (
       availableStatus &&
       availableStatus === AvailabilityTypeStatus.OTHER

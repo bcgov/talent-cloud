@@ -9,7 +9,7 @@ import { useTable } from '@/hooks';
 // common
 import { Filters, Role } from '@/common';
 import { Status } from '@/common';
-import { RecommitmentStatusFilter } from '@/common/enums/recommitment-status';
+import { ActiveRecommitmentStatusFilter, InactiveRecommitmentStatusFilter  } from '@/common/enums/recommitment-status';
 
 // ui
 import {
@@ -77,7 +77,7 @@ const Dashboard = () => {
                 <Tabs
                   tabs={tabs}
                   changeTab={(value: unknown) => {
-                    searchParams.set(Filters.AVAILABLE_STATUS, 'ALL');
+                    searchParams.delete(Filters.AVAILABLE_STATUS);
                     searchParams.set(Filters.STATUS, value as Status);
                     setSearchParams({ ...Object.fromEntries(searchParams) });
                     !loading && setLoading(true);
@@ -97,28 +97,9 @@ const Dashboard = () => {
                 </button>
               )}
             </div>
-            {/* Status filter for ACTIVE tab*/}
-            {searchParams.get(Filters.STATUS) === Status.ACTIVE && (
+            {searchParams.get(Filters.STATUS) !== Status.PENDING && (
               <StatusFilter
-                statusFilter={RecommitmentStatusFilter.filter((obj) =>
-                  ['ALL', 'NEW', 'MEMBER_COMMITTED'].includes(obj.value),
-                )}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-              />
-            )}
-            {/* Status filter for INACTIVE tab */}
-            {searchParams.get(Filters.STATUS) === Status.INACTIVE && (
-              <StatusFilter
-                statusFilter={RecommitmentStatusFilter.filter((obj) =>
-                  [
-                    'ALL',
-                    'MEMBER_NO_RESPONSE',
-                    'MEMBER_DENIED',
-                    'SUPERVISOR_DENIED',
-                    'OTHER',
-                  ].includes(obj.value),
-                )}
+                statusFilter={searchParams.get(Filters.STATUS) && searchParams.get(Filters.STATUS) === Status.ACTIVE ? ActiveRecommitmentStatusFilter : InactiveRecommitmentStatusFilter}
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
               />

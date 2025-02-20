@@ -10,11 +10,12 @@ import { Fragment } from 'react';
 
 // ui
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-import { RecommitmentStatusFilter } from '@/common/enums/recommitment-status';
+
 import { classes } from '@/components/filters/classes';
 
 // common
 import { Filters } from '@/common';
+import { AvailabilityTypeStatus } from '@/common/enums/recommitment-status';
 
 export const StatusFilter = ({
   searchParams,
@@ -23,7 +24,7 @@ export const StatusFilter = ({
 }: {
   searchParams: any;
   setSearchParams: (searchParams: any) => any;
-  statusFilter: typeof RecommitmentStatusFilter;
+  statusFilter: {label: string, value: AvailabilityTypeStatus}[];
 }) => {
   const value = searchParams.get(Filters.AVAILABLE_STATUS) ?? 'ALL';
 
@@ -44,7 +45,7 @@ export const StatusFilter = ({
                 aria-label="Single Select Menu Button"
               >
                 <p className={classes.menu.placeholder}>
-                  {statusFilter.filter((obj) => obj.value === value)[0]?.label}
+                {statusFilter.filter((obj) => obj.value === value)[0]?.label ?? 'All'}
                 </p>
                 {open ? (
                   <ChevronUpIcon aria-hidden="true" aria-label="open" />
