@@ -37,6 +37,14 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
           personnelData.bcws.travelPreference as keyof typeof BcwsTravelPreference
         ],
       status: personnelData.bcws?.status,
+      liaisonPhoneNumber: personnelData.bcws?.liaisonPhoneNumber?.replace(  
+        /(\d{3})(\d{3})(\d{4})/,
+        '($1) $2-$3',
+      ),
+      liaisonEmail: personnelData.bcws?.liaisonEmail, 
+      liaisonFirstName: personnelData.bcws?.liaisonFirstName, 
+      liaisonLastName: personnelData.bcws?.liaisonLastName,
+
     },
   };
 
@@ -95,9 +103,11 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
           fields.supervisorLastName,
           fields.supervisorEmail,
           fields.supervisorPhone,
-          fields.liaisonFirstName,
-          fields.liaisonLastName,
-          fields.liaisonEmail,
+          ...(personnelData.bcws ? [fields.bcws.liaisonLastName,
+            fields.bcws.liaisonFirstName,
+            fields.bcws.liaisonEmail,
+            fields.bcws.liaisonPhoneNumber] : []),
+          
           fields.ministry,
           fields.division,
           fields.unionMembership,
