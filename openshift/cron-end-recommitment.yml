@@ -47,7 +47,7 @@ objects:
               activeDeadlineSeconds: 1200
               containers:
               - name: ${APP_NAME}-cron-end-recommitment
-                restartPolicy: OnFailure
+                
                 activeDeadlineSeconds: 1200
                 image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
                 resources:
