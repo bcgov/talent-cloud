@@ -17,6 +17,7 @@ import { TemplateType, EmailTags } from '../mail/constants';
 import { MailRO } from '../mail/mail.ro';
 import { MailService } from '../mail/mail.service';
 import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
+import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
 
