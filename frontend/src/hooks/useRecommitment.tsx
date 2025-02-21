@@ -40,7 +40,7 @@ const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useSta
     })()
     
   }, []);
-console.log(isRecommitmentReinitCycleOpen)
+
   const updateRecommitment = async (
     personnelId: string,
     decisions: {
