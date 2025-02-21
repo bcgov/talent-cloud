@@ -1,13 +1,29 @@
+// react
 import { Fragment, useState } from 'react';
+
+// style
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
-import DetailsSection from './DetailsSection';
+
+// hooks
 import usePersonnel from '@/hooks/usePersonnel';
-import { useRoleContext } from '@/providers';
-import { datePST } from '@/utils';
-import { RecommitmentStatus, RecommitmentStatusLabel } from '@/common/enums/recommitment-status';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
-import {  Recommitment, RecommitmentCycle } from '@/common';
+import { useRoleContext } from '@/providers';
+
+// icons
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
+
+// ui
+import DetailsSection from './DetailsSection';
+import {
+  RecommitmentStatus,
+  RecommitmentStatusLabel,
+} from '@/common/enums/recommitment-status';
+
+// utils
+import { datePST } from '@/utils';
+
+// common
+import { Recommitment, RecommitmentCycle } from '@/common';
 
 export const RecommitmentDetails = () => {
   const { personnel } = usePersonnel();
@@ -20,46 +36,97 @@ export const RecommitmentDetails = () => {
   );
 
   const handleOpen = (open: boolean) => setOpen(!open);
-  
-  if(!recommitment) return null;
-  const getFieldData = (recommitment: Recommitment, recommitmentCycle?: RecommitmentCycle) => {  
-  switch(recommitment.status){
-    case RecommitmentStatus.SUPERVISOR_APPROVED:
-    case RecommitmentStatus.SUPERVISOR_DENIED:
-      return {
-        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
-        decisionDate: {title: "Date Recommitted", content: recommitment?.supervisorDecisionDate ? datePST(new Date(recommitment?.supervisorDecisionDate)):'--'},
-        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
-        reason: {title: "Supervisor Reason", content: '--'},
-        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
-      }
-    case RecommitmentStatus.MEMBER_DENIED:
-      return {
-        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
-        decisionDate: {title: "Date Declined", content: recommitment?.memberDecisionDate ? datePST(new Date(recommitment?.memberDecisionDate)):'--'},
-        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
-        reason: {title: "Member Reason", content: '--'},
-        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
-      }
-    case RecommitmentStatus.MEMBER_NO_RESPONSE:
-    case RecommitmentStatus.SUPERVISOR_NO_RESPONSE:
-      return {
-        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
-        decisionDate: {title: "Date Recommitted", content: '--'},
-        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
-        reason: {title: "Reason (if declined/denied)", content: '--'},
-        year: {title: "Upcoming Year", content: recommitmentCycle?.year},
-      }
-    default:
-      return {
-        supervisor: {title: "Supervisor", content: recommitment.supervisorIdir ? recommitment.supervisorIdir : personnel?.supervisorEmail},
-        decisionDate: {title: "Date Recommitted", content: '--'},
-        status: {title: "Status", content: RecommitmentStatusLabel[recommitment.status]},
-        reason: {title: "Reason (if declined/denied)", content: '--'},
-        year: {title: "Upoming Year", content: recommitmentCycle?.year},
-      }
-  }
-}
+
+  if (!recommitment) return null;
+  const getFieldData = (
+    recommitment: Recommitment,
+    recommitmentCycle?: RecommitmentCycle,
+  ) => {
+    switch (recommitment.status) {
+      case RecommitmentStatus.SUPERVISOR_APPROVED:
+      case RecommitmentStatus.SUPERVISOR_DENIED:
+        return {
+          supervisor: {
+            title: 'Supervisor',
+            content: recommitment.supervisorIdir
+              ? recommitment.supervisorIdir
+              : personnel?.supervisorEmail,
+          },
+          decisionDate: {
+            title: 'Date Recommitted',
+            content: recommitment?.supervisorDecisionDate
+              ? datePST(new Date(recommitment?.supervisorDecisionDate))
+              : '--',
+          },
+          status: {
+            title: 'Status',
+            content: RecommitmentStatusLabel[recommitment.status],
+          },
+          reason: {
+            title: 'Supervisor Reason',
+            content: recommitment.supervisorReason || '--',
+          },
+          year: { title: 'Upcoming Year', content: recommitmentCycle?.year },
+        };
+      case RecommitmentStatus.MEMBER_DENIED:
+        return {
+          supervisor: {
+            title: 'Supervisor',
+            content: recommitment.supervisorIdir
+              ? recommitment.supervisorIdir
+              : personnel?.supervisorEmail,
+          },
+          decisionDate: {
+            title: 'Date Declined',
+            content: recommitment?.memberDecisionDate
+              ? datePST(new Date(recommitment?.memberDecisionDate))
+              : '--',
+          },
+          status: {
+            title: 'Status',
+            content: RecommitmentStatusLabel[recommitment.status],
+          },
+          reason: {
+            title: 'Member Reason',
+            content: recommitment.memberReason || '--',
+          },
+          year: { title: 'Upcoming Year', content: recommitmentCycle?.year },
+        };
+      case RecommitmentStatus.MEMBER_NO_RESPONSE:
+      case RecommitmentStatus.SUPERVISOR_NO_RESPONSE:
+        return {
+          supervisor: {
+            title: 'Supervisor',
+            content: recommitment.supervisorIdir
+              ? recommitment.supervisorIdir
+              : personnel?.supervisorEmail,
+          },
+          decisionDate: { title: 'Date Recommitted', content: '--' },
+          status: {
+            title: 'Status',
+            content: RecommitmentStatusLabel[recommitment.status],
+          },
+          reason: { title: 'Reason (if declined/denied)', content: '--' },
+          year: { title: 'Upcoming Year', content: recommitmentCycle?.year },
+        };
+      default:
+        return {
+          supervisor: {
+            title: 'Supervisor',
+            content: recommitment.supervisorIdir
+              ? recommitment.supervisorIdir
+              : personnel?.supervisorEmail,
+          },
+          decisionDate: { title: 'Date Recommitted', content: '--' },
+          status: {
+            title: 'Status',
+            content: RecommitmentStatusLabel[recommitment.status],
+          },
+          reason: { title: 'Reason (if declined/denied)', content: '--' },
+          year: { title: 'Upoming Year', content: recommitmentCycle?.year },
+        };
+    }
+  };
   const fieldData = getFieldData(recommitment, recommitmentCycle);
   return (
     <>
@@ -95,25 +162,19 @@ export const RecommitmentDetails = () => {
                     columns={[
                       {
                         title: fieldData.year.title,
-                        content: 
-                          <p>{fieldData.year.content}</p>
-                        
+                        content: <p>{fieldData.year.content}</p>,
                       },
                       {
                         title: fieldData.status.title,
-                        content: (
-                          <p>
-                            {fieldData.status.content}
-                          </p>
-                        ),
+                        content: <p>{fieldData.status.content}</p>,
                       },
                       {
                         title: fieldData.decisionDate.title,
-                        content: <p>{fieldData.decisionDate.content}</p>
+                        content: <p>{fieldData.decisionDate.content}</p>,
                       },
                       {
                         title: fieldData.supervisor.title,
-                        content: <p>{fieldData.supervisor.content}</p>
+                        content: <p>{fieldData.supervisor.content}</p>,
                       },
                       {
                         title: fieldData.reason.title,
