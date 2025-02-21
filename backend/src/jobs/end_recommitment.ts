@@ -60,13 +60,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       { endDate: datePST(new Date()) },
     );
 
-    const data = await recommitmentService.handleEndRecommitment(
-      testRun,
-      testEmails,
-    );
-    console.log(data);
-
-    return;
+    return await recommitmentService.handleEndRecommitment(testRun, testEmails);
   } catch (e) {
     console.error(e);
   } finally {

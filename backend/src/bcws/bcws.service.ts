@@ -37,12 +37,10 @@ export class BcwsService {
    * @param id
    * @param status
    */
-  async updatePersonnelAfterRecommitment(id: string[], status: Status) {
+  async updatePersonnelAfterRecommitment(ids: string[], status: Status) {
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
-    qb.update()
-      .set({ status })
-      .where('personnel_id IN (:...ids)', { ids: [id] });
+    qb.update().set({ status }).where('personnel_id IN (:...ids)', { ids });
     return await qb.execute();
   }
 
