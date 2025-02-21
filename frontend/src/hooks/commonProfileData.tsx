@@ -1,8 +1,17 @@
-import { DriverLicenseName, DriverLicense, Member, Program, Personnel } from "@/common";
-import { LanguageProficiencyName } from "@/common/enums/language.enum";
-import { RecommitmentStatus } from "@/common/enums/recommitment-status";
-import { ToolsName, Tools, ToolsProficiencyName } from "@/common/enums/tools.enum";
-import { format, formatDate } from "date-fns";
+// common
+import {
+  DriverLicense,
+  DriverLicenseName,
+  Member,
+  Personnel,
+  Program,
+} from '@/common';
+import { LanguageProficiencyName } from '@/common/enums/language.enum';
+import { RecommitmentStatus } from '@/common/enums/recommitment-status';
+import { ToolsName, Tools, ToolsProficiencyName } from '@/common/enums/tools.enum';
+
+// util
+import { format, formatDate } from 'date-fns';
 
 export const formatDriversLicenses = (driverLicenses: string[]): string => {
   const licensesFormatted = driverLicenses.map(
@@ -57,6 +66,25 @@ export const renderRecommitmentStatus = (
       }
   }
 };
+
+const emptyMembershipDetails = [
+  {
+    title: 'Program',
+    content: '--',
+  },
+  {
+    title: 'Status',
+    content: '--',
+  },
+  {
+    title: 'Annual Recommitment',
+    content: '--',
+  },
+  {
+    title: 'Member since',
+    content: '--',
+  },
+];
 
 export const getMembershipDetails = (personnel: Member) => {
   const bcwsStatus = personnel?.recommitment?.find(
@@ -136,11 +164,10 @@ export const getMembershipDetails = (personnel: Member) => {
   } else if (bcwsMembership && emcrMembership) {
     return [...bcwsMembership, ...emcrMembership];
   }
-  return [];
+  return emptyMembershipDetails;
 };
 
-
-export const skillsData = (personnel: Personnel | Member)=> [
+export const skillsData = (personnel: Personnel | Member) => [
   {
     title: 'Languages',
     header: 'Language',
@@ -168,4 +195,4 @@ export const skillsData = (personnel: Personnel | Member)=> [
       value: c.expiry,
     })),
   },
-]
+];
