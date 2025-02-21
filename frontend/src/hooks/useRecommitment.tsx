@@ -4,7 +4,6 @@ import { useAxios } from './useAxios';
 import type { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { offsetTimezoneDate } from '@/utils';
 import type { SupervisorInformation } from '@/components/recommitment';
-import { addDays } from 'date-fns';
 
 export interface RecommitmentDecision {
   program: Program;
@@ -15,19 +14,27 @@ export interface RecommitmentDecision {
 
 export const useRecommitmentCycle = () => {
   const [recommitmentCycle, setRecommitmentCycle] = useState<RecommitmentCycle>();
-
+const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useState<boolean>(false);
   const { AxiosPrivate } = useAxios();
 
   useEffect(() => {
-    const fetchRecommitmentCycle = async () => {
+    (async () => {
       try {
         const { data } = await AxiosPrivate.get('/recommitment');
+        const today = new Date()
+        const endDate = data.endDate && new Date(data.endDate);
+        const reinitiationEndDate = data.reinitiationEndDate && new Date(data.reinitiationEndDate);
         setRecommitmentCycle(data);
+        if (today > endDate && today <= reinitiationEndDate)  {
+          setIsRecommitmentReinitCycleOpen(true);
+      } else {
+        setIsRecommitmentReinitCycleOpen(false);
+      }
       } catch (e) {
         console.error(e);
       }
-    };
-    fetchRecommitmentCycle();
+    })()
+    
   }, []);
 
   const updateRecommitment = async (
@@ -43,6 +50,7 @@ export const useRecommitmentCycle = () => {
         `/recommitment/${personnelId}`,
         decisions,
       );
+      
       return data;
     } catch (e: any) {
       console.error(e);
@@ -54,6 +62,7 @@ export const useRecommitmentCycle = () => {
       };
     }
   };
+  
 
   return {
     recommitmentCycle,
@@ -61,14 +70,8 @@ export const useRecommitmentCycle = () => {
       recommitmentCycle &&
       offsetTimezoneDate(recommitmentCycle.endDate) >= new Date() &&
       offsetTimezoneDate(recommitmentCycle.startDate) <= new Date(),
-    isRecommitmentReinitiationOpen:
-      recommitmentCycle &&
-      recommitmentCycle.reinitiationEndDate &&
-      offsetTimezoneDate(addDays(recommitmentCycle.endDate, 1).toString()) <=
-        new Date() &&
-      offsetTimezoneDate(
-        addDays(recommitmentCycle.reinitiationEndDate, 1).toString(),
-      ) >= new Date(),
+    isRecommitmentReinitiationOpen: isRecommitmentReinitCycleOpen,
+      
     updateRecommitment,
   };
 };
