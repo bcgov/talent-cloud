@@ -4,11 +4,12 @@ export enum Status {
   PENDING = 'PENDING',
 }
 
-export enum StatusNames {
-  ACTIVE = 'Active',
-  INACTIVE = 'Inactive',
-  PENDING = 'Pending',
-  NEW = 'New',
-  RECOMMITTED = 'Recommitted',
-  ALL = 'All',
+export enum AvailabilityTypeStatus {
+  ALL = 'ALL',
+  NEW = 'NEW',
+  SUPERVISOR_APPROVED = 'SUPERVISOR_APPROVED',
+  OTHER = 'OTHER',
+  MEMBER_DENIED = 'MEMBER_DENIED',
+  MISSED = 'MISSED',
+  SUPERVISOR_DENIED = 'SUPERVISOR_DENIED',
 }

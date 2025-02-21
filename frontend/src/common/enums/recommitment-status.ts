@@ -61,3 +61,31 @@ export enum RecommitmentStatusLabel {
   // member will be set as INACTIVE in the particular program
   SUPERVISOR_NO_RESPONSE = 'No Supervisor Response',
 }
+
+export enum AvailabilityTypeStatus {
+  ALL = 'ALL',
+  NEW = 'NEW',
+  SUPERVISOR_APPROVED = 'SUPERVISOR_APPROVED',
+  OTHER = 'OTHER',
+  MEMBER_DENIED = 'MEMBER_DENIED',
+  MISSED = 'MISSED',
+  SUPERVISOR_DENIED = 'SUPERVISOR_DENIED',
+}
+
+
+export const ActiveRecommitmentStatusFilter = [
+  { value: AvailabilityTypeStatus.ALL , label: 'All' },
+  { value: AvailabilityTypeStatus.NEW , label: 'New' },
+  { value: AvailabilityTypeStatus.SUPERVISOR_APPROVED , label: 'Recommitted' },
+  
+  
+];
+
+
+export const InactiveRecommitmentStatusFilter = [
+  { value: AvailabilityTypeStatus.ALL , label: 'All' },
+  { value: AvailabilityTypeStatus.OTHER , label: 'Other' },
+  { value: AvailabilityTypeStatus.MEMBER_DENIED , label: 'Member Declined - Not Returning' },
+  { value: AvailabilityTypeStatus.MISSED , label: 'Missed Recommitment' },
+  { value: AvailabilityTypeStatus.SUPERVISOR_DENIED , label: 'Supervisor Declined - Not Returning' },
+]

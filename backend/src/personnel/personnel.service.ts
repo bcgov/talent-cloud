@@ -20,7 +20,7 @@ import {
   AvailabilityType,
   AvailabilityTypeLabel,
 } from '../common/enums/availability-type.enum';
-import { Status } from '../common/enums/status.enum';
+import { AvailabilityTypeStatus, Status } from '../common/enums/status.enum';
 import { datePST } from '../common/helpers';
 import { CreatePersonnelLanguagesDTO } from './dto/skills/create-personnel-languages.dto';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
@@ -357,10 +357,10 @@ export class PersonnelService {
     availabilityType?: AvailabilityTypeLabel,
     availabilityFromDate?: string,
     availabilityToDate?: string,
-    availableStatus?: string,
+    availableStatus?: AvailabilityTypeStatus,
     program?: Program,
   ): Promise<SelectQueryBuilder<T>> {
-    if (availableStatus && availableStatus === 'New') {
+    if (availableStatus && availableStatus === AvailabilityTypeStatus.NEW) {
       if (program === Program.BCWS) {
         queryBuilder.andWhere(
           `bcws_personnel.dateApproved > current_date - interval '5' day `,
@@ -375,15 +375,45 @@ export class PersonnelService {
         );
       }
     }
-    if (availableStatus && availableStatus === 'Recommitted') {
+    if (availableStatus && availableStatus === AvailabilityTypeStatus.MISSED) {
       queryBuilder.andWhere('recommitment.program = :program', {
         program,
       });
-      queryBuilder.andWhere('recommitment.status = :recommitment_status', {
-        recommitment_status: RecommitmentStatus.SUPERVISOR_APPROVED,
+      queryBuilder.andWhere('recommitment.year = :year', {
+        year: new Date().getFullYear(),
+      });
+      queryBuilder.andWhere('recommitment.status in (:...recommitmentStatus)', {
+        recommitmentStatus: [
+          RecommitmentStatus.MEMBER_NO_RESPONSE,
+          RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
+        ],
+      });
+    } else if (
+      availableStatus &&
+      availableStatus === AvailabilityTypeStatus.OTHER
+    ) {
+      queryBuilder.andWhere('recommitment.program = :program', {
+        program,
       });
       queryBuilder.andWhere('recommitment.year = :year', {
         year: new Date().getFullYear(),
+      });
+      queryBuilder.andWhere('recommitment.status IS NOT NULL');
+    } else if (
+      availableStatus &&
+      availableStatus !== AvailabilityTypeStatus.ALL
+    ) {
+      queryBuilder.andWhere('recommitment.program = :program', {
+        program,
+      });
+      queryBuilder.andWhere('recommitment.year = :year', {
+        year: new Date().getFullYear(),
+      });
+      queryBuilder.andWhere('recommitment.status = :availableStatus', {
+        availableStatus:
+          RecommitmentStatus[
+            availableStatus as keyof typeof RecommitmentStatus
+          ],
       });
     }
 
@@ -566,6 +596,7 @@ export class PersonnelService {
 
     const tableName =
       program === Program.BCWS ? 'bcws_personnel' : 'emcr_personnel';
+
     const personnel = await queryBuilder
       .take(rows)
       .skip((page - 1) * rows)
