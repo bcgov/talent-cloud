@@ -17,11 +17,17 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     });
 
     const logger = new AppLogger();
-    app.useLogger(logger);
-    const viewsPath =
-      process.env.ENV === 'prod' || process.env.ENV === 'test'
-        ? 'views'
-        : 'views/test';
+
+    const testEmails = process.env?.TEST_EMAIL?.split(',') || undefined;
+    const viewsPath = process.env?.VIEWS_PATH || 'views';
+
+    const testRun = process.env?.TEST_RUN === 'true' || false;
+
+    logger.log(`Views path: ${viewsPath}`, 'End Recommitment');
+
+    logger.log(`Test run: ${testRun}`, 'End Recommitment');
+    logger.log(`Test Emails: ${testEmails}`, 'End Recommitment');
+
     app.useStaticAssets(join(__dirname, '..', viewsPath));
     app.setBaseViewsDir(join(__dirname, '..', viewsPath));
     nunjucks.configure(join(__dirname, '..', viewsPath), {
@@ -30,16 +36,18 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       trimBlocks: false,
       lstripBlocks: false,
       watch: true,
-      noCache: process.env.NODE_ENV === 'local' ? true : false,
+      noCache: true,
       express: app,
     });
 
     app.engine('njk', nunjucks.render);
     app.set('view cache', true);
     app.setViewEngine('njk');
+
     const recommitmentService = app.get(RecommitmentService);
     const recommitment_cycle =
       await recommitmentService.checkRecommitmentPeriod();
+
     if (!datasource.isInitialized) {
       await datasource.initialize();
     }
@@ -52,68 +60,10 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       { endDate: datePST(new Date()) },
     );
 
-    if (process.env.TEST_RUN === 'true') {
-      await testRun(recommitmentService);
-      return await app.close();
-    } else {
-      const data = await recommitmentService.handleEndRecommitment();
-
-      logger.log('Supervisor emails:', 'Recommitment');
-      logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
-
-      data.supervisor?.messages?.forEach((supervisor) => {
-        logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
-      });
-
-      logger.log('Member emails:', 'Recommitment');
-      logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
-
-      data.member?.messages?.forEach((member) => {
-        logger.log(`Member: ${member?.to}`, 'Recommitment');
-      });
-
-      logger.log('Recommitment job completed', 'Recommitment');
-      logger.log('Recommitment job completed', 'Recommitment');
-
-      return await app.close();
-    }
+    return await recommitmentService.handleEndRecommitment(testRun, testEmails);
   } catch (e) {
     console.error(e);
   } finally {
     process.exit(0);
   }
 })();
-
-const testRun = async (recommitmentService: RecommitmentService) => {
-  const logger = new AppLogger();
-  const testEmails = process.env?.TEST_EMAIL?.split(',');
-
-  if (!testEmails) {
-    logger.error('No test emails found', 'Recommitment');
-
-    return;
-  }
-
-  logger.log(testEmails, 'Recommitment');
-
-  const data = await recommitmentService.handleEndRecommitment(
-    true,
-    testEmails,
-  );
-
-  logger.log('Supervisor TEST emails:', 'Recommitment');
-  logger.log(`TxId: ${data?.supervisor?.txId}`, 'Recommitment');
-
-  data.supervisor?.messages?.forEach((supervisor) => {
-    logger.log(`Supervisor: ${supervisor?.to}`, 'Recommitment');
-  });
-
-  logger.log('Member TEST emails:', 'Recommitment');
-  logger.log(`TxId: ${data?.member?.txId}`, 'Recommitment');
-
-  data.member?.messages?.forEach((member) => {
-    logger.log(`Member: ${member?.to}`, 'Recommitment');
-  });
-
-  logger.log('Recommitment job completed', 'Recommitment');
-};

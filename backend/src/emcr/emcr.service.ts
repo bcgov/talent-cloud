@@ -42,14 +42,12 @@ export class EmcrService {
    * @param status
    */
   async updatePersonnelAfterRecommitment(
-    id: string,
+    ids: string[],
     status: Status,
   ): Promise<UpdateResult> {
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
-    qb.update(EmcrPersonnelEntity)
-      .set({ status })
-      .where('personnel_id = :id', { id });
+    qb.update().set({ status }).where('personnel_id IN (:...ids)', { ids });
     return await qb.execute();
   }
   /**

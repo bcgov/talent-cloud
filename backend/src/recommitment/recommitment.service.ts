@@ -1,10 +1,12 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { addDays, isAfter } from 'date-fns';
 import { Repository } from 'typeorm';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
+import { datePST } from '../common/helpers';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { RecommitmentCycleEntity } from '../database/entities/recommitment/recommitment-cycle.entity';
 import { RecommitmentCycleRO } from '../database/entities/recommitment/recommitment-cycle.ro';
@@ -18,8 +20,6 @@ import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-p
 import { ProgramRecommitmentDTO } from '../personnel/dto/recommitment/update-personnel-recommitment.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RecommitmentRO } from '../personnel/ro/recommitment.ro';
-import { addDays, isAfter } from 'date-fns';
-import { datePST } from '../common/helpers';
 
 @Injectable()
 export class RecommitmentService {
@@ -242,7 +242,7 @@ export class RecommitmentService {
       relations: ['personnel'],
     });
     const recommitmentCycle = await this.checkRecommitmentPeriod();
-    
+
     const { templateType, templateRecipient } = this.getEmailTemplate(
       recommitmentUpdate.status,
     );
@@ -250,13 +250,12 @@ export class RecommitmentService {
     const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
     const currentPST = datePST(new Date());
     // If reinitiation end date exists and current date is between end date & reinit end date, use reinit end date
-    const endDate = 
+    const endDate =
       isAfter(currentPST, dayAfterEndDate) &&
       isAfter(currentPST, recommitmentCycle.startDate) &&
-      recommitmentCycle.reinitiationEndDate ?
-      recommitmentCycle.reinitiationEndDate :
-      recommitmentCycle.endDate;
-
+      recommitmentCycle.reinitiationEndDate
+        ? recommitmentCycle.reinitiationEndDate
+        : recommitmentCycle.endDate;
 
     const emailTemplate = this.mailService.generateTemplate(
       templateType,
@@ -575,23 +574,19 @@ export class RecommitmentService {
       ...supervisorDenied,
     ];
 
-    for await (const recommitment of [
-      ...membersToInactive.filter((itm) => itm.program === Program.BCWS),
-    ]) {
-      await this.bcwsService.updatePersonnelAfterRecommitment(
-        recommitment.personnel.id,
-        Status.INACTIVE,
-      );
-    }
+    await this.bcwsService.updatePersonnelAfterRecommitment(
+      membersToInactive
+        .filter((itm) => itm.program === Program.BCWS)
+        .map((itm) => itm.personnel.id),
+      Status.INACTIVE,
+    );
 
-    for await (const recommitment of [
-      ...membersToInactive.filter((itm) => itm.program === Program.EMCR),
-    ]) {
-      await this.emcrService.updatePersonnelAfterRecommitment(
-        recommitment.personnel.id,
-        Status.INACTIVE,
-      );
-    }
+    await this.emcrService.updatePersonnelAfterRecommitment(
+      membersToInactive
+        .filter((itm) => itm.program === Program.EMCR)
+        .map((itm) => itm.personnel.id),
+      Status.INACTIVE,
+    );
 
     for await (const recommitment of [...memberPending]) {
       await this.recommitmentRepository.update(
