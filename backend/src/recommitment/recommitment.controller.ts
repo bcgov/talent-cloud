@@ -8,8 +8,10 @@ import {
   Param,
   Patch,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { RecommitmentStatus } from 'src/common/enums/recommitment-status.enum';
 import { RecommitmentService } from './recommitment.service';
 import { RequestWithRoles, Role } from '../auth/interface';
 import { Roles } from '../auth/roles.decorator';
@@ -46,6 +48,22 @@ export class RecommitmentController {
   ): Promise<Record<'personnel', PersonnelRO>> {
     this.logger.log(`Updating personnel ${id}`);
 
+    if (
+      (update.bcws &&
+        ![
+          RecommitmentStatus.MEMBER_COMMITTED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ].includes(update.bcws.status)) ||
+      (update.emcr &&
+        ![
+          RecommitmentStatus.MEMBER_COMMITTED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ].includes(update.emcr.status))
+    ) {
+      throw new UnauthorizedException(
+        'Member can only set themselves as committed or denied',
+      );
+    }
     const personnel =
       await this.recommitmentService.updateMemberRecommitmentStatus(
         id,
@@ -72,6 +90,14 @@ export class RecommitmentController {
     @Body() update: PersonnelRecommitmentDTO,
   ): Promise<Record<'personnel', PersonnelRO>> {
     this.logger.log(`Updating personnel ${id}`);
+    if (
+      (update.bcws && update.bcws.status !== RecommitmentStatus.PENDING) ||
+      (update.emcr && update.emcr.status !== RecommitmentStatus.PENDING)
+    ) {
+      throw new UnauthorizedException(
+        'Coordinators may only set members to pending',
+      );
+    }
 
     const personnel =
       await this.recommitmentService.coordinatorUpdatePersonnelRecommitment(
@@ -97,8 +123,22 @@ export class RecommitmentController {
     @Body() update: PersonnelRecommitmentDTO,
   ): Promise<Record<'personnel', PersonnelRO>> {
     this.logger.log(`Updating personnel ${id}`);
-    console.log(req);
-    console.log(update);
+    if (
+      (update.bcws &&
+        ![
+          RecommitmentStatus.MEMBER_COMMITTED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ].includes(update.bcws.status)) ||
+      (update.emcr &&
+        ![
+          RecommitmentStatus.MEMBER_COMMITTED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ].includes(update.emcr.status))
+    ) {
+      throw new UnauthorizedException(
+        'Supervisors may only set members to approved or denied',
+      );
+    }
     const personnel =
       await this.recommitmentService.supervisorUpdateMemberRecommitmentStatus(
         id,
