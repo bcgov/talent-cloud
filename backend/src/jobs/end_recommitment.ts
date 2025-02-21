@@ -19,7 +19,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     const logger = new AppLogger();
 
     const testEmails = process.env?.TEST_EMAIL?.split(',') || undefined;
-    const viewsPath = process.env?.VIEWS_PATH || 'views';
+    const viewsPath = process.env?.VIEWS || 'views';
 
     const testRun = process.env?.TEST_RUN === 'true' || false;
 
