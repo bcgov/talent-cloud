@@ -6,14 +6,17 @@ import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 export const SupervisorDashboardHeaderBanner = ({
   recommitmentYear,
   recommitmentDate,
+  isRecommitmentCycleOpen,
 }: {
   recommitmentDate: string;
   recommitmentYear: number;
+  isRecommitmentCycleOpen: boolean;
 }) => {
   const [showFAQs, setShowFAQs] = useState(false);
   return (
     <div className="bg-infoBannerLight px-12 flex flex-col items-start justify-start text-left space-y-4  pt-20 pb-12">
       <h3>{`Supervisor Approval for ${recommitmentYear} CORE Recommitment`}</h3>
+      {isRecommitmentCycleOpen ? 
       <p>
         {
           "Please approve or decline your employees' participation for the upcoming season by "
@@ -22,7 +25,7 @@ export const SupervisorDashboardHeaderBanner = ({
         {
           " down below. If you have any concerns, please contact your member's CORE coordinator."
         }
-      </p>
+      </p> : <p><strong>{`The ${recommitmentYear} recommitment period has ended.`}</strong> All members with supervisor approval will be considered readily deployable for the year. Please keep an eye out for deployment requests as those will also require your approval.</p>}
       <button
         onClick={() => setShowFAQs((showFAQs) => !showFAQs)}
         className="w-full"

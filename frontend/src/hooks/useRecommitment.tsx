@@ -15,6 +15,7 @@ export interface RecommitmentDecision {
 export const useRecommitmentCycle = () => {
   const [recommitmentCycle, setRecommitmentCycle] = useState<RecommitmentCycle>();
 const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useState<boolean>(false);
+const [isRecommitmentCycleOpen, setIsRecommitmentCycleOpen] = useState<boolean>(false);
   const { AxiosPrivate } = useAxios();
 
   useEffect(() => {
@@ -25,6 +26,12 @@ const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useSta
         const endDate = data.endDate && new Date(data.endDate);
         const reinitiationEndDate = data.reinitiationEndDate && new Date(data.reinitiationEndDate);
         setRecommitmentCycle(data);
+
+        
+      if(offsetTimezoneDate(data.endDate) >= new Date() &&
+          offsetTimezoneDate(data.startDate) <= new Date()){
+        setIsRecommitmentCycleOpen(true);
+      }
         if (today > endDate && today <= reinitiationEndDate)  {
           setIsRecommitmentReinitCycleOpen(true);
       } else {
@@ -66,10 +73,7 @@ const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useSta
 
   return {
     recommitmentCycle,
-    isRecommitmentCycleOpen:
-      recommitmentCycle &&
-      offsetTimezoneDate(recommitmentCycle.endDate) >= new Date() &&
-      offsetTimezoneDate(recommitmentCycle.startDate) <= new Date(),
+    isRecommitmentCycleOpen, 
     isRecommitmentReinitiationOpen: isRecommitmentReinitCycleOpen,
       
     updateRecommitment,
