@@ -45,10 +45,12 @@ export class EmcrService {
     ids: string[],
     status: Status,
   ): Promise<UpdateResult> {
-    const qb =
-      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
-    qb.update().set({ status }).where('personnel_id IN (:...ids)', { ids });
-    return await qb.execute();
+    return await this.emcrPersonnelRepository
+      .createQueryBuilder()
+      .update(EmcrPersonnelEntity)
+      .set({ status })
+      .where('personnel_id IN (:...ids)', { ids })
+      .execute();
   }
   /**
    *
