@@ -503,16 +503,31 @@ export class RecommitmentService {
     const { memberPending, memberCommitted, memberDeclined, supervisorDenied } =
       await this.findMembersByRecommitmentStatus();
 
+    this.logger.log(
+      `Found: ${memberPending.length} Pending Members`,
+      'Member Pending',
+    );
+    this.logger.log(
+      `Found: ${memberCommitted.length} Committed Members`,
+      'Member Committed',
+    );
+    this.logger.log(
+      `Found: ${memberDeclined.length} Declined Members`,
+      'Member Declined',
+    );
+    this.logger.log(
+      `Found: ${supervisorDenied.length} Denied Members`,
+      'Supervisor Denied',
+    );
+
     const recommitmentCycle = await this.checkRecommitmentPeriod();
 
-    if (!dryRun) {
-      await this.updatePersonnelStatus(
-        memberPending.map((itm) => itm.toResponseObject()),
-        memberCommitted.map((itm) => itm.toResponseObject()),
-        memberDeclined.map((itm) => itm.toResponseObject()),
-        supervisorDenied.map((itm) => itm.toResponseObject()),
-      );
-    }
+    await this.updatePersonnelStatus(
+      memberPending.map((itm) => itm.toResponseObject()),
+      memberCommitted.map((itm) => itm.toResponseObject()),
+      memberDeclined.map((itm) => itm.toResponseObject()),
+      supervisorDenied.map((itm) => itm.toResponseObject()),
+    );
 
     const pendingMembers = this.filterRecommitmentList(
       memberPending,
@@ -567,52 +582,45 @@ export class RecommitmentService {
     memberDeclined: RecommitmentRO[],
     supervisorDenied: RecommitmentRO[],
   ): Promise<void> {
-    const membersToInactive = [
-      ...memberPending,
+    const members = [
       ...memberCommitted,
+      ...memberPending,
       ...memberDeclined,
       ...supervisorDenied,
     ];
 
-    await this.bcwsService.updatePersonnelAfterRecommitment(
-      membersToInactive
-        .filter((itm) => itm.program === Program.BCWS)
-        .map((itm) => itm.personnel.id),
-      Status.INACTIVE,
-    );
+    const bcwsMembers = members.filter((itm) => itm.program === Program.BCWS);
+    const emcrMembers = members.filter((itm) => itm.program === Program.EMCR);
+    const bcwsIds = bcwsMembers.map((itm) => itm.personnel.id);
+    const emcrIds = emcrMembers.map((itm) => itm.personnel.id);
 
-    await this.emcrService.updatePersonnelAfterRecommitment(
-      membersToInactive
-        .filter((itm) => itm.program === Program.EMCR)
-        .map((itm) => itm.personnel.id),
-      Status.INACTIVE,
-    );
+    bcwsIds.length > 0 &&
+      (await this.bcwsService.updatePersonnelAfterRecommitment(
+        bcwsIds,
+        Status.INACTIVE,
+      ));
 
-    for await (const recommitment of [...memberPending]) {
-      await this.recommitmentRepository.update(
-        {
-          personnelId: recommitment.personnelId,
-          recommitmentCycleId: recommitment.year,
-          program: recommitment.program,
-        },
-        {
-          status: RecommitmentStatus.MEMBER_NO_RESPONSE,
-        },
-      );
-    }
+    emcrIds.length > 0 &&
+      (await this.emcrService.updatePersonnelAfterRecommitment(
+        emcrIds,
+        Status.INACTIVE,
+      ));
 
-    for await (const recommitment of [...memberCommitted]) {
-      await this.recommitmentRepository.update(
-        {
-          personnelId: recommitment.personnelId,
-          recommitmentCycleId: recommitment.year,
-          program: recommitment.program,
-        },
-        {
-          status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE,
-        },
-      );
-    }
+    await this.recommitmentRepository
+      .createQueryBuilder()
+      .update(RecommitmentEntity)
+      .set({ status: RecommitmentStatus.MEMBER_NO_RESPONSE })
+      .where('status = :status', { status: RecommitmentStatus.PENDING })
+      .execute();
+
+    await this.recommitmentRepository
+      .createQueryBuilder()
+      .update(RecommitmentEntity)
+      .set({ status: RecommitmentStatus.SUPERVISOR_NO_RESPONSE })
+      .where('status = :status', {
+        status: RecommitmentStatus.MEMBER_COMMITTED,
+      })
+      .execute();
   }
 
   /**

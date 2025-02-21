@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelBcwsDTO } from './dto';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { BcwsRO } from './ro';
@@ -31,17 +31,21 @@ export class BcwsService {
   ) {
     this.logger.setContext(BcwsService.name);
   }
-
   /**
    * Update personnel after recommitment
-   * @param id
+   * @param ids
    * @param status
    */
-  async updatePersonnelAfterRecommitment(ids: string[], status: Status) {
-    const qb =
-      this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
-    qb.update().set({ status }).where('personnel_id IN (:...ids)', { ids });
-    return await qb.execute();
+  async updatePersonnelAfterRecommitment(
+    ids: string[],
+    status: Status,
+  ): Promise<UpdateResult> {
+    return await this.bcwsPersonnelRepository
+      .createQueryBuilder()
+      .update(BcwsPersonnelEntity)
+      .set({ status })
+      .where('personnel_id IN (:...ids)', { ids })
+      .execute();
   }
 
   /**
