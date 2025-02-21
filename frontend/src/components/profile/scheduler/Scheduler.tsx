@@ -14,7 +14,7 @@ import { SchedulerRow } from './SchedulerRow';
 import { SchedulerControl } from './SchedulerControl';
 import type { AvailabilityRange, Personnel, SchedulerRowItem } from '@/common';
 import dayjs from 'dayjs';
-import type { AvailabilityType } from '@/common';
+import { AvailabilityType } from '@/common';
 import { SchedulerPopUp } from './SchedulerPopUp';
 import useAvailability from '@/hooks/useAvailability';
 
@@ -160,7 +160,10 @@ export const Scheduler = ({ personnel }: { personnel: Personnel }) => {
     const statusIndex = availability.findIndex((s) => s.date === date);
     if (statusIndex > -1) {
       const status = availability[statusIndex];
-      if (!status.availabilityType) {
+      if (
+        !status.availabilityType ||
+        status.availabilityType === AvailabilityType.AVAILABLE
+      ) {
         openSchedulerDialog(status.date, status.date);
       } else {
         // For all elements before (including this one), find the first break in availability type
