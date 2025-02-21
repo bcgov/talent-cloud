@@ -4,10 +4,6 @@ import { useAxios } from './useAxios';
 import type { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { offsetTimezoneDate } from '@/utils';
 import type { SupervisorInformation } from '@/components/recommitment';
-import { addDays } from 'date-fns';
-import { set } from 'lodash';
-import { is } from 'cypress/types/bluebird';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export interface RecommitmentDecision {
   program: Program;
