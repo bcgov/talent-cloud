@@ -126,13 +126,13 @@ export class RecommitmentController {
     if (
       (update.bcws &&
         ![
-          RecommitmentStatus.MEMBER_COMMITTED,
-          RecommitmentStatus.MEMBER_DENIED,
+          RecommitmentStatus.SUPERVISOR_APPROVED,
+          RecommitmentStatus.SUPERVISOR_DENIED,
         ].includes(update.bcws.status)) ||
       (update.emcr &&
         ![
-          RecommitmentStatus.MEMBER_COMMITTED,
-          RecommitmentStatus.MEMBER_DENIED,
+          RecommitmentStatus.SUPERVISOR_APPROVED,
+          RecommitmentStatus.SUPERVISOR_DENIED,
         ].includes(update.emcr.status))
     ) {
       throw new UnauthorizedException(
