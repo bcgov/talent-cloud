@@ -10,6 +10,7 @@ import {
 import { CheckIcon } from '../../components/ui/Icons';
 import { SupervisorReason } from '../../common/enums/supervisor-decision.enum';
 import { useAxios } from '../../hooks/useAxios';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 export const SupervisorApprovalForm = ({
   year,
@@ -33,6 +34,8 @@ export const SupervisorApprovalForm = ({
 }) => {
   const [supervisorDeclinedReason, setSupervisorDeclinedReason] =
     useState<SupervisorReason>();
+
+  const {isRecommitmentCycleOpen} = useRecommitmentCycle();
 
   const [fields, setFields] = useState(declineFormFields);
 
@@ -139,6 +142,7 @@ export const SupervisorApprovalForm = ({
         </div>
       ) : status === RecommitmentStatus.SUPERVISOR_DENIED ? (
         <Button
+        disabled={!isRecommitmentCycleOpen}
           variant={ButtonTypes.TERTIARY}
           text={'Unlock'}
           onClick={() => {

@@ -23,7 +23,7 @@ const SupervisorDashboard = () => {
     handleShowWarningBanner,
   } = useSupervisorDashboard();
 
-  const { recommitmentCycle } = useRecommitmentCycle();
+  const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
 
   if (loading) return <Loading />;
 
@@ -31,6 +31,7 @@ const SupervisorDashboard = () => {
     <div className="xl:px-32 pb-32">
       {recommitmentCycle && (
         <SupervisorDashboardHeaderBanner
+          isRecommitmentCycleOpen={isRecommitmentCycleOpen}
           recommitmentDate={
             format(new Date(recommitmentCycle.endDate), 'MMMM do, yyyy') ?? ''
           }
@@ -38,49 +39,53 @@ const SupervisorDashboard = () => {
         />
       )}
 
-      <Transition
-        show={showSuccessMessage}
-        appear={true}
-        enter="ease-in-out duration-300"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="ease-in-out duration-300"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <div className="pt-12">
-          <Banner
-            onClose={() => handleShowSuccessBanner(false)}
-            title={'Supervisor Decision for Recommitment Successfully Submitted'}
-            content={
-              "Thank you for your submission. Your employee and their coordinator will be notified. If approved, You'll be informed if they are called for deployment to provide approval."
-            }
-            type={BannerType.SUCCESS}
-          />
-        </div>
-      </Transition>
+      {isRecommitmentCycleOpen && (
+        <>
+          <Transition
+            show={showSuccessMessage}
+            appear={true}
+            enter="ease-in-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in-out duration-300"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="pt-12">
+              <Banner
+                onClose={() => handleShowSuccessBanner(false)}
+                title={'Supervisor Decision for Recommitment Successfully Submitted'}
+                content={
+                  "Thank you for your submission. Your employee and their coordinator will be notified. If approved, You'll be informed if they are called for deployment to provide approval."
+                }
+                type={BannerType.SUCCESS}
+              />
+            </div>
+          </Transition>
 
-      <Transition
-        show={showWarningBanner}
-        appear={true}
-        enter="ease-in duration-300"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="ease-out duration-300"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <div className="pt-12">
-          <Banner
-            onClose={handleShowWarningBanner}
-            content={
-              'Approved recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
-            }
-            title={'Approval Action Cannot be Undone'}
-            type={BannerType.WARNING}
-          />
-        </div>
-      </Transition>
+          <Transition
+            show={showWarningBanner}
+            appear={true}
+            enter="ease-in duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-out duration-300"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="pt-12">
+              <Banner
+                onClose={handleShowWarningBanner}
+                content={
+                  'Approved recommitment requests cannot be undone. If you have previously declined a recommitment request and wish to change your decision, please do so within the next 5 days.'
+                }
+                title={'Approval Action Cannot be Undone'}
+                type={BannerType.WARNING}
+              />
+            </div>
+          </Transition>
+        </>
+      )}
 
       <div className="w-full py-4 pt-16">
         <h6 className="font-bold text-left ">Pending Member List</h6>
