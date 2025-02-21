@@ -605,7 +605,7 @@ export const fields = {
     })),
   },
   liaisonFirstName: {
-    name: 'bcws.liaisonFirstName',
+    name: 'liaisonFirstName',
     label: 'Liaison First Name',
     type: 'text',
     autoComplete: 'off',
@@ -614,7 +614,7 @@ export const fields = {
     program: Program.BCWS,
   },
   liaisonLastName: {
-    name: 'bcws.liaisonLastName',
+    name: 'liaisonLastName',
     label: 'Liaison Last Name',
     type: 'text',
     autoComplete: 'off',
@@ -624,7 +624,7 @@ export const fields = {
   },
 
   liaisonPhoneNumber: {
-    name: 'bcws.liaisonPhoneNumber',
+    name: 'liaisonPhoneNumber',
     label: 'Liaison Number',
     type: 'tel',
     autoComplete: 'off',
@@ -633,7 +633,7 @@ export const fields = {
     program: Program.BCWS,
   },
   liaisonEmail: {
-    name: 'bcws.liaisonEmail',
+    name: 'liaisonEmail',
     label: 'Liaison Email',
     type: 'text',
     autoComplete: 'off',
@@ -682,6 +682,44 @@ export const fields = {
         label: TravelPreferenceText[itm],
         value: itm.toString(),
       })),
+    },
+    liaisonFirstName: {
+      name: 'bcws.liaisonFirstName',
+      label: 'Liaison First Name',
+      type: 'text',
+      autoComplete: 'off',
+      disabled: false,
+      required: false,
+      program: Program.BCWS,
+    },
+    liaisonLastName: {
+      name: 'bcws.liaisonLastName',
+      label: 'Liaison Last Name',
+      type: 'text',
+      autoComplete: 'off',
+      disabled: false,
+      required: false,
+      program: Program.BCWS,
+    },
+  
+    liaisonPhoneNumber: {
+      name: 'bcws.liaisonPhoneNumber',
+      label: 'Liaison Number',
+      type: 'tel',
+      autoComplete: 'off',
+      disabled: false,
+      required: false,
+      program: Program.BCWS,
+    },
+    liaisonEmail: {
+      name: 'bcws.liaisonEmail',
+      label: 'Liaison Email',
+      type: 'text',
+      autoComplete: 'off',
+      disabled: false,
+      required: false,
+      break: true,
+      program: Program.BCWS,
     },
   },
 
