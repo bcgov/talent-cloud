@@ -10,9 +10,9 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Roles } from '../auth/roles.decorator';
 import { RecommitmentService } from './recommitment.service';
 import { RequestWithRoles, Role } from '../auth/interface';
+import { Roles } from '../auth/roles.decorator';
 import { AppLogger } from '../logger/logger.service';
 import { GetPersonnelRO, PersonnelRO } from '../personnel';
 import { PersonnelRecommitmentDTO } from '../personnel/dto/recommitment/create-personnel-recommitment.dto';
@@ -29,7 +29,7 @@ export class RecommitmentController {
     this.logger.setContext(RecommitmentController.name);
   }
 
-  @Patch(':id')
+  @Patch('member/:id')
   @ApiOperation({
     summary: 'Update personnel data',
     description: 'Update personnel data',
@@ -38,16 +38,69 @@ export class RecommitmentController {
     status: HttpStatus.OK,
     type: GetPersonnelRO,
   })
-  @Roles(Role.MEMBER, Role.COORDINATOR, Role.SUPERVISOR)
+  @Roles(Role.MEMBER)
   async updatePersonnelRecommitment(
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
     @Body() update: PersonnelRecommitmentDTO,
   ): Promise<Record<'personnel', PersonnelRO>> {
     this.logger.log(`Updating personnel ${id}`);
-    
+
     const personnel =
       await this.recommitmentService.updateMemberRecommitmentStatus(
+        id,
+        update,
+        req,
+      );
+
+    return personnel.toResponseObject(req.roles);
+  }
+
+  @Patch('coordinator/:id')
+  @ApiOperation({
+    summary: 'Update personnel data',
+    description: 'Update personnel data',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Roles(Role.COORDINATOR)
+  async coordinatorUpdatePersonnelRecommitment(
+    @Param('id') id: string,
+    @Req() req: RequestWithRoles,
+    @Body() update: PersonnelRecommitmentDTO,
+  ): Promise<Record<'personnel', PersonnelRO>> {
+    this.logger.log(`Updating personnel ${id}`);
+
+    const personnel =
+      await this.recommitmentService.coordinatorUpdatePersonnelRecommitment(
+        id,
+        update,
+      );
+    return personnel.toResponseObject(req.roles);
+  }
+
+  @Patch('supervisor/:id')
+  @ApiOperation({
+    summary: 'Update personnel data',
+    description: 'Update personnel data',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Roles(Role.SUPERVISOR)
+  async supervisorUpdatePersonnelRecommitment(
+    @Param('id') id: string,
+    @Req() req: RequestWithRoles,
+    @Body() update: PersonnelRecommitmentDTO,
+  ): Promise<Record<'personnel', PersonnelRO>> {
+    this.logger.log(`Updating personnel ${id}`);
+    console.log(req);
+    console.log(update);
+    const personnel =
+      await this.recommitmentService.supervisorUpdateMemberRecommitmentStatus(
         id,
         update,
         req,
