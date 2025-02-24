@@ -52,6 +52,19 @@ export class RecommitmentService {
     const key = Object.keys(recommitmentUpdate).includes(Program.EMCR)
       ? Program.EMCR
       : Program.BCWS;
+
+    const recommitmentCycle = await this.recommitmentCycleRepository.findOne({ where: { year: new Date().getFullYear() }});
+    const currentPST = datePST(new Date());
+    const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
+    const endDate =
+      isAfter(currentPST, dayAfterEndDate) &&
+      isAfter(currentPST, recommitmentCycle.startDate) &&
+      recommitmentCycle.reinitiationEndDate
+        ? recommitmentCycle.reinitiationEndDate
+        : recommitmentCycle.endDate;
+    if (isAfter(currentPST, addDays(endDate, 1)) || isAfter(recommitmentCycle.startDate, currentPST)) {
+      throw new ForbiddenException('Unable to update recommitment status outside of recommitment cycle end date.');
+    }
     await this.recommitmentRepository.update(
       {
         personnelId: id,
@@ -66,17 +79,6 @@ export class RecommitmentService {
         supervisorReason: null,
       },
     );
-
-    const recommitmentCycle = await this.checkRecommitmentPeriod();
-
-    const dayAfterEndDate = addDays(recommitmentCycle.endDate, 1);
-    const currentPST = datePST(new Date());
-    const endDate =
-      isAfter(currentPST, dayAfterEndDate) &&
-      isAfter(currentPST, recommitmentCycle.startDate) &&
-      recommitmentCycle.reinitiationEndDate
-        ? recommitmentCycle.reinitiationEndDate
-        : recommitmentCycle.endDate;
 
     const recommitment = await this.recommitmentRepository.findOneByOrFail({
       personnelId: id,
@@ -111,6 +113,15 @@ export class RecommitmentService {
       ? Program.EMCR
       : Program.BCWS;
 
+    const recommitmentCycle = await this.recommitmentCycleRepository.findOne({ where: { year: new Date().getFullYear() }});
+    const currentPST = datePST(new Date());
+    const endDate = recommitmentCycle.reinitiationEndDate
+        ? recommitmentCycle.reinitiationEndDate
+        : recommitmentCycle.endDate;
+    if (isAfter(currentPST, addDays(endDate, 1)) || isAfter(recommitmentCycle.startDate, currentPST)) {
+      throw new ForbiddenException('Unable to update recommitment status outside of recommitment cycle dates.');
+    }
+
     await this.recommitmentRepository.update(
       {
         personnelId: id,
@@ -131,6 +142,15 @@ export class RecommitmentService {
       recommitmentCycleId: new Date().getFullYear(),
       program: key,
     });
+
+    if (isAfter(currentPST, addDays(recommitmentCycle.endDate, 1))) {
+      if (recommitmentUpdate.bcws?.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
+        await this.bcwsService.updatePersonnelAfterRecommitment([id], Status.ACTIVE);
+      }
+      if (recommitmentUpdate.emcr?.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
+        await this.emcrService.updatePersonnelAfterRecommitment([id], Status.ACTIVE);
+      }
+    }
 
     const emailTemplate = this.mailService.generateTemplate(
       recommitmentUpdate[key].status === RecommitmentStatus.SUPERVISOR_DENIED
@@ -169,6 +189,16 @@ export class RecommitmentService {
         'You are not authorized to perform this action',
       );
     }
+    
+    const recommitmentCycle = await this.recommitmentCycleRepository.findOne({ where: { year: new Date().getFullYear() }});
+    const currentPST = datePST(new Date());
+    const endDate = recommitmentCycle.reinitiationEndDate
+        ? recommitmentCycle.reinitiationEndDate
+        : recommitmentCycle.endDate;
+    if (isAfter(currentPST, addDays(endDate, 1)) || isAfter(recommitmentCycle.startDate, currentPST)) {
+      throw new ForbiddenException('Unable to update recommitment status outside of recommitment cycle end date.');
+    }
+
     if (recommitmentUpdate.supervisorInformation) {
       await this.personnelService.updatePersonnelSupervisorInformation(
         personnel.id,
