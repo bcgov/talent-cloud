@@ -5,6 +5,7 @@ import {
   Member,
   Personnel,
   Program,
+  Status,
 } from '@/common';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
@@ -19,6 +20,30 @@ export const formatDriversLicenses = (driverLicenses: string[]): string => {
   );
   return licensesFormatted.join(', ');
 };
+
+const renderStatus = (status: Status) => {
+  switch (status) {
+    case Status.ACTIVE:
+      return (
+        <span className="bg-successBannerLight px-2 rounded-full ml-2">Active</span>
+      );
+    case Status.INACTIVE:
+      return (
+        <span className="bg-warningBannerLight px-2 rounded-full ml-2">
+          Inactive
+        </span>
+      );
+    case Status.PENDING:
+      return (
+        <span className="bg-infoBannerLight px-2 rounded-full ml-2">
+          Pending Approval
+        </span>
+      );
+    case Status.NEW:
+      return <span className="bg-infoBannerLight px-2 rounded-full ml-2">New</span>;
+  }
+};
+
 export const renderRecommitmentStatus = (
   recommitmentStatus: RecommitmentStatus,
   isRecommitmentCycleOpen?: boolean,
@@ -67,26 +92,52 @@ export const renderRecommitmentStatus = (
   }
 };
 
-const emptyMembershipDetails = [
-  {
-    title: 'Program',
-    content: '--',
-  },
-  {
-    title: 'Status',
-    content: '--',
-  },
-  {
-    title: 'Annual Recommitment',
-    content: '--',
-  },
-  {
-    title: 'Member since',
-    content: '--',
-  },
-];
-
 export const getMembershipDetails = (personnel: Member) => {
+  // default membership
+  let defaultMembershipDetails = [];
+  if (Object.keys(personnel).includes('emcr')) {
+    const status = personnel.emcr?.status;
+    defaultMembershipDetails.push(
+      {
+        title: 'Program',
+        content: Program.EMCR.toUpperCase(),
+      },
+      {
+        title: 'Status',
+        content: (status && renderStatus(status)) || '--',
+      },
+      {
+        title: 'Annual Recommitment',
+        content: '--',
+      },
+      {
+        title: 'Member since',
+        content: '--',
+      },
+    );
+  }
+  if (Object.keys(personnel).includes('bcws')) {
+    const status = personnel.bcws?.status;
+    defaultMembershipDetails.push(
+      {
+        title: 'Program',
+        content: Program.BCWS.toUpperCase(),
+      },
+      {
+        title: 'Status',
+        content: (status && renderStatus(status)) || '--',
+      },
+      {
+        title: 'Annual Recommitment',
+        content: '--',
+      },
+      {
+        title: 'Member since',
+        content: '--',
+      },
+    );
+  }
+
   const bcwsStatus = personnel?.recommitment?.find(
     (itm) => itm.program === Program.BCWS,
   )?.status;
@@ -164,7 +215,8 @@ export const getMembershipDetails = (personnel: Member) => {
   } else if (bcwsMembership && emcrMembership) {
     return [...bcwsMembership, ...emcrMembership];
   }
-  return emptyMembershipDetails;
+
+  return defaultMembershipDetails;
 };
 
 export const skillsData = (personnel: Personnel | Member) => [
