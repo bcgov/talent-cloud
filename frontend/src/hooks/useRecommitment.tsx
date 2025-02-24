@@ -12,6 +12,12 @@ export interface RecommitmentDecision {
   reason?: string;
 }
 
+export enum RecommitmentEndpoint {
+  Member = 'member',
+  Supervisor = 'supervisor',
+  Coordinator = 'coordinator',
+}
+
 export const useRecommitmentCycle = () => {
   const [recommitmentCycle, setRecommitmentCycle] = useState<RecommitmentCycle>();
 const [isRecommitmentReinitCycleOpen, setIsRecommitmentReinitCycleOpen] = useState<boolean>(false);
@@ -50,11 +56,13 @@ const [isRecommitmentCycleOpen, setIsRecommitmentCycleOpen] = useState<boolean>(
       bcws?: RecommitmentDecision;
       emcr?: RecommitmentDecision;
       supervisorInformation?: SupervisorInformation;
+      
     },
+    endpoint: RecommitmentEndpoint
   ) => {
     try {
       const { data } = await AxiosPrivate.patch(
-        `/recommitment/${personnelId}`,
+        `/recommitment/${endpoint}/${personnelId}`,
         decisions,
       );
       

@@ -17,7 +17,7 @@ import {
 import { ParQBase } from './parq';
 import { QUESTIONS as PARQ_FOLLOWUP_QUESTIONS } from './parq/ParQFollowUp';
 import { fillInAndDownloadParQ } from '@/utils';
-import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { RecommitmentEndpoint, useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
 import { Transition } from '@headlessui/react';
 import { Banner } from '../ui/Banner';
@@ -330,7 +330,7 @@ export const RecommitmentFormBase = ({
     const res = await updateRecommitment(member.id, {
       ...decision,
       ...(recommitmentAnswer !== 'no' && { supervisorInformation }),
-    });
+    }, RecommitmentEndpoint.Member);
     if (res.error) {
       setErrorMessage(res.error.message);
     } else {
