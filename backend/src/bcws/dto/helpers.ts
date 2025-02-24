@@ -11,6 +11,7 @@ export class BcwsUpdateAdapter {
     this.bcws = {
       personnelId: data?.personnelId,
       approvedBySupervisor: data?.approvedBySupervisor,
+      dateApproved: data?.dateApproved,
       firstChoiceSection: data?.firstChoiceSection,
       secondChoiceSection: data?.secondChoiceSection,
       thirdChoiceSection: data?.thirdChoiceSection,
