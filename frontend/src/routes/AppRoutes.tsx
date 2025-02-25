@@ -7,6 +7,7 @@ import { AuthProvider, RoleProvider } from '@/providers';
 import RoleProtectedRoute from './RoleProtectedRoute';
 import PrivateRoute from './PrivateRoute';
 import Redirect from './Redirect';
+import { IntakeForm } from '@/pages/intake-form/IntakeForm';
 
 const SupervisorDashboard = lazy(
   () => import('../pages/supervisor/SupervisorDashboard'),
@@ -28,6 +29,7 @@ export default () => {
             <Suspense fallback={<Loading />}>
               <Routes>
                 <Route path={AppRoutes.Root} element={<SplashPage />} />
+                <Route path={AppRoutes.IntakeForm} element={<IntakeForm/>}/>
                 <Route path={AppRoutes.NotFound} element={<NotFound />} />
                 <Route
                   path={AppRoutes.Unauthenticated}
