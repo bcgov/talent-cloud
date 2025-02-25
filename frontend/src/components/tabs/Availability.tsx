@@ -6,9 +6,11 @@ import {
   DialogUI,
   MemberProfileEditPreferences,
   ProfileEditSkills,
+  Button,
 } from '@/components';
 import type { BcwsRoleInterface, FunctionType, Member } from '@/common';
 import {
+  ButtonTypes,
   Program,
   // type BcwsRoleInterface,
   // type FunctionType,
@@ -16,6 +18,9 @@ import {
 import { useState } from 'react';
 import { ProfileSectionHeader } from '../profile/common';
 import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
+import { Banner } from '../ui/Banner';
+import { BannerType } from '@/common/enums/banner-enum';
+import { BannerTransition } from '../ui/BannerTransition';
 
 export const MemberAvailabilityTab = ({
   bcwsRoles,
@@ -34,6 +39,11 @@ export const MemberAvailabilityTab = ({
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
   const [openEditSections, setOpenEditSections] = useState(false);
   const [openEditSkills, setOpenEditSkills] = useState(false);
+  const [showConfirmAvailability, setShowConfirmAvailability] = useState(false);
+
+  const openConfirmAvailability = () => {
+    setShowConfirmAvailability(!showConfirmAvailability);
+  };
 
   const handleOpenEditSections = () => {
     setOpenEditSections(!openEditSections);
@@ -43,15 +53,27 @@ export const MemberAvailabilityTab = ({
     setOpenEditSkills(!openEditSkills);
   };
 
-  const ScheduleDescription = () => (
-    <div>
-      <p className="text-defaultGray text-sm">
+  const ScheduleDescription = ({
+    openConfirmAvailability,
+  }: {
+    openConfirmAvailability: () => void;
+  }) => (
+    <div className="w-full flex justify-between">
+      <p className="text-defaultGray text-sm w-2/3">
         Select the calendar dates below to update your availability or view more
-        details.
-      </p>
-      <p className="text-defaultGray text-sm">
+        details.{' '}
+        <strong>
+          {
+            'Remember to click "Confirm and Send" each time after updating your availability.'
+          }
+        </strong>{' '}
         Deployment dates can only be declined and cannot be edited.
       </p>
+      <Button
+        onClick={openConfirmAvailability}
+        text="Confirm Availability"
+        variant={ButtonTypes.TERTIARY}
+      />
     </div>
   );
 
@@ -67,14 +89,65 @@ export const MemberAvailabilityTab = ({
     </div>
   );
 
+  const today = new Date();
+  const [showConfirmationWarningBanner, setShowConfirmationWarningBanner] = useState(
+    !member.availabilityConfirmedUntil ||
+      (member.availabilityConfirmedUntil &&
+        member.availabilityConfirmedUntil <
+          new Date(today.getFullYear(), today.getMonth() + 3, today.getDate())),
+  );
+  const [showSuccessConfirmationBanner, setShowSuccessConfirmationBanner] =
+    useState(false);
+
+  const handleShowSuccessConfirmationBanner = () => {
+    setShowSuccessConfirmationBanner(true);
+    setTimeout(() => {
+      setShowSuccessConfirmationBanner(false);
+    }, 5000);
+  };
   return (
     <>
+      <BannerTransition show={showConfirmationWarningBanner}>
+        <Banner
+          onClose={() => setShowConfirmationWarningBanner(false)}
+          content={
+            <p className="text-sm text-yellow-900 xl:pr-12">
+              Remember to click “Confirm and Send” after saving all your changes.
+              Failure to do so will result in inaccurate updates for your
+              coordinator, which could impact your chances for deployment.
+            </p>
+          }
+          title="Confirm Availability Changes for your Coordinator"
+          type={BannerType.WARNING}
+        />
+      </BannerTransition>
+      <BannerTransition show={showSuccessConfirmationBanner}>
+        <Banner
+          onClose={() => setShowSuccessConfirmationBanner(false)}
+          content={
+            <p className="text-sm text-green-900 xl:pr-12">
+              Your coordinator can now see your recent availability changes. You can
+              always adjust your availability if needed.
+            </p>
+          }
+          title="Updated availability confirmed and sent successfully."
+          type={BannerType.SUCCESS}
+        />
+      </BannerTransition>
+
       <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">
         <ProfileSectionHeader
-          title="My Schedule"
-          description={<ScheduleDescription />}
+          title="My Availability"
+          description={
+            <ScheduleDescription openConfirmAvailability={openConfirmAvailability} />
+          }
         >
-          <MemberScheduler memberId={member.id} />
+          <MemberScheduler
+            personnelId={member.id}
+            openConfirmAvailability={openConfirmAvailability}
+            showConfirmAvailability={showConfirmAvailability}
+            handleShowSuccessConfirmationBanner={handleShowSuccessConfirmationBanner}
+          />
         </ProfileSectionHeader>
       </div>
       <div className="border-2 border-gray-200 w-full p-8 mb-8 rounded-sm">

@@ -178,7 +178,8 @@ export interface PersonnelInfo {
   lastName: string;
   workLocation?: Location;
   homeLocation: Location;
-
+  availabilityConfirmedUntil?: Date;
+  availabilityConfirmedOn?: Date;
   availability?: Availability[];
   unionMembership: string;
   ministry?: Ministry;
@@ -222,6 +223,14 @@ export interface EmcrMember {
   newMember?: boolean;
   logisticsNotes?: string;
   coordinatorNotes?: string;
+  tools?: PersonnelTool[];
+  languages?: Languages[];
+  roles?: BcwsPersonnelRoleInterface[];
+  certifications?: Certification[];
+  bcws?: Partial<Personnel>;
+  emcr?: Partial<Personnel>;
+  skills: PersonnelTool[] | Certification[] | Languages[];
+  recommitment?: Recommitment[];
 }
 
 export interface BcwsMember {

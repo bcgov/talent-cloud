@@ -496,10 +496,14 @@ export class PersonnelService {
           numDays: differenceInDays(availabilityToDate, availabilityFromDate),
         });
 
-        queryBuilder.andWhere(
-          `personnel.id not IN (${allAvailable.getQuery()})`,
-          allAvailable.getParameters(),
-        );
+        queryBuilder
+          .andWhere(
+            `personnel.id not IN (${allAvailable.getQuery()})`,
+            allAvailable.getParameters(),
+          )
+          .andWhere('personnel.availability_confirmed_until > :date', {
+            date: end,
+          });
 
         queryBuilder.leftJoinAndSelect(
           'personnel.availability',
@@ -519,10 +523,14 @@ export class PersonnelService {
           date: start,
         });
 
-        queryBuilder.where(
-          `personnel.id not IN (${allAvailable.getQuery()})`,
-          allAvailable.getParameters(),
-        );
+        queryBuilder
+          .where(
+            `personnel.id not IN (${allAvailable.getQuery()})`,
+            allAvailable.getParameters(),
+          )
+          .andWhere('personnel.availabilityConfirmedUntil > :date', {
+            date: end,
+          });
       }
     } else {
       this.logger.log('Availability Query - No Type Specified');
@@ -932,10 +940,18 @@ export class PersonnelService {
     return { personnel, count };
   }
   /**
-   * Returns all ACTIVE  personnel in the system
-   * @param ministry
-   * @returns
+   * Member confirmation of availability
+   * @param date
+   * @param id
+   * @returns {UpdateResult}
    */
+  async confirmAvailability(date: Date, id: string): Promise<UpdateResult> {
+    return await this.personnelRepository.update(id, {
+      availabilityConfirmedUntil: date,
+      availabilityConfirmedOn: new Date(),
+    });
+  }
+
   async findActivePersonnel(ministry?: string): Promise<{
     emcr: PersonnelEntity[];
     bcws: PersonnelEntity[];
