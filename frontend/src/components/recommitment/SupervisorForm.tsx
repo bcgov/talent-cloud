@@ -19,6 +19,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
   const [formData, setFormData] = useState(initialData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    
     const { name, value } = e.target;
     name === 'phone' && value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
     
@@ -49,7 +50,7 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
           <input
             type="text"
             id="firstName"
-            name="firstName"
+            name="supervisorFirstName"
             value={formData.supervisorFirstName}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -59,15 +60,15 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
         {/* Last Name */}
         <div className="col-span-1">
           <label
-            htmlFor="lastName"
+            htmlFor="supervisorLastName"
             className="block text-sm font-bold text-black mb-1"
           >
             Supervisor Last Name<span className="text-red-300">*</span>
           </label>
           <input
             type="text"
-            id="lastName"
-            name="lastName"
+            id="supervisorLastName"
+            name="supervisorLastName"
             value={formData.supervisorLastName}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -81,8 +82,8 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
           </label>
           <input
             type="email"
-            id="email"
-            name="email"
+            id="supervisorEmail"
+            name="supervisorEmail"
             value={formData.supervisorEmail}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -92,13 +93,13 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
 
         {/* Phone */}
         <div className="col-span-1">
-          <label htmlFor="phone" className="block text-sm font-bold text-black mb-1">
+          <label htmlFor="supervisorPhone" className="block text-sm font-bold text-black mb-1">
             Supervisor Phone Number
           </label>
           <input
             type="tel"
-            id="phone"
-            name="phone"
+            id="supervisorPhone"
+            name="supervisorPhone"
             value={formData.supervisorPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
