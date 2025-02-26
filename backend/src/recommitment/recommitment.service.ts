@@ -120,7 +120,7 @@ export class RecommitmentService {
       TemplateType.MEMBER,
       [recommitment.toResponseObject()],
       endDate,
-      otherProgram ? Program.ALL : key,
+      otherProgramStatusReset ? Program.ALL : key,
     );
 
     await this.mailService.sendMail(emailTemplate, EmailTags.MEMBER_REACTIVATE);
