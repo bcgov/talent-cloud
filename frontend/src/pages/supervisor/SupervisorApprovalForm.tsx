@@ -71,7 +71,6 @@ export const SupervisorApprovalForm = ({
   const handleSelectReason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     
 
-
     if (e.target.value === SupervisorReason.OTHER) {
       setFields((prev) => ({
         ...prev,
