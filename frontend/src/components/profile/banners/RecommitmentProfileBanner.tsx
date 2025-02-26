@@ -191,4 +191,9 @@ export const RecommitmentProfileBanner = ({
       </div>
     );
   }
+  return renderProgramBanner(
+    RecommitmentStatus.MEMBER_COMMITTED,
+    showBcwsBanner,
+    Program.BCWS,
+  );
 };

@@ -21,6 +21,8 @@ import { BcwsRoleName, SectionName } from '@/common/enums/sections.enum';
 import { Banner } from '../ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
 import { BannerTransition } from '../ui/BannerTransition';
+import { RecommitmentProfileBanner } from '../profile/banners/RecommitmentProfileBanner';
+import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 
 export const MemberAvailabilityTab = ({
   bcwsRoles,
@@ -28,19 +30,33 @@ export const MemberAvailabilityTab = ({
   member,
   profileData,
   updateMember,
+  handleOpenRecommitmentForm,
 }: {
   bcwsRoles: BcwsRoleInterface[];
   functions: FunctionType[];
   member: Member;
   profileData: any;
   updateMember: (member: Member, endpoint?: string) => Promise<void>;
+  handleOpenRecommitmentForm: () => void;
 }) => {
   const defaultTab = member.bcws ? Program.BCWS : Program.EMCR;
   const [activeSectionRolesTab, setActiveSectionRolesTab] = useState(defaultTab);
   const [openEditSections, setOpenEditSections] = useState(false);
   const [openEditSkills, setOpenEditSkills] = useState(false);
   const [showConfirmAvailability, setShowConfirmAvailability] = useState(false);
-
+  const [showEmcrBanner, setShowEmcrBanner] = useState(true);
+  const [showBcwsBanner, setShowBcwsBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(true);
+  const handleCloseBanner = (program?: Program) => {
+    if (program === Program.ALL || !program) {
+      setShowBanner(false);
+    } else if (program === Program.BCWS) {
+      setShowBcwsBanner(false);
+    } else {
+      setShowEmcrBanner(false);
+    }
+  };
+  const { recommitmentCycle } = useRecommitmentCycle();
   const openConfirmAvailability = () => {
     setShowConfirmAvailability(!showConfirmAvailability);
   };
@@ -107,6 +123,18 @@ export const MemberAvailabilityTab = ({
   };
   return (
     <>
+      {member && recommitmentCycle && (
+        <RecommitmentProfileBanner
+          year={recommitmentCycle?.year}
+          endDate={recommitmentCycle?.endDate}
+          member={member}
+          handleClick={handleOpenRecommitmentForm}
+          handleCloseBanner={handleCloseBanner}
+          showBanner={showBanner}
+          showEmcrBanner={showEmcrBanner}
+          showBcwsBanner={showBcwsBanner}
+        />
+      )}
       <BannerTransition show={showConfirmationWarningBanner}>
         <Banner
           onClose={() => setShowConfirmationWarningBanner(false)}

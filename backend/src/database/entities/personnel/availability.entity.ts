@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { PersonnelEntity } from './personnel.entity';
 import { AvailabilityType, AvailabilityTypeLabel } from '../../../common/enums';

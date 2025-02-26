@@ -19,7 +19,7 @@ export const BannerTransition = ({
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-95"
     >
-      <div>{children}</div>
+      <div className="pb-6">{children}</div>
     </Transition>
   );
 };

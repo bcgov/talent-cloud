@@ -29,7 +29,7 @@ export const SchedulerControl = ({
   const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 3);
   const [toYear, setToYear] = useState<number>(new Date().getFullYear());
   const [numMonths, setNumMonths] = useState<number>(3);
-  console.log('availabilityConfirmedOn', availabilityConfirmedOn);
+
   // When values change, then we send a reuqest
   useEffect(() => {
     const fromString = dayjs(`${fromYear}/${fromMonth}/01`).format('YYYY-MM-DD');

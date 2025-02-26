@@ -18,8 +18,8 @@ export const AvailabilityConfirmation = ({
           Are you sure you want to send to your coordinator updates to your
           availability between{' '}
           <strong>
-            {format(availabilityQuery.to, 'yyyy-MM-dd')} and{' '}
-            {format(availabilityQuery.to, 'yyyy-MM-dd')}?
+            {format(availabilityQuery.from, 'MMM dd, yyyy')} and{' '}
+            {format(availabilityQuery.to, 'MMM dd, yyyy')}?
           </strong>
         </p>
 
