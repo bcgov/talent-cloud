@@ -1,5 +1,6 @@
 import { ButtonTypes } from '@/common';
 import { Button } from '@/components/ui';
+import { offsetTimezoneDate } from '@/utils';
 import { format } from 'date-fns';
 
 export const AvailabilityConfirmation = ({
@@ -18,8 +19,8 @@ export const AvailabilityConfirmation = ({
           Are you sure you want to send to your coordinator updates to your
           availability between{' '}
           <strong>
-            {format(availabilityQuery.from, 'MMM dd, yyyy')} and{' '}
-            {format(availabilityQuery.to, 'MMM dd, yyyy')}?
+            {format(offsetTimezoneDate(availabilityQuery.from), 'MMM dd, yyyy')} and{' '}
+            {format(offsetTimezoneDate(availabilityQuery.to), 'MMM dd, yyyy')}?
           </strong>
         </p>
 
