@@ -38,7 +38,7 @@ export enum EmailSubjects {
   MEMBER_FOLLOW_UP = 'ACTION REQUIRED: Confirm or Decline Recommitment for the {{year}} CORE Program',
   MEMBER_NO_RESPONSE = 'CORE TEAM: Notice for Change in Member Status',
   MEMBER_ANNUAL = 'ACTION REQUIRED: Annual Recommitment Reminder. Confirm or Decline Recommitment for the {{year}} CORE Program',
-  MEMBER_REACTIVATE = 'ACTION REQUIRED: Update your CORE Recommitment status for {{year}}',
+  MEMBER_REACTIVATE = 'ACTION REQUIRED: Confirm or Decline Recommitment for the {{year}} CORE Program',
   MEMBER_SUPERVISOR_NO_RESPONSE = 'CORE TEAM: Notice for Member Status Change',
   SUPERVISOR_ANNUAL = 'CORE Team {{year}} Annual Recommitment Period Has Started',
   SUPERVISOR_REQUEST = 'ACTION REQUIRED: Supervisor Approval Needed for {{year}} CORE Member Recommitment',
