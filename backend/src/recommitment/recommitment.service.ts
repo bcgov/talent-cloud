@@ -90,27 +90,25 @@ export class RecommitmentService {
       await this.emcrService.getEmcrPersonnelById([Role.COORDINATOR], id);
     let otherProgramStatusReset = false;
     if (otherProgramPersonnel) {
-      const recommitmentOtherProgram = await this.recommitmentRepository.findOneByOrFail({
-        personnelId: id,
-        recommitmentCycleId: new Date().getFullYear(),
-        program: otherProgram,
+      const recommitmentOtherProgram = await this.recommitmentRepository.findOne({
+        where: {
+          personnelId: id,
+          recommitmentCycleId: new Date().getFullYear(),
+          program: otherProgram,
+        }
       });
       // Unless they were already approved for the other program, reset to PENDING
-      if (recommitmentOtherProgram.status !== RecommitmentStatus.SUPERVISOR_APPROVED) {
-        await this.recommitmentRepository.update(
-          {
-            personnelId: id,
-            recommitmentCycleId: new Date().getFullYear(),
-            program: otherProgram,
-          },
-          {
-            status: recommitmentUpdate[key]?.status,
-            memberDecisionDate: null,
-            memberReason: null,
-            supervisorIdir: null,
-            supervisorReason: null,
-          },
-        );
+      if (recommitmentOtherProgram?.status !== RecommitmentStatus.SUPERVISOR_APPROVED) {
+        await this.recommitmentRepository.save([{
+          personnelId: id,
+          recommitmentCycleId: new Date().getFullYear(),
+          program: otherProgram,
+          status: recommitmentUpdate[key]?.status,
+          memberDecisionDate: null,
+          memberReason: null,
+          supervisorIdir: null,
+          supervisorReason: null,
+        }]);
         otherProgramStatusReset = true;
       }
     }
