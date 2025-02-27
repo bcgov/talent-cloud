@@ -2,8 +2,9 @@ import dayjs from 'dayjs';
 import type { SchedulerRowItem } from '@/common';
 import { AvailabilityType } from '@/common';
 import {
+  SCHEDULER_AVAILABLE_START_CLASS,
+  SCHEDULER_AVAILABLE_TEXT_CLASS,
   SCHEDULER_AVAILABLE_CLASS,
-  SCHEDULER_AVAILABLE_MEMBER_CLASS,
   SCHEDULER_DEPLOYED_CLASS,
   SCHEDULER_DEPLOYED_START_CLASS,
   SCHEDULER_DEPLOYED_TEXT_CLASS,
@@ -11,8 +12,9 @@ import {
   SCHEDULER_UNAVAILABLE_CLASS,
   SCHEDULER_UNAVAILABLE_START_CLASS,
   SCHEDULER_UNAVAILABLE_TEXT_CLASS,
+  SCHEDULER_NOT_INDICATED_CLASS,
+  SCHEDULER_NOT_INDICATED_TEXT_CLASS,
 } from '@/utils';
-import { useParams } from 'react-router';
 
 const Cell = ({
   dayOfMonthStatus,
@@ -113,8 +115,6 @@ export const SchedulerRow = ({
   data: SchedulerRowItem[];
   cellClick: (dayOfMonth: string) => void;
 }) => {
-  const { profileId } = useParams() as { profileId: string };
-  // Because setting variable classes doesn't tend to work, we define all classes ahead of time
   return (
     <div className="grid grid-cols-32 border border-cyan-950">
       <div className="h-20 border-l border-cyan-950 bg-white text-xs font-bold pl-1 pt-2">
@@ -161,21 +161,31 @@ export const SchedulerRow = ({
                 cellClick={cellClick}
               />
             );
+          case AvailabilityType.AVAILABLE:
+            return (
+              <Cell
+                dayOfMonthStatus={dayOfMonthStatus}
+                cellClass={SCHEDULER_AVAILABLE_CLASS}
+                startClass={SCHEDULER_AVAILABLE_START_CLASS}
+                textClass={SCHEDULER_AVAILABLE_TEXT_CLASS}
+                month={month}
+                dayOfMonth={dayOfMonth}
+                key={dayOfMonth}
+                cellClick={cellClick}
+              />
+            );
           default:
             return (
               <Cell
-                cellClass={
-                  profileId
-                    ? SCHEDULER_AVAILABLE_CLASS
-                    : SCHEDULER_AVAILABLE_MEMBER_CLASS
-                }
+                cellClass={SCHEDULER_NOT_INDICATED_CLASS}
+                textClass={SCHEDULER_NOT_INDICATED_TEXT_CLASS}
                 key={dayOfMonth}
                 dayOfMonth={dayOfMonth}
                 dayOfMonthStatus={{
                   date: dayjs(`${month} ${dayOfMonth}, ${year}`).format(
                     'YYYY-MM-DD',
                   ),
-                  status: 'Available',
+                  status: 'Not Indicated',
                 }}
                 cellClick={cellClick}
               />

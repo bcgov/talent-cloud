@@ -198,6 +198,20 @@ export class PersonnelEntity extends BaseEntity {
   @OneToMany(() => RecommitmentEntity, (r) => r.personnel)
   recommitment?: RecommitmentEntity[];
 
+  @Column({
+    name: 'availability_confirmed_until',
+    type: 'date',
+    nullable: true,
+  })
+  availabilityConfirmedUntil: Date;
+
+  @Column({
+    name: 'availability_confirmed_on',
+    type: 'date',
+    nullable: true,
+  })
+  availabilityConfirmedOn: Date;
+
   toResponseObject(
     roles: Role[],
     lastDeployed?: string,
@@ -221,7 +235,8 @@ export class PersonnelEntity extends BaseEntity {
       supervisorPhone: this.supervisorPhone ?? '',
       driverLicense: this.driverLicense ?? [],
       jobTitle: this.jobTitle ?? '',
-
+      availabilityConfirmedUntil: this.availabilityConfirmedUntil ?? null,
+      availabilityConfirmedOn: this.availabilityConfirmedOn ?? null,
       lastDeployed: lastDeployed ?? null,
       homeLocation: this.homeLocation?.toResponseObject(),
       workLocation: this.workLocation?.toResponseObject(),

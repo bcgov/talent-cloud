@@ -11,13 +11,16 @@ import {
 import dayjs from 'dayjs';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import MonthPicker from '@/components/ui/MonthPicker';
+import { format } from 'date-fns';
 
 export const SchedulerControl = ({
   onChangeAvailabilityDates,
   addEventClicked,
+  availabilityConfirmedOn,
 }: {
   onChangeAvailabilityDates: (from: string, to: string) => void;
   addEventClicked: () => void;
+  availabilityConfirmedOn: Date | undefined;
 }) => {
   const numMonthsItems = [1, 3, 6, 12];
 
@@ -37,131 +40,142 @@ export const SchedulerControl = ({
   }, [fromMonth, fromYear, toMonth, toYear, numMonths]);
 
   return (
-    <div className="flex flex-row">
-      <div className="w-40 pt-1">
-        <Button
-          variant="text"
-          size="sm"
-          className="bg-calBlue normal-case"
-          placeholder={''}
-          onClick={() => {
-            const fromDate = dayjs(new Date());
-            const toDate = fromDate.add(numMonths - 1, 'months');
-            setFromMonth(fromDate.month() + 1);
-            setFromYear(fromDate.year());
-            setToMonth(toDate.month() + 1);
-            setToYear(toDate.year());
-          }}
-        >
-          Jump to Today
-        </Button>
+    <div className="flex flex-col">
+      <div className="flex flex-row justify-between">
+        <div>
+          <p className="text-sm text-gray-600">
+            Last updated by member:{' '}
+            {availabilityConfirmedOn &&
+              format(availabilityConfirmedOn, 'yyyy-MM-dd')}
+          </p>
+        </div>
+        <div>
+          <Button
+            variant="text"
+            aria-label="Update Availability"
+            size="sm"
+            className="bg-calBlueTwo text-white normal-case"
+            placeholder={''}
+            onClick={addEventClicked}
+          >
+            Update Availability
+          </Button>
+        </div>
       </div>
-      <div className="w-32">
-        <Popover placement="bottom">
-          <PopoverHandler>
-            <Input
-              icon={<ChevronDownIcon className="h-4 w-4 bg-calBlue" />}
-              crossOrigin=""
-              className="border-none"
-              containerProps={{
-                className: 'min-w-px',
-              }}
-              labelProps={{
-                className: 'hidden',
-              }}
-              value={dayjs(`${fromYear}/${fromMonth}/1`).format('MMM YYYY')}
-            />
-          </PopoverHandler>
-          <PopoverContent placeholder={''} className="z-50">
-            <MonthPicker
-              startYear={fromYear}
-              onSelect={({ month, year }) => {
-                // FROM was changed, so we set TO according to numMonths
-                setFromMonth(month);
-                setFromYear(year);
-                const fromDate = dayjs(`${year}/${month}/01`);
-                const toDate = fromDate.add(numMonths - 1, 'months');
-                setToMonth(toDate.month() + 1);
-                setToYear(toDate.year());
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div>
-        <ArrowRightIcon className="h-10 w-4" />
-      </div>
-      <div className="w-32">
-        <Popover placement="bottom">
-          <PopoverHandler>
-            <Input
-              icon={<ChevronDownIcon className="h-4 w-4 bg-calBlue" />}
-              crossOrigin=""
-              className="border-none"
-              containerProps={{
-                className: 'min-w-px',
-              }}
-              labelProps={{
-                className: 'hidden',
-              }}
-              value={dayjs(`${toYear}/${toMonth}/1`).format('MMM YYYY')}
-            />
-          </PopoverHandler>
-          <PopoverContent placeholder={''} className="z-50">
-            <MonthPicker
-              startYear={toYear}
-              onSelect={({ month, year }) => {
-                // TO was changed, so we set FROM according to numMonths
-                setToMonth(month);
-                setToYear(year);
-                const toDate = dayjs(`${year}/${month}/01`);
-                const fromDate = toDate.subtract(numMonths - 1, 'months');
-                setFromMonth(fromDate.month() + 1);
-                setFromYear(fromDate.year());
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div className="grow" />
-      <div className="w-32">
-        <Select
-          value={`${numMonths}`}
-          placeholder={''}
-          className="border-none"
-          labelProps={{ className: 'hidden' }}
-          aria-label="Select Number of Months"
-          containerProps={{ className: 'min-w-px' }}
-          onChange={(num) => {
-            if (num) {
-              // numMonths was changed, so we set TO to numMonths after FROM
-              const monthsToAdd = parseInt(num, 10);
-              setNumMonths(monthsToAdd);
-              const fromDate = dayjs(`${fromYear}/${fromMonth}/01`);
-              const toDate = fromDate.add(monthsToAdd - 1, 'months');
+      <div className="flex flex-row">
+        <div className="w-40 pt-1">
+          <Button
+            variant="text"
+            size="sm"
+            className="bg-calBlue normal-case"
+            placeholder={''}
+            onClick={() => {
+              const fromDate = dayjs(new Date());
+              const toDate = fromDate.add(numMonths - 1, 'months');
+              setFromMonth(fromDate.month() + 1);
+              setFromYear(fromDate.year());
               setToMonth(toDate.month() + 1);
               setToYear(toDate.year());
-            }
-          }}
-        >
-          {numMonthsItems.map((num) => (
-            <Option key={num} value={num.toString()} className="text-xs">
-              {num} Month{num > 1 && 's'}
-            </Option>
-          ))}
-        </Select>
-      </div>
-      <div className="pt-2">
-        <Button
-          variant="text"
-          aria-label="Update Availability"
-          size="sm"
-          className="bg-calBlueTwo text-white normal-case"
-          placeholder={''}
-          onClick={addEventClicked}
-        >
-          Update Availability
-        </Button>
+            }}
+          >
+            Jump to Today
+          </Button>
+        </div>
+        <div className="w-32">
+          <Popover placement="bottom">
+            <PopoverHandler>
+              <Input
+                icon={<ChevronDownIcon className="h-4 w-4 bg-calBlue" />}
+                crossOrigin=""
+                className="border-none"
+                containerProps={{
+                  className: 'min-w-px',
+                }}
+                labelProps={{
+                  className: 'hidden',
+                }}
+                value={dayjs(`${fromYear}/${fromMonth}/1`).format('MMM YYYY')}
+              />
+            </PopoverHandler>
+            <PopoverContent placeholder={''} className="z-50">
+              <MonthPicker
+                startYear={fromYear}
+                onSelect={({ month, year }) => {
+                  // FROM was changed, so we set TO according to numMonths
+                  setFromMonth(month);
+                  setFromYear(year);
+                  const fromDate = dayjs(`${year}/${month}/01`);
+                  const toDate = fromDate.add(numMonths - 1, 'months');
+                  setToMonth(toDate.month() + 1);
+                  setToYear(toDate.year());
+                }}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div>
+          <ArrowRightIcon className="h-10 w-4" />
+        </div>
+        <div className="w-32">
+          <Popover placement="bottom">
+            <PopoverHandler>
+              <Input
+                icon={<ChevronDownIcon className="h-4 w-4 bg-calBlue" />}
+                crossOrigin=""
+                className="border-none"
+                containerProps={{
+                  className: 'min-w-px',
+                }}
+                labelProps={{
+                  className: 'hidden',
+                }}
+                value={dayjs(`${toYear}/${toMonth}/1`).format('MMM YYYY')}
+              />
+            </PopoverHandler>
+            <PopoverContent placeholder={''} className="z-50">
+              <MonthPicker
+                startYear={toYear}
+                onSelect={({ month, year }) => {
+                  // TO was changed, so we set FROM according to numMonths
+                  setToMonth(month);
+                  setToYear(year);
+                  const toDate = dayjs(`${year}/${month}/01`);
+                  const fromDate = toDate.subtract(numMonths - 1, 'months');
+                  setFromMonth(fromDate.month() + 1);
+                  setFromYear(fromDate.year());
+                }}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="grow" />
+        <div className="w-32">
+          <Select
+            value={`${numMonths}`}
+            placeholder={''}
+            className="border-none"
+            labelProps={{ className: 'hidden' }}
+            aria-label="Select Number of Months"
+            containerProps={{ className: 'min-w-px' }}
+            onChange={(num) => {
+              if (num) {
+                // numMonths was changed, so we set TO to numMonths after FROM
+                const monthsToAdd = parseInt(num, 10);
+                setNumMonths(monthsToAdd);
+                const fromDate = dayjs(`${fromYear}/${fromMonth}/01`);
+                const toDate = fromDate.add(monthsToAdd - 1, 'months');
+                setToMonth(toDate.month() + 1);
+                setToYear(toDate.year());
+              }
+            }}
+          >
+            {numMonthsItems.map((num) => (
+              <Option key={num} value={num.toString()} className="text-xs">
+                {num} Month{num > 1 && 's'}
+              </Option>
+            ))}
+          </Select>
+        </div>
       </div>
     </div>
   );

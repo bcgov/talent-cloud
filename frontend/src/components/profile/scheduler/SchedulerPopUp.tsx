@@ -266,17 +266,6 @@ export const SchedulerPopUp = ({
             <Button
               placeholder={''}
               className={
-                selectedStatus === null
-                  ? BUTTON_GROUP_SELECTED_CLASS
-                  : BUTTON_GROUP_UNSELECTED_CLASS
-              }
-              onClick={() => setSelectedStatus(null)}
-            >
-              Available
-            </Button>
-            <Button
-              placeholder={''}
-              className={
                 selectedStatus === AvailabilityType.UNAVAILABLE
                   ? BUTTON_GROUP_SELECTED_CLASS
                   : BUTTON_GROUP_UNSELECTED_CLASS

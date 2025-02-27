@@ -6,12 +6,9 @@ import { DialogUI, Loading, MemberProfileDetails } from '@/components';
 import { ProfileMemberHeader } from '@/components/profile/header';
 import { MemberAvailabilityTab } from '@/components/tabs/Availability';
 import { Tabs as TabIndexes } from '@/common';
-import { RecommitmentProfileBanner } from '@/components/profile/banners/RecommitmentProfileBanner';
 import { memberData } from '@/hooks/memberProfileData';
-import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { useProgramFieldData } from '@/hooks';
 import { RecommitmentFormBase } from '@/components/recommitment';
-import { format } from 'date-fns';
 
 const MemberProfile = () => {
   const {
@@ -23,26 +20,13 @@ const MemberProfile = () => {
     openRecommitmentForm,
     handleOpenRecommitmentForm,
   } = useMemberProfile();
-  const [showEmcrBanner, setShowEmcrBanner] = useState(true);
-  const [showBcwsBanner, setShowBcwsBanner] = useState(true);
-  const [showBanner, setShowBanner] = useState(true);
 
   const { bcwsRoles, functions } = useProgramFieldData(Program.ALL);
-
-  const handleCloseBanner = (program?: Program) => {
-    if (program === Program.ALL || !program) {
-      setShowBanner(false);
-    } else if (program === Program.BCWS) {
-      setShowBcwsBanner(false);
-    } else {
-      setShowEmcrBanner(false);
-    }
-  };
 
   const [activeTab, setActiveTab] = useState('availability');
 
   const profileData = memberData(member);
-  const { recommitmentCycle } = useRecommitmentCycle();
+
   const handleTabChange = (index: string) => {
     if (
       ![TabsEnum.AVAILABILITY, TabsEnum.PROFILE, TabsEnum.TRAINING].includes(
@@ -71,20 +55,6 @@ const MemberProfile = () => {
 
           <div className="bg-white w-full">
             <div className="mx-auto w-auto">
-              {member && recommitmentCycle && (
-                <div className="pt-12 pb-6">
-                  <RecommitmentProfileBanner
-                    year={recommitmentCycle?.year}
-                    endDate={format(recommitmentCycle.endDate, 'MMMM do, yyyy')}
-                    member={member}
-                    handleClick={handleOpenRecommitmentForm}
-                    handleCloseBanner={handleCloseBanner}
-                    showBanner={showBanner}
-                    showEmcrBanner={showEmcrBanner}
-                    showBcwsBanner={showBcwsBanner}
-                  />
-                </div>
-              )}
               <TabsBody placeholder={undefined}>
                 <TabPanel value={TabIndexes.AVAILABILITY}>
                   {member && (
@@ -94,6 +64,7 @@ const MemberProfile = () => {
                       member={member}
                       profileData={profileData}
                       updateMember={updateMember}
+                      handleOpenRecommitmentForm={handleOpenRecommitmentForm}
                     />
                   )}
                 </TabPanel>

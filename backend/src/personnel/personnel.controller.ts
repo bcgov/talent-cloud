@@ -13,6 +13,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { PersonnelEntity } from 'src/database/entities/personnel/personnel.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { UpdatePersonnelDTO } from './dto';
 import { GetAvailabilityDTO } from './dto/availability/get-availability.dto';
@@ -27,8 +28,8 @@ import { Roles } from '../auth/roles.decorator';
 import { Token } from '../auth/token.decorator';
 import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
+import { ConfirmAvailabilityDTO } from './dto/confirm-availability.dto';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @Controller('personnel')
 @ApiTags('Personnel API')
@@ -130,7 +131,6 @@ export class PersonnelController {
         languages: skills.languages,
       },
       person.id,
-      
     );
   }
 
@@ -179,9 +179,29 @@ export class PersonnelController {
   }
 
   @ApiOperation({
-    summary: 'Get Personnel Availability',
-    description:
-      'Returns the personnel data to the profile view according to the params',
+    summary: 'Member Confirmation of Availability',
+    description: 'Update availability',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetPersonnelRO,
+  })
+  @Roles(Role.MEMBER)
+  @Patch(':id/availability/confirm')
+  async confirmAvailability(
+    @Body() confirmAvailability: ConfirmAvailabilityDTO,
+    @Param() id: string,
+    @Req() req: RequestWithRoles,
+  ) {
+    this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
+    return await this.personnelService.confirmAvailability(
+      confirmAvailability.date,
+      id,
+    );
+  }
+  @ApiOperation({
+    summary: 'Get personnel availability for specific dates',
+    description: 'Returns the personnel data to the profile view',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -192,7 +212,7 @@ export class PersonnelController {
     @Param('id') id: string,
     @Req() req: RequestWithRoles,
     @Query() query: GetAvailabilityDTO,
-  ): Promise<AvailabilityRO[]> {
+  ): Promise< AvailabilityRO[]> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
     return await this.personnelService.getAvailability(id, query);
   }

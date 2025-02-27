@@ -155,12 +155,12 @@ export const Banner = ({
             content={content}
             title={title}
             onClick={onClick}
-            textColor={'success'}
+            textColor={'green-900'}
             bgColor={'successBannerLight'}
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-success  h-6 hidden sm:inline-block sm:mr-2" />
+              <InformationCircleIcon className="text-green-900  h-6 hidden sm:inline-block sm:mr-2" />
             }
           />
         );
