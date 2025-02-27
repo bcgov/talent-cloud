@@ -1,18 +1,15 @@
+import { useFormikContext } from 'formik';
 
-import { useFormikContext } from "formik";
-
-export const ExperienceRoles = () => {  
-  const {values, handleChange} = useFormikContext();  
-console.log(values)
-  return(
+export const ExperienceRoles = () => {
+  const { values, handleChange } = useFormikContext();
+  console.log(values, handleChange);
+  return (
     <>
-    {/* Emergency Experience Section */}
+      {/* Emergency Experience Section */}
 
-    {/* EMCR Core Team Sections  Section */}
+      {/* EMCR Core Team Sections  Section */}
 
-    {/* BCWS Section(s) and Role(s)  Section */}
+      {/* BCWS Section(s) and Role(s)  Section */}
     </>
-
-
-  )
-}
+  );
+};

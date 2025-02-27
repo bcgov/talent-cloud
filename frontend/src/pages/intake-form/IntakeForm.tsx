@@ -11,60 +11,56 @@ import {
   programSelectionSchema,
   skillsSchema,
 } from './validation';
-import { personalInfoFields,  programFields } from './fields';
-import { useRoleContext } from '@/providers';
+import { personalInfoFields, programFields } from './fields';
 import { useKeycloak } from '@react-keycloak/web';
 
-
 const IntakeForm = () => {
-  const { program } = useRoleContext();
-  const {keycloak} = useKeycloak()
-  const {tokenParsed} = keycloak;
+  const { keycloak } = useKeycloak();
+  const { tokenParsed } = keycloak;
 
-  if(!tokenParsed){
-    return
+  if (!tokenParsed) {
+    return;
   }
 
   return (
     <div className="pt-24 px-24">
-    <Formik
-      initialValues={{
-        programFields,
-        personalInfoFields:  {...personalInfoFields, firstName: tokenParsed.given_name, lastName: tokenParsed.family_name},
-        // ...etc
-        
-      }}
-      validationSchema={{
-        programSelectionSchema,
-        personalInfoSchema,
-        experienceRolesSchema,
-        skillsSchema,
-      }}
-      onSubmit={(values, actions) => {
-        // TODO: Update        
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-    >
-      
-
-      <Form>
-        <h1>Intake Form</h1>
-        {/* no need to pass props - access values and validation via useFormikContext() hook */}
-        <ProgramSelection />
-        <PersonalInfo />
-        <ExperienceRoles />
-        <Skills />
-        <ReviewAndSubmit />
-        <Complete />
-      </Form>
-    </Formik>
-    </div>    
+      <Formik
+        initialValues={{
+          programFields,
+          personalInfoFields: {
+            ...personalInfoFields,
+            firstName: tokenParsed.given_name,
+            lastName: tokenParsed.family_name,
+          },
+          // ...etc
+        }}
+        validationSchema={{
+          programSelectionSchema,
+          personalInfoSchema,
+          experienceRolesSchema,
+          skillsSchema,
+        }}
+        onSubmit={(values, actions) => {
+          // TODO: Update
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 1000);
+        }}
+      >
+        <Form>
+          <h1>Intake Form</h1>
+          {/* no need to pass props - access values and validation via useFormikContext() hook */}
+          <ProgramSelection />
+          <PersonalInfo />
+          <ExperienceRoles />
+          <Skills />
+          <ReviewAndSubmit />
+          <Complete />
+        </Form>
+      </Formik>
+    </div>
   );
 };
 
-
 export default IntakeForm;
-
