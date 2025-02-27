@@ -659,6 +659,7 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
+    const personnel = await this.personnelRepository.findOneByOrFail({id})
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
@@ -680,17 +681,19 @@ export class PersonnelService {
 
     const dates = eachDayOfInterval({ start, end: endDate });
 
+
     const availableDates: AvailabilityRO[] = dates.map(
-      (date) =>
+      (date) => 
+
         availability
           .find((itm) => itm.date === format(date, 'yyyy-MM-dd'))
           ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
-          availabilityType: AvailabilityTypeLabel.AVAILABLE,
+          availabilityType: new Date(personnel.availabilityConfirmedUntil) > new Date(date) ? AvailabilityTypeLabel.AVAILABLE : AvailabilityTypeLabel.NOT_INDICATED,
           deploymentCode: '',
-        },
+        }
+      
     );
-
     return availableDates;
   }
 
