@@ -5,6 +5,10 @@ import { ExperienceRoles } from './pages/ExperienceRoles';
 import { Skills } from './pages/Skills';
 import { ReviewAndSubmit } from './pages/ReviewAndSubmit';
 import { Complete } from './pages/Complete';
+import { personalDetailsSchema, programSelectionSchema } from './validation';
+import { personalDetails, programFields } from './fields';
+import { useRoleContext } from '@/providers';
+import { useKeycloak } from '@react-keycloak/web';
 import {
   experienceRolesSchema,
   personalInfoSchema,
@@ -13,8 +17,9 @@ import {
 } from './validation';
 import { personalInfoFields, programFields } from './fields';
 import { useKeycloak } from '@react-keycloak/web';
-
+        
 const IntakeForm = () => {
+
   const { keycloak } = useKeycloak();
   const { tokenParsed } = keycloak;
 
@@ -27,8 +32,13 @@ const IntakeForm = () => {
       <Formik
         initialValues={{
           programFields,
+
+          personalDetails: {
+            ...personalDetails,
+
           personalInfoFields: {
             ...personalInfoFields,
+
             firstName: tokenParsed.given_name,
             lastName: tokenParsed.family_name,
           },
@@ -36,7 +46,7 @@ const IntakeForm = () => {
         }}
         validationSchema={{
           programSelectionSchema,
-          personalInfoSchema,
+          personalDetailsSchema,
           experienceRolesSchema,
           skillsSchema,
         }}
