@@ -12,7 +12,7 @@ export const PersonalInfo = () => {
         <label>First Name:</label>
         <Field
           name={'firstName'}
-          value={values.personalInfoFields.firstName}
+          value={values.personalDetails.firstName}
           type="text"
           onChange={handleChange}
         />
