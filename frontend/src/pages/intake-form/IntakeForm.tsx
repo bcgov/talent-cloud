@@ -9,9 +9,17 @@ import { personalDetailsSchema, programSelectionSchema } from './validation';
 import { personalDetails, programFields } from './fields';
 import { useRoleContext } from '@/providers';
 import { useKeycloak } from '@react-keycloak/web';
-
+import {
+  experienceRolesSchema,
+  personalInfoSchema,
+  programSelectionSchema,
+  skillsSchema,
+} from './validation';
+import { personalInfoFields, programFields } from './fields';
+import { useKeycloak } from '@react-keycloak/web';
+        
 const IntakeForm = () => {
-  const { program } = useRoleContext();
+
   const { keycloak } = useKeycloak();
   const { tokenParsed } = keycloak;
 
@@ -24,8 +32,13 @@ const IntakeForm = () => {
       <Formik
         initialValues={{
           programFields,
+
           personalDetails: {
             ...personalDetails,
+
+          personalInfoFields: {
+            ...personalInfoFields,
+
             firstName: tokenParsed.given_name,
             lastName: tokenParsed.family_name,
           },
@@ -34,6 +47,8 @@ const IntakeForm = () => {
         validationSchema={{
           programSelectionSchema,
           personalDetailsSchema,
+          experienceRolesSchema,
+          skillsSchema,
         }}
         onSubmit={(values, actions) => {
           // TODO: Update

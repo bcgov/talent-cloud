@@ -1,11 +1,9 @@
-import {
-  Field,
-  useFormikContext,
-} from 'formik';
-import { IntakeFormInterface } from '../fields';
+import { Field, useFormikContext } from 'formik';
+import type { IntakeFormInterface } from '../fields';
 
 export const PersonalInfo = () => {
   const { values, handleChange } = useFormikContext<IntakeFormInterface>();
+  console.log(values, handleChange);
   return (
     <>
       {/* Personal Details Section */}
@@ -26,4 +24,3 @@ export const PersonalInfo = () => {
     </>
   );
 };
-
