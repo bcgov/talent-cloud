@@ -1,8 +1,10 @@
 import { useFormikContext } from 'formik';
 
-export const ExperienceRoles = () => {
+import type { FormSection } from '../types';
+
+export const ExperienceRoles = ({ sections }: { sections: FormSection[] }) => {
   const { values, handleChange } = useFormikContext();
-  console.log(values, handleChange);
+  console.log(values, handleChange, sections);
   return (
     <>
       {/* Emergency Experience Section */}

@@ -1,13 +1,18 @@
-import { Complete } from './pages/Complete';
-import { ExperienceRoles } from './pages/ExperienceRoles';
-import { PersonalInfo } from './pages/PersonalInfo';
-import { ProgramSelection } from './pages/ProgramSelection';
-import { ReviewAndSubmit } from './pages/ReviewAndSubmit';
-import { Skills } from './pages/Skills';
+import type { FormSection } from './types';
 
-export const formTabs = [
+interface FormTab {
+  label: string;
+  sections?: FormSection[];
+  description: React.ReactNode;
+  value: string;
+  title?: string;
+}
+
+export const formTabs: FormTab[] = [
   {
     label: 'Program Selection & Acknowledgement',
+
+    sections: [],
     description: (
       <>
         <p>
@@ -27,37 +32,129 @@ export const formTabs = [
     ),
 
     value: 'programSelection',
-    children: <ProgramSelection />,
   },
   {
     label: 'Personal & Employee Information',
     description:
       'Please provide your most up-to-date personal and employment details.',
     value: 'personalInfo',
-    children: <PersonalInfo />,
+
+    sections: [
+      {
+        name: 'Personal Details',
+        fields: [
+          {
+            name: 'firstName',
+            label: 'First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'First Name',
+            options: [],
+          },
+          {
+            name: 'lastName',
+            label: 'Last Name',
+            type: 'text',
+            required: true,
+            placeholder: 'Last Name',
+          },
+          {
+            name: 'email',
+            label: 'Email',
+            type: 'email',
+            required: true,
+            placeholder: 'Email',
+          },
+        ],
+      },
+      { name: 'Employment Details', fields: [] },
+      { name: 'Supervisor and Liason Details, Travel Preferences', fields: [] },
+      { name: 'Emergency Contact Details', fields: [] },
+    ],
   },
   {
-    label: 'Experience and Section Interests',
+    label: 'Experience & Section Interests',
     description:
       'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.',
     value: 'experienceRoles',
-    children: <ExperienceRoles />,
+
+    sections: [
+      { name: 'General Emergency Management Experience', fields: [] },
+      { name: 'EMCR Core Team Sections', fields: [] },
+      { name: 'BCWS CORE Team Sections and Roles', fields: [] },
+    ],
   },
   {
     label: 'Other Skills & Qualifications',
     value: 'skills',
     description: 'Please indicate any other skillset that you may have.',
-    children: <Skills />,
+    sections: [
+      { name: 'Languages', fields: [] },
+      { name: 'Tools & Software', fields: [] },
+      { name: 'Certifications and Qualifications', fields: [] },
+    ],
   },
   {
-    label: 'Review and Submit',
+    label: 'Review & Submit',
     value: 'reviewAndSubmit',
     description:
       'Please take a moment to review the information you have provided, then click “Submit” below to finalize your application.',
-    children: <ReviewAndSubmit />,
+
+    sections: [
+      {
+        name: 'Program Selection & Acknowledgement',
+        fields: [
+          {
+            name: 'programSelection',
+            label: 'Program Selection',
+            type: 'select',
+            options: ['Program 1', 'Program 2', 'Program 3'],
+            required: true,
+            placeholder: 'Select a program',
+          },
+        ],
+      },
+      {
+        name: 'Personal & Employee Information',
+        fields: [
+          {
+            name: 'firstName',
+            label: 'First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'First Name',
+          },
+        ],
+      },
+      {
+        name: 'Experience & Section Interests',
+        fields: [
+          {
+            name: 'General Emergency Management Experience',
+            label: 'General Emergency Management Experience',
+            type: 'text',
+            required: true,
+            placeholder: 'General Emergency Management Experience',
+          },
+        ],
+      },
+      {
+        name: 'Other Skills & Qualifications',
+        fields: [
+          {
+            name: 'Languages',
+            label: 'Languages',
+            type: 'text',
+            required: true,
+            placeholder: 'Languages',
+          },
+        ],
+      },
+    ],
   },
   {
     label: 'Complete',
+    title: 'Thank you for your application!',
     value: 'complete',
     description: (
       <>
@@ -74,6 +171,5 @@ export const formTabs = [
         </p>
       </>
     ),
-    children: <Complete />,
   },
 ];

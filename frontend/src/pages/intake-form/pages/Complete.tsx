@@ -1,7 +1,9 @@
 import { useFormikContext } from 'formik';
 
-export const Complete = () => {
+import type { FormSection } from '../types';
+
+export const Complete = ({ sections }: { sections: FormSection[] }) => {
   const { values, handleChange } = useFormikContext();
-  console.log(values, handleChange);
+  console.log(values, handleChange, sections);
   return <></>;
 };
