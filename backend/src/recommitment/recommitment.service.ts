@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { addDays, isAfter } from 'date-fns';
 import { Repository } from 'typeorm';
-import { Program, RequestWithRoles } from '../auth/interface';
+import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
@@ -86,12 +86,41 @@ export class RecommitmentService {
       program: key,
     });
 
+    const otherProgram = key === Program.BCWS ? Program.EMCR : Program.BCWS;
+    const otherProgramPersonnel = otherProgram === Program.BCWS ?
+      await this.bcwsService.getBcwsPersonnelById([Role.COORDINATOR], id) :
+      await this.emcrService.getEmcrPersonnelById([Role.COORDINATOR], id);
+    let otherProgramStatusReset = false;
+    if (otherProgramPersonnel) {
+      const recommitmentOtherProgram = await this.recommitmentRepository.findOne({
+        where: {
+          personnelId: id,
+          recommitmentCycleId: new Date().getFullYear(),
+          program: otherProgram,
+        }
+      });
+      // Unless they were already approved for the other program, reset to PENDING
+      if (recommitmentOtherProgram?.status !== RecommitmentStatus.SUPERVISOR_APPROVED) {
+        await this.recommitmentRepository.save([{
+          personnelId: id,
+          recommitmentCycleId: new Date().getFullYear(),
+          program: otherProgram,
+          status: recommitmentUpdate[key]?.status,
+          memberDecisionDate: null,
+          memberReason: null,
+          supervisorIdir: null,
+          supervisorReason: null,
+        }]);
+        otherProgramStatusReset = true;
+      }
+    }
+
     const emailTemplate = this.mailService.generateTemplate(
       EmailTags.MEMBER_REACTIVATE,
       TemplateType.MEMBER,
       [recommitment.toResponseObject()],
       endDate,
-      key,
+      otherProgramStatusReset ? Program.ALL : key,
     );
 
     await this.mailService.sendMail(emailTemplate, EmailTags.MEMBER_REACTIVATE);
