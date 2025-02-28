@@ -14,7 +14,17 @@ const MyInput = ({
   field: any;
   props: any;
 }) => {
-  console.log(form, field, props);
+  if ((props as any).type && (props as any).type === 'select') {
+    return (
+      <select {...field} {...props}>
+        {(props as any).options?.map((o: string) => (
+          <option value={o} key={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    );
+  }
   return <input {...field} {...props} />;
 };
 
@@ -33,20 +43,30 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                   </div>
                 </DisclosureButton>
                 <DisclosurePanel className="text-gray-500">
-                  {section?.fields?.map((field) => (
-                    <div key={field.name}>
-                      <label htmlFor={field.name}>
-                        {field.label}
+                  <div className="grid grid-cols-2 gap-20 pt-[36px] pb-[50px] px-[40px] items-end">
+                    {section?.fields?.map((field, index) => (
+                      <div
+                        className={`flex flex-col gap-y-[5px] col-span-${section?.fields?.length && index === section.fields.length - 1 && section.fields.length % 2 === 1 ? 2 : 1}`}
+                        key={field.name}
+                      >
+                        <label htmlFor={field.name}>
+                          {field.label}
+                          {field.required && (
+                            <span className="font-bold text-red-500">*</span>
+                          )}
+                        </label>
                         <Field
+                          className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md"
                           name={field.name}
                           type={field.type}
                           as={field.name}
                           placeholder={field.placeholder}
+                          options={field?.options}
                           component={MyInput}
                         />
-                      </label>
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                  </div>
                 </DisclosurePanel>
               </>
             )}
