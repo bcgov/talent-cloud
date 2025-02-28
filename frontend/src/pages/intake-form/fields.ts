@@ -78,8 +78,8 @@ export interface EmploymentDetails {
   workPhone: string;
   ministry: string;
   division: string;
-  paylistId: string;
-  purchaseCardHolder: boolean;
+  paylistId: string; // should be in bcws
+  purchaseCardHolder: boolean; // should be in bcws
 }
 
 export const employmentDetails: EmploymentDetails = {
@@ -152,18 +152,18 @@ export const emergencyContactDetails: EmergencyContactDetails = {
 // emcr section(s) interest
 
 export interface GeneralEmergencyManagementExperience {
-  directExperience: boolean;
+  emergencyExperience: boolean;
   preocExperience: boolean;
   peccExperience: boolean;
-  indigenousExperience: boolean;
+  firstNationsWorking: boolean;
 }
 
 export const generalEmergencyManagementExperience: GeneralEmergencyManagementExperience =
   {
-    directExperience: false,
+    emergencyExperience: false,
     preocExperience: false,
     peccExperience: false,
-    indigenousExperience: false,
+    firstNationsWorking: false,
   };
 
 export interface SectionChoiceEmcr {
@@ -278,8 +278,25 @@ export const reviewAndSubmit: ReviewAndSubmit = {
   acknowledgeSubmit: false,
 };
 
+export type PersonnelFormData = PersonalDetails &
+  SupervisorDetails &
+  EmploymentDetails &
+  EmergencyContactDetails &
+  LanguageSkills;
+
+export type EmcrFormData = TravelDetails & {
+  functions: SectionInterestEmcr;
+
+  experience: GeneralEmergencyManagementExperience;
+};
+export type BcwsFormData = LiaisonDetails &
+  EmploymentDetails &
+  TravelDetails & {
+    sections?: SectionRolesBcws;
+  };
+
 // form interface
-export interface IntakeFormInterface {
-  programFields: ProgramFields;
-  personalDetails: PersonalDetails;
-}
+export type IntakeFormData = PersonnelFormData & {
+  bcws?: BcwsFormData;
+  emcr?: EmcrFormData;
+};
