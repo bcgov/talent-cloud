@@ -9,6 +9,7 @@ import { Button } from '@/components/ui';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { formTabs } from './tabs';
+import { FormSections } from './FormSections';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
@@ -92,13 +93,12 @@ const IntakeForm = () => {
               ))}
             </TabList>
             <TabPanels>
-              {formTabs.map(({ value, children, label, description }) => (
+              {formTabs.map(({ value, label, description, title, sections }) => (
                 <TabPanel key={value}>
-                  <div className="h-full flex flex-col xl:pr-24">
-                    <h3>{label}</h3>
+                  <div className="h-full flex flex-col xl:pr-24 w-[900px]">
+                    <h3>{title ?? label}</h3>
                     <div className="text-sm py-6">{description}</div>
-
-                    {children}
+                    <FormSections sections={sections} />
                   </div>
                 </TabPanel>
               ))}
