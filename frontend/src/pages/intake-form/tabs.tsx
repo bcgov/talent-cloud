@@ -1,11 +1,11 @@
 import type { FormSection } from './types';
 
 interface FormTab {
+  description: React.ReactNode;
   label: string;
   sections?: FormSection[];
-  description: React.ReactNode;
-  value: string;
   title?: string;
+  value: string;
 }
 
 export const formTabs: FormTab[] = [
@@ -61,15 +61,15 @@ export const formTabs: FormTab[] = [
           {
             name: 'primaryPhone',
             label: 'Primary Phone Number',
-            type: 'text',
+            type: 'tel',
             required: true,
             placeholder: '000-000-0000',
           },
           {
             name: 'secondaryPhone',
             label: 'Secondary Phone Number',
-            type: 'text',
-            required: true,
+            type: 'tel',
+            required: false,
             placeholder: '000-000-0000',
           },
           {
@@ -79,10 +79,77 @@ export const formTabs: FormTab[] = [
             required: true,
             placeholder: 'Select an option',
             options: ['Vancouver', 'Victoria', 'Kamloops'],
+            helper:
+              'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
           },
         ],
       },
-      { name: 'Employment Details', fields: [] },
+      {
+        name: 'Employment Details',
+        fields: [
+          {
+            name: 'jobTitle',
+            label: 'Job Title',
+            type: 'text',
+            required: true,
+            placeholder: 'Policy Analyst',
+          },
+          {
+            name: 'employeeId',
+            label: 'BC Government Employee Number',
+            type: 'text',
+            required: true,
+            placeholder: '123456',
+            helper: 'This is your 6-digit employee number.',
+          },
+          {
+            name: 'email',
+            label: 'BC Government Email',
+            type: 'text',
+            required: true,
+            placeholder: 'johnsmith@gov.bc.ca',
+          },
+          {
+            name: 'workPhone',
+            label: 'Work Phone Number',
+            type: 'tel',
+            required: true,
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'ministry',
+            label: 'Ministry',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: ['Finance', 'Housing', 'Forests'],
+          },
+          {
+            name: 'division',
+            label: 'Division',
+            type: 'text',
+            required: true,
+            placeholder: 'Water, Fisheries and Coast Division',
+            helper: 'Full division name, no acronyms.',
+          },
+          {
+            name: 'paylistId',
+            label: 'Pay List (Dept ID)',
+            type: 'text',
+            required: true,
+            placeholder: '123-4567',
+            helper: 'You can find this information on your paystub.',
+          },
+          {
+            name: 'purchaseCardHolder',
+            label: 'Purchase Card Holder',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: ['Holder 1', 'Holder 2'],
+          },
+        ],
+      },
       { name: 'Supervisor and Liason Details, Travel Preferences', fields: [] },
       { name: 'Emergency Contact Details', fields: [] },
     ],

@@ -149,3 +149,13 @@ export const certificationsSchema = Yup.object().shape({
 export const reviewAndSubmitSchema = Yup.object().shape({
   acknowledgeSubmit: Yup.boolean().required('You must acknowledge your submission'),
 });
+
+export const intakeFormValidationSchema = Yup.object().shape({
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
+  primaryPhone: Yup.string().required('Primary phone is required'),
+  secondaryPhone: Yup.string(),
+  homeLocation: Yup.string().required('Home location is required'),
+
+
+});

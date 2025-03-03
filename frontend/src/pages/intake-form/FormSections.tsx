@@ -1,9 +1,11 @@
 import type { FormikFormProps } from 'formik';
-import { Field } from 'formik';
+import { ErrorMessage, Field } from 'formik';
 import type { FormSection } from './types';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
+import { classes } from '@/components/filters/classes';
+import { formatPhone } from '@/utils';
 
 const MyInput = ({
   field,
@@ -14,18 +16,50 @@ const MyInput = ({
   field: any;
   props: any;
 }) => {
-  if ((props as any).type && (props as any).type === 'select') {
+  console.log('FORM-------');
+  console.log(form);
+  console.log('FIELD-------');
+  console.log(field);
+  console.log('PROPS------');
+  console.log(props);
+  const propsObj = props as any;
+  if (propsObj.type && propsObj.type === 'select') {
     return (
-      <select {...field} {...props}>
-        {(props as any).options?.map((o: string) => (
-          <option value={o} key={o}>
-            {o}
+      <div className="relative">
+        <select {...field} {...propsObj}>
+          <option hidden disabled selected value={''}>
+            {propsObj.placeholder}
           </option>
-        ))}
-      </select>
+          {propsObj.options?.map((o: string) => (
+            <option value={o} key={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+        {propsObj.helper && <p className="subtext absolute">{propsObj.helper}</p>}
+        <ErrorMessage name={field.name}>
+          {(msg) => {
+            return <div className="font-normal text-errorRed absolute">{msg}</div>;
+          }}
+        </ErrorMessage>
+      </div>
     );
   }
-  return <input {...field} {...props} />;
+  if (propsObj.type === 'tel') {
+    propsObj.value = formatPhone(field.value);
+    propsObj.type = 'text';
+  }
+  return (
+    <div className="text-black relative">
+      <input className={classes.menu.container} {...field} {...propsObj} />
+      {propsObj.helper && <p className="subtext absolute">{propsObj.helper}</p>}
+      <ErrorMessage name={field.name}>
+        {(msg) => {
+          return <div className="font-normal text-errorRed absolute">{msg}</div>;
+        }}
+      </ErrorMessage>
+    </div>
+  );
 };
 
 export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
@@ -62,6 +96,7 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                           as={field.name}
                           placeholder={field.placeholder}
                           options={field?.options}
+                          helper={field?.helper}
                           component={MyInput}
                         />
                       </div>

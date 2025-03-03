@@ -1,14 +1,15 @@
 import type { ReactElement } from 'react';
 
 export interface FormFields {
-  type: string;
-  name: string;
-  label: string;
-  options?: string[];
-  required?: boolean;
-  placeholder?: string;
-  hidden?: boolean;
   component?: ReactElement;
+  helper?: string;
+  hidden?: boolean;
+  label: string;
+  name: string;
+  options?: string[];
+  placeholder?: string;
+  required?: boolean;
+  type: string;
 }
 
 export interface FormSection {

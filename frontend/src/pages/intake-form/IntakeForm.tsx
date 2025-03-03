@@ -1,6 +1,12 @@
+import * as Yup from 'yup';
+
 import { Form, Formik } from 'formik';
-import { personalDetailsSchema, programSelectionSchema } from './validation';
-import { personalDetails, programFields } from './fields';
+import {
+  intakeFormValidationSchema,
+  personalDetailsSchema,
+  programSelectionSchema,
+} from './validation';
+import { intakeFormInitialValues, personalDetails, programFields } from './fields';
 import { useKeycloak } from '@react-keycloak/web';
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
@@ -25,21 +31,14 @@ const IntakeForm = () => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full overflow-y-auto flex flex-col justify-between">
       <Formik
         initialValues={{
-          programFields,
-          personalDetails: {
-            ...personalDetails,
-            firstName: tokenParsed.given_name,
-            lastName: tokenParsed.family_name,
-          },
-          // ...etc
+          ...intakeFormInitialValues,
+          firstName: tokenParsed.given_name,
+          lastName: tokenParsed.family_name,
         }}
-        validationSchema={{
-          programSelectionSchema,
-          personalDetailsSchema,
-        }}
+        validationSchema={intakeFormValidationSchema}
         onSubmit={(values, actions) => {
           // TODO: Update
           setTimeout(() => {
