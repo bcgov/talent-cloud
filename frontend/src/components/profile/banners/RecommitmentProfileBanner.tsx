@@ -3,6 +3,8 @@ import type { Member } from '@/common';
 import { Program } from '@/common';
 import { RecommitmentBanner } from '../RecommitmentBanner';
 import { RecommitmentStatus } from '@/common/enums/recommitment-status';
+import { datePST } from '../../../utils';
+import { format } from 'date-fns';
 
 export const RecommitmentProfileBanner = ({
   year,
@@ -31,7 +33,9 @@ export const RecommitmentProfileBanner = ({
         </span>{' '}
         Please ensure that your profile details are up-to-date, before confirming
         your recommitment to CORE for {year} by{' '}
-        <span className="font-bold text-sm">{endDate}</span>
+        <span className="font-bold text-sm">
+          {format(datePST(new Date(endDate)), 'MMM dd, YYYY')}
+        </span>
       </p>
     ),
     buttonText: 'Make Recommitment Decision',

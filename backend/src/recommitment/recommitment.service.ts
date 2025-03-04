@@ -87,9 +87,10 @@ export class RecommitmentService {
     });
 
     const otherProgram = key === Program.BCWS ? Program.EMCR : Program.BCWS;
+    const personnel = await this.personnelService.findOneById(id);
     const otherProgramPersonnel = otherProgram === Program.BCWS ?
-      await this.bcwsService.getBcwsPersonnelById([Role.COORDINATOR], id) :
-      await this.emcrService.getEmcrPersonnelById([Role.COORDINATOR], id);
+      personnel.bcws :
+      personnel.emcr;
     let otherProgramStatusReset = false;
     if (otherProgramPersonnel) {
       const recommitmentOtherProgram = await this.recommitmentRepository.findOne({
