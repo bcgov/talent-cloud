@@ -12,6 +12,7 @@ import type { BcwsRoleInterface, FunctionType, Member } from '@/common';
 import {
   ButtonTypes,
   Program,
+  Status,
   // type BcwsRoleInterface,
   // type FunctionType,
 } from '@/common';
@@ -135,20 +136,23 @@ export const MemberAvailabilityTab = ({
           showBcwsBanner={showBcwsBanner}
         />
       )}
-      <BannerTransition show={showConfirmationWarningBanner}>
-        <Banner
-          onClose={() => setShowConfirmationWarningBanner(false)}
-          content={
-            <p className="text-sm text-yellow-900 xl:pr-12">
-              Remember to click “Confirm and Send” after saving all your changes.
-              Failure to do so will result in inaccurate updates for your
-              coordinator, which could impact your chances for deployment.
-            </p>
-          }
-          title="Confirm Availability Changes for your Coordinator"
-          type={BannerType.WARNING}
-        />
-      </BannerTransition>
+      {(member.bcws?.status === Status.ACTIVE ||
+        member.emcr?.status === Status.ACTIVE) && (
+        <BannerTransition show={showConfirmationWarningBanner}>
+          <Banner
+            onClose={() => setShowConfirmationWarningBanner(false)}
+            content={
+              <p className="text-sm text-yellow-900 xl:pr-12">
+                Remember to click “Confirm and Send” after saving all your changes.
+                Failure to do so will result in inaccurate updates for your
+                coordinator, which could impact your chances for deployment.
+              </p>
+            }
+            title="Confirm Availability Changes for your Coordinator"
+            type={BannerType.WARNING}
+          />
+        </BannerTransition>
+      )}
       <BannerTransition show={showSuccessConfirmationBanner}>
         <Banner
           onClose={() => setShowSuccessConfirmationBanner(false)}
