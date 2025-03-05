@@ -49,12 +49,9 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                   </div>
                 </DisclosureButton>
                 <DisclosurePanel className="text-gray-500">
-                  <div className="grid grid-cols-2 gap-20 pt-[36px] pb-[50px] px-[40px] items-end">
-                    {section?.fields?.map((fieldItm, index) => (
-                      <div
-                        className={`flex flex-col gap-y-[5px] col-span-${section?.fields?.length && index === section.fields.length - 1 && section.fields.length % 2 === 1 ? 2 : 1}`}
-                        key={fieldItm.name}
-                      >
+                  <div className="grid grid-cols-2 gap-12 pt-[36px] pb-[50px] px-[40px] items-start">
+                    {section?.fields?.map((fieldItm) => (
+                      <div key={fieldItm.name}>
                         <label htmlFor={fieldItm.name}>
                           {fieldItm.label}
                           {fieldItm.required && (
@@ -86,20 +83,17 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                             })
                           }
                         </Field>
-                        <div>
-                          {fieldItm.helper && (
-                            <p className="subtext">{fieldItm.helper}</p>
-                          )}
-                          <ErrorMessage name={fieldItm.name}>
-                            {(msg) => {
-                              return (
-                                <div className="font-normal text-errorRed">
-                                  {msg}
-                                </div>
-                              );
-                            }}
-                          </ErrorMessage>
-                        </div>
+
+                        {fieldItm.helper && (
+                          <p className="subtext">{fieldItm.helper}</p>
+                        )}
+                        <ErrorMessage name={fieldItm.name}>
+                          {(msg) => {
+                            return (
+                              <div className="font-normal text-errorRed">{msg}</div>
+                            );
+                          }}
+                        </ErrorMessage>
                       </div>
                     ))}
                   </div>

@@ -13,21 +13,23 @@ export const SelectField = ({
 }) => {
   console.log(props, form);
   return (
-    <select
-      {...field}
-      {...form}
-      defaultValue={''}
-      value={form.values[field.name as keyof typeof form.values] as string}
-      className={classes.menu.container}
-    >
-      <option disabled value={''}>
-        {field.placeholder}
-      </option>
-      {field.options?.map((o: { label: string; value: string | boolean }) => (
-        <option value={o.value as string} key={o.value as string}>
-          {o.label}
+    <div className="relative">
+      <select
+        {...field}
+        {...form}
+        defaultValue={''}
+        value={form.values[field.name as keyof typeof form.values] as string}
+        className={classes.menu.container}
+      >
+        <option disabled value={''}>
+          {field.placeholder}
         </option>
-      ))}
-    </select>
+        {field.options?.map((o: { label: string; value: string | boolean }) => (
+          <option value={o.value as string} key={o.value as string}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };

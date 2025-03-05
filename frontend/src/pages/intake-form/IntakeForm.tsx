@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { formTabs } from './tabs';
 import { FormSections } from './FormSections';
+import { intakeFormValidationSchema } from './validation';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
@@ -24,9 +25,10 @@ const IntakeForm = () => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full overflow-y-auto flex flex-col justify-between">
       <Formik
         initialValues={intakeFormInitialValues}
+        validationSchema={intakeFormValidationSchema}
         onSubmit={(values, actions) => {
           // TODO: Update
           setTimeout(() => {
