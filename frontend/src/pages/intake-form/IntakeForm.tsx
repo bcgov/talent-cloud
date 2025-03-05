@@ -1,5 +1,4 @@
 import { Form, Formik } from 'formik';
-import { personalDetailsSchema, programSelectionSchema } from './validation';
 import { intakeFormInitialValues } from './fields';
 import { useKeycloak } from '@react-keycloak/web';
 
@@ -28,10 +27,6 @@ const IntakeForm = () => {
     <div className="h-full flex flex-col justify-between">
       <Formik
         initialValues={intakeFormInitialValues}
-        validationSchema={{
-          programSelectionSchema,
-          personalDetailsSchema,
-        }}
         onSubmit={(values, actions) => {
           // TODO: Update
           setTimeout(() => {
