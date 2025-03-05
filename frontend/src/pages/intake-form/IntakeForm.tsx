@@ -55,8 +55,8 @@ const IntakeForm = () => {
         }}
       >
         <Form>
-          <div className="h-full flex flex-col justify-between">
-            <div>
+          <div className="h-screen overflow-y-hidden flex flex-col justify-between">
+            <div className="h-full  overflow-y-auto">
               <TabGroup
                 vertical
                 manual
@@ -141,9 +141,10 @@ const IntakeForm = () => {
                 </TabPanels>
               </TabGroup>
             </div>
+
             <div>
               <div className="border border-t-grey-200"></div>
-              <div className="flex flex-row justify-between py-8 px-32">
+              <div className="flex flex-row justify-between px-32 py-8">
                 <div className="flex flex-row space-x-6">
                   <Button
                     text="Cancel"

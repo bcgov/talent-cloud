@@ -1,11 +1,13 @@
 import { useField, useFormikContext, type FormikProps } from 'formik';
-import type { IntakeFormData } from '../fields';
+import type { IntakeFormPersonnelData } from '../fields';
 import { classes } from '@/components/filters/classes';
 import type { FormFields } from '../types';
 
-export const SelectField = (props: FormFields & FormikProps<IntakeFormData>) => {
+export const SelectField = (
+  props: FormFields & FormikProps<IntakeFormPersonnelData>,
+) => {
   console.log(props);
-  const { values } = useFormikContext<IntakeFormData>();
+  const { values } = useFormikContext<IntakeFormPersonnelData>();
   const [field] = useField(props.name);
   return (
     <select
