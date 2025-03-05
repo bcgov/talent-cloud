@@ -1,78 +1,36 @@
 // react
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-
-// formik
-import type { FormikFormProps } from 'formik';
-import { ErrorMessage, Field } from 'formik';
-
+import type { FormikProps } from 'formik';
+import { Field } from 'formik';
 // types
-import type { FormSection } from './types';
-
+import type { FormFields, FormSection } from './types';
 // icons
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-
-// classes
-import { classes } from '@/components/filters/classes';
-
-// utils
-import { formatPhone } from '@/utils';
-
-const MyInput = ({
-  field,
-  form,
-  ...props
-}: {
-  form: FormikFormProps;
-  field: any;
-  props: any;
-}) => {
-  const propsObj = props as any;
-  if (propsObj.type && propsObj.type === 'select') {
-    return (
-      <div className="relative">
-        <select {...field} {...propsObj} value={undefined} defaultValue={''}>
-          <option disabled value={''}>
-            {propsObj.placeholder}
-          </option>
-          {propsObj.options?.map((o: { label: string; value: string | boolean }) => (
-            <option value={o.value as string} key={o.value as string}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        <div className="absolute">
-          {propsObj.helper && <p className="subtext">{propsObj.helper}</p>}
-          <ErrorMessage name={field.name}>
-            {(msg) => {
-              return <div className="font-normal text-errorRed">{msg}</div>;
-            }}
-          </ErrorMessage>
-        </div>
-      </div>
-    );
-  }
-
-  if (propsObj.type === 'tel') {
-    propsObj.value = formatPhone(field.value);
-    propsObj.type = 'text';
-  }
-
-  return (
-    <div className="text-black relative">
-      <input className={classes.menu.container} {...field} {...propsObj} />
-      <div className="absolute">
-        {propsObj.helper && <p className="subtext">{propsObj.helper}</p>}
-        <ErrorMessage name={field.name}>
-          {(msg) => {
-            return <div className="font-normal text-errorRed">{msg}</div>;
-          }}
-        </ErrorMessage>
-      </div>
-    </div>
-  );
-};
+import { SelectField, TextField } from './components/TextField';
+import type { IntakeFormData } from './fields';
 
 export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
+  const renderField = ({
+    field,
+    form,
+    ...props
+  }: {
+    form: FormikProps<IntakeFormData>;
+    field: any;
+    props: FormFields;
+  }) => {
+    console.log(props);
+    switch (field.type) {
+      case 'text':
+        return <TextField field={field} form={form} {...props} />;
+      case 'tel':
+        return <TextField field={field} form={form} {...props} />;
+      case 'select':
+        return <SelectField field={field} form={form} {...props} />;
+      default:
+        return <TextField field={field} form={form} {...props} />;
+    }
+  };
   return (
     <div className="flex flex-col space-y-8  w-full">
       {sections?.map((section) => (
@@ -107,8 +65,17 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                           placeholder={field.placeholder}
                           options={field?.options}
                           helper={field?.helper}
-                          component={MyInput}
-                        />
+                        >
+                          {({
+                            field,
+                            form,
+                            props,
+                          }: {
+                            form: FormikProps<IntakeFormData>;
+                            field: any;
+                            props: FormFields;
+                          }) => renderField({ field, form, props })}
+                        </Field>
                       </div>
                     ))}
                   </div>

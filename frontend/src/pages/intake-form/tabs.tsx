@@ -77,6 +77,7 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
+
             options: [
               { label: 'Vancouver', value: 'vancouver' },
               { label: 'Victoria', value: 'victoria' },
@@ -103,6 +104,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: '123456',
+
             helper: 'This is your 6-digit employee number.',
           },
           {
@@ -125,6 +127,7 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
+
             options: [
               { label: 'Finance', value: 'fin' },
               { label: 'Forestry', value: 'for' },
@@ -136,6 +139,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: 'Water, Fisheries and Coast Division',
+
             helper: 'Full division name, no acronyms.',
           },
           {
@@ -144,6 +148,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: '123-4567',
+
             helper: 'You can find this information on your paystub.',
           },
           {
@@ -152,6 +157,7 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
+
             options: [
               { label: 'Yes', value: true },
               { label: 'No', value: false },

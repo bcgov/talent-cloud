@@ -1,23 +1,15 @@
-// formik
 import { Form, Formik } from 'formik';
-
-// validation
-import { intakeFormValidationSchema } from './validation';
-
-// fields
+import { personalDetailsSchema, programSelectionSchema } from './validation';
 import { intakeFormInitialValues } from './fields';
-
-// react
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useKeycloak } from '@react-keycloak/web';
-import { useState } from 'react';
 
-// ui
-import clsx from 'clsx';
-import { Button } from '@/components/ui';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ButtonTypes } from '@/common';
-import { FormSections } from './FormSections';
+import { Button } from '@/components/ui';
+import clsx from 'clsx';
+import { useState } from 'react';
 import { formTabs } from './tabs';
+import { FormSections } from './FormSections';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
@@ -33,14 +25,13 @@ const IntakeForm = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between">
       <Formik
-        initialValues={{
-          ...intakeFormInitialValues,
-          firstName: tokenParsed.given_name,
-          lastName: tokenParsed.family_name,
+        initialValues={intakeFormInitialValues}
+        validationSchema={{
+          programSelectionSchema,
+          personalDetailsSchema,
         }}
-        validationSchema={intakeFormValidationSchema}
         onSubmit={(values, actions) => {
           // TODO: Update
           setTimeout(() => {
