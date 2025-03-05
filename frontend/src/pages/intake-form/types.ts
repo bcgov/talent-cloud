@@ -3,10 +3,11 @@ export interface FormFields {
   hidden?: boolean;
   label: string;
   name: string;
-  options?: { label: string; value: string | boolean }[];
+  options?: { label: string; value: string; disabled?: boolean }[];
   placeholder?: string;
   required?: boolean;
   type: string;
+  disabled?: boolean;
 }
 
 export interface FormSection {

@@ -3,38 +3,15 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react
 import type { FormikProps } from 'formik';
 import { ErrorMessage, Field } from 'formik';
 // types
-import type { FormFields, FormSection } from './types';
+import type { FormSection } from './types';
 // icons
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-import { TextField } from './components/TextField';
+
 import type { IntakeFormData } from './fields';
-import { SelectField } from './components/SelectField';
+
+import { renderField } from './helpers';
 
 export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
-  const renderField = ({
-    field,
-    form,
-    type,
-    ...props
-  }: {
-    form: FormikProps<IntakeFormData>;
-    field: any;
-    type: string;
-    props: FormFields;
-  }) => {
-    switch (type) {
-      case 'text':
-        return <TextField field={field} form={form} {...props} />;
-      case 'tel':
-        return <TextField field={field} form={form} {...props} />;
-      case 'select':
-        return <SelectField field={field} form={form} {...props} />;
-      // case 'radio':
-      //   return <RadioField />;
-      default:
-        return <TextField field={field} form={form} {...props} />;
-    }
-  };
   return (
     <div className="flex flex-col space-y-8  w-full">
       {sections?.map((section) => (
@@ -66,21 +43,8 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                           options={fieldItm?.options}
                           helper={fieldItm?.helper}
                         >
-                          {({
-                            field,
-                            form,
-                            ...props
-                          }: {
-                            form: FormikProps<IntakeFormData>;
-                            field: any;
-                            props: any;
-                          }) =>
-                            renderField({
-                              field,
-                              form,
-                              type: fieldItm.type,
-                              ...props,
-                            })
+                          {(fieldProps: FormikProps<IntakeFormData>) =>
+                            renderField(fieldItm, fieldProps)
                           }
                         </Field>
 

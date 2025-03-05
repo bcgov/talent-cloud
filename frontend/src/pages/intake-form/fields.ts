@@ -4,8 +4,8 @@ import type {
   Languages,
   Location,
   PersonnelTool,
-  Program,
 } from '@/common';
+import { Program } from '@/common';
 
 export interface ProgramFields {
   program?: Program;
@@ -60,6 +60,7 @@ export interface PersonalDetails {
   primaryPhone: string;
   secondaryPhone?: string;
   homeLocation?: Location;
+  email: string;
 }
 export const personalDetails: PersonalDetails = {
   firstName: '',
@@ -67,6 +68,7 @@ export const personalDetails: PersonalDetails = {
   primaryPhone: '',
   secondaryPhone: '',
   homeLocation: undefined,
+  email: '',
 };
 
 // employment details
@@ -299,16 +301,26 @@ export type BcwsFormData = LiaisonDetails &
   };
 
 // form interface
-export type IntakeFormData = PersonnelFormData & {
+export type IntakeFormData = {
+  id: string;
+  createdByEmail: string;
+  personnel: PersonnelFormData & {
+    bcws?: BcwsFormData;
+    emcr?: EmcrFormData;
+  };
+};
+// form interface
+export type IntakeFormPersonnelData = PersonnelFormData & {
+  program: Program;
   bcws?: BcwsFormData;
   emcr?: EmcrFormData;
 };
-
-export const intakeFormInitialValues: IntakeFormData = {
+export const intakeFormInitialValues: IntakeFormPersonnelData = {
   ...personalDetails,
   ...employmentDetails,
   ...supervisorDetails,
   ...emergencyContactDetails,
+  program: Program.ALL,
   bcws: {
     paylistId: '',
     travelPreferences: '',
