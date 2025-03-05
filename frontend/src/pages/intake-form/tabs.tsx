@@ -1,4 +1,5 @@
-import type { FormSection } from './types';
+import { Program } from '@/common';
+import type { FormFields, FormSection } from './types';
 
 interface FormTab {
   description: React.ReactNode;
@@ -6,13 +7,30 @@ interface FormTab {
   sections?: FormSection[];
   title?: string;
   value: string;
+  fields?: FormFields[];
 }
 
 export const formTabs: FormTab[] = [
   {
     label: 'Program Selection & Acknowledgement',
 
-    sections: [],
+    fields: [
+      {
+        name: 'program',
+        label: 'Program Selection',
+        type: 'radio',
+
+        // disabled: !!currentProgram,
+        options: [
+          { label: 'Both', value: Program.ALL },
+          { label: 'EMCR', value: Program.EMCR },
+          { label: 'BCWS', value: Program.BCWS },
+        ],
+        required: true,
+        placeholder: 'Select a program',
+      },
+    ],
+
     description: (
       <>
         <p>
@@ -31,7 +49,7 @@ export const formTabs: FormTab[] = [
       </>
     ),
 
-    value: 'programSelection',
+    value: 'program',
   },
   {
     label: 'Personal & Employee Information',
@@ -159,8 +177,8 @@ export const formTabs: FormTab[] = [
             placeholder: 'Select an option',
 
             options: [
-              { label: 'Yes', value: true },
-              { label: 'No', value: false },
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
             ],
           },
         ],
@@ -234,13 +252,10 @@ export const formTabs: FormTab[] = [
         name: 'Program Selection & Acknowledgement',
         fields: [
           {
-            name: 'programSelection',
+            name: 'program',
             label: 'Program Selection',
             type: 'select',
-            options: [
-              { label: 'Program 1', value: 'program1' },
-              { label: 'Program 2', value: 'program2' },
-            ],
+            options: [],
             required: true,
             placeholder: 'Select a program',
           },
