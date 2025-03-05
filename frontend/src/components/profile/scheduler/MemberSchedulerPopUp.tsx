@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  Input,
-} from '@material-tailwind/react';
+import { Button, Dialog, DialogBody, Input } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import { CalendarDaysIcon } from '@heroicons/react/24/solid';
 import { Button as DialogButton } from '../../ui';
@@ -50,16 +45,10 @@ export const MemberSchedulerPopUp = ({
       to: toDay.format('YYYY-MM-DD'),
       type: AvailabilityType.UNAVAILABLE,
     };
-    if (
-      dayjs(editedFrom).isBefore(fromDay, 'date') &&
-      editedAvailabilityType
-    ) {
+    if (dayjs(editedFrom).isBefore(fromDay, 'date') && editedAvailabilityType) {
       availabilityRange.removeFrom = editedFrom;
     }
-    if (
-      dayjs(editedTo).isAfter(toDay, 'date') &&
-      editedAvailabilityType
-    ) {
+    if (dayjs(editedTo).isAfter(toDay, 'date') && editedAvailabilityType) {
       availabilityRange.removeTo = editedTo;
     }
     onSave(availabilityRange);
@@ -162,7 +151,10 @@ export const MemberSchedulerPopUp = ({
   const SetUnavailability = () => (
     <div className="grid grid-cols-2 gap-4 p-6 min-h-[300px] flex-grow">
       <div className="space-y-2">
-        <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="startDate"
+          className="block text-sm font-medium text-gray-700"
+        >
           Start Date
         </label>
         <div className="relative">
@@ -219,38 +211,42 @@ export const MemberSchedulerPopUp = ({
 
   return (
     <div className="flex flex-col">
-      {editedAvailabilityType === AvailabilityType.AVAILABLE && <SetUnavailability />}
-      {(editedAvailabilityType === AvailabilityType.UNAVAILABLE || editedAvailabilityType === AvailabilityType.DEPLOYED) && <UnavailableForDeployment />}
+      {editedAvailabilityType === AvailabilityType.AVAILABLE ||
+        (editedAvailabilityType === AvailabilityType.NOT_INDICATED && (
+          <SetUnavailability />
+        ))}
+      {(editedAvailabilityType === AvailabilityType.UNAVAILABLE ||
+        editedAvailabilityType === AvailabilityType.DEPLOYED) && (
+        <UnavailableForDeployment />
+      )}
       <div className="flex flex-row space-x-6 py-4 justify-end px-8 border-t-2 border-defaultGray">
         <DialogButton
           variant={ButtonTypes.PRIMARY}
           type="button"
           onClick={onCancel}
-          text={editedAvailabilityType === AvailabilityType.DEPLOYED ? 'Close' : 'Cancel'}
+          text={
+            editedAvailabilityType === AvailabilityType.DEPLOYED ? 'Close' : 'Cancel'
+          }
         />
-        {editedAvailabilityType === AvailabilityType.UNAVAILABLE &&
+        {editedAvailabilityType === AvailabilityType.UNAVAILABLE && (
           <DialogButton
             variant={ButtonTypes.PRIMARY}
             type="button"
             onClick={() => setConfirmModal('DELETE')}
             text="Delete"
           />
-        }
-        {editedAvailabilityType === AvailabilityType.AVAILABLE &&
-          <DialogButton
-            variant={ButtonTypes.TERTIARY}
-            type="button"
-            onClick={confirmAction}
-            text="Save"
-          />
-        }
+        )}
+        {editedAvailabilityType === AvailabilityType.AVAILABLE ||
+          (editedAvailabilityType === AvailabilityType.NOT_INDICATED && (
+            <DialogButton
+              variant={ButtonTypes.TERTIARY}
+              type="button"
+              onClick={confirmAction}
+              text="Save"
+            />
+          ))}
       </div>
-      <Dialog
-        open={!!confirmModal}
-        handler={() => {}}
-        title={'Confirm'}
-        size="sm"
-      >
+      <Dialog open={!!confirmModal} handler={() => {}} title={'Confirm'} size="sm">
         <DialogBody>
           {confirmModal === 'DELETE' && <DeleteConfirmContent />}
         </DialogBody>
