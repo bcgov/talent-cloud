@@ -1,21 +1,23 @@
-import * as Yup from 'yup';
-
+// formik
 import { Form, Formik } from 'formik';
-import {
-  intakeFormValidationSchema,
-  personalDetailsSchema,
-  programSelectionSchema,
-} from './validation';
-import { intakeFormInitialValues, personalDetails, programFields } from './fields';
-import { useKeycloak } from '@react-keycloak/web';
 
+// validation
+import { intakeFormValidationSchema } from './validation';
+
+// fields
+import { intakeFormInitialValues } from './fields';
+
+// react
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { ButtonTypes } from '@/common';
-import { Button } from '@/components/ui';
-import clsx from 'clsx';
+import { useKeycloak } from '@react-keycloak/web';
 import { useState } from 'react';
-import { formTabs } from './tabs';
+
+// ui
+import clsx from 'clsx';
+import { Button } from '@/components/ui';
+import { ButtonTypes } from '@/common';
 import { FormSections } from './FormSections';
+import { formTabs } from './tabs';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();

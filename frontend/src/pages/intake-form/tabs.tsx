@@ -49,7 +49,6 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: 'First Name',
-            options: [],
           },
           {
             name: 'lastName',
@@ -78,7 +77,11 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
-            options: ['Vancouver', 'Victoria', 'Kamloops'],
+            options: [
+              { label: 'Vancouver', value: 'vancouver' },
+              { label: 'Victoria', value: 'victoria' },
+              { label: 'Kamloops', value: 'kamloops' },
+            ],
             helper:
               'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
           },
@@ -122,7 +125,10 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
-            options: ['Finance', 'Housing', 'Forests'],
+            options: [
+              { label: 'Finance', value: 'fin' },
+              { label: 'Forestry', value: 'for' },
+            ],
           },
           {
             name: 'division',
@@ -146,11 +152,46 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
-            options: ['Holder 1', 'Holder 2'],
+            options: [
+              { label: 'Yes', value: true },
+              { label: 'No', value: false },
+            ],
           },
         ],
       },
-      { name: 'Supervisor and Liason Details, Travel Preferences', fields: [] },
+      {
+        name: 'Supervisor and Liason Details, Travel Preferences',
+        fields: [
+          {
+            name: 'supervisorFirstName',
+            label: 'Supervisor First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'John',
+          },
+          {
+            name: 'supervisorLastName',
+            label: 'Supervisor Last Name',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'supervisorEmail',
+            label: 'Supervisor Email',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'supervisorPhone',
+            label: 'Supervisor Phone Number',
+            type: 'text',
+            required: false,
+            placeholder: '000-000-0000',
+          },
+        ],
+      },
       { name: 'Emergency Contact Details', fields: [] },
     ],
   },
@@ -190,7 +231,10 @@ export const formTabs: FormTab[] = [
             name: 'programSelection',
             label: 'Program Selection',
             type: 'select',
-            options: ['Program 1', 'Program 2', 'Program 3'],
+            options: [
+              { label: 'Program 1', value: 'program1' },
+              { label: 'Program 2', value: 'program2' },
+            ],
             required: true,
             placeholder: 'Select a program',
           },

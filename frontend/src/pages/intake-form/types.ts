@@ -6,7 +6,7 @@ export interface FormFields {
   hidden?: boolean;
   label: string;
   name: string;
-  options?: string[];
+  options?: {label: string, value: string | boolean}[];
   placeholder?: string;
   required?: boolean;
   type: string;

@@ -79,7 +79,7 @@ export interface EmploymentDetails {
   ministry: string;
   division: string;
   paylistId: string; // should be in bcws
-  purchaseCardHolder: boolean; // should be in bcws
+  purchaseCardHolder: boolean | undefined; // should be in bcws
 }
 
 export const employmentDetails: EmploymentDetails = {
@@ -90,7 +90,7 @@ export const employmentDetails: EmploymentDetails = {
   ministry: '',
   division: '',
   paylistId: '',
-  purchaseCardHolder: false,
+  purchaseCardHolder: undefined,
 };
 
 // supervisor and liaison details, travel preferences
