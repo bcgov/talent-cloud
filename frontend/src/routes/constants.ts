@@ -10,4 +10,5 @@ export default Object.freeze({
   Root: '/',
   NotFound: '*',
   Redirect: '/redirect',
+  IntakeForm: '/intake-form',
 });
