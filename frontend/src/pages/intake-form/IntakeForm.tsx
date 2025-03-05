@@ -55,92 +55,97 @@ const IntakeForm = () => {
     >
       {({ values }) => (
         <Form>
-          <div className="h-screen overflow-y-hidden flex flex-col justify-between">
-            <div className="h-full  overflow-y-auto">
-              <TabGroup
-                vertical
-                manual
-                selectedIndex={selectedTab}
-                onChange={setSelectedTab}
-                className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-              >
-                <TabList className="flex flex-col space-y-16 mt-2  border-dashed border-blue-900 border-l">
-                  {formTabs.map(({ label, value }, index) => (
-                    // {/* <Tab className="data-[selected]:bg-blue-500 data-[selected]:text-white data-[hover]:underline"> */}
+          <div className="h-full flex flex-col justify-between">
+            <TabGroup
+              vertical
+              manual
+              selectedIndex={selectedTab}
+              onChange={setSelectedTab}
+              className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
+            >
+              <TabList className="flex flex-col">
+                {formTabs.map(({ label, value }, index) => (
+                  // {/* <Tab className="data-[selected]:bg-blue-500 data-[selected]:text-white data-[hover]:underline"> */}
+                  <>
                     <Tab
                       key={value}
                       value={value}
                       onClick={() => handleSelectTab(value)}
-                      className={'data-[selected]:outline-none'}
+                      className={clsx(
+                        'data-[selected]:outline-none pb-16',
+                        index !== formTabs.length - 1 &&
+                          'border-blue-800 border-l border-dashed',
+                      )}
                     >
                       {({ selected }) => (
-                        <div className="flex flex-row space-x-2 flex-nowrap text-nowrap h-full">
-                          <div
-                            className={clsx(
-                              selected &&
-                                'bg-blue-800 text-white border-2 border-blue-800',
-                              !selected && ' border-2 border-[#606060] bg-white',
-                              ' px-2 -ml-3 rounded-full ',
-                            )}
-                          >
-                            {index + 1}
-                          </div>
-                          <div>
-                            <p
+                        <>
+                          <div className="flex flex-row space-x-2 flex-nowrap text-nowrap h-full">
+                            <div
                               className={clsx(
-                                selected && 'outline-none text-blue-800 font-bold',
-                                'text-sm  text-[#606060]',
+                                selected &&
+                                  'bg-blue-800 text-white border-2 border-blue-800',
+                                !selected && ' border-2 border-[#606060] bg-white',
+                                ' px-2 -ml-3 rounded-full ',
                               )}
                             >
-                              {label}
-                            </p>
+                              {index + 1}
+                            </div>
+                            <div>
+                              <p
+                                className={clsx(
+                                  selected && 'outline-none text-blue-800 font-bold',
+                                  'text-sm  text-[#606060]',
+                                )}
+                              >
+                                {label}
+                              </p>
+                            </div>
                           </div>
-                        </div>
+                        </>
                       )}
                     </Tab>
-                  ))}
-                </TabList>
-                <TabPanels>
-                  {formTabs.map(
-                    ({ value, label, description, title, sections, fields }) => (
-                      <TabPanel key={value}>
-                        <div className="h-full flex flex-col xl:pr-24 w-[900px]">
-                          <h3>{title ?? label}</h3>
-                          <h3>{values.program}</h3>
+                    {/* <div className="border-dashed border-blue-900 border-l h-full absolute"></div> */}
+                  </>
+                ))}
+              </TabList>
+              <TabPanels>
+                {formTabs.map(
+                  ({ value, label, description, title, sections, fields }) => (
+                    <TabPanel key={value}>
+                      <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
+                        <h3>{title ?? label}</h3>
+                        <h3>{values.program}</h3>
 
-                          <div className="text-sm py-6">{description}</div>
-                          {sections && <FormSections sections={sections} />}
+                        <div className="text-sm py-6">{description}</div>
+                        {sections && <FormSections sections={sections} />}
 
-                          {fields &&
-                            fields.map((fieldItm: FormFields) => (
-                              <div
-                                key={fieldItm.name}
-                                className="w-full flex flex-col"
+                        {fields &&
+                          fields.map((fieldItm: FormFields) => (
+                            <div
+                              key={fieldItm.name}
+                              className="w-full flex flex-col"
+                            >
+                              <label htmlFor={fieldItm.name}>{fieldItm.label}</label>
+                              <Field
+                                className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md"
+                                name={fieldItm.name}
+                                type={fieldItm.type}
+                                placeholder={fieldItm.placeholder}
+                                options={fieldItm?.options}
+                                helper={fieldItm?.helper}
                               >
-                                <label htmlFor={fieldItm.name}>
-                                  {fieldItm.label}
-                                </label>
-                                <Field
-                                  className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md"
-                                  name={fieldItm.name}
-                                  type={fieldItm.type}
-                                  placeholder={fieldItm.placeholder}
-                                  options={fieldItm?.options}
-                                  helper={fieldItm?.helper}
-                                >
-                                  {(fieldProps: FormikProps<IntakeFormData>) =>
-                                    renderField(fieldItm, fieldProps)
-                                  }
-                                </Field>
-                              </div>
-                            ))}
-                        </div>
-                      </TabPanel>
-                    ),
-                  )}
-                </TabPanels>
-              </TabGroup>
-            </div>
+                                {(fieldProps: FormikProps<IntakeFormData>) =>
+                                  renderField(fieldItm, fieldProps)
+                                }
+                              </Field>
+                            </div>
+                          ))}
+                      </div>
+                    </TabPanel>
+                  ),
+                )}
+              </TabPanels>
+            </TabGroup>
 
             <div>
               <div className="border border-t-grey-200"></div>
