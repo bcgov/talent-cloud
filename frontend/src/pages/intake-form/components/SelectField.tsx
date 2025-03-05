@@ -24,12 +24,7 @@ export const SelectField = (
         <option value={o.value as string} key={o.value as string}>
           {o.label}
         </option>
-        {field.options?.map((o: { label: string; value: string | boolean }) => (
-          <option value={o.value as string} key={o.value as string}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </div>
+      ))}
+    </select>
   );
 };

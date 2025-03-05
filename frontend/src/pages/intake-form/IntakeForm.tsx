@@ -42,18 +42,18 @@ const IntakeForm = () => {
   // }
 
   return (
-    <div className="h-full overflow-y-auto flex flex-col justify-between">
-      <Formik
-        initialValues={intakeFormInitialValues}
-        validationSchema={intakeFormValidationSchema}
-        onSubmit={(values, actions) => {
-          // TODO: Update
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
-        }}
-      >
+    <Formik
+      initialValues={intakeFormInitialValues}
+      validationSchema={intakeFormValidationSchema}
+      onSubmit={(values, actions) => {
+        // TODO: Update
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          actions.setSubmitting(false);
+        }, 1000);
+      }}
+    >
+      {({ values }) => (
         <Form>
           <div className="h-screen overflow-y-hidden flex flex-col justify-between">
             <div className="h-full  overflow-y-auto">
