@@ -1,15 +1,23 @@
+// formik
 import { Form, Formik } from 'formik';
-import { personalDetailsSchema, programSelectionSchema } from './validation';
-import { personalDetails, programFields } from './fields';
-import { useKeycloak } from '@react-keycloak/web';
 
+// validation
+import { intakeFormValidationSchema } from './validation';
+
+// fields
+import { intakeFormInitialValues } from './fields';
+
+// react
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { ButtonTypes } from '@/common';
-import { Button } from '@/components/ui';
-import clsx from 'clsx';
+import { useKeycloak } from '@react-keycloak/web';
 import { useState } from 'react';
-import { formTabs } from './tabs';
+
+// ui
+import clsx from 'clsx';
+import { Button } from '@/components/ui';
+import { ButtonTypes } from '@/common';
 import { FormSections } from './FormSections';
+import { formTabs } from './tabs';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
@@ -25,21 +33,14 @@ const IntakeForm = () => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full overflow-y-auto flex flex-col justify-between">
       <Formik
         initialValues={{
-          programFields,
-          personalDetails: {
-            ...personalDetails,
-            firstName: tokenParsed.given_name,
-            lastName: tokenParsed.family_name,
-          },
-          // ...etc
+          ...intakeFormInitialValues,
+          firstName: tokenParsed.given_name,
+          lastName: tokenParsed.family_name,
         }}
-        validationSchema={{
-          programSelectionSchema,
-          personalDetailsSchema,
-        }}
+        validationSchema={intakeFormValidationSchema}
         onSubmit={(values, actions) => {
           // TODO: Update
           setTimeout(() => {

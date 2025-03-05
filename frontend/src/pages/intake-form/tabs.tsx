@@ -1,11 +1,11 @@
 import type { FormSection } from './types';
 
 interface FormTab {
+  description: React.ReactNode;
   label: string;
   sections?: FormSection[];
-  description: React.ReactNode;
-  value: string;
   title?: string;
+  value: string;
 }
 
 export const formTabs: FormTab[] = [
@@ -49,7 +49,6 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: 'First Name',
-            options: [],
           },
           {
             name: 'lastName',
@@ -59,16 +58,140 @@ export const formTabs: FormTab[] = [
             placeholder: 'Last Name',
           },
           {
-            name: 'email',
-            label: 'Email',
-            type: 'email',
+            name: 'primaryPhone',
+            label: 'Primary Phone Number',
+            type: 'tel',
             required: true,
-            placeholder: 'Email',
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'secondaryPhone',
+            label: 'Secondary Phone Number',
+            type: 'tel',
+            required: false,
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'homeLocation',
+            label: 'Home Location',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'Vancouver', value: 'vancouver' },
+              { label: 'Victoria', value: 'victoria' },
+              { label: 'Kamloops', value: 'kamloops' },
+            ],
+            helper:
+              'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
           },
         ],
       },
-      { name: 'Employment Details', fields: [] },
-      { name: 'Supervisor and Liason Details, Travel Preferences', fields: [] },
+      {
+        name: 'Employment Details',
+        fields: [
+          {
+            name: 'jobTitle',
+            label: 'Job Title',
+            type: 'text',
+            required: true,
+            placeholder: 'Policy Analyst',
+          },
+          {
+            name: 'employeeId',
+            label: 'BC Government Employee Number',
+            type: 'text',
+            required: true,
+            placeholder: '123456',
+            helper: 'This is your 6-digit employee number.',
+          },
+          {
+            name: 'email',
+            label: 'BC Government Email',
+            type: 'text',
+            required: true,
+            placeholder: 'johnsmith@gov.bc.ca',
+          },
+          {
+            name: 'workPhone',
+            label: 'Work Phone Number',
+            type: 'tel',
+            required: true,
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'ministry',
+            label: 'Ministry',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'Finance', value: 'fin' },
+              { label: 'Forestry', value: 'for' },
+            ],
+          },
+          {
+            name: 'division',
+            label: 'Division',
+            type: 'text',
+            required: true,
+            placeholder: 'Water, Fisheries and Coast Division',
+            helper: 'Full division name, no acronyms.',
+          },
+          {
+            name: 'paylistId',
+            label: 'Pay List (Dept ID)',
+            type: 'text',
+            required: true,
+            placeholder: '123-4567',
+            helper: 'You can find this information on your paystub.',
+          },
+          {
+            name: 'purchaseCardHolder',
+            label: 'Purchase Card Holder',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'Yes', value: true },
+              { label: 'No', value: false },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Supervisor and Liason Details, Travel Preferences',
+        fields: [
+          {
+            name: 'supervisorFirstName',
+            label: 'Supervisor First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'John',
+          },
+          {
+            name: 'supervisorLastName',
+            label: 'Supervisor Last Name',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'supervisorEmail',
+            label: 'Supervisor Email',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'supervisorPhone',
+            label: 'Supervisor Phone Number',
+            type: 'text',
+            required: false,
+            placeholder: '000-000-0000',
+          },
+        ],
+      },
       { name: 'Emergency Contact Details', fields: [] },
     ],
   },
@@ -108,7 +231,10 @@ export const formTabs: FormTab[] = [
             name: 'programSelection',
             label: 'Program Selection',
             type: 'select',
-            options: ['Program 1', 'Program 2', 'Program 3'],
+            options: [
+              { label: 'Program 1', value: 'program1' },
+              { label: 'Program 2', value: 'program2' },
+            ],
             required: true,
             placeholder: 'Select a program',
           },

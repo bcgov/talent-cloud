@@ -79,7 +79,7 @@ export interface EmploymentDetails {
   ministry: string;
   division: string;
   paylistId: string; // should be in bcws
-  purchaseCardHolder: boolean; // should be in bcws
+  purchaseCardHolder: boolean | undefined; // should be in bcws
 }
 
 export const employmentDetails: EmploymentDetails = {
@@ -90,7 +90,7 @@ export const employmentDetails: EmploymentDetails = {
   ministry: '',
   division: '',
   paylistId: '',
-  purchaseCardHolder: false,
+  purchaseCardHolder: undefined,
 };
 
 // supervisor and liaison details, travel preferences
@@ -254,18 +254,18 @@ export const softwareSkills: SoftwareSkills = {
   tools: [],
 };
 
-export interface OtherCertifications {
+export interface Certifications {
   highestOfaCompleted?: string;
   driverLicenseQualifications?: string[];
   certifiedPfa: string;
-  otherCertifications?: string[];
+  certifications?: string[];
 }
 
-export const otherCertifications: OtherCertifications = {
+export const certifications: Certifications = {
   highestOfaCompleted: '',
   driverLicenseQualifications: [],
   certifiedPfa: '',
-  otherCertifications: [],
+  certifications: [],
 };
 
 // review & submit
@@ -299,4 +299,28 @@ export type BcwsFormData = LiaisonDetails &
 export type IntakeFormData = PersonnelFormData & {
   bcws?: BcwsFormData;
   emcr?: EmcrFormData;
+};
+
+export const intakeFormInitialValues = {
+  ...personalDetails,
+  ...employmentDetails,
+  ...supervisorDetails,
+  ...emergencyContactDetails,
+  bcws: {
+    paylistId: '',
+    travelPreferences: '',
+    ...liaisonDetails,
+    sections: sectionRolesBcws,
+  },
+  emcr: {
+    travelPreferences: '',
+    functions: sectionInterestEmcr,
+    ...generalEmergencyManagementExperience,
+  },
+  languages: [],
+  tools: [],
+  certifications: [],
+  highestOfaCompleted: '',
+  driverLicenseQualifications: [],
+  certifiedPfa: '',
 };

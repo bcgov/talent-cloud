@@ -1,9 +1,21 @@
-import type { FormikFormProps } from 'formik';
-import { Field } from 'formik';
-import type { FormSection } from './types';
+// react
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 
+// formik
+import type { FormikFormProps } from 'formik';
+import { ErrorMessage, Field } from 'formik';
+
+// types
+import type { FormSection } from './types';
+
+// icons
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
+
+// classes
+import { classes } from '@/components/filters/classes';
+
+// utils
+import { formatPhone } from '@/utils';
 
 const MyInput = ({
   field,
@@ -14,8 +26,50 @@ const MyInput = ({
   field: any;
   props: any;
 }) => {
-  console.log(form, field, props);
-  return <input {...field} {...props} />;
+  const propsObj = props as any;
+  if (propsObj.type && propsObj.type === 'select') {
+    return (
+      <div className="relative">
+        <select {...field} {...propsObj} value={undefined} defaultValue={''}>
+          <option disabled value={''}>
+            {propsObj.placeholder}
+          </option>
+          {propsObj.options?.map((o: { label: string; value: string | boolean }) => (
+            <option value={o.value as string} key={o.value as string}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+        <div className="absolute">
+          {propsObj.helper && <p className="subtext">{propsObj.helper}</p>}
+          <ErrorMessage name={field.name}>
+            {(msg) => {
+              return <div className="font-normal text-errorRed">{msg}</div>;
+            }}
+          </ErrorMessage>
+        </div>
+      </div>
+    );
+  }
+
+  if (propsObj.type === 'tel') {
+    propsObj.value = formatPhone(field.value);
+    propsObj.type = 'text';
+  }
+
+  return (
+    <div className="text-black relative">
+      <input className={classes.menu.container} {...field} {...propsObj} />
+      <div className="absolute">
+        {propsObj.helper && <p className="subtext">{propsObj.helper}</p>}
+        <ErrorMessage name={field.name}>
+          {(msg) => {
+            return <div className="font-normal text-errorRed">{msg}</div>;
+          }}
+        </ErrorMessage>
+      </div>
+    </div>
+  );
 };
 
 export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
@@ -33,20 +87,31 @@ export const FormSections = ({ sections }: { sections?: FormSection[] }) => {
                   </div>
                 </DisclosureButton>
                 <DisclosurePanel className="text-gray-500">
-                  {section?.fields?.map((field) => (
-                    <div key={field.name}>
-                      <label htmlFor={field.name}>
-                        {field.label}
+                  <div className="grid grid-cols-2 gap-20 pt-[36px] pb-[50px] px-[40px] items-end">
+                    {section?.fields?.map((field, index) => (
+                      <div
+                        className={`flex flex-col gap-y-[5px] col-span-${section?.fields?.length && index === section.fields.length - 1 && section.fields.length % 2 === 1 ? 2 : 1}`}
+                        key={field.name}
+                      >
+                        <label htmlFor={field.name}>
+                          {field.label}
+                          {field.required && (
+                            <span className="font-bold text-red-500">*</span>
+                          )}
+                        </label>
                         <Field
+                          className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md"
                           name={field.name}
                           type={field.type}
                           as={field.name}
                           placeholder={field.placeholder}
+                          options={field?.options}
+                          helper={field?.helper}
                           component={MyInput}
                         />
-                      </label>
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                  </div>
                 </DisclosurePanel>
               </>
             )}

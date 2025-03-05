@@ -35,12 +35,12 @@ export const personalDetailsSchema = Yup.object().shape({
 
 export const employmentDetailsSchema = Yup.object().shape({
   jobTitle: Yup.string().required('Job title is required'),
-  bcGovEmployeeNumber: Yup.string().required('Employee number is required'),
-  bcGovEmail: Yup.string().required('Email is required'),
+  employeeId: Yup.string().required('Employee number is required'),
+  email: Yup.string().required('Email is required'),
   workPhone: Yup.string().required('Work phone is required'),
   ministry: Yup.string().required('Ministry is required'),
   division: Yup.string().required('Division is required'),
-  deptId: Yup.string().required('Pay list (Dept ID) is required'),
+  paylistId: Yup.string().required('Pay list (Dept ID) is required'),
   purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
 });
 
@@ -148,4 +148,26 @@ export const certificationsSchema = Yup.object().shape({
 
 export const reviewAndSubmitSchema = Yup.object().shape({
   acknowledgeSubmit: Yup.boolean().required('You must acknowledge your submission'),
+});
+
+export const intakeFormValidationSchema = Yup.object().shape({
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
+  primaryPhone: Yup.string().required('Primary phone is required'),
+  secondaryPhone: Yup.string(),
+  homeLocation: Yup.string().required('Home location is required'),
+
+  jobTitle: Yup.string().required('Job title is required'),
+  employeeId: Yup.string().required('Employee number is required'),
+  email: Yup.string().required('Email is required'),
+  workPhone: Yup.string().required('Work phone is required'),
+  ministry: Yup.string().required('Ministry is required'),
+  division: Yup.string().required('Division is required'),
+  paylistId: Yup.string().required('Pay list (Dept ID) is required'),
+  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
+
+  supervisorFirstName: Yup.string().required("Supervisor's first name is required"),
+  supervisorLastName: Yup.string().required("Supervisor's last name is required"),
+  supervisorEmail: Yup.string().required("Supervisor's email is required"),
+  supervisorPhone: Yup.string(),
 });
