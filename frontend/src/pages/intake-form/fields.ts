@@ -1,5 +1,5 @@
 // common
-import {
+import type {
   BcwsRoleInterface,
   Languages,
   Location,
@@ -277,22 +277,25 @@ export interface ReviewAndSubmit {
 export const reviewAndSubmit: ReviewAndSubmit = {
   acknowledgeSubmit: false,
 };
-
+export interface Tools {
+  tools?: PersonnelTool[];
+}
 export type PersonnelFormData = PersonalDetails &
   SupervisorDetails &
   EmploymentDetails &
   EmergencyContactDetails &
+  Tools &
+  Certifications &
   LanguageSkills;
 
 export type EmcrFormData = TravelDetails & {
   functions: SectionInterestEmcr;
-
   experience: GeneralEmergencyManagementExperience;
 };
 export type BcwsFormData = LiaisonDetails &
-  EmploymentDetails &
   TravelDetails & {
     sections?: SectionRolesBcws;
+    paylistId: string;
   };
 
 // form interface
@@ -301,7 +304,7 @@ export type IntakeFormData = PersonnelFormData & {
   emcr?: EmcrFormData;
 };
 
-export const intakeFormInitialValues = {
+export const intakeFormInitialValues: IntakeFormData = {
   ...personalDetails,
   ...employmentDetails,
   ...supervisorDetails,
@@ -315,7 +318,7 @@ export const intakeFormInitialValues = {
   emcr: {
     travelPreferences: '',
     functions: sectionInterestEmcr,
-    ...generalEmergencyManagementExperience,
+    experience: { ...generalEmergencyManagementExperience },
   },
   languages: [],
   tools: [],
