@@ -1,5 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { format, eachDayOfInterval, parse, differenceInDays } from 'date-fns';
 import {
   Brackets,
@@ -15,6 +16,7 @@ import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { AvailabilityRO, PersonnelRO } from './ro';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
+import { sampleData, sampleTrainingData } from '../common/chips/sample-data';
 import { ChipsMinistryName, Ministry, Section } from '../common/enums';
 import {
   AvailabilityType,
@@ -35,9 +37,7 @@ import { AppLogger } from '../logger/logger.service';
 import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
 import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
 import { ChipsResponse, mapToChipsResponse, mapToChipsTrainingResponse } from '../common/chips/chips-response';
-import axios from 'axios';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
-import { sampleData, sampleTrainingData } from '../common/chips/sample-data';
 
 @Injectable()
 export class PersonnelService {
@@ -1000,7 +1000,7 @@ export class PersonnelService {
   }
 
   async updatePersonnelChipsData(personnel: PersonnelEntity, data: ChipsResponse) {
-    let issues: { [key: string]: string } = {};
+    const issues: { [key: string]: string } = {};
     let ministry;
     if (ChipsMinistryName[data.organization.trim()]) {
       ministry = ChipsMinistryName[data.organization.trim()];

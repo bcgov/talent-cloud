@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface ChipsResponse {
   actionDate: Date; // Date last updated
   apptStatus: string; // Type of employment - Regular, Auxilary or ABC
