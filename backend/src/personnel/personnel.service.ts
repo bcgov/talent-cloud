@@ -374,8 +374,10 @@ export class PersonnelService {
           `bcws_personnel.dateApproved > current_date - interval '5' day OR emcr_personnel.dateApproved > current_date - interval '5' day`,
         );
       }
-    }
-    if (availableStatus && availableStatus === AvailabilityTypeStatus.MISSED) {
+    } else if (
+      availableStatus &&
+      availableStatus === AvailabilityTypeStatus.MISSED
+    ) {
       queryBuilder.andWhere('recommitment.program = :program', {
         program,
       });
