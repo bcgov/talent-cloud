@@ -304,6 +304,7 @@ export type BcwsFormData = LiaisonDetails &
 export type IntakeFormData = {
   id: string;
   createdByEmail: string;
+  program: Program;
   personnel: PersonnelFormData & {
     bcws?: BcwsFormData;
     emcr?: EmcrFormData;

@@ -13,12 +13,14 @@ import { FormSections } from './FormSections';
 import type { FormFields } from './types';
 import { renderField } from './helpers';
 import { intakeFormValidationSchema } from './validation';
+import { Link } from 'react-router-dom';
+import { useIntakeForm } from '@/hooks/useIntakeForm';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
   const { tokenParsed } = keycloak;
   const [selectedTab, setSelectedTab] = useState(0);
-  // const { formData, saveUpdateForm, loading, alreadyEnrolled } = useIntakeForm();
+  const { formData, saveUpdateForm, loading, alreadyEnrolled } = useIntakeForm();
 
   if (!tokenParsed) {
     return;
@@ -28,22 +30,26 @@ const IntakeForm = () => {
     setSelectedTab(value);
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  // if (alreadyEnrolled) {
-  //   return (
-  //     <div className="h-full flex flex-col justify-centre w-full items-center">
-  //       <h3>Member is in both programs</h3>
-  //       <Link to="/profile">Profile</Link>
-  //     </div>
-  //   );
-  // }
+  if (alreadyEnrolled) {
+    return (
+      <div className="h-full flex flex-col justify-centre w-full items-center">
+        <h3>Member is in both programs</h3>
+        <Link to="/profile">Profile</Link>
+      </div>
+    );
+  }
 
   return (
     <Formik
-      initialValues={intakeFormInitialValues}
+      initialValues={{
+        ...intakeFormInitialValues,
+        ...formData?.personnel,
+        program: formData?.program,
+      }}
       validationSchema={intakeFormValidationSchema}
       onSubmit={(values, actions) => {
         // TODO: Update
@@ -65,47 +71,43 @@ const IntakeForm = () => {
             >
               <TabList className="flex flex-col">
                 {formTabs.map(({ label, value }, index) => (
-                  // {/* <Tab className="data-[selected]:bg-blue-500 data-[selected]:text-white data-[hover]:underline"> */}
-                  <>
-                    <Tab
-                      key={value}
-                      value={value}
-                      onClick={() => handleSelectTab(value)}
-                      className={clsx(
-                        'data-[selected]:outline-none pb-16',
-                        index !== formTabs.length - 1 &&
-                          'border-blue-800 border-l border-dashed',
-                      )}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <div className="flex flex-row space-x-2 flex-nowrap text-nowrap h-full">
-                            <div
+                  <Tab
+                    key={value}
+                    value={value}
+                    onClick={() => handleSelectTab(value)}
+                    className={clsx(
+                      'data-[selected]:outline-none pb-16',
+                      index !== formTabs.length - 1 &&
+                        'border-blue-800 border-l border-dashed',
+                    )}
+                  >
+                    {({ selected }) => (
+                      <>
+                        <div className="flex flex-row space-x-2 flex-nowrap text-nowrap h-full">
+                          <div
+                            className={clsx(
+                              selected &&
+                                'bg-blue-800 text-white border-2 border-blue-800',
+                              !selected && ' border-2 border-[#606060] bg-white',
+                              ' px-2 -ml-3 rounded-full ',
+                            )}
+                          >
+                            {index + 1}
+                          </div>
+                          <div>
+                            <p
                               className={clsx(
-                                selected &&
-                                  'bg-blue-800 text-white border-2 border-blue-800',
-                                !selected && ' border-2 border-[#606060] bg-white',
-                                ' px-2 -ml-3 rounded-full ',
+                                selected && 'outline-none text-blue-800 font-bold',
+                                'text-sm  text-[#606060]',
                               )}
                             >
-                              {index + 1}
-                            </div>
-                            <div>
-                              <p
-                                className={clsx(
-                                  selected && 'outline-none text-blue-800 font-bold',
-                                  'text-sm  text-[#606060]',
-                                )}
-                              >
-                                {label}
-                              </p>
-                            </div>
+                              {label}
+                            </p>
                           </div>
-                        </>
-                      )}
-                    </Tab>
-                    {/* <div className="border-dashed border-blue-900 border-l h-full absolute"></div> */}
-                  </>
+                        </div>
+                      </>
+                    )}
+                  </Tab>
                 ))}
               </TabList>
               <TabPanels>
@@ -159,7 +161,7 @@ const IntakeForm = () => {
                   <Button
                     text="Save For Later"
                     variant={ButtonTypes.OUTLINED}
-                    onClick={() => console.log('clicked')}
+                    onClick={() => saveUpdateForm(values)}
                   />
                 </div>
                 <div className="flex flex-row space-x-6">

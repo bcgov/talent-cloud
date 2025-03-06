@@ -1,6 +1,6 @@
 import { RadioGroup, Radio, Label, Field as HeadlessField } from '@headlessui/react';
 import clsx from 'clsx';
-import type { FormikProps } from 'formik';
+import { useFormikContext, type FormikProps } from 'formik';
 
 import { Fragment } from 'react';
 import type { FormFields } from '../types';
@@ -10,10 +10,10 @@ export const RadioGroupField = (
   props: FormFields & FormikProps<IntakeFormPersonnelData>,
 ) => {
   console.log(props);
-
+  const { values } = useFormikContext<IntakeFormPersonnelData>();
   return (
     <>
-      <RadioGroup>
+      <RadioGroup value={values.program}>
         {props.options?.map((itm: { label: string; value: string }) => (
           <HeadlessField key={itm.value} className="flex items-center gap-2">
             <Radio as={Fragment} value={itm.value}>
