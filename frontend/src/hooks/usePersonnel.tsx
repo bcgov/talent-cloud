@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import type { BcwsPersonnelRoleInterface, ExperienceInterface, Personnel, Role, UpdateBcwsRoles } from '@/common';
+import type {
+  BcwsPersonnelRoleInterface,
+  ExperienceInterface,
+  Personnel,
+  Role,
+  UpdateBcwsRoles,
+} from '@/common';
 import type { FormikValues } from 'formik';
 import { useAxios } from './useAxios';
 import { useRoleContext } from '@/providers';
@@ -23,8 +29,7 @@ const usePersonnel = (): {
   const [personnel, setPersonnel] = useState<Personnel>();
   const { AxiosPrivate } = useAxios();
   const { profileId } = useParams();
-  const [refetch, setRefetch] = useState(false);  
-
+  const [refetch, setRefetch] = useState(false);
 
   const fetch = async () => {
     try {
@@ -44,23 +49,24 @@ const usePersonnel = (): {
 
   const updatePersonnel = async (personnel: FormikValues, endpoint = '') => {
     //TODO: refactor this to use the training array on the FE or set as a single field on the emcr personnel in the BE
-    if(personnel.icsTraining){
-      if(personnel.icsTraining === 'true' || personnel.icsTraining === true){
-        personnel.trainings = [{name: Training.ICS_TRAINING_NAME}];
+    if (personnel.icsTraining) {
+      if (personnel.icsTraining === 'true' || personnel.icsTraining === true) {
+        personnel.trainings = [{ name: Training.ICS_TRAINING_NAME }];
         delete personnel.icsTraining;
       } else {
         personnel.trainings = [];
         delete personnel.icsTraining;
       }
     }
-if (endpoint === PersonnelEndpoint.Roles) {
-      const roles:       UpdateBcwsRoles[]
-      = personnel.roles.map((r: BcwsPersonnelRoleInterface) => ({
-        roleId: r.id,
-        expLevel: r.expLevel,
-      }));
-      personnel = {...personnel, roles};
-} 
+    if (endpoint === PersonnelEndpoint.Roles) {
+      const roles: UpdateBcwsRoles[] = personnel.roles.map(
+        (r: BcwsPersonnelRoleInterface) => ({
+          roleId: r.id,
+          expLevel: r.expLevel,
+        }),
+      );
+      personnel = { ...personnel, roles };
+    }
     if (endpoint === PersonnelEndpoint.Experiences) {
       personnel = personnel.experiences.map((e: ExperienceInterface) => ({
         functionId: e.id,
@@ -68,6 +74,13 @@ if (endpoint === PersonnelEndpoint.Roles) {
         experienceType: e.experienceType,
       }));
     }
+    if (endpoint === PersonnelEndpoint.Roles) {
+      personnel = {
+        ...personnel,
+        secondChoiceSection: personnel.secondChoiceSection ?? null,
+      };
+    }
+
     try {
       const res =
         program &&
@@ -76,7 +89,7 @@ if (endpoint === PersonnelEndpoint.Roles) {
           personnel,
         ));
       // update endpoint does not return the same data as the GET endpoint, so triggering refetch
-      if(res){
+      if (res) {
         setRefetch(!refetch);
       }
     } catch (e) {

@@ -24,6 +24,7 @@ export class UpdateBcwsRolesAndPreferencesDTO {
     enum: Section,
     example: Section.FINANCE_ADMIN,
   })
+  @IsOptional()
   secondChoiceSection?: Section;
 
   @ApiProperty({
@@ -32,6 +33,7 @@ export class UpdateBcwsRolesAndPreferencesDTO {
     enum: Section,
     example: Section.COMMAND,
   })
+  @IsOptional()
   thirdChoiceSection?: Section;
 
   @ApiProperty({
