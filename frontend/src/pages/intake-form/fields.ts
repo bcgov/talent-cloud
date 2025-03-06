@@ -1,11 +1,12 @@
 // common
 import type {
   BcwsRoleInterface,
+  FunctionType,
   Languages,
   Location,
   PersonnelTool,
 } from '@/common';
-import { Program } from '@/common';
+import type { Program } from '@/common';
 
 export interface ProgramFields {
   program?: Program;
@@ -290,10 +291,12 @@ export type PersonnelFormData = PersonalDetails &
   Certifications &
   LanguageSkills;
 
-export type EmcrFormData = TravelDetails & {
-  functions: SectionInterestEmcr;
-  experience: GeneralEmergencyManagementExperience;
-};
+export type EmcrFormData = TravelDetails &
+  SectionInterestEmcr &
+  GeneralEmergencyManagementExperience & {
+    functions: FunctionType[];
+  };
+
 export type BcwsFormData = LiaisonDetails &
   TravelDetails & {
     sections?: SectionRolesBcws;
@@ -304,7 +307,8 @@ export type BcwsFormData = LiaisonDetails &
 export type IntakeFormData = {
   id: string;
   createdByEmail: string;
-  program: Program;
+  program: Program; //
+  currentProgram: Program;
   personnel: PersonnelFormData & {
     bcws?: BcwsFormData;
     emcr?: EmcrFormData;
@@ -312,7 +316,8 @@ export type IntakeFormData = {
 };
 // form interface
 export type IntakeFormPersonnelData = PersonnelFormData & {
-  program: Program;
+  id?: string;
+  program?: Program;
   bcws?: BcwsFormData;
   emcr?: EmcrFormData;
 };
@@ -321,17 +326,17 @@ export const intakeFormInitialValues: IntakeFormPersonnelData = {
   ...employmentDetails,
   ...supervisorDetails,
   ...emergencyContactDetails,
-  program: Program.ALL,
+
   bcws: {
     paylistId: '',
     travelPreferences: '',
-    ...liaisonDetails,
-    sections: sectionRolesBcws,
+    ...sectionChoiceBcws,
   },
   emcr: {
     travelPreferences: '',
-    functions: sectionInterestEmcr,
-    experience: { ...generalEmergencyManagementExperience },
+    functions: [],
+    ...sectionChoiceEmcr,
+    ...generalEmergencyManagementExperience,
   },
   languages: [],
   tools: [],

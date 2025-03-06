@@ -9,6 +9,7 @@ import {
 import type { Region } from '@/common/enums/region.enum';
 import type {
   BcwsRoleInterface,
+  Certification,
   FunctionType,
   Location,
   SectionType,
@@ -21,6 +22,7 @@ import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { Section } from '@/common/enums/sections.enum';
 import { SectionName } from '@/common/enums/sections.enum';
 import type { FieldInterface } from '@/components';
+import type { Tools, ToolsName } from '@/common/enums/tools.enum';
 
 export const useProgramFieldData = (program?: Program) => {
   const [bcwsRoles, setBcwsRoles] = useState<BcwsRoleInterface[]>([]);
@@ -29,6 +31,11 @@ export const useProgramFieldData = (program?: Program) => {
   const [sections, setSections] = useState<SectionType[]>([]);
   const [fireCentre, setFireCentre] = useState<FireCentre[]>([]);
   const [functions, setFunctions] = useState<FunctionType[]>([]);
+  const [tools, setTools] = useState<
+    { name: Tools; fullName: ToolsName; id: number }[]
+  >([]);
+  const [certificates, setCertificates] = useState<Certification[]>([]);
+
   const { AxiosPrivate } = useAxios();
 
   const sortRegion = (reg: Region[]) => {
@@ -74,6 +81,9 @@ export const useProgramFieldData = (program?: Program) => {
           setEmcrData(res.data);
           setBcwsData(res.data);
         }
+
+        res.data.tools && setTools(res.data.tools);
+        res.data.certs && setCertificates(res.data.certs);
       }
     })();
   }, [program]);
@@ -199,5 +209,7 @@ export const useProgramFieldData = (program?: Program) => {
     regions,
     fireCentre,
     sections,
+    tools,
+    certificates,
   };
 };

@@ -32,7 +32,7 @@ export class IntakeFormEntity {
   @Column({name: 'program', nullable: true, type: 'enum', enum: Program}) 
   program: Program;
 
-  toResponseObject(): IntakeFormRO { 
+  toResponseObject(currentProgram?: Program): IntakeFormRO { 
     return {
       id: this.id,
       personnel: this.personnel,
@@ -40,7 +40,8 @@ export class IntakeFormEntity {
       updatedAt: this.updatedAt,
       createdByEmail: this.createdByEmail,
       status: this.status ?? FormStatusEnum.DRAFT, 
-      program: this.program 
+      program: this.program,
+      currentProgram: currentProgram 
    }}
 
    constructor(data: Partial<IntakeFormEntity>) { 

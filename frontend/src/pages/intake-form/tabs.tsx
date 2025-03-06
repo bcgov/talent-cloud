@@ -1,5 +1,10 @@
-import { Program } from '@/common';
+import { DriverLicense, DriverLicenseName, Program } from '@/common';
 import type { FormFields, FormSection } from './types';
+import {
+  LanguageProficiency,
+  LanguageProficiencyName,
+} from '@/common/enums/language.enum';
+import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
 
 interface FormTab {
   description: React.ReactNode;
@@ -9,48 +14,46 @@ interface FormTab {
   value: string;
   fields?: FormFields[];
 }
+export const programTab = {
+  label: 'Program Selection & Acknowledgement',
+
+  fields: [
+    {
+      name: 'program',
+      label: 'Program Selection',
+      type: 'radio',
+      options: [
+        { label: 'Both', value: Program.ALL },
+        { label: 'EMCR', value: Program.EMCR },
+        { label: 'BCWS', value: Program.BCWS },
+      ],
+      required: true,
+      placeholder: 'Select a program',
+    },
+  ],
+
+  description: (
+    <>
+      <p>
+        As a prospective member of the Coordinated Operation Response in Emergencies
+        (CORE) Team program, it is crucial that you acknowledge and understand the
+        commitments involved for the{' '}
+        <strong>Emergency Management and Climate Readiness (EMCR)</strong> and the{' '}
+        <strong>BC Wildfire Service (BCWS)</strong> CORE Team program streams.
+      </p>
+      <br></br>
+      <p>
+        Before proceeding, please carefully read the details of each stream and their
+        application instructions below, make your stream choice, and then check off
+        the acknowledgement statements that will appear below.{' '}
+      </p>
+    </>
+  ),
+
+  value: 'program',
+};
 
 export const formTabs: FormTab[] = [
-  {
-    label: 'Program Selection & Acknowledgement',
-
-    fields: [
-      {
-        name: 'program',
-        label: 'Program Selection',
-        type: 'radio',
-
-        // disabled: !!currentProgram,
-        options: [
-          { label: 'Both', value: Program.ALL },
-          { label: 'EMCR', value: Program.EMCR },
-          { label: 'BCWS', value: Program.BCWS },
-        ],
-        required: true,
-        placeholder: 'Select a program',
-      },
-    ],
-
-    description: (
-      <>
-        <p>
-          As a prospective member of the Coordinated Operation Response in
-          Emergencies (CORE) Team program, it is crucial that you acknowledge and
-          understand the commitments involved for the{' '}
-          <strong>Emergency Management and Climate Readiness (EMCR)</strong> and the{' '}
-          <strong>BC Wildfire Service (BCWS)</strong> CORE Team program streams.
-        </p>
-        <br></br>
-        <p>
-          Before proceeding, please carefully read the details of each stream and
-          their application instructions below, make your stream choice, and then
-          check off the acknowledgement statements that will appear below.{' '}
-        </p>
-      </>
-    ),
-
-    value: 'program',
-  },
   {
     label: 'Personal & Employee Information',
     description:
@@ -175,7 +178,7 @@ export const formTabs: FormTab[] = [
             type: 'select',
             required: true,
             placeholder: 'Select an option',
-
+            program: Program.BCWS,
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -221,14 +224,97 @@ export const formTabs: FormTab[] = [
   },
   {
     label: 'Experience & Section Interests',
+
     description:
       'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.',
     value: 'experienceRoles',
 
     sections: [
-      { name: 'General Emergency Management Experience', fields: [] },
-      { name: 'EMCR Core Team Sections', fields: [] },
-      { name: 'BCWS CORE Team Sections and Roles', fields: [] },
+      {
+        program: Program.EMCR,
+        name: 'General Emergency Management Experience',
+        fields: [],
+      },
+      {
+        program: Program.EMCR,
+        name: 'EMCR Core Team Sections',
+        fields: [
+          {
+            name: 'emcr.firstChoiceFunction',
+            label: 'First Choice Function',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.EMCR,
+            options: [],
+          },
+          {
+            name: 'emcr.secondChoiceFunction',
+            label: 'Second Choice Function',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.EMCR,
+            options: [],
+          },
+          {
+            name: 'emcr.thirdChoiceFunction',
+            label: 'Third Choice Function',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.EMCR,
+            options: [],
+          },
+          {
+            name: 'emcr.functions',
+            label: 'Emcr Function Experiences',
+            type: 'checkbox-group',
+            required: true,
+            options: [],
+          },
+        ],
+      },
+      {
+        program: Program.BCWS,
+        name: 'BCWS CORE Team Sections and Roles',
+        fields: [
+          {
+            name: 'bcws.firstChoiceSection',
+            label: 'First Choice Section',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.BCWS,
+            options: [],
+          },
+          {
+            name: 'bcws.secondChoiceSection',
+            label: 'Second Choice Section',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.BCWS,
+            options: [],
+          },
+          {
+            name: 'bcws.thirdChoiceSection',
+            label: 'Third Choice Section',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.BCWS,
+            options: [],
+          },
+          {
+            name: 'bcws.roles',
+            label: 'BCWS Roles',
+            type: 'checkbox-group',
+            required: true,
+            options: [],
+          },
+        ],
+      },
     ],
   },
   {
@@ -236,9 +322,84 @@ export const formTabs: FormTab[] = [
     value: 'skills',
     description: 'Please indicate any other skillset that you may have.',
     sections: [
-      { name: 'Languages', fields: [] },
-      { name: 'Tools & Software', fields: [] },
-      { name: 'Certifications and Qualifications', fields: [] },
+      {
+        name: 'Languages',
+        fields: [
+          {
+            name: 'languages',
+            label: 'Languages',
+            type: 'text',
+            required: false,
+            placeholder: 'Enter a language',
+          },
+          {
+            name: 'languageProficiency',
+            label: 'Language Proficiency',
+            type: 'select',
+            required: false,
+            options: Object.keys(LanguageProficiency).map((key) => ({
+              label:
+                LanguageProficiencyName[key as keyof typeof LanguageProficiencyName],
+              value: key,
+            })),
+          },
+        ],
+      },
+      {
+        name: 'Tools & Software',
+        fields: [
+          {
+            name: 'tools',
+            label: 'Tools & Software',
+            type: 'select',
+            required: false,
+            placeholder: 'Select an option',
+            options: [],
+          },
+          {
+            name: 'toolProficiency',
+            label: 'Tool Proficiency',
+            type: 'select',
+            required: false,
+            placeholder: 'Select an option',
+            options: Object.keys(ToolsProficiency).map((key) => ({
+              label: ToolsProficiencyName[key as keyof typeof ToolsProficiencyName],
+              value: key,
+            })),
+          },
+        ],
+      },
+      {
+        name: 'Certificates',
+        fields: [
+          {
+            name: 'certificates',
+            label: 'Certificates',
+            type: 'select',
+            required: false,
+            placeholder: 'Select an option',
+            options: [],
+          },
+          {
+            name: 'certificateExpiry',
+            label: 'Certificate Expiry',
+            type: 'date',
+            required: false,
+            placeholder: 'Select a date',
+          },
+          {
+            name: 'driverLicense',
+            label: 'Driver License',
+            type: 'select',
+            required: false,
+            placeholder: 'Select an option',
+            options: Object.keys(DriverLicense).map((key) => ({
+              label: DriverLicenseName[key as keyof typeof DriverLicenseName],
+              value: key,
+            })),
+          },
+        ],
+      },
     ],
   },
   {
@@ -246,58 +407,6 @@ export const formTabs: FormTab[] = [
     value: 'reviewAndSubmit',
     description:
       'Please take a moment to review the information you have provided, then click “Submit” below to finalize your application.',
-
-    sections: [
-      {
-        name: 'Program Selection & Acknowledgement',
-        fields: [
-          {
-            name: 'program',
-            label: 'Program Selection',
-            type: 'select',
-            options: [],
-            required: true,
-            placeholder: 'Select a program',
-          },
-        ],
-      },
-      {
-        name: 'Personal & Employee Information',
-        fields: [
-          {
-            name: 'firstName',
-            label: 'First Name',
-            type: 'text',
-            required: true,
-            placeholder: 'First Name',
-          },
-        ],
-      },
-      {
-        name: 'Experience & Section Interests',
-        fields: [
-          {
-            name: 'General Emergency Management Experience',
-            label: 'General Emergency Management Experience',
-            type: 'text',
-            required: true,
-            placeholder: 'General Emergency Management Experience',
-          },
-        ],
-      },
-      {
-        name: 'Other Skills & Qualifications',
-        fields: [
-          {
-            name: 'Languages',
-            label: 'Languages',
-            type: 'text',
-            required: true,
-            placeholder: 'Languages',
-          },
-        ],
-      },
-    ],
   },
   {
     label: 'Complete',

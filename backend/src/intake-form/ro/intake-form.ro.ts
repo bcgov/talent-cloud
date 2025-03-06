@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsJSON, IsOptional, IsString } from "class-validator";
+import { IsDate, IsEnum, IsJSON, IsOptional, IsString, ValidateIf } from "class-validator";
 import { CreatePersonnelDTO } from "../../personnel";
 import { FormStatusEnum } from "src/common/enums/form-status.enum";
 import { Program } from "src/auth/interface";
@@ -23,9 +23,15 @@ export class IntakeFormRO{
   @IsOptional()
   status: FormStatusEnum;
 
-  @IsEnum(FormStatusEnum)
+  @IsEnum(Program)
   @IsOptional()
-  program: Program;
+  @ValidateIf((o) => o.program)
+  program?: Program;
+
+  @IsEnum(Program)
+  @IsOptional()
+  @ValidateIf((o) => o.currentProgram)
+  currentProgram?: Program;
 
   @IsString()
   @IsOptional()
