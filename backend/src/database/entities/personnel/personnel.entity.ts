@@ -212,6 +212,57 @@ export class PersonnelEntity extends BaseEntity {
   })
   availabilityConfirmedOn: Date;
 
+  @Column({
+    name: 'chips_last_ping',
+    type: 'date',
+    nullable: true,
+  })
+  chipsLastPing: Date;
+
+  @Column({
+    name: 'chips_last_action_date',
+    type: 'date',
+    nullable: true,
+  })
+  chipsLastActionDate: Date;  // Action date, ie. when their CHIPS profile was last updated
+
+  @Column({
+    name: 'chips_profile_missing',
+    type: 'boolean',
+    default: false,
+  })
+  chipsProfileMissing: boolean;
+
+  @Column({
+    name: 'chips_last_updated_properties',
+    type: 'jsonb',
+    default: () => "'{}'",
+  })
+  chipsLastUpdatedProperties: { [key: string]: string | object };
+
+  @Column({
+    name: 'chips_issues',
+    type: 'jsonb',
+    default: () => "'{}'",
+  })
+  chipsIssues: { [key: string]: string };
+
+  @Column({
+    name: 'chips_ignore_properties',
+    type: 'text',
+    array: true,
+    nullable: true,
+  })
+  chipsIgnoreProperties: string[];
+
+  @Column({
+    name: 'chips_training_data',
+    array: false,
+    type: 'jsonb',
+    default: () => "'[]'",
+  })
+  chipsTrainingData: Array<{ id: string, name: string, completed: string }>;
+
   toResponseObject(
     roles: Role[],
     lastDeployed?: string,

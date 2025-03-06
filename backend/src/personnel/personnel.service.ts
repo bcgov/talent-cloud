@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { format, eachDayOfInterval, parse, differenceInDays } from 'date-fns';
 import {
@@ -15,7 +15,7 @@ import { CreatePersonnelDTO } from './dto/create-personnel.dto';
 import { AvailabilityRO, PersonnelRO } from './ro';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
-import { Ministry, Section } from '../common/enums';
+import { ChipsMinistryName, Ministry, Section } from '../common/enums';
 import {
   AvailabilityType,
   AvailabilityTypeLabel,
@@ -34,6 +34,10 @@ import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
 import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
+import { ChipsResponse, mapToChipsResponse, mapToChipsTrainingResponse } from '../common/chips/chips-response';
+import axios from 'axios';
+import { RegionsAndLocationsService } from '../region-location/region-location.service';
+import { sampleData, sampleTrainingData } from '../common/chips/sample-data';
 
 @Injectable()
 export class PersonnelService {
@@ -46,6 +50,8 @@ export class PersonnelService {
     private toolsRepository: Repository<ToolsEntity>,
     @InjectRepository(CertificationEntity)
     private certificationRepository: Repository<CertificationEntity>,
+    @Inject(RegionsAndLocationsService)
+    private regionsAndLocationsService: RegionsAndLocationsService,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(PersonnelService.name);
@@ -991,5 +997,113 @@ export class PersonnelService {
     const activeBcwsPersonnel = await activeBcwsPersonnelQb.getMany();
 
     return { emcr: activeEmcrPersonnel, bcws: activeBcwsPersonnel };
+  }
+
+  async updatePersonnelChipsData(personnel: PersonnelEntity, data: ChipsResponse) {
+    let issues: { [key: string]: string } = {};
+    let ministry;
+    if (ChipsMinistryName[data.organization.trim()]) {
+      ministry = ChipsMinistryName[data.organization.trim()];
+    } else {
+      // Add to issues
+      issues.ministry = `${data.organization} not found in CORE ministries`;
+      ministry = personnel.ministry;
+    }
+
+    const allLocations = await this.regionsAndLocationsService.getAllLocations();
+    let workLocation = allLocations.find(l => l.locationName === data.workCity?.trim());
+    let homeLocation = allLocations.find(l => l.locationName === data.homeCity?.trim());
+    if (!homeLocation) {
+      // Add to issues
+      issues.homeLocation = `${data.homeCity} not found in CORE list of cities`;
+      homeLocation = personnel.homeLocation;
+    }
+    if (!workLocation) {
+      // Add to issues
+      issues.workLocation = `${data.workCity} not found in CORE list of cities`;
+      workLocation = personnel.workLocation;
+    }
+
+    if (data.name.split(',').length !== 2) {
+      issues.name = `Unable to parse name "${data.name}" from CHIPS.`;
+    }
+
+    const personnelUpdates: Partial<PersonnelEntity> = {
+      ...personnel,
+      employeeId: data.emplId,  // Ensure format
+      lastName: data.name.split(',')[0]?.trim() || personnel.firstName,
+      firstName: data.name.split(',')[1]?.trim() || personnel.lastName,
+      division: data.levelOne,
+      jobTitle: data.currentPositionTitle || personnel.jobTitle,
+      ministry,
+      workLocation,
+      homeLocation,
+      paylistId: data.deptId,
+      supervisorLastName: data.currentSupervisorName.split(',')[0],
+      supervisorFirstName: data.currentSupervisorName.split(',')[1],
+      supervisorEmail: data.currentSupervisorEmail,
+      chipsLastPing: new Date(),
+      chipsLastActionDate: data.actionDate,
+      chipsIssues: issues,
+    };
+    
+    const differences: { [key: string]: string | object } = {};
+    for (const key in personnelUpdates) {
+      if (key.includes('chips')) {
+        continue;
+      }
+      else if (key.includes('Location')) {
+        if (personnelUpdates[key]['id'] !== personnel[key]['id']) {
+          differences[key] = personnel[key];
+        }
+      }
+      else if (personnelUpdates[key] !== personnel[key]) {
+        differences[key] = personnel[key];
+      }
+    }
+    personnelUpdates.chipsLastUpdatedProperties = differences;
+    const trainingData = await this.getChipsTrainingData(personnel.employeeId);
+    personnelUpdates.chipsTrainingData = trainingData;
+    await this.personnelRepository.update(personnel.id, personnelUpdates);
+  }
+
+  async getChipsMemberData(memberEmail: string): Promise<ChipsResponse | null> {
+    if (process.env.TEST_CHIPS_RESPONSE === 'true') {
+      return mapToChipsResponse(sampleData);
+    }
+    const response = await axios.get(
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(Work_Email='${memberEmail}')`,
+      {
+        headers: {
+          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+        },
+      },
+    );
+    if (response?.data) {
+      return mapToChipsResponse(response.data);
+    } else {
+      this.logger.error(`No CHIPS profile for ${memberEmail}`);
+      return null;
+    }
+  }
+
+  async getChipsTrainingData(employeeId: string) {
+    if (process.env.TEST_CHIPS_RESPONSE === 'true') {
+      return sampleTrainingData.map(course => mapToChipsTrainingResponse(course));
+    }
+    const response = await axios.get(
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_TrainingData(EMPLID='${employeeId}')`,
+      {
+        headers: {
+          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+        },
+      },
+    );
+    if (response?.data?.value) {
+      return response.data.value.map(course => mapToChipsTrainingResponse(course));
+    } else {
+      this.logger.error(`No Training Data for ${employeeId}`);
+      return null;
+    }
   }
 }
