@@ -374,8 +374,10 @@ export class PersonnelService {
           `bcws_personnel.dateApproved > current_date - interval '5' day OR emcr_personnel.dateApproved > current_date - interval '5' day`,
         );
       }
-    }
-    if (availableStatus && availableStatus === AvailabilityTypeStatus.MISSED) {
+    } else if (
+      availableStatus &&
+      availableStatus === AvailabilityTypeStatus.MISSED
+    ) {
       queryBuilder.andWhere('recommitment.program = :program', {
         program,
       });
@@ -390,7 +392,7 @@ export class PersonnelService {
       });
     } else if (
       availableStatus &&
-      availableStatus === AvailabilityTypeStatus.OTHER
+      availableStatus === AvailabilityTypeStatus.NOT_RETURNING
     ) {
       queryBuilder.andWhere('recommitment.program = :program', {
         program,
@@ -398,7 +400,12 @@ export class PersonnelService {
       queryBuilder.andWhere('recommitment.year = :year', {
         year: new Date().getFullYear(),
       });
-      queryBuilder.andWhere('recommitment.status IS NOT NULL');
+      queryBuilder.andWhere('recommitment.status in (:...recommitmentStatus)', {
+        recommitmentStatus: [
+          RecommitmentStatus.SUPERVISOR_DENIED,
+          RecommitmentStatus.MEMBER_DENIED,
+        ],
+      });
     } else if (
       availableStatus &&
       availableStatus !== AvailabilityTypeStatus.ALL
@@ -659,7 +666,7 @@ export class PersonnelService {
     id: string,
     query: GetAvailabilityDTO,
   ): Promise<AvailabilityRO[]> {
-    const personnel = await this.personnelRepository.findOneByOrFail({id})
+    const personnel = await this.personnelRepository.findOneByOrFail({ id });
     const qb = this.availabilityRepository.createQueryBuilder('availability');
 
     const start = parse(query.from, 'yyyy-MM-dd', new Date());
@@ -681,18 +688,18 @@ export class PersonnelService {
 
     const dates = eachDayOfInterval({ start, end: endDate });
 
-
     const availableDates: AvailabilityRO[] = dates.map(
-      (date) => 
-
+      (date) =>
         availability
           .find((itm) => itm.date === format(date, 'yyyy-MM-dd'))
           ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
-          availabilityType: new Date(personnel.availabilityConfirmedUntil) >= new Date(date) ? AvailabilityTypeLabel.AVAILABLE : AvailabilityTypeLabel.NOT_INDICATED,
+          availabilityType:
+            new Date(personnel.availabilityConfirmedUntil) > new Date(date)
+              ? AvailabilityTypeLabel.AVAILABLE
+              : AvailabilityTypeLabel.NOT_INDICATED,
           deploymentCode: '',
-        }
-      
+        },
     );
     return availableDates;
   }
