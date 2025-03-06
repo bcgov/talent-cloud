@@ -4,11 +4,11 @@ import { IntakeFormDTO } from './dto/intake-form.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IntakeFormEntity } from '../database/entities/form/intake-form.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { Program, RequestWithRoles, Role } from '../auth/interface';
+import { Program, RequestWithRoles } from '../auth/interface';
 import { PersonnelService } from '../personnel/personnel.service';
 import { PersonnelRO } from '../personnel';
 import { FormStatusEnum } from '../common/enums/form-status.enum';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
+
 
 @Injectable()
 export class IntakeFormService {
@@ -24,6 +24,8 @@ export class IntakeFormService {
     req: RequestWithRoles,
     id: string,
   ): Promise<PersonnelRO> {
+    //TODO
+    console.log(id)
     await this.intakeFormRepository.save(
       this.intakeFormRepository.create({
         ...createIntakeFormDto,
