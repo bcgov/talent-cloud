@@ -8,17 +8,12 @@ export const useIntakeForm = () => {
   const [formData, setFormData] = useState<IntakeFormData>();
   const [loading, setLoading] = useState(false);
 
-  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
-
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
-        if (res.data.error) {
-          setAlreadyEnrolled(true);
-        }
-        setFormData({ ...res.data });
+        setFormData(res.data);
       } catch (e) {
         console.error(e);
       } finally {
@@ -45,7 +40,7 @@ export const useIntakeForm = () => {
     formData,
     setFormData,
     loading,
-    alreadyEnrolled,
+
     submitForm,
   };
 };

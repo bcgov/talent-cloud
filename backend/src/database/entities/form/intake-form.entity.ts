@@ -1,0 +1,50 @@
+import { FormStatusEnum } from '../../../common/enums/form-status.enum';
+import { IntakeFormRO } from '../../../intake-form/ro/intake-form.ro';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Program } from '../../../auth/interface';
+
+
+
+@Entity('intake_form')
+export class IntakeFormEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('jsonb', {default:{},  nullable:true,  array: false})
+  personnel?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    };
+
+  @Column({name: "created_by_email", nullable: true})
+  createdByEmail: string;
+
+  @CreateDateColumn({name: 'created_at'})  
+  createdAt: Date;
+
+  @UpdateDateColumn({name: 'updated_at', nullable: true}) 
+  updatedAt: Date;
+
+  @Column({name: 'status', nullable: true, type: 'enum', enum: FormStatusEnum}) 
+  status: FormStatusEnum;
+
+  @Column({name: 'program', nullable: true, type: 'enum', enum: Program}) 
+  program: Program;
+
+  toResponseObject(currentProgram?: Program): IntakeFormRO { 
+    return {
+      id: this.id,
+      personnel: this.personnel,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      createdByEmail: this.createdByEmail,
+      status: this.status ?? FormStatusEnum.DRAFT, 
+      program: this.program,
+      currentProgram: currentProgram 
+   }}
+
+   constructor(data: Partial<IntakeFormEntity>) { 
+    Object.assign(this, data)
+   }
+}
