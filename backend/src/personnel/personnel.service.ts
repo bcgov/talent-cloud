@@ -96,7 +96,7 @@ export class PersonnelService {
       where: { email },
       relations: ['emcr', 'bcws'],
     });
-  }
+  }                                       
 
   async findOneById(id: string): Promise<PersonnelEntity> {
     return this.personnelRepository.findOne({
