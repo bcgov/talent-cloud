@@ -1,7 +1,7 @@
 import { IsDate, IsEnum, IsJSON, IsOptional, IsString, ValidateIf } from "class-validator";
 import { CreatePersonnelDTO } from "../../personnel";
-import { FormStatusEnum } from "src/common/enums/form-status.enum";
-import { Program } from "src/auth/interface";
+import { FormStatusEnum } from "../../common/enums/form-status.enum";
+import { Program } from "../../auth/interface";
 
 export class IntakeFormRO{
   @IsString()
