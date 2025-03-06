@@ -16,11 +16,13 @@ export const MemberScheduler = ({
   openConfirmAvailability,
   showConfirmAvailability,
   handleShowSuccessConfirmationBanner,
+  handleShowConfirmAvailability,
 }: {
   personnelId: string;
   openConfirmAvailability: () => void;
   showConfirmAvailability: boolean;
   handleShowSuccessConfirmationBanner: () => void;
+  handleShowConfirmAvailability: () => void;
 }) => {
   const {
     availability,
@@ -46,6 +48,7 @@ export const MemberScheduler = ({
     await saveConfirmedUntil(date);
     openConfirmAvailability();
     handleShowSuccessConfirmationBanner();
+    handleShowConfirmAvailability();
     getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
@@ -94,7 +97,7 @@ export const MemberScheduler = ({
         open={showConfirmAvailability}
         onClose={openConfirmAvailability}
         handleOpen={openConfirmAvailability}
-        title={'Confirm and Send Updated Availability'}
+        title={'Confirm Availability'}
         style="sm:w-3/4 md:w-1/2 xl:w-1/3"
       >
         <AvailabilityConfirmation

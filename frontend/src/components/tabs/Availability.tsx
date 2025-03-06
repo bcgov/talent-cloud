@@ -81,7 +81,7 @@ export const MemberAvailabilityTab = ({
         details.{' '}
         <strong>
           {
-            'Remember to click "Confirm and Send" each time after updating your availability.'
+            'Remember to click "Confirm Availability" each time after updating your availability.'
           }
         </strong>{' '}
         Deployment dates can only be declined and cannot be edited.
@@ -122,6 +122,9 @@ export const MemberAvailabilityTab = ({
       setShowSuccessConfirmationBanner(false);
     }, 5000);
   };
+  const handleShowConfirmAvailability = () => {
+    setShowConfirmationWarningBanner(false);
+  };
   return (
     <>
       {member && recommitmentCycle && (
@@ -140,11 +143,11 @@ export const MemberAvailabilityTab = ({
         member.emcr?.status === Status.ACTIVE) && (
         <BannerTransition show={showConfirmationWarningBanner}>
           <Banner
-            onClose={() => setShowConfirmationWarningBanner(false)}
+            onClose={handleShowConfirmAvailability}
             content={
               <p className="text-sm text-yellow-900 xl:pr-12">
-                Remember to click “Confirm and Send” after saving all your changes.
-                Failure to do so will result in inaccurate updates for your
+                Remember to click “Confirm Availability” after saving all your
+                changes. Failure to do so will result in inaccurate updates for your
                 coordinator, which could impact your chances for deployment.
               </p>
             }
@@ -179,6 +182,7 @@ export const MemberAvailabilityTab = ({
             openConfirmAvailability={openConfirmAvailability}
             showConfirmAvailability={showConfirmAvailability}
             handleShowSuccessConfirmationBanner={handleShowSuccessConfirmationBanner}
+            handleShowConfirmAvailability={handleShowConfirmAvailability}
           />
         </ProfileSectionHeader>
       </div>

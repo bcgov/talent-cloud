@@ -16,11 +16,10 @@ const useAvailability = ({
   saveConfirmedUntil: (date: Date) => Promise<void>;
   schedulerRows: { [key: string]: SchedulerRowItem[] };
   saveAvailability: (dates: AvailabilityRange) => Promise<void>;
-  onChangeAvailabilityQuery: (from: string, to: string) => void;
+  onChangeAvailabilityQuery: (from: string, to: string) => Promise<void>;
 } => {
   const { AxiosPrivate } = useAxios();
   const [availability, setAvailability] = useState<Availability[]>([]);
-
   const [availabilityQuery, setAvailabilityQuery] = useState<{
     from: string;
     to: string;
@@ -44,7 +43,7 @@ const useAvailability = ({
       encodeURI(`/personnel/${personnelId}/availability`),
       dates,
     );
-    getAvailability(availabilityQuery.from, availabilityQuery.to);
+    await getAvailability(availabilityQuery.from, availabilityQuery.to);
   };
 
   const saveConfirmedUntil = async (date: Date) => {
@@ -54,9 +53,9 @@ const useAvailability = ({
       { date: date },
     );
   };
-  const onChangeAvailabilityQuery = (from: string, to: string) => {
+  const onChangeAvailabilityQuery = async (from: string, to: string) => {
     setAvailabilityQuery({ from, to });
-    getAvailability(from, to);
+    await getAvailability(from, to);
   };
 
   useEffect(() => {
