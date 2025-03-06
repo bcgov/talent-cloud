@@ -96,7 +96,7 @@ export class PersonnelService {
       where: { email },
       relations: ['emcr', 'bcws'],
     });
-  }
+  }                                       
 
   async findOneById(id: string): Promise<PersonnelEntity> {
     return this.personnelRepository.findOne({
@@ -689,7 +689,7 @@ export class PersonnelService {
           .find((itm) => itm.date === format(date, 'yyyy-MM-dd'))
           ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
-          availabilityType: new Date(personnel.availabilityConfirmedUntil) > new Date(date) ? AvailabilityTypeLabel.AVAILABLE : AvailabilityTypeLabel.NOT_INDICATED,
+          availabilityType: new Date(personnel.availabilityConfirmedUntil) >= new Date(date) ? AvailabilityTypeLabel.AVAILABLE : AvailabilityTypeLabel.NOT_INDICATED,
           deploymentCode: '',
         }
       
