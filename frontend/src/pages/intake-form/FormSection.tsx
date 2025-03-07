@@ -5,6 +5,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 import { Program } from '@/common';
 import { useFormikContext } from 'formik';
 import type { IntakeFormPersonnelData } from './fields';
+import { BannerType } from '@/common/enums/banner-enum';
+import { Banner } from '@/components/ui/Banner';
 
 export const FormSection = ({ section }: { section: FormSectionType }) => {
   const { values } = useFormikContext<IntakeFormPersonnelData>();
@@ -30,7 +32,19 @@ export const FormSection = ({ section }: { section: FormSectionType }) => {
                     }
                   })
                   ?.map((fieldItm) => (
-                    <FormField key={fieldItm.name} field={fieldItm} />
+                    <>
+                      {fieldItm.type === 'infoBox' ? (
+                        <div className="col-span-2">
+                          <Banner
+                            title={fieldItm.name}
+                            content={fieldItm.label}
+                            type={BannerType.INFO}
+                          />
+                        </div>
+                      ) : (
+                        <FormField key={fieldItm.name} field={fieldItm} />
+                      )}
+                    </>
                   ))}
               </div>
             </DisclosurePanel>
