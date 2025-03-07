@@ -13,12 +13,14 @@ import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { LoggerModule } from '../logger/logger.module';
 import { MailModule } from '../mail/mail.module';
 import { PersonnelTools } from '../database/entities/personnel/personnel-tools.entity';
+import { RegionsAndLocationsModule } from '../region-location/region-location.module';
 
 @Module({
   imports: [
     LoggerModule,
     MailModule,
     AuditModule,
+    RegionsAndLocationsModule,
     TypeOrmModule.forFeature([
       PersonnelEntity,
       AvailabilityEntity,

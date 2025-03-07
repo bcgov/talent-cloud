@@ -1,12 +1,13 @@
 import { StrictMode, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AppRoutes from './constants';
+      import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { Role } from '@/common';
 import { AuthProvider, RoleProvider } from '@/providers';
 import RoleProtectedRoute from './RoleProtectedRoute';
 import PrivateRoute from './PrivateRoute';
 import Redirect from './Redirect';
+
 
 const SupervisorDashboard = lazy(
   () => import('../pages/supervisor/SupervisorDashboard'),
@@ -18,6 +19,7 @@ const NotFound = lazy(() => import('../pages/NotFound'));
 const SplashPage = lazy(() => import('../pages/SplashPage'));
 const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 const Unauthenticated = lazy(() => import('../pages/Unauthenticated'));
+const IntakeForm = lazy(() => import('../pages/intake-form/IntakeForm'));
 
 export default () => {
   return (
@@ -28,14 +30,16 @@ export default () => {
             <Suspense fallback={<Loading />}>
               <Routes>
                 <Route path={AppRoutes.Root} element={<SplashPage />} />
+                
                 <Route path={AppRoutes.NotFound} element={<NotFound />} />
                 <Route
                   path={AppRoutes.Unauthenticated}
                   element={<Unauthenticated />}
                 />
-
+                
                 <Route element={<PrivateRoute />}>
                   <Route path={AppRoutes.Redirect} element={<Redirect />} />
+                  <Route path={AppRoutes.IntakeForm} element={<IntakeForm/>}/>
                   <Route
                     element={
                       <RoleProtectedRoute
@@ -43,6 +47,7 @@ export default () => {
                       />
                     }
                   >
+                    
                     <Route element={<Dashboard />} path={AppRoutes.Dashboard} />
                     <Route element={<Profile />} path={AppRoutes.Profile} />
                   </Route>

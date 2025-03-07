@@ -14,17 +14,20 @@ export const Button = ({
   textIcon,
 }: ButtonProps) => {
   const buttonClass = () => {
-    if (variant === ButtonTypes.PRIMARY) {
+    if (variant === ButtonTypes.PRIMARY || variant === ButtonTypes.OUTLINED) {
       return button.primaryButton;
     }
     if (variant === ButtonTypes.SECONDARY) {
       return button.secondaryButton;
     }
-    if (variant === ButtonTypes.TERTIARY) {
+    if (variant === ButtonTypes.TERTIARY || variant === ButtonTypes.SOLID) {
       return button.tertiaryButton;
     }
     if (variant === ButtonTypes.SECONDARY_LIGHT) {
       return button.secondaryLight;
+    }
+    if (variant === ButtonTypes.TEXT) {
+      return button.textButton;
     }
   };
 
@@ -38,7 +41,14 @@ export const Button = ({
       aria-label={text}
       className={buttonClass()}
     >
-      {loading ? <ButtonLoading /> : <div className="flex flex-row gap-1">{textIcon}{text}</div>}
+      {loading ? (
+        <ButtonLoading />
+      ) : (
+        <div className="flex flex-row gap-1">
+          {textIcon}
+          {text}
+        </div>
+      )}
     </button>
   );
 };

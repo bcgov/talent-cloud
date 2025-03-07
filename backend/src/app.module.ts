@@ -17,6 +17,7 @@ import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RecommitmentModule } from './recommitment/recommitment.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
+import { IntakeFormModule } from './intake-form/intake-form.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { RegionsAndLocationsModule } from './region-location/region-location.mod
         mount: true,
       },
     }),
+    IntakeFormModule,
   ],
   controllers: [AppController],
   providers: [

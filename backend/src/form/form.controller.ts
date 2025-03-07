@@ -47,6 +47,7 @@ export class FormSubmissionController {
     return {
       formId: process.env.CHEFS_FORM_ID,
       formEnabled: process.env.CHEFS_FORM_ENABLED === 'true',
+      env: process.env.ENV,
     };
   }
 }

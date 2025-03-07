@@ -16,6 +16,7 @@ const SplashPage = () => {
   };
   const [formId, setFormId] = useState<string>();
   const [formEnabled, setFormEnabled] = useState<boolean>(false);
+  const [env, setEnv] = useState();
 
   useEffect(() => {
     (async () => {
@@ -23,6 +24,7 @@ const SplashPage = () => {
 
       setFormId(data.formId);
       setFormEnabled(data.formEnabled);
+      setEnv(data.env);
     })();
   }, []);
 
@@ -52,7 +54,11 @@ const SplashPage = () => {
                     <span className="font-bold">CORE</span>
                     {` (Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
                     <a
-                      href={`https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`}
+                      href={
+                        env === 'prod'
+                          ? `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`
+                          : Routes.IntakeForm
+                      }
                     >
                       <span className="font-bold">here.</span>
                     </a>

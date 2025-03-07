@@ -188,6 +188,12 @@ export class PersonnelRO {
   emergencyContactPhoneNumber: string;
 
   @ApiProperty({
+    description: 'Emergency Contact Relationship',
+    required: false,
+  })
+  emergencyContactRelationship?: string;
+
+  @ApiProperty({
     description: 'Employee ID',
     required: false,
   })
@@ -198,6 +204,16 @@ export class PersonnelRO {
     required: false,
   })
   paylistId?: string;
+
+  @ApiProperty({description:'firstAidLevel', required: false})
+  firstAidLevel?: string
+  
+  @ApiProperty({description:'firstAidExpiry', required: false})
+  firstAidExpiry?: Date
+  
+  @ApiProperty({description:'psychologicalFirstAid', required: false})
+  psychologicalFirstAid?: boolean
+
 
   @ApiProperty()
   @Expose({ groups: ['emcr', 'member', 'supervisor'] })
