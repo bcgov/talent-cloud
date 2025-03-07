@@ -17,7 +17,7 @@ const IntakeForm = () => {
   const { keycloak } = useKeycloak();
   const { tokenParsed } = keycloak;
   const [selectedTab, setSelectedTab] = useState(0);
-  const { formData, saveUpdateForm, loading } = useIntakeForm();
+  const { formData, saveUpdateForm, loading, tabs } = useIntakeForm();
 
   if (!tokenParsed) {
     return;
@@ -61,14 +61,14 @@ const IntakeForm = () => {
                 className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
               >
                 <TabList className="flex flex-col">
-                  {[programTab, ...formTabs].map(({ label, value }, index) => (
+                  {[programTab, ...tabs].map(({ label, value }, index) => (
                     <Tab
                       key={value}
                       value={value}
                       onClick={() => handleSelectTab(value)}
                       className={clsx(
                         'data-[selected]:outline-none pb-16',
-                        index !== formTabs.length &&
+                        index !== tabs.length &&
                           'border-blue-800 border-l border-dashed',
                       )}
                     >

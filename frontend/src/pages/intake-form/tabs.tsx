@@ -6,7 +6,7 @@ import {
 } from '@/common/enums/language.enum';
 import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
 
-interface FormTab {
+export interface FormTab {
   description: React.ReactNode;
   label: string;
   sections?: FormSection[];
