@@ -90,7 +90,9 @@ export const RecommitmentProfileBanner = ({
         </span>
         Sorry to see you go! We hope to welcome you back to CORE in the future. You
         can change your decision any time before{' '}
-        <span className="font-bold">{endDate}</span>
+        <span className="font-bold">
+          {format(offsetTimezoneDate(endDate), 'MMM dd, yyyy')}
+        </span>
       </p>
     ),
     onClick: handleClick,
