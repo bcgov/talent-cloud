@@ -25,7 +25,7 @@ export const useIntakeForm = () => {
     })();
   }, []);
 
-  const saveUpdateForm = async (values: IntakeFormPersonnelData) => {
+  const saveUpdateForm = async (values: any) => {
     const res = await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
       ...formData,
       personnel: values,
