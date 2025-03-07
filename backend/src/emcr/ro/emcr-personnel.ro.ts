@@ -10,7 +10,7 @@ export class EmcrRO {
   secondChoiceFunction?: string;
 
   @ApiProperty()
-  thirdChoiceSection?: string;
+  thirdChoiceFunction?: string;
 
   @ApiProperty({
     description: 'Notes about Personnel - Only vieweable by coordinators',
@@ -32,6 +32,24 @@ export class EmcrRO {
     required: true,
   })
   icsTraining: boolean;
+
+  // @ApiProperty({})
+  // travelPreference: string;
+
+  // @ApiProperty({})
+  // firstNationExperienceLiving: boolean;
+
+  // @ApiProperty({})
+  // firstNationExperienceWorking: boolean;
+
+  // @ApiProperty({})
+  // peccExperience: boolean;
+
+  // @ApiProperty({})
+  // preocExperience: boolean;
+
+  // @ApiProperty({})
+  // emergencyExperience: boolean;
 
   @ApiProperty({
     description: 'Experience with functions',

@@ -293,6 +293,7 @@ export type PersonnelFormData = PersonalDetails &
 
 export type EmcrFormData = TravelDetails &
   SectionInterestEmcr &
+  SectionChoiceEmcr & 
   GeneralEmergencyManagementExperience & {
     functions: FunctionType[];
   };

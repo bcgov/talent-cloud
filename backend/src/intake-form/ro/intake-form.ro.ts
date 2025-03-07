@@ -1,7 +1,9 @@
 import { IsDate, IsEnum, IsJSON, IsOptional, IsString, ValidateIf } from "class-validator";
-import { CreatePersonnelDTO } from "../../personnel";
 import { FormStatusEnum } from "../../common/enums/form-status.enum";
 import { Program } from "../../auth/interface";
+import { IntakeFormPersonnelData } from "../types";
+
+
 
 export class IntakeFormRO{
   @IsString()
@@ -9,7 +11,7 @@ export class IntakeFormRO{
 
   @IsJSON()
   @IsOptional()
-  personnel: Partial<CreatePersonnelDTO>
+  personnel: Partial<IntakeFormPersonnelData>
 
   @IsDate()
   @IsOptional()
