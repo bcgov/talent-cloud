@@ -233,6 +233,7 @@ export class PersonnelEntity extends BaseEntity {
   })
   chipsProfileMissing: boolean;
 
+  // Key can be any property of personnel entity, value is the previous value
   @Column({
     name: 'chips_last_updated_properties',
     type: 'jsonb',
@@ -240,6 +241,7 @@ export class PersonnelEntity extends BaseEntity {
   })
   chipsLastUpdatedProperties: { [key: string]: string | object };
 
+  // Key can be any property of personnel entity, value is the error / issue
   @Column({
     name: 'chips_issues',
     type: 'jsonb',
@@ -247,6 +249,7 @@ export class PersonnelEntity extends BaseEntity {
   })
   chipsIssues: { [key: string]: string };
 
+  // Unused for now. Potentially for ignoring properties that will be incorrect
   @Column({
     name: 'chips_ignore_properties',
     type: 'text',
