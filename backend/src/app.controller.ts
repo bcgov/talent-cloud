@@ -1,5 +1,5 @@
-import { Request, Controller, Get, Inject } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request, Controller, Get, Inject, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheckService,
   HealthCheck,
@@ -117,15 +117,24 @@ export class AppController {
     return await this.recommitmentService.checkRecommitmentPeriod();
   }
 
+  @Public()
   @Get('/chips')
-  async chips() {
+  @ApiQuery({
+    name: 'email',
+    type: String,
+    description: 'Email',
+    required: false
+  })
+  async chips(
+    @Query("email") email?: string,
+  ) {
     if (process.env.ENV !== 'dev') {
       return {};
     }
     this.logger.log('CHIPS');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$top=100`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${email}')`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -144,14 +153,22 @@ export class AppController {
 
   @Public()
   @Get('/chipstraining')
-  async training() {
+  @ApiQuery({
+    name: 'govid',
+    type: String,
+    description: 'Email',
+    required: false
+  })
+  async training(
+    @Query("govid") govid?: string,
+  ) {
     if (process.env.ENV !== 'dev') {
       return {};
     }
     this.logger.log('TRAINING');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$top=100`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${govid}')`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,

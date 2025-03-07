@@ -98,6 +98,7 @@ services:
       TEST_RUN: ${TEST_RUN}
       VIEWS: ${VIEWS}
       RECOMMITMENT_MINISTRY: ${RECOMMITMENT_MINISTRY}
+      TEST_CHIPS_RESPONSE: ${TEST_CHIPS_RESPONSE}
     networks:
       - tc
   keycloak:
