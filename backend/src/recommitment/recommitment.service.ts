@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { addDays, isAfter } from 'date-fns';
 import { Repository } from 'typeorm';
-import { Program, RequestWithRoles, Role } from '../auth/interface';
+import { Program, RequestWithRoles } from '../auth/interface';
 import { BcwsService } from '../bcws/bcws.service';
 import { Status } from '../common/enums';
 import { RecommitmentStatus } from '../common/enums/recommitment-status.enum';
@@ -80,11 +80,11 @@ export class RecommitmentService {
       },
     );
 
-    const recommitment = await this.recommitmentRepository.findOneByOrFail({
+    const recommitment = await this.recommitmentRepository.findOneOrFail({ where: {
       personnelId: id,
       recommitmentCycleId: new Date().getFullYear(),
       program: key,
-    });
+    }, relations: ['personnel', 'recommitmentCycle'] });
 
     const otherProgram = key === Program.BCWS ? Program.EMCR : Program.BCWS;
     const personnel = await this.personnelService.findOneById(id);
@@ -167,11 +167,11 @@ export class RecommitmentService {
       },
     );
 
-    const recommitment = await this.recommitmentRepository.findOneByOrFail({
+    const recommitment = await this.recommitmentRepository.findOneOrFail({ where: {
       personnelId: id,
       recommitmentCycleId: new Date().getFullYear(),
       program: key,
-    });
+    }, relations: ['personnel', 'recommitmentCycle'] });
 
     if (isAfter(currentPST, addDays(recommitmentCycle.endDate, 1))) {
       if (recommitmentUpdate.bcws?.status === RecommitmentStatus.SUPERVISOR_APPROVED) {
