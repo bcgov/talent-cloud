@@ -27,10 +27,10 @@ export class IntakeFormService {
   ): Promise<PersonnelRO> {
     //TODO
     console.log(id);
-    // await this.intakeFormRepository.update(createIntakeFormDto.id, {
-    //   ...createIntakeFormDto,
-    //   status: FormStatusEnum.SUBMITTED,
+    // await this.intakeFormRepository.save({...createIntakeFormDto, 
+    //   status: FormStatusEnum.SUBMITTED
     // });
+
     await this.personnelService.findOneByEmail(
       req.idir,
     );
@@ -124,13 +124,11 @@ export class IntakeFormService {
 
     if (!existingform && personnel) {
 
-      const intakeForm = new IntakeFormEntity({
-        createdByEmail: req.idir,
-        status: FormStatusEnum.DRAFT,
-        program: personnel.emcr ? Program.BCWS : Program.EMCR,
-        personnel: {}
-      });
-
+      const intakeForm = new IntakeFormEntity()
+        intakeForm.createdByEmail= req.idir
+        intakeForm.status= FormStatusEnum.DRAFT
+        intakeForm.program=personnel.emcr ? Program.BCWS : Program.EMCR
+        intakeForm.personnel=this.mapPersonnelToForm(personnel)
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject(
         personnel.emcr ? Program.EMCR : Program.BCWS,
@@ -138,20 +136,22 @@ export class IntakeFormService {
     }
 
     if (!existingform && !personnel) {
-      const intakeForm = new IntakeFormEntity({
-        createdByEmail: req.idir,
-        status: FormStatusEnum.DRAFT,
-      });
+      const intakeForm = new IntakeFormEntity()
+      
+      intakeForm.createdByEmail= req.idir
+      intakeForm.status= FormStatusEnum.DRAFT
+      
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject();
+      
     }
   }
 
   async updateFormProgress(
     id: string,
-    form: Partial<IntakeFormDTO>,
+    form: IntakeFormDTO,
   ): Promise<UpdateResult> {
-    // return await this.intakeFormRepository.update(id, form);
-    return
+    return await this.intakeFormRepository.update(id, form);
+   
   }
 }

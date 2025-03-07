@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { EmcrExperienceRO } from './experience.ro';
+import { TravelPreference } from '../../common/enums/travel-preference.enum';
 
 export class EmcrRO {
   @ApiProperty()
@@ -33,23 +34,41 @@ export class EmcrRO {
   })
   icsTraining: boolean;
 
-  // @ApiProperty({})
-  // travelPreference: string;
+  @ApiProperty({
+    description: 'Travel Preferences',
+    required: false,
+  })
+  travelPreference?: TravelPreference;
 
-  // @ApiProperty({})
-  // firstNationExperienceLiving: boolean;
+  @ApiProperty({
+    description: 'Has experience living with First Nations',
+    required: false,
+  })
+  firstNationExperienceLiving?: boolean;
 
-  // @ApiProperty({})
-  // firstNationExperienceWorking: boolean;
+  @ApiProperty({
+    description: 'Has experience working with First Nations',
+    required: false,
+  })
+  firstNationExperienceWorking?: boolean;
 
-  // @ApiProperty({})
-  // peccExperience: boolean;
+  @ApiProperty({
+    description: 'Has experience with PECC',
+    required: false,
+  })
+  peccExperience?: boolean;
 
-  // @ApiProperty({})
-  // preocExperience: boolean;
+  @ApiProperty({
+    description: 'Has experience with PREOC',
+    required: false,
+  })
+  preocExperience?: boolean;
 
-  // @ApiProperty({})
-  // emergencyExperience: boolean;
+  @ApiProperty({
+    description: 'Has experience with Emergency Response',
+    required: false,
+  })
+  emergencyExperience?: boolean;
 
   @ApiProperty({
     description: 'Experience with functions',

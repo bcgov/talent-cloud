@@ -54,7 +54,5 @@ export class IntakeFormEntity {
     };
   }
 
-  constructor(data: Partial<IntakeFormDTO|IntakeFormEntity>) {
-    Object.assign(this, data);
-  }
+  
 }

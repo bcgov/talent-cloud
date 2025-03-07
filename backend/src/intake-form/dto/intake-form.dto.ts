@@ -4,23 +4,23 @@ import { IsOptional, ValidateIf } from "class-validator";
 import { Program } from "../../auth/interface";
 import { CreatePersonnelBcwsDTO } from "../../bcws/dto";
 import { CreatePersonnelDTO } from "../../personnel";
+import { IntakeFormPersonnelData } from "../types";
 
 export class IntakeFormDTO {
   @ApiProperty({
-    description: 'BCWS information for the personnel',
+    description: 'Form ID',
     required: false,
-    type: CreatePersonnelDTO,
+    
   })
   @IsOptional()
-  @ValidateIf((o) => o.bcws)
-  @Type(() => CreatePersonnelDTO) 
-  personnel: CreatePersonnelDTO; 
+  id?: string;
 
   @ApiProperty({
-    description: 'BCWS information for the personnel',
+    description: 'Personnel Data on form',
     required: false,
-    type: CreatePersonnelBcwsDTO,
+    
   })
   @IsOptional()
-  program: Program
+  personnel: IntakeFormPersonnelData; 
+
 }

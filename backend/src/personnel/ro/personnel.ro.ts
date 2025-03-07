@@ -205,14 +205,14 @@ export class PersonnelRO {
   })
   paylistId?: string;
 
-  // @ApiProperty({description:'firstAidLevel', required: false})
-  // firstAidLevel?: string
+  @ApiProperty({description:'firstAidLevel', required: false})
+  firstAidLevel?: string
   
-  // @ApiProperty({description:'firstAidExpiry', required: false})
-  // firstAidExpiry?: Date
+  @ApiProperty({description:'firstAidExpiry', required: false})
+  firstAidExpiry?: Date
   
-  // @ApiProperty({description:'psychologicalFirstAid', required: false})
-  // psychologicalFirstAid?: boolean
+  @ApiProperty({description:'psychologicalFirstAid', required: false})
+  psychologicalFirstAid?: boolean
 
 
   @ApiProperty()
