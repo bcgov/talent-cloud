@@ -13,10 +13,12 @@ export const FormField = ({ field }: { field: FormFields }) => {
     placeholder,
     options,
     helper,
+    colspan,
+    hideLabel,
   } = field;
   return (
-    <div key={name}>
-      <label htmlFor={name}>
+    <div key={name} className={colspan ? `col-span-${colspan}` : ''}>
+      <label htmlFor={name} className={hideLabel ? 'invisible' : ''}>
         {label}
         {required && <span className="font-bold text-red-500">*</span>}
       </label>

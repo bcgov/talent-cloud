@@ -19,7 +19,7 @@ export const renderField = (
       return <SelectField {...fieldItm} {...fieldProps} />;
     case 'radio-group':
       return <RadioGroupField {...fieldItm} {...fieldProps} />;
-    case 'checkbox-group':
+    case 'checkbox':
       return <CheckboxGroupField {...fieldItm} {...fieldProps} />;
     default:
       return <TextField {...fieldItm} {...fieldProps} />;

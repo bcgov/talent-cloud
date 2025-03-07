@@ -526,7 +526,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'bcws.roles',
             label: 'BCWS Roles',
-            type: 'checkbox-group',
+            type: 'checkbox',
             required: true,
             options: [],
           },
