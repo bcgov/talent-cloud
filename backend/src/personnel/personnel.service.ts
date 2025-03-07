@@ -695,7 +695,7 @@ export class PersonnelService {
           ?.toResponseObject() ?? {
           date: format(date, 'yyyy-MM-dd'),
           availabilityType:
-            new Date(personnel.availabilityConfirmedUntil) > new Date(date)
+            new Date(personnel.availabilityConfirmedUntil) >= new Date(date)
               ? AvailabilityTypeLabel.AVAILABLE
               : AvailabilityTypeLabel.NOT_INDICATED,
           deploymentCode: '',
