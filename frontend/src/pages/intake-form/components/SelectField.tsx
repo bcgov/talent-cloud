@@ -51,7 +51,7 @@ export const SelectField = (
   const options = getOptions();
 
   return (
-    <select className={classes.menu.container} {...props} {...field}>
+    <select className={classes.menu.container} {...props} {...field} value={undefined} defaultValue={''}>
       <option disabled value={''}>
         {props.placeholder}
       </option>

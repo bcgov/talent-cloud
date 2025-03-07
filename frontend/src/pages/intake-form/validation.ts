@@ -60,7 +60,7 @@ export const liaisonDetailsSchema = Yup.object().shape({
 });
 
 export const travelDetailsSchema = Yup.object().shape({
-  travelPreferences: Yup.string(),
+  travelPreference: Yup.string().required('Travel Preference is required'),
 });
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
@@ -170,4 +170,12 @@ export const intakeFormValidationSchema = Yup.object().shape({
   supervisorLastName: Yup.string().required("Supervisor's last name is required"),
   supervisorEmail: Yup.string().required("Supervisor's email is required"),
   supervisorPhone: Yup.string(),
+
+  liaisonUnknown: Yup.string(),
+  liaisonFirstName: Yup.string(),
+  liaisonLastName: Yup.string(),
+  liaisonEmail: Yup.string(),
+  liaisonPhone: Yup.string(),
+
+  travelPreference: Yup.string().required('Travel preference is required'),
 });

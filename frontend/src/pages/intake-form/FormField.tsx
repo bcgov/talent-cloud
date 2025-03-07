@@ -5,10 +5,20 @@ import { renderField } from './helpers';
 import type { FormFields } from './types';
 
 export const FormField = ({ field }: { field: FormFields }) => {
-  const { name, label, required, type, placeholder, options, helper } = field;
+  const {
+    name,
+    label,
+    required,
+    type,
+    placeholder,
+    options,
+    helper,
+    colspan,
+    hideLabel,
+  } = field;
   return (
-    <div key={name}>
-      <label htmlFor={name}>
+    <div key={name} className={colspan ? `col-span-${colspan}` : ''}>
+      <label htmlFor={name} className={hideLabel ? 'invisible' : ''}>
         {label}
         {required && <span className="font-bold text-red-500">*</span>}
       </label>
