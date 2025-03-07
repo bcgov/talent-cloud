@@ -22,7 +22,6 @@ const IntakeForm = () => {
   if (!tokenParsed) {
     return;
   }
-
   const handleSelectTab = (value: any) => {
     setSelectedTab(value);
   };

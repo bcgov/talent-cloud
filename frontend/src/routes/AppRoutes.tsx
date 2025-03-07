@@ -1,6 +1,6 @@
 import { StrictMode, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AppRoutes from './constants';
+      import AppRoutes from './constants';
 import { Loading } from '@/components';
 import { Role } from '@/common';
 import { AuthProvider, RoleProvider } from '@/providers';

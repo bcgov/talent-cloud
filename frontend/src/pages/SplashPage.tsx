@@ -52,7 +52,7 @@ const SplashPage = () => {
                     <span className="font-bold">CORE</span>
                     {` (Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
                     <a
-                      href={Routes.IntakeForm}
+                      href={process.env.ENV === 'prod' ? `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}` : Routes.IntakeForm}
                     >
                       <span className="font-bold">here.</span>
                     </a>
