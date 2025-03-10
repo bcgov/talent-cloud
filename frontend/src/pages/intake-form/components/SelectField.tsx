@@ -8,7 +8,6 @@ import { SectionName } from '@/common/enums/sections.enum';
 export const SelectField = (
   props: FormFields & FormikProps<IntakeFormPersonnelData>,
 ) => {
-  
   const { values } = useFormikContext<IntakeFormPersonnelData>();
   const [field] = useField(props.name);
   const { functions, locations, sections, tools, certificates } =
@@ -50,21 +49,7 @@ export const SelectField = (
     }
   };
   const options = getOptions();
-// console.log(field.name)
-// console.log(values[field.name as keyof typeof values])
 
-// console.log(values?.emcr?.firstChoiceFunction)
-
-// const getDisabled = () => {
-//   if (values.program && field.name.includes(values.program)){
-//     console.log(values.program)
-//     console.log('bcws field')
-//   }
-//   if (field.name.includes('emcr')){
-// console.log('emcr field')
-//   }
-//   return false
-// }
   return (
     <select className={classes.menu.container} {...props} {...field}>
       <option disabled value={''}>

@@ -138,6 +138,7 @@ const IntakeForm = () => {
                     <Button
                       text="Cancel"
                       variant={ButtonTypes.TEXT}
+                      // TODO: Save and navigate?
                       onClick={() => console.log('clicked')}
                     />
                     <Button
