@@ -1006,6 +1006,12 @@ export class PersonnelService {
     return { emcr: activeEmcrPersonnel, bcws: activeBcwsPersonnel };
   }
 
+  async updatePersonnelChipsLastPing(personnel: PersonnelEntity) {
+    await this.personnelRepository.update(personnel.id, {
+      chipsLastPing: new Date(),
+    });
+  }
+
   async updatePersonnelChipsData(personnel: PersonnelEntity, data: ChipsResponse) {
     const issues: { [key: string]: string } = {};
     let ministry;

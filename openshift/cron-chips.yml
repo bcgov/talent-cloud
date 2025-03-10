@@ -1,0 +1,203 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+labels:
+  app: ${APP_NAME}
+parameters:
+  - name: APP_NAME
+    description: App name that OpenShift objects will be prefixed with
+    required: true
+  - name: ENV
+    description: Environment name
+    value: dev
+    required: true
+  - name: IMAGE_NAMESPACE
+    description: Namespace from which to pull the image
+    required: true
+  - name: IMAGE_TAG
+    description: Image tag from image stream
+    value: latest
+    required: true
+  - name: CONFIG_VERSION
+    description: The github repository version of Config (Commit SHA)
+    value: default
+objects:
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: ${APP_NAME}-cronjob-chips
+    spec:
+      schedule: 0 0 0 0 0
+      concurrencyPolicy: 'Replace'
+      startingDeadlineSeconds: 10
+      successfulJobsHistoryLimit: 1
+      failedJobsHistoryLimit: 1
+      jobTemplate:
+        spec:
+          activeDeadlineSeconds: 1200
+          replicas: 3
+          template:
+            metadata:
+              labels:
+                parent: 'cronjobpi'
+            spec:
+              restartPolicy: OnFailure
+              activeDeadlineSeconds: 1200
+              containers:
+              - name: ${APP_NAME}-cron-chips
+                image: image-registry.openshift-image-registry.svc:5000/${IMAGE_NAMESPACE}/${APP_NAME}-server:${IMAGE_TAG}
+                activeDeadlineSeconds: 1200
+                resources:
+                  limits:
+                    cpu: 150m
+                    memory: 256Mi
+                  requests:
+                    cpu: 50m
+                    memory: 128Mi
+                terminationMessagePath: /dev/termination-log
+                terminationMessagePolicy: File
+                imagePullPolicy: Always
+                command:
+                  - ./node_modules/.bin/ts-node 
+                  - -e
+                  - 'require("./dist/jobs/chips.js")'
+                env:
+                - name: ENV
+                  valueFrom:
+                    configMapKeyRef:
+                      key: app-env
+                      name: ${APP_NAME}-server-config
+                - name: NODE_ENV
+                  value: production
+                - name: PORT
+                  value: '3000'
+                - name: CONFIG_VERSION
+                  value: ${CONFIG_VERSION}
+                - name: DB_HOST
+                  value: ${APP_NAME}-patroni
+                - name: DB_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-db-name
+                      name: ${APP_NAME}-patroni-creds
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-db-username
+                      name: ${APP_NAME}-patroni-creds
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-db-password
+                      name: ${APP_NAME}-patroni-creds
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      key: realm
+                      name: ${APP_NAME}-keycloak
+                - name: KEYCLOAK_AUTH_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: auth-url
+                      name: ${APP_NAME}-keycloak
+                - name: KEYCLOAK_CLIENT
+                  valueFrom:
+                    secretKeyRef:
+                      key: client
+                      name: ${APP_NAME}-keycloak
+                - name: CHES_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_client_id
+                      name: ${APP_NAME}-ches
+                - name: CHES_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_client_secret
+                      name: ${APP_NAME}-ches
+                - name: CHES_API
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_api
+                      name: ${APP_NAME}-ches
+                - name: CHES_AUTH_API
+                  valueFrom:
+                    secretKeyRef:
+                      key: ches_auth_api
+                      name: ${APP_NAME}-ches
+                - name: MODE
+                  valueFrom:
+                    secretKeyRef:
+                      key: mode
+                      name: ${APP_NAME}-ches
+                - name: CHEFS_API
+                  valueFrom:
+                    secretKeyRef:
+                      key: base_url
+                      name: ${APP_NAME}-chefs
+                - name: CHEFS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: api_key
+                      name: ${APP_NAME}-chefs
+                - name: CHEFS_WS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: token
+                      name: ${APP_NAME}-chefs
+                - name: CHEFS_FORM_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: form_id
+                      name: ${APP_NAME}-chefs
+                - name: CHEFS_FORM_ENABLED
+                  valueFrom:
+                    secretKeyRef:
+                      key: enabled
+                      name: ${APP_NAME}-chefs
+                - name: CHIPS_API
+                  valueFrom:
+                    secretKeyRef:
+                      key: base_url
+                      name: ${APP_NAME}-chips
+                - name: CHIPS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: api_key
+                      name: ${APP_NAME}-chips
+                - name: BCWS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: bcws_token
+                      name: ${APP_NAME}-bcws
+                - name: TEST_EMAIL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: test_email
+                      name: ${APP_NAME}-recommitment
+                - name: NOTIFICATION_SCHEDULE
+                  valueFrom:
+                    configMapKeyRef:
+                      key: notification_schedule
+                      name: ${APP_NAME}-recommitment
+                - name: START_RECOMMITMENT_SCHEDULE
+                  valueFrom:
+                    configMapKeyRef:
+                      key: start_recommitment_schedule
+                      name: ${APP_NAME}-recommitment
+                - name: END_RECOMMITMENT_SCHEDULE
+                  valueFrom:
+                    configMapKeyRef:
+                      key: end_recommitment_schedule
+                      name: ${APP_NAME}-recommitment
+                - name: TEST_RUN
+                  valueFrom:
+                    configMapKeyRef:
+                      key: test_run
+                      name: ${APP_NAME}-recommitment
+                - name: VIEWS
+                  valueFrom:
+                    configMapKeyRef:
+                      key: views
+                      name: ${APP_NAME}-recommitment
+            
+  
