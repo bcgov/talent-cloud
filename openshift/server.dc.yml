@@ -216,6 +216,11 @@ objects:
                     configMapKeyRef:
                       key: test_run
                       name: ${APP_NAME}-recommitment
+                - name: TEST_CHIPS_RESPONSE
+                  valueFrom:
+                    configMapKeyRef:
+                      key: test_chips_response
+                      name: ${APP_NAME}-chips
                 - name: VIEWS
                   valueFrom:
                     configMapKeyRef:

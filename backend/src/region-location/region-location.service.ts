@@ -36,5 +36,7 @@ export class RegionsAndLocationsService {
     return location.toResponseObject();
   }
 
-  
+  async getAllLocations(): Promise<LocationEntity[]> {
+    return this.locationRepository.find();
+  }
 }
