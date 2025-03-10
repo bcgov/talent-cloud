@@ -22,7 +22,7 @@ export const FormPage = ({
   fields?: FormFields[];
 }) => {
   const { values } = useFormikContext<IntakeFormPersonnelData>();
-  console.log(values);
+
   return (
     <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
       <h3>{title ?? label}</h3>
