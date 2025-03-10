@@ -2,6 +2,7 @@ export type FieldType = {
   name: string;
   label: string;
   type: string;
+  colspan?: string;
   required: boolean;
   disabled: boolean;
   autoComplete?: string;

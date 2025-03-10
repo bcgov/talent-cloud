@@ -11,7 +11,6 @@ export interface FormFields {
   program?: string;
   disabledProgram?: boolean;
   colspan?: number;
-  hideLabel?: boolean;
 }
 
 export interface FormSection {

@@ -42,7 +42,9 @@ export const FormSection = ({ section }: { section: FormSectionType }) => {
                           />
                         </div>
                       ) : (
-                        <FormField key={fieldItm.name} field={fieldItm} />
+                        <div className={`col-span-${fieldItm.colspan || '1'} flex flex-col justify-end w-full h-full`}>
+                          <FormField key={fieldItm.name} field={fieldItm} />
+                        </div>
                       )}
                     </>
                   ))}

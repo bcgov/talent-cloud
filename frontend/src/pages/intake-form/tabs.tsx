@@ -227,13 +227,12 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'liaisonUnknownCheckbox',
-            label: 'I am unsure who my liaison is',
+            label: '',
             type: 'checkbox',
             required: false,
             placeholder: '',
-            program: 'bcws',
+            program: Program.BCWS,
             colspan: 2,
-            hideLabel: true,
             options: [
               {
                 label: 'I am unsure who my liaison is',
@@ -248,7 +247,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: false,
             placeholder: 'John',
-            program: 'bcws',
+            program: Program.BCWS,
           },
           {
             name: 'liaisonLastName',
@@ -256,7 +255,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: false,
             placeholder: 'Smith',
-            program: 'bcws',
+            program: Program.BCWS,
           },
           {
             name: 'liaisonEmail',
@@ -264,7 +263,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: false,
             placeholder: 'johnsmith@gov.bc.ca',
-            program: 'bcws',
+            program: Program.BCWS,
           },
           {
             name: 'liaisonPhoneNumber',
@@ -272,18 +271,30 @@ export const formTabs: FormTab[] = [
             type: 'tel',
             required: false,
             placeholder: '000-000-0000',
-            program: 'bcws',
+            program: Program.BCWS,
           },
           {
-            name: 'travelPreference',
-            label: 'Travel Preferences (for deployment',
+            name: 'emcr.travelPreference',
+            label: 'EMCR - Travel Preferences (for deployment)',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
             options: [
-              { label: 'Option 1', value: 'travel1' },
-              { label: 'Option 2', value: 'travel2' },
+              { label: 'EMCR Travel Option 1', value: 'emcrTravel1' },
+              { label: 'EMCR Travel Option 2', value: 'emcrTravel2' },
             ],
+          },
+          {
+            name: 'bcws.travelPreference',
+            label: 'BCWS - Travel Preferences (for deployment)',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'BCWS - Option 1', value: 'bcwsTravel1' },
+              { label: 'BCWS - Option 2', value: 'bcwsTravel2' },
+            ],
+            program: Program.BCWS,
           },
         ],
       },
@@ -314,14 +325,9 @@ export const formTabs: FormTab[] = [
           {
             name: 'emergencyRelationship',
             label: 'Emergency Contract Relationship',
-            type: 'select',
+            type: 'text',
             required: true,
-            placeholder: 'Select an option',
-            options: [
-              { label: 'Sibling', value: 'sibling' },
-              { label: 'Friend', value: 'friend' },
-              { label: 'Spouse', value: 'spouse' },
-            ],
+            placeholder: 'Spouse',
           },
         ],
       },
@@ -422,13 +428,12 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'emcr.functions',
-            label: 'Emcr Function Experiences',
+            label: '',
             type: 'checkbox',
             required: false,
             placeholder: '',
-            program: 'emcr',
+            program: Program.EMCR,
             colspan: 2,
-            hideLabel: true,
             options: [
               {
                 label: 'Advance Planning Unit',
