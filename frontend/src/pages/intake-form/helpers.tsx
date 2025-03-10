@@ -5,7 +5,6 @@ import type { IntakeFormPersonnelData } from './fields';
 import type { FormFields } from './types';
 import { RadioGroupField } from './components/RadioGroupField';
 import { CheckboxGroupField } from './components/CheckBoxGroupField';
-import { CheckboxField } from './components/Checkbox';
 
 export const renderField = (
   fieldItm: FormFields,
@@ -21,8 +20,6 @@ export const renderField = (
     case 'radio':
       return <RadioGroupField {...fieldItm} {...fieldProps} />;
     case 'checkbox':
-      return <CheckboxField {...fieldItm} {...fieldProps} />;
-    case 'checkbox-group':
       return <CheckboxGroupField {...fieldItm} {...fieldProps} />;
     default:
       return <TextField {...fieldItm} {...fieldProps} />;

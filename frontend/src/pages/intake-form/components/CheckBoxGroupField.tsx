@@ -1,14 +1,23 @@
-import { Checkbox } from '@headlessui/react';
+// formik
+import { FormikProps } from 'formik';
 
-export const CheckboxGroupField = () =>
-  // TODO
-  // props: FormFields & FormikProps<IntakeFormPersonnelData>,
-  {
-    return (
-      <div>
-        <Checkbox value="1">Option 1</Checkbox>
-        <Checkbox value="2">Option 2</Checkbox>
-        <Checkbox value="3">Option 3</Checkbox>
-      </div>
-    );
-  };
+// fields
+import { FormFields } from '../types';
+import { IntakeFormPersonnelData } from '../fields';
+
+export const CheckboxGroupField = (
+  props: FormFields & FormikProps<IntakeFormPersonnelData>,
+) => {
+  return (
+    <div className="w-full h-full flex flex-col font-normal h-10 mt-2 text-sm text-ellipsis text-nowrap gap-2 text-defaultGray truncate ">
+      {props?.options?.map((itm) => {
+        return (
+          <div key={itm.name}>
+            <input type="checkbox" name={itm.name} value={itm.value} />{' '}
+            <label className="font-normal">{itm.label}</label>
+          </div>
+        );
+      })}
+    </div>
+  );
+};

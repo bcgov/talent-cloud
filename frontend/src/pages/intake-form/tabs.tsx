@@ -226,7 +226,7 @@ export const formTabs: FormTab[] = [
             placeholder: '000-000-0000',
           },
           {
-            name: 'liaisonUnknown',
+            name: 'liaisonUnknownCheckbox',
             label: 'I am unsure who my liaison is',
             type: 'checkbox',
             required: false,
@@ -234,6 +234,13 @@ export const formTabs: FormTab[] = [
             program: 'bcws',
             colspan: 2,
             hideLabel: true,
+            options: [
+              {
+                label: 'I am unsure who my liaison is',
+                value: 'false',
+                name: 'liaisonUnknown',
+              },
+            ],
           },
           {
             name: 'liaisonFirstName',
@@ -280,7 +287,44 @@ export const formTabs: FormTab[] = [
           },
         ],
       },
-      { name: 'Emergency Contact Details', fields: [] },
+      {
+        name: 'Emergency Contact Details',
+        fields: [
+          {
+            name: 'emergencyFirstName',
+            label: 'Emergency Contact First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'John',
+          },
+          {
+            name: 'emergencyLastName',
+            label: 'Emergency Contact Last Name',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'emergencyPhone',
+            label: 'Emergency Contact Phone Number',
+            type: 'tel',
+            required: true,
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'emergencyRelationship',
+            label: 'Emergency Contract Relationship',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'Sibling', value: 'sibling' },
+              { label: 'Friend', value: 'friend' },
+              { label: 'Spouse', value: 'spouse' },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
@@ -294,7 +338,56 @@ export const formTabs: FormTab[] = [
       {
         program: Program.EMCR,
         name: 'General Emergency Management Experience',
-        fields: [],
+        fields: [
+          {
+            name: 'emergencyExperience',
+            label:
+              'Do you have any direct experience related to emergency management?',
+            type: 'radio',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'preocExperience',
+            label:
+              'Do you have any experience working in a Provincial Regional Emergency Operation Centre (PREOC)?',
+            type: 'radio',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'peccExperience',
+            label:
+              'Do you have any experience working in a Provincial Emergency Coordination Centre (PECC)?',
+            type: 'radio',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'firstNationsWorking',
+            label:
+              'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
+            type: 'radio',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+        ],
       },
       {
         program: Program.EMCR,
@@ -330,9 +423,64 @@ export const formTabs: FormTab[] = [
           {
             name: 'emcr.functions',
             label: 'Emcr Function Experiences',
-            type: 'checkbox-group',
-            required: true,
-            options: [],
+            type: 'checkbox',
+            required: false,
+            placeholder: '',
+            program: 'emcr',
+            colspan: 2,
+            hideLabel: true,
+            options: [
+              {
+                label: 'Advance Planning Unit',
+                value: 'false',
+                name: 'advancePlanningUnit',
+              },
+              {
+                label: 'Deputy Director',
+                value: 'false',
+                name: 'deputyDirector',
+              },
+              {
+                label: 'Emergency Support Services (ESS)',
+                value: 'false',
+                name: 'ess',
+              },
+              {
+                label: 'Finance',
+                value: 'false',
+                name: 'finance',
+              },
+              {
+                label: 'First Nations Branch',
+                value: 'false',
+                name: 'firstNationsBranch',
+              },
+              {
+                label: 'Liaison',
+                value: 'false',
+                name: 'liaison',
+              },
+              {
+                label: 'Logistics',
+                value: 'false',
+                name: 'logistics',
+              },
+              {
+                label: 'Operations',
+                value: 'false',
+                name: 'operations',
+              },
+              {
+                label: 'Planning',
+                value: 'false',
+                name: 'planning',
+              },
+              {
+                label: 'Recovery',
+                value: 'false',
+                name: 'recovery',
+              },
+            ],
           },
         ],
       },
@@ -370,7 +518,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'bcws.roles',
             label: 'BCWS Roles',
-            type: 'checkbox-group',
+            type: 'checkbox',
             required: true,
             options: [],
           },

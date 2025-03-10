@@ -75,10 +75,10 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
 });
 
 export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
-  directExperience: Yup.boolean().required(),
+  emergencyExperience: Yup.boolean().required(),
   preocExperience: Yup.boolean().required(),
   peccExperience: Yup.boolean().required(),
-  indigenousExperience: Yup.boolean().required(),
+  firstNationsWorking: Yup.boolean().required(),
 });
 
 export const sectionChoiceEmcrSchema = Yup.object().shape({
@@ -178,4 +178,18 @@ export const intakeFormValidationSchema = Yup.object().shape({
   liaisonPhone: Yup.string(),
 
   travelPreference: Yup.string().required('Travel preference is required'),
+
+  emergencyFirstName: Yup.string().required(
+    "Emergency contact's first name is required",
+  ),
+  emergencyLastName: Yup.string().required(
+    "Emergency contact's last name is required",
+  ),
+  emergencyPhone: Yup.string().required("Emergency contact's phone is required"),
+  emergencyRelationship: Yup.string().required('Relationship is required'),
+
+  emergencyExperience: Yup.boolean().required(),
+  preocExperience: Yup.boolean().required(),
+  peccExperience: Yup.boolean().required(),
+  firstNationsWorking: Yup.boolean().required(),
 });

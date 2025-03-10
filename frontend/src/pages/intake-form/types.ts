@@ -3,7 +3,7 @@ export interface FormFields {
   hidden?: boolean;
   label: string;
   name: string;
-  options?: { label: string; value: string; disabled?: boolean }[];
+  options?: { label: string; value: string; disabled?: boolean, name?: string }[];
   placeholder?: string;
   required?: boolean;
   type: string;
