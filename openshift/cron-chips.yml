@@ -29,7 +29,7 @@ objects:
       schedule: 0 0 0 0 0
       concurrencyPolicy: 'Replace'
       startingDeadlineSeconds: 10
-      successfulJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 1
       jobTemplate:
         spec:
