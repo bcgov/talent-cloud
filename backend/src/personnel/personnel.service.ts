@@ -1006,6 +1006,17 @@ export class PersonnelService {
     return { emcr: activeEmcrPersonnel, bcws: activeBcwsPersonnel };
   }
 
+  async getChipsPersonnelToUpdate(): Promise<PersonnelEntity[]> {
+    const qb = this.personnelRepository.createQueryBuilder('personnel');
+    qb.leftJoinAndSelect('personnel.emcr', 'emcr');
+    qb.leftJoinAndSelect('personnel.bcws', 'bcws');
+    qb.andWhere('bcws.status = :status OR emcr.status = :status', { status: Status.ACTIVE });
+    qb.andWhere('personnel.chipsProfileMissing = false');
+    qb.andWhere('personnel.chipsLastPing < current_date');
+    qb.take(10);
+    return qb.getMany();
+  }
+
   async updatePersonnelChipsLastPing(personnel: PersonnelEntity) {
     await this.personnelRepository.update(personnel.id, {
       chipsLastPing: new Date(),

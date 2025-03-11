@@ -8,35 +8,29 @@ import { PersonnelService } from '../personnel/personnel.service';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { Status } from '../common/enums';
 import { isAfter } from 'date-fns';
+import { ChipsAppModule } from '../modules/chips-app.module';
 
 
 (async () => {
   if (!datasource) {
     await datasource.initialize();
   }
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(ChipsAppModule, {
     rawBody: true,
     bufferLogs: true,
   });
 
   const logger = new AppLogger();
   try {
-    const personnelRepository = datasource.getRepository(PersonnelEntity);
-    const qb = personnelRepository.createQueryBuilder('personnel');
-    qb.leftJoinAndSelect('personnel.emcr', 'emcr');
-    qb.leftJoinAndSelect('personnel.bcws', 'bcws');
-    qb.andWhere('bcws.status = :status OR emcr.status = :status', { status: Status.ACTIVE });
-    qb.andWhere('personnel.chipsProfileMissing = false');
-    qb.andWhere('personnel.chipsLastPing < current_date');
-    qb.take(10);
-    const personnel = await qb.getMany();
+    logger.log(`Starting CHIPS updates`);
+    const personnelService = app.get(PersonnelService);
+    const personnel = await personnelService.getChipsPersonnelToUpdate();
 
     if (personnel.length === 0) {
       logger.log(`No personnel left to update from CHIPS`);
       return;
     }
 
-    const personnelService = app.get(PersonnelService);
     for (const p of personnel) {
       const chipsResponse = await personnelService.getChipsMemberData(p.email);
       if (
