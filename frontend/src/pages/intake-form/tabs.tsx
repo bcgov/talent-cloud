@@ -21,7 +21,7 @@ export const programTab = {
     {
       name: 'program',
       label: 'Program Selection',
-      type: 'radio',
+      type: 'radio-group',
       options: [
         { label: 'Both', value: Program.ALL },
         { label: 'EMCR', value: Program.EMCR },
@@ -228,7 +228,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'liaisonUnknownCheckbox',
             label: '',
-            type: 'checkbox',
+            type: 'checkbox-group',
             required: false,
             placeholder: '',
             program: Program.BCWS,
@@ -275,7 +275,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'emcr.travelPreference',
-            label: 'EMCR - Travel Preferences (for deployment)',
+            label: 'EMCR Travel Preferences (for deployment)',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
@@ -283,10 +283,12 @@ export const formTabs: FormTab[] = [
               { label: 'EMCR Travel Option 1', value: 'emcrTravel1' },
               { label: 'EMCR Travel Option 2', value: 'emcrTravel2' },
             ],
+            program: Program.EMCR,
+            colspan: 2,
           },
           {
             name: 'bcws.travelPreference',
-            label: 'BCWS - Travel Preferences (for deployment)',
+            label: 'BCWS Travel Preferences (for deployment)',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
@@ -295,6 +297,7 @@ export const formTabs: FormTab[] = [
               { label: 'BCWS - Option 2', value: 'bcwsTravel2' },
             ],
             program: Program.BCWS,
+            colspan: 2,
           },
         ],
       },
@@ -324,7 +327,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'emergencyRelationship',
-            label: 'Emergency Contract Relationship',
+            label: 'Emergency Contact Relationship',
             type: 'text',
             required: true,
             placeholder: 'Spouse',
@@ -349,7 +352,7 @@ export const formTabs: FormTab[] = [
             name: 'emergencyExperience',
             label:
               'Do you have any direct experience related to emergency management?',
-            type: 'radio',
+            type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -361,7 +364,7 @@ export const formTabs: FormTab[] = [
             name: 'preocExperience',
             label:
               'Do you have any experience working in a Provincial Regional Emergency Operation Centre (PREOC)?',
-            type: 'radio',
+            type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -373,7 +376,7 @@ export const formTabs: FormTab[] = [
             name: 'peccExperience',
             label:
               'Do you have any experience working in a Provincial Emergency Coordination Centre (PECC)?',
-            type: 'radio',
+            type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -385,7 +388,7 @@ export const formTabs: FormTab[] = [
             name: 'firstNationsWorking',
             label:
               'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
-            type: 'radio',
+            type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -429,7 +432,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'emcr.functions',
             label: '',
-            type: 'checkbox',
+            type: 'checkbox-group',
             required: false,
             placeholder: '',
             program: Program.EMCR,
@@ -523,7 +526,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'bcws.roles',
             label: 'BCWS Roles',
-            type: 'checkbox',
+            type: 'checkbox-group',
             required: true,
             options: [],
           },

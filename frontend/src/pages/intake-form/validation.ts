@@ -154,7 +154,7 @@ export const intakeFormValidationSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   primaryPhone: Yup.string().required('Primary phone is required'),
-  secondaryPhone: Yup.string(),
+  secondaryPhone: Yup.string().optional(),
   homeLocation: Yup.string().required('Home location is required'),
 
   jobTitle: Yup.string().required('Job title is required'),
@@ -169,13 +169,13 @@ export const intakeFormValidationSchema = Yup.object().shape({
   supervisorFirstName: Yup.string().required("Supervisor's first name is required"),
   supervisorLastName: Yup.string().required("Supervisor's last name is required"),
   supervisorEmail: Yup.string().required("Supervisor's email is required"),
-  supervisorPhone: Yup.string(),
+  supervisorPhone: Yup.string().optional(),
 
-  liaisonUnknown: Yup.string(),
-  liaisonFirstName: Yup.string(),
-  liaisonLastName: Yup.string(),
-  liaisonEmail: Yup.string(),
-  liaisonPhone: Yup.string(),
+  liaisonUnknown: Yup.string().optional(),
+  liaisonFirstName: Yup.string().optional(),
+  liaisonLastName: Yup.string().optional(),
+  liaisonEmail: Yup.string().optional(),
+  liaisonPhone: Yup.string().optional(),
 
   travelPreference: Yup.string().required('Travel preference is required'),
 
