@@ -30,7 +30,7 @@ const SplashPage = () => {
     title: 'Welcome to CORE Team',
     subtitle: 'Coordinated Operation Response in Emergencies',
     description: {
-      pt1: 'This is the staffing system (previously known as TEAMS – Temporary Emergency Assignment Management System) that maintains a roster of employees from numerous ministries in the BC Government who have a combination of interest, skills, and experience to work within EMCR operation centres and BCWS fire centres to support communities in emergency management and wildfire response across the province.',
+      pt1: 'This is the staffing system that maintains a roster of employees from numerous ministries in the BC Government who have a combination of interest, skills, and experience to work within Emergency Management and Climate Readiness (EMCR) operation centres and BC Wildfire Service (BCWS) centres to support communities in emergency management and wildfire response across the province.',
     },
     login: {
       title: 'Login',
@@ -74,8 +74,50 @@ const SplashPage = () => {
               <span className="text-info lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
             </div>
-            <div>
+            <div className="flex flex-col gap-16">
               <p className="leading-loose">{content.description.pt1}</p>
+              <div>
+                <p className="font-bold">
+                  To learn more about each CORE Team program stream, visit:{' '}
+                </p>
+                <ul className="list-disc list-inside text-primaryBlue">
+                  <li>
+                    <a href="#" className="hover:underline">
+                      EMCR CORE Team program stream intranet page{' '}
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:underline">
+                      BCWS CORE Team program stream intranet page{' '}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div className="w-full drop-shadow-md rounded-md">
+                <div className="w-full bg-grayBackground px-[24px] py-[12px]">
+                  <p className="font-bold text-lg">Contact Information</p>
+                </div>
+                <div className="w-full bg-white pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[16px]">
+                  <div>
+                    <p className="font-bold">EMCR CORE Team:</p>
+                    <a
+                      className="text-primaryBlue hover:underline"
+                      href="mailto:EMCR.CORETeam@gov.bc.ca"
+                    >
+                      EMCR.CORETeam@gov.bc.ca
+                    </a>
+                  </div>
+                  <div>
+                    <p className="font-bold">BCWS CORE Team:</p>
+                    <a
+                      className="text-primaryBlue hover:underline"
+                      href="mailto:BCWS.CORETeam@gov.bc.ca"
+                    >
+                      EMCR.CORETeam@gov.bc.ca
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {/* Small Screen Login in Section */}
