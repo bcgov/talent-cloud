@@ -21,7 +21,7 @@ export const programTab = {
     {
       name: 'program',
       label: 'Program Selection',
-      type: 'radio',
+      type: 'radio-group',
       options: [
         { label: 'Both', value: Program.ALL },
         { label: 'EMCR', value: Program.EMCR },
@@ -106,6 +106,7 @@ export const formTabs: FormTab[] = [
             ],
             helper:
               'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
+            colspan: 2,
           },
         ],
       },
@@ -224,9 +225,115 @@ export const formTabs: FormTab[] = [
             required: false,
             placeholder: '000-000-0000',
           },
+          {
+            name: 'liaisonUnknownCheckbox',
+            label: '',
+            type: 'checkbox-group',
+            required: false,
+            placeholder: '',
+            program: Program.BCWS,
+            colspan: 2,
+            options: [
+              {
+                label: 'I am unsure who my liaison is',
+                value: 'false',
+                name: 'liaisonUnknown',
+              },
+            ],
+          },
+          {
+            name: 'liaisonFirstName',
+            label: 'Liaison First Name',
+            type: 'text',
+            required: false,
+            placeholder: 'John',
+            program: Program.BCWS,
+          },
+          {
+            name: 'liaisonLastName',
+            label: 'Liaison Last Name',
+            type: 'text',
+            required: false,
+            placeholder: 'Smith',
+            program: Program.BCWS,
+          },
+          {
+            name: 'liaisonEmail',
+            label: 'Liaison Email',
+            type: 'text',
+            required: false,
+            placeholder: 'johnsmith@gov.bc.ca',
+            program: Program.BCWS,
+          },
+          {
+            name: 'liaisonPhoneNumber',
+            label: 'Liaison Phone Number',
+            type: 'tel',
+            required: false,
+            placeholder: '000-000-0000',
+            program: Program.BCWS,
+          },
+          {
+            name: 'emcr.travelPreference',
+            label: 'EMCR Travel Preferences (for deployment)',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'EMCR Travel Option 1', value: 'emcrTravel1' },
+              { label: 'EMCR Travel Option 2', value: 'emcrTravel2' },
+            ],
+            program: Program.EMCR,
+            colspan: 2,
+          },
+          {
+            name: 'bcws.travelPreference',
+            label: 'BCWS Travel Preferences (for deployment)',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            options: [
+              { label: 'BCWS - Option 1', value: 'bcwsTravel1' },
+              { label: 'BCWS - Option 2', value: 'bcwsTravel2' },
+            ],
+            program: Program.BCWS,
+            colspan: 2,
+          },
         ],
       },
-      { name: 'Emergency Contact Details', fields: [] },
+      {
+        name: 'Emergency Contact Details',
+        fields: [
+          {
+            name: 'emergencyFirstName',
+            label: 'Emergency Contact First Name',
+            type: 'text',
+            required: true,
+            placeholder: 'John',
+          },
+          {
+            name: 'emergencyLastName',
+            label: 'Emergency Contact Last Name',
+            type: 'text',
+            required: true,
+            placeholder: 'Smith',
+          },
+          {
+            name: 'emergencyPhone',
+            label: 'Emergency Contact Phone Number',
+            type: 'tel',
+            required: true,
+            placeholder: '000-000-0000',
+          },
+          {
+            name: 'emergencyRelationship',
+            label: 'Emergency Contact Relationship',
+            type: 'text',
+            required: true,
+            placeholder: 'Spouse',
+          },
+        ],
+      },
     ],
   },
   {
@@ -240,7 +347,56 @@ export const formTabs: FormTab[] = [
       {
         program: Program.EMCR,
         name: 'General Emergency Management Experience',
-        fields: [],
+        fields: [
+          {
+            name: 'emergencyExperience',
+            label:
+              'Do you have any direct experience related to emergency management?',
+            type: 'radio-group',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'preocExperience',
+            label:
+              'Do you have any experience working in a Provincial Regional Emergency Operation Centre (PREOC)?',
+            type: 'radio-group',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'peccExperience',
+            label:
+              'Do you have any experience working in a Provincial Emergency Coordination Centre (PECC)?',
+            type: 'radio-group',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+          {
+            name: 'firstNationsWorking',
+            label:
+              'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
+            type: 'radio-group',
+            options: [
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ],
+            required: true,
+            colspan: 2,
+          },
+        ],
       },
       {
         program: Program.EMCR,
@@ -275,10 +431,64 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'emcr.functions',
-            label: 'Emcr Function Experiences',
+            label: '',
             type: 'checkbox-group',
-            required: true,
-            options: [],
+            required: false,
+            placeholder: '',
+            program: Program.EMCR,
+            colspan: 2,
+            options: [
+              {
+                label: 'Advance Planning Unit',
+                value: 'false',
+                name: 'advancePlanningUnit',
+              },
+              {
+                label: 'Deputy Director',
+                value: 'false',
+                name: 'deputyDirector',
+              },
+              {
+                label: 'Emergency Support Services (ESS)',
+                value: 'false',
+                name: 'ess',
+              },
+              {
+                label: 'Finance',
+                value: 'false',
+                name: 'finance',
+              },
+              {
+                label: 'First Nations Branch',
+                value: 'false',
+                name: 'firstNationsBranch',
+              },
+              {
+                label: 'Liaison',
+                value: 'false',
+                name: 'liaison',
+              },
+              {
+                label: 'Logistics',
+                value: 'false',
+                name: 'logistics',
+              },
+              {
+                label: 'Operations',
+                value: 'false',
+                name: 'operations',
+              },
+              {
+                label: 'Planning',
+                value: 'false',
+                name: 'planning',
+              },
+              {
+                label: 'Recovery',
+                value: 'false',
+                name: 'recovery',
+              },
+            ],
           },
         ],
       },

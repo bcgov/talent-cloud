@@ -60,7 +60,7 @@ export const liaisonDetailsSchema = Yup.object().shape({
 });
 
 export const travelDetailsSchema = Yup.object().shape({
-  travelPreferences: Yup.string(),
+  travelPreference: Yup.string().required('Travel Preference is required'),
 });
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
@@ -75,10 +75,10 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
 });
 
 export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
-  directExperience: Yup.boolean().required(),
+  emergencyExperience: Yup.boolean().required(),
   preocExperience: Yup.boolean().required(),
   peccExperience: Yup.boolean().required(),
-  indigenousExperience: Yup.boolean().required(),
+  firstNationsWorking: Yup.boolean().required(),
 });
 
 export const sectionChoiceEmcrSchema = Yup.object().shape({
@@ -154,7 +154,7 @@ export const intakeFormValidationSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   primaryPhone: Yup.string().required('Primary phone is required'),
-  secondaryPhone: Yup.string(),
+  secondaryPhone: Yup.string().optional(),
   homeLocation: Yup.string().required('Home location is required'),
 
   jobTitle: Yup.string().required('Job title is required'),
@@ -169,5 +169,27 @@ export const intakeFormValidationSchema = Yup.object().shape({
   supervisorFirstName: Yup.string().required("Supervisor's first name is required"),
   supervisorLastName: Yup.string().required("Supervisor's last name is required"),
   supervisorEmail: Yup.string().required("Supervisor's email is required"),
-  supervisorPhone: Yup.string(),
+  supervisorPhone: Yup.string().optional(),
+
+  liaisonUnknown: Yup.string().optional(),
+  liaisonFirstName: Yup.string().optional(),
+  liaisonLastName: Yup.string().optional(),
+  liaisonEmail: Yup.string().optional(),
+  liaisonPhone: Yup.string().optional(),
+
+  travelPreference: Yup.string().required('Travel preference is required'),
+
+  emergencyFirstName: Yup.string().required(
+    "Emergency contact's first name is required",
+  ),
+  emergencyLastName: Yup.string().required(
+    "Emergency contact's last name is required",
+  ),
+  emergencyPhone: Yup.string().required("Emergency contact's phone is required"),
+  emergencyRelationship: Yup.string().required('Relationship is required'),
+
+  emergencyExperience: Yup.boolean().required(),
+  preocExperience: Yup.boolean().required(),
+  peccExperience: Yup.boolean().required(),
+  firstNationsWorking: Yup.boolean().required(),
 });

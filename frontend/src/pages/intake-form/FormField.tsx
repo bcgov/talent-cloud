@@ -5,7 +5,15 @@ import { renderField } from './helpers';
 import type { FormFields } from './types';
 
 export const FormField = ({ field }: { field: FormFields }) => {
-  const { name, label, required, type, placeholder, options, helper } = field;
+  const {
+    name,
+    label,
+    required,
+    type,
+    placeholder,
+    options,
+    helper,
+  } = field;
   return (
     <div key={name}>
       <label htmlFor={name}>
