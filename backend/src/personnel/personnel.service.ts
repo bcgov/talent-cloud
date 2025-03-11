@@ -1008,18 +1008,21 @@ export class PersonnelService {
 
   async getChipsPersonnelToUpdate(): Promise<PersonnelEntity[]> {
     const qb = this.personnelRepository.createQueryBuilder('personnel');
-    qb.leftJoinAndSelect('personnel.emcr', 'emcr');
-    qb.leftJoinAndSelect('personnel.bcws', 'bcws');
-    qb.andWhere('bcws.status = :status OR emcr.status = :status', { status: Status.ACTIVE });
+    qb.leftJoin('personnel.emcr', 'emcr');
+    qb.leftJoin('personnel.bcws', 'bcws');
+    qb.leftJoinAndSelect('personnel.workLocation', 'workLocation');
+    qb.leftJoinAndSelect('personnel.homeLocation', 'homeLocation');
+    qb.andWhere('(bcws.status = :status OR emcr.status = :status)', { status: Status.ACTIVE });
     qb.andWhere('personnel.chipsProfileMissing = false');
-    qb.andWhere('personnel.chipsLastPing < current_date');
-    qb.take(10);
+    qb.andWhere('(personnel.chipsLastPing < current_date OR personnel.chipsLastPing IS NULL)');
+    qb.limit(10);
     return qb.getMany();
   }
 
   async updatePersonnelChipsLastPing(personnel: PersonnelEntity) {
     await this.personnelRepository.update(personnel.id, {
       chipsLastPing: new Date(),
+      updatedAt: personnel.updatedAt,
     });
   }
 
@@ -1088,6 +1091,7 @@ export class PersonnelService {
     personnelUpdates.chipsLastUpdatedProperties = differences;
     const trainingData = await this.getChipsTrainingData(personnel.employeeId);
     personnelUpdates.chipsTrainingData = trainingData;
+
     await this.personnelRepository.update(personnel.id, personnelUpdates);
   }
 
@@ -1127,7 +1131,7 @@ export class PersonnelService {
       return response.data.value.map(course => mapToChipsTrainingResponse(course));
     } else {
       this.logger.error(`No Training Data for ${employeeId}`);
-      return null;
+      return [];
     }
   }
 }

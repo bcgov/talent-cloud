@@ -1,12 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { AppModule } from '../app.module';
-import { datePST } from '../common/helpers';
 import { AppLogger } from '../logger/logger.service';
 import { datasource } from '../database/datasource';
 import { PersonnelService } from '../personnel/personnel.service';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
-import { Status } from '../common/enums';
 import { isAfter } from 'date-fns';
 import { ChipsAppModule } from '../modules/chips-app.module';
 
@@ -34,7 +30,10 @@ import { ChipsAppModule } from '../modules/chips-app.module';
     for (const p of personnel) {
       const chipsResponse = await personnelService.getChipsMemberData(p.email);
       if (
-        isAfter(chipsResponse.actionDate, p.chipsLastActionDate) &&
+        (
+          isAfter(chipsResponse.actionDate, p.chipsLastActionDate) ||
+          !p.chipsLastActionDate
+        ) &&
         isAfter(chipsResponse.actionDate, p.updatedAt)
       ) {
         logger.log(`Updating personnel ${p.id} from CHIPS`);
