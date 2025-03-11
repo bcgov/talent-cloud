@@ -1136,7 +1136,7 @@ export class PersonnelService {
       );
     }
     const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_TrainingData(EMPLID='${employeeId}')`,
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${employeeId}')`,
       {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
