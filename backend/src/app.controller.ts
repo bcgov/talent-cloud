@@ -176,8 +176,8 @@ export class AppController {
       this.logger.log(typeof response.data);
       this.logger.log(response.data);
       this.logger.log(response.data.length);
-      response.data.forEach((d) => console.log(d));
-      return response.data;
+      const responseString = `[${response.data}]`;
+      return JSON.parse(responseString);
     } catch (e) {
       this.logger.error('ERROR');
       this.logger.error(e);

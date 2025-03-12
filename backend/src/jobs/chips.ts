@@ -22,23 +22,33 @@ import { PersonnelService } from '../personnel/personnel.service';
       logger.log(`No personnel left to update from CHIPS`);
       return;
     }
-    logger.error(
+    logger.log(
       `CHIPS: Checking updates for '${personnel.map((p) => p.id).join('; ')}`,
     );
 
     for (const p of personnel) {
       const chipsResponse = await personnelService.getChipsMemberData(p.email);
-      if (
-        (isAfter(chipsResponse.actionDate, p.chipsLastActionDate) ||
-          !p.chipsLastActionDate) &&
-        isAfter(chipsResponse.actionDate, p.updatedAt)
-      ) {
-        logger.log(`Updating personnel ${p.id} from CHIPS`);
-        personnelUpdates += 1;
-        await personnelService.updatePersonnelChipsData(p, chipsResponse);
-      } else {
-        logger.log(`No CHIPS personnel update for ${p.id}`);
-        await personnelService.updatePersonnelChipsLastPing(p);
+      if (chipsResponse?.success && chipsResponse.data) {
+        if (
+          (isAfter(chipsResponse.data.actionDate, p.chipsLastActionDate) ||
+            !p.chipsLastActionDate) &&
+          isAfter(chipsResponse.data.actionDate, p.updatedAt)
+        ) {
+          logger.log(`Updating personnel ${p.id} from CHIPS`);
+          personnelUpdates += 1;
+          await personnelService.updatePersonnelChipsData(
+            p,
+            chipsResponse.data,
+          );
+        } else {
+          logger.log(`No CHIPS personnel update for ${p.id}`);
+          await personnelService.updatePersonnelChipsMeta(p);
+        }
+      } else if (!chipsResponse?.success) {
+        logger.log(
+          `No CHIPS data available for ${p.id}, setting profile missing to TRUE`,
+        );
+        await personnelService.updatePersonnelChipsMeta(p, true);
       }
     }
   } catch (error) {
