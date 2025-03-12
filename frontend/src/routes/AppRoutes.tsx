@@ -18,6 +18,7 @@ const NotFound = lazy(() => import('../pages/NotFound'));
 const SplashPage = lazy(() => import('../pages/SplashPage'));
 const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 const Unauthenticated = lazy(() => import('../pages/Unauthenticated'));
+const IntakeForm = lazy(() => import('../pages/intake-form/IntakeForm'));
 
 export default () => {
   return (
@@ -28,6 +29,7 @@ export default () => {
             <Suspense fallback={<Loading />}>
               <Routes>
                 <Route path={AppRoutes.Root} element={<SplashPage />} />
+
                 <Route path={AppRoutes.NotFound} element={<NotFound />} />
                 <Route
                   path={AppRoutes.Unauthenticated}
@@ -36,6 +38,7 @@ export default () => {
 
                 <Route element={<PrivateRoute />}>
                   <Route path={AppRoutes.Redirect} element={<Redirect />} />
+                  <Route path={AppRoutes.IntakeForm} element={<IntakeForm />} />
                   <Route
                     element={
                       <RoleProtectedRoute

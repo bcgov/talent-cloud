@@ -1091,7 +1091,6 @@ export class PersonnelService {
     personnelUpdates.chipsLastUpdatedProperties = differences;
     const trainingData = await this.getChipsTrainingData(personnel.employeeId);
     personnelUpdates.chipsTrainingData = trainingData;
-
     await this.personnelRepository.update(personnel.id, personnelUpdates);
   }
 
