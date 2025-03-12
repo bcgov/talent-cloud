@@ -1,14 +1,25 @@
+// react
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import { FormField } from './FormField';
-import type { FormSection as FormSectionType } from './types';
-import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
-import { useFormikContext } from 'formik';
-import type { IntakeFormValues } from './fields';
-import { BannerType } from '@/common/enums/banner-enum';
-import { Banner } from '@/components/ui/Banner';
-import { handleFilterProgram } from './helpers';
 import { Fragment } from 'react';
+
+// formik
+import { useFormikContext } from 'formik';
+
+// form
+import type { IntakeFormValues } from './fields';
+import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 import { FieldGroup } from './components/FieldGroup';
+import { FormField } from './FormField';
+
+// types
+import type { FormSection as FormSectionType } from './types';
+
+// util
+import {
+  handleFilterProgram,
+  intakeFormComponents,
+  renderIntakeFormComponent,
+} from './helpers';
 
 export const FormSection = ({
   program,
@@ -45,14 +56,8 @@ export const FormSection = ({
                   )
                   ?.map((fieldItm) => (
                     <Fragment key={fieldItm.name}>
-                      {fieldItm.type === 'infoBox' ? (
-                        <div className="col-span-2">
-                          <Banner
-                            title={fieldItm.name}
-                            content={fieldItm.label}
-                            type={BannerType.INFO}
-                          />
-                        </div>
+                      {intakeFormComponents.includes(fieldItm.type) ? (
+                        renderIntakeFormComponent(fieldItm)
                       ) : fieldItm.type === 'field-group' ? (
                         <FieldGroup
                           field={fieldItm}

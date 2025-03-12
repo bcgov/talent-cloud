@@ -14,7 +14,7 @@ export const RadioGroupField = (
     <>
       <div role="group" aria-labelledby="my-radio-group" className="flex flex-col">
         {props?.options?.map((itm) => (
-          <label key={itm.value}>
+          <label key={itm.value} className="flex flex-row gap-2 items-center">
             <Field type="radio" name={props.name} value={itm.value} />
             {itm.label}
           </label>

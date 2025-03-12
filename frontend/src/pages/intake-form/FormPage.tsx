@@ -1,13 +1,24 @@
-import { FormField } from './FormField';
-import type { FormFields } from './types';
+// react
 import { Fragment } from 'react';
-import { FormSection } from './FormSection';
-import { Banner } from '@/components/ui/Banner';
-import { BannerType } from '@/common/enums/banner-enum';
-import { handleFilterProgram } from './helpers';
-import type { FormTab } from './tabs';
+
+// formik
 import { useFormikContext } from 'formik';
+
+// types
+import type { FormFields } from './types';
+
+// form
+import type { FormTab } from './tabs';
 import type { IntakeFormValues } from './fields';
+import { FormField } from './FormField';
+import { FormSection } from './FormSection';
+
+// util
+import {
+  handleFilterProgram,
+  intakeFormComponents,
+  renderIntakeFormComponent,
+} from './helpers';
 
 export const FormPage = ({
   getOptions,
@@ -41,27 +52,26 @@ export const FormPage = ({
             />
           ))}
       </div>
-
-      {fields &&
-        fields
-          ?.filter((itm) =>
-            itm.program ? handleFilterProgram(itm, program ?? null) : true,
-          )
-          .map((fieldItm: FormFields) => (
-            <Fragment key={fieldItm.name}>
-              {fieldItm.type === 'infoBox' ? (
-                <div className="col-span-2">
-                  <Banner content={fieldItm.label} type={BannerType.INFO} />
-                </div>
-              ) : (
-                <FormField
-                  key={fieldItm.name}
-                  formField={fieldItm}
-                  getOptions={getOptions}
-                />
-              )}
-            </Fragment>
-          ))}
+      <div className="flex flex-col space-y-[36px] w-full">
+        {fields &&
+          fields
+            ?.filter((itm) =>
+              itm.program ? handleFilterProgram(itm, program ?? null) : true,
+            )
+            .map((fieldItm: FormFields) => (
+              <Fragment key={fieldItm.name}>
+                {intakeFormComponents.includes(fieldItm.type) ? (
+                  renderIntakeFormComponent(fieldItm)
+                ) : (
+                  <FormField
+                    key={fieldItm.name}
+                    formField={fieldItm}
+                    getOptions={getOptions}
+                  />
+                )}
+              </Fragment>
+            ))}
+      </div>
     </div>
   );
 };
