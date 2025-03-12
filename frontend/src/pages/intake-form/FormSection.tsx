@@ -1,12 +1,12 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { FormField } from './FormField';
-import type { FormFields, FormSection as FormSectionType } from './types';
+import type { FormSection as FormSectionType } from './types';
 import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
 import { useFormikContext } from 'formik';
 import type { IntakeFormValues } from './fields';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
-import { handleFilterProgram, handleSetValues } from './helpers';
+import { handleFilterProgram } from './helpers';
 import { Fragment } from 'react';
 import { FieldGroup } from './components/FieldGroup';
 
@@ -22,11 +22,7 @@ export const FormSection = ({
     program?: string,
   ) => { label: string; value: string; disabled?: boolean; name?: string }[];
 }) => {
-  const { values, setValues } = useFormikContext<IntakeFormValues>();
-
-  const addField = (field: FormFields) => {
-    setValues((prev: IntakeFormValues) => handleSetValues(prev, field));
-  };
+  const { values } = useFormikContext<IntakeFormValues>();
 
   return (
     <div key={section.name} className="border-1 border-gray-200 ">
@@ -60,7 +56,6 @@ export const FormSection = ({
                       ) : fieldItm.type === 'field-group' ? (
                         <FieldGroup
                           field={fieldItm}
-                          addField={addField}
                           getOptions={getOptions}
                           values={
                             values[fieldItm.name as keyof typeof values] as string[]

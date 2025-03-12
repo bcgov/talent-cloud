@@ -62,13 +62,3 @@ export const dynamicFields: { [key: string]: any } = {
     languageProficiency: '',
   },
 };
-
-export const handleSetValues = (prev: any, field: FormFields) => {
-  return {
-    ...prev,
-    [field.name]: [
-      ...prev[field.name],
-      dynamicFields[field.name as keyof typeof dynamicFields],
-    ],
-  };
-};
