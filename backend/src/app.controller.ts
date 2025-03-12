@@ -5,6 +5,7 @@ import {
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import axios from 'axios';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
 import { BcwsService } from './bcws/bcws.service';
@@ -14,7 +15,6 @@ import { AppLogger } from './logger/logger.service';
 import { PersonnelService } from './personnel/personnel.service';
 import { RecommitmentService } from './recommitment/recommitment.service';
 import { RegionsAndLocationsService } from './region-location/region-location.service';
-import axios from 'axios';
 
 @ApiTags('Application API')
 @Controller()
@@ -123,11 +123,9 @@ export class AppController {
     name: 'email',
     type: String,
     description: 'Email',
-    required: false
+    required: false,
   })
-  async chips(
-    @Query("email") email?: string,
-  ) {
+  async chips(@Query('email') email?: string) {
     if (process.env.ENV !== 'dev') {
       return {};
     }
@@ -157,11 +155,9 @@ export class AppController {
     name: 'govid',
     type: String,
     description: 'Email',
-    required: false
+    required: false,
   })
-  async training(
-    @Query("govid") govid?: string,
-  ) {
+  async training(@Query('govid') govid?: string) {
     if (process.env.ENV !== 'dev') {
       return {};
     }
@@ -177,6 +173,10 @@ export class AppController {
       );
       this.logger.log('SUCCESS');
       this.logger.log(response);
+      this.logger.log(typeof response.data);
+      this.logger.log(response.data);
+      this.logger.log(response.data.length);
+      response.data.forEach((d) => console.log(d));
       return response.data;
     } catch (e) {
       this.logger.error('ERROR');

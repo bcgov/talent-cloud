@@ -36,7 +36,11 @@ import { ToolsEntity } from '../database/entities/personnel/tools.entity';
 import { AppLogger } from '../logger/logger.service';
 import { UpdateSkillsDTO } from './dto/skills/update-personnel-skills.dto';
 import { UpdateSupervisorInformationDTO } from './dto/supervisor/update-supervisor.dto';
-import { ChipsResponse, mapToChipsResponse, mapToChipsTrainingResponse } from '../common/chips/chips-response';
+import {
+  ChipsResponse,
+  mapToChipsResponse,
+  mapToChipsTrainingResponse,
+} from '../common/chips/chips-response';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
 
 @Injectable()
@@ -102,7 +106,7 @@ export class PersonnelService {
       where: { email },
       relations: ['emcr', 'bcws'],
     });
-  }                                       
+  }
 
   async findOneById(id: string): Promise<PersonnelEntity> {
     return this.personnelRepository.findOne({
@@ -1012,9 +1016,13 @@ export class PersonnelService {
     qb.leftJoin('personnel.bcws', 'bcws');
     qb.leftJoinAndSelect('personnel.workLocation', 'workLocation');
     qb.leftJoinAndSelect('personnel.homeLocation', 'homeLocation');
-    qb.andWhere('(bcws.status = :status OR emcr.status = :status)', { status: Status.ACTIVE });
+    qb.andWhere('(bcws.status = :status OR emcr.status = :status)', {
+      status: Status.ACTIVE,
+    });
     qb.andWhere('personnel.chipsProfileMissing = false');
-    qb.andWhere('(personnel.chipsLastPing < current_date OR personnel.chipsLastPing IS NULL)');
+    qb.andWhere(
+      '(personnel.chipsLastPing < current_date OR personnel.chipsLastPing IS NULL)',
+    );
     qb.limit(10);
     return qb.getMany();
   }
@@ -1026,7 +1034,10 @@ export class PersonnelService {
     });
   }
 
-  async updatePersonnelChipsData(personnel: PersonnelEntity, data: ChipsResponse) {
+  async updatePersonnelChipsData(
+    personnel: PersonnelEntity,
+    data: ChipsResponse,
+  ) {
     const issues: { [key: string]: string } = {};
     let ministry;
     if (ChipsMinistryName[data.organization.trim()]) {
@@ -1037,9 +1048,14 @@ export class PersonnelService {
       ministry = personnel.ministry;
     }
 
-    const allLocations = await this.regionsAndLocationsService.getAllLocations();
-    let workLocation = allLocations.find(l => l.locationName === data.workCity?.trim());
-    let homeLocation = allLocations.find(l => l.locationName === data.homeCity?.trim());
+    const allLocations =
+      await this.regionsAndLocationsService.getAllLocations();
+    let workLocation = allLocations.find(
+      (l) => l.locationName === data.workCity?.trim(),
+    );
+    let homeLocation = allLocations.find(
+      (l) => l.locationName === data.homeCity?.trim(),
+    );
     if (!homeLocation) {
       // Add to issues
       issues.homeLocation = `${data.homeCity} not found in CORE list of cities`;
@@ -1057,7 +1073,7 @@ export class PersonnelService {
 
     const personnelUpdates: Partial<PersonnelEntity> = {
       ...personnel,
-      employeeId: data.emplId,  // Ensure format
+      employeeId: data.emplId, // Ensure format
       lastName: data.name.split(',')[0]?.trim() || personnel.firstName,
       firstName: data.name.split(',')[1]?.trim() || personnel.lastName,
       division: data.levelOne,
@@ -1073,23 +1089,23 @@ export class PersonnelService {
       chipsLastActionDate: data.actionDate,
       chipsIssues: issues,
     };
-    
+
     const differences: { [key: string]: string | object } = {};
     for (const key in personnelUpdates) {
       if (key.includes('chips')) {
         continue;
-      }
-      else if (key.includes('Location')) {
+      } else if (key.includes('Location')) {
         if (personnelUpdates[key]['id'] !== personnel[key]['id']) {
           differences[key] = personnel[key];
         }
-      }
-      else if (personnelUpdates[key] !== personnel[key]) {
+      } else if (personnelUpdates[key] !== personnel[key]) {
         differences[key] = personnel[key];
       }
     }
     personnelUpdates.chipsLastUpdatedProperties = differences;
-    const trainingData = await this.getChipsTrainingData(personnel.employeeId);
+    const trainingData = await this.getChipsTrainingData(
+      personnelUpdates.employeeId,
+    );
     personnelUpdates.chipsTrainingData = trainingData;
 
     await this.personnelRepository.update(personnel.id, personnelUpdates);
@@ -1100,7 +1116,7 @@ export class PersonnelService {
       return mapToChipsResponse(sampleData);
     }
     const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(Work_Email='${memberEmail}')`,
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${memberEmail}')`,
       {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -1117,10 +1133,12 @@ export class PersonnelService {
 
   async getChipsTrainingData(employeeId: string) {
     if (process.env.TEST_CHIPS_RESPONSE === 'true') {
-      return sampleTrainingData.map(course => mapToChipsTrainingResponse(course));
+      return sampleTrainingData.map((course) =>
+        mapToChipsTrainingResponse(course),
+      );
     }
     const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_TrainingData(EMPLID='${employeeId}')`,
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${employeeId}')`,
       {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -1128,7 +1146,9 @@ export class PersonnelService {
       },
     );
     if (response?.data?.value) {
-      return response.data.value.map(course => mapToChipsTrainingResponse(course));
+      return response.data.value.map((course) =>
+        mapToChipsTrainingResponse(course),
+      );
     } else {
       this.logger.error(`No Training Data for ${employeeId}`);
       return [];
