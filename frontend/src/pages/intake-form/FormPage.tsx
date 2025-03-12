@@ -1,27 +1,27 @@
 import { FormField } from './FormField';
-import type { FormFields, FormSection as FormSectionType } from './types';
-import { useFormikContext } from 'formik';
-import type { ReactNode } from 'react';
-import type { IntakeFormPersonnelData } from './fields';
+import type { FormFields } from './types';
+import { Fragment } from 'react';
 import { FormSection } from './FormSection';
-import { Program } from '@/common';
 import { Banner } from '@/components/ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
+import { handleFilterProgram } from './helpers';
+import type { FormTab } from './tabs';
+import { useFormikContext } from 'formik';
+import type { IntakeFormValues } from './fields';
 
 export const FormPage = ({
-  label,
-  description,
-  title,
-  sections,
-  fields,
+  getOptions,
+  tab,
 }: {
-  label: string;
-  description: string | ReactNode;
-  title?: string | ReactNode;
-  sections?: FormSectionType[];
-  fields?: FormFields[];
+  getOptions: (
+    props: any,
+    program?: string,
+  ) => { label: string; value: string; disabled?: boolean; name?: string }[];
+  tab: FormTab;
 }) => {
-  const { values } = useFormikContext<IntakeFormPersonnelData>();
+  const { title, label, description, sections, fields } = tab;
+  const { values } = useFormikContext<IntakeFormValues>();
+  const program = values.program;
 
   return (
     <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
@@ -29,35 +29,38 @@ export const FormPage = ({
       <div className="text-sm py-6">{description}</div>
       <div className="flex flex-col space-y-8  w-full">
         {sections
-          ?.filter((itm) => {
-            if (values.program === Program.ALL || !itm.program) {
-              return itm;
-            } else if (itm.program && itm.program === values.program) {
-              return itm;
-            }
-          })
-          ?.map((section) => <FormSection key={section.name} section={section} />)}
+          ?.filter((itm) =>
+            itm.program && program ? handleFilterProgram(itm, program) : true,
+          )
+          ?.map((section) => (
+            <FormSection
+              key={section.name}
+              section={section}
+              program={program}
+              getOptions={getOptions}
+            />
+          ))}
       </div>
 
       {fields &&
         fields
-          ?.filter((itm) => {
-            if (values.program === Program.ALL || !itm.program) {
-              return itm;
-            } else if (itm.program && itm.program === values.program) {
-              return itm;
-            }
-          })
+          ?.filter((itm) =>
+            itm.program ? handleFilterProgram(itm, program ?? null) : true,
+          )
           .map((fieldItm: FormFields) => (
-            <>
+            <Fragment key={fieldItm.name}>
               {fieldItm.type === 'infoBox' ? (
                 <div className="col-span-2">
                   <Banner content={fieldItm.label} type={BannerType.INFO} />
                 </div>
               ) : (
-                <FormField key={fieldItm.name} field={fieldItm} />
+                <FormField
+                  key={fieldItm.name}
+                  formField={fieldItm}
+                  getOptions={getOptions}
+                />
               )}
-            </>
+            </Fragment>
           ))}
     </div>
   );

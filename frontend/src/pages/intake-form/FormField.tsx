@@ -1,38 +1,59 @@
 import type { FormikProps } from 'formik';
-import { Field, ErrorMessage } from 'formik';
-import type { IntakeFormPersonnelData } from './fields';
+import { Field, ErrorMessage, useFormikContext, useField } from 'formik';
+import type { IntakeFormValues } from './fields';
 import { renderField } from './helpers';
 import type { FormFields } from './types';
 
-export const FormField = ({ field }: { field: FormFields }) => {
-  const {
-    name,
-    label,
-    required,
-    type,
-    placeholder,
-    options,
-    helper,
-    colspan,
-    hideLabel,
-  } = field;
+export const FormField = ({
+  formField,
+  getOptions,
+  handleChange,
+}: {
+  formField: FormFields;
+  getOptions?: (
+    props: any,
+    program?: string,
+  ) => {
+    label: string;
+    value: string;
+    disabled?: boolean | undefined;
+    name?: string | undefined;
+  }[];
+  handleChange?: (props: any) => void;
+}) => {
+  const { name, label, required, type, placeholder, helper, labelHelper } =
+    formField;
+
+  const { values } = useFormikContext<IntakeFormValues>();
+
+  if (getOptions) {
+    formField.options = getOptions(formField, values?.program);
+  }
+
+  const [field] = useField(name);
+
   return (
-    <div key={name} className={colspan ? `col-span-${colspan}` : ''}>
-      <label htmlFor={name} className={hideLabel ? 'invisible' : ''}>
+    <div key={name}>
+      <label htmlFor={name}>
         {label}
         {required && <span className="font-bold text-red-500">*</span>}
       </label>
+      {labelHelper && <div className="text-xs text-defaultGray">{labelHelper}</div>}
       <Field
         className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md"
         name={name}
         type={type}
         placeholder={placeholder}
-        options={options}
+        options={formField.options}
         helper={helper}
+        onChange={handleChange ? handleChange : field.onChange}
       >
-        {(fieldProps: FormikProps<IntakeFormPersonnelData>) =>
-          renderField(field, fieldProps)
-        }
+        {(fieldProps: FormikProps<IntakeFormValues>) => {
+          if (handleChange) {
+            fieldProps.handleChange = handleChange;
+          }
+          return renderField(formField, fieldProps);
+        }}
       </Field>
 
       {helper && <p className="subtext">{helper}</p>}

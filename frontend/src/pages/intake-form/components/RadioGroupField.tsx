@@ -1,13 +1,15 @@
 // formik
-import { Field, type FormikProps } from 'formik';
+import { Field, useFormikContext, type FormikProps } from 'formik';
 
 // form
 import type { FormFields } from '../types';
-import type { IntakeFormPersonnelData } from '../fields';
+import type { IntakeFormValues } from '../fields';
 
 export const RadioGroupField = (
-  props: FormFields & FormikProps<IntakeFormPersonnelData>,
+  props: FormFields & FormikProps<IntakeFormValues>,
 ) => {
+  const { errors } = useFormikContext<IntakeFormValues>();
+
   return (
     <>
       <div role="group" aria-labelledby="my-radio-group" className="flex flex-col">
@@ -18,6 +20,12 @@ export const RadioGroupField = (
           </label>
         ))}
       </div>
+
+      {errors?.[props.name as keyof typeof errors] && (
+        <div className="font-normal text-errorRed">
+          {errors[props.name as keyof typeof errors]?.toString()}
+        </div>
+      )}
     </>
   );
 };

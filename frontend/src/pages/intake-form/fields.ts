@@ -1,60 +1,18 @@
 // common
-import type {
-  BcwsRoleInterface,
-  FunctionType,
-  Languages,
-  Location,
-  PersonnelTool,
-} from '@/common';
+import type { BcwsRoleInterface, FunctionType, Location } from '@/common';
 import type { Program } from '@/common';
-
-export interface ProgramFields {
-  program?: Program;
-}
-// core team program selection
-export const programFields: ProgramFields = {
-  program: undefined,
-};
-
-// acknowledgement for selected program stream(s)
-export interface AcknowledgementEmcr {
-  expectations: boolean;
-  approvedBySupervisor: boolean;
-}
-
-export type AcknowledgementBcws = AcknowledgementEmcr & {
-  orientation: boolean;
-  willingnessStatement: boolean;
-  parQ: boolean;
-};
-
-export type AcknowledgementBoth = AcknowledgementEmcr & AcknowledgementBcws;
-
-export const acknowledgementEmcr: AcknowledgementEmcr = {
-  expectations: false,
-  approvedBySupervisor: false,
-};
-
-export const acknowledgementBcws: AcknowledgementBcws = {
-  expectations: false,
-  approvedBySupervisor: false,
-  orientation: false,
-  willingnessStatement: false,
-  parQ: false,
-};
-
-export const acknowledgementBoth: AcknowledgementBoth = {
-  expectations: false,
-  approvedBySupervisor: false,
-  orientation: false,
-  willingnessStatement: false,
-  parQ: false,
-};
+import type { Expectations } from './tabs';
 
 // personal & employee information
 
 // personal details
-
+export const liaisonDetails: LiaisonDetails = {
+  liaisonUnknown: false,
+  liaisonFirstName: '',
+  liaisonLastName: '',
+  liaisonEmail: '',
+  liaisonPhoneNumber: '',
+};
 export interface PersonalDetails {
   firstName: string;
   lastName: string;
@@ -81,8 +39,6 @@ export interface EmploymentDetails {
   workPhone: string;
   ministry: string;
   division: string;
-  paylistId: string; // should be in bcws
-  purchaseCardHolder: boolean | undefined; // should be in bcws
 }
 
 export const employmentDetails: EmploymentDetails = {
@@ -92,8 +48,6 @@ export const employmentDetails: EmploymentDetails = {
   workPhone: '',
   ministry: '',
   division: '',
-  paylistId: '',
-  purchaseCardHolder: undefined,
 };
 
 // supervisor and liaison details, travel preferences
@@ -111,27 +65,12 @@ export interface LiaisonDetails {
   liaisonEmail?: string;
   liaisonPhoneNumber?: string;
 }
-export interface TravelDetails {
-  travelPreferences: string;
-}
 
 export const supervisorDetails: SupervisorDetails = {
   supervisorFirstName: '',
   supervisorLastName: '',
   supervisorEmail: '',
   supervisorPhone: '',
-};
-
-export const liaisonDetails: LiaisonDetails = {
-  liaisonUnknown: false,
-  liaisonFirstName: '',
-  liaisonLastName: '',
-  liaisonEmail: '',
-  liaisonPhoneNumber: '',
-};
-
-export const travelDetails: TravelDetails = {
-  travelPreferences: '',
 };
 
 // emergency contact details
@@ -175,11 +114,11 @@ export interface SectionChoiceEmcr {
   thirdChoiceFunction?: string;
 }
 
-export const sectionChoiceEmcr: SectionChoiceEmcr = {
-  firstChoiceFunction: '',
-  secondChoiceFunction: '',
-  thirdChoiceFunction: '',
-};
+export interface SectionChoiceBcws {
+  firstChoiceSection: string;
+  secondChoiceSection?: string;
+  thirdChoiceSection?: string;
+}
 
 export interface SectionInterestEmcr {
   advancePlanningUnit?: boolean;
@@ -207,20 +146,6 @@ export const sectionInterestEmcr: SectionInterestEmcr = {
   recovery: false,
 };
 
-// bcws section(s) & role(s) interest
-
-export interface SectionChoiceBcws {
-  firstChoiceSection: string;
-  secondChoiceSection?: string;
-  thirdChoiceSection?: string;
-}
-
-export const sectionChoiceBcws: SectionChoiceBcws = {
-  firstChoiceSection: '',
-  secondChoiceSection: '',
-  thirdChoiceSection: '',
-};
-
 export interface SectionRolesBcws {
   planning?: BcwsRoleInterface[];
   logistics?: BcwsRoleInterface[];
@@ -241,35 +166,35 @@ export const sectionRolesBcws: SectionRolesBcws = {
 
 // other skills & qualifications
 
-export interface LanguageSkills {
-  languages?: Languages[];
+export interface LanguageSkill {
+  language: string;
+  languageProficiency: string;
 }
 
-export const languageSkills: LanguageSkills = {
-  languages: [],
-};
+export const languageSkills: LanguageSkill[] = [
+  {
+    language: '',
+    languageProficiency: '',
+  },
+];
 
-export interface SoftwareSkills {
-  tools?: PersonnelTool[];
+export interface ToolsSkill {
+  tool: string;
+  proficiencyLevel: string;
 }
 
-export const softwareSkills: SoftwareSkills = {
-  tools: [],
-};
+export const toolSkills: ToolsSkill[] = [
+  {
+    tool: '',
+    proficiencyLevel: '',
+  },
+];
 
-export interface Certifications {
-  highestOfaCompleted?: string;
-  driverLicenseQualifications?: string[];
-  certifiedPfa: string;
-  certifications?: string[];
+export interface CertificationSkill {
+  name: string;
+  id: number;
+  expiry?: string;
 }
-
-export const certifications: Certifications = {
-  highestOfaCompleted: '',
-  driverLicenseQualifications: [],
-  certifiedPfa: '',
-  certifications: [],
-};
 
 // review & submit
 
@@ -280,69 +205,76 @@ export interface ReviewAndSubmit {
 export const reviewAndSubmit: ReviewAndSubmit = {
   acknowledgeSubmit: false,
 };
-export interface Tools {
-  tools?: PersonnelTool[];
-}
-export type PersonnelFormData = PersonalDetails &
-  SupervisorDetails &
-  EmploymentDetails &
-  EmergencyContactDetails &
-  Tools &
-  Certifications &
-  LanguageSkills;
-
-export type EmcrFormData = TravelDetails &
-  SectionInterestEmcr &
-  SectionChoiceEmcr & 
-  GeneralEmergencyManagementExperience & {
-    functions: FunctionType[];
-  };
-
-export type BcwsFormData = LiaisonDetails &
-  TravelDetails & {
-    sections?: SectionRolesBcws;
-    paylistId: string;
-  };
 
 // form interface
-export type IntakeFormData = {
+export type IntakeFormSubmissionData = {
   id: string;
   createdByEmail: string;
   program: Program; //
   currentProgram: Program;
-  personnel: PersonnelFormData & {
-    bcws?: BcwsFormData;
-    emcr?: EmcrFormData;
+  formData: IntakeFormValues;
+};
+
+export type IntakeFormValues = PersonalDetails &
+  EmploymentDetails &
+  SupervisorDetails &
+  EmergencyContactDetails &
+  SectionChoiceBcws &
+  SectionChoiceEmcr &
+  LiaisonDetails &
+  GeneralEmergencyManagementExperience & {
+    functions: FunctionType[];
+    travelPreferenceEmcr: string;
+    travelPreferenceBcws: string;
+    program?: string;
+    acknowledgement?: Expectations[];
+    paylistId: string;
+    roles: BcwsRoleInterface[];
+    languages?: LanguageSkill[];
+    tools?: ToolsSkill[];
+    certifications?: CertificationSkill[];
   };
-};
-// form interface
-export type IntakeFormPersonnelData = PersonnelFormData & {
-  id?: string;
-  program?: Program;
-  bcws?: BcwsFormData;
-  emcr?: EmcrFormData;
-};
-export const intakeFormInitialValues: IntakeFormPersonnelData = {
+
+export const intakeFormInitialValues: IntakeFormValues = {
+  program: '',
+  acknowledgement: [],
+
   ...personalDetails,
   ...employmentDetails,
   ...supervisorDetails,
   ...emergencyContactDetails,
 
-  bcws: {
-    paylistId: '',
-    travelPreferences: '',
-    ...sectionChoiceBcws,
-  },
-  emcr: {
-    travelPreferences: '',
-    functions: [],
-    ...sectionChoiceEmcr,
-    ...generalEmergencyManagementExperience,
-  },
-  languages: [],
-  tools: [],
-  certifications: [],
-  highestOfaCompleted: '',
-  driverLicenseQualifications: [],
-  certifiedPfa: '',
+  firstChoiceFunction: '',
+  secondChoiceFunction: '',
+  thirdChoiceFunction: '',
+  travelPreferenceEmcr: '',
+  ...generalEmergencyManagementExperience,
+  functions: [],
+
+  firstChoiceSection: '',
+  secondChoiceSection: '',
+  thirdChoiceSection: '',
+  roles: [],
+  ...liaisonDetails,
+  travelPreferenceBcws: '',
+  paylistId: '',
+  languages: [
+    {
+      language: '',
+      languageProficiency: '',
+    },
+  ],
+  tools: [
+    {
+      tool: '',
+      proficiencyLevel: '',
+    },
+  ],
+  certifications: [
+    {
+      name: '',
+      id: 0,
+      expiry: '',
+    },
+  ],
 };

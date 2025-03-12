@@ -1,4 +1,4 @@
-import { DriverLicense, DriverLicenseName, Program } from '@/common';
+import { DriverLicense, DriverLicenseName, Ministry, Program } from '@/common';
 import type { FormFields, FormSection } from './types';
 import {
   LanguageProficiency,
@@ -6,60 +6,146 @@ import {
 } from '@/common/enums/language.enum';
 import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
 
+import type * as Yup from 'yup';
+
+import {
+  BcwsTravelPreference,
+  EmcrTravelPreference,
+} from '@/common/enums/travel-preference.enum';
+import { SectionName } from '@/common/enums/sections.enum';
+
+export enum Expectations {
+  expectations = 'expectations',
+  approvedBySupervisor = 'approvedBySupervisor',
+  orientation = 'orientation',
+  willingnessStatement = 'willingnessStatement',
+  parQ = 'parQ',
+}
+export enum ExpectationsBcws {
+  orientation = 'orientation',
+  willingnessStatement = 'willingnessStatement',
+  parQ = 'parQ',
+}
+export enum ExpectationsEmcr {
+  expectations = 'expectations',
+  approvedBySupervisor = 'approvedBySupervisor',
+}
+
 export interface FormTab {
   description: React.ReactNode;
+  schema?: Yup.AnyObject;
   label: string;
   sections?: FormSection[];
   title?: string;
   value: string;
   fields?: FormFields[];
+  errors?: string[];
 }
-export const programTab = {
-  label: 'Program Selection & Acknowledgement',
 
-  fields: [
-    {
-      name: 'program',
-      label: 'Program Selection',
-      type: 'radio-group',
-      options: [
-        { label: 'Both', value: Program.ALL },
-        { label: 'EMCR', value: Program.EMCR },
-        { label: 'BCWS', value: Program.BCWS },
-      ],
-      required: true,
-      placeholder: 'Select a program',
-    },
-  ],
+export interface IntakeFormTabs {
+  programSelection: FormTab;
+  personalDetails: FormTab;
+  experiences: FormTab;
+  skills: FormTab;
+  review: FormTab;
+  complete: FormTab;
+}
 
-  description: (
-    <>
-      <p>
-        As a prospective member of the Coordinated Operation Response in Emergencies
-        (CORE) Team program, it is crucial that you acknowledge and understand the
-        commitments involved for the{' '}
-        <strong>Emergency Management and Climate Readiness (EMCR)</strong> and the{' '}
-        <strong>BC Wildfire Service (BCWS)</strong> CORE Team program streams.
-      </p>
-      <br></br>
-      <p>
-        Before proceeding, please carefully read the details of each stream and their
-        application instructions below, make your stream choice, and then check off
-        the acknowledgement statements that will appear below.{' '}
-      </p>
-    </>
-  ),
+export enum IntakeFormTab {
+  Program = 'programSelection',
+  PersonalDetails = 'personalDetails',
+  Experiences = 'experiences',
+  Skills = 'skills',
+  Review = 'review',
+  Complete = 'complete',
+}
 
-  value: 'program',
+export type FormTabKeyValue = {
+  [key in IntakeFormTab]: FormTab;
 };
 
 export const formTabs: FormTab[] = [
   {
+    label: 'Program Selection & Acknowledgement',
+
+    value: IntakeFormTab.Program,
+    errors: ['program', 'acknowledgement'],
+    fields: [
+      {
+        name: 'program',
+        label: 'Program Selection',
+        type: 'radio-group',
+        options: [
+          { label: 'Both', value: Program.ALL },
+          { label: 'EMCR', value: Program.EMCR },
+          { label: 'BCWS', value: Program.BCWS },
+        ],
+        required: true,
+        placeholder: 'Select a program',
+      },
+      {
+        name: 'acknowledgement',
+        label: '',
+        type: 'checkbox-group',
+        required: false,
+        options: [],
+      },
+    ],
+
+    description: (
+      <>
+        <p>
+          As a prospective member of the Coordinated Operation Response in
+          Emergencies (CORE) Team program, it is crucial that you acknowledge and
+          understand the commitments involved for the{' '}
+          <strong>Emergency Management and Climate Readiness (EMCR)</strong> and the{' '}
+          <strong>BC Wildfire Service (BCWS)</strong> CORE Team program streams.
+        </p>
+        <br></br>
+        <p>
+          Before proceeding, please carefully read the details of each stream and
+          their application instructions below, make your stream choice, and then
+          check off the acknowledgement statements that will appear below.{' '}
+        </p>
+      </>
+    ),
+  },
+
+  {
     label: 'Personal & Employee Information',
     description:
       'Please provide your most up-to-date personal and employment details.',
-    value: 'personalInfo',
-
+    value: IntakeFormTab.PersonalDetails,
+    errors: [
+      'firstName',
+      'lastName',
+      'primaryPhone',
+      'secondaryPhone',
+      'homeLocation',
+      'jobTitle',
+      'employeeId',
+      'email',
+      'workPhone',
+      'ministry',
+      'division',
+      'paylistId',
+      'purchaseCardHolder',
+      'supervisorFirstName',
+      'supervisorLastName',
+      'supervisorEmail',
+      'supervisorPhone',
+      'liaisonUnknownCheckbox',
+      'liaisonFirstName',
+      'liaisonLastName',
+      'liaisonEmail',
+      'liaisonPhoneNumber',
+      'travelPreferenceBcws',
+      'travelPreferenceEmcr',
+      'emergencyContactFirstName',
+      'emergencyContactLastName',
+      'emergencyContactPhone',
+      'emergencyContactRelationship',
+    ],
     sections: [
       {
         name: 'Personal Details',
@@ -150,10 +236,10 @@ export const formTabs: FormTab[] = [
             required: true,
             placeholder: 'Select an option',
 
-            options: [
-              { label: 'Finance', value: 'fin' },
-              { label: 'Forestry', value: 'for' },
-            ],
+            options: Object.values(Ministry).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
           },
           {
             name: 'division',
@@ -161,7 +247,6 @@ export const formTabs: FormTab[] = [
             type: 'text',
             required: true,
             placeholder: 'Water, Fisheries and Coast Division',
-
             helper: 'Full division name, no acronyms.',
           },
           {
@@ -227,8 +312,8 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'liaisonUnknownCheckbox',
-            label: '',
-            type: 'checkbox-group',
+            label: 'I am unsure who my liaison is',
+            type: 'checkbox',
             required: false,
             placeholder: '',
             program: Program.BCWS,
@@ -274,30 +359,28 @@ export const formTabs: FormTab[] = [
             program: Program.BCWS,
           },
           {
-            name: 'emcr.travelPreference',
-            label: 'EMCR Travel Preferences (for deployment)',
-            type: 'select',
-            required: true,
-            placeholder: 'Select an option',
-            options: [
-              { label: 'EMCR Travel Option 1', value: 'emcrTravel1' },
-              { label: 'EMCR Travel Option 2', value: 'emcrTravel2' },
-            ],
-            program: Program.EMCR,
-            colspan: 2,
-          },
-          {
-            name: 'bcws.travelPreference',
+            name: 'travelPreferenceBcws',
             label: 'BCWS Travel Preferences (for deployment)',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
-            options: [
-              { label: 'BCWS - Option 1', value: 'bcwsTravel1' },
-              { label: 'BCWS - Option 2', value: 'bcwsTravel2' },
-            ],
             program: Program.BCWS,
-            colspan: 2,
+            options: Object.values(BcwsTravelPreference).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
+          },
+          {
+            name: 'travelPreferenceEmcr',
+            label: 'EMCR Travel Preferences (for deployment)',
+            type: 'select',
+            required: true,
+            placeholder: 'Select an option',
+            program: Program.EMCR,
+            options: Object.values(EmcrTravelPreference).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
           },
         ],
       },
@@ -330,7 +413,7 @@ export const formTabs: FormTab[] = [
             label: 'Emergency Contact Relationship',
             type: 'text',
             required: true,
-            placeholder: 'Spouse',
+            placeholder: 'Friend',
           },
         ],
       },
@@ -338,11 +421,23 @@ export const formTabs: FormTab[] = [
   },
   {
     label: 'Experience & Section Interests',
-
+    errors: [
+      'emergencyExperience',
+      'preocExperience',
+      'peccExperience',
+      'firstNationsWorking',
+      'firstChoiceFunction',
+      'secondChoiceFunction',
+      'thirdChoiceFunction',
+      'functions',
+      'firstChoiceSection',
+      'secondChoiceSection',
+      'thirdChoiceSection',
+      'roles',
+    ],
     description:
       'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.',
-    value: 'experienceRoles',
-
+    value: IntakeFormTab.Experiences,
     sections: [
       {
         program: Program.EMCR,
@@ -403,7 +498,7 @@ export const formTabs: FormTab[] = [
         name: 'EMCR Core Team Sections',
         fields: [
           {
-            name: 'emcr.firstChoiceFunction',
+            name: 'firstChoiceFunction',
             label: 'First Choice Function',
             type: 'select',
             required: true,
@@ -412,7 +507,7 @@ export const formTabs: FormTab[] = [
             options: [],
           },
           {
-            name: 'emcr.secondChoiceFunction',
+            name: 'secondChoiceFunction',
             label: 'Second Choice Function',
             type: 'select',
             required: true,
@@ -421,7 +516,7 @@ export const formTabs: FormTab[] = [
             options: [],
           },
           {
-            name: 'emcr.thirdChoiceFunction',
+            name: 'thirdChoiceFunction',
             label: 'Third Choice Function',
             type: 'select',
             required: true,
@@ -430,65 +525,17 @@ export const formTabs: FormTab[] = [
             options: [],
           },
           {
-            name: 'emcr.functions',
-            label: '',
+            name: 'functions',
+            label:
+              'Please select ALL the sections that you are interested in, if you were to be deployed.',
+            helper:
+              'Your selections must include your first choice. For your EMCR CORE Team application, you must select AT LEAST one section.',
             type: 'checkbox-group',
             required: false,
             placeholder: '',
             program: Program.EMCR,
             colspan: 2,
-            options: [
-              {
-                label: 'Advance Planning Unit',
-                value: 'false',
-                name: 'advancePlanningUnit',
-              },
-              {
-                label: 'Deputy Director',
-                value: 'false',
-                name: 'deputyDirector',
-              },
-              {
-                label: 'Emergency Support Services (ESS)',
-                value: 'false',
-                name: 'ess',
-              },
-              {
-                label: 'Finance',
-                value: 'false',
-                name: 'finance',
-              },
-              {
-                label: 'First Nations Branch',
-                value: 'false',
-                name: 'firstNationsBranch',
-              },
-              {
-                label: 'Liaison',
-                value: 'false',
-                name: 'liaison',
-              },
-              {
-                label: 'Logistics',
-                value: 'false',
-                name: 'logistics',
-              },
-              {
-                label: 'Operations',
-                value: 'false',
-                name: 'operations',
-              },
-              {
-                label: 'Planning',
-                value: 'false',
-                name: 'planning',
-              },
-              {
-                label: 'Recovery',
-                value: 'false',
-                name: 'recovery',
-              },
-            ],
+            options: [],
           },
         ],
       },
@@ -497,38 +544,55 @@ export const formTabs: FormTab[] = [
         name: 'BCWS CORE Team Sections and Roles',
         fields: [
           {
-            name: 'bcws.firstChoiceSection',
+            name: 'firstChoiceSection',
             label: 'First Choice Section',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: [],
+            options: Object.values(SectionName).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
           },
           {
-            name: 'bcws.secondChoiceSection',
+            name: 'secondChoiceSection',
             label: 'Second Choice Section',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: [],
+            options: Object.values(SectionName).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
           },
           {
-            name: 'bcws.thirdChoiceSection',
+            name: 'thirdChoiceSection',
             label: 'Third Choice Section',
             type: 'select',
             required: true,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: [],
+            options: Object.values(SectionName).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
           },
           {
-            name: 'bcws.roles',
-            label: 'BCWS Roles',
-            type: 'checkbox',
+            name: 'roles',
+            label:
+              'For each section below, please indicate any role(s) that you are interested in for deployment.',
+            helper: 'You must select AT LEAST ONE role under your FIRST choice.',
+            type: 'field-group',
             required: true,
-            options: [],
+            fields: Object.values(SectionName).map((itm) => ({
+              name: itm,
+              label: `${itm} Roles`,
+              type: 'multiselect',
+              required: false,
+              placeholder: '',
+            })),
           },
         ],
       },
@@ -536,7 +600,8 @@ export const formTabs: FormTab[] = [
   },
   {
     label: 'Other Skills & Qualifications',
-    value: 'skills',
+    value: IntakeFormTab.Skills,
+    errors: ['languages', 'tools', 'certifications', 'driversLicense'],
     description: 'Please indicate any other skillset that you may have.',
     sections: [
       {
@@ -544,21 +609,33 @@ export const formTabs: FormTab[] = [
         fields: [
           {
             name: 'languages',
-            label: 'Languages',
-            type: 'text',
-            required: false,
-            placeholder: 'Enter a language',
-          },
-          {
-            name: 'languageProficiency',
-            label: 'Language Proficiency',
-            type: 'select',
-            required: false,
-            options: Object.keys(LanguageProficiency).map((key) => ({
-              label:
-                LanguageProficiencyName[key as keyof typeof LanguageProficiencyName],
-              value: key,
-            })),
+            label: '',
+            type: 'field-group',
+            fields: [
+              {
+                name: 'language',
+                label: 'Language',
+                colspan: 2,
+                type: 'text',
+                required: true,
+                placeholder: 'Enter a language',
+              },
+              {
+                name: 'languageProficiency',
+                label: 'Language Proficiency',
+                colspan: 2,
+                type: 'select',
+                required: true,
+                placeholder: 'Select Proficieny Level',
+                options: Object.keys(LanguageProficiency).map((key) => ({
+                  label:
+                    LanguageProficiencyName[
+                      key as keyof typeof LanguageProficiencyName
+                    ],
+                  value: key,
+                })),
+              },
+            ],
           },
         ],
       },
@@ -567,45 +644,64 @@ export const formTabs: FormTab[] = [
         fields: [
           {
             name: 'tools',
-            label: 'Tools & Software',
-            type: 'select',
-            required: false,
-            placeholder: 'Select an option',
-            options: [],
-          },
-          {
-            name: 'toolProficiency',
-            label: 'Tool Proficiency',
-            type: 'select',
-            required: false,
-            placeholder: 'Select an option',
-            options: Object.keys(ToolsProficiency).map((key) => ({
-              label: ToolsProficiencyName[key as keyof typeof ToolsProficiencyName],
-              value: key,
-            })),
+            type: 'field-group',
+            label: '',
+            colspan: 2,
+            fields: [
+              {
+                name: 'tool',
+                colspan: 2,
+                label: 'Tool Name',
+                type: 'select',
+                required: true,
+                placeholder: 'Select an option',
+                options: [],
+              },
+              {
+                name: 'toolProficiency',
+                label: 'Tool Proficiency',
+                type: 'select',
+                colspan: 2,
+                required: true,
+                placeholder: 'Select an option',
+                options: Object.keys(ToolsProficiency).map((key) => ({
+                  label:
+                    ToolsProficiencyName[key as keyof typeof ToolsProficiencyName],
+                  value: key,
+                })),
+              },
+            ],
           },
         ],
       },
+
       {
         name: 'Certificates',
         fields: [
           {
-            name: 'certificates',
-            label: 'Certificates',
-            type: 'select',
-            required: false,
-            placeholder: 'Select an option',
-            options: [],
+            name: 'certifications',
+            label: '',
+            type: 'field-group',
+            fields: [
+              {
+                name: 'certificate',
+                label: 'Certification Name',
+                type: 'select',
+                required: true,
+                placeholder: 'Select an option',
+                options: [],
+              },
+              {
+                name: 'expiry',
+                label: 'Certificate Expiry',
+                type: 'date',
+                required: false,
+                placeholder: 'Select a date',
+              },
+            ],
           },
           {
-            name: 'certificateExpiry',
-            label: 'Certificate Expiry',
-            type: 'date',
-            required: false,
-            placeholder: 'Select a date',
-          },
-          {
-            name: 'driverLicense',
+            name: 'driversLicense',
             label: 'Driver License',
             type: 'select',
             required: false,
@@ -621,14 +717,14 @@ export const formTabs: FormTab[] = [
   },
   {
     label: 'Review & Submit',
-    value: 'reviewAndSubmit',
+    value: IntakeFormTab.Review,
     description:
       'Please take a moment to review the information you have provided, then click “Submit” below to finalize your application.',
   },
   {
     label: 'Complete',
     title: 'Thank you for your application!',
-    value: 'complete',
+    value: IntakeFormTab.Complete,
     description: (
       <>
         <p>
