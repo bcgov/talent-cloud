@@ -82,12 +82,22 @@ const SplashPage = () => {
                 </p>
                 <ul className="list-disc list-inside text-primaryBlue">
                   <li>
-                    <a href="#" className="hover:underline">
+                    <a
+                      href="https://intranet.gov.bc.ca/emcr/employees-workplace/hr/core-team"
+                      className="hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       EMCR CORE Team program stream intranet page{' '}
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="hover:underline">
+                    <a
+                      href="https://intranet.gov.bc.ca/bcws/core-team"
+                      className="hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       BCWS CORE Team program stream intranet page{' '}
                     </a>
                   </li>
