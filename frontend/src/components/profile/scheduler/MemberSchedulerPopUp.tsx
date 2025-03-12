@@ -166,8 +166,8 @@ export const MemberSchedulerPopUp = ({
               setFromInput(e.target.value);
               fromToOnBlur(e.target.value, 'from');
             }}
-            min={min}
-            max={max}
+            min={min ?? editedFrom}
+            max={max ?? editedTo}
             error={fromError}
             className="w-full"
           />
@@ -187,8 +187,8 @@ export const MemberSchedulerPopUp = ({
               setToInput(e.target.value);
               fromToOnBlur(e.target.value, 'to');
             }}
-            min={min}
-            max={max}
+            min={min ?? editedFrom}
+            max={max ?? editedTo}
             error={toError}
             className="w-full"
           />
@@ -196,7 +196,6 @@ export const MemberSchedulerPopUp = ({
       </div>
     </div>
   );
-
   const UnavailableForDeployment = () => (
     <div className="p-6 min-h-[200px] min-w-[350px] flex-grow">
       <div className="flex flex-row space-x-1">
@@ -211,14 +210,14 @@ export const MemberSchedulerPopUp = ({
 
   return (
     <div className="flex flex-col">
-      {editedAvailabilityType === AvailabilityType.AVAILABLE ||
-        (editedAvailabilityType === AvailabilityType.NOT_INDICATED && (
-          <SetUnavailability />
-        ))}
-      {(editedAvailabilityType === AvailabilityType.UNAVAILABLE ||
-        editedAvailabilityType === AvailabilityType.DEPLOYED) && (
-        <UnavailableForDeployment />
-      )}
+      {editedAvailabilityType &&
+        [AvailabilityType.AVAILABLE, AvailabilityType.NOT_INDICATED].includes(
+          editedAvailabilityType,
+        ) && <SetUnavailability />}
+      {editedAvailabilityType &&
+        [AvailabilityType.UNAVAILABLE, AvailabilityType.DEPLOYED].includes(
+          editedAvailabilityType,
+        ) && <UnavailableForDeployment />}
       <div className="flex flex-row space-x-6 py-4 justify-end px-8 border-t-2 border-defaultGray">
         <DialogButton
           variant={ButtonTypes.PRIMARY}
@@ -236,15 +235,17 @@ export const MemberSchedulerPopUp = ({
             text="Delete"
           />
         )}
-        {editedAvailabilityType === AvailabilityType.AVAILABLE ||
-          (editedAvailabilityType === AvailabilityType.NOT_INDICATED && (
+        {editedAvailabilityType &&
+          [AvailabilityType.AVAILABLE, AvailabilityType.NOT_INDICATED].includes(
+            editedAvailabilityType,
+          ) && (
             <DialogButton
               variant={ButtonTypes.TERTIARY}
               type="button"
               onClick={confirmAction}
               text="Save"
             />
-          ))}
+          )}
       </div>
       <Dialog open={!!confirmModal} handler={() => {}} title={'Confirm'} size="sm">
         <DialogBody>
