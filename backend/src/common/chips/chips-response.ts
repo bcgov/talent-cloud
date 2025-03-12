@@ -5,14 +5,14 @@ export interface ChipsResponse {
   apptStatus: string; // Type of employment - Regular, Auxilary or ABC
   apptStatusCode: string; // Short form of Appt Status. Not expected to be used.
   // baseHourlyRT?: string;
-  basePosition?: string; // If a person is in a Temporary Assignment, their base position will show up here. 
+  basePosition?: string; // If a person is in a Temporary Assignment, their base position will show up here.
   basePositionTitle?: string;
   // baseSupervisor?: string;
   // baseSupervisorEmail?: string;
   // baseSupervisorEmplId?: string;
   businessPhone?: string;
   businessUnit: string; // PeopleSoft Business Unit Code
-  businessUnitDescription: string;  // PeoplSoft
+  businessUnitDescription: string; // PeoplSoft
   // cellPhone?: string;
   // currentHourlyRT: number;
   currentPositionNumber: string;
@@ -96,7 +96,7 @@ export function mapToChipsResponse(data: any): ChipsResponse {
     organization: data.Organization,
     workCity: data.Work_City,
     workEmail: data.Work_Email,
-    workPhone: data.Work_Phone
+    workPhone: data.Work_Phone,
   };
 }
 
@@ -106,6 +106,6 @@ export function mapToChipsTrainingResponse(data: any): ChipsTrainingResponse {
     courseTitle: data.COURSE_TITLE,
     employeeRecord: data.EMPL_RCD,
     employeeId: data.EMPLID,
-    completedDate: data.LM_CMP_DT,
-  }
+    completedDate: data.LM_COMPL_DT,
+  };
 }
