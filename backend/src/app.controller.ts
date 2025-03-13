@@ -150,6 +150,38 @@ export class AppController {
   }
 
   @Public()
+  @Get('/chipswithfilter')
+  @ApiQuery({
+    name: 'email',
+    type: String,
+    description: 'Email',
+    required: false,
+  })
+  async secondchips(@Query('email') email?: string) {
+    if (process.env.ENV !== 'dev') {
+      return {};
+    }
+    this.logger.log('CHIPS');
+    try {
+      const response = await axios.get(
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${email}'`,
+        {
+          headers: {
+            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+          },
+        },
+      );
+      this.logger.log('SUCCESS');
+      this.logger.log(response);
+      return response.data;
+    } catch (e) {
+      this.logger.error('ERROR');
+      this.logger.error(e);
+      return { error: 'error' };
+    }
+  }
+
+  @Public()
   @Get('/chipstraining')
   @ApiQuery({
     name: 'govid',
@@ -164,7 +196,7 @@ export class AppController {
     this.logger.log('TRAINING');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${govid}')`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$filter=EMPLID%20eq%20'${govid}')`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
