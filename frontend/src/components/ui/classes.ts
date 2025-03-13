@@ -13,4 +13,7 @@ export const button = {
 
   disabledButton:
     'bg-gray-300 text-gray-500 rounded-sm  px-6 h-[34px] border-gray-300 text-center block  text-xs text-decoration-none whitespace-nowrap',
+
+  textButton:
+    'text-primaryBlue text-xs text-decoration-underline bg-white whitespace-nowrap',
 };

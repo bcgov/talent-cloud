@@ -1114,7 +1114,6 @@ export class PersonnelService {
       personnelUpdates.employeeId,
     );
     personnelUpdates.chipsTrainingData = trainingData;
-
     await this.personnelRepository.update(personnel.id, personnelUpdates);
   }
 

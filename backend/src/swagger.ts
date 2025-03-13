@@ -9,6 +9,7 @@ import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RecommitmentModule } from './recommitment/recommitment.module';
 import { RegionsAndLocationsModule } from './region-location/region-location.module';
+import { IntakeFormModule } from './intake-form/intake-form.module';
 
 export const Documentation = (app: INestApplication) => {
   const options = new DocumentBuilder()
@@ -29,6 +30,7 @@ export const Documentation = (app: INestApplication) => {
       RegionsAndLocationsModule,
       MailModule,
       RecommitmentModule,
+      IntakeFormModule
     ],
   });
 
