@@ -1027,11 +1027,18 @@ export class PersonnelService {
     return qb.getMany();
   }
 
-  async updatePersonnelChipsLastPing(personnel: PersonnelEntity) {
-    await this.personnelRepository.update(personnel.id, {
+  async updatePersonnelChipsMeta(
+    personnel: PersonnelEntity,
+    personnelMissing?: boolean,
+  ) {
+    const update: Partial<PersonnelEntity> = {
       chipsLastPing: new Date(),
       updatedAt: personnel.updatedAt,
-    });
+    };
+    if (personnelMissing === true) {
+      update.chipsProfileMissing = true;
+    }
+    await this.personnelRepository.update(personnel.id, update);
   }
 
   async updatePersonnelChipsData(
@@ -1111,9 +1118,18 @@ export class PersonnelService {
     await this.personnelRepository.update(personnel.id, personnelUpdates);
   }
 
-  async getChipsMemberData(memberEmail: string): Promise<ChipsResponse | null> {
+  async getChipsMemberData(memberEmail: string): Promise<
+    | {
+        success: boolean;
+        data: ChipsResponse | undefined;
+      }
+    | undefined
+  > {
     if (process.env.TEST_CHIPS_RESPONSE === 'true') {
-      return mapToChipsResponse(sampleData);
+      return {
+        success: true,
+        data: mapToChipsResponse(sampleData),
+      };
     }
     const response = await axios.get(
       `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${memberEmail}')`,
@@ -1123,11 +1139,20 @@ export class PersonnelService {
         },
       },
     );
-    if (response?.data) {
-      return mapToChipsResponse(response.data);
+    if (response?.data && response.data !== '') {
+      return {
+        success: true,
+        data: mapToChipsResponse(response.data),
+      };
+    } else if (response?.status === 200) {
+      // Successful request, no data returned, no profile on chips
+      return {
+        success: true,
+        data: undefined,
+      };
     } else {
       this.logger.error(`No CHIPS profile for ${memberEmail}`);
-      return null;
+      return undefined;
     }
   }
 
@@ -1145,10 +1170,10 @@ export class PersonnelService {
         },
       },
     );
-    if (response?.data?.value) {
-      return response.data.value.map((course) =>
-        mapToChipsTrainingResponse(course),
-      );
+    if (response?.data) {
+      const dataString = `[${response.data}]`;
+      const jsonData = JSON.parse(dataString);
+      return jsonData.value.map((course) => mapToChipsTrainingResponse(course));
     } else {
       this.logger.error(`No Training Data for ${employeeId}`);
       return [];
