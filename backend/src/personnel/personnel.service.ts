@@ -1132,17 +1132,17 @@ export class PersonnelService {
       };
     }
     const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${memberEmail}')`,
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${memberEmail}'`,
       {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
         },
       },
     );
-    if (response?.data && response.data !== '') {
+    if (response?.data?.value?.length > 0) {
       return {
         success: true,
-        data: mapToChipsResponse(response.data),
+        data: mapToChipsResponse(response.data.value[0]),
       };
     } else if (response?.status === 200) {
       // Successful request, no data returned, no profile on chips
@@ -1163,17 +1163,17 @@ export class PersonnelService {
       );
     }
     const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${employeeId}')`,
+      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$filter=EMPLID%20eq%20'${employeeId}')`,
       {
         headers: {
           'x-cdata-authtoken': process.env.CHIPS_API_KEY,
         },
       },
     );
-    if (response?.data) {
-      const dataString = `[${response.data}]`;
-      const jsonData = JSON.parse(dataString);
-      return jsonData.value.map((course) => mapToChipsTrainingResponse(course));
+    if (response?.data?.value) {
+      return response.data.value.map((course) =>
+        mapToChipsTrainingResponse(course),
+      );
     } else {
       this.logger.error(`No Training Data for ${employeeId}`);
       return [];

@@ -132,7 +132,7 @@ export class AppController {
     this.logger.log('CHIPS');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${email}')`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${email}'`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -141,7 +141,7 @@ export class AppController {
       );
       this.logger.log('SUCCESS');
       this.logger.log(response);
-      return response.data;
+      return response.data?.value?.[0] || {};
     } catch (e) {
       this.logger.error('ERROR');
       this.logger.error(e);
@@ -164,7 +164,7 @@ export class AppController {
     this.logger.log('TRAINING');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData(EMPLID='${govid}')`,
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$filter=EMPLID%20eq%20'${govid}')`,
         {
           headers: {
             'x-cdata-authtoken': process.env.CHIPS_API_KEY,
@@ -175,9 +175,8 @@ export class AppController {
       this.logger.log(response);
       this.logger.log(typeof response.data);
       this.logger.log(response.data);
-      this.logger.log(response.data.length);
-      const responseString = `[${response.data}]`;
-      return JSON.parse(responseString);
+      this.logger.log(response.data?.value);
+      return response.data?.value || [];
     } catch (e) {
       this.logger.error('ERROR');
       this.logger.error(e);
