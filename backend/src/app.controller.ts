@@ -132,38 +132,6 @@ export class AppController {
     this.logger.log('CHIPS');
     try {
       const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData(Work_Email='${email}')`,
-        {
-          headers: {
-            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
-          },
-        },
-      );
-      this.logger.log('SUCCESS');
-      this.logger.log(response);
-      return response.data;
-    } catch (e) {
-      this.logger.error('ERROR');
-      this.logger.error(e);
-      return { error: 'error' };
-    }
-  }
-
-  @Public()
-  @Get('/chipswithfilter')
-  @ApiQuery({
-    name: 'email',
-    type: String,
-    description: 'Email',
-    required: false,
-  })
-  async secondchips(@Query('email') email?: string) {
-    if (process.env.ENV !== 'dev') {
-      return {};
-    }
-    this.logger.log('CHIPS');
-    try {
-      const response = await axios.get(
         `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${email}'`,
         {
           headers: {
@@ -173,7 +141,7 @@ export class AppController {
       );
       this.logger.log('SUCCESS');
       this.logger.log(response);
-      return response.data;
+      return response.data?.value?.[0] || {};
     } catch (e) {
       this.logger.error('ERROR');
       this.logger.error(e);
@@ -207,9 +175,8 @@ export class AppController {
       this.logger.log(response);
       this.logger.log(typeof response.data);
       this.logger.log(response.data);
-      this.logger.log(response.data.length);
-      const responseString = `[${response.data}]`;
-      return JSON.parse(responseString);
+      this.logger.log(response.data?.value);
+      return response.data?.value || [];
     } catch (e) {
       this.logger.error('ERROR');
       this.logger.error(e);
