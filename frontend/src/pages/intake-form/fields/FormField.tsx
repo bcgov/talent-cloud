@@ -1,14 +1,19 @@
+// react
+import { ReactComponentElement } from 'react';
+
 // formik
 import type { FieldInputProps, FormikFormProps } from 'formik';
 import { Field, ErrorMessage } from 'formik';
 
 //util
 import { renderField } from '../utils/helpers';
+
+// styles
 import clsx from 'clsx';
 
 export const FormField = (props: {
   name: string;
-  label: string;
+  label: string | ReactComponentElement<any>;
   required?: boolean;
   type: string;
   helper?: string;

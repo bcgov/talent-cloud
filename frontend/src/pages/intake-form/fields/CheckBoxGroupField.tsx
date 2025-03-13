@@ -2,11 +2,13 @@
 import type { FieldInputProps } from 'formik';
 import { useFormikContext } from 'formik';
 
-// fields
-
+// ui
 import { Checkbox } from '@headlessui/react';
 
+// styles
 import clsx from 'clsx';
+
+// types
 import type { IntakeFormValues } from '../constants/types';
 
 export const CheckboxGroupField = ({
@@ -27,15 +29,14 @@ export const CheckboxGroupField = ({
     }
     setFieldValue(field.name, Array.from(valueSet));
   };
-
   return (
     <>
-      <div className="w-full flex flex-col font-normal mt-2 text-sm text-ellipsis text-nowrap gap-2 text-defaultGray truncate ">
+      <div className="w-full flex flex-col font-normal mt-2 text-sm gap-2 text-defaultGray text-wrap">
         <>
           {options?.map((itm, index) => (
             <div
               key={itm.value.toString()}
-              className="flex flex-row space-x-2 items-center"
+              className="flex flex-row space-x-4 items-center"
             >
               <Checkbox
                 checked={field.value.includes(itm.value)}
@@ -71,7 +72,15 @@ export const CheckboxGroupField = ({
                   </span>
                 )}
               </Checkbox>
-              <label className="font-normal">{itm.label}</label>
+              <label className="font-normal">
+                {itm.label}
+                {itm.required && (
+                  <>
+                    <span className="text-red-400">* </span>
+                    <span className="subtext">(Required)</span>
+                  </>
+                )}
+              </label>
             </div>
           ))}
         </>

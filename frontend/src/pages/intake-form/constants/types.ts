@@ -4,13 +4,17 @@ import type { FormikErrors } from 'formik';
 
 // react
 import type { ReactComponentElement } from 'react';
+
+// yup
 import type * as Yup from 'yup';
+
+// enums
 import type { Expectations } from './enums';
 
 export interface FormFields {
   helper?: string;
   hidden?: boolean;
-  label: string;
+  label: string | ReactComponentElement<any>;
   name: string;
   options?: {
     label: string | ReactComponentElement<any>;
