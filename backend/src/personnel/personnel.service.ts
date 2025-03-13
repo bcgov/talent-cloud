@@ -1139,19 +1139,22 @@ export class PersonnelService {
         },
       },
     );
-    if (response?.data?.value?.length > 0) {
-      return {
-        success: true,
-        data: mapToChipsResponse(response.data.value[0]),
-      };
-    } else if (response?.status === 200) {
-      // Successful request, no data returned, no profile on chips
-      return {
-        success: true,
-        data: undefined,
-      };
+    if (response?.data) {
+      if (response.data.value?.length > 0) {
+        this.logger.log(`CHIPS profile found for ${memberEmail}`);
+        return {
+          success: true,
+          data: mapToChipsResponse(response.data.value[0]),
+        };
+      } else {
+        this.logger.log(`No CHIPS profile for ${memberEmail}`);
+        return {
+          success: true,
+          data: undefined,
+        };
+      }
     } else {
-      this.logger.error(`No CHIPS profile for ${memberEmail}`);
+      this.logger.error(`CHIPS error`);
       return undefined;
     }
   }

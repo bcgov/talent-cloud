@@ -23,7 +23,7 @@ import { PersonnelService } from '../personnel/personnel.service';
       return;
     }
     logger.log(
-      `CHIPS: Checking updates for '${personnel.map((p) => p.id).join('; ')}`,
+      `CHIPS: Checking updates for ${personnel.map((p) => p.id).join('; ')}`,
     );
 
     for (const p of personnel) {
