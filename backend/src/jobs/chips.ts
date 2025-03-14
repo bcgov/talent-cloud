@@ -30,16 +30,15 @@ import { PersonnelService } from '../personnel/personnel.service';
       const chipsResponse = await personnelService.getChipsMemberData(p.email);
       if (chipsResponse?.success && chipsResponse.data) {
         if (
-          (isAfter(chipsResponse.data.actionDate, p.chipsLastActionDate) ||
-            !p.chipsLastActionDate) &&
-          isAfter(chipsResponse.data.actionDate, p.updatedAt)
+          isAfter(chipsResponse.data.actionDate, p.chipsLastActionDate) ||
+          !p.chipsLastActionDate
         ) {
           logger.log(`Updating personnel ${p.id} from CHIPS`);
-          personnelUpdates += 1;
           await personnelService.updatePersonnelChipsData(
             p,
             chipsResponse.data,
           );
+          personnelUpdates += 1;
         } else {
           logger.log(`No CHIPS personnel update for ${p.id}`);
           await personnelService.updatePersonnelChipsMeta(p);
