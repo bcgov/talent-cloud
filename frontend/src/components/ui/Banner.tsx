@@ -1,9 +1,14 @@
+// react
+import type { ReactElement } from 'react';
+
+// enums
 import { BannerType } from '@/common/enums/banner-enum';
+
+// icons
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/solid';
-import type { ReactElement } from 'react';
 import { CloseIcon, ExclamationCircleIcon } from './Icons';
 
 export const CustomBanner = ({
@@ -77,6 +82,7 @@ export const Banner = ({
   buttonText,
   title,
   onClose,
+  hideIcon,
 }: {
   content: string | ReactElement;
   link?: { name: string; url: string };
@@ -85,6 +91,7 @@ export const Banner = ({
   buttonText?: string;
   title?: string;
   onClose?: (props?: any) => void;
+  hideIcon?: boolean;
 }) => {
   const renderBanner = () => {
     switch (type) {
@@ -100,7 +107,11 @@ export const Banner = ({
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />
+              hideIcon ? (
+                <></>
+              ) : (
+                <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />
+              )
             }
           />
         );
@@ -115,7 +126,13 @@ export const Banner = ({
             bgColor={'warningBannerLight'}
             link={link}
             buttonText={buttonText}
-            icon={<ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />}
+            icon={
+              hideIcon ? (
+                <></>
+              ) : (
+                <ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />
+              )
+            }
           />
         );
       case BannerType.RECOMMITMENT:
@@ -129,7 +146,9 @@ export const Banner = ({
             bgColor={'warningBannerLight'}
             link={link}
             buttonText={buttonText}
-            icon={<ExclamationCircleIcon className="text-info  " />}
+            icon={
+              hideIcon ? <></> : <ExclamationCircleIcon className="text-info  " />
+            }
           />
         );
       case BannerType.ERROR:
@@ -144,7 +163,11 @@ export const Banner = ({
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-error  h-6 hidden sm:inline-block sm:mr-2" />
+              hideIcon ? (
+                <></>
+              ) : (
+                <InformationCircleIcon className="text-error  h-6 hidden sm:inline-block sm:mr-2" />
+              )
             }
           />
         );
@@ -160,7 +183,11 @@ export const Banner = ({
             link={link}
             buttonText={buttonText}
             icon={
-              <InformationCircleIcon className="text-green-900  h-6 hidden sm:inline-block sm:mr-2" />
+              hideIcon ? (
+                <></>
+              ) : (
+                <InformationCircleIcon className="text-green-900  h-6 hidden sm:inline-block sm:mr-2" />
+              )
             }
           />
         );
