@@ -34,11 +34,11 @@ import { PersonnelService } from '../personnel/personnel.service';
           !p.chipsLastActionDate
         ) {
           logger.log(`Updating personnel ${p.id} from CHIPS`);
-          personnelUpdates += 1;
           await personnelService.updatePersonnelChipsData(
             p,
             chipsResponse.data,
           );
+          personnelUpdates += 1;
         } else {
           logger.log(`No CHIPS personnel update for ${p.id}`);
           await personnelService.updatePersonnelChipsMeta(p);

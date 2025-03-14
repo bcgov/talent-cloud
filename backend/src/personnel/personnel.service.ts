@@ -1102,14 +1102,16 @@ export class PersonnelService {
       if (key.includes('chips')) {
         continue;
       } else if (key.includes('Location')) {
-        if (personnelUpdates[key]['id'] !== personnel[key]['id']) {
-          differences[key] = personnel[key];
-        }
+        // if (personnelUpdates[key]['id'] !== personnel[key]['id']) {
+        //   differences[key] = personnel[key];
+        // }
+        continue; // A possible bug when using location id
       } else if (personnelUpdates[key] !== personnel[key]) {
         differences[key] = personnel[key];
       }
     }
     personnelUpdates.chipsLastUpdatedProperties = differences;
+    this.logger.log(`Retrieving training data for ${personnel.id}`);
     const trainingData = await this.getChipsTrainingData(
       personnelUpdates.employeeId,
     );
