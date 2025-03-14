@@ -64,7 +64,10 @@ export const useSchedulerDialog = () => {
       const firstDate = firstDateStatus.actualStartDate ?? firstDateStatus.date;
       const lastDate = firstDateStatus.actualEndDate ?? lastDateStatus.date;
       const availabilityType = status.availabilityType;
-      if (status.availabilityType === AvailabilityType.NOT_INDICATED) {
+      if (
+        status.availabilityType === AvailabilityType.NOT_INDICATED ||
+        status.availabilityType === AvailabilityType.AVAILABLE
+      ) {
         // Use actualStartDate / actualEndDate if it exists
         const min = lastBreakIndex > -1 ? firstDate : undefined;
         const max = nextBreakIndex > -1 ? lastDate : undefined;

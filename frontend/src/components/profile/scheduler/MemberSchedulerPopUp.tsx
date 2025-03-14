@@ -166,8 +166,8 @@ export const MemberSchedulerPopUp = ({
               setFromInput(e.target.value);
               fromToOnBlur(e.target.value, 'from');
             }}
-            min={min ?? editedFrom}
-            max={max ?? editedTo}
+            min={min}
+            max={max}
             error={fromError}
             className="w-full"
           />
@@ -187,8 +187,8 @@ export const MemberSchedulerPopUp = ({
               setToInput(e.target.value);
               fromToOnBlur(e.target.value, 'to');
             }}
-            min={min ?? editedFrom}
-            max={max ?? editedTo}
+            min={min}
+            max={max}
             error={toError}
             className="w-full"
           />
