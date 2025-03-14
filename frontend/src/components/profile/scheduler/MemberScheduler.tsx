@@ -10,19 +10,23 @@ import useAvailability from '@/hooks/useAvailability';
 import { DialogUI } from '@/components/ui';
 import { useSchedulerDialog } from '@/hooks/useSchedulerDialog';
 import { AvailabilityConfirmation } from '@/hooks/AvailabilityConfirmation';
+import { useEffect } from 'react';
+import { format } from 'date-fns';
 
 export const MemberScheduler = ({
   personnelId,
   openConfirmAvailability,
   showConfirmAvailability,
   handleShowSuccessConfirmationBanner,
-  handleShowConfirmAvailability,
+  handleShowConfirmationWarningBanner,
+  memberConfirmedUntil,
 }: {
   personnelId: string;
   openConfirmAvailability: () => void;
   showConfirmAvailability: boolean;
   handleShowSuccessConfirmationBanner: () => void;
-  handleShowConfirmAvailability: () => void;
+  handleShowConfirmationWarningBanner: (show: boolean) => void;
+  memberConfirmedUntil?: Date;
 }) => {
   const {
     availability,
@@ -48,9 +52,32 @@ export const MemberScheduler = ({
     await saveConfirmedUntil(date);
     openConfirmAvailability();
     handleShowSuccessConfirmationBanner();
-    handleShowConfirmAvailability();
-    getAvailability(availabilityQuery.from, availabilityQuery.to);
+    getAvailability(availabilityQuery.from, format(date, 'yyyy-MM-dd'));
   };
+
+  useEffect(() => {
+    if (!memberConfirmedUntil) {
+      handleShowConfirmationWarningBanner(true);
+    }
+    if (
+      memberConfirmedUntil &&
+      new Date(memberConfirmedUntil) > new Date(availabilityQuery.to)
+    ) {
+      handleShowConfirmationWarningBanner(false);
+    }
+    if (
+      memberConfirmedUntil &&
+      new Date(memberConfirmedUntil) < new Date(availabilityQuery.to)
+    ) {
+      handleShowConfirmationWarningBanner(true);
+    }
+  }, [
+    schedulerRows,
+    availability,
+    availabilityQuery,
+    memberConfirmedUntil,
+    showConfirmAvailability,
+  ]);
 
   return (
     <>
