@@ -2,10 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useAxios } from './useAxios';
 import { useProgramFieldData } from './useProgramFieldData';
-
 // enums & types
 import { DriverLicense, DriverLicenseName, Program } from '@/common';
-
 import {
   LanguageProficiency,
   LanguageProficiencyName,
@@ -17,7 +15,6 @@ import {
   expectationsBoth,
   expectationsEmcr,
 } from '@/pages/intake-form/constants/enums';
-
 
 export const useIntakeForm = () => {
   const { AxiosPrivate } = useAxios();
