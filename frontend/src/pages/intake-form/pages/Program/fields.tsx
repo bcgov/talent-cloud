@@ -1,4 +1,7 @@
+// common
 import { Program } from '@/common';
+
+// fields
 import { CheckboxGroupField } from '../../fields/CheckBoxGroupField';
 import { RadioGroupField } from '../../fields/RadioGroupField';
 
@@ -42,7 +45,12 @@ export const fields = [
   },
   {
     name: 'acknowledgement',
-    label: 'Acknowledgement',
+    label: (
+      <span>
+        Acknowledgement for selected program stream(s){' '}
+        <span className="subtext">(Check all to proceed)</span>
+      </span>
+    ),
     type: 'checkbox-group',
     hidden: true,
     component: CheckboxGroupField,

@@ -1,20 +1,21 @@
+// hooks
 import { useState, useEffect } from 'react';
 import { useAxios } from './useAxios';
 import { useProgramFieldData } from './useProgramFieldData';
-import { DriverLicense, DriverLicenseName, Program } from '@/common';
 
+// enums & types
+import { DriverLicense, DriverLicenseName, Program } from '@/common';
 import {
   LanguageProficiency,
   LanguageProficiencyName,
 } from '@/common/enums/language.enum';
 import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
-import {
-  ExpectationsBcws,
-  ExpectationsLabel,
-  ExpectationsEmcr,
-  Expectations,
-} from '@/pages/intake-form/constants/enums';
 import type { IntakeFormSubmissionData } from '@/pages/intake-form/constants/types';
+import {
+  expectationsBcws,
+  expectationsBoth,
+  expectationsEmcr,
+} from '@/pages/intake-form/constants/enums';
 
 export const useIntakeForm = () => {
   const { AxiosPrivate } = useAxios();
@@ -87,20 +88,10 @@ export const useIntakeForm = () => {
       //TODO - you can just hardcode these values here instead of using the enums
       case 'acknowledgement':
         if (program === Program.BCWS) {
-          return Object.values(ExpectationsBcws).map((itm) => ({
-            label: ExpectationsLabel[itm as keyof typeof ExpectationsBcws],
-            value: itm,
-          }));
+          return expectationsBcws;
         } else if (program === Program.EMCR) {
-          return Object.values(ExpectationsEmcr).map((itm) => ({
-            label: ExpectationsLabel[itm as keyof typeof ExpectationsEmcr],
-            value: itm,
-          }));
-        } else
-          return Object.values(Expectations).map((itm) => ({
-            label: ExpectationsLabel[itm as keyof typeof Expectations],
-            value: itm,
-          }));
+          return expectationsEmcr;
+        } else return expectationsBoth;
 
       default:
         return [];
