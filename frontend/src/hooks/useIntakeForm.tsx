@@ -22,9 +22,8 @@ export const useIntakeForm = () => {
   const [formData, setFormData] = useState<IntakeFormSubmissionData>();
   const [loading, setLoading] = useState(false);
 
-  const { functions, locations, tools, certificates } = useProgramFieldData(
-    Program.ALL,
-  );
+  const { functions, locations, tools, sections, certificates } =
+    useProgramFieldData(Program.ALL);
 
   const getOptions = (name: string, program?: string) => {
     switch (name) {
@@ -48,11 +47,9 @@ export const useIntakeForm = () => {
           label: itm,
           value: itm,
         }));
-      // case 'roles':
-      //   return sections.map((itm) => ({
-      //     label: itm.name,
-      //     value: itm.id,
-      //   }));
+      case 'roles':
+        return sections;
+
       case 'homeLocation':
         return locations.map((loc) => ({
           label: loc.locationName,

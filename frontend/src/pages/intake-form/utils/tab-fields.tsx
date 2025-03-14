@@ -4,7 +4,7 @@ import {
   BcwsTravelPreference,
   EmcrTravelPreference,
 } from '@/common/enums/travel-preference.enum';
-import { SectionName } from '@/common/enums/sections.enum';
+import { Section, SectionName } from '@/common/enums/sections.enum';
 import { SelectField } from '../fields/SelectField';
 import { ProgramPage } from '../pages/Program/Program';
 import { PersonalDetails } from '../pages/PersonalDetails';
@@ -514,19 +514,28 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'roles',
-            label:
-              'For each section below, please indicate any role(s) that you are interested in for deployment.',
-            helper: 'You must select AT LEAST ONE role under your FIRST choice.',
-            type: 'field-group',
+            colspan: 2,
+            label: (
+              <>
+                <p>
+                  For each section below, please indicate any role(s) that you are
+                  interested in for deployment.
+                </p>
+                <p className="subtext">
+                  You must select AT LEAST ONE role under your FIRST choice.
+                </p>
+              </>
+            ),
+            type: 'multiselect-group',
             component: FieldGroup,
-            required: true,
-            fields: Object.values(SectionName).map((itm) => ({
+            fields: Object.values(Section).map((itm) => ({
               name: itm,
-              label: `${itm} Roles`,
+              label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
               component: SelectField,
               required: false,
               placeholder: '',
+              options: [],
             })),
           },
         ],

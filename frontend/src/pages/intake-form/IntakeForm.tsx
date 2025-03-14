@@ -74,28 +74,29 @@ const IntakeForm = () => {
                           {tab.component({ sections: tab.sections })}
                         </div>
                       </div>
-                    )}
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </TabGroup>
+                    
+                  )}
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </TabGroup>
 
-            <FormButtonNavigation
-              saveUpdateForm={saveUpdateForm}
-              handlePrevious={() =>
-                setSelectedTab(selectedTab - (1 % Object.keys(formTabs).length))
-              }
-              handleNext={() =>
-                setSelectedTab(selectedTab + (1 % Object.keys(formTabs).length))
-              }
-              disableNext={selectedTab === formTabs.length - 1}
-              disablePrevious={selectedTab === 0}
-            />
-          </div>
-        </Form>
-      </Formik>
-    );
-  }
+          <FormButtonNavigation
+            saveUpdateForm={saveUpdateForm}
+            handlePrevious={() =>
+              setSelectedTab(selectedTab - (1 % Object.keys(formTabs).length))
+            }
+            handleNext={() =>
+              setSelectedTab(selectedTab + (1 % Object.keys(formTabs).length))
+            }
+            disableNext={selectedTab === formTabs.length - 1}
+            disablePrevious={selectedTab === 0}
+          />
+        </div>
+      </Form>
+    </Formik>
+  );
+};
 };
 
 export default IntakeForm;

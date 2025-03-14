@@ -95,7 +95,7 @@ export const intakeFormInitialValues: IntakeFormValues = {
   firstChoiceSection: '',
   secondChoiceSection: '',
   thirdChoiceSection: '',
-  roles: [],
+  roles: [''],
   ...liaisonDetails,
   travelPreferenceBcws: '',
   paylistId: '',

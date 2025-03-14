@@ -28,6 +28,9 @@ export const renderField = ({
   options?: any[];
 }) => {
   switch (props.type) {
+    // field group should be rendered as a component rather than a field, all rendered components from the renderField function will be wrapped in a field component
+    // case 'field-group':
+    //   return <FieldGroup field={props} />;
     case 'select':
       return <SelectField field={field} props={props} options={options ?? []} />;
     case 'radio-group':
