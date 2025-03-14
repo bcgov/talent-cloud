@@ -12,9 +12,9 @@ export const MemberSchedulerControl = ({
 
   const [fromMonth, setFromMonth] = useState<number>(new Date().getMonth() + 1);
   const [fromYear, setFromYear] = useState<number>(new Date().getFullYear());
-  const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 3);
+  const [toMonth, setToMonth] = useState<number>(new Date().getMonth() + 6);
   const [toYear, setToYear] = useState<number>(new Date().getFullYear());
-  const [numMonths, setNumMonths] = useState<number>(3);
+  const [numMonths, setNumMonths] = useState<number>(6);
 
   // When values change, then we send a reuqest
   useEffect(() => {
