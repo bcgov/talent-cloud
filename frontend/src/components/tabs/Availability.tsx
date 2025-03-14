@@ -106,24 +106,21 @@ export const MemberAvailabilityTab = ({
     </div>
   );
 
-  const today = new Date();
-  const [showConfirmationWarningBanner, setShowConfirmationWarningBanner] = useState(
-    !member.availabilityConfirmedUntil ||
-      (member.availabilityConfirmedUntil &&
-        member.availabilityConfirmedUntil <
-          new Date(today.getFullYear(), today.getMonth() + 3, today.getDate())),
-  );
   const [showSuccessConfirmationBanner, setShowSuccessConfirmationBanner] =
     useState(false);
+
+  const [showConfirmationWarningBanner, setShowConfirmationWarningBanner] =
+    useState(false);
+
+  const handleShowConfirmationWarningBanner = (show: boolean) => {
+    setShowConfirmationWarningBanner(show);
+  };
 
   const handleShowSuccessConfirmationBanner = () => {
     setShowSuccessConfirmationBanner(true);
     setTimeout(() => {
       setShowSuccessConfirmationBanner(false);
     }, 5000);
-  };
-  const handleShowConfirmAvailability = () => {
-    setShowConfirmationWarningBanner(false);
   };
   return (
     <>
@@ -139,26 +136,26 @@ export const MemberAvailabilityTab = ({
           showBcwsBanner={showBcwsBanner}
         />
       )}
-      {(member.bcws?.status === Status.ACTIVE ||
-        member.emcr?.status === Status.ACTIVE) && (
-        <BannerTransition show={showConfirmationWarningBanner}>
-          <Banner
-            onClose={handleShowConfirmAvailability}
-            content={
-              <p className="text-sm text-yellow-900 xl:pr-12">
-                Remember to click “Confirm Availability” after saving all your
-                changes. Failure to do so will result in inaccurate updates for your
-                coordinator, which could impact your chances for deployment.
-              </p>
-            }
-            title="Confirm Availability Changes for your Coordinator"
-            type={BannerType.WARNING}
-          />
-        </BannerTransition>
-      )}
+      {[member.emcr?.status, member.bcws?.status].includes(Status.ACTIVE) &&
+        !showSuccessConfirmationBanner && (
+          <BannerTransition show={showConfirmationWarningBanner}>
+            <Banner
+              onClose={() => setShowConfirmationWarningBanner(false)}
+              content={
+                <p className="text-sm text-yellow-900 xl:pr-12">
+                  Remember to click “Confirm Availability” after saving all your
+                  changes. Failure to do so will result in inaccurate updates for
+                  your coordinator, which could impact your chances for deployment.
+                </p>
+              }
+              title="Confirm Availability Changes for your Coordinator"
+              type={BannerType.WARNING}
+            />
+          </BannerTransition>
+        )}
       <BannerTransition show={showSuccessConfirmationBanner}>
         <Banner
-          onClose={() => setShowSuccessConfirmationBanner(false)}
+          onClose={() => handleShowSuccessConfirmationBanner()}
           content={
             <p className="text-sm text-green-900 xl:pr-12">
               Your coordinator can now see your recent availability changes. You can
@@ -182,7 +179,8 @@ export const MemberAvailabilityTab = ({
             openConfirmAvailability={openConfirmAvailability}
             showConfirmAvailability={showConfirmAvailability}
             handleShowSuccessConfirmationBanner={handleShowSuccessConfirmationBanner}
-            handleShowConfirmAvailability={handleShowConfirmAvailability}
+            handleShowConfirmationWarningBanner={handleShowConfirmationWarningBanner}
+            memberConfirmedUntil={member.availabilityConfirmedUntil}
           />
         </ProfileSectionHeader>
       </div>
