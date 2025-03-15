@@ -115,7 +115,6 @@ export const intakeFormInitialValues: IntakeFormValues = {
     {
       name: '',
       id: 0,
-      expiry: '',
     },
   ],
 };

@@ -161,7 +161,7 @@ export interface LanguageSkill {
 export interface CertificationSkill {
   name: string;
   id: number;
-  expiry?: string;
+  expiry?: Date;
 }
 
 // review & submit
@@ -176,7 +176,7 @@ export type IntakeFormSubmissionData = {
   createdByEmail: string;
   program: Program; //
   currentProgram: Program;
-  formData: IntakeFormValues;
+  personnel: IntakeFormValues;
 };
 
 export type IntakeFormValues = PersonalDetails &

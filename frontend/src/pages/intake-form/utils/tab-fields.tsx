@@ -548,6 +548,8 @@ export const formTabs: FormTab[] = [
           {
             name: 'languages',
             label: '',
+            helper:
+              'Please enter your language(s) and select the proficiency level for each.',
             type: 'field-group',
             component: FieldGroup,
             fields: [
@@ -562,7 +564,7 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'languageProficiency',
-                label: 'Language Proficiency',
+                label: 'Proficiency Level',
                 colspan: 2,
                 type: 'select',
                 component: SelectField,
@@ -583,12 +585,14 @@ export const formTabs: FormTab[] = [
             type: 'field-group',
             component: FieldGroup,
             label: '',
+            helper:
+              'Please select tools/software and indicate your proficiency level for each.',
             colspan: 2,
             fields: [
               {
                 name: 'tool',
                 colspan: 2,
-                label: 'Tool Name',
+                label: 'Tool/Software',
                 type: 'select',
                 component: SelectField,
                 required: true,
@@ -597,7 +601,7 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'toolProficiency',
-                label: 'Tool Proficiency',
+                label: 'Proficiency Level',
                 type: 'select',
                 component: SelectField,
                 colspan: 2,
@@ -616,6 +620,8 @@ export const formTabs: FormTab[] = [
           {
             name: 'certifications',
             label: '',
+            helper:
+              'Please indicate any certifications that you have and their expiry date (if applicable).',
             type: 'field-group',
             component: FieldGroup,
             fields: [
@@ -630,7 +636,14 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'expiry',
-                label: 'Certificate Expiry',
+                label: (
+                  <>
+                    Certificate Expiry
+                    <span className="text-sm text-gray-700 font-normal pl-2">
+                      (if applicable)
+                    </span>
+                  </>
+                ),
                 type: 'date',
                 component: DatePicker,
                 required: false,

@@ -29,14 +29,7 @@ export const renderField = ({
 }) => {
   switch (props.type) {
     case 'select':
-      return (
-        <SelectField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
+      return <SelectField field={field} props={props} options={options ?? []} />;
     case 'radio-group':
       return (
         <RadioGroupField
@@ -47,36 +40,18 @@ export const renderField = ({
         />
       );
     case 'checkbox-group':
-      return (
-        <CheckboxGroupField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
+      return <CheckboxGroupField field={field} options={options ?? []} />;
     case 'date':
-      return (
-        <DateField
-          field={{ ...field, value: { from: undefined, to: undefined } }}
-          form={form}
-          props={props}
-        />
-      );
+      return <DateField field={field} />;
     case 'multiselect':
       return (
-        <MultiSelectField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
+        <MultiSelectField field={field} props={props} options={options ?? []} />
       );
     case 'multiselect-group':
     case 'text':
     case 'tel':
     default:
-      return <TextField field={field} form={form} props={props} />;
+      return <TextField field={field} props={props} />;
   }
 };
 
