@@ -2,6 +2,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Layout } from '@/components';
 import { createCustomLoginUrl } from '@/utils/keycloak';
+import { AlertBanner } from '@/components/ui/Alert';
+import { AlertProvider } from '@/providers/Alert';
 
 const PrivateRoute = () => {
   const { keycloak } = useKeycloak();
@@ -19,7 +21,12 @@ const PrivateRoute = () => {
 
   return (
     <Layout>
-      <Outlet />
+      <AlertProvider>
+        <>
+          <AlertBanner />
+          <Outlet />
+        </>
+      </AlertProvider>
     </Layout>
   );
 };

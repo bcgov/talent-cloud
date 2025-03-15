@@ -2,16 +2,16 @@ import { Form, Formik } from 'formik';
 import { intakeFormInitialValues } from './constants/initial-values';
 import { useKeycloak } from '@react-keycloak/web';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { Program } from '@/common';
 import { useState } from 'react';
 import { intakeFormValidationSchema } from './constants/validation';
-import { Navigate } from 'react-router-dom';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
-import { Routes } from '@/routes';
 import { FormButtonNavigation } from './components/FormButtonNavigation';
-import { FormStepper } from './components/FormStepper';
 import type { FormTab } from './constants/types';
 import { formTabs } from './utils/tab-fields';
+import { FormStepper } from './components/FormStepper';
+import { Program } from '@/common';
+import { Navigate } from 'react-router';
+import { Routes } from '@/routes';
 
 const IntakeForm = () => {
   const { keycloak } = useKeycloak();
@@ -19,7 +19,6 @@ const IntakeForm = () => {
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const { formData, saveUpdateForm, loading } = useIntakeForm();
-
   if (!tokenParsed) {
     return;
   }
@@ -68,7 +67,9 @@ const IntakeForm = () => {
                     {() => (
                       <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
                         <h3>{tab.title ?? tab.label}</h3>
+
                         <div className="text-sm py-6">{tab.description}</div>
+
                         <div className="flex flex-col space-y-8  w-full">
                           {tab.component({ sections: tab.sections })}
                         </div>
