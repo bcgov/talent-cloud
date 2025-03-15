@@ -1,8 +1,8 @@
 import { ButtonTypes } from '@/common';
 import type { FormikValues } from 'formik';
 import { useFormikContext } from 'formik';
-import type { IntakeFormValues } from '../constants/initial-values';
 import { Button } from '@/components';
+import type { IntakeFormValues } from '../constants/types';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,

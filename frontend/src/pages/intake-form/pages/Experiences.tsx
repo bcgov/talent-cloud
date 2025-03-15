@@ -30,9 +30,9 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   return (
     <div className="pb-24">
       {sections.map(
-        (itm) =>
+        (itm, index) =>
           itm.fields && (
-            <FormSection section={itm} key={itm.name}>
+            <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
               <>
                 {itm.fields
                   .map((itm: any) => {

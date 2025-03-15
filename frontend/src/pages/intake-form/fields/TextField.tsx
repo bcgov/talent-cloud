@@ -15,8 +15,8 @@ export const TextField = ({
     <div className="text-black relative w-full">
       <input
         className={clsx(classes.menu.container, 'text-black')}
-        {...field}
         {...props}
+        {...field}
       />
     </div>
   );

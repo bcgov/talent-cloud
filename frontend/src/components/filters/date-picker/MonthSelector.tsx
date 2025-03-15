@@ -18,7 +18,7 @@ export const MonthSelector = (props: SelectorProps) => (
           aria-label="month selecter"
           className="w-full flex  font-bold  items-center pb-1"
         >
-          <span className="text-md pr-1">
+          <span className="pr-1 text-gray-900">
             {months.find((itm) => itm.value === props.displayMonth.getMonth())
               ?.label ?? ''}
           </span>
@@ -49,12 +49,12 @@ export const MonthSelector = (props: SelectorProps) => (
                     new Date(props.displayMonth.getFullYear(), itm.value, 1),
                   )
                 }
-                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
+                className="py-1 text-sm text-gray-900 cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
               >
                 {props.displayMonth.getMonth() === itm.value ? (
                   <span className="font-bold">{itm.label}</span>
                 ) : (
-                  <span className="font-normal">{itm.label}</span>
+                  <span className="text-gray-800 font-normal">{itm.label}</span>
                 )}
               </button>
             </MenuItem>

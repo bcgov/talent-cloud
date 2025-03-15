@@ -33,7 +33,7 @@ const IntakeForm = () => {
   } else {
     return (
       <Formik
-        initialValues={{ ...intakeFormInitialValues, ...formData?.formData }}
+        initialValues={{ ...intakeFormInitialValues, ...formData?.personnel }}
         validationSchema={intakeFormValidationSchema}
         onSubmit={(values, actions) => {
           // TODO: Update
