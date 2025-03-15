@@ -18,10 +18,10 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
   return (
     <div className="pb-24">
       {sections.map(
-        (itm) =>
+        (itm, index) =>
           itm.name && (
-            <FormSection section={itm} key={itm.name}>
-              <Fragment>
+            <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
+              <>
                 {itm.fields
                   ?.map((itm: any) => {
                     if (itm.options && itm.options.length === 0) {
@@ -62,7 +62,7 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
                       )}
                     </Fragment>
                   ))}
-              </Fragment>
+              </>
             </FormSection>
           ),
       )}

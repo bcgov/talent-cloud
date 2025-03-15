@@ -4,7 +4,7 @@ import {
   BcwsTravelPreference,
   EmcrTravelPreference,
 } from '@/common/enums/travel-preference.enum';
-import { SectionName } from '@/common/enums/sections.enum';
+import { Section, SectionName } from '@/common/enums/sections.enum';
 import { SelectField } from '../fields/SelectField';
 import { ProgramPage } from '../pages/Program/Program';
 import { PersonalDetails } from '../pages/PersonalDetails';
@@ -514,19 +514,28 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'roles',
-            label:
-              'For each section below, please indicate any role(s) that you are interested in for deployment.',
-            helper: 'You must select AT LEAST ONE role under your FIRST choice.',
-            type: 'field-group',
+            colspan: 2,
+            label: (
+              <>
+                <p>
+                  For each section below, please indicate any role(s) that you are
+                  interested in for deployment.
+                </p>
+                <p className="subtext">
+                  You must select AT LEAST ONE role under your FIRST choice.
+                </p>
+              </>
+            ),
+            type: 'multiselect-group',
             component: FieldGroup,
-            required: true,
-            fields: Object.values(SectionName).map((itm) => ({
+            fields: Object.values(Section).map((itm) => ({
               name: itm,
-              label: `${itm} Roles`,
+              label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
               component: SelectField,
               required: false,
               placeholder: '',
+              options: [],
             })),
           },
         ],
@@ -548,6 +557,8 @@ export const formTabs: FormTab[] = [
           {
             name: 'languages',
             label: '',
+            helper:
+              'Please enter your language(s) and select the proficiency level for each.',
             type: 'field-group',
             component: FieldGroup,
             fields: [
@@ -562,7 +573,7 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'languageProficiency',
-                label: 'Language Proficiency',
+                label: 'Proficiency Level',
                 colspan: 2,
                 type: 'select',
                 component: SelectField,
@@ -583,12 +594,14 @@ export const formTabs: FormTab[] = [
             type: 'field-group',
             component: FieldGroup,
             label: '',
+            helper:
+              'Please select tools/software and indicate your proficiency level for each.',
             colspan: 2,
             fields: [
               {
                 name: 'tool',
                 colspan: 2,
-                label: 'Tool Name',
+                label: 'Tool/Software',
                 type: 'select',
                 component: SelectField,
                 required: true,
@@ -597,7 +610,7 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'toolProficiency',
-                label: 'Tool Proficiency',
+                label: 'Proficiency Level',
                 type: 'select',
                 component: SelectField,
                 colspan: 2,
@@ -616,6 +629,8 @@ export const formTabs: FormTab[] = [
           {
             name: 'certifications',
             label: '',
+            helper:
+              'Please indicate any certifications that you have and their expiry date (if applicable).',
             type: 'field-group',
             component: FieldGroup,
             fields: [
@@ -630,7 +645,14 @@ export const formTabs: FormTab[] = [
               },
               {
                 name: 'expiry',
-                label: 'Certificate Expiry',
+                label: (
+                  <>
+                    Certificate Expiry
+                    <span className="text-sm text-gray-700 font-normal pl-2">
+                      (if applicable)
+                    </span>
+                  </>
+                ),
                 type: 'date',
                 component: DatePicker,
                 required: false,

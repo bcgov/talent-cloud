@@ -6,6 +6,7 @@ import { ErrorMessage, Field, FieldArray } from 'formik';
 import { dynamicFields, renderField } from '../utils/helpers';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
 import clsx from 'clsx';
+import { PlusIcon } from '@/components/ui/Icons';
 
 export const FieldGroup = ({
   field,
@@ -19,20 +20,25 @@ export const FieldGroup = ({
   return (
     <div className="w-full col-span-2">
       {field.label}
+      {field.helper && (
+        <div className="pb-12">
+          <p className="subtext">{field.helper}</p>
+        </div>
+      )}
       <FieldArray
         name={field.name}
         render={(arrayHelpers) => (
           <>
             {values?.map((value: any, index: number) => (
               <div key={value} className="grid grid-cols-3 gap-4">
-                {field.fields?.map((itm: FormFields, index: number) => (
+                {field.fields?.map((itm: FormFields) => (
                   <div key={itm.name} className="col-span-1">
                     <label htmlFor={itm.name}>
                       {itm.label}
                       {itm.required && <span className="text-errorRed">*</span>}
                     </label>
                     <Field
-                      value={value[itm.name as keyof typeof value]}
+                      value={value?.[index]?.[itm.name]}
                       name={`${field.name}.${index}.${itm.name}`}
                       type={itm.type}
                     >
@@ -84,7 +90,8 @@ export const FieldGroup = ({
               <Button
                 variant={ButtonTypes.SOLID}
                 onClick={() => arrayHelpers.push(dynamicFields[field.name])}
-                text="Add Another"
+                text={`Add ${field.fields?.[0].label.toString().split(' ')[0]}`}
+                textIcon={<PlusIcon />}
               />
             </div>
           </>

@@ -4,12 +4,10 @@ import type { FormFields } from '../constants/types';
 
 export const SelectField = ({
   field,
-  // form,
   props,
   options,
 }: {
   field: FieldInputProps<any>;
-  // form: FormikFormProps;
   props: FormFields;
   options?: any[];
 }) => {
@@ -18,7 +16,6 @@ export const SelectField = ({
       className={classes.menu.container}
       {...props}
       {...field}
-      value={undefined}
       defaultValue={''}
     >
       <option disabled value={''}>

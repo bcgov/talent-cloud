@@ -10,11 +10,11 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
   const { getOptions } = useIntakeForm();
 
   return (
-    <>
+    <div className="pb-24">
       {sections.map(
-        (itm) =>
+        (itm, index) =>
           itm.name && (
-            <FormSection section={itm} key={itm.name}>
+            <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
               <>
                 {itm.fields
                   ?.map((itm: any) => {
@@ -47,6 +47,6 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
             </FormSection>
           ),
       )}
-    </>
+    </div>
   );
 };

@@ -15,10 +15,10 @@ export const YearSelector = (props: SelectorProps) => (
   <Menu>
     <div className="flex flex-row">
       <MenuButton
-        className="w-full flex  font-bold  items-center pb-1"
+        className="w-full flex  font-bold  items-center mb-1"
         aria-label="open"
       >
-        <span className="text-md pr-1">{getYear(props.displayMonth)}</span>
+        <span className="text-gray-900 pr-1">{getYear(props.displayMonth)}</span>
         <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-icon" />
       </MenuButton>
     </div>
@@ -43,12 +43,12 @@ export const YearSelector = (props: SelectorProps) => (
                     new Date(itm.value, props.displayMonth.getMonth(), 1),
                   )
                 }
-                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left"
+                className="py-1 text-sm cursor-pointer px-8 rounded-sm hover:bg-gray-100 font-bold text-left text-black"
               >
                 {props.displayMonth.getFullYear() === itm.value ? (
-                  <span className="font-bold">{itm.label}</span>
+                  <span className="font-bold text-black">{itm.label}</span>
                 ) : (
-                  <span className="font-normal">{itm.label}</span>
+                  <span className="font-normal text-black">{itm.label}</span>
                 )}
               </button>
             </MenuItem>

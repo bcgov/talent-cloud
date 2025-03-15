@@ -44,7 +44,7 @@ export const Button = ({
       {loading ? (
         <ButtonLoading />
       ) : (
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-row gap-2 items-center">
           {textIcon}
           {text}
         </div>

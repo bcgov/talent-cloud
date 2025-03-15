@@ -1,8 +1,10 @@
 import { ButtonTypes } from '@/common';
 import type { FormikValues } from 'formik';
 import { useFormikContext } from 'formik';
-import type { IntakeFormValues } from '../constants/initial-values';
 import { Button } from '@/components';
+import type { IntakeFormValues } from '../constants/types';
+
+import { AlertType, useAlertContext } from '@/providers/Alert';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,
@@ -18,6 +20,8 @@ export const FormButtonNavigation = ({
   disablePrevious: boolean;
 }) => {
   const { values } = useFormikContext<IntakeFormValues>();
+  const { showAlert } = useAlertContext();
+
   return (
     <div>
       <div className="border border-t-grey-200"></div>
@@ -32,7 +36,13 @@ export const FormButtonNavigation = ({
           <Button
             text="Save For Later"
             variant={ButtonTypes.OUTLINED}
-            onClick={() => saveUpdateForm(values)}
+            onClick={() => {
+              saveUpdateForm(values);
+              showAlert({
+                title: 'Form Saved!',
+                type: AlertType.SUCCESS,
+              });
+            }}
           />
         </div>
         <div className="flex flex-row space-x-6">
