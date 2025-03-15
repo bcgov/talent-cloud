@@ -193,7 +193,7 @@ export type IntakeFormValues = PersonalDetails &
     program?: string;
     acknowledgement?: Expectations[];
     paylistId: string;
-    roles: BcwsRoleInterface[];
+    roles: string[];
     languages?: LanguageSkill[];
     tools?: ToolsSkill[];
     certifications?: CertificationSkill[];

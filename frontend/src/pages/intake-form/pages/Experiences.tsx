@@ -10,6 +10,7 @@ import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { FormField } from '../fields/FormField';
+import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
@@ -47,6 +48,10 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                         <div className="col-span-2">
                           <Banner content={fieldItm.label} type={BannerType.INFO} />
                         </div>
+                      ) : fieldItm.type === 'multiselect-group' ? (
+                        <>
+                          <MultiSelectGroup field={fieldItm} />
+                        </>
                       ) : (
                         <div
                           className={

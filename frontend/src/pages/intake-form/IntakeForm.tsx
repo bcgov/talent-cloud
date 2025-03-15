@@ -74,11 +74,12 @@ const IntakeForm = () => {
                           {tab.component({ sections: tab.sections })}
                         </div>
                       </div>
-                    )}
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </TabGroup>
+                    
+                  )}
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </TabGroup>
 
             <FormButtonNavigation
               saveUpdateForm={saveUpdateForm}
@@ -97,5 +98,6 @@ const IntakeForm = () => {
     );
   }
 };
+
 
 export default IntakeForm;
