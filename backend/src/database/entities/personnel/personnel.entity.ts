@@ -224,7 +224,7 @@ export class PersonnelEntity extends BaseEntity {
     type: 'date',
     nullable: true,
   })
-  chipsLastActionDate: Date;  // Action date, ie. when their CHIPS profile was last updated
+  chipsLastActionDate: Date; // Action date, ie. when their CHIPS profile was last updated
 
   @Column({
     name: 'chips_profile_missing',
@@ -264,7 +264,7 @@ export class PersonnelEntity extends BaseEntity {
     type: 'jsonb',
     default: () => "'[]'",
   })
-  chipsTrainingData: Array<{ id: string, name: string, completed: string }>;
+  chipsTrainingData: Array<{ id: string; name: string; completed: string }>;
 
   toResponseObject(
     roles: Role[],
@@ -311,6 +311,10 @@ export class PersonnelEntity extends BaseEntity {
       emcr: this?.emcr?.toResponseObject(roles) ?? null,
       recommitment:
         this.recommitment?.map((itm) => itm.toResponseObject()) ?? null,
+      chipsLastPing: this.chipsLastPing,
+      chipsProfileMissing: this.chipsProfileMissing,
+      chipsIssues: this.chipsIssues,
+      chipsTrainingData: this.chipsTrainingData,
     };
 
     // If availability is empty (hence we requested it and nothing came back), we fill in a "today"

@@ -205,15 +205,14 @@ export class PersonnelRO {
   })
   paylistId?: string;
 
-  @ApiProperty({description:'firstAidLevel', required: false})
-  firstAidLevel?: string
-  
-  @ApiProperty({description:'firstAidExpiry', required: false})
-  firstAidExpiry?: Date
-  
-  @ApiProperty({description:'psychologicalFirstAid', required: false})
-  psychologicalFirstAid?: boolean
+  @ApiProperty({ description: 'firstAidLevel', required: false })
+  firstAidLevel?: string;
 
+  @ApiProperty({ description: 'firstAidExpiry', required: false })
+  firstAidExpiry?: Date;
+
+  @ApiProperty({ description: 'psychologicalFirstAid', required: false })
+  psychologicalFirstAid?: boolean;
 
   @ApiProperty()
   @Expose({ groups: ['emcr', 'member', 'supervisor'] })
@@ -222,4 +221,16 @@ export class PersonnelRO {
   @ApiProperty()
   @Expose({ groups: ['bcws', 'member', 'supervisor'] })
   bcws?: BcwsRO;
+
+  @ApiProperty({ description: 'chipsLastPing', required: false })
+  chipsLastPing?: Date;
+
+  @ApiProperty({ description: 'chipsProfileMissing', required: true })
+  chipsProfileMissing?: boolean;
+
+  @ApiProperty({ description: 'chipsIssues', required: false })
+  chipsIssues?: { [key: string]: string };
+
+  @ApiProperty({ description: 'chipsTrainingData', required: false })
+  chipsTrainingData?: Array<{ id: string; name: string; completed: string }>;
 }

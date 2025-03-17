@@ -837,7 +837,10 @@ export class PersonnelService {
         'personnel.lastName',
         'personnel.employeeId',
       ])
-      .andWhere('bcws.status = :status', { status: Status.ACTIVE });
+      .andWhere('bcws.status = :status', { status: Status.ACTIVE })
+      .andWhere('personnel.chipsProfileMissing = :missingProfile', {
+        missingProfile: false,
+      });
     const personnel = await qb.getMany();
     return personnel.map((p) => ({
       employeeId: p.employeeId,
