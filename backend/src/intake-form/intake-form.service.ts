@@ -86,7 +86,7 @@ const email = req.idir;
       language: item.language,
       languageProficiency: item.level,
       })),
-    certifications: personnel.certifications?.map(item => ({certificationId: item.certificationId.toString(),  expiry: new Date(item.expiry) ?? undefined})),
+    certifications: personnel.certifications?.map(item => ({certificationId: item.certificationId.toString(),  expiry: item.expiry ? new Date(item.expiry) : undefined})),
     emergencyContactFirstName: personnel?.emergencyContactFirstName,
     emergencyContactLastName: personnel?.emergencyContactLastName,
     emergencyContactPhoneNumber: personnel?.emergencyContactPhoneNumber,
