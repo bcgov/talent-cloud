@@ -66,8 +66,8 @@ export const renderIntakeFormComponent = (fieldItm: FormComponent) => {
       return (
         <div className="col-span-2">
           <Banner
-            title={fieldItm.name}
-            content={fieldItm.label}
+            title={fieldItm.label}
+            content={fieldItm.content}
             type={BannerType.INFO}
           />
         </div>
@@ -91,14 +91,12 @@ export const handleFilterProgram = (
   itm: FormFields | FormSection,
   program: string | null,
 ) => {
-  if (!program) {
-    return false;
-  }
   if (program === 'all') {
-    return itm;
-  }
-  if (itm.program === program) {
-    return itm;
+    return true;
+  } else if (itm.program === program || itm.program === 'all' || !itm.program) {
+    return true;
+  } else {
+    return false;
   }
 };
 

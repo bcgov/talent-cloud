@@ -39,7 +39,7 @@ export const CheckboxGroupField = ({
               className="flex flex-row space-x-4 items-center"
             >
               <Checkbox
-                checked={field.value.includes(itm.value)}
+                checked={field.value?.includes(itm.value)}
                 onChange={() => handleChange(itm.value)}
                 name={`${field.name}.${index}`}
                 className="group block size-4 rounded border border-gray-700 bg-white data-[checked]:bg-gray-700 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[checked]:data-[disabled]:bg-gray-500 "

@@ -20,6 +20,55 @@ import { Experiences } from '../pages/Experiences';
 import { IntakeFormTab } from '../constants/enums';
 import type { FormTab, FormSection } from '../constants/types';
 import { Complete } from '../pages/Complete';
+import { BannerType } from '@/common/enums/banner-enum';
+import { Banner } from '@/components/ui/Banner';
+
+const emcrSectionsInterest = (
+  <div className="my-8">
+    <p className="text-xl font-bold mb-2">EMCR Section(s) Interest</p>
+    <Banner
+      title={
+        'For your EMCR CORE Team application, you only need to indicate the following:'
+      }
+      content={
+        <>
+          <ul className="list-disc list-inside text-info text-sm font-normal">
+            <li>
+              Your general experiences in emergency management (e.g, past experience
+              outside emergency events, etc.);
+            </li>
+            <li>Your ranking of and interest in EMCR CORE Team section(s)</li>
+          </ul>
+        </>
+      }
+      type={BannerType.INFO}
+    />
+  </div>
+);
+
+const bcwsSectionsInterest = (
+  <div className="my-8">
+    <p className="text-xl font-bold mb-2">BCWS Section(s) and Role(s) Interest</p>
+    <Banner
+      title={'For your BCWS CORE Team application, you must indicate the following:'}
+      content={
+        <>
+          <ul className="list-disc list-inside text-info text-sm font-normal">
+            <li>
+              Your ranking of BCWS CORE Team sections that you wish to be deployed in
+              the most;
+            </li>
+            <li>
+              Your ranking of BCWS CORE Team sections that you wish to be deployed in
+              the most;{' '}
+            </li>
+          </ul>
+        </>
+      }
+      type={BannerType.INFO}
+    />
+  </div>
+);
 
 export const formTabs: FormTab[] = [
   {
@@ -193,12 +242,53 @@ export const formTabs: FormTab[] = [
         name: 'Supervisor and Liason Details, Travel Preferences',
         fields: [
           {
-            name: 'Title',
-            label: 'Info',
+            name: 'infoSupervisorEMCR',
+            label: 'About supervisor',
             type: 'infoBox',
             component: TextField,
             required: false,
             placeholder: '',
+            program: Program.EMCR,
+            content: (
+              <p className="text-info text-sm">
+                We will notify your supervisor about the outcome of your application.
+                If there is a change in your position or supervisor at any point, you
+                must update this information and obtain your new supervisor’s
+                approval to participate.
+              </p>
+            ),
+          },
+          {
+            name: 'infoSupervisorBCWS',
+            label: 'About supervisor and liaison',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            placeholder: '',
+            program: Program.BCWS,
+            content: (
+              <>
+                <p className="text-info text-sm">
+                  We will notify your supervisor about the outcome of your
+                  application. If there is a change in your position or supervisor at
+                  any point, you must update this information and obtain your new
+                  supervisor’s approval to participate.
+                </p>
+                <br />
+                <br />
+                <p className="text-info text-sm">
+                  Liaison information is required for BCWS CORE Team applicants and
+                  is applicable only if you belong to any of the following: 1)
+                  Ministry of Forests, 2) Ministry of Water, Land and Resource
+                  Stewardship, 3) The Recreation Sites and Trails, and the BC Parks
+                  division under Ministry of Environment.{' '}
+                </p>
+                <br />
+                <p className="text-info text-sm">
+                  Please reach out to your supervisor about who your liaison is.{' '}
+                </p>
+              </>
+            ),
           },
           {
             name: 'supervisorFirstName',
@@ -235,7 +325,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'liaisonUnknownCheckbox',
             label: 'I am unsure who my liaison is',
-            type: 'checkbox',
+            type: 'checkbox-group',
             component: CheckboxGroupField,
             required: false,
             placeholder: '',
@@ -284,6 +374,30 @@ export const formTabs: FormTab[] = [
             required: false,
             placeholder: '000-000-0000',
             program: Program.BCWS,
+          },
+          {
+            name: 'infoTravelPreferences',
+            label: 'Travel Preferences',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            program: Program.ALL,
+            content: (
+              <>
+                <p className="text-info text-sm">
+                  If you are unwilling to travel to activation sites outside of your
+                  home location, your deployment opportunities may be limited.
+                  Deployment flexibility could also vary by role, with some requiring
+                  on-site presence. New CORE Team members may need to undergo on-site
+                  training.
+                </p>
+                <br />
+                <p className="text-info text-sm">
+                  You can always change your travel preferences in your dashboard
+                  once you become a member.
+                </p>
+              </>
+            ),
           },
           {
             name: 'travelPreferenceBcws',
@@ -357,8 +471,7 @@ export const formTabs: FormTab[] = [
     component: ({ sections }: { sections: FormSection[] }) => (
       <Experiences sections={sections} />
     ),
-    description:
-      'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.',
+    description: '',
     value: IntakeFormTab.Experiences,
     sections: [
       {
@@ -418,6 +531,7 @@ export const formTabs: FormTab[] = [
             colspan: 2,
           },
         ],
+        header: emcrSectionsInterest,
       },
       {
         program: Program.EMCR,
@@ -472,6 +586,7 @@ export const formTabs: FormTab[] = [
       {
         program: Program.BCWS,
         name: 'BCWS CORE Team Sections and Roles',
+        header: bcwsSectionsInterest,
         fields: [
           {
             name: 'firstChoiceSection',

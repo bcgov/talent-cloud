@@ -70,7 +70,9 @@ const IntakeForm = () => {
                       <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
                         <h3>{tab.title ?? tab.label}</h3>
 
-                        <div className="text-sm py-6">{tab.description}</div>
+                        {tab.description && (
+                          <div className="text-sm py-6">{tab.description}</div>
+                        )}
 
                         <div className="flex flex-col space-y-8  w-full">
                           {tab.component({ sections: tab.sections })}
