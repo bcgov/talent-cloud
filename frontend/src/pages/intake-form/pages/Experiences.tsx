@@ -11,6 +11,7 @@ import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { FormField } from '../fields/FormField';
 import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
+import { handleFilterProgram } from '../utils/helpers';
 
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
@@ -27,31 +28,33 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   }, [firstChoiceFunction]);
 
   const { getOptions } = useIntakeForm();
-
+  const { values } = useFormikContext<IntakeFormValues>();
   return (
     <div className="pb-24">
-      {sections.map(
-        (itm, index) =>
-          itm.fields && (
-            <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
-              <>
-                {itm.fields
-                  .map((itm: any) => {
-                    if (itm.options && itm.options.length === 0) {
-                      itm.options = getOptions(itm.name);
-                    }
-                    return itm;
-                  })
-                  .map((fieldItm) => (
+      {sections
+        .filter(
+          (section) =>
+            values.program &&
+            section.program &&
+            handleFilterProgram(section, values.program.toString()),
+        )
+        .map(
+          (section, index) =>
+            section.fields && (
+              <FormSection
+                section={section}
+                key={section.name}
+                defaultOpen={index === 0}
+              >
+                <>
+                  {section.fields.map((fieldItm) => (
                     <Fragment key={fieldItm.name}>
                       {fieldItm.type === 'infoBox' ? (
                         <div className="col-span-2">
                           <Banner content={fieldItm.label} type={BannerType.INFO} />
                         </div>
                       ) : fieldItm.type === 'multiselect-group' ? (
-                        <>
-                          <MultiSelectGroup field={fieldItm} />
-                        </>
+                        <MultiSelectGroup field={fieldItm} />
                       ) : (
                         <div
                           className={
@@ -60,15 +63,23 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               : 'col-span-1'
                           }
                         >
-                          <FormField key={fieldItm.name} {...fieldItm} />
+                          <FormField
+                            key={fieldItm.name}
+                            {...fieldItm}
+                            options={
+                              fieldItm.options?.length === 0
+                                ? getOptions(fieldItm.name)
+                                : fieldItm.options
+                            }
+                          />
                         </div>
                       )}
                     </Fragment>
                   ))}
-              </>
-            </FormSection>
-          ),
-      )}
+                </>
+              </FormSection>
+            ),
+        )}
     </div>
   );
 };

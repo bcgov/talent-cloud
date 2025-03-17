@@ -77,23 +77,40 @@ export class PersonnelService {
    * @param id
    * @returns
    */
-  async findOne(id: string): Promise<PersonnelEntity> {
-    const person = await this.personnelRepository.findOneOrFail({
-      where: { id },
-      relations: [
-        'certifications',
-        'certifications.certification',
-        'tools',
-        'tools.tool',
-        'homeLocation',
-        'workLocation',
-        'recommitment',
-        'recommitment.recommitmentCycle',
-        'languages',
-      ],
-    });
-
-    return person;
+  async findOne(id?: string, email?: string): Promise<PersonnelEntity> {
+    if (email) {
+      const person = await this.personnelRepository.findOne({
+        where: { email },
+        relations: [
+          'certifications',
+          'certifications.certification',
+          'tools',
+          'tools.tool',
+          'homeLocation',
+          'workLocation',
+          'recommitment',
+          'recommitment.recommitmentCycle',
+          'languages',
+        ],
+      });
+      return person;
+    } else if(id) {
+      const person = await this.personnelRepository.findOneOrFail({
+        where: { id },
+        relations: [
+          'certifications',
+          'certifications.certification',
+          'tools',
+          'tools.tool',
+          'homeLocation',
+          'workLocation',
+          'recommitment',
+          'recommitment.recommitmentCycle',
+          'languages',
+        ],
+      });
+      return person;
+    }
   }
 
   /**
@@ -144,6 +161,25 @@ export class PersonnelService {
           this.personnelRepository.save({ ...personEntity, languages });
         }),
       );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async createPerson(personnel: CreatePersonnelDTO): Promise<PersonnelEntity> {
+    try {
+      return await this.personnelRepository.save(
+        this.personnelRepository.create(new PersonnelEntity(personnel)),
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async updatePerson(personnel: UpdatePersonnelDTO): Promise<PersonnelEntity> {
+    console.log(personnel, 'UPDATE DTO');
+    try {
+      return await this.personnelRepository.save(personnel);
     } catch (e) {
       console.log(e);
     }

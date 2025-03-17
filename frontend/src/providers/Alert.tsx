@@ -1,5 +1,9 @@
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import type { ReactElement } from 'react';
 import { createContext, useContext, useMemo, useState } from 'react';
+import { Flip, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export enum AlertType {
   ERROR = 'error',
@@ -55,12 +59,38 @@ export const AlertProvider = ({ children }: { children: ReactElement }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>();
 
-  const showAlert = (ctx: { type: AlertType; message?: string; title?: string }) => {
-    const { type, message, title } = ctx;
+  const showAlert = ({
+    type,
+    message,
+    title,
+  }: {
+    type: AlertType;
+    message?: string;
+    title?: string;
+  }) => {
     setType(type);
     setMessage(message);
     setTitle(title);
-    setOpen(true);
+
+    toast(message, {
+      className: clsx(
+        type === AlertType.ERROR && 'bg-red-200 text-red-600',
+        type === AlertType.WARNING && 'bg-yellow-200 text-yellow-900',
+        type === AlertType.INFO && 'bg-blue-300 text-blue-800',
+        type === AlertType.SUCCESS && 'bg-sprout-300 text-green-900',
+      ),
+      type,
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      rtl: false,
+      pauseOnFocusLoss: false,
+      draggable: true,
+      pauseOnHover: true,
+      icon: InformationCircleIcon,
+      transition: Flip,
+    });
   };
 
   const closeAlert = (cb?: () => void) => {
@@ -79,5 +109,12 @@ export const AlertProvider = ({ children }: { children: ReactElement }) => {
     };
   }, [type, message, open, title]);
 
-  return <AlertContext.Provider value={value}>{children}</AlertContext.Provider>;
+  return (
+    <AlertContext.Provider value={value}>
+      <>
+        {children}
+        <ToastContainer />
+      </>
+    </AlertContext.Provider>
+  );
 };

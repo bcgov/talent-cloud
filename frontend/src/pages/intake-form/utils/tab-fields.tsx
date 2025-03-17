@@ -317,7 +317,7 @@ export const formTabs: FormTab[] = [
         name: 'Emergency Contact Details',
         fields: [
           {
-            name: 'emergencyFirstName',
+            name: 'emergencyContactFirstName',
             label: 'Emergency Contact First Name',
             type: 'text',
             component: TextField,
@@ -325,7 +325,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'John',
           },
           {
-            name: 'emergencyLastName',
+            name: 'emergencyContactLastName',
             label: 'Emergency Contact Last Name',
             type: 'text',
             component: TextField,
@@ -333,7 +333,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'emergencyPhone',
+            name: 'emergencyContactPhone',
             label: 'Emergency Contact Phone Number',
             type: 'tel',
             component: TextField,
@@ -341,7 +341,7 @@ export const formTabs: FormTab[] = [
             placeholder: '000-000-0000',
           },
           {
-            name: 'emergencyRelationship',
+            name: 'emergencyContactRelationship',
             label: 'Emergency Contact Relationship',
             type: 'text',
             component: TextField,
@@ -405,7 +405,7 @@ export const formTabs: FormTab[] = [
             colspan: 2,
           },
           {
-            name: 'firstNationsWorking',
+            name: 'firstNationsExperience',
             label:
               'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
             type: 'radio-group',
@@ -599,7 +599,7 @@ export const formTabs: FormTab[] = [
             colspan: 2,
             fields: [
               {
-                name: 'tool',
+                name: 'toolId',
                 colspan: 2,
                 label: 'Tool/Software',
                 type: 'select',
@@ -635,7 +635,7 @@ export const formTabs: FormTab[] = [
             component: FieldGroup,
             fields: [
               {
-                name: 'certificate',
+                name: 'certificationId',
                 label: 'Certification Name',
                 type: 'select',
                 component: SelectField,

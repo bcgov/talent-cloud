@@ -49,9 +49,9 @@ export const MultiSelectField = ({
         <MenuHandler>
           <MenuItem className="w-full">
             <div className={classes.menu.container}>
-              {field.value?.length ? (
+              {field.value && field.value?.length ? (
                 <div className={classes.menu.chipsContainer}>
-                  {field.value.length > 3 ? (
+                  {field?.value?.length > 3 ? (
                     <Chip
                       value={
                         <Typography
@@ -59,7 +59,7 @@ export const MultiSelectField = ({
                           variant="small"
                           className="font-bold text-info capitalize leading-none"
                         >
-                          {field.value.length} Selected
+                          {field?.value?.length} Selected
                         </Typography>
                       }
                       variant="ghost"
@@ -67,6 +67,7 @@ export const MultiSelectField = ({
                       onClose={handleCloseAll}
                     />
                   ) : (
+                    field.value &&
                     field.value?.map((itm: any) => {
                       const chip = options?.find((option) => option.value === itm);
                       return (
@@ -78,7 +79,7 @@ export const MultiSelectField = ({
                               variant="small"
                               className="font-bold text-info capitalize leading-none"
                             >
-                              {chip.label}
+                              {chip?.label ?? ''}
                             </Typography>
                           }
                           variant="ghost"

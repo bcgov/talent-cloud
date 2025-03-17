@@ -2,11 +2,12 @@
 
 
 export interface IntakeFormPersonnelData {
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
+  program: string;  
   employeeId?: string;
   paylistId?: string;
-  email?: string;
+  email: string;
   primaryPhone?: string;
   secondaryPhone?: string;
   workPhone?: string;
@@ -16,66 +17,53 @@ export interface IntakeFormPersonnelData {
   supervisorEmail?: string;
   supervisorPhone?: string;
   driverLicense?: string[];  
-  homeLocation?: {
-    id?: number;
-    locationName: string;
-    fireCentre?: string;
-    region?: string;
-  };
-  workLocation?: {
-    id: number;
-    locationName: string;
-    fireCentre?: string;
-    region?: string;
-  };
+  homeLocation?: number
   ministry?: string;
   division?: string;
-  tools?: any[];
+  tools?: {
+    toolId: string;
+    toolProficiency: string;
+  }[];
   languages?: {
     language: string;
-    level: string;
-    type: string;
+    languageProficiency: string;
+    
   }[];
-  certifications?: any[];
+  certifications?: {
+    certificationId: string;  
+    expiry?: Date;
+  }[];
   emergencyContactFirstName?: string;
   emergencyContactLastName?: string;
   emergencyContactPhoneNumber?: string;
-  emergencyContactRelationship?: string;
-  firstAidLevel?: string;
-  firstAidExpiry?: Date;
-  psychologicalFirstAid?: boolean;
-  emcr?: {
+  emergencyContactRelationship?: string;  
+  
     firstChoiceFunction?: string;
     secondChoiceFunction?: string;
     thirdChoiceFunction?: string;
-    travelPreference?: string;
-    firstNationExperienceLiving?: boolean;
-    firstNationExperienceWorking?: boolean;
+    
+    firstNationExperience?: boolean;
     peccExperience?: boolean;
     preocExperience?: boolean;
     emergencyExperience?: boolean;
-    experiences?: {
-      id?: number;
-      name?: string;
-      experience?: string;
-    }[];
-  } 
-  bcws?: {
+    functions: {
+      id: string;
+    }[]
     purchaseCardHolder?: boolean;
     liaisonFirstName?: string;
     liaisonLastName?: string;
     liaisonPhoneNumber?: string;
     liaisonEmail?: string;
     firstChoiceSection?: string;
-    secondChoiceSection?: number;
+    secondChoiceSection?: string;
     thirdChoiceSection?: string;
-    travelPreference?: string;
+    travelPreferenceBcws?: string;
+    travelPreferenceEmcr?: string;
     roles?: {
-      id: number;
-      name: string;
-      section: string;
+      id: string;
+      
     }[];
-  };
+  
 }
 
 

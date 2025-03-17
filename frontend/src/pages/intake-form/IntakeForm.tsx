@@ -18,29 +18,31 @@ const IntakeForm = () => {
   const { tokenParsed } = keycloak;
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { formData, saveUpdateForm, loading } = useIntakeForm();
+  const { formData, saveUpdateForm, loading, handleSubmit } = useIntakeForm();
   if (!tokenParsed) {
     return;
   }
-
   if (loading) {
     return <div>Loading...</div>;
   }
-
   if (formData?.currentProgram === Program.ALL) {
     return <Navigate to={Routes.MemberProfile} />;
   } else {
     return (
       <Formik
-        initialValues={{ ...intakeFormInitialValues, ...formData?.personnel }}
-        validationSchema={intakeFormValidationSchema}
-        onSubmit={(values, actions) => {
-          // TODO: Update
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
+        initialValues={{
+          ...intakeFormInitialValues,
+          ...formData?.personnel,
+          firstName: tokenParsed.given_name,
+          lastName: tokenParsed.family_name
+            ? tokenParsed.family_name
+            : tokenParsed.given_name,
+          email: tokenParsed.email,
+          idir_user_guid: tokenParsed.idir_user_guid,
+          program: formData?.program ?? formData?.personnel?.program,
         }}
+        validationSchema={intakeFormValidationSchema}
+        onSubmit={async (values) => await handleSubmit(values)}
       >
         <Form>
           <div className="h-full flex flex-col justify-between">
@@ -74,12 +76,11 @@ const IntakeForm = () => {
                           {tab.component({ sections: tab.sections })}
                         </div>
                       </div>
-                    
-                  )}
-                </TabPanel>
-              ))}
-            </TabPanels>
-          </TabGroup>
+                    )}
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </TabGroup>
 
             <FormButtonNavigation
               saveUpdateForm={saveUpdateForm}
@@ -98,6 +99,5 @@ const IntakeForm = () => {
     );
   }
 };
-
 
 export default IntakeForm;

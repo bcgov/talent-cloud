@@ -31,12 +31,22 @@ export class UpdatePersonnelProgramsDTO {
   bcws?: UpdateBcwsPersonnelDTO;
 }
 
+class UpdatePersonnelId {
+  @ApiProperty({
+    description: 'Personnel ID',
+    required: false,
+  })
+  id?: string;
+}
+
 export class UpdatePersonnelDTO extends IntersectionType(
+  UpdatePersonnelId,
   UpdatePersonnelProgramsDTO,
   UpdatePersonnelDetailsDTO,
   UpdateEmploymentInfo,
   UpdateEmergencyContactInfo,
   UpdateSupervisorInformationDTO,
   UpdateSkillsDTO,
+  
 ) {}
 

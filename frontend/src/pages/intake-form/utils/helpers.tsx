@@ -104,17 +104,11 @@ export const handleFilterProgram = (
 
 export const dynamicFields: { [key: string]: any } = {
   tools: {
-    tool: {
-      name: '',
-      proficiency: '',
-    },
+    toolId: '',
     toolProficiency: '',
   },
   certifications: {
-    certificate: {
-      name: '',
-      expiry: '',
-    },
+    certificationId: '',
     expiry: '',
   },
   languages: {

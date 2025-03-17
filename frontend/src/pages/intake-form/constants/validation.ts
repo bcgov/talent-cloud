@@ -40,8 +40,8 @@ export const employmentDetailsSchema = Yup.object().shape({
   workPhone: Yup.string().required('Work phone is required'),
   ministry: Yup.string().required('Ministry is required'),
   division: Yup.string().required('Division is required'),
-  paylistId: Yup.string().required('Pay list (Dept ID) is required'),
-  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
+  paylistId: Yup.string(),
+  purchaseCardHolder: Yup.string(),
 });
 
 export const supervisorDetailsSchema = Yup.object().shape({
@@ -64,14 +64,16 @@ export const travelDetailsSchema = Yup.object().shape({
 });
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
-  emergencyFirstName: Yup.string().required(
+  emergencyContactFirstName: Yup.string().required(
     "Emergency contact's first name is required",
   ),
-  emergencyLastName: Yup.string().required(
+  emergencyContactLastName: Yup.string().required(
     "Emergency contact's last name is required",
   ),
-  emergencyPhone: Yup.string().required("Emergency contact's phone is required"),
-  emergencyRelationship: Yup.string().required('Relationship is required'),
+  emergencyContactPhone: Yup.string().required(
+    "Emergency contact's phone is required",
+  ),
+  emergencyContactRelationship: Yup.string().required('Relationship is required'),
 });
 
 export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
@@ -163,8 +165,8 @@ export const intakeFormValidationSchema = Yup.object().shape({
   workPhone: Yup.string().required('Work phone is required'),
   ministry: Yup.string().required('Ministry is required'),
   division: Yup.string().required('Division is required'),
-  paylistId: Yup.string().required('Pay list (Dept ID) is required'),
-  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
+  paylistId: Yup.string(),
+  purchaseCardHolder: Yup.string(),
 
   supervisorFirstName: Yup.string().required("Supervisor's first name is required"),
   supervisorLastName: Yup.string().required("Supervisor's last name is required"),
@@ -177,19 +179,37 @@ export const intakeFormValidationSchema = Yup.object().shape({
   liaisonEmail: Yup.string().optional(),
   liaisonPhone: Yup.string().optional(),
 
-  travelPreference: Yup.string().required('Travel preference is required'),
+  travelPreferenceBcws: Yup.string(),
+  travelPreferenceEmcr: Yup.string(),
 
-  emergencyFirstName: Yup.string().required(
+  emergencyContactFirstName: Yup.string().required(
     "Emergency contact's first name is required",
   ),
-  emergencyLastName: Yup.string().required(
+  emergencyContactLastName: Yup.string().required(
     "Emergency contact's last name is required",
   ),
-  emergencyPhone: Yup.string().required("Emergency contact's phone is required"),
-  emergencyRelationship: Yup.string().required('Relationship is required'),
+  emergencyContactPhone: Yup.string().required(
+    "Emergency contact's phone is required",
+  ),
+  emergencyContactRelationship: Yup.string().required('Relationship is required'),
 
   emergencyExperience: Yup.boolean().required(),
   preocExperience: Yup.boolean().required(),
   peccExperience: Yup.boolean().required(),
-  firstNationsWorking: Yup.boolean().required(),
+  firstNationsExperience: Yup.boolean().required(),
 });
+
+const programStepValidation = Yup.object().shape({
+  program: Yup.string().required('Program is required'),
+  acknowledgement: Yup.array()
+    .of(Yup.string())
+    .min(1, 'At least one acknowledgement is required'),
+});
+const personnelStepValidation = personalDetailsSchema
+  .concat(employmentDetailsSchema)
+  .concat(supervisorDetailsSchema)
+  .concat(liaisonDetailsSchema)
+  .concat(travelDetailsSchema)
+  .concat(emergencyContactDetailsSchema)
+  .concat(generalEmergencyManagementExperienceSchema);
+export const stepValidation = [programStepValidation, personnelStepValidation];

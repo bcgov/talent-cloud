@@ -23,4 +23,20 @@ export class IntakeFormDTO {
   @IsOptional()
   personnel: IntakeFormPersonnelData; 
 
+  @ApiProperty({
+    description: 'Current Program',
+    required: false,
+    
+  })
+  @IsOptional()
+  currentProgram: Program;  
+
+  @ApiProperty({
+    description: 'Program',
+    required: false,
+    
+  })
+  @IsOptional()
+  program: Program;  
+
 }

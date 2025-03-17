@@ -16,6 +16,7 @@ import { IntakeFormRO } from './ro/intake-form.ro';
 import { RequestWithRoles } from '../auth/interface';
 import { UpdateResult } from 'typeorm';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @ApiTags('Intake Form API')
 @Controller('intake-form')
@@ -65,12 +66,12 @@ export class IntakeFormController {
     status: HttpStatus.OK,
     type: IntakeFormRO,
   })
-  @Post(':id')
+  @Post(':id/submit')
   async submitIntakeForm(
     @Body() createIntakeFormDto: IntakeFormDTO,
     @Req() req: RequestWithRoles,
     @Param() id: string,
-  ): Promise<PersonnelRO> {
+  ): Promise<PersonnelEntity> {
     return await this.intakeFormService.submitIntakeForm(
       createIntakeFormDto,
       req,

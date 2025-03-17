@@ -13,7 +13,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { PersonnelEntity } from 'src/database/entities/personnel/personnel.entity';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { UpdatePersonnelDTO } from './dto';
 import { GetAvailabilityDTO } from './dto/availability/get-availability.dto';

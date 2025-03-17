@@ -107,14 +107,14 @@ export const intakeFormInitialValues: IntakeFormValues = {
   ],
   tools: [
     {
-      tool: '',
-      proficiencyLevel: '',
+      toolId: '',
+      toolProficiency: '',
     },
   ],
   certifications: [
     {
-      name: '',
-      id: 0,
+      certificationId: '',
     },
   ],
+  driverLicense: [],
 };

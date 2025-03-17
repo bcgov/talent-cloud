@@ -70,13 +70,13 @@ export interface FormSection {
 }
 
 export interface ToolsSkill {
-  tool: string;
-  proficiencyLevel: string;
+  toolId: string;
+  toolProficiency: string;
 }
 export const toolSkills: ToolsSkill[] = [
   {
-    tool: '',
-    proficiencyLevel: '',
+    toolId: '',
+    toolProficiency: '',
   },
 ];
 
@@ -159,8 +159,7 @@ export interface LanguageSkill {
 }
 
 export interface CertificationSkill {
-  name: string;
-  id: number;
+  certificationId: string;
   expiry?: Date;
 }
 
@@ -197,4 +196,5 @@ export type IntakeFormValues = PersonalDetails &
     languages?: LanguageSkill[];
     tools?: ToolsSkill[];
     certifications?: CertificationSkill[];
+    driverLicense: string[];
   };
