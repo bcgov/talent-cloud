@@ -3,7 +3,7 @@ import type { BcwsRoleInterface, Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
-import type { ReactComponentElement } from 'react';
+import type { ReactComponentElement, ReactElement } from 'react';
 
 // yup
 import type * as Yup from 'yup';
@@ -34,6 +34,7 @@ export interface FormFields {
   section?: string;
   labelHelper?: string;
   component?: (props: any) => JSX.Element;
+  content?: string | ReactElement;
 }
 
 export interface FormTab {
@@ -62,6 +63,8 @@ export type FormComponent = {
   name: string;
   component?: any;
   options?: any[];
+  content?: string | ReactElement;
+  program?: string;
 };
 export interface FormSection {
   name?: string;

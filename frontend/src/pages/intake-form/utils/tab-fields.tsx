@@ -193,12 +193,53 @@ export const formTabs: FormTab[] = [
         name: 'Supervisor and Liason Details, Travel Preferences',
         fields: [
           {
-            name: 'Title',
-            label: 'Info',
+            name: 'infoSupervisorEMCR',
+            label: 'About supervisor',
             type: 'infoBox',
             component: TextField,
             required: false,
             placeholder: '',
+            program: Program.EMCR,
+            content: (
+              <p>
+                We will notify your supervisor about the outcome of your application.
+                If there is a change in your position or supervisor at any point, you
+                must update this information and obtain your new supervisor’s
+                approval to participate.
+              </p>
+            ),
+          },
+          {
+            name: 'infoSupervisorBCWS',
+            label: 'About supervisor and liaison',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            placeholder: '',
+            program: Program.BCWS,
+            content: (
+              <>
+                <p>
+                  We will notify your supervisor about the outcome of your
+                  application. If there is a change in your position or supervisor at
+                  any point, you must update this information and obtain your new
+                  supervisor’s approval to participate.
+                </p>
+                <br />
+                <br />
+                <p>
+                  Liaison information is required for BCWS CORE Team applicants and
+                  is applicable only if you belong to any of the following: 1)
+                  Ministry of Forests, 2) Ministry of Water, Land and Resource
+                  Stewardship, 3) The Recreation Sites and Trails, and the BC Parks
+                  division under Ministry of Environment.{' '}
+                </p>
+                <br />
+                <p>
+                  Please reach out to your supervisor about who your liaison is.{' '}
+                </p>
+              </>
+            ),
           },
           {
             name: 'supervisorFirstName',
@@ -234,8 +275,8 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'liaisonUnknownCheckbox',
-            label: 'I am unsure who my liaison is',
-            type: 'checkbox',
+            label: '',
+            type: 'checkbox-group',
             component: CheckboxGroupField,
             required: false,
             placeholder: '',
@@ -284,6 +325,30 @@ export const formTabs: FormTab[] = [
             required: false,
             placeholder: '000-000-0000',
             program: Program.BCWS,
+          },
+          {
+            name: 'infoTravelPreferences',
+            label: 'Travel Preferences',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            program: Program.ALL,
+            content: (
+              <>
+                <p>
+                  If you are unwilling to travel to activation sites outside of your
+                  home location, your deployment opportunities may be limited.
+                  Deployment flexibility could also vary by role, with some requiring
+                  on-site presence. New CORE Team members may need to undergo on-site
+                  training.
+                </p>
+                <br />
+                <p>
+                  You can always change your travel preferences in your dashboard
+                  once you become a member.
+                </p>
+              </>
+            ),
           },
           {
             name: 'travelPreferenceBcws',

@@ -2,7 +2,7 @@
 import type { FieldInputProps, FormikFormProps } from 'formik';
 
 // types & values
-import type { FormComponent, FormFields, FormSection } from '../constants/types';
+import type { FormComponent, FormFields } from '../constants/types';
 
 import { BannerType } from '@/common/enums/banner-enum';
 
@@ -21,62 +21,68 @@ export const renderField = ({
   form,
   props,
   options,
+  program,
 }: {
   field: FieldInputProps<any>;
   form: FormikFormProps;
   props: FormFields;
   options?: any[];
+  program?: string;
 }) => {
-  switch (props.type) {
-    case 'select':
-      return (
-        <SelectField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
-    case 'radio-group':
-      return (
-        <RadioGroupField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
-    case 'checkbox-group':
-      return (
-        <CheckboxGroupField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
-    case 'date':
-      return (
-        <DateField
-          field={{ ...field, value: { from: undefined, to: undefined } }}
-          form={form}
-          props={props}
-        />
-      );
-    case 'multiselect':
-      return (
-        <MultiSelectField
-          field={field}
-          form={form}
-          props={props}
-          options={options ?? []}
-        />
-      );
-    case 'multiselect-group':
-    case 'text':
-    case 'tel':
-    default:
-      return <TextField field={field} form={form} props={props} />;
+  const isRender = program ? handleFilterProgram(props, program) : true;
+
+  if (isRender) {
+    switch (props.type) {
+      case 'select':
+        return (
+          <SelectField
+            field={field}
+            form={form}
+            props={props}
+            options={options ?? []}
+          />
+        );
+      case 'radio-group':
+        return (
+          <RadioGroupField
+            field={field}
+            form={form}
+            props={props}
+            options={options ?? []}
+          />
+        );
+      case 'checkbox-group':
+        return (
+          <CheckboxGroupField
+            field={field}
+            form={form}
+            props={props}
+            options={options ?? []}
+          />
+        );
+      case 'date':
+        return (
+          <DateField
+            field={{ ...field, value: { from: undefined, to: undefined } }}
+            form={form}
+            props={props}
+          />
+        );
+      case 'multiselect':
+        return (
+          <MultiSelectField
+            field={field}
+            form={form}
+            props={props}
+            options={options ?? []}
+          />
+        );
+      case 'multiselect-group':
+      case 'text':
+      case 'tel':
+      default:
+        return <TextField field={field} form={form} props={props} />;
+    }
   }
 };
 
@@ -88,8 +94,8 @@ export const renderIntakeFormComponent = (fieldItm: FormComponent) => {
       return (
         <div className="col-span-2">
           <Banner
-            title={fieldItm.name}
-            content={fieldItm.label}
+            title={fieldItm.label}
+            content={fieldItm.content || ''}
             type={BannerType.INFO}
           />
         </div>
@@ -110,17 +116,15 @@ export const renderIntakeFormComponent = (fieldItm: FormComponent) => {
 };
 
 export const handleFilterProgram = (
-  itm: FormFields | FormSection,
-  program: string | null,
+  itm: FormComponent | FormFields,
+  program: string,
 ) => {
-  if (!program) {
-    return false;
-  }
   if (program === 'all') {
-    return itm;
-  }
-  if (itm.program === program) {
-    return itm;
+    return true;
+  } else if (itm.program === program || itm.program === 'all' || !itm.program) {
+    return true;
+  } else {
+    return false;
   }
 };
 
