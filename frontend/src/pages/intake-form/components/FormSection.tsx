@@ -19,7 +19,7 @@ export const FormSection = ({
 }) => {
   return (
     <>
-      {header && header}
+      {header}
       <Disclosure
         as="div"
         className="border border-1 border-gray-300 rounded-sm my-8"
