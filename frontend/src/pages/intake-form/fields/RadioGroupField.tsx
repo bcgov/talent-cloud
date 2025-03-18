@@ -1,5 +1,5 @@
 // formik
-import type { FieldInputProps, FormikFormProps } from 'formik';
+import type { FieldInputProps } from 'formik';
 import { Field } from 'formik';
 
 // form
@@ -11,11 +11,10 @@ export const RadioGroupField = ({
   options,
 }: {
   field: FieldInputProps<any>;
-  form: FormikFormProps;
   options?: any[];
 }) => {
   const { currentProgram } = useIntakeForm();
-  const disabled = field.name === 'program' && currentProgram;
+  const disabled = field.name === 'program' && currentProgram ? true : false;
 
   return (
     <>

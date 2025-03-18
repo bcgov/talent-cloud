@@ -17,18 +17,18 @@ import {
 } from '@/common/enums/travel-preference.enum';
 import type { FieldType } from './types';
 
-const phoneNumber = (value: any) => {
+export const phoneNumber = (value: any) => {
   if (value === '' || !value || value === null) {
     return true;
   } else return value?.toString().replace(/[^\d]/g, '').length === 10;
 };
 
-const firstName = Yup.string()
+export const firstName = Yup.string()
   .min(2, 'Min length 2 characters.')
   .max(50, 'Max length 50 characters.')
   .required('This field is required.');
 
-const lastName = Yup.string()
+export const lastName = Yup.string()
   .min(2, 'Min length 2 characters.')
   .max(50, 'Max length 50 characters.')
   .required('This field is required.');
@@ -45,7 +45,7 @@ const homeLocation = Yup.object().shape({
   fireCentre: Yup.string(),
 });
 
-const primaryPhone = Yup.string()
+export const primaryPhone = Yup.string()
   .required('This field is required.')
   .test(
     'phone number',
@@ -53,7 +53,7 @@ const primaryPhone = Yup.string()
     phoneNumber,
   );
 
-const secondaryPhone = Yup.string()
+export const secondaryPhone = Yup.string()
   .nullable()
   .optional()
   .test(
@@ -63,23 +63,23 @@ const secondaryPhone = Yup.string()
   )
   .optional();
 
-const workPhone = Yup.string().test(
+export const workPhone = Yup.string().test(
   'phone number',
   'Invalid phone number format. Please enter digits only. ex: 5555555555',
   phoneNumber,
 );
 
-const supervisorFirstName = Yup.string()
+export const supervisorFirstName = Yup.string()
   .min(2, 'Min length 2 characters.')
   .max(50, 'Max length 50 characters.')
   .required('This field is required.');
 
-const supervisorLastName = Yup.string()
+export const supervisorLastName = Yup.string()
   .min(2, 'Min length 2 characters.')
   .max(50, 'Max length 50 characters.')
   .required('This field is required.');
 
-const supervisorEmail = Yup.string()
+export const supervisorEmail = Yup.string()
   .optional()
   .nullable()
   .email('Invalid email format.')
@@ -88,7 +88,7 @@ const supervisorEmail = Yup.string()
     'Invalid email format. Must be a gov.bc.ca email address.',
   );
 
-const supervisorPhone = Yup.string()
+export const supervisorPhone = Yup.string()
   .optional()
   .nullable()
   .test(
@@ -120,7 +120,7 @@ const liaisonFirstName = Yup.string().optional();
 
 const liaisonLastName = Yup.string().optional();
 
-const liaisonPhoneNumber = Yup.string()
+export const liaisonPhoneNumber = Yup.string()
   .test(
     'phone number',
     'Invalid phone number format. Please enter digits only. ex: 5555555555',
@@ -135,7 +135,7 @@ const emergencyContactFirstName = Yup.string().optional();
 
 const emergencyContactLastName = Yup.string().optional();
 
-const emergencyContactPhoneNumber = Yup.string()
+export const emergencyContactPhoneNumber = Yup.string()
   .optional()
   .nullable()
   .test(
@@ -701,7 +701,7 @@ export const fields = {
       required: false,
       program: Program.BCWS,
     },
-  
+
     liaisonPhoneNumber: {
       name: 'bcws.liaisonPhoneNumber',
       label: 'Liaison Number',

@@ -1,4 +1,5 @@
 // common
+import { Section } from '@/common/enums/sections.enum';
 import type {
   LiaisonDetails,
   PersonalDetails,
@@ -58,10 +59,10 @@ export const emergencyContactDetails: EmergencyContactDetails = {
 
 export const generalEmergencyManagementExperience: GeneralEmergencyManagementExperience =
   {
-    emergencyExperience: false,
-    preocExperience: false,
-    peccExperience: false,
-    firstNationsWorking: false,
+    emergencyExperience: undefined,
+    preocExperience: undefined,
+    peccExperience: undefined,
+    firstNationsExperience: undefined,
   };
 
 export const sectionRolesBcws: SectionRolesBcws = {
@@ -85,17 +86,25 @@ export const intakeFormInitialValues: IntakeFormValues = {
   ...employmentDetails,
   ...supervisorDetails,
   ...emergencyContactDetails,
-
+  homeLocation: '',
   firstChoiceFunction: '',
   secondChoiceFunction: '',
   thirdChoiceFunction: '',
   travelPreferenceEmcr: '',
   ...generalEmergencyManagementExperience,
-  functions: [''],
+  functions: [],
   firstChoiceSection: '',
   secondChoiceSection: '',
   thirdChoiceSection: '',
-  roles: [''],
+  unionMembership: '',
+  roles: [
+    { [Section.PLANNING]: [] },
+    { [Section.LOGISTICS]: [] },
+    { [Section.FINANCE_ADMIN]: [] },
+    { [Section.OPERATIONS]: [] },
+    { [Section.COMMAND]: [] },
+    { [Section.AVIATION]: [] },
+  ],
   ...liaisonDetails,
   travelPreferenceBcws: '',
   paylistId: '',

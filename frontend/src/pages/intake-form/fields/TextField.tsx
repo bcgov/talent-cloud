@@ -1,23 +1,24 @@
 import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
-import clsx from 'clsx';
-
-import type { FormFields } from '../constants/types';
+import { formatPaylistID, formatPhone } from '@/utils';
 
 export const TextField = ({
   field,
-  ...props
+  type,
+  placeholder,
 }: {
   field: FieldInputProps<any>;
-  props: FormFields;
+  type?: string;
+  placeholder?: string;
 }) => {
+  if (type === 'tel') {
+    field.value = formatPhone(field.value);
+  }
+  if (field.name === 'paylistId') {
+    field.value = formatPaylistID(field.value);
+  }
+
   return (
-    <div className="text-black relative w-full">
-      <input
-        className={clsx(classes.menu.container, 'text-black')}
-        {...props}
-        {...field}
-      />
-    </div>
+    <input {...field} placeholder={placeholder} className={classes.menu.container} />
   );
 };

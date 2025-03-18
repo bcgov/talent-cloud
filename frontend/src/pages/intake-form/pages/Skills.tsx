@@ -4,13 +4,13 @@ import type {
   IntakeFormValues,
 } from '../constants/types';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
-import { FieldGroup } from '../components/FieldGroup';
+
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { Fragment } from 'react';
 import { useFormikContext } from 'formik';
-
 import { FormField } from '../fields/FormField';
+import { FieldGroup } from '../components/FieldGroup';
 
 export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
   const { getOptions } = useIntakeForm();
@@ -36,13 +36,13 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
                           <Banner content={fieldItm.label} type={BannerType.INFO} />
                         </div>
                       ) : fieldItm.type === 'multiselect' ? (
-                        <>
+                        <div className="col-span-2">
                           <FormField
-                            key={fieldItm.name}
                             {...fieldItm}
-                            options={getOptions(fieldItm.name)}
+                            key={fieldItm.name}
+                            value={values[fieldItm.name as keyof IntakeFormValues]}
                           />
-                        </>
+                        </div>
                       ) : (
                         <FieldGroup
                           key={fieldItm.name}
@@ -55,9 +55,6 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
                               return itm;
                             }),
                           }}
-                          values={
-                            values[fieldItm.name as keyof IntakeFormValues] as any[]
-                          }
                         />
                       )}
                     </Fragment>

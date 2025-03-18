@@ -1,21 +1,15 @@
-import type { FormFields } from '../constants/types';
+import type { FormFields, IntakeFormValues } from '../constants/types';
 import { Button } from '@/components';
 import { ButtonTypes } from '@/common';
-import type { FieldInputProps, FormikFormProps } from 'formik';
-import { ErrorMessage, Field, FieldArray } from 'formik';
-import { dynamicFields, renderField } from '../utils/helpers';
+import { FieldArray, useFormikContext } from 'formik';
+import { dynamicFields } from '../utils/helpers';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
-import clsx from 'clsx';
 import { PlusIcon } from '@/components/ui/Icons';
+import { FormField } from '../fields/FormField';
 
-export const FieldGroup = ({
-  field,
-  values,
-}: {
-  field: FormFields;
-  values: string[];
-}) => {
+export const FieldGroup = ({ field }: { field: FormFields }) => {
   const { getOptions } = useIntakeForm();
+  const { values } = useFormikContext<IntakeFormValues>();
 
   return (
     <div className="w-full col-span-2">
@@ -29,6 +23,7 @@ export const FieldGroup = ({
         name={field.name}
         render={(arrayHelpers) => (
           <>
+<<<<<<< HEAD
             {values?.map((value: any, index: number) => (
               <div key={value} className="grid grid-cols-3 gap-4">
                 {field.fields?.map((itm: FormFields) => (
@@ -71,18 +66,36 @@ export const FieldGroup = ({
                         </>
                       )}
                     </Field>
-                  </div>
-                ))}
+=======
+            {(values?.[field.name as keyof typeof values] as {}[])?.map(
+              (value: any, index: number) => (
+                <div key={value} className="grid grid-cols-3 gap-4">
+                  {field.fields?.map((itm: FormFields) => (
+                    <div key={itm.name} className="col-span-1">
+                      <FormField
+                        {...itm}
+                        value={value?.[index]?.[itm.name]}
+                        name={`${field.name}.${index}.${itm.name}`}
+                        options={
+                          itm.options && itm.options.length === 0
+                            ? getOptions(itm.name)
+                            : itm.options
+                        }
+                      />
+                    </div>
+                  ))}
 
-                <div className="col-span-1 pt-9">
-                  <Button
-                    variant={ButtonTypes.OUTLINED}
-                    text="Remove"
-                    onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                  />
+                  <div className="col-span-1 pt-9">
+                    <Button
+                      variant={ButtonTypes.OUTLINED}
+                      text="Remove"
+                      onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                    />
+>>>>>>> 84044c2b (step validation and form submission)
+                  </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
 
             <div className="pt-4">
               <Button
