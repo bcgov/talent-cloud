@@ -76,8 +76,8 @@ const bcwsSectionsInterest = (
 // Roles & Interests Descriptions
 const emcrDefinitionsModalGridContainer = (
   <div className="grid grid-cols-6 mt-4 gap-y-4">
-    {emcr.map((itm) => (
-      <ModalGridItem {...itm} />
+    {emcr.map((itm, index: number) => (
+      <ModalGridItem key={index} {...itm} />
     ))}
   </div>
 );
@@ -88,12 +88,12 @@ const emcrDefinitionsModalButton = (
 );
 const bcwsDefinitionsModalGridContainer = (
   <div className="flex flex-col mt-4 gap-y-4">
-    {bcws.map((sec) => (
-      <Accordion title={sec.section}>
+    {bcws.map((sec, index: number) => (
+      <Accordion title={sec.section} key={index}>
         {
           <div className="grid grid-cols-6 gap-y-4">
-            {sec.roles.map((rol) => (
-              <ModalGridItem {...rol} titleStyle="!font-normal" />
+            {sec.roles.map((rol, rolIndex: number) => (
+              <ModalGridItem {...rol} titleStyle="!font-normal" key={rolIndex} />
             ))}
           </div>
         }

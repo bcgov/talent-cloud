@@ -7,8 +7,6 @@ import type {
 import { useFormikContext } from 'formik';
 
 import { useIntakeForm } from '@/hooks/useIntakeForm';
-import { BannerType } from '@/common/enums/banner-enum';
-import { Banner } from '@/components/ui/Banner';
 import { FormField } from '../fields/FormField';
 import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 import {
