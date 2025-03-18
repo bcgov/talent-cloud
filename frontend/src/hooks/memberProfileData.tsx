@@ -1,11 +1,18 @@
-import { Member, RegionName, FireCentreName } from '@/common';
-import {
-  TravelPreferenceText,
+import type { Member } from '@/common';
+import { RegionName, FireCentreName } from '@/common';
+import type {
   BcwsTravelPreference,
   EmcrTravelPreference,
 } from '@/common/enums/travel-preference.enum';
+import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 import { formatPhone } from '@/utils';
-import { formatDriversLicenses, getMembershipDetails, skillsData } from './commonProfileData';
+import {
+  formatDriversLicenses,
+  getMembershipDetails,
+  skillsData,
+} from './commonProfileData';
+import { QuestionIcon } from '../components/ui/Icons';
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
 export const memberData = (personnel?: Member) => {
   let homeLocationTitle;
@@ -45,10 +52,22 @@ export const memberData = (personnel?: Member) => {
       {
         title: homeLocationTitle,
         content: homeLocation,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['workLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['workLocation'],
       },
       {
         title: workLocationTitle,
         content: workLocation,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['homeLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['homeLocation'],
       },
       {
         title: 'Travel Preference BCWS',
@@ -71,8 +90,17 @@ export const memberData = (personnel?: Member) => {
       {
         title: 'Employee ID',
         content: personnel?.employeeId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
-      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
+      {
+        title: 'Paylist (Dept ID)',
+        content: personnel?.paylistId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
     ],
     contact: [
       {
@@ -96,10 +124,16 @@ export const memberData = (personnel?: Member) => {
           personnel?.supervisorFirstName && personnel?.supervisorLastName
             ? `${personnel?.supervisorFirstName} ${personnel?.supervisorLastName}`
             : '--',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
       {
         title: 'Supervisor Email',
         content: personnel?.supervisorEmail ?? '--',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
       {
         title: 'Supervisor Phone Number',
@@ -112,6 +146,7 @@ export const memberData = (personnel?: Member) => {
           personnel?.bcws?.liaisonFirstName && personnel?.bcws?.liaisonLastName
             ? `${personnel?.bcws?.liaisonFirstName} ${personnel?.bcws?.liaisonLastName}`
             : '--',
+        tooltipIcon: <QuestionIcon />,
         tooltipTitle: 'How can I find my liaison?',
         tooltipContent: (
           <div className="py-2">
@@ -146,10 +181,17 @@ export const memberData = (personnel?: Member) => {
       {
         title: 'Ministry',
         content: `${personnel?.ministry}`,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['ministry'],
       },
       {
         title: 'Division',
         content: `${personnel?.division ?? 'Not Listed'}`,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
     ],
     emergency: [
@@ -171,6 +213,6 @@ export const memberData = (personnel?: Member) => {
     ],
     membership: personnel && getMembershipDetails(personnel),
 
-    skills: personnel && skillsData(personnel),  
+    skills: personnel && skillsData(personnel),
   };
 };

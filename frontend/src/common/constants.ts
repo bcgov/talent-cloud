@@ -207,6 +207,11 @@ export interface PersonnelInfo {
   certifications?: Certification[];
   recommitment?: Recommitment[];
   lastDeployed?: string;
+
+  chipsProfileMissing: boolean;
+  chipsIssues: { [key: string]: string };
+  chipsTrainingData: Array<{ id: string; name: string; completed: string }>;
+  chipsLastPing?: string;
 }
 
 export interface EmcrMember {

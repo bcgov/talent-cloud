@@ -229,7 +229,7 @@ export class PersonnelRO {
   chipsProfileMissing?: boolean;
 
   @ApiProperty({ description: 'chipsIssues', required: false })
-  chipsIssues?: { [key: string]: string };
+  chipsIssues: { [key: string]: string };
 
   @ApiProperty({ description: 'chipsTrainingData', required: false })
   chipsTrainingData?: Array<{ id: string; name: string; completed: string }>;
