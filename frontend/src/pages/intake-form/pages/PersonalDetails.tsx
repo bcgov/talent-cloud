@@ -8,7 +8,11 @@ import { Banner } from '@/components/ui/Banner';
 import { FormField } from '../fields/FormField';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { Fragment } from 'react';
-import { handleFilterProgram } from '../utils/helpers';
+import {
+  handleFilterProgram,
+  intakeFormComponents,
+  renderIntakeFormComponent,
+} from '../utils/helpers';
 import { useFormikContext } from 'formik';
 
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
@@ -16,6 +20,16 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
   const { values } = useFormikContext<IntakeFormValues>();
   return (
     <div className="pb-24">
+      <Banner
+        title={'Information Detected from your Government Profile'}
+        content={
+          'Some fields have been auto-populated based on existing information from your government profile. Please review them carefully for accuracy.'
+        }
+        type={BannerType.INFO}
+        onClose={(e) => {
+          e.currentTarget.parentNode.remove();
+        }}
+      />
       {sections
         .filter((section) =>
           section.program && values.program
@@ -41,12 +55,9 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
                     })
                     ?.map((fieldItm) => (
                       <Fragment key={fieldItm.name}>
-                        {fieldItm.type === 'infoBox' ? (
+                        {intakeFormComponents.includes(fieldItm.type) ? (
                           <div className={'col-span-2'}>
-                            <Banner
-                              content={fieldItm.label}
-                              type={BannerType.INFO}
-                            />
+                            {renderIntakeFormComponent(fieldItm)}
                           </div>
                         ) : (
                           <div

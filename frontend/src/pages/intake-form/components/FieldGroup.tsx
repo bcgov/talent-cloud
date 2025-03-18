@@ -35,7 +35,7 @@ export const FieldGroup = ({
                   <div key={itm.name} className="col-span-1">
                     <label htmlFor={itm.name}>
                       {itm.label}
-                      {itm.required && <span className="text-errorRed">*</span>}
+                      {itm.required && <span className="text-error">*</span>}
                     </label>
                     <Field
                       value={value?.[index]?.[itm.name]}
@@ -64,9 +64,7 @@ export const FieldGroup = ({
                           <ErrorMessage name={field.name}>
                             {(msg) => {
                               return (
-                                <div className="font-normal text-errorRed">
-                                  {msg}
-                                </div>
+                                <div className="font-normal text-error">{msg}</div>
                               );
                             }}
                           </ErrorMessage>
