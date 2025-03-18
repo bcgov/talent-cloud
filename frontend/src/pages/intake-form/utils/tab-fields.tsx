@@ -22,6 +22,9 @@ import type { FormTab, FormSection } from '../constants/types';
 import { Complete } from '../pages/Complete';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
+import { Modal, ModalGridItem } from '../components/Modal';
+import { bcws, emcr } from '@/components/profile/sections-roles/roles';
+import { Accordion } from '../components/Accordion';
 
 const emcrSectionsInterest = (
   <div className="my-8">
@@ -68,6 +71,40 @@ const bcwsSectionsInterest = (
       type={BannerType.INFO}
     />
   </div>
+);
+
+// Roles & Interests Descriptions
+const emcrDefinitionsModalGridContainer = (
+  <div className="grid grid-cols-6 mt-4 gap-y-4">
+    {emcr.map((itm) => (
+      <ModalGridItem {...itm} />
+    ))}
+  </div>
+);
+const emcrDefinitionsModalButton = (
+  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+    Learn more about EMCR CORE Team sections
+  </a>
+);
+const bcwsDefinitionsModalGridContainer = (
+  <div className="flex flex-col mt-4 gap-y-4">
+    {bcws.map((sec) => (
+      <Accordion title={sec.section}>
+        {
+          <div className="grid grid-cols-6 gap-y-4">
+            {sec.roles.map((rol) => (
+              <ModalGridItem {...rol} titleStyle="!font-normal" />
+            ))}
+          </div>
+        }
+      </Accordion>
+    ))}
+  </div>
+);
+const bcwsDefinitionsModalButton = (
+  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+    Learn more about BCWS CORE Team sections
+  </a>
 );
 
 export const formTabs: FormTab[] = [
@@ -479,6 +516,20 @@ export const formTabs: FormTab[] = [
         name: 'General Emergency Management Experience',
         fields: [
           {
+            name: 'emergencyExperienceHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <p>
+                Please answer the following questions regarding your{' '}
+                <span className="font-bold">
+                  emergency management related experiences
+                </span>
+                .
+              </p>
+            ),
+          },
+          {
             name: 'emergencyExperience',
             label:
               'Do you have any direct experience related to emergency management?',
@@ -538,6 +589,25 @@ export const formTabs: FormTab[] = [
         name: 'EMCR Core Team Sections',
         fields: [
           {
+            name: 'emcCoreTeamSectionsHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <>
+                <p>
+                  Please select your top three EMCR CORE Team sections that you would
+                  like to be deployed in.{' '}
+                </p>
+                <Modal
+                  modalButton={emcrDefinitionsModalButton}
+                  contentHeader="EMCR CORE Team Section Definitions"
+                  gridHeader="EMCR sections consist of the following:"
+                  gridContainer={emcrDefinitionsModalGridContainer}
+                />
+              </>
+            ),
+          },
+          {
             name: 'firstChoiceFunction',
             label: 'First Choice Function',
             type: 'select',
@@ -568,6 +638,12 @@ export const formTabs: FormTab[] = [
             options: [],
           },
           {
+            name: 'emcrDivider',
+            label: '',
+            type: 'componentBox',
+            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
+          },
+          {
             name: 'functions',
             label:
               'Please select ALL the sections that you are interested in, if you were to be deployed.',
@@ -588,6 +664,25 @@ export const formTabs: FormTab[] = [
         name: 'BCWS CORE Team Sections and Roles',
         header: bcwsSectionsInterest,
         fields: [
+          {
+            name: 'bcwsCoreTeamSectionsHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <>
+                <p>
+                  Please select your top three BCWS CORE Team sections that you would
+                  like to be deployed in.
+                </p>
+                <Modal
+                  modalButton={bcwsDefinitionsModalButton}
+                  contentHeader="BCWS CORE Team Section & Role Definitions"
+                  gridHeader="BCWS sections consist of the following. Please expand each sections to view their respective roles."
+                  gridContainer={bcwsDefinitionsModalGridContainer}
+                />
+              </>
+            ),
+          },
           {
             name: 'firstChoiceSection',
             label: 'First Choice Section',
@@ -626,6 +721,12 @@ export const formTabs: FormTab[] = [
               label: itm,
               value: itm,
             })),
+          },
+          {
+            name: 'bcwsDivider',
+            label: '',
+            type: 'componentBox',
+            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
           },
           {
             name: 'roles',

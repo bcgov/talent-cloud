@@ -81,7 +81,7 @@ export const renderIntakeFormComponent = (fieldItm: FormComponent) => {
         </div>
       );
     case 'componentBox':
-      return <div className="col-span-2">{fieldItm.component}</div>;
+      return <div className="col-span-2">{fieldItm.component()}</div>;
     default:
       return <></>;
   }
