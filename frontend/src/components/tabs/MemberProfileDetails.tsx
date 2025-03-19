@@ -7,6 +7,10 @@ import { MemberProfileEditForm } from '../profile/forms';
 import type { Member } from '@/common';
 import { ButtonTypes, Program } from '@/common';
 import type { FormikValues } from 'formik';
+import { Banner } from '@/components/ui/Banner';
+import { BannerType } from '../../common/enums/banner-enum';
+import { differenceInDays } from 'date-fns';
+import { offsetTimezoneDate } from '../../utils';
 
 export const MemberProfileDetails = ({
   member,
@@ -71,6 +75,74 @@ export const MemberProfileDetails = ({
   return (
     <>
       <section>
+        {member.chipsProfileMissing ||
+        Object.keys(member.chipsIssues || {}).length > 0 ? (
+          <Banner
+            type={BannerType.ERROR}
+            content={
+              <>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-errorRed">
+                    Government Profile Syncing Errors Detected
+                  </span>
+                  {member.chipsLastPing && (
+                    <span className="text-sm text-gray-500">
+                      Profile data synced{' '}
+                      {differenceInDays(
+                        new Date(),
+                        offsetTimezoneDate(member.chipsLastPing),
+                      )}{' '}
+                      days ago
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1">
+                  {member.chipsProfileMissing ? (
+                    <p className="text-sm text-errorRed">
+                      Your profile cannot be found in the government system.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-errorRed">
+                      The details with an exclamation icon are directly sourced from
+                      your government profile and may be outdated or incorrect.
+                      Please edit your details if needed.
+                    </p>
+                  )}
+                </div>
+              </>
+            }
+          />
+        ) : (
+          <Banner
+            type={BannerType.INFO}
+            content={
+              <>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold">
+                    Verify Information from Government Profile
+                  </span>
+                  {member.chipsLastPing && (
+                    <span className="text-sm text-gray-600">
+                      Profile data synced{' '}
+                      {differenceInDays(
+                        new Date(),
+                        offsetTimezoneDate(member.chipsLastPing),
+                      )}{' '}
+                      days ago
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1">
+                  <p className="text-sm text-defaultGray">
+                    The details with an exclamation icon are directly sourced from
+                    your government profile and may be outdated or incorrect. Please
+                    edit your details if needed.
+                  </p>
+                </div>
+              </>
+            }
+          />
+        )}
         {sections.map((itm: any) => (
           <div
             key={itm.title}

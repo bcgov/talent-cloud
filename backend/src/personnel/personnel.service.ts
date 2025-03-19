@@ -837,7 +837,10 @@ export class PersonnelService {
         'personnel.lastName',
         'personnel.employeeId',
       ])
-      .andWhere('bcws.status = :status', { status: Status.ACTIVE });
+      .andWhere('bcws.status = :status', { status: Status.ACTIVE })
+      .andWhere('personnel.chipsProfileMissing = :missingProfile', {
+        missingProfile: false,
+      });
     const personnel = await qb.getMany();
     return personnel.map((p) => ({
       employeeId: p.employeeId,
@@ -1051,7 +1054,7 @@ export class PersonnelService {
       ministry = ChipsMinistryName[data.organization.trim()];
     } else {
       // Add to issues
-      issues.ministry = `${data.organization} not found in CORE ministries`;
+      issues.ministry = `Ministry Mismatch: The ministry '${data.organization}' listed on the government profile cannot be found in the CORE Team application.`;
       ministry = personnel.ministry;
     }
 
@@ -1065,12 +1068,12 @@ export class PersonnelService {
     );
     if (!homeLocation) {
       // Add to issues
-      issues.homeLocation = `${data.homeCity} not found in CORE list of cities`;
+      issues.homeLocation = `Location Mismatch: The location '${data.homeCity}' listed on the government profile cannot be found in the CORE Team application.`;
       homeLocation = personnel.homeLocation;
     }
     if (!workLocation) {
       // Add to issues
-      issues.workLocation = `${data.workCity} not found in CORE list of cities`;
+      issues.workLocation = `Location Mismatch: The location '${data.workCity}' listed on the government profile cannot be found in the CORE Team application.`;
       workLocation = personnel.workLocation;
     }
 
@@ -1085,6 +1088,8 @@ export class PersonnelService {
       firstName: data.name.split(',')[1]?.trim() || personnel.lastName,
       division: data.levelOne,
       jobTitle: data.currentPositionTitle || personnel.jobTitle,
+      // TODO: Union
+      // TODO: Phone
       ministry,
       workLocation,
       homeLocation,

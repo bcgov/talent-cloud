@@ -52,7 +52,7 @@ const SplashPage = () => {
                 content={
                   <>
                     <span className="font-bold">CORE</span>
-                    {` (Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
+                    {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
                     <a
                       href={
                         env === 'prod'

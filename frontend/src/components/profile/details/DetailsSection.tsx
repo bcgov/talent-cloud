@@ -22,6 +22,7 @@ const DetailsSection = ({
             <Detail
               title={column.title}
               content={column.content}
+              tooltipIcon={column.tooltipIcon}
               tooltipTitle={column.tooltipTitle}
               tooltipContent={column.tooltipContent}
               tooltipClicked={tooltipClicked}

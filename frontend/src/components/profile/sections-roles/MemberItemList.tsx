@@ -18,7 +18,7 @@ export const MemberItemList = ({
     second?: string;
     third?: string;
   };
-  columns: { key: string; name: string }[];
+  columns: { key: string; name: string; size?: string }[];
   data: {
     id: string | number;
     [key: string]: string | number;
@@ -29,11 +29,18 @@ export const MemberItemList = ({
   const secondChoiceSection = preferences?.second;
   const thirdChoiceSection = preferences?.third;
 
-  const Header = ({ columnNames }: { columnNames: string[] }) => (
+  const Header = ({
+    columns,
+  }: {
+    columns: { key: string; name: string; size?: string }[];
+  }) => (
     <div className="flex flex-row p-2 bg-grayBackground">
-      {columnNames.map((columnName) => (
-        <div className={`basis-1/${columnNames.length}`} key={columnName}>
-          <span className="text-blue-900 font-bold">{columnName}</span>
+      {columns.map((c) => (
+        <div
+          className={`${c.size ? `basis-${c.size}` : `basis-1-${columns.length}`}`}
+          key={c.name}
+        >
+          <span className="text-blue-900 font-bold">{c.name}</span>
         </div>
       ))}
     </div>
@@ -46,10 +53,7 @@ export const MemberItemList = ({
           <p className="flex flex-row gap-2">
             {section}
             {section === firstChoiceSection && (
-              <Chip
-                value="1st Choice"
-                className="rounded-full capitalize"
-              />
+              <Chip value="1st Choice" className="rounded-full capitalize" />
             )}
             {section === secondChoiceSection && (
               <Chip
@@ -83,7 +87,7 @@ export const MemberItemList = ({
   return (
     <>
       <section>
-        <Header columnNames={columns.map((c) => c.name)} />
+        <Header columns={columns} />
         {firstChoiceSection &&
           !data.map((d) => d.section).includes(firstChoiceSection) && (
             <EmptyChoiceSection section={firstChoiceSection} />
@@ -110,7 +114,7 @@ export const MemberItemList = ({
                 {columns.map((c) => (
                   <div
                     key={c.key}
-                    className={`basis-1/${columns.length} text-darkGray`}
+                    className={`${c.size ? `basis-${c.size}` : `basis-1-${columns.length}`} text-darkGray`}
                   >
                     {c.key === 'section' && (
                       <p className="flex flex-row gap-2">
@@ -147,6 +151,9 @@ export const MemberItemList = ({
                     {c.key === 'tool' && <p>{row['tool']}</p>}
                     {c.key === 'certification' && <p>{row['certification']}</p>}
                     {c.key === 'expiry' && <p>{row['expiry']}</p>}
+                    {c.key === 'courseId' && <p>{row['courseId']}</p>}
+                    {c.key === 'courseTitle' && <p>{row['courseTitle']}</p>}
+                    {c.key === 'completedDate' && <p>{row['completedDate']}</p>}
                   </div>
                 ))}
               </div>

@@ -1,13 +1,15 @@
-import {  Status } from '@/common';
-import type {  Personnel } from '@/common';
+import { Status } from '@/common';
+import type { Personnel } from '@/common';
 import { datePST, formatPhone } from '@/utils';
-import { FireCentreName } from '../common/enums'
+import { FireCentreName } from '../common/enums';
 import { TravelPreferenceText } from '../common/enums/travel-preference.enum';
 
-import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+} from '@heroicons/react/24/solid';
 import { formatDriversLicenses, skillsData } from './commonProfileData';
-
-
 
 export const emcrData = (personnel?: Personnel) => {
   return {
@@ -17,10 +19,22 @@ export const emcrData = (personnel?: Personnel) => {
         content: personnel?.workLocation?.locationName
           ? `${personnel?.workLocation?.locationName}, ${personnel?.workLocation?.region}`
           : 'Not Listed',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['workLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['workLocation'],
       },
       {
         title: 'Home Location, Region',
         content: `${personnel?.homeLocation.locationName}, ${personnel?.homeLocation.region}`,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['homeLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['homeLocation'],
       },
       {
         title: 'Travel Preference',
@@ -41,8 +55,17 @@ export const emcrData = (personnel?: Personnel) => {
       {
         title: 'Employee ID',
         content: personnel?.employeeId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
-      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
+      {
+        title: 'Paylist (Dept ID)',
+        content: personnel?.paylistId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
       {
         title: 'Emergency Contact First Name',
         content: personnel?.emergencyContactFirstName ?? 'Not Listed',
@@ -83,13 +106,35 @@ export const emcrData = (personnel?: Personnel) => {
       { title: 'Email Address', content: personnel?.email },
     ],
     organizational: [
-      { title: 'Supervisor First Name', content: personnel?.supervisorFirstName },
-      { title: 'Supervisor Last Name', content: personnel?.supervisorLastName },
+      {
+        title: 'Supervisor First Name',
+        content: personnel?.supervisorFirstName,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
+      {
+        title: 'Supervisor Last Name',
+        content: personnel?.supervisorLastName,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
       {
         title: 'Supervisor Email',
         content: personnel?.supervisorEmail ?? 'Not Listed',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
-      { title: 'Ministry', content: personnel?.ministry },
+      {
+        title: 'Ministry',
+        content: personnel?.ministry,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['ministry'],
+      },
       { title: 'Union Membership', content: personnel?.unionMembership },
       {
         title: 'Supervisor Approval',
@@ -97,7 +142,7 @@ export const emcrData = (personnel?: Personnel) => {
           personnel?.approvedBySupervisor === true ? 'Received' : 'Not Received',
       },
     ],
-    skills: personnel && skillsData(personnel),  
+    skills: personnel && skillsData(personnel),
   };
 };
 
@@ -162,12 +207,24 @@ export const bcwsData = (personnel?: Personnel) => {
         content: personnel?.homeLocation
           ? `${personnel.homeLocation.locationName}, ${FireCentreName[personnel.homeLocation.fireCentre]}`
           : 'Not Listed',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['workLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['workLocation'],
       },
       {
         title: 'Work Location, Fire Centre',
         content: personnel?.workLocation
           ? `${personnel.workLocation.locationName}, ${FireCentreName[personnel.workLocation.fireCentre]}`
           : 'Not Listed',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon
+            className={`w-5 h-5 ${personnel?.chipsIssues?.['homeLocation'] ? 'text-red-700' : 'text-info'}`}
+          />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['homeLocation'],
       },
       {
         title: 'Travel Preference',
@@ -191,8 +248,17 @@ export const bcwsData = (personnel?: Personnel) => {
       {
         title: 'Employee ID',
         content: personnel?.employeeId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
-      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
+      {
+        title: 'Paylist (Dept ID)',
+        content: personnel?.paylistId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
     ],
     contact: [
       {
@@ -222,11 +288,26 @@ export const bcwsData = (personnel?: Personnel) => {
       },
     ],
     organizational: [
-      { title: 'Supervisor First Name', content: personnel?.supervisorFirstName },
-      { title: 'Supervisor Last Name', content: personnel?.supervisorLastName },
+      {
+        title: 'Supervisor First Name',
+        content: personnel?.supervisorFirstName,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
+      {
+        title: 'Supervisor Last Name',
+        content: personnel?.supervisorLastName,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
       {
         title: 'Supervisor Email',
         content: personnel?.supervisorEmail ?? 'Not Listed',
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
       {
         title: 'Supervisor Approval',
@@ -240,13 +321,26 @@ export const bcwsData = (personnel?: Personnel) => {
       {
         title: 'Ministry',
         content: `${personnel?.ministry}`,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+        tooltipTitle: personnel?.chipsIssues?.['ministry'],
       },
       {
         title: 'Division',
         content: `${personnel?.division ?? 'Not Listed'}`,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
       },
       { title: 'Union Membership', content: personnel?.unionMembership },
-      { title: 'Paylist (Dept ID)', content: personnel?.paylistId },
+      {
+        title: 'Paylist (Dept ID)',
+        content: personnel?.paylistId,
+        tooltipIcon: !personnel?.chipsProfileMissing && (
+          <ExclamationCircleIcon className="text-info w-5 h-5" />
+        ),
+      },
       {
         title: 'Liaison First Name',
         content: personnel?.liaisonFirstName ?? 'Not Listed',

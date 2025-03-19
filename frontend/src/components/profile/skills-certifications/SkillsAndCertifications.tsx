@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { ProfileEditSkills } from './ProfileEditSkills';
 import type { Certification, Languages, PersonnelTool, Personnel } from '@/common';
 import { PersonnelEndpoint } from '@/common/enums/personnel-endpoint';
+import { MemberItemList } from '../sections-roles';
 
 export type SkillsProps = {
   title?: string;
@@ -114,6 +115,40 @@ export const SkillsAndCertifications = ({
               )}
             </div>
           ))}
+          {!personnel.chipsProfileMissing &&
+            personnel.chipsTrainingData.length > 0 && (
+              <div>
+                <h5 className="pl-8 py-6 font-bold text-primaryBlue">Training</h5>
+                <div className="px-6">
+                  {/* Not consistent with old profile look & feel, but consistent with Member Profile */}
+                  <MemberItemList
+                    columns={[
+                      {
+                        name: 'Course',
+                        key: 'courseId',
+                        size: '1/6',
+                      },
+                      {
+                        name: 'Title',
+                        key: 'courseTitle',
+                        size: '1/2',
+                      },
+                      {
+                        name: 'Date Completed',
+                        key: 'completedDate',
+                        size: '1/3',
+                      },
+                    ]}
+                    data={personnel.chipsTrainingData.map((t) => ({
+                      id: t.courseId,
+                      courseId: t.courseId,
+                      courseTitle: t.courseTitle,
+                      completedDate: t.completedDate,
+                    }))}
+                  />
+                </div>
+              </div>
+            )}
         </div>
       </Accordion>
 
