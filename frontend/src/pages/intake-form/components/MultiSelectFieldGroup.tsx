@@ -1,10 +1,7 @@
-import type { FieldInputProps, FormikFormProps } from 'formik';
-import { ErrorMessage, Field, FieldArray, useFormikContext } from 'formik';
-
+import { FieldArray, useFormikContext } from 'formik';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
-import clsx from 'clsx';
 import type { FormFields, IntakeFormValues } from '../constants/types';
-import { renderField } from '../utils/helpers';
+import { FormField } from '../fields/FormField';
 
 // This component renders a group of multiselects - the values of these fields will be the field.value array from the roles component
 export const MultiSelectGroup = ({ field }: { field: FormFields }) => {
@@ -29,48 +26,17 @@ export const MultiSelectGroup = ({ field }: { field: FormFields }) => {
               {field.fields?.map((itm: FormFields, index: number) => {
                 return (
                   <div key={itm.name} className="col-span-2">
-                    <label htmlFor={itm.name}>
-                      {itm.label}
-                      {itm.required && <span className="text-errorRed">*</span>}
-                    </label>
-                    <Field
+                    <FormField
+                      {...itm}
                       value={values[field.name as keyof typeof values]}
                       name={`${field.name}.${index}.${itm.name}`}
                       type={itm.type}
-                    >
-                      {({
-                        field,
-                        form,
-                      }: {
-                        field: FieldInputProps<any>;
-                        form: FormikFormProps;
-                      }) => {
-                        return (
-                          <>
-                            {renderField({
-                              field,
-                              form,
-                              props: itm,
-                              options: getFieldOptions(index),
-                            })}
-
-                            {itm.helper && (
-                              <p className={clsx('subtext', 'py-2')}>{itm.helper}</p>
-                            )}
-
-                            <ErrorMessage name={field.name}>
-                              {(msg) => {
-                                return (
-                                  <div className="font-normal text-errorRed">
-                                    {msg}
-                                  </div>
-                                );
-                              }}
-                            </ErrorMessage>
-                          </>
-                        );
-                      }}
-                    </Field>
+                      options={
+                        itm.options && itm.options.length === 0
+                          ? getFieldOptions(index)
+                          : itm.options
+                      }
+                    />
                   </div>
                 );
               })}

@@ -18,6 +18,7 @@ import { useFormikContext } from 'formik';
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
   const { getOptions } = useIntakeForm();
   const { values } = useFormikContext<IntakeFormValues>();
+
   return (
     <div className="pb-24">
       <Banner
@@ -63,8 +64,8 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
                           <div
                             key={fieldItm.name}
                             className={
-                              fieldItm.colspan
-                                ? `col-span-${fieldItm.colspan}`
+                              fieldItm.colSpan
+                                ? `col-span-${fieldItm.colSpan}`
                                 : 'col-span-1'
                             }
                           >

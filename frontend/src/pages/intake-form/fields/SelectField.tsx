@@ -13,13 +13,13 @@ export const SelectField = ({
 }) => {
   return (
     <select
-      className={classes.menu.container}
       {...props}
       {...field}
-      defaultValue={''}
+      value={field.value}
+      className={classes.menu.container}
     >
       <option disabled value={''}>
-        {props.placeholder}
+        Select An Option
       </option>
       {options?.map((itm: any) => (
         <option key={itm.value} value={itm.value}>

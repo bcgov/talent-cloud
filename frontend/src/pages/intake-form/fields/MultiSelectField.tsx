@@ -1,18 +1,18 @@
 import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
-import type { FormFields } from '../constants/types';
 import { Checkbox, Chip, Typography } from '@material-tailwind/react';
 import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
 
 import { MenuButton } from '../../../components/ui';
 import { MenuHandler, MenuList, MenuItem, Menu } from '@material-tailwind/react';
+
 export const MultiSelectField = ({
   field,
-  props,
+  placeholder,
   options,
 }: {
   field: FieldInputProps<any>;
-  props: FormFields;
+  placeholder?: string;
   options?: any[];
 }) => {
   const handleChange = (e: any) => {
@@ -93,7 +93,7 @@ export const MultiSelectField = ({
                   )}
                 </div>
               ) : (
-                <span className={classes.menu.placeholder}>{props.placeholder}</span>
+                <span className={classes.menu.placeholder}>{placeholder}</span>
               )}
               <MenuButton />
             </div>

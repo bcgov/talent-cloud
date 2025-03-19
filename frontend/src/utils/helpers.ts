@@ -36,6 +36,11 @@ export const formatPhone = (value?: string): string | undefined => {
   else return undefined;
 };
 
+export const formatPaylistID = (value?: string): string | undefined => {
+  if (value?.split('').length) return value.replace(/(\d{3})(\d{3})/, '$1-$2');
+  else return undefined;
+};
+
 export const getLabelFromValue = (
   options: [{ value: string; label: string }],
   value: string,

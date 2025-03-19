@@ -41,6 +41,9 @@ export class IntakeFormEntity {
   @Column({ name: 'program', nullable: true, type: 'enum', enum: Program })
   program: Program;
 
+  @Column({nullable: true}) 
+  step: number;
+
   toResponseObject(currentProgram?: Program): IntakeFormRO {
     return {
       id: this.id,
@@ -49,6 +52,7 @@ export class IntakeFormEntity {
       updatedAt: this.updatedAt,
       createdByEmail: this.createdByEmail,
       status: this.status ?? FormStatusEnum.DRAFT,
+      step: this.step ?? 0, 
       program: this.program,
       currentProgram: currentProgram,
     };

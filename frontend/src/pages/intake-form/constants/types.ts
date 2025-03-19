@@ -28,11 +28,10 @@ export interface FormFields {
   disabled?: boolean;
   program?: string;
   disabledProgram?: boolean;
-  colspan?: number;
+  colSpan?: number;
   fields?: FormFields[];
   error?: FormikErrors<any>;
   section?: string;
-  labelHelper?: string;
   component?: (props: any) => JSX.Element;
   content?: string | ReactComponentElement<any>;
 }
@@ -90,7 +89,7 @@ export interface PersonalDetails {
   lastName: string;
   primaryPhone: string;
   secondaryPhone?: string;
-  homeLocation?: Location;
+  homeLocation?: string;
   email: string;
 }
 
@@ -127,10 +126,10 @@ export interface EmergencyContactDetails {
   emergencyContactRelationship: string;
 }
 export interface GeneralEmergencyManagementExperience {
-  emergencyExperience: boolean;
-  preocExperience: boolean;
-  peccExperience: boolean;
-  firstNationsWorking: boolean;
+  emergencyExperience?: string;
+  preocExperience?: string;
+  peccExperience?: string;
+  firstNationsExperience?: string;
 }
 
 export interface SectionChoiceEmcr {
@@ -195,9 +194,10 @@ export type IntakeFormValues = PersonalDetails &
     program?: string;
     acknowledgement?: Expectations[];
     paylistId: string;
-    roles: string[];
+    roles: { [key: string]: string[] }[];
     languages?: LanguageSkill[];
     tools?: ToolsSkill[];
     certifications?: CertificationSkill[];
     driverLicense: string[];
+    unionMembership: string;
   };

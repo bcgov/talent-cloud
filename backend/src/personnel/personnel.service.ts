@@ -77,24 +77,9 @@ export class PersonnelService {
    * @param id
    * @returns
    */
-  async findOne(id?: string, email?: string): Promise<PersonnelEntity> {
-    if (email) {
-      const person = await this.personnelRepository.findOne({
-        where: { email },
-        relations: [
-          'certifications',
-          'certifications.certification',
-          'tools',
-          'tools.tool',
-          'homeLocation',
-          'workLocation',
-          'recommitment',
-          'recommitment.recommitmentCycle',
-          'languages',
-        ],
-      });
-      return person;
-    } else if(id) {
+  async findOne(id: string): Promise<PersonnelEntity> {
+    
+
       const person = await this.personnelRepository.findOneOrFail({
         where: { id },
         relations: [
@@ -109,8 +94,7 @@ export class PersonnelService {
           'languages',
         ],
       });
-      return person;
-    }
+      return person; 
   }
 
   /**
@@ -123,6 +107,27 @@ export class PersonnelService {
       where: { email },
       relations: ['emcr', 'bcws'],
     });
+  }
+
+  async findOneWithAllRelationsByEmail(email: string):  Promise<PersonnelEntity>{
+    
+   return await this.personnelRepository.findOne({
+        where: { email },
+        relations: [
+          'bcws',
+          'emcr',
+          'bcws.roles',
+          'emcr.experiences',
+          'emcr.trainings',
+          'certifications',
+          'certifications.certification',
+          'tools',
+          'tools.tool',
+          'homeLocation',
+          'languages',
+        ],
+      });
+    
   }
 
   async findOneById(id: string): Promise<PersonnelEntity> {

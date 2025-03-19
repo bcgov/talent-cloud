@@ -30,6 +30,7 @@ export const useIntakeForm = () => {
   const { functions, locations, tools, sections, certificates } =
     useProgramFieldData(Program.ALL);
   const { showAlert } = useAlert();
+  const [step, setStep] = useState(0);
 
   const getOptions = (name: string, program?: string) => {
     switch (name) {
@@ -95,8 +96,10 @@ export const useIntakeForm = () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
+
         setFormData(res.data);
         setCurrentProgram(res.data.currentProgram);
+        setStep(res.data.step);
       } catch (e) {
         showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
       } finally {
@@ -109,6 +112,7 @@ export const useIntakeForm = () => {
     try {
       await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
         ...formData,
+        step,
         personnel: values,
       });
     } catch (e) {
@@ -117,16 +121,31 @@ export const useIntakeForm = () => {
   };
 
   const handleSubmit = async (values: IntakeFormValues) => {
+    values.primaryPhone = values.primaryPhone.replace(/[^\d]/g, '');
+    values.secondaryPhone = values.secondaryPhone?.replace(/[^\d]/g, '');
+    values.emergencyContactPhoneNumber = values.emergencyContactPhoneNumber.replace(
+      /[^\d]/g,
+      '',
+    );
+    values.secondaryPhone = values.supervisorPhone?.replace(/[^\d]/g, '');
+    values.workPhone = values.workPhone?.replace(/[^\d]/g, '');
+
     try {
-      await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
+      const res = await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
         ...formData,
+        step,
         personnel: values,
       });
+      setFormData(res.data);
+      setStep(5);
+      showAlert({ type: AlertType.SUCCESS, message: 'Form has been submitted!' });
     } catch (e) {
       showAlert({ type: AlertType.ERROR, message: 'Error Submitting Form' });
     }
   };
-
+  const handleSetStep = (step: number) => {
+    setStep(step);
+  };
   return {
     saveUpdateForm,
     formData,
@@ -135,5 +154,7 @@ export const useIntakeForm = () => {
     handleSubmit,
     getOptions,
     currentProgram,
+    step,
+    handleSetStep,
   };
 };

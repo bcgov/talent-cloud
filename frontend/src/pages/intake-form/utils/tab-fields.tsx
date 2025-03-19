@@ -1,16 +1,16 @@
 // common
-import { Ministry, Program } from '@/common';
+import { Ministry, Program, UnionMembership } from '@/common';
 import {
   BcwsTravelPreference,
   EmcrTravelPreference,
+  TravelPreferenceText,
 } from '@/common/enums/travel-preference.enum';
 import { Section, SectionName } from '@/common/enums/sections.enum';
 import { SelectField } from '../fields/SelectField';
 import { ProgramPage } from '../pages/Program/Program';
 import { PersonalDetails } from '../pages/PersonalDetails';
-import { DatePicker } from '@/components';
+import { DateField } from '../fields/DateField';
 import { Skills } from '../pages/Skills';
-
 import { Review } from '../pages/Review';
 import { RadioGroupField } from '../fields/RadioGroupField';
 import { TextField } from '../fields/TextField';
@@ -106,6 +106,8 @@ const bcwsDefinitionsModalButton = (
     Learn more about BCWS CORE Team sections
   </a>
 );
+import { CheckboxField } from '../fields/CheckboxField';
+import { MultiSelectField } from '../fields/MultiSelectField';
 
 export const formTabs: FormTab[] = [
   {
@@ -186,7 +188,7 @@ export const formTabs: FormTab[] = [
             options: [],
             helper:
               'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
-            colspan: 2,
+            colSpan: 2,
           },
         ],
       },
@@ -251,13 +253,23 @@ export const formTabs: FormTab[] = [
             helper: 'Full division name, no acronyms.',
           },
           {
+            name: 'unionMembership',
+            label: 'Union Membership',
+            type: 'select',
+            component: SelectField,
+            required: true,
+            options: Object.values(UnionMembership).map((itm) => ({
+              label: itm,
+              value: itm,
+            })),
+          },
+          {
             name: 'paylistId',
             label: 'Pay List (Dept ID)',
             type: 'text',
             component: TextField,
             required: true,
             placeholder: '123-4567',
-
             helper: 'You can find this information on your paystub.',
           },
           {
@@ -267,7 +279,7 @@ export const formTabs: FormTab[] = [
             component: SelectField,
             required: true,
             placeholder: 'Select an option',
-            program: Program.BCWS,
+
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
@@ -360,21 +372,14 @@ export const formTabs: FormTab[] = [
             placeholder: '000-000-0000',
           },
           {
-            name: 'liaisonUnknownCheckbox',
-            label: 'I am unsure who my liaison is',
-            type: 'checkbox-group',
-            component: CheckboxGroupField,
+            name: 'liaisonUnknown',
+            label: '',
+            type: 'checkbox',
+            component: CheckboxField,
             required: false,
-            placeholder: '',
+            placeholder: 'I am unsure who my liaison is',
             program: Program.BCWS,
-            colspan: 2,
-            options: [
-              {
-                label: 'I am unsure who my liaison is',
-                value: 'false',
-                name: 'liaisonUnknown',
-              },
-            ],
+            colSpan: 2,
           },
           {
             name: 'liaisonFirstName',
@@ -445,7 +450,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Select an option',
             program: Program.BCWS,
             options: Object.values(BcwsTravelPreference).map((itm) => ({
-              label: itm,
+              label: TravelPreferenceText[itm],
               value: itm,
             })),
           },
@@ -458,7 +463,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Select an option',
             program: Program.EMCR,
             options: Object.values(EmcrTravelPreference).map((itm) => ({
-              label: itm,
+              label: TravelPreferenceText[itm],
               value: itm,
             })),
           },
@@ -534,52 +539,54 @@ export const formTabs: FormTab[] = [
             label:
               'Do you have any direct experience related to emergency management?',
             type: 'radio-group',
-            component: RadioGroupField,
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
             ],
             required: true,
-            colspan: 2,
+            colSpan: 2,
+            component: RadioGroupField,
           },
           {
             name: 'preocExperience',
             label:
               'Do you have any experience working in a Provincial Regional Emergency Operation Centre (PREOC)?',
             type: 'radio-group',
-            component: RadioGroupField,
+
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
             ],
             required: true,
-            colspan: 2,
+            colSpan: 2,
+            component: RadioGroupField,
           },
           {
             name: 'peccExperience',
             label:
               'Do you have any experience working in a Provincial Emergency Coordination Centre (PECC)?',
             type: 'radio-group',
-            component: RadioGroupField,
+
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
             ],
             required: true,
-            colspan: 2,
+            colSpan: 2,
+            component: RadioGroupField,
           },
           {
             name: 'firstNationsExperience',
             label:
               'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
             type: 'radio-group',
-            component: RadioGroupField,
             options: [
               { label: 'Yes', value: 'true' },
               { label: 'No', value: 'false' },
             ],
             required: true,
-            colspan: 2,
+            colSpan: 2,
+            component: RadioGroupField,
           },
         ],
         header: emcrSectionsInterest,
@@ -622,7 +629,7 @@ export const formTabs: FormTab[] = [
             label: 'Second Choice Function',
             type: 'select',
             component: SelectField,
-            required: true,
+            required: false,
             placeholder: 'Select an option',
             program: Program.EMCR,
             options: [],
@@ -632,7 +639,7 @@ export const formTabs: FormTab[] = [
             label: 'Third Choice Function',
             type: 'select',
             component: SelectField,
-            required: true,
+            required: false,
             placeholder: 'Select an option',
             program: Program.EMCR,
             options: [],
@@ -645,16 +652,28 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'functions',
-            label:
-              'Please select ALL the sections that you are interested in, if you were to be deployed.',
-            labelHelper:
-              'Your selections must include your first choice. For your EMCR CORE Team application, you must select AT LEAST one section.',
+            label: (
+              <div>
+                <div className="text-black">
+                  {
+                    'Please select ALL the sections that you are interested in, if you were to be deployed.'
+                  }
+                </div>
+                <div className="text-grey">
+                  <span className="text-sm font-normal">
+                    {
+                      'Your selections must include your first choice. For your EMCR CORE Team application, you must select AT LEAST one section.'
+                    }
+                  </span>
+                </div>
+              </div>
+            ),
             type: 'checkbox-group',
             component: CheckboxGroupField,
             required: false,
             placeholder: '',
             program: Program.EMCR,
-            colspan: 2,
+            colSpan: 2,
             options: [],
           },
         ],
@@ -691,8 +710,8 @@ export const formTabs: FormTab[] = [
             required: true,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: Object.values(SectionName).map((itm) => ({
-              label: itm,
+            options: Object.values(Section).map((itm) => ({
+              label: SectionName[itm],
               value: itm,
             })),
           },
@@ -701,11 +720,11 @@ export const formTabs: FormTab[] = [
             label: 'Second Choice Section',
             type: 'select',
             component: SelectField,
-            required: true,
+            required: false,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: Object.values(SectionName).map((itm) => ({
-              label: itm,
+            options: Object.values(Section).map((itm) => ({
+              label: SectionName[itm],
               value: itm,
             })),
           },
@@ -714,11 +733,11 @@ export const formTabs: FormTab[] = [
             label: 'Third Choice Section',
             type: 'select',
             component: SelectField,
-            required: true,
+            required: false,
             placeholder: 'Select an option',
             program: Program.BCWS,
-            options: Object.values(SectionName).map((itm) => ({
-              label: itm,
+            options: Object.values(Section).map((itm) => ({
+              label: SectionName[itm],
               value: itm,
             })),
           },
@@ -730,7 +749,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'roles',
-            colspan: 2,
+            colSpan: 2,
             label: (
               <>
                 <p>
@@ -744,11 +763,11 @@ export const formTabs: FormTab[] = [
             ),
             type: 'multiselect-group',
             component: FieldGroup,
-            fields: Object.values(Section).map((itm) => ({
-              name: itm,
+            fields: Object.values(Section).map((itm, index) => ({
+              name: `roles.${index}.${itm}`,
               label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
-              component: SelectField,
+              component: MultiSelectField,
               required: false,
               placeholder: '',
               options: [],
@@ -781,19 +800,18 @@ export const formTabs: FormTab[] = [
               {
                 name: 'language',
                 label: 'Language',
-                colspan: 2,
+                colSpan: 2,
                 type: 'text',
                 component: TextField,
-                required: true,
+                required: false,
                 placeholder: 'Enter a language',
               },
               {
                 name: 'languageProficiency',
                 label: 'Proficiency Level',
-                colspan: 2,
+                colSpan: 2,
                 type: 'select',
                 component: SelectField,
-
                 required: true,
                 placeholder: 'Select Proficieny Level',
                 options: [],
@@ -812,11 +830,11 @@ export const formTabs: FormTab[] = [
             label: '',
             helper:
               'Please select tools/software and indicate your proficiency level for each.',
-            colspan: 2,
+            colSpan: 2,
             fields: [
               {
                 name: 'toolId',
-                colspan: 2,
+                colSpan: 2,
                 label: 'Tool/Software',
                 type: 'select',
                 component: SelectField,
@@ -829,7 +847,7 @@ export const formTabs: FormTab[] = [
                 label: 'Proficiency Level',
                 type: 'select',
                 component: SelectField,
-                colspan: 2,
+                colSpan: 2,
                 required: true,
                 placeholder: 'Select an option',
                 options: [],
@@ -855,7 +873,7 @@ export const formTabs: FormTab[] = [
                 label: 'Certification Name',
                 type: 'select',
                 component: SelectField,
-                required: true,
+                required: false,
                 placeholder: 'Select an option',
                 options: [],
               },
@@ -870,19 +888,20 @@ export const formTabs: FormTab[] = [
                   </>
                 ),
                 type: 'date',
-                component: DatePicker,
+                component: DateField,
                 required: false,
                 placeholder: 'Select a date',
               },
             ],
           },
-          // TODO Add this back in
+          // TODO
           // {
           //   name: 'driversLicense',
           //   label: 'Driver License',
           //   type: 'multiselect',
           //   component: SelectField,
           //   required: false,
+          //   colSpan: 2,
           //   placeholder: 'Select an option',
           //   options: Object.keys(DriverLicense).map((key) => ({
           //     label: DriverLicenseName[key as keyof typeof DriverLicenseName],
@@ -922,3 +941,4 @@ export const formTabs: FormTab[] = [
     ),
   },
 ];
+

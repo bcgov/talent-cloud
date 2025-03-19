@@ -25,10 +25,12 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
     if (functions.length === 0 && firstChoiceFunction) {
       setFieldValue('functions', [firstChoiceFunction]);
     } else {
-      setFieldValue('functions', [...functions, firstChoiceFunction]);
+      const functionSet = new Set(functions);
+      if (!functionSet.has(firstChoiceFunction) && firstChoiceFunction !== '') {
+        setFieldValue('functions', [...functions, firstChoiceFunction]);
+      }
     }
   }, [firstChoiceFunction]);
-
   const { getOptions } = useIntakeForm();
   const { values } = useFormikContext<IntakeFormValues>();
 
@@ -79,8 +81,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                         ) : (
                           <div
                             className={
-                              fieldItm.colspan
-                                ? `col-span-${fieldItm.colspan}`
+                              fieldItm.colSpan
+                                ? `col-span-${fieldItm.colSpan}`
                                 : 'col-span-1'
                             }
                           >
@@ -88,7 +90,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               key={fieldItm.name}
                               {...fieldItm}
                               options={
-                                fieldItm.options?.length === 0
+                                fieldItm.options && fieldItm.options.length === 0
+
                                   ? getOptions(fieldItm.name)
                                   : fieldItm.options
                               }
