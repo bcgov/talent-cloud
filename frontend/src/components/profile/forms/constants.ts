@@ -83,7 +83,7 @@ const supervisorEmail = Yup.string()
   .optional()
   .nullable()
   .email('Invalid email format.')
-  .matches(/^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/, 'Invalid email format.');
+  .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.');
 
 const supervisorPhone = Yup.string()
   .optional()

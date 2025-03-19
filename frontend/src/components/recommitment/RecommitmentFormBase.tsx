@@ -473,7 +473,7 @@ export const RecommitmentFormBase = ({
         supervisorEmail,
         supervisorPhone,
       } = supervisorInformation;
-      const isValidEmail = /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/.test(supervisorEmail);
+      const isValidEmail = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(supervisorEmail);
       const isValidPhone =
         supervisorPhone && supervisorPhone !== ''
           ? /(\d{3})(\d{3})(\d{4})/.test(supervisorPhone)
