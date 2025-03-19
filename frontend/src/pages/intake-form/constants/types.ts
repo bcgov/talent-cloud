@@ -170,12 +170,17 @@ export interface CertificationSkill {
 export interface ReviewAndSubmit {
   acknowledgeSubmit: boolean;
 }
+export enum FormStatus {
+  DRAFT = 'draft',
+  SUBMITTED = 'submitted',
+}
 
 // form interface
 export type IntakeFormSubmissionData = {
   id: string;
   createdByEmail: string;
   program: Program; //
+  status: FormStatus;
   currentProgram: Program;
   personnel: IntakeFormValues;
 };

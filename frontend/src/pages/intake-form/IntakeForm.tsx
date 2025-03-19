@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { stepValidation } from './constants/validation';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { FormButtonNavigation } from './components/FormButtonNavigation';
-import { FormStatus, type FormTab, type IntakeFormValues } from './constants/types';
+import { type FormTab, type IntakeFormValues } from './constants/types';
 import { formTabs } from './utils/tab-fields';
 import { FormStepper } from './components/FormStepper';
 import { Program } from '@/common';
