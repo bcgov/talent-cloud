@@ -20,6 +20,92 @@ import { Experiences } from '../pages/Experiences';
 import { IntakeFormTab } from '../constants/enums';
 import type { FormTab, FormSection } from '../constants/types';
 import { Complete } from '../pages/Complete';
+import { BannerType } from '@/common/enums/banner-enum';
+import { Banner } from '@/components/ui/Banner';
+import { Modal, ModalGridItem } from '../components/Modal';
+import { bcws, emcr } from '@/components/profile/sections-roles/roles';
+import { Accordion } from '../components/Accordion';
+
+const emcrSectionsInterest = (
+  <div className="my-8">
+    <p className="text-xl font-bold mb-2">EMCR Section(s) Interest</p>
+    <Banner
+      title={
+        'For your EMCR CORE Team application, you only need to indicate the following:'
+      }
+      content={
+        <>
+          <ul className="list-disc list-inside text-info text-sm font-normal">
+            <li>
+              Your general experiences in emergency management (e.g, past experience
+              outside emergency events, etc.);
+            </li>
+            <li>Your ranking of and interest in EMCR CORE Team section(s)</li>
+          </ul>
+        </>
+      }
+      type={BannerType.INFO}
+    />
+  </div>
+);
+
+const bcwsSectionsInterest = (
+  <div className="my-8">
+    <p className="text-xl font-bold mb-2">BCWS Section(s) and Role(s) Interest</p>
+    <Banner
+      title={'For your BCWS CORE Team application, you must indicate the following:'}
+      content={
+        <>
+          <ul className="list-disc list-inside text-info text-sm font-normal">
+            <li>
+              Your ranking of BCWS CORE Team sections that you wish to be deployed in
+              the most;
+            </li>
+            <li>
+              Your ranking of BCWS CORE Team sections that you wish to be deployed in
+              the most;{' '}
+            </li>
+          </ul>
+        </>
+      }
+      type={BannerType.INFO}
+    />
+  </div>
+);
+
+// Roles & Interests Descriptions
+const emcrDefinitionsModalGridContainer = (
+  <div className="grid grid-cols-6 mt-4 gap-y-4">
+    {emcr.map((itm, index: number) => (
+      <ModalGridItem key={index} {...itm} />
+    ))}
+  </div>
+);
+const emcrDefinitionsModalButton = (
+  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+    Learn more about EMCR CORE Team sections
+  </a>
+);
+const bcwsDefinitionsModalGridContainer = (
+  <div className="flex flex-col mt-4 gap-y-4">
+    {bcws.map((sec, index: number) => (
+      <Accordion title={sec.section} key={index}>
+        {
+          <div className="grid grid-cols-6 gap-y-4">
+            {sec.roles.map((rol, rolIndex: number) => (
+              <ModalGridItem {...rol} titleStyle="!font-normal" key={rolIndex} />
+            ))}
+          </div>
+        }
+      </Accordion>
+    ))}
+  </div>
+);
+const bcwsDefinitionsModalButton = (
+  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+    Learn more about BCWS CORE Team sections
+  </a>
+);
 
 export const formTabs: FormTab[] = [
   {
@@ -193,12 +279,53 @@ export const formTabs: FormTab[] = [
         name: 'Supervisor and Liason Details, Travel Preferences',
         fields: [
           {
-            name: 'Title',
-            label: 'Info',
+            name: 'infoSupervisorEMCR',
+            label: 'About supervisor',
             type: 'infoBox',
             component: TextField,
             required: false,
             placeholder: '',
+            program: Program.EMCR,
+            content: (
+              <p className="text-info text-sm">
+                We will notify your supervisor about the outcome of your application.
+                If there is a change in your position or supervisor at any point, you
+                must update this information and obtain your new supervisor’s
+                approval to participate.
+              </p>
+            ),
+          },
+          {
+            name: 'infoSupervisorBCWS',
+            label: 'About supervisor and liaison',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            placeholder: '',
+            program: Program.BCWS,
+            content: (
+              <>
+                <p className="text-info text-sm">
+                  We will notify your supervisor about the outcome of your
+                  application. If there is a change in your position or supervisor at
+                  any point, you must update this information and obtain your new
+                  supervisor’s approval to participate.
+                </p>
+                <br />
+                <br />
+                <p className="text-info text-sm">
+                  Liaison information is required for BCWS CORE Team applicants and
+                  is applicable only if you belong to any of the following: 1)
+                  Ministry of Forests, 2) Ministry of Water, Land and Resource
+                  Stewardship, 3) The Recreation Sites and Trails, and the BC Parks
+                  division under Ministry of Environment.{' '}
+                </p>
+                <br />
+                <p className="text-info text-sm">
+                  Please reach out to your supervisor about who your liaison is.{' '}
+                </p>
+              </>
+            ),
           },
           {
             name: 'supervisorFirstName',
@@ -235,7 +362,7 @@ export const formTabs: FormTab[] = [
           {
             name: 'liaisonUnknownCheckbox',
             label: 'I am unsure who my liaison is',
-            type: 'checkbox',
+            type: 'checkbox-group',
             component: CheckboxGroupField,
             required: false,
             placeholder: '',
@@ -284,6 +411,30 @@ export const formTabs: FormTab[] = [
             required: false,
             placeholder: '000-000-0000',
             program: Program.BCWS,
+          },
+          {
+            name: 'infoTravelPreferences',
+            label: 'Travel Preferences',
+            type: 'infoBox',
+            component: TextField,
+            required: false,
+            program: Program.ALL,
+            content: (
+              <>
+                <p className="text-info text-sm">
+                  If you are unwilling to travel to activation sites outside of your
+                  home location, your deployment opportunities may be limited.
+                  Deployment flexibility could also vary by role, with some requiring
+                  on-site presence. New CORE Team members may need to undergo on-site
+                  training.
+                </p>
+                <br />
+                <p className="text-info text-sm">
+                  You can always change your travel preferences in your dashboard
+                  once you become a member.
+                </p>
+              </>
+            ),
           },
           {
             name: 'travelPreferenceBcws',
@@ -357,14 +508,27 @@ export const formTabs: FormTab[] = [
     component: ({ sections }: { sections: FormSection[] }) => (
       <Experiences sections={sections} />
     ),
-    description:
-      'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.',
+    description: '',
     value: IntakeFormTab.Experiences,
     sections: [
       {
         program: Program.EMCR,
         name: 'General Emergency Management Experience',
         fields: [
+          {
+            name: 'emergencyExperienceHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <p>
+                Please answer the following questions regarding your{' '}
+                <span className="font-bold">
+                  emergency management related experiences
+                </span>
+                .
+              </p>
+            ),
+          },
           {
             name: 'emergencyExperience',
             label:
@@ -418,11 +582,31 @@ export const formTabs: FormTab[] = [
             colspan: 2,
           },
         ],
+        header: emcrSectionsInterest,
       },
       {
         program: Program.EMCR,
         name: 'EMCR Core Team Sections',
         fields: [
+          {
+            name: 'emcCoreTeamSectionsHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <>
+                <p>
+                  Please select your top three EMCR CORE Team sections that you would
+                  like to be deployed in.{' '}
+                </p>
+                <Modal
+                  modalButton={emcrDefinitionsModalButton}
+                  contentHeader="EMCR CORE Team Section Definitions"
+                  gridHeader="EMCR sections consist of the following:"
+                  gridContainer={emcrDefinitionsModalGridContainer}
+                />
+              </>
+            ),
+          },
           {
             name: 'firstChoiceFunction',
             label: 'First Choice Function',
@@ -454,6 +638,12 @@ export const formTabs: FormTab[] = [
             options: [],
           },
           {
+            name: 'emcrDivider',
+            label: '',
+            type: 'componentBox',
+            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
+          },
+          {
             name: 'functions',
             label:
               'Please select ALL the sections that you are interested in, if you were to be deployed.',
@@ -472,7 +662,27 @@ export const formTabs: FormTab[] = [
       {
         program: Program.BCWS,
         name: 'BCWS CORE Team Sections and Roles',
+        header: bcwsSectionsInterest,
         fields: [
+          {
+            name: 'bcwsCoreTeamSectionsHeader',
+            label: '',
+            type: 'componentBox',
+            component: () => (
+              <>
+                <p>
+                  Please select your top three BCWS CORE Team sections that you would
+                  like to be deployed in.
+                </p>
+                <Modal
+                  modalButton={bcwsDefinitionsModalButton}
+                  contentHeader="BCWS CORE Team Section & Role Definitions"
+                  gridHeader="BCWS sections consist of the following. Please expand each sections to view their respective roles."
+                  gridContainer={bcwsDefinitionsModalGridContainer}
+                />
+              </>
+            ),
+          },
           {
             name: 'firstChoiceSection',
             label: 'First Choice Section',
@@ -511,6 +721,12 @@ export const formTabs: FormTab[] = [
               label: itm,
               value: itm,
             })),
+          },
+          {
+            name: 'bcwsDivider',
+            label: '',
+            type: 'componentBox',
+            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
           },
           {
             name: 'roles',

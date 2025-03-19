@@ -34,6 +34,7 @@ export interface FormFields {
   section?: string;
   labelHelper?: string;
   component?: (props: any) => JSX.Element;
+  content?: string | ReactComponentElement<any>;
 }
 
 export interface FormTab {
@@ -58,15 +59,17 @@ export interface IntakeFormTabs {
 }
 export type FormComponent = {
   type: string;
-  label: string;
+  label: string | ReactComponentElement<any>;
   name: string;
   component?: any;
   options?: any[];
+  content?: string | ReactComponentElement<any>;
 };
 export interface FormSection {
   name?: string;
   fields?: FormFields[];
   program?: string;
+  header?: ReactComponentElement<any>;
 }
 
 export interface ToolsSkill {
