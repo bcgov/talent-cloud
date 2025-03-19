@@ -38,7 +38,7 @@ const emcrSectionsInterest = (
           <ul className="list-disc list-inside text-info text-sm font-normal">
             <li>
               Your general experiences in emergency management (e.g, past experience
-              outside emergency events, etc.);
+              outside emergency events, etc.)
             </li>
             <li>Your ranking of and interest in EMCR CORE Team section(s)</li>
           </ul>
@@ -941,4 +941,3 @@ export const formTabs: FormTab[] = [
     ),
   },
 ];
-

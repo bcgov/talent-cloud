@@ -139,21 +139,17 @@ export class IntakeFormService {
 
     if (
       existingform &&
-      existingform.status === FormStatusEnum.DRAFT &&
-      personnel
+      existingform.status === FormStatusEnum.DRAFT
+      
     ) {
-      return existingform.toResponseObject(
-        personnel.emcr ? Program.EMCR : Program.BCWS,
-      );
-    }
-
-    if (
-      (existingform &&
-      existingform.status === FormStatusEnum.DRAFT) &&
-      !personnel
-    ) {
+      if(personnel){
+        return existingform.toResponseObject(
+          personnel.emcr ? Program.EMCR : Program.BCWS,
+        );
+      }
       return existingform.toResponseObject();
     }
+
 if
       (
         existingform && existingform.status === FormStatusEnum.SUBMITTED 
@@ -344,7 +340,7 @@ if
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    console.log(personnel, 'OERRS ');
+    
     return {
       firstName: personnel.firstName,
       program:
