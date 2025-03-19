@@ -11,33 +11,31 @@ export const FormStepper = ({
   formTabs,
   stepErrors,
   completedSteps,
-  handleValidateLastStep,
-  handleValidateCurrentStep,
+  handleValidateStep,
+
+  disabled,
 }: {
   tab: FormTab;
   index: number;
   formTabs: FormTab[];
   stepErrors?: number[] | null;
   completedSteps?: number[] | null;
-  handleValidateLastStep: (
+  handleValidateStep: (
     validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
     index: number,
+    values: IntakeFormValues,
   ) => Promise<void>;
-  handleValidateCurrentStep: (
-    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-    index: number,
-  ) => Promise<void>;
+
+  disabled: boolean;
 }) => {
-  const { validateForm } = useFormikContext<IntakeFormValues>();
+  const { values, validateForm } = useFormikContext<IntakeFormValues>();
 
   return (
     <Tab
       key={tab.value}
       value={tab.value}
-      onClick={async () => {
-        await handleValidateLastStep(validateForm, index);
-        await handleValidateCurrentStep(validateForm, index);
-      }}
+      disabled={disabled || index === 5}
+      onClick={async () => await handleValidateStep(validateForm, index, values)}
       className={clsx(
         'data-[selected]:outline-none pb-16',
         index !== formTabs.length - 1 && 'border-blue-800 border-l border-dashed',

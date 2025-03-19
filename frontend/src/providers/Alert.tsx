@@ -16,7 +16,6 @@ interface AlertContext {
   message?: string;
   open: boolean;
   title?: string;
-
   showAlert: (_ctx: { type: AlertType; message?: string; title?: string }) => void;
   closeAlert: () => void;
 }

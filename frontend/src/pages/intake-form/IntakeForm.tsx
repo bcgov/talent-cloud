@@ -1,4 +1,4 @@
-import type { FormikErrors } from 'formik';
+import type { FormikErrors, FormikValues } from 'formik';
 import { Form, Formik } from 'formik';
 import { intakeFormInitialValues } from './constants/initial-values';
 import { useKeycloak } from '@react-keycloak/web';
@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { stepValidation } from './constants/validation';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { FormButtonNavigation } from './components/FormButtonNavigation';
-import type { FormTab, IntakeFormValues } from './constants/types';
+import { FormStatus, type FormTab, type IntakeFormValues } from './constants/types';
 import { formTabs } from './utils/tab-fields';
 import { FormStepper } from './components/FormStepper';
 import { Program } from '@/common';
@@ -64,30 +64,30 @@ const IntakeForm = () => {
   // call validate form (runs for the current step only)
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
   // if there are no errors on  the current step, remove this from the errorSteps array
-  const handleValidateLastStep = async (
+  const handleValidateStep = async (
     validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
     index: number,
+    values: FormikValues,
   ) => {
     const formErrors = await validateForm();
-
     if (!formErrors || Object.values(formErrors).length === 0) {
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
       handleSetStep(index);
+      await saveUpdateForm(values);
+      const formErrors = await validateForm();
+      if (!formErrors) {
+        handleRemoveStepError(index);
+      }
     } else {
       handleSetErrors(step);
       handleRemoveCompletedStep(step);
       handleSetStep(index);
-    }
-  };
-
-  // trigger field validation on the current step, only if it has previously been added to the stepErrors array
-  const handleValidateCurrentStep = async (
-    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-    index: number,
-  ) => {
-    if (stepErrors && stepErrors.length > 0 && stepErrors.includes(index)) {
-      await validateForm();
+      await saveUpdateForm(values);
+      const formErrors = await validateForm();
+      if (!formErrors) {
+        handleRemoveStepError(index);
+      }
     }
   };
 
@@ -135,8 +135,8 @@ const IntakeForm = () => {
                       formTabs={formTabs}
                       stepErrors={stepErrors}
                       completedSteps={completedSteps}
-                      handleValidateLastStep={handleValidateLastStep}
-                      handleValidateCurrentStep={handleValidateCurrentStep}
+                      handleValidateStep={handleValidateStep}
+                      disabled={formData?.status === FormStatus.SUBMITTED}
                     />
                   ))}
                 </TabList>
@@ -146,11 +146,10 @@ const IntakeForm = () => {
                       {() => (
                         <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
                           <h3>{tab.title ?? tab.label}</h3>
-
+                          {JSON.stringify(stepErrors)}
                           {tab.description && (
                             <div className="text-sm py-6">{tab.description}</div>
                           )}
-
 
                           <div className="flex flex-col space-y-8  w-full">
                             {tab.component({ sections: tab.sections })}
@@ -167,32 +166,22 @@ const IntakeForm = () => {
                 handlePrevious={async (
                   validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
                 ) => {
-                  // handleSetStep(step - (1 % Object.keys(formTabs).length))
-                  await handleValidateLastStep(
+                  await handleValidateStep(
                     validateForm,
                     step - (1 % Object.keys(formTabs).length),
+                    values,
                   );
-                  await handleValidateCurrentStep(
-                    validateForm,
-                    step - (1 % Object.keys(formTabs).length),
-                  );
-                  await saveUpdateForm(values);
                 }}
                 handleNext={async (
                   validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
                 ) => {
-                  // handleSetStep(step + (1 % Object.keys(formTabs).length))
-                  await handleValidateLastStep(
+                  await handleValidateStep(
                     validateForm,
                     step + (1 % Object.keys(formTabs).length),
+                    values,
                   );
-                  await handleValidateCurrentStep(
-                    validateForm,
-                    step + (1 % Object.keys(formTabs).length),
-                  );
-                  await saveUpdateForm(values);
                 }}
-                disableNext={step === formTabs.length - 1}
+                disableNext={step === formTabs.length - 2}
                 disablePrevious={step === 0}
               />
             </div>

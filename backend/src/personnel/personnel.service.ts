@@ -177,7 +177,7 @@ export class PersonnelService {
         this.personnelRepository.create(new PersonnelEntity(personnel)),
       );
     } catch (e) {
-      console.log(e);
+      throw new BadRequestException(e.message);
     }
   }
 

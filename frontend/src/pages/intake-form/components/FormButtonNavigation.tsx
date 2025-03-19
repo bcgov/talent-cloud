@@ -5,6 +5,7 @@ import { Button } from '@/components';
 import type { IntakeFormValues } from '../constants/types';
 
 import { AlertType, useAlertContext } from '@/providers/Alert';
+import { useNavigate } from 'react-router';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,
@@ -16,14 +17,16 @@ export const FormButtonNavigation = ({
   saveUpdateForm: (values: FormikValues) => void;
   handlePrevious: (
     validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-  ) => void;
-  handleNext: (validateForm: () => Promise<FormikErrors<IntakeFormValues>>) => void;
+  ) => Promise<void>;
+  handleNext: (
+    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
+  ) => Promise<void>;
   disableNext: boolean;
   disablePrevious: boolean;
 }) => {
   const { values, validateForm } = useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
-
+  const navigate = useNavigate();
   return (
     <div>
       <div className="border border-t-grey-200"></div>
@@ -33,7 +36,7 @@ export const FormButtonNavigation = ({
             text="Cancel"
             variant={ButtonTypes.TEXT}
             // TODO: Save and navigate? Delete form?
-            onClick={() => console.log('clicked')}
+            onClick={() => navigate('/')}
           />
           <Button
             text="Save For Later"
@@ -53,13 +56,13 @@ export const FormButtonNavigation = ({
             text="Previous"
             disabled={disablePrevious}
             variant={ButtonTypes.OUTLINED}
-            onClick={() => handlePrevious(validateForm)}
+            onClick={async () => await handlePrevious(validateForm)}
           />
           <Button
             text="Next"
             variant={ButtonTypes.SOLID}
             disabled={disableNext}
-            onClick={() => handleNext(validateForm)}
+            onClick={async () => await handleNext(validateForm)}
           />
         </div>
       </div>
