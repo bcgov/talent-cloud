@@ -232,5 +232,5 @@ export class PersonnelRO {
   chipsIssues: { [key: string]: string };
 
   @ApiProperty({ description: 'chipsTrainingData', required: false })
-  chipsTrainingData?: Array<{ id: string; name: string; completed: string }>;
+  chipsTrainingData?: Array<{ courseId: string; courseTitle: string; completedDate: string }>;
 }

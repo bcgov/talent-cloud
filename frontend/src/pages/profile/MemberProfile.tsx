@@ -9,6 +9,7 @@ import { Tabs as TabIndexes } from '@/common';
 import { memberData } from '@/hooks/memberProfileData';
 import { useProgramFieldData } from '@/hooks';
 import { RecommitmentFormBase } from '@/components/recommitment';
+import { MemberTraining } from '../../components/tabs/MemberTraining';
 
 const MemberProfile = () => {
   const {
@@ -76,6 +77,9 @@ const MemberProfile = () => {
                       updateMember={updateMember}
                     />
                   )}
+                </TabPanel>
+                <TabPanel value={TabIndexes.TRAINING}>
+                  {member && <MemberTraining member={member} />}
                 </TabPanel>
               </TabsBody>
             </div>

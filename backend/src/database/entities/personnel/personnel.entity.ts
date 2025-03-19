@@ -264,7 +264,7 @@ export class PersonnelEntity extends BaseEntity {
     type: 'jsonb',
     default: () => "'[]'",
   })
-  chipsTrainingData: Array<{ id: string; name: string; completed: string }>;
+  chipsTrainingData: Array<{ courseId: string; courseTitle: string; completedDate: string }>;
 
   toResponseObject(
     roles: Role[],

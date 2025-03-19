@@ -56,14 +56,14 @@ export const ProfileDetails = () => {
     <>
       <section className="bg-white">
         <div className="pt-6">
-          {personnel?.chipsProfileMissing ||
-          Object.keys(personnel?.chipsIssues || {}).length > 0 ? (
+          {(personnel?.chipsProfileMissing === true ||
+            Object.keys(personnel?.chipsIssues || {}).length > 0) && (
             <Banner
               type={BannerType.ERROR}
               content={
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-red-700">
+                    <span className="font-bold text-errorRed">
                       Government Profile Syncing Errors Detected
                     </span>
                     {personnel?.chipsLastPing && (
@@ -79,53 +79,58 @@ export const ProfileDetails = () => {
                   </div>
                   <div className="mt-1">
                     {personnel?.chipsProfileMissing ? (
-                      <p className="text-sm text-red-700">
+                      <p className="text-sm text-errorRed">
                         This member&apos;s profile cannot be found in the government
                         system.
                       </p>
                     ) : (
-                      <p className="text-sm text-red-700">
-                        The details with an exclamation icon are directly sourced
-                        from this member&apos;s government profile and may be
-                        outdated or incorrect. Please edit this member&apos;s details
-                        if needed.
+                      <p className="text-sm text-errorRed">
+                        This member has some profile information flagged for review
+                        as they may contain errors. Please see the red tooltips for
+                        details and make necessary edits.&nbsp; The details with an
+                        exclamation icon are directly sourced from this member&apos;s
+                        government profile and may be outdated or incorrect. Please
+                        edit this member&apos;s details if needed.
                       </p>
                     )}
-                  </div>
-                </>
-              }
-            />
-          ) : (
-            <Banner
-              type={BannerType.INFO}
-              content={
-                <>
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold">
-                      Verify Information from Government Profile
-                    </span>
-                    {personnel?.chipsLastPing && (
-                      <span className="text-sm text-gray-500">
-                        Profile data synced{' '}
-                        {differenceInDays(
-                          new Date(),
-                          offsetTimezoneDate(personnel.chipsLastPing),
-                        )}{' '}
-                        days ago
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-1">
-                    <p className="text-sm text-gray-700">
-                      The details with an exclamation icon are directly sourced from
-                      this member&apos;s government profile and may be outdated or
-                      incorrect. Please edit this member&apos;s details if needed.
-                    </p>
                   </div>
                 </>
               }
             />
           )}
+          {!personnel?.chipsProfileMissing === false &&
+            Object.keys(personnel?.chipsIssues || {}).length === 0 && (
+              <Banner
+                type={BannerType.INFO}
+                content={
+                  <>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold">
+                        Verify Information from Government Profile
+                      </span>
+                      {personnel?.chipsLastPing && (
+                        <span className="text-sm text-gray-600">
+                          Profile data synced{' '}
+                          {differenceInDays(
+                            new Date(),
+                            offsetTimezoneDate(personnel.chipsLastPing),
+                          )}{' '}
+                          days ago
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-1">
+                      <p className="text-sm text-defaultGray">
+                        The details with an exclamation icon are directly sourced
+                        from this member&apos;s government profile and may be
+                        outdated or incorrect. Please edit this member&apos;s details
+                        if needed.
+                      </p>
+                    </div>
+                  </>
+                }
+              />
+            )}
           <Accordion
             className="border-2 border-slate-950"
             placeholder={'Member Details'}

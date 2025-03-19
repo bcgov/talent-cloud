@@ -75,17 +75,17 @@ export const MemberProfileDetails = ({
   return (
     <>
       <section>
-        {member?.chipsProfileMissing ||
-        Object.keys(member?.chipsIssues || {}).length > 0 ? (
+        {member.chipsProfileMissing ||
+        Object.keys(member.chipsIssues || {}).length > 0 ? (
           <Banner
             type={BannerType.ERROR}
             content={
               <>
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-red-700">
+                  <span className="font-bold text-errorRed">
                     Government Profile Syncing Errors Detected
                   </span>
-                  {member?.chipsLastPing && (
+                  {member.chipsLastPing && (
                     <span className="text-sm text-gray-500">
                       Profile data synced{' '}
                       {differenceInDays(
@@ -97,12 +97,12 @@ export const MemberProfileDetails = ({
                   )}
                 </div>
                 <div className="mt-1">
-                  {member?.chipsProfileMissing ? (
-                    <p className="text-sm text-red-700">
+                  {member.chipsProfileMissing ? (
+                    <p className="text-sm text-errorRed">
                       Your profile cannot be found in the government system.
                     </p>
                   ) : (
-                    <p className="text-sm text-red-700">
+                    <p className="text-sm text-errorRed">
                       The details with an exclamation icon are directly sourced from
                       your government profile and may be outdated or incorrect.
                       Please edit your details if needed.
@@ -121,8 +121,8 @@ export const MemberProfileDetails = ({
                   <span className="font-bold">
                     Verify Information from Government Profile
                   </span>
-                  {member?.chipsLastPing && (
-                    <span className="text-sm text-gray-500">
+                  {member.chipsLastPing && (
+                    <span className="text-sm text-gray-600">
                       Profile data synced{' '}
                       {differenceInDays(
                         new Date(),
@@ -133,7 +133,7 @@ export const MemberProfileDetails = ({
                   )}
                 </div>
                 <div className="mt-1">
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-defaultGray">
                     The details with an exclamation icon are directly sourced from
                     your government profile and may be outdated or incorrect. Please
                     edit your details if needed.

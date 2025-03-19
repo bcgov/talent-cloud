@@ -210,7 +210,11 @@ export interface PersonnelInfo {
 
   chipsProfileMissing: boolean;
   chipsIssues: { [key: string]: string };
-  chipsTrainingData: Array<{ id: string; name: string; completed: string }>;
+  chipsTrainingData: Array<{
+    courseId: string;
+    courseTitle: string;
+    completedDate: string;
+  }>;
   chipsLastPing?: string;
 }
 
