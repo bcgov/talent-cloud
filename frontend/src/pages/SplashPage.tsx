@@ -8,6 +8,7 @@ import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { AxiosPublic } from '@/utils';
 import { Routes } from '@/routes';
+import { useNavigate } from 'react-router';
 
 const SplashPage = () => {
   const { keycloak } = useKeycloak();
@@ -27,7 +28,7 @@ const SplashPage = () => {
       setEnv(data.env);
     })();
   }, []);
-
+  const navigate = useNavigate();
   const content = {
     title: 'Welcome to CORE Team',
     subtitle: 'Coordinated Operation Response in Emergencies',
@@ -147,10 +148,17 @@ const SplashPage = () => {
                 text={'Log In'}
                 onClick={login}
               />
-              <Button
-                variant={ButtonTypes.TEXT_SECONDARY}
-                text={'Not a member yet? Apply now'}
-              />
+              <button
+                type={'button'}
+                onClick={() => navigate(Routes.IntakeForm)}
+                className={
+                  'text-white text-xs text-decoration-underline underline whitespace-nowrap'
+                }
+              >
+                <div className="flex flex-row gap-2 items-center">
+                  Not a member yet? Apply now
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -168,10 +176,17 @@ const SplashPage = () => {
                 text={'Log In'}
                 onClick={login}
               />
-              <Button
-                variant={ButtonTypes.TEXT_SECONDARY}
-                text={'Not a member yet? Apply now'}
-              />
+              <button
+                type={'button'}
+                onClick={() => navigate(Routes.IntakeForm)}
+                className={
+                  'text-white text-xs text-decoration-underline underline whitespace-nowrap'
+                }
+              >
+                <div className="flex flex-row gap-2 items-center">
+                  Not a member yet? Apply now
+                </div>
+              </button>
             </div>
           </div>
         </div>
