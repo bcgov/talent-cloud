@@ -47,6 +47,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       text="Remove"
                       onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
                     />
+
                   </div>
                 </div>
               ),

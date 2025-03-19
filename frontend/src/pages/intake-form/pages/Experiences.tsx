@@ -91,6 +91,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               {...fieldItm}
                               options={
                                 fieldItm.options && fieldItm.options.length === 0
+
                                   ? getOptions(fieldItm.name)
                                   : fieldItm.options
                               }

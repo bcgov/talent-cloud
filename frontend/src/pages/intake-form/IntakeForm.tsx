@@ -151,6 +151,7 @@ const IntakeForm = () => {
                             <div className="text-sm py-6">{tab.description}</div>
                           )}
 
+
                           <div className="flex flex-col space-y-8  w-full">
                             {tab.component({ sections: tab.sections })}
                           </div>
