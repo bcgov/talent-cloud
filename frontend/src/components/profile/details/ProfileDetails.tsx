@@ -98,7 +98,7 @@ export const ProfileDetails = () => {
               }
             />
           )}
-          {!personnel?.chipsProfileMissing === false &&
+          {personnel?.chipsProfileMissing === false &&
             Object.keys(personnel?.chipsIssues || {}).length === 0 && (
               <Banner
                 type={BannerType.INFO}
