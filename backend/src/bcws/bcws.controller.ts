@@ -61,7 +61,7 @@ export class BcwsController {
     
     await this.bcwsService.updateBcwsPersonnel(person.bcws, id);
 
-    return await this.personnelService.updatePersonnelDetails(person.details,   id);
+    return await this.personnelService.updatePersonnelDetails(person.details, id);
    
   }
 

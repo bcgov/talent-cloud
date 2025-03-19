@@ -17,7 +17,7 @@ import { AvailabilityRO, PersonnelRO } from './ro';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
 import { sampleData, sampleTrainingData } from '../common/chips/sample-data';
-import { ChipsMinistryName, Ministry, Section } from '../common/enums';
+import { ChipsMinistryName, Ministry, Section, UnionMembership } from '../common/enums';
 import {
   AvailabilityType,
   AvailabilityTypeLabel,
@@ -277,7 +277,10 @@ export class PersonnelService {
       },
     });
 
-    return await this.personnelRepository.update(person.id, updateDTO);
+    return await this.personnelRepository.update(person.id, {
+      ...updateDTO,
+      chipsIssues: {},
+    });
   }
 
   async updatePersonnel(
@@ -302,6 +305,7 @@ export class PersonnelService {
     await this.personnelRepository.save({
       ...person,
       ...updateDTO,
+      chipsIssues: {},
     });
 
     return await this.findOneById(id).then((person) =>
@@ -1081,6 +1085,13 @@ export class PersonnelService {
       issues.name = `Unable to parse name "${data.name}" from CHIPS.`;
     }
 
+    let unionMembership;
+    if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
+      unionMembership = data.employeeGroup;
+    } else {
+      unionMembership = UnionMembership.EXCLUDED;
+    }
+
     const personnelUpdates: Partial<PersonnelEntity> = {
       ...personnel,
       employeeId: data.emplId, // Ensure format
@@ -1089,7 +1100,7 @@ export class PersonnelService {
       division: data.levelOne,
       jobTitle: data.currentPositionTitle || personnel.jobTitle,
       // TODO: Union
-      // TODO: Phone
+      // primaryPhone: data.homePhone || personnel.primaryPhone,  // Commented - said to be inaccurate
       ministry,
       workLocation,
       homeLocation,
