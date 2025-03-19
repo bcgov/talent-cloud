@@ -87,10 +87,10 @@ export const ProfileDetails = () => {
                       <p className="text-sm text-errorRed">
                         This member has some profile information flagged for review
                         as they may contain errors. Please see the red tooltips for
-                        details and make necessary edits.&nbsp; The details with an
-                        exclamation icon are directly sourced from this member&apos;s
-                        government profile and may be outdated or incorrect. Please
-                        edit this member&apos;s details if needed.
+                        details and make necessary edits.&nbsp; The details with a
+                        blue exclamation icon are directly sourced from this
+                        member&apos;s government profile and may be outdated or
+                        incorrect. Please edit this member&apos;s details if needed.
                       </p>
                     )}
                   </div>

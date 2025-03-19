@@ -103,9 +103,11 @@ export const MemberProfileDetails = ({
                     </p>
                   ) : (
                     <p className="text-sm text-errorRed">
-                      The details with an exclamation icon are directly sourced from
-                      your government profile and may be outdated or incorrect.
-                      Please edit your details if needed.
+                      You have some profile information flagged for review as they
+                      may contain errors. Please see the red tooltips for details and
+                      make necessary edits. The details with a blue exclamation icon
+                      are directly sourced from your government profile and may be
+                      outdated or incorrect. Please edit your details if needed.
                     </p>
                   )}
                 </div>
