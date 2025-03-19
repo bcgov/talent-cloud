@@ -83,10 +83,7 @@ const supervisorEmail = Yup.string()
   .optional()
   .nullable()
   .email('Invalid email format.')
-  .matches(
-    /^[^\s@]+@gov.bc.ca+$/,
-    'Invalid email format. Must be a gov.bc.ca email address.',
-  );
+  .matches(/^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/, 'Invalid email format.');
 
 const supervisorPhone = Yup.string()
   .optional()
@@ -501,6 +498,15 @@ export const fields = {
     required: true,
     type: 'text',
     autoComplete: 'off',
+    disabled: false,
+  },
+  emailByMember: {
+    name: 'email',
+    label: 'Work Email',
+    break: true,
+    required: true,
+    type: 'text',
+    autoComplete: 'off',
     disabled: true,
   },
 
@@ -701,7 +707,7 @@ export const fields = {
       required: false,
       program: Program.BCWS,
     },
-  
+
     liaisonPhoneNumber: {
       name: 'bcws.liaisonPhoneNumber',
       label: 'Liaison Number',
