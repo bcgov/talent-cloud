@@ -23,50 +23,6 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
         name={field.name}
         render={(arrayHelpers) => (
           <>
-<<<<<<< HEAD
-            {values?.map((value: any, index: number) => (
-              <div key={value} className="grid grid-cols-3 gap-4">
-                {field.fields?.map((itm: FormFields) => (
-                  <div key={itm.name} className="col-span-1">
-                    <label htmlFor={itm.name}>
-                      {itm.label}
-                      {itm.required && <span className="text-error">*</span>}
-                    </label>
-                    <Field
-                      value={value?.[index]?.[itm.name]}
-                      name={`${field.name}.${index}.${itm.name}`}
-                      type={itm.type}
-                    >
-                      {({
-                        field,
-                        form,
-                      }: {
-                        field: FieldInputProps<any>;
-                        form: FormikFormProps;
-                      }) => (
-                        <>
-                          {renderField({
-                            field,
-                            form,
-                            props: itm,
-                            options: getOptions(itm.name),
-                          })}
-
-                          {itm.helper && (
-                            <p className={clsx('subtext', 'py-2')}>{itm.helper}</p>
-                          )}
-
-                          <ErrorMessage name={field.name}>
-                            {(msg) => {
-                              return (
-                                <div className="font-normal text-error">{msg}</div>
-                              );
-                            }}
-                          </ErrorMessage>
-                        </>
-                      )}
-                    </Field>
-=======
             {(values?.[field.name as keyof typeof values] as {}[])?.map(
               (value: any, index: number) => (
                 <div key={value} className="grid grid-cols-3 gap-4">
@@ -91,7 +47,6 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       text="Remove"
                       onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
                     />
->>>>>>> 84044c2b (step validation and form submission)
                   </div>
                 </div>
               ),

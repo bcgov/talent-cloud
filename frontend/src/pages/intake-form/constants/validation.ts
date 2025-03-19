@@ -95,12 +95,26 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
 });
 
 export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
-  emergencyExperience: Yup.string().required('Emergency Experience is required'),
-  preocExperience: Yup.string().required('PREOC Experience is required'),
-  peccExperience: Yup.string().required('PECC Experience is required'),
-  firstNationsExperience: Yup.string().required(
-    'First Nations Experience is required',
-  ),
+  emergencyExperience: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().required('Emergency Experience is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  preocExperience: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().required('PREOC Experience is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  peccExperience: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().required('PECC Experience is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  firstNationsExperience: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().required('First Nations Experience is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
 });
 
 export const sectionChoiceEmcrSchema = Yup.object().shape({
@@ -129,39 +143,33 @@ export const firstChoiceTest = (value: any) => {
 };
 
 export const sectionRolesBcwsSchema = Yup.object().shape({
-  roles: Yup.array()
-    .of(
-      Yup.object().shape({
-        [Section.PLANNING]: Yup.array()
-          .of(Yup.string())
-          .when('firstChoiceSection', {
-            is: (val: string) => val === Section.PLANNING,
-            then: () =>
-              Yup.array()
-                .of(Yup.string())
-                .min(1)
-                .required('Choose at least one role from your preferred section(s)'),
-          }),
-        [Section.LOGISTICS]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.FINANCE_ADMIN]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.OPERATIONS]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.AVIATION]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.COMMAND]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-      }),
-    )
-    .test('firstChoiceSection', 'Roles are required', (value) => {
-      console.log(value);
+  roles: Yup.array().of(
+    Yup.object().shape({
+      [Section.PLANNING]: Yup.array()
+        .of(Yup.string())
+        .when('firstChoiceSection', {
+          is: (val: string) => val === Section.PLANNING,
+          then: () =>
+            Yup.array()
+              .of(Yup.string())
+              .min(1)
+              .required('Choose at least one role from your preferred section(s)'),
+        }),
+      [Section.LOGISTICS]: Yup.array().of(
+        Yup.string().required('Roles are required'),
+      ),
+      [Section.FINANCE_ADMIN]: Yup.array().of(
+        Yup.string().required('Roles are required'),
+      ),
+      [Section.OPERATIONS]: Yup.array().of(
+        Yup.string().required('Roles are required'),
+      ),
+      [Section.AVIATION]: Yup.array().of(
+        Yup.string().required('Roles are required'),
+      ),
+      [Section.COMMAND]: Yup.array().of(Yup.string().required('Roles are required')),
     }),
+  ),
 });
 
 export const languageSkillsSchema = Yup.object().shape({
@@ -205,7 +213,7 @@ const programStepValidation = Yup.object().shape({
 });
 
 const emcrFunctionSchema = Yup.object().shape({
-  functions: Yup.array().of(Yup.string()).min(1),
+  functions: Yup.array().of(Yup.string()),
 });
 
 const certificationsSchema = Yup.object().shape({

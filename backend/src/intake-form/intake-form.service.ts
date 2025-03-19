@@ -32,12 +32,12 @@ import {
 import {
   CreatePersonnelEmcrDTO,
   EmcrPersonnelExperienceDTO,
-} from 'src/emcr/dto';
+} from '../emcr/dto';
 import {
   CreateBcwsPersonnelRolesDTO,
   CreatePersonnelBcwsDTO,
-} from 'src/bcws/dto';
-import { LocationEntity } from 'src/database/entities/location.entity';
+} from '../bcws/dto';
+import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
 export class IntakeFormService {
@@ -76,21 +76,19 @@ export class IntakeFormService {
           status: FormStatusEnum.SUBMITTED,
         });
 
-        return await this.intakeFormRepository.save({
-          ...createIntakeFormDto,
-          status: FormStatusEnum.SUBMITTED,
-        });
+        
       } else {
         await this.personnelService.updatePerson({
           ...existingPerson,
           ...personnelFromFormData,
         });
 
-        return await this.intakeFormRepository.save({
-          ...createIntakeFormDto,
-          status: FormStatusEnum.SUBMITTED,
-        });
+        
       }
+      return await this.intakeFormRepository.save({
+        ...createIntakeFormDto,
+        status: FormStatusEnum.SUBMITTED,
+      });
     } catch (e) {
       throw new BadRequestException(e.message);
     }
@@ -152,17 +150,16 @@ export class IntakeFormService {
     }
 
     if (
-      existingform &&
-      existingform.status === FormStatusEnum.DRAFT &&
+      (existingform &&
+      existingform.status === FormStatusEnum.DRAFT) &&
       !personnel
     ) {
       return existingform.toResponseObject();
     }
-
-    if (
-      (!existingform ||
-        (existingform && existingform.status === FormStatusEnum.SUBMITTED)) &&
-      personnel
+if
+      (
+        existingform && existingform.status === FormStatusEnum.SUBMITTED 
+      
     ) {
       const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
@@ -203,6 +200,9 @@ export class IntakeFormService {
   mapBcwsFormDataToPersonnel(
     personnel: IntakeFormPersonnelData,
   ): CreatePersonnelBcwsDTO {
+    
+    
+    
     const bcwsPerson = new CreatePersonnelBcwsDTO();
     const bcwsData = {
       status: Status.PENDING,
@@ -220,12 +220,13 @@ export class IntakeFormService {
       thirdChoiceSection: personnel.thirdChoiceSection
         ? Section[personnel?.thirdChoiceSection]
         : undefined,
-      roles: personnel.roles?.map((item) => {
-        const role = new CreateBcwsPersonnelRolesDTO();
-        role.roleId = parseInt(item);
-        role.expLevel = ExperienceLevel.INTERESTED;
-        return role;
-      }),
+        // TODO
+      // roles: roles.length > 0 ? roles?.map((item) => {
+      //   const role = new CreateBcwsPersonnelRolesDTO();
+      //   role.roleId = parseInt(item);
+      //   role.expLevel = ExperienceLevel.INTERESTED;
+      //   return role;
+      // }) : [],
     };
     return Object.assign(bcwsData, bcwsPerson);
   }
@@ -277,6 +278,15 @@ export class IntakeFormService {
     locations: LocationEntity[],
   ): CreatePersonnelDTO {
     const person = new CreatePersonnelDTO();
+    if(personnel.tools[0].toolId === '' && personnel.tools[0].toolProficiency === ''){
+      delete personnel.tools
+    }
+    if(personnel.languages[0].language === '' && personnel.languages[0].languageProficiency === ''){
+      delete personnel.languages
+    }
+    if(personnel.certifications[0].certificationId === ''){
+      delete personnel.certifications
+    }
     const personData = {
       firstName: personnel.firstName,
       lastName: personnel.lastName,
@@ -298,24 +308,31 @@ export class IntakeFormService {
       ),
       ministry: Ministry[personnel.ministry],
       division: personnel.division,
-      tools: personnel.tools?.map((item) => {
+      tools: personnel.tools ? personnel.tools?.map((item) => {
+        
         const tool = new PersonnelTools();
         tool.toolId = parseInt(item.toolId);
         tool.proficiencyLevel = ToolsProficiency[item.toolProficiency];
         return tool;
-      }),
-      languages: personnel.languages.map((item) => {
+      }) : [],
+      languages: personnel.languages ? personnel.languages.map((item) => {
+        if(item.language === '' && item.languageProficiency === ''){
+          return
+        } 
         const language = new LanguageEntity();
         language.language = item.language;
         language.level = LanguageProficiency[item.languageProficiency];
         return language;
-      }),
-      certifications: personnel.certifications?.map((item) => {
+      }) : [],
+      certifications: personnel.certifications ? personnel.certifications?.map((item) => {
+        if(item.certificationId === '' && item.expiry === undefined){
+          return
+        }
         const certification = new PersonnelCertificationEntity();
         certification.certificationId = parseInt(item.certificationId);
         certification.expiry = item.expiry ?? undefined;
         return certification;
-      }),
+      }) : [],
       emergencyContactFirstName: personnel.emergencyContactFirstName,
       emergencyContactLastName: personnel.emergencyContactLastName,
       emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,

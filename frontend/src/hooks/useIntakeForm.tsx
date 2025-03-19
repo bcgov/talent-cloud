@@ -121,6 +121,15 @@ export const useIntakeForm = () => {
   };
 
   const handleSubmit = async (values: IntakeFormValues) => {
+    values.primaryPhone = values.primaryPhone.replace(/[^\d]/g, '');
+    values.secondaryPhone = values.secondaryPhone?.replace(/[^\d]/g, '');
+    values.emergencyContactPhoneNumber = values.emergencyContactPhoneNumber.replace(
+      /[^\d]/g,
+      '',
+    );
+    values.secondaryPhone = values.supervisorPhone?.replace(/[^\d]/g, '');
+    values.workPhone = values.workPhone?.replace(/[^\d]/g, '');
+
     try {
       const res = await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
         ...formData,

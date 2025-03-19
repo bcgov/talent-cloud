@@ -103,7 +103,7 @@ export const CheckIcon = ({
   className?: string;
 }) => {
   if (fill === 'white') {
-    fill = '#FFFFFF';
+    fill = 'white';
   } else {
     fill = '#2D4821';
   }

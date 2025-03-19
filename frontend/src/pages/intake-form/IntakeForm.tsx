@@ -116,82 +116,87 @@ const IntakeForm = () => {
         validationSchema={stepValidation[step]}
         onSubmit={async (values) => await handleSubmit(values)}
       >
-        <Form>
-          <div className="h-full flex flex-col justify-between">
-            <TabGroup
-              vertical
-              manual
-              selectedIndex={step}
-              className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-            >
-              <TabList className="flex flex-col">
-                {formTabs.map((tab: FormTab, index: number) => (
-                  <FormStepper
-                    key={tab.value}
-                    tab={tab}
-                    index={index}
-                    formTabs={formTabs}
-                    stepErrors={stepErrors}
-                    completedSteps={completedSteps}
-                    handleValidateLastStep={handleValidateLastStep}
-                    handleValidateCurrentStep={handleValidateCurrentStep}
-                  />
-                ))}
-              </TabList>
-              <TabPanels>
-                {formTabs.map((tab: FormTab) => (
-                  <TabPanel key={tab.value}>
-                    {() => (
-                      <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
-                        <h3>{tab.title ?? tab.label}</h3>
+        {({ values }) => (
+          <Form>
+            <div className="h-full flex flex-col justify-between">
+              <TabGroup
+                vertical
+                manual
+                selectedIndex={step}
+                className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
+                onChange={() => saveUpdateForm(values)}
+              >
+                <TabList className="flex flex-col">
+                  {formTabs.map((tab: FormTab, index: number) => (
+                    <FormStepper
+                      key={tab.value}
+                      tab={tab}
+                      index={index}
+                      formTabs={formTabs}
+                      stepErrors={stepErrors}
+                      completedSteps={completedSteps}
+                      handleValidateLastStep={handleValidateLastStep}
+                      handleValidateCurrentStep={handleValidateCurrentStep}
+                    />
+                  ))}
+                </TabList>
+                <TabPanels>
+                  {formTabs.map((tab: FormTab) => (
+                    <TabPanel key={tab.value}>
+                      {() => (
+                        <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
+                          <h3>{tab.title ?? tab.label}</h3>
 
-                        {tab.description && (
-                          <div className="text-sm py-6">{tab.description}</div>
-                        )}
+                          {tab.description && (
+                            <div className="text-sm py-6">{tab.description}</div>
+                          )}
 
-                        <div className="flex flex-col space-y-8  w-full">
-                          {tab.component({ sections: tab.sections })}
+                          <div className="flex flex-col space-y-8  w-full">
+                            {tab.component({ sections: tab.sections })}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </TabGroup>
+                      )}
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </TabGroup>
 
-            <FormButtonNavigation
-              saveUpdateForm={saveUpdateForm}
-              handlePrevious={(
-                validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-              ) => {
-                // handleSetStep(step - (1 % Object.keys(formTabs).length))
-                handleValidateLastStep(
-                  validateForm,
-                  step - (1 % Object.keys(formTabs).length),
-                );
-                handleValidateCurrentStep(
-                  validateForm,
-                  step - (1 % Object.keys(formTabs).length),
-                );
-              }}
-              handleNext={(
-                validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-              ) => {
-                // handleSetStep(step + (1 % Object.keys(formTabs).length))
-                handleValidateLastStep(
-                  validateForm,
-                  step + (1 % Object.keys(formTabs).length),
-                );
-                handleValidateCurrentStep(
-                  validateForm,
-                  step + (1 % Object.keys(formTabs).length),
-                );
-              }}
-              disableNext={step === formTabs.length - 1}
-              disablePrevious={step === 0}
-            />
-          </div>
-        </Form>
+              <FormButtonNavigation
+                saveUpdateForm={saveUpdateForm}
+                handlePrevious={async (
+                  validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
+                ) => {
+                  // handleSetStep(step - (1 % Object.keys(formTabs).length))
+                  await handleValidateLastStep(
+                    validateForm,
+                    step - (1 % Object.keys(formTabs).length),
+                  );
+                  await handleValidateCurrentStep(
+                    validateForm,
+                    step - (1 % Object.keys(formTabs).length),
+                  );
+                  await saveUpdateForm(values);
+                }}
+                handleNext={async (
+                  validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
+                ) => {
+                  // handleSetStep(step + (1 % Object.keys(formTabs).length))
+                  await handleValidateLastStep(
+                    validateForm,
+                    step + (1 % Object.keys(formTabs).length),
+                  );
+                  await handleValidateCurrentStep(
+                    validateForm,
+                    step + (1 % Object.keys(formTabs).length),
+                  );
+                  await saveUpdateForm(values);
+                }}
+                disableNext={step === formTabs.length - 1}
+                disablePrevious={step === 0}
+              />
+            </div>
+          </Form>
+        )}
       </Formik>
     );
   }
