@@ -23,11 +23,17 @@ export const Button = ({
     if (variant === ButtonTypes.TERTIARY || variant === ButtonTypes.SOLID) {
       return button.tertiaryButton;
     }
+    if (variant === ButtonTypes.SOLID_SECONDARY) {
+      return button.solidSecondary;
+    }
     if (variant === ButtonTypes.SECONDARY_LIGHT) {
       return button.secondaryLight;
     }
     if (variant === ButtonTypes.TEXT) {
       return button.textButton;
+    }
+    if (variant === ButtonTypes.TEXT_SECONDARY) {
+      return button.textButtonSecondary;
     }
   };
 
