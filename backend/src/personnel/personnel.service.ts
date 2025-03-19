@@ -1087,7 +1087,7 @@ export class PersonnelService {
 
     let unionMembership;
     if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
-      unionMembership = data.employeeGroup;
+      unionMembership = UnionMembership[data.employeeGroup?.toUpperCase()];
     } else {
       unionMembership = UnionMembership.EXCLUDED;
     }
@@ -1099,7 +1099,7 @@ export class PersonnelService {
       firstName: data.name.split(',')[1]?.trim() || personnel.lastName,
       division: data.levelOne,
       jobTitle: data.currentPositionTitle || personnel.jobTitle,
-      // TODO: Union
+      unionMembership,
       // primaryPhone: data.homePhone || personnel.primaryPhone,  // Commented - said to be inaccurate
       ministry,
       workLocation,
