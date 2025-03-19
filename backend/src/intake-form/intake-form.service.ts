@@ -34,7 +34,6 @@ import {
   EmcrPersonnelExperienceDTO,
 } from '../emcr/dto';
 import {
-  CreateBcwsPersonnelRolesDTO,
   CreatePersonnelBcwsDTO,
 } from '../bcws/dto';
 import { LocationEntity } from '../database/entities/location.entity';
@@ -59,7 +58,6 @@ export class IntakeFormService {
   async submitIntakeForm(
     createIntakeFormDto: IntakeFormDTO,
     req: RequestWithRoles,
-    id: string,
   ): Promise<IntakeFormRO> {
     try {
       const email = req.idir;
