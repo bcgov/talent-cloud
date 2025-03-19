@@ -67,12 +67,10 @@ export class IntakeFormController {
   async submitIntakeForm(
     @Body() createIntakeFormDto: IntakeFormDTO,
     @Req() req: RequestWithRoles,
-    @Param() id: string,
   ): Promise<IntakeFormRO> {
     return await this.intakeFormService.submitIntakeForm(
       createIntakeFormDto,
       req,
-      id,
     );
   }
 }
