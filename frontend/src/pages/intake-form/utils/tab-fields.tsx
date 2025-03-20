@@ -488,7 +488,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'emergencyContactNumber',
+            name: 'emergencyContactPhoneNumber',
             label: 'Emergency Contact Phone Number',
             type: 'tel',
             component: TextField,

@@ -7,7 +7,6 @@ import {
   phoneNumber,
   primaryPhone,
   secondaryPhone,
-  supervisorEmail,
   supervisorPhone,
   workPhone,
 } from '@/components/profile/forms/constants';
@@ -38,15 +37,15 @@ export const employmentDetailsSchema = Yup.object().shape({
     otherwise: () => Yup.string().required('Paylist ID is required'),
   }),
   purchaseCardHolder: Yup.string().optional(),
-  emcrTravelPreference: Yup.string().when('program', {
+  travelPreferenceEmcr: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().notRequired(),
-    otherwise: () => Yup.string().required(''),
+    then: () => Yup.string().required(''),
+    otherwise: () => Yup.string().notRequired(),
   }),
-  bcwsTravelPreference: Yup.string().when('program', {
+  travelPreferenceBcws: Yup.string().when('program', {
     is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().notRequired(),
-    otherwise: () => Yup.string().required(''),
+    then: () => Yup.string().required(''),
+    otherwise: () => Yup.string().notRequired(),
   }),
 });
 
@@ -60,7 +59,11 @@ export const supervisorDetailsSchema = Yup.object().shape({
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required("Supervisor's last name is required"),
-  supervisorEmail: supervisorEmail,
+  supervisorEmail: Yup.string()
+    .optional()
+    .nullable()
+    .email('Invalid email format.')
+    .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.'),
   supervisorPhoneNumber: supervisorPhone,
 });
 
@@ -68,21 +71,12 @@ export const liaisonDetailsSchema = Yup.object().shape({
   liaisonUnknown: Yup.string().optional(),
   liaisonFirstName: Yup.string().min(2).max(50),
   liaisonLastName: Yup.string().min(2).max(50),
-  liaisonEmail: supervisorEmail,
+  liaisonEmail: Yup.string()
+    .optional()
+    .nullable()
+    .email('Invalid email format.')
+    .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.'),
   liaisonPhoneNumber: liaisonPhoneNumber,
-});
-
-export const travelDetailsSchema = Yup.object().shape({
-  travelPreferenceBcws: Yup.string().when('program', {
-    is: (val: Program) => val === Program.BCWS || val === Program.ALL,
-    then: () => Yup.string().required('This is a required field'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
-  travelPreferenceEmcr: Yup.string().when('program', {
-    is: (val: Program) => val === Program.EMCR || val === Program.ALL,
-    then: () => Yup.string().required('This is a required field'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
 });
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
@@ -237,7 +231,6 @@ const personnelStepValidation = personalDetailsSchema
   .concat(employmentDetailsSchema)
   .concat(supervisorDetailsSchema)
   .concat(liaisonDetailsSchema)
-  .concat(travelDetailsSchema)
   .concat(emergencyContactDetailsSchema);
 
 const experiencesValidation = generalEmergencyManagementExperienceSchema

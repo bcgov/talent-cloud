@@ -17,8 +17,8 @@ import { useFormikContext } from 'formik';
 
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
   const { getOptions } = useIntakeForm();
-  const { values } = useFormikContext<IntakeFormValues>();
-
+  const { values, errors } = useFormikContext<IntakeFormValues>();
+  console.log(errors);
   return (
     <div className="pb-24">
       <Banner
