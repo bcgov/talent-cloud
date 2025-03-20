@@ -1,28 +1,37 @@
 import type { FieldInputProps } from 'formik';
 import { classes } from '@/components/filters/classes';
-import type { FormFields } from '../constants/types';
+
+import clsx from 'clsx';
 
 export const SelectField = ({
   field,
-  props,
   options,
+  disabled,
+  placeholder,
 }: {
   field: FieldInputProps<any>;
-  props: FormFields;
+  disabled?: boolean;
   options?: any[];
+  placeholder?: string;
 }) => {
   return (
     <select
-      {...props}
       {...field}
-      value={field.value}
-      className={classes.menu.container}
+      // value={field.value}
+      disabled={disabled}
+      defaultValue=""
+      placeholder={placeholder}
+      className={clsx(
+        field.value === '' || field.value === undefined
+          ? classes.menu.container + ' text-gray-400 placeholder-gray-400'
+          : classes.menu.container,
+      )}
     >
-      <option disabled value={''}>
+      <option disabled={true} value="" className="text-gray-400">
         Select An Option
       </option>
       {options?.map((itm: any) => (
-        <option key={itm.value} value={itm.value}>
+        <option key={itm.value} value={itm.value} disabled={itm.disabled}>
           {itm.label}
         </option>
       ))}

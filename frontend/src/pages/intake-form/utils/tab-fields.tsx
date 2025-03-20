@@ -162,7 +162,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Last Name',
           },
           {
-            name: 'primaryPhone',
+            name: 'primaryPhoneNumber',
             label: 'Primary Phone Number',
             type: 'tel',
             component: TextField,
@@ -170,7 +170,7 @@ export const formTabs: FormTab[] = [
             placeholder: '000-000-0000',
           },
           {
-            name: 'secondaryPhone',
+            name: 'secondaryPhoneNumber',
             label: 'Secondary Phone Number',
             type: 'tel',
             component: TextField,
@@ -211,19 +211,19 @@ export const formTabs: FormTab[] = [
             component: TextField,
             required: true,
             placeholder: '123456',
-
             helper: 'This is your 6-digit employee number.',
           },
           {
             name: 'email',
             label: 'BC Government Email',
             type: 'text',
+            disabled: true,
             component: TextField,
             required: true,
             placeholder: 'johnsmith@gov.bc.ca',
           },
           {
-            name: 'workPhone',
+            name: 'workPhoneNumber',
             label: 'Work Phone Number',
             type: 'tel',
             component: TextField,
@@ -237,7 +237,6 @@ export const formTabs: FormTab[] = [
             component: SelectField,
             required: true,
             placeholder: 'Select an option',
-
             options: Object.values(Ministry).map((itm) => ({
               label: itm,
               value: itm,
@@ -364,7 +363,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'supervisorPhone',
+            name: 'supervisorPhoneNumber',
             label: 'Supervisor Phone Number',
             type: 'text',
             component: TextField,
@@ -489,7 +488,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'emergencyContactPhone',
+            name: 'emergencyContactPhoneNumber',
             label: 'Emergency Contact Phone Number',
             type: 'tel',
             component: TextField,
@@ -763,8 +762,8 @@ export const formTabs: FormTab[] = [
             ),
             type: 'multiselect-group',
             component: FieldGroup,
-            fields: Object.values(Section).map((itm, index) => ({
-              name: `roles.${index}.${itm}`,
+            fields: Object.values(Section).map((itm) => ({
+              name: itm,
               label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
               component: MultiSelectField,

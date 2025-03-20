@@ -7,7 +7,6 @@ import {
   phoneNumber,
   primaryPhone,
   secondaryPhone,
-  supervisorEmail,
   supervisorPhone,
   workPhone,
 } from '@/components/profile/forms/constants';
@@ -20,8 +19,8 @@ export const programSelectionSchema = Yup.object().shape({
 export const personalDetailsSchema = Yup.object().shape({
   firstName: firstName,
   lastName: lastName,
-  primaryPhone: primaryPhone,
-  secondaryPhone: secondaryPhone,
+  primaryPhoneNumber: primaryPhone,
+  secondaryPhoneNumber: secondaryPhone,
   homeLocation: Yup.string().required('Home location is required'),
 });
 
@@ -29,7 +28,7 @@ export const employmentDetailsSchema = Yup.object().shape({
   jobTitle: Yup.string().required('Job title is required'),
   employeeId: Yup.string().min(6).max(6).required('Employee number is required'),
   email: Yup.string().required('Email is required'),
-  workPhone: workPhone,
+  workPhoneNumber: workPhone,
   ministry: Yup.string().required('Ministry is required'),
   division: Yup.string().required('Division is required'),
   paylistId: Yup.string().when('program', {
@@ -38,6 +37,16 @@ export const employmentDetailsSchema = Yup.object().shape({
     otherwise: () => Yup.string().required('Paylist ID is required'),
   }),
   purchaseCardHolder: Yup.string().optional(),
+  travelPreferenceEmcr: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().required(''),
+    otherwise: () => Yup.string().notRequired(),
+  }),
+  travelPreferenceBcws: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.EMCR,
+    then: () => Yup.string().required(''),
+    otherwise: () => Yup.string().notRequired(),
+  }),
 });
 
 export const supervisorDetailsSchema = Yup.object().shape({
@@ -50,29 +59,24 @@ export const supervisorDetailsSchema = Yup.object().shape({
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
     .required("Supervisor's last name is required"),
-  supervisorEmail: supervisorEmail,
-  supervisorPhone: supervisorPhone,
+  supervisorEmail: Yup.string()
+    .optional()
+    .nullable()
+    .email('Invalid email format.')
+    .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.'),
+  supervisorPhoneNumber: supervisorPhone,
 });
 
 export const liaisonDetailsSchema = Yup.object().shape({
   liaisonUnknown: Yup.string().optional(),
   liaisonFirstName: Yup.string().min(2).max(50),
   liaisonLastName: Yup.string().min(2).max(50),
-  liaisonEmail: supervisorEmail,
-  liaisonPhone: liaisonPhoneNumber,
-});
-
-export const travelDetailsSchema = Yup.object().shape({
-  travelPreferenceBcws: Yup.string().when('program', {
-    is: (val: Program) => val === Program.BCWS || val === Program.ALL,
-    then: () => Yup.string().required('This is a required field'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
-  travelPreferenceEmcr: Yup.string().when('program', {
-    is: (val: Program) => val === Program.EMCR || val === Program.ALL,
-    then: () => Yup.string().required('This is a required field'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
+  liaisonEmail: Yup.string()
+    .optional()
+    .nullable()
+    .email('Invalid email format.')
+    .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.'),
+  liaisonPhoneNumber: liaisonPhoneNumber,
 });
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
@@ -84,7 +88,7 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
     .min(2)
     .max(50)
     .required("Emergency contact's last name is required"),
-  emergencyContactPhone: Yup.string()
+  emergencyContactPhoneNumber: Yup.string()
     .test(
       'phone number',
       'Invalid phone number format. Please enter digits only. ex: 5555555555',
@@ -130,47 +134,44 @@ export const sectionChoiceEmcrSchema = Yup.object().shape({
 export const sectionChoiceBcwsSchema = Yup.object().shape({
   firstChoiceSection: Yup.string().when('program', {
     is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().required('First choice is required'),
+    then: () => Yup.string().required('First  choice section is required'),
     otherwise: () => Yup.string().notRequired(),
   }),
   secondChoiceSection: Yup.string().optional(),
   thirdChoiceSection: Yup.string().optional(),
 });
-export const firstChoiceTest = (value: any) => {
-  if (value === '' || !value || value === null) {
-    return true;
-  } else return value?.toString().replace(/[^\d]/g, '').length === 10;
-};
 
-export const sectionRolesBcwsSchema = Yup.object().shape({
-  roles: Yup.array().of(
-    Yup.object().shape({
-      [Section.PLANNING]: Yup.array()
-        .of(Yup.string())
-        .when('firstChoiceSection', {
-          is: (val: string) => val === Section.PLANNING,
+export const sectionRolesBcwsSchema = Yup.object()
+  .shape({
+    roles: Yup.array().of(
+      Yup.object().shape({
+        [Section.PLANNING.toString()]: Yup.array().when('firstChoiceSection', {
+          is: (val: string) => val === Section.PLANNING.toString(),
           then: () =>
             Yup.array()
               .of(Yup.string())
               .min(1)
               .required('Choose at least one role from your preferred section(s)'),
         }),
-      [Section.LOGISTICS]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.FINANCE_ADMIN]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.OPERATIONS]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.AVIATION]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.COMMAND]: Yup.array().of(Yup.string().required('Roles are required')),
-    }),
-  ),
-});
+        [Section.LOGISTICS]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.FINANCE_ADMIN]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.OPERATIONS]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.AVIATION]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.COMMAND]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+      }),
+    ),
+  })
+  .required();
 
 export const languageSkillsSchema = Yup.object().shape({
   languages: Yup.array()
@@ -230,9 +231,7 @@ const personnelStepValidation = personalDetailsSchema
   .concat(employmentDetailsSchema)
   .concat(supervisorDetailsSchema)
   .concat(liaisonDetailsSchema)
-  .concat(travelDetailsSchema)
-  .concat(emergencyContactDetailsSchema)
-  .concat(generalEmergencyManagementExperienceSchema);
+  .concat(emergencyContactDetailsSchema);
 
 const experiencesValidation = generalEmergencyManagementExperienceSchema
   .concat(sectionChoiceEmcrSchema)
@@ -261,3 +260,10 @@ export const stepValidation = [
   reviewValidation,
   completeValidation,
 ];
+
+export const formValidation = programStepValidation
+  .concat(personnelStepValidation)
+  .concat(experiencesValidation)
+  .concat(skillsValidation)
+  .concat(reviewValidation)
+  .concat(completeValidation);

@@ -1,4 +1,4 @@
-import type { FormikErrors, FormikValues } from 'formik';
+import type { FormikErrors } from 'formik';
 import { Form, Formik } from 'formik';
 import { intakeFormInitialValues } from './constants/initial-values';
 import { useKeycloak } from '@react-keycloak/web';
@@ -67,27 +67,16 @@ const IntakeForm = () => {
   const handleValidateStep = async (
     validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
     index: number,
-    values: FormikValues,
   ) => {
     const formErrors = await validateForm();
     if (!formErrors || Object.values(formErrors).length === 0) {
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
-      handleSetStep(index);
-      await saveUpdateForm(values);
-      const formErrors = await validateForm();
-      if (!formErrors) {
-        handleRemoveStepError(index);
-      }
+      return handleSetStep(index);
     } else {
       handleSetErrors(step);
       handleRemoveCompletedStep(step);
-      handleSetStep(index);
-      await saveUpdateForm(values);
-      const formErrors = await validateForm();
-      if (!formErrors) {
-        handleRemoveStepError(index);
-      }
+      return handleSetStep(index);
     }
   };
 
@@ -116,7 +105,7 @@ const IntakeForm = () => {
         validationSchema={stepValidation[step]}
         onSubmit={async (values) => await handleSubmit(values)}
       >
-        {({ values }) => (
+        {({ validateForm }) => (
           <Form>
             <div className="h-full flex flex-col justify-between">
               <TabGroup
@@ -124,7 +113,7 @@ const IntakeForm = () => {
                 manual
                 selectedIndex={step}
                 className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-                onChange={() => saveUpdateForm(values)}
+                onChange={(index) => handleValidateStep(validateForm, index)}
               >
                 <TabList className="flex flex-col">
                   {formTabs.map((tab: FormTab, index: number) => (
@@ -135,8 +124,8 @@ const IntakeForm = () => {
                       formTabs={formTabs}
                       stepErrors={stepErrors}
                       completedSteps={completedSteps}
-                      handleValidateStep={handleValidateStep}
                       disabled={formData?.status === FormStatus.SUBMITTED}
+                      step={step}
                     />
                   ))}
                 </TabList>
@@ -146,7 +135,6 @@ const IntakeForm = () => {
                       {() => (
                         <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
                           <h3>{tab.title ?? tab.label}</h3>
-                          {JSON.stringify(stepErrors)}
                           {tab.description && (
                             <div className="text-sm py-6">{tab.description}</div>
                           )}
@@ -163,24 +151,18 @@ const IntakeForm = () => {
 
               <FormButtonNavigation
                 saveUpdateForm={saveUpdateForm}
-                handlePrevious={async (
-                  validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-                ) => {
-                  await handleValidateStep(
+                handlePrevious={() =>
+                  handleValidateStep(
                     validateForm,
                     step - (1 % Object.keys(formTabs).length),
-                    values,
-                  );
-                }}
-                handleNext={async (
-                  validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-                ) => {
-                  await handleValidateStep(
+                  )
+                }
+                handleNext={() =>
+                  handleValidateStep(
                     validateForm,
                     step + (1 % Object.keys(formTabs).length),
-                    values,
-                  );
-                }}
+                  )
+                }
                 disableNext={step === formTabs.length - 2}
                 disablePrevious={step === 0}
               />

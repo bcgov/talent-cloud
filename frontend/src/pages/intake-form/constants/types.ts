@@ -1,5 +1,5 @@
 // formik
-import type { BcwsRoleInterface, Program } from '@/common';
+import type { Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
@@ -9,7 +9,6 @@ import type { ReactComponentElement } from 'react';
 import type * as Yup from 'yup';
 
 // enums
-import type { Expectations } from './enums';
 
 export interface FormFields {
   helper?: string;
@@ -87,8 +86,8 @@ export const toolSkills: ToolsSkill[] = [
 export interface PersonalDetails {
   firstName: string;
   lastName: string;
-  primaryPhone: string;
-  secondaryPhone?: string;
+  primaryPhoneNumber: string;
+  secondaryPhoneNumber?: string;
   homeLocation?: string;
   email: string;
 }
@@ -99,9 +98,13 @@ export interface EmploymentDetails {
   jobTitle: string;
   employeeId: string;
   email: string;
-  workPhone: string;
+  workPhoneNumber: string;
   ministry: string;
   division: string;
+  unionMembership: string;
+  paylistId: string;
+  travelPreferenceBcws: string;
+  travelPreferenceEmcr: string;
 }
 
 // supervisor and liaison details, travel preferences
@@ -110,10 +113,10 @@ export interface SupervisorDetails {
   supervisorFirstName: string;
   supervisorLastName: string;
   supervisorEmail: string;
-  supervisorPhone?: string;
+  supervisorPhoneNumber?: string;
 }
 export interface LiaisonDetails {
-  liaisonUnknown?: boolean;
+  liaisonUnknown?: string;
   liaisonFirstName?: string;
   liaisonLastName?: string;
   liaisonEmail?: string;
@@ -133,6 +136,7 @@ export interface GeneralEmergencyManagementExperience {
 }
 
 export interface SectionChoiceEmcr {
+  functions: string[];
   firstChoiceFunction: string;
   secondChoiceFunction?: string;
   thirdChoiceFunction?: string;
@@ -145,12 +149,12 @@ export interface SectionChoiceBcws {
 }
 
 export interface SectionRolesBcws {
-  planning?: BcwsRoleInterface[];
-  logistics?: BcwsRoleInterface[];
-  finance?: BcwsRoleInterface[];
-  operations?: BcwsRoleInterface[];
-  command?: BcwsRoleInterface[];
-  aviation?: BcwsRoleInterface[];
+  roles: { [key: string]: string[] }[];
+}
+
+export interface ProgramAck {
+  program?: Program;
+  acknowledgement: string[];
 }
 
 // other skills & qualifications
@@ -164,7 +168,12 @@ export interface CertificationSkill {
   certificationId: string;
   expiry?: Date;
 }
-
+export interface Skills {
+  languages: LanguageSkill[];
+  certifications: CertificationSkill[];
+  tools: ToolsSkill[];
+  driverLicense: string[];
+}
 // review & submit
 
 export interface ReviewAndSubmit {
@@ -181,28 +190,19 @@ export type IntakeFormSubmissionData = {
   createdByEmail: string;
   program: Program; //
   status: FormStatus;
+  step: number;
   currentProgram: Program;
   personnel: IntakeFormValues;
 };
 
-export type IntakeFormValues = PersonalDetails &
+export type IntakeFormValues = ProgramAck &
+  PersonalDetails &
   EmploymentDetails &
   SupervisorDetails &
   EmergencyContactDetails &
+  LiaisonDetails &
   SectionChoiceBcws &
   SectionChoiceEmcr &
-  LiaisonDetails &
-  GeneralEmergencyManagementExperience & {
-    functions: string[];
-    travelPreferenceEmcr: string;
-    travelPreferenceBcws: string;
-    program?: string;
-    acknowledgement?: Expectations[];
-    paylistId: string;
-    roles: { [key: string]: string[] }[];
-    languages?: LanguageSkill[];
-    tools?: ToolsSkill[];
-    certifications?: CertificationSkill[];
-    driverLicense: string[];
-    unionMembership: string;
-  };
+  SectionRolesBcws &
+  GeneralEmergencyManagementExperience &
+  Skills;

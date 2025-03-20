@@ -17,8 +17,8 @@ import { useFormikContext } from 'formik';
 
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
   const { getOptions } = useIntakeForm();
-  const { values } = useFormikContext<IntakeFormValues>();
-
+  const { values, errors } = useFormikContext<IntakeFormValues>();
+  console.log(errors);
   return (
     <div className="pb-24">
       <Banner
@@ -38,9 +38,9 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
             : true,
         )
         .map(
-          (itm, index) =>
+          (itm) =>
             itm.name && (
-              <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
+              <FormSection section={itm} key={itm.name}>
                 <>
                   {itm.fields
                     ?.filter((field) =>

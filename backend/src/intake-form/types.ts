@@ -7,14 +7,14 @@ export interface IntakeFormPersonnelData {
   employeeId?: string;
   paylistId?: string;
   email: string;
-  primaryPhone?: string;
-  secondaryPhone?: string;
-  workPhone?: string;
+  primaryPhoneNumber?: string;
+  secondaryPhoneNumber?: string;
+  workPhoneNumber?: string;
   unionMembership?: string;
   supervisorFirstName?: string;
   supervisorLastName?: string;
   supervisorEmail?: string;
-  supervisorPhone?: string;
+  supervisorPhoneNumber?: string;
   driverLicense?: string[];
   homeLocation?: string;
   ministry?: string;

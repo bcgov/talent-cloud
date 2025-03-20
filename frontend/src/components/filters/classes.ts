@@ -1,7 +1,7 @@
 export const classes = {
   menu: {
     container:
-      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row flex-nowrap items-center text-ellipsis text-nowrap  justify-between border border-[#606060] text-defaultGray truncate ',
+      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row flex-nowrap items-center text-ellipsis text-nowrap  justify-between border border-[#606060] text-black placeholder-gray-500 truncate ',
     textArea:
       'placeholder:text-dark text-dark textarea resize flex flex-row  p-2.5 w-full font-normal bg-white min-h-[300px] rounded-sm border border-[#606060]  outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 disabled:text-dark',
     textAreaError:
