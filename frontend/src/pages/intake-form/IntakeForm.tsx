@@ -75,10 +75,6 @@ const IntakeForm = () => {
       handleSetCompletedStep(step);
       handleSetStep(index);
       await saveUpdateForm(values);
-      const formErrors = await validateForm();
-      if (!formErrors) {
-        handleRemoveStepError(index);
-      }
     } else {
       handleSetErrors(step);
       handleRemoveCompletedStep(step);
@@ -86,7 +82,7 @@ const IntakeForm = () => {
       await saveUpdateForm(values);
       const formErrors = await validateForm();
       if (!formErrors) {
-        handleRemoveStepError(index);
+        handleRemoveStepError(step);
       }
     }
   };
@@ -116,7 +112,7 @@ const IntakeForm = () => {
         validationSchema={stepValidation[step]}
         onSubmit={async (values) => await handleSubmit(values)}
       >
-        {({ values }) => (
+        {({ validateForm, values }) => (
           <Form>
             <div className="h-full flex flex-col justify-between">
               <TabGroup
@@ -124,7 +120,10 @@ const IntakeForm = () => {
                 manual
                 selectedIndex={step}
                 className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-                onChange={() => saveUpdateForm(values)}
+                onChange={async (index) => {
+                  await handleValidateStep(validateForm, index, values);
+                  await saveUpdateForm(values);
+                }}
               >
                 <TabList className="flex flex-col">
                   {formTabs.map((tab: FormTab, index: number) => (
@@ -135,7 +134,6 @@ const IntakeForm = () => {
                       formTabs={formTabs}
                       stepErrors={stepErrors}
                       completedSteps={completedSteps}
-                      handleValidateStep={handleValidateStep}
                       disabled={formData?.status === FormStatus.SUBMITTED}
                     />
                   ))}

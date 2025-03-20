@@ -48,8 +48,9 @@ export const FormField = (props: {
       )}
       <Field
         className={clsx(
-          '!border-t-blue-gray-200 focus:!border-t-gray-900 w-full py-4',
+          '!border-t-blue-gray-200 focus:!border-t-gray-900 w-full py-4 text-black placeholder-gray-50',
           `${colSpan}`,
+          disabled ? 'bg-gray-200' : 'bg-white',
         )}
         name={name}
         label={label}

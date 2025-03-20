@@ -18,9 +18,9 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
   return (
     <div className="pb-24">
       {sections.map(
-        (itm, index) =>
+        (itm) =>
           itm.name && (
-            <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
+            <FormSection section={itm} key={itm.name}>
               <>
                 {itm.fields
                   ?.map((itm: any) => {

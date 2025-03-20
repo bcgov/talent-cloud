@@ -18,19 +18,73 @@ import {
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
     setFieldValue,
-    values: { firstChoiceFunction, functions },
+    values: {
+      firstChoiceFunction,
+      functions,
+      secondChoiceFunction,
+      thirdChoiceFunction,
+      firstChoiceSection,
+      secondChoiceSection,
+      thirdChoiceSection,
+    },
   } = useFormikContext<IntakeFormValues>();
 
   useEffect(() => {
-    if (functions.length === 0 && firstChoiceFunction) {
+    if (!functions || (functions?.length === 0 && firstChoiceFunction)) {
       setFieldValue('functions', [firstChoiceFunction]);
     } else {
-      const functionSet = new Set(functions);
-      if (!functionSet.has(firstChoiceFunction) && firstChoiceFunction !== '') {
-        setFieldValue('functions', [...functions, firstChoiceFunction]);
+      const functionSet = functions && functions.length > 0 && new Set(functions);
+      if (
+        functionSet &&
+        !functionSet.has(firstChoiceFunction) &&
+        firstChoiceFunction !== ''
+      ) {
+        setFieldValue('functions', [
+          ...Array.from(functionSet),
+          firstChoiceFunction,
+        ]);
       }
     }
   }, [firstChoiceFunction]);
+
+  useEffect(() => {
+    if (!functions || (functions?.length === 0 && secondChoiceFunction)) {
+      setFieldValue('functions', [secondChoiceFunction]);
+    } else {
+      const functionSet = functions && functions.length > 0 && new Set(functions);
+      if (
+        functionSet &&
+        secondChoiceFunction &&
+        !functionSet.has(secondChoiceFunction) &&
+        secondChoiceFunction !== ''
+      ) {
+        setFieldValue('functions', [
+          ...Array.from(functionSet),
+          secondChoiceFunction,
+        ]);
+      }
+    }
+  }, [secondChoiceFunction]);
+
+  useEffect(() => {
+    if (!functions || (functions?.length === 0 && thirdChoiceFunction)) {
+      setFieldValue('functions', [thirdChoiceFunction]);
+    } else {
+      const functionSet = functions && functions.length > 0 && new Set(functions);
+      if (
+        thirdChoiceFunction &&
+        functionSet &&
+        !functionSet.has(thirdChoiceFunction) &&
+        thirdChoiceFunction !== ''
+      ) {
+        setFieldValue('functions', [
+          ...Array.from(functionSet),
+          thirdChoiceFunction,
+        ]);
+      }
+    }
+  }, [thirdChoiceFunction]);
+
   const { getOptions } = useIntakeForm();
   const { values } = useFormikContext<IntakeFormValues>();
 
@@ -61,12 +115,11 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
               handleFilterProgram(section, values.program.toString()),
           )
           .map(
-            (section, index) =>
+            (section) =>
               section.fields && (
                 <FormSection
                   section={section}
                   key={section.name}
-                  defaultOpen={index === 0}
                   header={section.header}
                 >
                   <>
@@ -89,11 +142,34 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                             <FormField
                               key={fieldItm.name}
                               {...fieldItm}
+                              disabled={
+                                (fieldItm.name === 'secondChoiceFunction' &&
+                                  !firstChoiceFunction) ||
+                                (fieldItm.name === 'thirdChoiceFunction' &&
+                                  !secondChoiceFunction) ||
+                                (fieldItm.name === 'secondChoiceSection' &&
+                                  !firstChoiceSection) ||
+                                (fieldItm.name === 'thirdChoiceSection' &&
+                                  !secondChoiceSection)
+                              }
                               options={
                                 fieldItm.options && fieldItm.options.length === 0
-
-                                  ? getOptions(fieldItm.name)
-                                  : fieldItm.options
+                                  ? getOptions(fieldItm.name).map((option) => ({
+                                      ...option,
+                                      disabled: [
+                                        firstChoiceFunction,
+                                        secondChoiceFunction,
+                                        thirdChoiceFunction,
+                                      ].includes(option.value.toString()),
+                                    }))
+                                  : fieldItm.options?.map((option) => ({
+                                      ...option,
+                                      disabled: [
+                                        firstChoiceSection,
+                                        secondChoiceSection,
+                                        thirdChoiceSection,
+                                      ].includes(option.value.toString()),
+                                    }))
                               }
                             />
                           </div>

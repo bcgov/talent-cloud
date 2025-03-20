@@ -9,12 +9,12 @@ import type { FormSection as FormSectionType } from '../constants/types';
 export const FormSection = ({
   section,
   children,
-  defaultOpen = false,
+
   header,
 }: {
   section: FormSectionType;
   children: ReactElement;
-  defaultOpen?: boolean;
+
   header?: ReactComponentElement<any>;
 }) => {
   return (
@@ -23,7 +23,7 @@ export const FormSection = ({
       <Disclosure
         as="div"
         className="border border-1 border-gray-300 rounded-sm my-8"
-        defaultOpen={defaultOpen}
+        defaultOpen={true}
       >
         {({ open }) => (
           <>

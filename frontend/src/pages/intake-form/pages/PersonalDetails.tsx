@@ -38,9 +38,9 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
             : true,
         )
         .map(
-          (itm, index) =>
+          (itm) =>
             itm.name && (
-              <FormSection section={itm} key={itm.name} defaultOpen={index === 0}>
+              <FormSection section={itm} key={itm.name}>
                 <>
                   {itm.fields
                     ?.filter((field) =>

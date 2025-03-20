@@ -211,13 +211,13 @@ export const formTabs: FormTab[] = [
             component: TextField,
             required: true,
             placeholder: '123456',
-
             helper: 'This is your 6-digit employee number.',
           },
           {
             name: 'email',
             label: 'BC Government Email',
             type: 'text',
+            disabled: true,
             component: TextField,
             required: true,
             placeholder: 'johnsmith@gov.bc.ca',
@@ -237,7 +237,6 @@ export const formTabs: FormTab[] = [
             component: SelectField,
             required: true,
             placeholder: 'Select an option',
-
             options: Object.values(Ministry).map((itm) => ({
               label: itm,
               value: itm,
@@ -763,8 +762,8 @@ export const formTabs: FormTab[] = [
             ),
             type: 'multiselect-group',
             component: FieldGroup,
-            fields: Object.values(Section).map((itm, index) => ({
-              name: `roles.${index}.${itm}`,
+            fields: Object.values(Section).map((itm) => ({
+              name: itm,
               label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
               component: MultiSelectField,

@@ -49,7 +49,7 @@ export const CheckboxGroupField = ({
                     className={clsx(
                       'block size-4 rounded border',
                       !checked && 'bg-white',
-                      checked && !disabled && 'bg-blue-500',
+                      checked && !disabled && 'bg-blue-800',
                       checked && disabled && 'bg-gray-500',
                       disabled && 'cursor-not-allowed opacity-50',
                     )}

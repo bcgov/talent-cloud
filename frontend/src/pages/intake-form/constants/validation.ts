@@ -38,6 +38,16 @@ export const employmentDetailsSchema = Yup.object().shape({
     otherwise: () => Yup.string().required('Paylist ID is required'),
   }),
   purchaseCardHolder: Yup.string().optional(),
+  emcrTravelPreference: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.BCWS,
+    then: () => Yup.string().notRequired(),
+    otherwise: () => Yup.string().required(''),
+  }),
+  bcwsTravelPreference: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.EMCR,
+    then: () => Yup.string().notRequired(),
+    otherwise: () => Yup.string().required(''),
+  }),
 });
 
 export const supervisorDetailsSchema = Yup.object().shape({
@@ -130,47 +140,44 @@ export const sectionChoiceEmcrSchema = Yup.object().shape({
 export const sectionChoiceBcwsSchema = Yup.object().shape({
   firstChoiceSection: Yup.string().when('program', {
     is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().required('First choice is required'),
+    then: () => Yup.string().required('First  choice section is required'),
     otherwise: () => Yup.string().notRequired(),
   }),
   secondChoiceSection: Yup.string().optional(),
   thirdChoiceSection: Yup.string().optional(),
 });
-export const firstChoiceTest = (value: any) => {
-  if (value === '' || !value || value === null) {
-    return true;
-  } else return value?.toString().replace(/[^\d]/g, '').length === 10;
-};
 
-export const sectionRolesBcwsSchema = Yup.object().shape({
-  roles: Yup.array().of(
-    Yup.object().shape({
-      [Section.PLANNING]: Yup.array()
-        .of(Yup.string())
-        .when('firstChoiceSection', {
-          is: (val: string) => val === Section.PLANNING,
+export const sectionRolesBcwsSchema = Yup.object()
+  .shape({
+    roles: Yup.array().of(
+      Yup.object().shape({
+        [Section.PLANNING.toString()]: Yup.array().when('firstChoiceSection', {
+          is: (val: string) => val === Section.PLANNING.toString(),
           then: () =>
             Yup.array()
               .of(Yup.string())
               .min(1)
               .required('Choose at least one role from your preferred section(s)'),
         }),
-      [Section.LOGISTICS]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.FINANCE_ADMIN]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.OPERATIONS]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.AVIATION]: Yup.array().of(
-        Yup.string().required('Roles are required'),
-      ),
-      [Section.COMMAND]: Yup.array().of(Yup.string().required('Roles are required')),
-    }),
-  ),
-});
+        [Section.LOGISTICS]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.FINANCE_ADMIN]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.OPERATIONS]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.AVIATION]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+        [Section.COMMAND]: Yup.array().of(
+          Yup.string().required('Roles are required'),
+        ),
+      }),
+    ),
+  })
+  .required();
 
 export const languageSkillsSchema = Yup.object().shape({
   languages: Yup.array()
@@ -231,8 +238,7 @@ const personnelStepValidation = personalDetailsSchema
   .concat(supervisorDetailsSchema)
   .concat(liaisonDetailsSchema)
   .concat(travelDetailsSchema)
-  .concat(emergencyContactDetailsSchema)
-  .concat(generalEmergencyManagementExperienceSchema);
+  .concat(emergencyContactDetailsSchema);
 
 const experiencesValidation = generalEmergencyManagementExperienceSchema
   .concat(sectionChoiceEmcrSchema)
@@ -261,3 +267,10 @@ export const stepValidation = [
   reviewValidation,
   completeValidation,
 ];
+
+export const formValidation = programStepValidation
+  .concat(personnelStepValidation)
+  .concat(experiencesValidation)
+  .concat(skillsValidation)
+  .concat(reviewValidation)
+  .concat(completeValidation);

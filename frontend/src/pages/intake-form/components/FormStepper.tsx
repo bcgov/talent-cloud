@@ -1,8 +1,7 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import type { FormTab, IntakeFormValues } from '../constants/types';
-import type { FormikErrors } from 'formik';
-import { useFormikContext } from 'formik';
+import type { FormTab } from '../constants/types';
+
 import { CheckIcon } from '@/components/ui/Icons';
 
 export const FormStepper = ({
@@ -11,8 +10,6 @@ export const FormStepper = ({
   formTabs,
   stepErrors,
   completedSteps,
-  handleValidateStep,
-
   disabled,
 }: {
   tab: FormTab;
@@ -20,22 +17,14 @@ export const FormStepper = ({
   formTabs: FormTab[];
   stepErrors?: number[] | null;
   completedSteps?: number[] | null;
-  handleValidateStep: (
-    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-    index: number,
-    values: IntakeFormValues,
-  ) => Promise<void>;
 
   disabled: boolean;
 }) => {
-  const { values, validateForm } = useFormikContext<IntakeFormValues>();
-
   return (
     <Tab
       key={tab.value}
       value={tab.value}
       disabled={disabled || index === 5}
-      onClick={async () => await handleValidateStep(validateForm, index, values)}
       className={clsx(
         'data-[selected]:outline-none pb-16',
         index !== formTabs.length - 1 && 'border-blue-800 border-l border-dashed',
