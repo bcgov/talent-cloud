@@ -11,9 +11,9 @@ import { FormStatusEnum } from '../common/enums/form-status.enum';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { IntakeFormPersonnelData } from './types';
 import {
+  ChipsMinistryName,
   DriverLicense,
   Experience,
-  ExperienceLevel,
   LanguageProficiency,
   Ministry,
   Section,
@@ -150,10 +150,8 @@ export class IntakeFormService {
       return existingform.toResponseObject();
     }
 
-if
-      (
+    if (
         existingform && existingform.status === FormStatusEnum.SUBMITTED 
-      
     ) {
       const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
@@ -172,9 +170,18 @@ if
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
 
+      const chipsData = await this.getChipsForIntake(req);
+      if (chipsData) {
+        intakeForm.personnel = {
+          ...chipsData,
+          email: req.idir,
+        };
+      }
+
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject();
     }
+    return {};
   }
   /***
    * Updates the form progress
@@ -414,5 +421,53 @@ if
       thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
       roles: personnel.bcws?.roles?.map((item) => item.roleId.toString()),
     };
+  }
+
+  async getChipsForIntake(req: RequestWithRoles): Promise<Partial<IntakeFormPersonnelData> | null> {
+    const chipsData = await this.personnelService.getChipsMemberData(req.idir);
+    if (chipsData.success) {
+      const data = chipsData.data;
+      let ministry = '';
+      if (ChipsMinistryName[data.organization.trim()]) {
+        ministry = ChipsMinistryName[data.organization.trim()];
+      }
+
+      const allLocations =
+        await this.locationService.getAllLocations();
+      let workLocation = allLocations.find(
+        (l) => l.locationName === data.workCity?.trim(),
+      )?.id?.toString();
+      let homeLocation = allLocations.find(
+        (l) => l.locationName === data.homeCity?.trim(),
+      )?.id?.toString();
+
+      let unionMembership;
+      if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
+        unionMembership = UnionMembership[data.employeeGroup?.toUpperCase()];
+      } else {
+        unionMembership = UnionMembership.EXCLUDED;
+      }
+
+      const personnelUpdates: Partial<IntakeFormPersonnelData> = {
+        employeeId: data.emplId,
+        lastName: data.name.split(',')[0]?.trim() || '',
+        firstName: data.name.split(',')[1]?.trim() || '',
+        division: data.levelOne,
+        jobTitle: data.currentPositionTitle || '',
+        unionMembership,
+        ministry,
+        workLocation,
+        homeLocation,
+        paylistId: data.deptId,
+        supervisorLastName: data.currentSupervisorName.split(',')[0],
+        supervisorFirstName: data.currentSupervisorName.split(',')[1],
+        supervisorEmail: data.currentSupervisorEmail,
+        chipsLastActionDate: data.actionDate,
+      };
+
+      return personnelUpdates;
+    } else {
+      return null;
+    }
   }
 }
