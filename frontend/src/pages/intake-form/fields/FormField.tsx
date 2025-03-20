@@ -64,7 +64,7 @@ export const FormField = (props: {
       />
       {helper && <p className={clsx('subtext', 'py-2')}>{helper}</p>}
       {errors && (
-        <div className="font-normal text-errorRed">
+        <div className="font-normal text-sm text-errorRed">
           {
             (errors as FormikErrors<{ [key: string]: string }>)[
               name as keyof typeof errors

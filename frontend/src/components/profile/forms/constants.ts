@@ -46,7 +46,7 @@ const homeLocation = Yup.object().shape({
 });
 
 export const primaryPhone = Yup.string()
-  .required('This field is required.')
+  .required('Primary phone number is required.')
   .test(
     'phone number',
     'Invalid phone number format. Please enter digits only. ex: 5555555555',
@@ -63,11 +63,13 @@ export const secondaryPhone = Yup.string()
   )
   .optional();
 
-export const workPhone = Yup.string().test(
-  'phone number',
-  'Invalid phone number format. Please enter digits only. ex: 5555555555',
-  phoneNumber,
-);
+export const workPhone = Yup.string()
+  .required('Work phone number is required.')
+  .test(
+    'phone number',
+    'Invalid phone number format. Please enter digits only. ex: 5555555555',
+    phoneNumber,
+  );
 
 export const supervisorFirstName = Yup.string()
   .min(2, 'Min length 2 characters.')

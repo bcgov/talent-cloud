@@ -32,11 +32,14 @@ export const DateField = ({ field }: { field: FieldInputProps<any> }) => {
             aria-label="Month Select Menu Button"
             className={classes.menu.container}
           >
-            <span>
-              {field.value ? format(field.value, 'MM/dd/yyyy') : 'Select Date'}
-            </span>
-
-            <CalendarDaysIcon className="h-6 w-6 text-defaultGray" />
+            <div className="flex flex-row items-center justify-between">
+              {field.value ? (
+                <span>{format(field.value, 'MM/dd/yyyy')}</span>
+              ) : (
+                <span className={classes.menu.placeholder}>Select Date</span>
+              )}
+              <CalendarDaysIcon className="h-6 w-6 text-defaultGray" />
+            </div>
           </MenuButton>
 
           <Transition

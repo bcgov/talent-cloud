@@ -1,7 +1,7 @@
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useMenu } from '@material-tailwind/react';
 
 import { classes } from '../filters/classes';
+import { ChevronDownIcon, ChevronUpIcon } from './Icons';
 
 export const MenuButton = () => {
   const { open } = useMenu();
@@ -10,11 +10,11 @@ export const MenuButton = () => {
     <div className={classes.menu.buttonContainer}>
       {open ? (
         <button className={classes.menu.button} aria-label="close">
-          <ChevronUpIcon className="h-8 w-5 text-icon" />
+          <ChevronUpIcon />
         </button>
       ) : (
         <button className={classes.menu.button} aria-label="open">
-          <ChevronDownIcon className="h-8 w-5 text-icon" />
+          <ChevronDownIcon />
         </button>
       )}
     </div>

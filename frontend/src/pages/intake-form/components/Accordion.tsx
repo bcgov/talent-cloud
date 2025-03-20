@@ -4,7 +4,7 @@ import {
   AccordionHeader,
   AccordionBody,
 } from '@material-tailwind/react';
-import type { ReactElement } from 'react';
+import type { ReactComponentElement, ReactElement } from 'react';
 import { useState } from 'react';
 
 // icons
@@ -14,7 +14,10 @@ export const Accordion = ({
   title,
   children,
 }: {
-  title: string;
+  title:
+    | string
+    | ReactComponentElement<any, Pick<any, string | number | symbol>>
+    | undefined;
   children: ReactElement;
 }) => {
   const [open, setOpen] = useState(1);

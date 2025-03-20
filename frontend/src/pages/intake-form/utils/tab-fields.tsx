@@ -30,11 +30,13 @@ const emcrSectionsInterest = (
   <div className="my-8">
     <p className="text-xl font-bold mb-2">EMCR Section(s) Interest</p>
     <Banner
-      title={
-        'For your EMCR CORE Team application, you only need to indicate the following:'
-      }
+      title={''}
       content={
         <>
+          <p className="text-info text-sm pb-2">
+            For your EMCR CORE Team application, you only need to indicate the
+            following:
+          </p>
           <ul className="list-disc list-inside text-info text-sm font-normal">
             <li>
               Your general experiences in emergency management (e.g, past experience
@@ -53,18 +55,18 @@ const bcwsSectionsInterest = (
   <div className="my-8">
     <p className="text-xl font-bold mb-2">BCWS Section(s) and Role(s) Interest</p>
     <Banner
-      title={'For your BCWS CORE Team application, you must indicate the following:'}
+      title={''}
       content={
         <>
+          <p className="text-info text-sm pb-2">
+            For your BCWS CORE Team application, you must indicate the following:
+          </p>
           <ul className="list-disc list-inside text-info text-sm font-normal">
             <li>
               Your ranking of BCWS CORE Team sections that you wish to be deployed in
-              the most;
+              the most
             </li>
-            <li>
-              Your ranking of BCWS CORE Team sections that you wish to be deployed in
-              the most;{' '}
-            </li>
+            <li>Section role(s) that you are interested in for deployment</li>
           </ul>
         </>
       }
@@ -82,7 +84,7 @@ const emcrDefinitionsModalGridContainer = (
   </div>
 );
 const emcrDefinitionsModalButton = (
-  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+  <a className="text-[#1A5A96] underline cursor-pointer text-sm">
     Learn more about EMCR CORE Team sections
   </a>
 );
@@ -102,12 +104,13 @@ const bcwsDefinitionsModalGridContainer = (
   </div>
 );
 const bcwsDefinitionsModalButton = (
-  <a className="text-[#1A5A96] hover:underline cursor-pointer">
+  <a className="text-[#1A5A96] underline cursor-pointer text-sm">
     Learn more about BCWS CORE Team sections
   </a>
 );
 import { CheckboxField } from '../fields/CheckboxField';
 import { MultiSelectField } from '../fields/MultiSelectField';
+import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 
 export const formTabs: FormTab[] = [
   {
@@ -268,6 +271,7 @@ export const formTabs: FormTab[] = [
             type: 'text',
             component: TextField,
             required: true,
+
             placeholder: '123-4567',
             helper: 'You can find this information on your paystub.',
           },
@@ -524,7 +528,7 @@ export const formTabs: FormTab[] = [
             label: '',
             type: 'componentBox',
             component: () => (
-              <p>
+              <p className="text-sm">
                 Please answer the following questions regarding your{' '}
                 <span className="font-bold">
                   emergency management related experiences
@@ -535,8 +539,11 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'emergencyExperience',
-            label:
-              'Do you have any direct experience related to emergency management?',
+            label: (
+              <span className="font-normal">
+                Do you have any direct experience related to emergency management?
+              </span>
+            ),
             type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
@@ -548,8 +555,12 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'preocExperience',
-            label:
-              'Do you have any experience working in a Provincial Regional Emergency Operation Centre (PREOC)?',
+            label: (
+              <span className="font-normal">
+                Do you have any experience working in a Provincial Regional Emergency
+                Operation Centre (PREOC)?
+              </span>
+            ),
             type: 'radio-group',
 
             options: [
@@ -562,8 +573,12 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'peccExperience',
-            label:
-              'Do you have any experience working in a Provincial Emergency Coordination Centre (PECC)?',
+            label: (
+              <span className="font-normal">
+                Do you have any experience working in a Provincial Emergency
+                Coordination Centre (PECC)?
+              </span>
+            ),
             type: 'radio-group',
 
             options: [
@@ -576,8 +591,13 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'firstNationsExperience',
-            label:
-              'Do you have any direct experience working with Indigenous communities (e.g., living or working in a Reserve, working directly with Indigenous communities, etc.)?',
+            label: (
+              <span className="font-normal">
+                Do you have any direct experience working with Indigenous communities
+                (e.g., living or working in a Reserve, working directly with
+                Indigenous communities, etc.)?
+              </span>
+            ),
             type: 'radio-group',
             options: [
               { label: 'Yes', value: 'true' },
@@ -600,7 +620,7 @@ export const formTabs: FormTab[] = [
             type: 'componentBox',
             component: () => (
               <>
-                <p>
+                <p className="text-sm">
                   Please select your top three EMCR CORE Team sections that you would
                   like to be deployed in.{' '}
                 </p>
@@ -615,7 +635,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'firstChoiceFunction',
-            label: 'First Choice Function',
+            label: 'First Choice',
             type: 'select',
             component: SelectField,
             required: true,
@@ -625,7 +645,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'secondChoiceFunction',
-            label: 'Second Choice Function',
+            label: 'Second Choice',
             type: 'select',
             component: SelectField,
             required: false,
@@ -635,7 +655,7 @@ export const formTabs: FormTab[] = [
           },
           {
             name: 'thirdChoiceFunction',
-            label: 'Third Choice Function',
+            label: 'Third Choice',
             type: 'select',
             component: SelectField,
             required: false,
@@ -647,19 +667,21 @@ export const formTabs: FormTab[] = [
             name: 'emcrDivider',
             label: '',
             type: 'componentBox',
-            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
+            component: () => (
+              <hr className="mt-6 mb-4 h-0.5 border-t-0 bg-[#cfcfcf]" />
+            ),
           },
           {
             name: 'functions',
             label: (
               <div>
-                <div className="text-black">
+                <div className="text-black text-sm font-normal">
                   {
                     'Please select ALL the sections that you are interested in, if you were to be deployed.'
                   }
                 </div>
-                <div className="text-grey">
-                  <span className="text-sm font-normal">
+                <div className=" pb-8">
+                  <span className="text-xs font-normal text-gray-700">
                     {
                       'Your selections must include your first choice. For your EMCR CORE Team application, you must select AT LEAST one section.'
                     }
@@ -688,7 +710,7 @@ export const formTabs: FormTab[] = [
             type: 'componentBox',
             component: () => (
               <>
-                <p>
+                <p className="text-sm">
                   Please select your top three BCWS CORE Team sections that you would
                   like to be deployed in.
                 </p>
@@ -744,31 +766,35 @@ export const formTabs: FormTab[] = [
             name: 'bcwsDivider',
             label: '',
             type: 'componentBox',
-            component: () => <hr className="my-6 h-0.5 border-t-0 bg-[#cfcfcf]" />,
+            component: () => (
+              <hr className="mt-6 mb-2 h-0.5 border-t-0 bg-[#cfcfcf]" />
+            ),
           },
           {
             name: 'roles',
             colSpan: 2,
             label: (
-              <>
-                <p>
+              <div>
+                <div className="text-black text-sm font-normal">
                   For each section below, please indicate any role(s) that you are
                   interested in for deployment.
-                </p>
-                <p className="subtext">
-                  You must select AT LEAST ONE role under your FIRST choice.
-                </p>
-              </>
+                </div>
+                <div className=" pb-8">
+                  <span className="text-xs font-normal text-gray-700">
+                    You must select AT LEAST ONE role under your FIRST choice.
+                  </span>
+                </div>
+              </div>
             ),
             type: 'multiselect-group',
-            component: FieldGroup,
+            component: MultiSelectGroup,
             fields: Object.values(Section).map((itm) => ({
               name: itm,
               label: `${SectionName[itm]} Roles`,
               type: 'multiselect',
               component: MultiSelectField,
               required: false,
-              placeholder: '',
+              placeholder: 'Select option(s)',
               options: [],
             })),
           },
@@ -857,7 +883,7 @@ export const formTabs: FormTab[] = [
       },
 
       {
-        name: 'Certificates',
+        name: 'Certifications & Qualifications',
         fields: [
           {
             name: 'certifications',

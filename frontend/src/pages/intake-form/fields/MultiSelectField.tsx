@@ -1,10 +1,11 @@
 import { classes } from '@/components/filters/classes';
 import type { FieldInputProps } from 'formik';
-import { Checkbox, Chip, Typography } from '@material-tailwind/react';
-import { propTypesMenuProps } from '@material-tailwind/react/types/components/select';
+import { Chip, Typography } from '@material-tailwind/react';
 
-import { MenuButton } from '../../../components/ui';
-import { MenuHandler, MenuList, MenuItem, Menu } from '@material-tailwind/react';
+import { Checkbox } from '@/components';
+import { MenuItem, Menu, MenuButton, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
+import clsx from 'clsx';
 
 export const MultiSelectField = ({
   field,
@@ -38,18 +39,11 @@ export const MultiSelectField = ({
   };
   return (
     <>
-      <Menu
-        {...propTypesMenuProps}
-        dismiss={{
-          outsidePress: true,
-          itemPress: false,
-          isRequired: { outsidePress: true, itemPress: true },
-        }}
-      >
-        <MenuHandler>
-          <MenuItem className="w-full">
-            <div className={classes.menu.container}>
-              {field.value && field.value?.length ? (
+      <Menu as="div" className="relative">
+        <MenuButton className={clsx(classes.menu.container, 'h-[42px]')}>
+          {({ open }) => (
+            <div className="flex flex-row justify-between items-center">
+              {field.value && field.value !== '' && field.value?.length ? (
                 <div className={classes.menu.chipsContainer}>
                   {field?.value?.length > 3 ? (
                     <Chip
@@ -95,14 +89,27 @@ export const MultiSelectField = ({
               ) : (
                 <span className={classes.menu.placeholder}>{placeholder}</span>
               )}
-              <MenuButton />
+              <div>
+                {open ? (
+                  <ChevronUpIcon aria-hidden="true" />
+                ) : (
+                  <ChevronDownIcon aria-hidden="true" />
+                )}
+              </div>
             </div>
-          </MenuItem>
-        </MenuHandler>
-        <MenuList className={field.name}>
+          )}
+        </MenuButton>
+
+        <MenuItems
+          transition
+          className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        >
           {options?.map((option) => (
             <MenuItem key={option.value}>
-              <label className={classes.menu.listItem} htmlFor={option.label}>
+              <label
+                className={'py-2 font-normal text-sm flex flex-row items-center'}
+                htmlFor={option.label}
+              >
                 <Checkbox
                   id={option.label}
                   onChange={handleChange}
@@ -114,7 +121,7 @@ export const MultiSelectField = ({
               </label>
             </MenuItem>
           ))}
-        </MenuList>
+        </MenuItems>
       </Menu>
     </>
   );

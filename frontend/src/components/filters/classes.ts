@@ -1,7 +1,7 @@
 export const classes = {
   menu: {
     container:
-      'bg-white rounded-sm  shadow-sm w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row flex-nowrap items-center text-ellipsis text-nowrap  justify-between border border-[#606060] text-black placeholder-gray-500 truncate ',
+      'bg-white rounded-[4px]  shadow-sm w-full font-normal h-[34px] pt-[5px] pb-[5px] text-sm px-[7px]  focus:outline-none flex flex-row flex-nowrap items-center text-ellipsis text-nowrap   border border-[#606060] border-opacity-60 text-black placeholder-gray-500 truncate flex flex-row items-center justify-between grid w-full cursor-default grid-cols-1 rounded-md bg-white  text-left text-dark-800 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-[#3B8FDD]',
     textArea:
       'placeholder:text-dark text-dark textarea resize flex flex-row  p-2.5 w-full font-normal bg-white min-h-[300px] rounded-sm border border-[#606060]  outline outline-0 transition-all  focus:outline-0 disabled:resize-none disabled:border-0 disabled:text-dark',
     textAreaError:
@@ -13,10 +13,10 @@ export const classes = {
       'bg-white flex flex-row justify-between items-center no-wrap fill-[#606060]',
     listLabel: 'flex cursor-pointer items-center justify-start text-list-header',
     listItem: 'flex cursor-pointer items-center justify-start text-list-item',
-    chipsContainer: 'flex flex-row items-center justify-start',
+    chipsContainer: 'flex flex-row items-center justify-start space-x-2 mb-1',
     chip: 'rounded-full text-sm font-bold text-info bg-infoBannerLight text-transform-none',
     placeholder:
-      'truncate inline text-defaultGray  text-sm text-defaultGray text-ellipsis text-nowrap',
+      'truncate inline text-defaultGray  text-sm text-defaultGray text-ellipsis text-nowrap text-gray-500',
     checkbox: 'checkbox',
     checkboxContainer: 'checkboxContainer',
     disabled:
