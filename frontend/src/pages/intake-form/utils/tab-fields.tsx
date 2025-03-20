@@ -924,19 +924,111 @@ export const formTabs: FormTab[] = [
     title: 'Thank you for your application!',
     value: IntakeFormTab.Complete,
     description: (
-      <>
-        <p>
-          Thank you for submitting your application to join CORE Team. Our team will
-          be reviewing your application soon.
-        </p>
-        <br></br>
-        <p>
-          A CORE Team coordinator may reach out to you in the next 7 to 10 working
-          days via email to further assess your experience and deployment readiness.
-          Our response time may vary depending on ongoing operational tasks such as
-          responding to emergency and wildfire across the province.
-        </p>
-      </>
+      <div className="flex flex-col gap-12">
+        <div>
+          <p>
+            Thank you for submitting your application to join CORE Team. Our team
+            will be reviewing your application soon.
+          </p>
+          <br />
+          <p>
+            A CORE Team coordinator may reach out to you in the next 7 to 10 working
+            days via email to further assess your experience and deployment
+            readiness. Our response time may vary depending on ongoing operational
+            tasks such as responding to emergency and wildfire across the province.
+          </p>
+          <br />
+          <p>Please be aware that duplicate submissions will NOT be considered.</p>
+        </div>
+        <div>
+          <Banner
+            title={
+              'Please remember to email your proof of supervisor approval and all other required documents relevant to the program stream(s) you applied for.'
+            }
+            content={
+              <div className="grid grid-cols-2 mt-4 gap-2">
+                <div className="col-span-1">
+                  <p className="font-bold text-sm text-[#003366]">
+                    EMCR CORE Team program stream
+                  </p>
+                  <ul className="list-disc list-inside text-info text-sm font-normal">
+                    <li>
+                      <a
+                        href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
+                        target="_blank"
+                        className="text-linkBlue hover:underline"
+                      >
+                        Incident Command System (ICS) Training
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-span-1">
+                  <p className="font-bold text-sm text-[#003366]">
+                    BCWS CORE Team program stream
+                  </p>
+                  <ul className="list-disc list-inside text-info text-sm font-normal">
+                    <li>
+                      <a
+                        href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
+                        target="_blank"
+                        className="text-linkBlue hover:underline"
+                      >
+                        “Intro to CORE”
+                      </a>{' '}
+                      online orientation
+                    </li>
+                    <li>
+                      <a
+                        href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/2024_willingness_statement_-_in_progress.pdf"
+                        target="_blank"
+                        className="text-linkBlue hover:underline"
+                      >
+                        Willingness Statement{' '}
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
+                        target="_blank"
+                        className="text-linkBlue hover:underline"
+                      >
+                        PAR-Q+ form
+                      </a>{' '}
+                      (please download this form for completion)
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-span-1">
+                  <p className="text-sm">
+                    Submit to{' '}
+                    <a
+                      href="mailto:EMCR.CORETeam@gov.bc.ca"
+                      className="text-linkBlue hover:underline"
+                    >
+                      EMCR.CORETeam@gov.bc.ca
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div className="col-span-1">
+                  <p className="text-sm">
+                    Submit to your Fire Centre’s email.{' '}
+                    <a
+                      href="https://intranet.gov.bc.ca/bcws/core-team"
+                      target="_blank"
+                      className="text-linkBlue hover:underline"
+                    >
+                      Find my Fire Centre
+                    </a>
+                  </p>
+                </div>
+              </div>
+            }
+            type={BannerType.INFO}
+          />
+        </div>
+      </div>
     ),
   },
 ];
