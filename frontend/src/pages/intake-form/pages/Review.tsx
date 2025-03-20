@@ -77,7 +77,6 @@ export const Review = () => {
   };
   sections.unshift(programSectionAndAcknowledgementSection);
 
-  console.log(sections);
   const sectionsWithValues = sections.map((section) => ({
     ...section,
     fields: section?.fields?.map((field) => {
@@ -138,9 +137,7 @@ export const Review = () => {
     }),
   }));
 
-  console.log(sectionsWithValues);
-  // filter program-specific sections & fields
-
+  // get values for the tools, languages and certifications
   const finalSections = sectionsWithValues.map((section) => {
     const filteredFields = section.fields;
     if (
