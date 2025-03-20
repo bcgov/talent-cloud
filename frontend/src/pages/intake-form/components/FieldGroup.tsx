@@ -9,7 +9,8 @@ import { FormField } from '../fields/FormField';
 
 export const FieldGroup = ({ field }: { field: FormFields }) => {
   const { getOptions } = useIntakeForm();
-  const { values } = useFormikContext<IntakeFormValues>();
+  const { values, errors } = useFormikContext<IntakeFormValues>();
+  const fieldErrors = errors[field.name as keyof typeof errors];
 
   return (
     <div className="w-full col-span-2">
@@ -38,6 +39,9 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                             : itm.options
                         }
                       />
+                      <div className="font-normal text-errorRed">
+                        {fieldErrors && (fieldErrors as any)[index][itm.name]}
+                      </div>
                     </div>
                   ))}
 
@@ -47,7 +51,6 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       text="Remove"
                       onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
                     />
-
                   </div>
                 </div>
               ),
