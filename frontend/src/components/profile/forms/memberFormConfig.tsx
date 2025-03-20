@@ -1,14 +1,12 @@
 import type { Location, Member } from '@/common';
-import {  fields, memberValidationSchema } from './constants';
+import { fields, memberValidationSchema } from './constants';
 import { datePST } from '@/utils';
 import {
   BcwsTravelPreference,
   EmcrTravelPreference,
 } from '@/common/enums/travel-preference.enum';
 
-
 export const memberFormConfig = (personnelData: Member, locations: Location[]) => {
-
   const personnel = {
     ...personnelData,
     primaryPhone:
@@ -37,14 +35,13 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
           personnelData.bcws.travelPreference as keyof typeof BcwsTravelPreference
         ],
       status: personnelData.bcws?.status,
-      liaisonPhoneNumber: personnelData.bcws?.liaisonPhoneNumber?.replace(  
+      liaisonPhoneNumber: personnelData.bcws?.liaisonPhoneNumber?.replace(
         /(\d{3})(\d{3})(\d{4})/,
         '($1) $2-$3',
       ),
-      liaisonEmail: personnelData.bcws?.liaisonEmail, 
-      liaisonFirstName: personnelData.bcws?.liaisonFirstName, 
+      liaisonEmail: personnelData.bcws?.liaisonEmail,
+      liaisonFirstName: personnelData.bcws?.liaisonFirstName,
       liaisonLastName: personnelData.bcws?.liaisonLastName,
-
     },
   };
 
@@ -103,11 +100,15 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
           fields.supervisorLastName,
           fields.supervisorEmail,
           fields.supervisorPhone,
-          ...(personnelData.bcws ? [fields.bcws.liaisonLastName,
-            fields.bcws.liaisonFirstName,
-            fields.bcws.liaisonEmail,
-            fields.bcws.liaisonPhoneNumber] : []),
-          
+          ...(personnelData.bcws
+            ? [
+                fields.bcws.liaisonLastName,
+                fields.bcws.liaisonFirstName,
+                fields.bcws.liaisonEmail,
+                fields.bcws.liaisonPhoneNumber,
+              ]
+            : []),
+
           fields.ministry,
           fields.division,
           fields.unionMembership,
@@ -121,7 +122,7 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
           fields.primaryPhone,
           fields.secondaryPhone,
           fields.workPhone,
-          fields.email,
+          fields.emailByMember,
         ],
       },
     ],

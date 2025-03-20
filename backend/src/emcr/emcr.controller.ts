@@ -118,7 +118,7 @@ export class EmcrController {
     
     await this.emcrService.updateEmcrPersonnel(person.emcr, id);
 
-    return await this.personnelService.updatePersonnelDetails(person.details,   id);
+    return await this.personnelService.updatePersonnelDetails(person.details, id);
   }
 
   @ApiOperation({

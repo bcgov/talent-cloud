@@ -327,10 +327,14 @@ export const RecommitmentFormBase = ({
 
     const decision =
       decisionMap[recommitmentAnswer as keyof typeof decisionMap] || {};
-    const res = await updateRecommitment(member.id, {
-      ...decision,
-      ...(recommitmentAnswer !== 'no' && { supervisorInformation }),
-    }, RecommitmentEndpoint.Member);
+    const res = await updateRecommitment(
+      member.id,
+      {
+        ...decision,
+        ...(recommitmentAnswer !== 'no' && { supervisorInformation }),
+      },
+      RecommitmentEndpoint.Member,
+    );
     if (res.error) {
       setErrorMessage(res.error.message);
     } else {
@@ -463,14 +467,21 @@ export const RecommitmentFormBase = ({
 
     // For SupervisorForm, require first name, last name, and email
     if (currentComponentType === SupervisorForm) {
-      const { supervisorFirstName, supervisorLastName, supervisorEmail,  supervisorPhone } = supervisorInformation;
-      const isValidEmail = /^[^\s@]+@gov.bc.ca+$/.test(supervisorEmail);
+      const {
+        supervisorFirstName,
+        supervisorLastName,
+        supervisorEmail,
+        supervisorPhone,
+      } = supervisorInformation;
+      const isValidEmail = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(supervisorEmail);
       const isValidPhone =
-      supervisorPhone && supervisorPhone !== '' ? /(\d{3})(\d{3})(\d{4})/.test(supervisorPhone) : true;
+        supervisorPhone && supervisorPhone !== ''
+          ? /(\d{3})(\d{3})(\d{4})/.test(supervisorPhone)
+          : true;
       return Boolean(
         supervisorFirstName?.trim() &&
-        supervisorLastName?.trim() &&
-        supervisorEmail?.trim() &&
+          supervisorLastName?.trim() &&
+          supervisorEmail?.trim() &&
           isValidEmail &&
           isValidPhone,
       );

@@ -19,12 +19,11 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
   const [formData, setFormData] = useState(initialData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
     const { name, value } = e.target;
-    name === 'phone' && value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
-    
+    name === 'phone' && value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+
     const newData = { ...formData, [name]: value };
-    
+
     setFormData(newData);
     onUpdate(newData);
   };
@@ -88,23 +87,34 @@ export const SupervisorForm = ({ initialData, onUpdate }: SupervisorFormProps) =
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
-          <p className="text-xs text-gray-600">Must be a valid @gov.bc.ca email</p>
+          <p className="text-xs text-gray-600">Must be a valid email</p>
         </div>
 
         {/* Phone */}
         <div className="col-span-1">
-          <label htmlFor="supervisorPhone" className="block text-sm font-bold text-black mb-1">
+          <label
+            htmlFor="supervisorPhone"
+            className="block text-sm font-bold text-black mb-1"
+          >
             Supervisor Phone Number
           </label>
           <input
             type="tel"
             id="supervisorPhone"
             name="supervisorPhone"
-            value={formData.supervisorPhone?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
+            value={formData.supervisorPhone?.replace(
+              /(\d{3})(\d{3})(\d{4})/,
+              '($1) $2-$3',
+            )}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
-          {formData?.supervisorPhone && !(/(\d{3})(\d{3})(\d{4})/).test(formData?.supervisorPhone) && <p className="text-xs text-error">Please enter only 10 digits for phone number</p>}
+          {formData?.supervisorPhone &&
+            !/(\d{3})(\d{3})(\d{4})/.test(formData?.supervisorPhone) && (
+              <p className="text-xs text-error">
+                Please enter only 10 digits for phone number
+              </p>
+            )}
         </div>
       </div>
     </div>
