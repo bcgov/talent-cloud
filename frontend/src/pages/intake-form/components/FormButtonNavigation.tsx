@@ -1,5 +1,5 @@
 import { ButtonTypes } from '@/common';
-import type { FormikErrors, FormikValues } from 'formik';
+import type { FormikValues } from 'formik';
 import { useFormikContext } from 'formik';
 import { Button } from '@/components';
 import type { IntakeFormValues } from '../constants/types';
@@ -15,16 +15,12 @@ export const FormButtonNavigation = ({
   disablePrevious,
 }: {
   saveUpdateForm: (values: FormikValues) => void;
-  handlePrevious: (
-    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-  ) => Promise<void>;
-  handleNext: (
-    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
-  ) => Promise<void>;
+  handlePrevious: () => void;
+  handleNext: () => void;
   disableNext: boolean;
   disablePrevious: boolean;
 }) => {
-  const { values, validateForm } = useFormikContext<IntakeFormValues>();
+  const { values } = useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
   const navigate = useNavigate();
   return (
@@ -56,13 +52,13 @@ export const FormButtonNavigation = ({
             text="Previous"
             disabled={disablePrevious}
             variant={ButtonTypes.OUTLINED}
-            onClick={async () => await handlePrevious(validateForm)}
+            onClick={handlePrevious}
           />
           <Button
             text="Next"
             variant={ButtonTypes.SOLID}
             disabled={disableNext}
-            onClick={async () => await handleNext(validateForm)}
+            onClick={handleNext}
           />
         </div>
       </div>
