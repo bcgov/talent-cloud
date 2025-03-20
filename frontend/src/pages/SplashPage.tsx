@@ -8,6 +8,7 @@ import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
 import { AxiosPublic } from '@/utils';
 import { Routes } from '@/routes';
+import { useNavigate } from 'react-router';
 
 const SplashPage = () => {
   const { keycloak } = useKeycloak();
@@ -27,7 +28,7 @@ const SplashPage = () => {
       setEnv(data.env);
     })();
   }, []);
-
+  const navigate = useNavigate();
   const content = {
     title: 'Welcome to CORE Team',
     subtitle: 'Coordinated Operation Response in Emergencies',
@@ -36,7 +37,7 @@ const SplashPage = () => {
     },
     login: {
       title: 'Login',
-      description: 'Use your IDIR to access the CORE member database.',
+      description: 'Use your IDIR to access the CORE Team application.',
     },
   };
 
@@ -143,26 +144,50 @@ const SplashPage = () => {
               <p className="text-white">{content.login.description}</p>
               <Button
                 id={'login-button-mobile'}
-                variant={ButtonTypes.SECONDARY_LIGHT}
+                variant={ButtonTypes.SOLID_SECONDARY}
                 text={'Log In'}
                 onClick={login}
               />
+              <button
+                type={'button'}
+                onClick={() => navigate(Routes.IntakeForm)}
+                className={
+                  'text-white text-xs text-decoration-underline underline whitespace-nowrap'
+                }
+              >
+                <div className="flex flex-row gap-2 items-center">
+                  Not a member yet? Apply now
+                </div>
+              </button>
             </div>
           </div>
         </div>
         <div className="hidden col-span-1 w-full px-0 lg:flex relative">
           <SplashImage />
 
-          <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-60 rounded-md h-[300px] mr-24"></div>
-          <div className="absolute inset-0 top-1/3  border-l-4 h-[300px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
-            <h3 className="text-white">Login</h3>
+          <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-80 rounded-md h-[200px] mr-24"></div>
+          <div className="absolute inset-0 top-1/3  border-l-4 h-[200px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
+            <h3 className="font-normal text-white">Login</h3>
             <p className="text-white">{content.login.description}</p>
-            <Button
-              id={'login-button-main'}
-              variant={ButtonTypes.SECONDARY_LIGHT}
-              text={'Log In'}
-              onClick={login}
-            />
+            <div className="flex flex-row space-x-4">
+              <Button
+                id={'login-button-main'}
+                variant={ButtonTypes.SOLID_SECONDARY}
+                text={'Log In'}
+                onClick={login}
+              />
+              <button
+                type={'button'}
+                onClick={() => navigate(Routes.IntakeForm)}
+                className={
+                  'text-white text-xs text-decoration-underline underline whitespace-nowrap'
+                }
+              >
+                <div className="flex flex-row gap-2 items-center">
+                  Not a member yet? Apply now
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>

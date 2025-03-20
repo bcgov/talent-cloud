@@ -1,15 +1,13 @@
 // react
-import { ReactComponentElement } from 'react';
+import type { ReactComponentElement } from 'react';
 
 // formik
-import type { FieldInputProps, FormikFormProps } from 'formik';
-import { Field, ErrorMessage } from 'formik';
-
-//util
-import { renderField } from '../utils/helpers';
+import type { FormikErrors } from 'formik';
+import { Field, useFormikContext } from 'formik';
 
 // styles
 import clsx from 'clsx';
+import type { IntakeFormValues } from '../constants/types';
 
 export const FormField = (props: {
   name: string;
@@ -17,11 +15,12 @@ export const FormField = (props: {
   required?: boolean;
   type: string;
   helper?: string;
-  labelHelper?: string;
+
   disabled?: boolean;
   options?: any[];
   placeholder?: string;
   value?: any;
+  colSpan?: number;
   component?: (props: any) => JSX.Element;
 }) => {
   const {
@@ -31,10 +30,13 @@ export const FormField = (props: {
     placeholder,
     disabled,
     helper,
-    labelHelper,
+
     label,
     required,
+    component,
+    colSpan,
   } = props;
+  const { errors } = useFormikContext<IntakeFormValues>();
 
   return (
     <>
@@ -44,46 +46,31 @@ export const FormField = (props: {
           {required && <span className="font-bold text-red-500">*</span>}
         </label>
       )}
-      {labelHelper && (
-        <div className="text-xs text-defaultGray py-2">{labelHelper}</div>
-      )}
       <Field
-        className="!border-t-blue-gray-200 focus:!border-t-gray-900 w-full rounded-md py-4"
+        className={clsx(
+          '!border-t-blue-gray-200 focus:!border-t-gray-900 w-full py-4',
+          `${colSpan}`,
+        )}
         name={name}
         label={label}
         required={required}
         type={type}
         helper={helper}
-        labelHelper={labelHelper}
         placeholder={placeholder}
         disabled={disabled}
         options={options}
-      >
-        {({
-          field,
-          form,
-        }: {
-          field: FieldInputProps<any>;
-          form: FormikFormProps;
-        }) => (
-          <>
-            {renderField({
-              field,
-              form,
-              props,
-              options,
-            })}
-
-            {helper && <p className={clsx('subtext', 'py-2')}>{helper}</p>}
-
-            <ErrorMessage name={name}>
-              {(msg) => {
-                return <div className="font-normal text-errorRed">{msg}</div>;
-              }}
-            </ErrorMessage>
-          </>
-        )}
-      </Field>
+        component={component}
+      />
+      {helper && <p className={clsx('subtext', 'py-2')}>{helper}</p>}
+      {errors && (
+        <div className="font-normal text-errorRed">
+          {
+            (errors as FormikErrors<{ [key: string]: string }>)[
+              name as keyof typeof errors
+            ]
+          }
+        </div>
+      )}
     </>
   );
 };

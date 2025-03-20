@@ -1,8 +1,11 @@
 import { ButtonTypes } from '@/common';
-import type { FormikValues } from 'formik';
+import type { FormikErrors, FormikValues } from 'formik';
 import { useFormikContext } from 'formik';
-import type { IntakeFormValues } from '../constants/initial-values';
 import { Button } from '@/components';
+import type { IntakeFormValues } from '../constants/types';
+
+import { AlertType, useAlertContext } from '@/providers/Alert';
+import { useNavigate } from 'react-router';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,
@@ -12,12 +15,18 @@ export const FormButtonNavigation = ({
   disablePrevious,
 }: {
   saveUpdateForm: (values: FormikValues) => void;
-  handlePrevious: () => void;
-  handleNext: () => void;
+  handlePrevious: (
+    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
+  ) => Promise<void>;
+  handleNext: (
+    validateForm: () => Promise<FormikErrors<IntakeFormValues>>,
+  ) => Promise<void>;
   disableNext: boolean;
   disablePrevious: boolean;
 }) => {
-  const { values } = useFormikContext<IntakeFormValues>();
+  const { values, validateForm } = useFormikContext<IntakeFormValues>();
+  const { showAlert } = useAlertContext();
+  const navigate = useNavigate();
   return (
     <div>
       <div className="border border-t-grey-200"></div>
@@ -27,12 +36,19 @@ export const FormButtonNavigation = ({
             text="Cancel"
             variant={ButtonTypes.TEXT}
             // TODO: Save and navigate? Delete form?
-            onClick={() => console.log('clicked')}
+            onClick={() => navigate('/')}
           />
           <Button
             text="Save For Later"
             variant={ButtonTypes.OUTLINED}
-            onClick={() => saveUpdateForm(values)}
+            onClick={() => {
+              saveUpdateForm(values);
+              showAlert({
+                title: 'Form Saved!',
+                type: AlertType.SUCCESS,
+                message: 'Form Data Has been Saved',
+              });
+            }}
           />
         </div>
         <div className="flex flex-row space-x-6">
@@ -40,13 +56,13 @@ export const FormButtonNavigation = ({
             text="Previous"
             disabled={disablePrevious}
             variant={ButtonTypes.OUTLINED}
-            onClick={handlePrevious}
+            onClick={async () => await handlePrevious(validateForm)}
           />
           <Button
             text="Next"
             variant={ButtonTypes.SOLID}
             disabled={disableNext}
-            onClick={handleNext}
+            onClick={async () => await handleNext(validateForm)}
           />
         </div>
       </div>

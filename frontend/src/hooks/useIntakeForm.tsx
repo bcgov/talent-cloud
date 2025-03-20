@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useAxios } from './useAxios';
 import { useProgramFieldData } from './useProgramFieldData';
-
 // enums & types
 import { DriverLicense, DriverLicenseName, Program } from '@/common';
 import {
@@ -10,22 +9,28 @@ import {
   LanguageProficiencyName,
 } from '@/common/enums/language.enum';
 import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
-import type { IntakeFormSubmissionData } from '@/pages/intake-form/constants/types';
+import type {
+  IntakeFormSubmissionData,
+  IntakeFormValues,
+} from '@/pages/intake-form/constants/types';
 import {
   expectationsBcws,
   expectationsBoth,
   expectationsEmcr,
 } from '@/pages/intake-form/constants/enums';
+import { AlertType } from '@/providers/Alert';
+import { useAlert } from './useAlert';
 
 export const useIntakeForm = () => {
   const { AxiosPrivate } = useAxios();
 
   const [formData, setFormData] = useState<IntakeFormSubmissionData>();
   const [loading, setLoading] = useState(false);
-
-  const { functions, locations, tools, certificates } = useProgramFieldData(
-    Program.ALL,
-  );
+  const [currentProgram, setCurrentProgram] = useState<Program>();
+  const { functions, locations, tools, sections, certificates } =
+    useProgramFieldData(Program.ALL);
+  const { showAlert } = useAlert();
+  const [step, setStep] = useState(0);
 
   const getOptions = (name: string, program?: string) => {
     switch (name) {
@@ -49,33 +54,24 @@ export const useIntakeForm = () => {
           label: itm,
           value: itm,
         }));
-      // case 'roles':
-      //   return sections.map((itm) => ({
-      //     label: itm.name,
-      //     value: itm.id,
-      //   }));
+      case 'roles':
+        return sections;
+
       case 'homeLocation':
         return locations.map((loc) => ({
           label: loc.locationName,
           value: loc.id,
         })) as unknown as { label: string; value: string }[];
-      case 'tool':
+      case 'toolId':
         return tools.map((tool) => ({
           label: tool.fullName,
           value: tool.id,
         })) as unknown as { label: string; value: string }[];
-      case 'certificate':
+      case 'certificationId':
         return certificates.map((cert) => ({
           label: cert.name,
           value: cert.id,
         })) as unknown as { label: string; value: string }[];
-      // case 'firstChoiceSection':
-      // case 'secondChoiceSection':
-      // case 'thirdChoiceSection':
-      //   return Object.keys(sections).map((itm) => ({
-      //     label: SectionName[itm as keyof typeof SectionName],
-      //     value: itm,
-      //   })) as unknown as { label: string; value: string }[];
       case 'firstChoiceFunction':
       case 'secondChoiceFunction':
       case 'thirdChoiceFunction':
@@ -84,8 +80,6 @@ export const useIntakeForm = () => {
           label: itm.name,
           value: itm.id.toString(),
         })) as unknown as { label: string; value: string }[];
-
-      //TODO - you can just hardcode these values here instead of using the enums
       case 'acknowledgement':
         if (program === Program.BCWS) {
           return expectationsBcws;
@@ -102,9 +96,12 @@ export const useIntakeForm = () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
+
         setFormData(res.data);
+        setCurrentProgram(res.data.currentProgram);
+        setStep(res.data.step);
       } catch (e) {
-        console.error(e);
+        showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
       } finally {
         setLoading(false);
       }
@@ -112,29 +109,52 @@ export const useIntakeForm = () => {
   }, []);
 
   const saveUpdateForm = async (values: any) => {
-    const res = await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
-      ...formData,
-      personnel: values,
-    });
-    //TODO
-    console.log(res);
+    try {
+      await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
+        ...formData,
+        step,
+        personnel: values,
+      });
+    } catch (e) {
+      showAlert({ type: AlertType.ERROR, message: 'Error Saving Form' });
+    }
   };
 
-  const submitForm = async (values: any) => {
-    const res = await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
-      ...formData,
-      personnel: values,
-    });
-    //TODO
-    console.log(res);
-  };
+  const handleSubmit = async (values: IntakeFormValues) => {
+    values.primaryPhone = values.primaryPhone.replace(/[^\d]/g, '');
+    values.secondaryPhone = values.secondaryPhone?.replace(/[^\d]/g, '');
+    values.emergencyContactPhoneNumber = values.emergencyContactPhoneNumber.replace(
+      /[^\d]/g,
+      '',
+    );
+    values.secondaryPhone = values.supervisorPhone?.replace(/[^\d]/g, '');
+    values.workPhone = values.workPhone?.replace(/[^\d]/g, '');
 
+    try {
+      const res = await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
+        ...formData,
+        step,
+        personnel: values,
+      });
+      setFormData(res.data);
+      setStep(5);
+      showAlert({ type: AlertType.SUCCESS, message: 'Form has been submitted!' });
+    } catch (e) {
+      showAlert({ type: AlertType.ERROR, message: 'Error Submitting Form' });
+    }
+  };
+  const handleSetStep = (step: number) => {
+    setStep(step);
+  };
   return {
     saveUpdateForm,
     formData,
     setFormData,
     loading,
-    submitForm,
+    handleSubmit,
     getOptions,
+    currentProgram,
+    step,
+    handleSetStep,
   };
 };

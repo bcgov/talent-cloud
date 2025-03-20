@@ -27,8 +27,11 @@ export const ProgramPage = () => {
     values: { program },
   } = useFormikContext<IntakeFormValues>();
 
-  const [dynamicFields, setFields] = useState<FormFields[]>([fields[0]]);
-  const { getOptions } = useIntakeForm();
+  const { getOptions, currentProgram } = useIntakeForm();
+
+  const [dynamicFields, setFields] = useState<FormFields[]>([
+    { ...fields[0], disabled: currentProgram ? true : false },
+  ]);
 
   useEffect(() => {
     if (program) {

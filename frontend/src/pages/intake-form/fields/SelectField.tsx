@@ -4,25 +4,22 @@ import type { FormFields } from '../constants/types';
 
 export const SelectField = ({
   field,
-  // form,
   props,
   options,
 }: {
   field: FieldInputProps<any>;
-  // form: FormikFormProps;
   props: FormFields;
   options?: any[];
 }) => {
   return (
     <select
-      className={classes.menu.container}
       {...props}
       {...field}
-      value={undefined}
-      defaultValue={''}
+      value={field.value}
+      className={classes.menu.container}
     >
       <option disabled value={''}>
-        {props.placeholder}
+        Select An Option
       </option>
       {options?.map((itm: any) => (
         <option key={itm.value} value={itm.value}>

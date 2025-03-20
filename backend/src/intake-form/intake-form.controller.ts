@@ -10,7 +10,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { IntakeFormService } from './intake-form.service';
-import { PersonnelRO } from '../personnel';
 import { IntakeFormDTO } from './dto/intake-form.dto';
 import { IntakeFormRO } from './ro/intake-form.ro';
 import { RequestWithRoles } from '../auth/interface';
@@ -27,7 +26,7 @@ export class IntakeFormController {
 
   @ApiOperation({
     summary: 'Get intake form data',
-    description: 'Returns the partially completed intake form data',
+    description: 'Returns the partially completed intake form data - Creates a form if one does not exist',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -50,7 +49,6 @@ export class IntakeFormController {
   })
   @Patch(':id')
   async updateIntakeForm(
-    @Req() req: RequestWithRoles,
     @Param() id: string,
     @Body() intakeFormDto: IntakeFormDTO,
   ): Promise<UpdateResult> {
@@ -58,23 +56,21 @@ export class IntakeFormController {
   }
 
   @ApiOperation({
-    summary: 'Post request to save final  form copy for the logged in user',
-    description: 'Returns the created personnel object',
+    summary: 'Submit Form',
+    description: 'Returns the form with updated Submission status',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     type: IntakeFormRO,
   })
-  @Post(':id')
+  @Post(':id/submit')
   async submitIntakeForm(
     @Body() createIntakeFormDto: IntakeFormDTO,
     @Req() req: RequestWithRoles,
-    @Param() id: string,
-  ): Promise<PersonnelRO> {
+  ): Promise<IntakeFormRO> {
     return await this.intakeFormService.submitIntakeForm(
       createIntakeFormDto,
       req,
-      id,
     );
   }
 }

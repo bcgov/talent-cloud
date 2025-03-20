@@ -28,12 +28,12 @@ export interface FormFields {
   disabled?: boolean;
   program?: string;
   disabledProgram?: boolean;
-  colspan?: number;
+  colSpan?: number;
   fields?: FormFields[];
   error?: FormikErrors<any>;
   section?: string;
-  labelHelper?: string;
   component?: (props: any) => JSX.Element;
+  content?: string | ReactComponentElement<any>;
 }
 
 export interface FormTab {
@@ -58,25 +58,27 @@ export interface IntakeFormTabs {
 }
 export type FormComponent = {
   type: string;
-  label: string;
+  label: string | ReactComponentElement<any>;
   name: string;
   component?: any;
   options?: any[];
+  content?: string | ReactComponentElement<any>;
 };
 export interface FormSection {
   name?: string;
   fields?: FormFields[];
   program?: string;
+  header?: ReactComponentElement<any>;
 }
 
 export interface ToolsSkill {
-  tool: string;
-  proficiencyLevel: string;
+  toolId: string;
+  toolProficiency: string;
 }
 export const toolSkills: ToolsSkill[] = [
   {
-    tool: '',
-    proficiencyLevel: '',
+    toolId: '',
+    toolProficiency: '',
   },
 ];
 
@@ -87,7 +89,7 @@ export interface PersonalDetails {
   lastName: string;
   primaryPhone: string;
   secondaryPhone?: string;
-  homeLocation?: Location;
+  homeLocation?: string;
   email: string;
 }
 
@@ -124,10 +126,10 @@ export interface EmergencyContactDetails {
   emergencyContactRelationship: string;
 }
 export interface GeneralEmergencyManagementExperience {
-  emergencyExperience: boolean;
-  preocExperience: boolean;
-  peccExperience: boolean;
-  firstNationsWorking: boolean;
+  emergencyExperience?: string;
+  preocExperience?: string;
+  peccExperience?: string;
+  firstNationsExperience?: string;
 }
 
 export interface SectionChoiceEmcr {
@@ -159,9 +161,8 @@ export interface LanguageSkill {
 }
 
 export interface CertificationSkill {
-  name: string;
-  id: number;
-  expiry?: string;
+  certificationId: string;
+  expiry?: Date;
 }
 
 // review & submit
@@ -169,14 +170,19 @@ export interface CertificationSkill {
 export interface ReviewAndSubmit {
   acknowledgeSubmit: boolean;
 }
+export enum FormStatus {
+  DRAFT = 'draft',
+  SUBMITTED = 'submitted',
+}
 
 // form interface
 export type IntakeFormSubmissionData = {
   id: string;
   createdByEmail: string;
   program: Program; //
+  status: FormStatus;
   currentProgram: Program;
-  formData: IntakeFormValues;
+  personnel: IntakeFormValues;
 };
 
 export type IntakeFormValues = PersonalDetails &
@@ -193,8 +199,10 @@ export type IntakeFormValues = PersonalDetails &
     program?: string;
     acknowledgement?: Expectations[];
     paylistId: string;
-    roles: BcwsRoleInterface[];
+    roles: { [key: string]: string[] }[];
     languages?: LanguageSkill[];
     tools?: ToolsSkill[];
     certifications?: CertificationSkill[];
+    driverLicense: string[];
+    unionMembership: string;
   };
