@@ -1,9 +1,9 @@
 /* eslint-disable */
 
 export interface IntakeFormPersonnelData {
-  firstName: string;
-  lastName: string;
-  program: string;
+  firstName?: string;
+  lastName?: string;
+  program?: string;
   employeeId?: string;
   paylistId?: string;
   email: string;
@@ -17,6 +17,7 @@ export interface IntakeFormPersonnelData {
   supervisorPhoneNumber?: string;
   driverLicense?: string[];
   homeLocation?: string;
+  workLocation?: string;
   ministry?: string;
   division?: string;
   tools?: {
@@ -44,7 +45,7 @@ export interface IntakeFormPersonnelData {
   peccExperience?: string;
   preocExperience?: string;
   emergencyExperience?: string;
-  functions: string[];
+  functions?: string[];
   purchaseCardHolder?: boolean;
   liaisonFirstName?: string;
   liaisonLastName?: string;
@@ -56,4 +57,6 @@ export interface IntakeFormPersonnelData {
   travelPreferenceBcws?: string;
   travelPreferenceEmcr?: string;
   roles?: string[];
+  chipsLastActionDate?: Date;
+  jobTitle?: string;
 }
