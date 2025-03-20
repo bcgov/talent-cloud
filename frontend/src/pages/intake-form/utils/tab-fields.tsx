@@ -162,7 +162,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Last Name',
           },
           {
-            name: 'primaryPhone',
+            name: 'primaryPhoneNumber',
             label: 'Primary Phone Number',
             type: 'tel',
             component: TextField,
@@ -170,7 +170,7 @@ export const formTabs: FormTab[] = [
             placeholder: '000-000-0000',
           },
           {
-            name: 'secondaryPhone',
+            name: 'secondaryPhoneNumber',
             label: 'Secondary Phone Number',
             type: 'tel',
             component: TextField,
@@ -223,7 +223,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'johnsmith@gov.bc.ca',
           },
           {
-            name: 'workPhone',
+            name: 'workPhoneNumber',
             label: 'Work Phone Number',
             type: 'tel',
             component: TextField,
@@ -363,7 +363,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'supervisorPhone',
+            name: 'supervisorPhoneNumber',
             label: 'Supervisor Phone Number',
             type: 'text',
             component: TextField,
@@ -488,7 +488,7 @@ export const formTabs: FormTab[] = [
             placeholder: 'Smith',
           },
           {
-            name: 'emergencyContactPhone',
+            name: 'emergencyContactNumber',
             label: 'Emergency Contact Phone Number',
             type: 'tel',
             component: TextField,

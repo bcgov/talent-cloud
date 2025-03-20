@@ -20,8 +20,8 @@ export const programSelectionSchema = Yup.object().shape({
 export const personalDetailsSchema = Yup.object().shape({
   firstName: firstName,
   lastName: lastName,
-  primaryPhone: primaryPhone,
-  secondaryPhone: secondaryPhone,
+  primaryPhoneNumber: primaryPhone,
+  secondaryPhoneNumber: secondaryPhone,
   homeLocation: Yup.string().required('Home location is required'),
 });
 
@@ -29,7 +29,7 @@ export const employmentDetailsSchema = Yup.object().shape({
   jobTitle: Yup.string().required('Job title is required'),
   employeeId: Yup.string().min(6).max(6).required('Employee number is required'),
   email: Yup.string().required('Email is required'),
-  workPhone: workPhone,
+  workPhoneNumber: workPhone,
   ministry: Yup.string().required('Ministry is required'),
   division: Yup.string().required('Division is required'),
   paylistId: Yup.string().when('program', {
@@ -61,7 +61,7 @@ export const supervisorDetailsSchema = Yup.object().shape({
     .max(50, 'Max length 50 characters.')
     .required("Supervisor's last name is required"),
   supervisorEmail: supervisorEmail,
-  supervisorPhone: supervisorPhone,
+  supervisorPhoneNumber: supervisorPhone,
 });
 
 export const liaisonDetailsSchema = Yup.object().shape({
@@ -69,7 +69,7 @@ export const liaisonDetailsSchema = Yup.object().shape({
   liaisonFirstName: Yup.string().min(2).max(50),
   liaisonLastName: Yup.string().min(2).max(50),
   liaisonEmail: supervisorEmail,
-  liaisonPhone: liaisonPhoneNumber,
+  liaisonPhoneNumber: liaisonPhoneNumber,
 });
 
 export const travelDetailsSchema = Yup.object().shape({
@@ -94,7 +94,7 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
     .min(2)
     .max(50)
     .required("Emergency contact's last name is required"),
-  emergencyContactPhone: Yup.string()
+  emergencyContactPhoneNumber: Yup.string()
     .test(
       'phone number',
       'Invalid phone number format. Please enter digits only. ex: 5555555555',
