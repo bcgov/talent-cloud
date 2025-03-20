@@ -130,7 +130,11 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                             {renderIntakeFormComponent(fieldItm)}
                           </div>
                         ) : fieldItm.type === 'multiselect-group' ? (
-                          <MultiSelectGroup field={fieldItm} />
+                          <div className="col-span-2">
+                            {fieldItm.label}
+
+                            <MultiSelectGroup field={fieldItm} />
+                          </div>
                         ) : (
                           <div
                             className={

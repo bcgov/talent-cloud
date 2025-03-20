@@ -13,7 +13,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
   const fieldErrors = errors[field.name as keyof typeof errors];
 
   return (
-    <div className="w-full col-span-2">
+    <>
       {field.label}
       {field.helper && (
         <div className="pb-12">
@@ -44,11 +44,10 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       </div>
                     </div>
                   ))}
-
-                  <div className="col-span-1 pt-9">
+                  <div className="col-span-1 pt-6">
                     <Button
                       variant={ButtonTypes.OUTLINED}
-                      text="Remove"
+                      text="Delete"
                       onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
                     />
                   </div>
@@ -67,6 +66,6 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
           </>
         )}
       />
-    </div>
+    </>
   );
 };

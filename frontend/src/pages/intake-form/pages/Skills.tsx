@@ -44,18 +44,20 @@ export const Skills = ({ sections }: { sections: FormSectionType[] }) => {
                           />
                         </div>
                       ) : (
-                        <FieldGroup
-                          key={fieldItm.name}
-                          field={{
-                            ...fieldItm,
-                            fields: fieldItm.fields?.map((itm: any) => {
-                              if (itm.options && itm.options.length === 0) {
-                                itm.options = getOptions(itm.name);
-                              }
-                              return itm;
-                            }),
-                          }}
-                        />
+                        <div className="col-span-2">
+                          <FieldGroup
+                            key={fieldItm.name}
+                            field={{
+                              ...fieldItm,
+                              fields: fieldItm.fields?.map((itm: any) => {
+                                if (itm.options && itm.options.length === 0) {
+                                  itm.options = getOptions(itm.name);
+                                }
+                                return itm;
+                              }),
+                            }}
+                          />
+                        </div>
                       )}
                     </Fragment>
                   ))}

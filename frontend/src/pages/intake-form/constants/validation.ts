@@ -13,7 +13,7 @@ import {
 import * as Yup from 'yup';
 
 export const programSelectionSchema = Yup.object().shape({
-  program: Yup.string().required('Program is required'),
+  program: Yup.string().required('Program is required.'),
 });
 
 export const personalDetailsSchema = Yup.object().shape({
@@ -21,30 +21,27 @@ export const personalDetailsSchema = Yup.object().shape({
   lastName: lastName,
   primaryPhoneNumber: primaryPhone,
   secondaryPhoneNumber: secondaryPhone,
-  homeLocation: Yup.string().required('Home location is required'),
+  homeLocation: Yup.string().required('Home location is required.'),
 });
 
 export const employmentDetailsSchema = Yup.object().shape({
-  jobTitle: Yup.string().required('Job title is required'),
-  employeeId: Yup.string().min(6).max(6).required('Employee number is required'),
-  email: Yup.string().required('Email is required'),
+  jobTitle: Yup.string().required('Job title is required.'),
+  employeeId: Yup.string().min(6).max(6).required('Employee number is required.'),
+  email: Yup.string().required('Email is required.'),
   workPhoneNumber: workPhone,
-  ministry: Yup.string().required('Ministry is required'),
-  division: Yup.string().required('Division is required'),
-  paylistId: Yup.string().when('program', {
-    is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().notRequired(),
-    otherwise: () => Yup.string().required('Paylist ID is required'),
-  }),
-  purchaseCardHolder: Yup.string().optional(),
+  paylistId: Yup.string().required('Paylist ID is required'),
+  ministry: Yup.string().required('Ministry is required.'),
+  unionMembership: Yup.string().required('Union membership is required.'),
+  division: Yup.string().required('Division is required.'),
+  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
   travelPreferenceEmcr: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required(''),
+    then: () => Yup.string().required('Travel preference is required'),
     otherwise: () => Yup.string().notRequired(),
   }),
   travelPreferenceBcws: Yup.string().when('program', {
     is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().required(''),
+    then: () => Yup.string().required('Travel preference is required'),
     otherwise: () => Yup.string().notRequired(),
   }),
 });
@@ -53,22 +50,20 @@ export const supervisorDetailsSchema = Yup.object().shape({
   supervisorFirstName: Yup.string()
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
-    .required("Supervisor's first name is required"),
+    .required("Supervisor's first name is required."),
 
   supervisorLastName: Yup.string()
     .min(2, 'Min length 2 characters.')
     .max(50, 'Max length 50 characters.')
-    .required("Supervisor's last name is required"),
+    .required("Supervisor's last name is required."),
   supervisorEmail: Yup.string()
-    .optional()
-    .nullable()
+    .required('Supervisor email is required.')
     .email('Invalid email format.')
     .matches(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format.'),
   supervisorPhoneNumber: supervisorPhone,
 });
 
 export const liaisonDetailsSchema = Yup.object().shape({
-  liaisonUnknown: Yup.string().optional(),
   liaisonFirstName: Yup.string().min(2).max(50),
   liaisonLastName: Yup.string().min(2).max(50),
   liaisonEmail: Yup.string()
@@ -83,40 +78,40 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
   emergencyContactFirstName: Yup.string()
     .min(2)
     .max(50)
-    .required("Emergency contact's first name is required"),
+    .required("Emergency contact's first name is required."),
   emergencyContactLastName: Yup.string()
     .min(2)
     .max(50)
-    .required("Emergency contact's last name is required"),
+    .required("Emergency contact's last name is required."),
   emergencyContactPhoneNumber: Yup.string()
     .test(
       'phone number',
       'Invalid phone number format. Please enter digits only. ex: 5555555555',
       phoneNumber,
     )
-    .required('Emergency contact phone number is required'),
-  emergencyContactRelationship: Yup.string().required('Relationship is required'),
+    .required('Emergency contact phone number is required.'),
+  emergencyContactRelationship: Yup.string().required('Relationship is required.'),
 });
 
 export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
   emergencyExperience: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('Emergency Experience is required'),
+    then: () => Yup.string().required('Emergency Experience is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
   preocExperience: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('PREOC Experience is required'),
+    then: () => Yup.string().required('PREOC Experience is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
   peccExperience: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('PECC Experience is required'),
+    then: () => Yup.string().required('PECC Experience is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
   firstNationsExperience: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('First Nations Experience is required'),
+    then: () => Yup.string().required('First Nations Experience is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
 });
@@ -124,7 +119,7 @@ export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
 export const sectionChoiceEmcrSchema = Yup.object().shape({
   firstChoiceFunction: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('First choice is required'),
+    then: () => Yup.string().required('First choice is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
   secondChoiceFunction: Yup.string().optional().nullable(),
@@ -134,7 +129,7 @@ export const sectionChoiceEmcrSchema = Yup.object().shape({
 export const sectionChoiceBcwsSchema = Yup.object().shape({
   firstChoiceSection: Yup.string().when('program', {
     is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().required('First  choice section is required'),
+    then: () => Yup.string().required('First  choice section is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
   secondChoiceSection: Yup.string().optional(),
@@ -180,13 +175,13 @@ export const languageSkillsSchema = Yup.object().shape({
         language: Yup.string(),
         languageProficiency: Yup.string().when('language', {
           is: (val: string) => val !== undefined,
-          then: () => Yup.string().required('Proficiency Level is required'),
+          then: () => Yup.string().required('Proficiency Level is required.'),
         }),
       }),
     )
     .when('language', {
       is: (val: string) => val !== undefined,
-      then: () => Yup.string().required('Proficiency Level is required'),
+      then: () => Yup.string().required('Proficiency Level is required.'),
     }),
 });
 
@@ -196,20 +191,28 @@ export const softwareSkillsSchema = Yup.object().shape({
       toolId: Yup.string(),
       toolProficiency: Yup.string().when('toolId', {
         is: (val: string) => val !== undefined,
-        then: () => Yup.string().required('Proficiency Level is required'),
+        then: () => Yup.string().required('Proficiency Level is required.'),
       }),
     }),
   ),
 });
 
 const programStepValidation = Yup.object().shape({
-  program: Yup.string().required('Program is required'),
+  program: Yup.string().required('Program is required.'),
   acknowledgement: Yup.array()
     .of(Yup.string())
     .when('program', {
       is: (val: Program) => val === Program.EMCR,
-      then: () => Yup.array().of(Yup.string()).min(2).max(2),
-      otherwise: () => Yup.array().of(Yup.string()).min(5).max(5),
+      then: () =>
+        Yup.array()
+          .of(Yup.string())
+          .min(2, 'All acknowledgement fields must be checked')
+          .max(2, 'All acknowledgement fields must be checked'),
+      otherwise: () =>
+        Yup.array()
+          .of(Yup.string())
+          .min(5, 'All acknowledgement fields must be checked')
+          .max(5, 'All acknowledgement fields must be checked'),
     }),
 });
 

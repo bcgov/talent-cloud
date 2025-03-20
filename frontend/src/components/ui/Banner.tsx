@@ -1,15 +1,13 @@
 // react
-import type { ReactElement } from 'react';
+import type { ReactComponentElement, ReactElement } from 'react';
 
 // enums
 import { BannerType } from '@/common/enums/banner-enum';
 
 // icons
-import {
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/24/solid';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { CloseIcon, ExclamationCircleIcon } from './Icons';
+import { AlertType } from '@/providers/Alert';
 
 export const CustomBanner = ({
   content,
@@ -22,12 +20,18 @@ export const CustomBanner = ({
   buttonText,
   onClose,
 }: {
-  content: string | ReactElement;
+  content:
+    | string
+    | ReactComponentElement<any, Pick<any, string | number | symbol>>
+    | undefined;
   textColor: string;
   bgColor: string;
   icon: ReactElement;
   link?: { name: string; url: string };
-  title?: string;
+  title?:
+    | string
+    | ReactComponentElement<any, Pick<any, string | number | symbol>>
+    | undefined;
   onClick?: (props?: any) => void;
   buttonText?: string;
   onClose?: (props?: any) => void;
@@ -84,12 +88,17 @@ export const Banner = ({
   onClose,
   hideIcon,
 }: {
-  content: string | ReactElement;
+  content:
+    | string
+    | ReactComponentElement<any, Pick<any, string | number | symbol>>
+    | undefined;
   link?: { name: string; url: string };
   type: BannerType;
   onClick?: () => void;
   buttonText?: string;
-  title?: string;
+  title?:
+    | string
+    | React.ReactComponentElement<any, Pick<any, string | number | symbol>>;
   onClose?: (props?: any) => void;
   hideIcon?: boolean;
 }) => {
@@ -110,7 +119,10 @@ export const Banner = ({
               hideIcon ? (
                 <></>
               ) : (
-                <InformationCircleIcon className="text-info  h-6 hidden sm:inline sm:mr-2" />
+                <ExclamationCircleIcon
+                  className="text-info  h-6 hidden sm:inline sm:mr-2"
+                  type={AlertType.INFO}
+                />
               )
             }
           />
@@ -166,7 +178,10 @@ export const Banner = ({
               hideIcon ? (
                 <></>
               ) : (
-                <InformationCircleIcon className="text-error  h-6 hidden sm:inline-block sm:mr-2" />
+                <ExclamationCircleIcon
+                  className="text-error  h-6 hidden sm:inline-block sm:mr-2"
+                  type={AlertType.ERROR}
+                />
               )
             }
           />
@@ -186,7 +201,10 @@ export const Banner = ({
               hideIcon ? (
                 <></>
               ) : (
-                <InformationCircleIcon className="text-green-900  h-6 hidden sm:inline-block sm:mr-2" />
+                <ExclamationCircleIcon
+                  className="text-green-900  h-6 hidden sm:inline-block sm:mr-2"
+                  type={AlertType.SUCCESS}
+                />
               )
             }
           />

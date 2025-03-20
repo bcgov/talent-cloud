@@ -21,7 +21,7 @@ export const RadioGroupField = ({
       <div id="my-radio-group"></div>
       <div role="group" aria-labelledby="my-radio-group" className="flex flex-col">
         {options?.map((itm: any) => (
-          <label key={itm.value}>
+          <label key={itm.value} className="font-normal">
             <Field
               {...field}
               name={field.name}
@@ -32,8 +32,8 @@ export const RadioGroupField = ({
             />
             <span
               className={clsx(
-                itm.value === field.value && 'text-dark-900',
-                disabled && 'text-gray-400',
+                itm.value === field.value && 'text-dark-900 font-normal',
+                disabled && 'text-gray-400 font-normal',
                 'px-2',
               )}
             >

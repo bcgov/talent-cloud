@@ -1,7 +1,15 @@
-import type { FieldInputProps } from 'formik';
+import { useFormikContext, type FieldInputProps } from 'formik';
 import { classes } from '@/components/filters/classes';
 
 import clsx from 'clsx';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@/components/ui/Icons';
+import type { IntakeFormValues } from '../constants/types';
 
 export const SelectField = ({
   field,
@@ -14,27 +22,61 @@ export const SelectField = ({
   options?: any[];
   placeholder?: string;
 }) => {
+  const { setFieldValue } = useFormikContext<IntakeFormValues>();
+
   return (
-    <select
+    <Listbox
       {...field}
-      // value={field.value}
+      defaultValue={''}
       disabled={disabled}
-      defaultValue=""
-      placeholder={placeholder}
-      className={clsx(
-        field.value === '' || field.value === undefined
-          ? classes.menu.container + ' text-gray-400 placeholder-gray-400'
-          : classes.menu.container,
-      )}
+      onChange={(v: any) => setFieldValue(field.name, v)}
     >
-      <option disabled={true} value="" className="text-gray-400">
-        Select An Option
-      </option>
-      {options?.map((itm: any) => (
-        <option key={itm.value} value={itm.value} disabled={itm.disabled}>
-          {itm.label}
-        </option>
-      ))}
-    </select>
+      {({ open }) => (
+        <div className={clsx('relative')}>
+          <ListboxButton className={clsx(classes.menu.container)}>
+            <div className="flex flex-row justify-between items-center">
+              {field.value ? (
+                <span className="truncate">
+                  {options?.find((itm) => itm.value === field.value).label}
+                </span>
+              ) : (
+                <span className="text-gray-500 text-sm">{placeholder}</span>
+              )}
+
+              {open ? (
+                <ChevronUpIcon aria-hidden="true" />
+              ) : (
+                <ChevronDownIcon aria-hidden="true" />
+              )}
+            </div>
+          </ListboxButton>
+
+          <ListboxOptions
+            transition
+            className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+          >
+            {options?.map((option) => (
+              <ListboxOption
+                key={option.value}
+                value={option.value}
+                disabled={option.disabled}
+                className="group relative cursor-default py-2 pr-9 pl-3 select-none data-focus:bg-[#3B8FDD] data-focus:text-white data-focus:outline-hidden"
+              >
+                <div className="flex items-center">
+                  <span
+                    className={clsx(
+                      option.disabled ? 'text-gray-400' : 'text-gray-800',
+                      'ml-3 block truncate font-normal group-data-selected:font-semibold',
+                    )}
+                  >
+                    {option.label}
+                  </span>
+                </div>
+              </ListboxOption>
+            ))}
+          </ListboxOptions>
+        </div>
+      )}
+    </Listbox>
   );
 };
