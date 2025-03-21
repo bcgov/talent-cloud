@@ -25,7 +25,7 @@ export const TextField = ({
     <input
       {...field}
       placeholder={placeholder}
-      className={clsx(disabled ? classes.menu.disabled : classes.menu.container)}
+      className={clsx(disabled ? classes.menu.disabled : classes.menu.formContainer)}
       disabled={disabled}
     />
   );
