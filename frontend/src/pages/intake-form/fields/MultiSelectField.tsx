@@ -40,7 +40,7 @@ export const MultiSelectField = ({
   return (
     <>
       <Menu as="div" className="relative">
-        <MenuButton className={clsx(classes.menu.container, 'h-[42px]')}>
+        <MenuButton className={clsx(classes.menu.formContainer, 'h-[42px]')}>
           {({ open }) => (
             <div className="flex flex-row justify-between items-center">
               {field.value && field.value !== '' && field.value?.length ? (
