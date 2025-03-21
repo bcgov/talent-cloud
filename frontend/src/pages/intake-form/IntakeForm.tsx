@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { stepValidation } from './constants/validation';
 import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { FormButtonNavigation } from './components/FormButtonNavigation';
-import { FormStatus, type FormTab, type IntakeFormValues } from './constants/types';
+import { type FormTab, type IntakeFormValues } from './constants/types';
 import { formTabs } from './utils/tab-fields';
 import { FormStepper } from './components/FormStepper';
 import { Program } from '@/common';
@@ -18,8 +18,15 @@ const IntakeForm = () => {
   const { keycloak } = useKeycloak();
   const { tokenParsed } = keycloak;
 
-  const { formData, saveUpdateForm, loading, step, handleSetStep, handleSubmit } =
-    useIntakeForm();
+  const {
+    formData,
+    saveUpdateForm,
+    loading,
+    step,
+    handleSetStep,
+    disabledSteps,
+    handleSubmit,
+  } = useIntakeForm();
   const [stepErrors, setStepErrors] = useState<number[] | null>();
   const [completedSteps, setCompletedSteps] = useState<number[] | null>();
 
@@ -103,7 +110,7 @@ const IntakeForm = () => {
           program: formData?.program ?? formData?.personnel?.program,
         }}
         validationSchema={stepValidation[step]}
-        onSubmit={async (values) => await handleSubmit(values)}
+        onSubmit={handleSubmit}
       >
         {({ validateForm }) => (
           <Form>
@@ -124,7 +131,7 @@ const IntakeForm = () => {
                       formTabs={formTabs}
                       stepErrors={stepErrors}
                       completedSteps={completedSteps}
-                      disabled={formData?.status === FormStatus.SUBMITTED}
+                      disabled={disabledSteps.includes(index)}
                       step={step}
                     />
                   ))}
@@ -150,6 +157,7 @@ const IntakeForm = () => {
               </TabGroup>
 
               <FormButtonNavigation
+                step={step}
                 saveUpdateForm={saveUpdateForm}
                 handlePrevious={() =>
                   handleValidateStep(

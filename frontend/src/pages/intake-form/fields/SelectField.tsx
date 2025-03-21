@@ -37,7 +37,7 @@ export const SelectField = ({
             <div className="flex flex-row justify-between items-center">
               {field.value ? (
                 <span className="truncate">
-                  {options?.find((itm) => itm.value === field.value).label}
+                  {options?.find((itm) => itm.value === field.value)?.label}
                 </span>
               ) : (
                 <span className="text-gray-500 text-sm">{placeholder}</span>

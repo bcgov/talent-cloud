@@ -30,6 +30,7 @@ export const useIntakeForm = () => {
   const { functions, locations, tools, sections, certificates } =
     useProgramFieldData(Program.ALL);
   const { showAlert } = useAlert();
+  const [disabledSteps, setDisabledSteps] = useState([5]);
   const [step, setStep] = useState(0);
 
   const getOptions = (name: string, program?: string) => {
@@ -140,6 +141,7 @@ export const useIntakeForm = () => {
         personnel: values,
       });
       setFormData(res.data);
+      setDisabledSteps([0, 1, 2, 3, 4]);
       setStep(5);
       showAlert({ type: AlertType.SUCCESS, message: 'Form has been submitted!' });
     } catch (e) {
@@ -159,5 +161,6 @@ export const useIntakeForm = () => {
     currentProgram,
     step,
     handleSetStep,
+    disabledSteps,
   };
 };
