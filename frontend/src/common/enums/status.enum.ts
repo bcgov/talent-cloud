@@ -23,7 +23,7 @@ export const StatusLabels: Record<string, string> = {
   ALL: 'All',
   INACTIVE: 'Inactive',
   MEMBER_DECLINED: 'Member Declined - Not Returning',
-  MISSED: 'Missed Recommitment',
+  MISSED: 'Missed Deadline',
   NEW: 'New',
   OTHER: 'Other',
   PENDING: 'Pending',
