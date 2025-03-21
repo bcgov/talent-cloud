@@ -55,7 +55,6 @@ export const personalAndEmployeeDetails: PersonalDetails &
 };
 
 export const experienceDetails: GeneralEmergencyManagementExperience &
-  SectionRolesBcws &
   SectionChoiceEmcr &
   SectionChoiceBcws = {
   emergencyExperience: undefined,
