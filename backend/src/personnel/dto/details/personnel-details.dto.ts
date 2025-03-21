@@ -111,6 +111,12 @@ export class PersonnelDetailsDTO {
   jobTitle?: string;
 
   @ApiProperty({
+    description: 'Reset Chips Profile - set chipsProfileMissing to false'
+  })
+  @IsOptional()
+  chipsProfileMissing?: boolean;
+
+  @ApiProperty({
     description: 'UnionMembership of personnel',
     enum: UnionMembership,
     example: UnionMembership.BCGEU,

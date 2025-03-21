@@ -27,6 +27,10 @@ export const ProfileEditForm = ({
     values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
 
+    if (values.resetChips === 'true') {
+      values.chipsProfileMissing = false;
+    }
+
     if (values?.secondaryPhone) {
       values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
     }
@@ -53,7 +57,7 @@ export const ProfileEditForm = ({
 
     if (values?.icsTraining === 'true') {
       values.icsTraining = true;
-    }    
+    }
     updatePersonnel(values);
     handleClose(props.event as MouseEvent<HTMLElement>);
   };

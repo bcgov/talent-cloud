@@ -1,7 +1,6 @@
 import { Program, Status } from '@/common';
 import type { Personnel, Location } from '@/common';
 import {
-  
   bcwsProfileValidationSchema,
   emcrPendingValidationSchema,
   bcwsPendingValidationSchema,
@@ -14,7 +13,6 @@ import {
   EmcrTravelPreference,
   TravelPreferenceText,
 } from '@/common/enums/travel-preference.enum';
-
 
 export const formConfig = (
   personnelData: Partial<Personnel>,
@@ -44,12 +42,12 @@ export const formConfig = (
   if (personnelData.liaisonPhoneNumber) {
     personnelData.liaisonPhoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   }
-    if (personnel.emergencyContactPhoneNumber) {
-      personnelData.emergencyContactPhoneNumber?.replace(
-        /(\d{3})(\d{3})(\d{4})/,
-        '($1) $2-$3',
-      );
-    }
+  if (personnel.emergencyContactPhoneNumber) {
+    personnelData.emergencyContactPhoneNumber?.replace(
+      /(\d{3})(\d{3})(\d{4})/,
+      '($1) $2-$3',
+    );
+  }
 
   fields.homeLocation.locationName.options = locations.map((itm: Location) => ({
     label: itm.locationName,
@@ -97,6 +95,7 @@ export const formConfig = (
 
         fields.driverLicense,
         fields.purchaseCardHolder,
+        ...(personnel.chipsProfileMissing ? [fields.resetChips] : []),
       ].filter((itm) =>
         personnel.status === Status.PENDING
           ? itm !== fields.dateApproved
@@ -155,6 +154,7 @@ export const formConfig = (
         fields.workLocation.locationName,
         fields.workLocation.region,
         fields.driverLicense,
+        ...(personnel.chipsProfileMissing ? [fields.resetChips] : []),
       ].filter((itm) =>
         personnel.status === Status.PENDING
           ? itm !== fields.dateApproved
@@ -191,7 +191,7 @@ export const formConfig = (
     primaryPhone: personnel.primaryPhone,
     secondaryPhone: personnel.secondaryPhone,
     workPhone: personnel.workPhone,
-    
+
     supervisorFirstName: personnel.supervisorFirstName,
     supervisorLastName: personnel.supervisorLastName,
     supervisorEmail: personnel.supervisorEmail,
@@ -206,6 +206,7 @@ export const formConfig = (
     emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
     emergencyContactRelationship: personnel.emergencyContactRelationship ?? '',
     payListId: personnel.paylistId ?? '',
+    resetChips: false,
   };
 
   const bcwsValues = {
@@ -219,15 +220,14 @@ export const formConfig = (
     approvedBySupervisor: personnel.approvedBySupervisor,
     dateApproved: personnel.dateApproved,
     status: personnel.status,
-    
   };
-const emcrValues = {
-  ...initialFormValues, 
-  approvedBySupervisor: personnel.approvedBySupervisor,
-  dateApproved: personnel.dateApproved,
-  travelPreference: personnel.travelPreference,
-  status: personnel.status,
-}
+  const emcrValues = {
+    ...initialFormValues,
+    approvedBySupervisor: personnel.approvedBySupervisor,
+    dateApproved: personnel.dateApproved,
+    travelPreference: personnel.travelPreference,
+    status: personnel.status,
+  };
   const emcrPendingValues = {
     ...emcrValues,
     icsTraining: personnel.icsTraining,
