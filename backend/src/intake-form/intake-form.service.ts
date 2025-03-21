@@ -1,15 +1,20 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { IntakeFormRO } from './ro/intake-form.ro';
-import { IntakeFormDTO } from './dto/intake-form.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IntakeFormEntity } from '../database/entities/form/intake-form.entity';
+import * as nunjucks from 'nunjucks';
+import {
+  EmailSubjects,
+  EmailTags,
+  EmailTemplates,
+  envs,
+} from 'src/mail/constants';
+import { MailDto } from 'src/mail/mail.dto';
+import { MailService } from 'src/mail/mail.service';
 import { Repository, UpdateResult } from 'typeorm';
-import { Program, RequestWithRoles } from '../auth/interface';
-import { PersonnelService } from '../personnel/personnel.service';
-import { CreatePersonnelDTO } from '../personnel';
-import { FormStatusEnum } from '../common/enums/form-status.enum';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
+import { IntakeFormDTO } from './dto/intake-form.dto';
+import { IntakeFormRO } from './ro/intake-form.ro';
 import { IntakeFormPersonnelData } from './types';
+import { Program, RequestWithRoles } from '../auth/interface';
+import { CreatePersonnelBcwsDTO } from '../bcws/dto';
 import {
   ChipsMinistryName,
   DriverLicense,
@@ -21,6 +26,11 @@ import {
   ToolsProficiency,
   UnionMembership,
 } from '../common/enums';
+import { FormStatusEnum } from '../common/enums/form-status.enum';
+import { IntakeFormEntity } from '../database/entities/form/intake-form.entity';
+import { PersonnelService } from '../personnel/personnel.service';
+import { CreatePersonnelDTO } from '../personnel';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
 import { PersonnelTools } from '../database/entities/personnel/personnel-tools.entity';
 import { LanguageEntity } from '../database/entities/personnel/personnel-language.entity';
@@ -33,9 +43,6 @@ import {
   CreatePersonnelEmcrDTO,
   EmcrPersonnelExperienceDTO,
 } from '../emcr/dto';
-import {
-  CreatePersonnelBcwsDTO,
-} from '../bcws/dto';
 import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
@@ -47,6 +54,7 @@ export class IntakeFormService {
     private personnelService: PersonnelService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
+    @Inject(MailService) private readonly mailService: MailService,
   ) {}
   /**
    * Creates new Personnel, EMCR Personnel, BCWS Personnel from Intake Form data
@@ -66,27 +74,49 @@ export class IntakeFormService {
       const personnelFromFormData = await this.createPersonnel(
         createIntakeFormDto.personnel,
       );
-
+      let mailToPerson = existingPerson;
       if (!existingPerson) {
-        await this.personnelService.createPerson(personnelFromFormData);
+        mailToPerson = await this.personnelService.createPerson(
+          personnelFromFormData,
+        );
         await this.intakeFormRepository.save({
           ...createIntakeFormDto,
           status: FormStatusEnum.SUBMITTED,
         });
-
-        
       } else {
-        await this.personnelService.updatePerson({
+        mailToPerson = await this.personnelService.updatePerson({
           ...existingPerson,
           ...personnelFromFormData,
         });
-
-        
       }
-      return await this.intakeFormRepository.save({
+      const res = await this.intakeFormRepository.save({
         ...createIntakeFormDto,
         status: FormStatusEnum.SUBMITTED,
       });
+
+      const emailTemplate = new MailDto({
+        subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
+        body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          ...envs,
+        }),
+        attachments: [],
+        contexts: [
+          {
+            to: [mailToPerson.email],
+            cc: [],
+            bcc: [],
+            tag: `${EmailTags.INTAKE_CONFIRM}_${process.env.ENV}`,
+            delayTS: 0,
+            context: {
+              emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
+              bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
+              ...envs,
+            },
+          },
+        ],
+      });
+      await this.mailService.sendMail(emailTemplate, EmailTags.INTAKE_CONFIRM);
+      return res;
     } catch (e) {
       throw new BadRequestException(e.message);
     }
@@ -137,12 +167,8 @@ export class IntakeFormService {
       return { currentProgram: Program.ALL };
     }
 
-    if (
-      existingform &&
-      existingform.status === FormStatusEnum.DRAFT
-      
-    ) {
-      if(personnel){
+    if (existingform && existingform.status === FormStatusEnum.DRAFT) {
+      if (personnel) {
         return existingform.toResponseObject(
           personnel.emcr ? Program.EMCR : Program.BCWS,
         );
@@ -150,9 +176,7 @@ export class IntakeFormService {
       return existingform.toResponseObject();
     }
 
-    if (
-        existingform && existingform.status === FormStatusEnum.SUBMITTED 
-    ) {
+    if (existingform && existingform.status === FormStatusEnum.SUBMITTED) {
       const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
@@ -201,9 +225,6 @@ export class IntakeFormService {
   mapBcwsFormDataToPersonnel(
     personnel: IntakeFormPersonnelData,
   ): CreatePersonnelBcwsDTO {
-    
-    
-    
     const bcwsPerson = new CreatePersonnelBcwsDTO();
     const bcwsData = {
       status: Status.PENDING,
@@ -221,7 +242,7 @@ export class IntakeFormService {
       thirdChoiceSection: personnel.thirdChoiceSection
         ? Section[personnel?.thirdChoiceSection]
         : undefined,
-        // TODO
+      // TODO
       // roles: roles.length > 0 ? roles?.map((item) => {
       //   const role = new CreateBcwsPersonnelRolesDTO();
       //   role.roleId = parseInt(item);
@@ -279,14 +300,20 @@ export class IntakeFormService {
     locations: LocationEntity[],
   ): CreatePersonnelDTO {
     const person = new CreatePersonnelDTO();
-    if(personnel.tools[0].toolId === '' && personnel.tools[0].toolProficiency === ''){
-      delete personnel.tools
+    if (
+      personnel.tools[0].toolId === '' &&
+      personnel.tools[0].toolProficiency === ''
+    ) {
+      delete personnel.tools;
     }
-    if(personnel.languages[0].language === '' && personnel.languages[0].languageProficiency === ''){
-      delete personnel.languages
+    if (
+      personnel.languages[0].language === '' &&
+      personnel.languages[0].languageProficiency === ''
+    ) {
+      delete personnel.languages;
     }
-    if(personnel.certifications[0].certificationId === ''){
-      delete personnel.certifications
+    if (personnel.certifications[0].certificationId === '') {
+      delete personnel.certifications;
     }
     const personData = {
       firstName: personnel.firstName,
@@ -309,31 +336,36 @@ export class IntakeFormService {
       ),
       ministry: Ministry[personnel.ministry],
       division: personnel.division,
-      tools: personnel.tools ? personnel.tools?.map((item) => {
-        
-        const tool = new PersonnelTools();
-        tool.toolId = parseInt(item.toolId);
-        tool.proficiencyLevel = ToolsProficiency[item.toolProficiency];
-        return tool;
-      }) : [],
-      languages: personnel.languages ? personnel.languages.map((item) => {
-        if(item.language === '' && item.languageProficiency === ''){
-          return
-        } 
-        const language = new LanguageEntity();
-        language.language = item.language;
-        language.level = LanguageProficiency[item.languageProficiency];
-        return language;
-      }) : [],
-      certifications: personnel.certifications ? personnel.certifications?.map((item) => {
-        if(item.certificationId === '' && item.expiry === undefined){
-          return
-        }
-        const certification = new PersonnelCertificationEntity();
-        certification.certificationId = parseInt(item.certificationId);
-        certification.expiry = item.expiry ?? undefined;
-        return certification;
-      }) : [],
+      tools: personnel.tools
+        ? personnel.tools?.map((item) => {
+            const tool = new PersonnelTools();
+            tool.toolId = parseInt(item.toolId);
+            tool.proficiencyLevel = ToolsProficiency[item.toolProficiency];
+            return tool;
+          })
+        : [],
+      languages: personnel.languages
+        ? personnel.languages.map((item) => {
+            if (item.language === '' && item.languageProficiency === '') {
+              return;
+            }
+            const language = new LanguageEntity();
+            language.language = item.language;
+            language.level = LanguageProficiency[item.languageProficiency];
+            return language;
+          })
+        : [],
+      certifications: personnel.certifications
+        ? personnel.certifications?.map((item) => {
+            if (item.certificationId === '' && item.expiry === undefined) {
+              return;
+            }
+            const certification = new PersonnelCertificationEntity();
+            certification.certificationId = parseInt(item.certificationId);
+            certification.expiry = item.expiry ?? undefined;
+            return certification;
+          })
+        : [],
       emergencyContactFirstName: personnel.emergencyContactFirstName,
       emergencyContactLastName: personnel.emergencyContactLastName,
       emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
@@ -347,7 +379,6 @@ export class IntakeFormService {
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    
     return {
       firstName: personnel.firstName,
       program:
@@ -372,25 +403,37 @@ export class IntakeFormService {
       homeLocation: personnel.homeLocation.id.toString(),
       ministry: personnel.ministry,
       division: personnel.division,
-      tools: personnel.tools.length === 0 ? [{
-        toolId: '',
-        toolProficiency: '',
-      }]:personnel.tools?.map((item) => ({
-        toolId: item.tool.id.toString(),
-        toolProficiency: item.proficiencyLevel,
-      })),
-      languages: personnel.languages.length === 0 ? [{language: '', languageProficiency: ''}]: personnel.languages?.map((item) => ({
-        language: item.language,
-        languageProficiency: item.level,
-      })),
-      certifications: personnel.certifications.length === 0 ? [{
-        certificationId: '',
-        expiry: undefined,
-        
-      }]: personnel.certifications?.map((item) => ({
-        certificationId: item.certificationId.toString(),
-        expiry: item.expiry ? new Date(item.expiry) : undefined,
-      })),
+      tools:
+        personnel.tools.length === 0
+          ? [
+              {
+                toolId: '',
+                toolProficiency: '',
+              },
+            ]
+          : personnel.tools?.map((item) => ({
+              toolId: item.tool.id.toString(),
+              toolProficiency: item.proficiencyLevel,
+            })),
+      languages:
+        personnel.languages.length === 0
+          ? [{ language: '', languageProficiency: '' }]
+          : personnel.languages?.map((item) => ({
+              language: item.language,
+              languageProficiency: item.level,
+            })),
+      certifications:
+        personnel.certifications.length === 0
+          ? [
+              {
+                certificationId: '',
+                expiry: undefined,
+              },
+            ]
+          : personnel.certifications?.map((item) => ({
+              certificationId: item.certificationId.toString(),
+              expiry: item.expiry ? new Date(item.expiry) : undefined,
+            })),
       emergencyContactFirstName: personnel?.emergencyContactFirstName,
       emergencyContactLastName: personnel?.emergencyContactLastName,
       emergencyContactPhoneNumber: personnel?.emergencyContactPhoneNumber,
@@ -423,7 +466,9 @@ export class IntakeFormService {
     };
   }
 
-  async getChipsForIntake(req: RequestWithRoles): Promise<Partial<IntakeFormPersonnelData> | null> {
+  async getChipsForIntake(
+    req: RequestWithRoles,
+  ): Promise<Partial<IntakeFormPersonnelData> | null> {
     const chipsData = await this.personnelService.getChipsMemberData(req.idir);
     if (chipsData.success) {
       const data = chipsData.data;
@@ -432,14 +477,13 @@ export class IntakeFormService {
         ministry = ChipsMinistryName[data.organization.trim()];
       }
 
-      const allLocations =
-        await this.locationService.getAllLocations();
-      let workLocation = allLocations.find(
-        (l) => l.locationName === data.workCity?.trim(),
-      )?.id?.toString();
-      let homeLocation = allLocations.find(
-        (l) => l.locationName === data.homeCity?.trim(),
-      )?.id?.toString();
+      const allLocations = await this.locationService.getAllLocations();
+      const workLocation = allLocations
+        .find((l) => l.locationName === data.workCity?.trim())
+        ?.id?.toString();
+      const homeLocation = allLocations
+        .find((l) => l.locationName === data.homeCity?.trim())
+        ?.id?.toString();
 
       let unionMembership;
       if (UnionMembership[data.employeeGroup?.toUpperCase()]) {

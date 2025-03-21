@@ -4,6 +4,7 @@ export enum TemplateType {
 }
 
 export enum EmailTags {
+  INTAKE_CONFIRM = 'INTAKE_CONFIRM',
   MEMBER_DECLINED = 'MEMBER_DECLINED',
   MEMBER_DENIED_BY_SUPERVISOR = 'MEMBER_DENIED_BY_SUPERVISOR',
   MEMBER_APPROVED = 'MEMBER_APPROVED',
@@ -18,6 +19,7 @@ export enum EmailTags {
 }
 
 export enum EmailTemplates {
+  INTAKE_CONFIRM = 'intake/confirmation.njk',
   MEMBER_DECLINED = 'member/member-declined.njk',
   MEMBER_DENIED_BY_SUPERVISOR = 'member/member-denied.njk',
   MEMBER_APPROVED = 'member/member-approved.njk',
@@ -32,6 +34,7 @@ export enum EmailTemplates {
 }
 
 export enum EmailSubjects {
+  INTAKE_CONFIRM = 'CORE Team: Confirmation of application submission',
   MEMBER_DECLINED = 'CORE Team: You have declined your {{year}} recommitment',
   MEMBER_DENIED_BY_SUPERVISOR = 'Your CORE Recommitment Status for {{year}} has been updated',
   MEMBER_APPROVED = 'Your CORE Recommitment for {{year}} has been approved by your supervisor',
