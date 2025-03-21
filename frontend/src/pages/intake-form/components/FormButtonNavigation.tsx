@@ -60,7 +60,7 @@ export const FormButtonNavigation = ({
             disabled={disablePrevious || step === 5}
             variant={ButtonTypes.OUTLINED}
             onClick={() => {
-              handlePrevious;
+              handlePrevious();
               saveUpdateForm(values);
             }}
           />
