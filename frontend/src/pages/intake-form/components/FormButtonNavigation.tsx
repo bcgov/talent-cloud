@@ -64,7 +64,7 @@ export const FormButtonNavigation = ({
               saveUpdateForm(values);
             }}
           />
-          {step === 4 || step === 5 ? (
+          {[5, 4].includes(step) ? (
             <Button
               text="Submit"
               variant={ButtonTypes.SOLID}
