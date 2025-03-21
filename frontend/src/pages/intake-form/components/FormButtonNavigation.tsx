@@ -13,14 +13,17 @@ export const FormButtonNavigation = ({
   handleNext,
   disableNext,
   disablePrevious,
+  step,
 }: {
   saveUpdateForm: (values: FormikValues) => void;
   handlePrevious: () => void;
   handleNext: () => void;
   disableNext: boolean;
   disablePrevious: boolean;
+  step: number;
 }) => {
-  const { values } = useFormikContext<IntakeFormValues>();
+  const { values, submitForm, isValid, validateForm } =
+    useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
   const navigate = useNavigate();
   return (
@@ -31,12 +34,14 @@ export const FormButtonNavigation = ({
           <Button
             text="Cancel"
             variant={ButtonTypes.TEXT}
+            disabled={step === 5}
             // TODO: Save and navigate? Delete form?
             onClick={() => navigate('/')}
           />
           <Button
             text="Save For Later"
             variant={ButtonTypes.OUTLINED}
+            disabled={step === 5}
             onClick={() => {
               saveUpdateForm(values);
               showAlert({
@@ -50,16 +55,35 @@ export const FormButtonNavigation = ({
         <div className="flex flex-row space-x-6">
           <Button
             text="Previous"
-            disabled={disablePrevious}
+            disabled={disablePrevious || step === 5}
             variant={ButtonTypes.OUTLINED}
             onClick={handlePrevious}
           />
-          <Button
-            text="Next"
-            variant={ButtonTypes.SOLID}
-            disabled={disableNext}
-            onClick={handleNext}
-          />
+          {step === 4 || step === 5 ? (
+            <Button
+              text="Submit"
+              variant={ButtonTypes.SOLID}
+              disabled={!isValid || step === 5}
+              onClick={async () => {
+                const errors = await validateForm();
+                if (Object.keys(errors).length > 0) {
+                  showAlert({
+                    type: AlertType.ERROR,
+                    message: 'Please resolve validation errors.',
+                  });
+                } else {
+                  await submitForm();
+                }
+              }}
+            />
+          ) : (
+            <Button
+              text="Next"
+              variant={ButtonTypes.SOLID}
+              disabled={disableNext}
+              onClick={handleNext}
+            />
+          )}
         </div>
       </div>
     </div>
