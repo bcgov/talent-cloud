@@ -748,4 +748,16 @@ export const fields = {
     required: true,
     break: true,
   },
+
+  resetChips: {
+    name: 'resetChips',
+    label: 'Sync with PeopleSoft',
+    type: 'select',
+    disabled: false,
+    autoComplete: 'off',
+    options: [
+      { label: 'Reset', value: true },
+      { label: 'No', value: false },
+    ],
+  },
 };
