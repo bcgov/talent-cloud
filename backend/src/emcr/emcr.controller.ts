@@ -27,7 +27,7 @@ import { EmcrRO } from './ro';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
 import { Public } from '../auth/public.decorator';
-import { EmcrCsvHeaders } from '../common/enums';
+//import { EmcrCsvHeaders } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { GetPersonnelRO, UpdatePersonnelDTO } from '../personnel';
@@ -95,7 +95,7 @@ export class EmcrController {
 
     //convert input data to CSV format and prettify headers
     const csvConverted = json2csv(csvRawData, {
-      keys: EmcrCsvHeaders,
+      //  keys: EmcrCsvHeaders,
       useLocaleFormat: true,
     });
 
