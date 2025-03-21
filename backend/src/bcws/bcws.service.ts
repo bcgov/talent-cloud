@@ -213,6 +213,26 @@ export class BcwsService {
   }
 
   /**
+   * Get BCWS Personnel for CSV Export
+   * Extracts full raw JSON list of all BCWS-flagged personnel
+   * and associated table columns for export to CSV file
+   * @returns {string} List of personnel, converted to JSON string
+   */
+  async getBcwsPersonnelforCSV(): Promise<BcwsPersonnelEntity[]> {
+    const qb =
+      this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
+    qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
+    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
+    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
+
+    const personnel = await qb.getRawMany();
+
+    return personnel;
+  }
+
+  /**
    * Get Personnel By ID
    * Returns a default availability range of 31 days for a single personnel
    * @returns {EmcrPersonnelEntity} Single personnel

@@ -9,25 +9,38 @@ import {
   Patch,
   Query,
   Req,
+  StreamableFile,
   UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiProduces,
+} from '@nestjs/swagger';
+import { json2csv } from 'json-2-csv';
+import { UpdateResult } from 'typeorm';
+import { Readable } from 'stream';
 import { BcwsService } from './bcws.service';
+import { BcwsCsvHeaders } from '../common/enums';
 import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
-import {  UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
+import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
+import { Public } from '../auth/public.decorator';
+import { Roles } from '../auth/roles.decorator';
+import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
-import { UpdatePersonnelDTO, GetPersonnelRO, PersonnelRO,  } from '../personnel';
+import { UpdatePersonnelDTO, GetPersonnelRO } from '../personnel';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { BcwsRO } from './ro';
 import { PersonnelService } from '../personnel/personnel.service';
-import { UpdateBcwsRolesAndPreferencesDTO, UpdateBcwsRolesDTO } from './dto/update-bcws-personnel-roles.dto';
 import { BcwsUpdateAdapter } from './dto/helpers';
+import {
+  UpdateBcwsRolesAndPreferencesDTO,
+  UpdateBcwsRolesDTO,
+} from './dto/update-bcws-personnel-roles.dto';
 import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
-import { UpdateResult } from 'typeorm';
-import { Roles } from '../auth/roles.decorator';
-import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 
 @Controller('bcws')
 @ApiTags('BCWS Personnel API')
@@ -35,7 +48,7 @@ export class BcwsController {
   constructor(
     @Inject(BcwsService)
     private readonly bcwsService: BcwsService,
-    @Inject(PersonnelService )
+    @Inject(PersonnelService)
     private readonly personnelService: PersonnelService,
     private readonly logger: AppLogger,
   ) {}
@@ -56,9 +69,9 @@ export class BcwsController {
     @Param('id') id: string,
   ): Promise<UpdateResult> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
-    
-    const person = new BcwsUpdateAdapter(personnel)
-    
+
+    const person = new BcwsUpdateAdapter(personnel);
+
     await this.bcwsService.updateBcwsPersonnel(person.bcws, id);
 
     return await this.personnelService.updatePersonnelDetails(person.details, id);
@@ -76,16 +89,13 @@ export class BcwsController {
   @Programs(Program.BCWS)
   @Patch('/:id/roles')
   async updateBcwsPersonnelRoles(
-    @Body() preferences: UpdateBcwsRolesAndPreferencesDTO,  
+    @Body() preferences: UpdateBcwsRolesAndPreferencesDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ): Promise<UpdateBcwsRolesDTO[]> {
-
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     return await this.bcwsService.updateRoles(id, preferences);
-
-    
   }
 
   @ApiOperation({
@@ -105,13 +115,8 @@ export class BcwsController {
   ): Promise<PersonnelEntity> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    return await this.personnelService.updatePersonnelSkills(
-      skills,
-      id,
-      
-    );
+    return await this.personnelService.updatePersonnelSkills(skills, id);
   }
-
 
   @ApiOperation({
     summary: 'BCWS Coordinator/Logistics Get Personnel Endpoint',
@@ -138,6 +143,36 @@ export class BcwsController {
       rows: query.rows,
       page: query.page,
     };
+  }
+
+  @ApiOperation({
+    summary: 'Download BCWS Personnel CSV Endpoint',
+    description: 'Returns a CSV file with all listed BCWS personnel',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @ApiProduces('text/csv')
+  //@Programs(Program.BCWS)
+  //@Roles(Role.COORDINATOR)
+  @Public()
+  @Get('/export-test')
+  async exportBcwsPersonnelToCSV(): Promise<StreamableFile> {
+    const csvRawData = await this.bcwsService.getBcwsPersonnelforCSV();
+
+    //convert input data to CSV format and prettify headers
+    const csvConverted = json2csv(csvRawData, {
+      keys: BcwsCsvHeaders,
+      useLocaleFormat: true,
+    });
+
+    const csvStream = Readable.from(csvConverted);
+
+    return new StreamableFile(csvStream, {
+      type: 'text/csv',
+      disposition: 'attachment; filename="BCWS_Personnel_Details.csv"',
+    });
   }
 
   @ApiOperation({
