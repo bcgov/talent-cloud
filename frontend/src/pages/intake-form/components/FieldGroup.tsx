@@ -40,7 +40,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                         }
                       />
                       <div className="font-normal text-errorRed">
-                        {fieldErrors && (fieldErrors as any)[index][itm.name]}
+                        {fieldErrors && (fieldErrors as any)?.[index]?.[itm.name]}
                       </div>
                     </div>
                   ))}

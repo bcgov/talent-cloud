@@ -1,8 +1,7 @@
 // common
-import { Section } from '@/common/enums/sections.enum';
+
 import type {
   GeneralEmergencyManagementExperience,
-  SectionRolesBcws,
   ReviewAndSubmit,
   PersonalDetails,
   EmploymentDetails,
@@ -70,14 +69,14 @@ export const experienceDetails: GeneralEmergencyManagementExperience &
   firstChoiceFunction: '',
   secondChoiceFunction: '',
   thirdChoiceFunction: '',
-  roles: [
-    { [Section.PLANNING.toString()]: [] },
-    { [Section.LOGISTICS.toString()]: [] },
-    { [Section.FINANCE_ADMIN.toString()]: [] },
-    { [Section.OPERATIONS.toString()]: [] },
-    { [Section.COMMAND.toString()]: [] },
-    { [Section.AVIATION.toString()]: [] },
-  ],
+  // roles: [
+  //   { [Section.PLANNING.toString()]: [] },
+  //   { [Section.LOGISTICS.toString()]: [] },
+  //   { [Section.FINANCE_ADMIN.toString()]: [] },
+  //   { [Section.OPERATIONS.toString()]: [] },
+  //   { [Section.COMMAND.toString()]: [] },
+  //   { [Section.AVIATION.toString()]: [] },
+  // ],
 };
 
 export const skillsDetails: Skills = {
@@ -109,10 +108,7 @@ export const programDetails: ProgramAck = {
 export const initialValueSteps: {
   0: ProgramAck;
   1: PersonalDetails;
-  2: GeneralEmergencyManagementExperience &
-    SectionRolesBcws &
-    SectionChoiceEmcr &
-    SectionChoiceBcws;
+  2: GeneralEmergencyManagementExperience & SectionChoiceEmcr & SectionChoiceBcws;
   3: Skills;
   4: any;
   5: any;

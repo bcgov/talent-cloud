@@ -14,6 +14,7 @@ export const FormButtonNavigation = ({
   disableNext,
   disablePrevious,
   step,
+  handleSetCompletedStep,
 }: {
   saveUpdateForm: (values: FormikValues) => void;
   handlePrevious: () => void;
@@ -21,6 +22,7 @@ export const FormButtonNavigation = ({
   disableNext: boolean;
   disablePrevious: boolean;
   step: number;
+  handleSetCompletedStep: (step: number) => void;
 }) => {
   const { values, submitForm, isValid, validateForm } =
     useFormikContext<IntakeFormValues>();
@@ -57,7 +59,10 @@ export const FormButtonNavigation = ({
             text="Previous"
             disabled={disablePrevious || step === 5}
             variant={ButtonTypes.OUTLINED}
-            onClick={handlePrevious}
+            onClick={() => {
+              handlePrevious;
+              saveUpdateForm(values);
+            }}
           />
           {step === 4 || step === 5 ? (
             <Button
@@ -72,6 +77,7 @@ export const FormButtonNavigation = ({
                     message: 'Please resolve validation errors.',
                   });
                 } else {
+                  handleSetCompletedStep(4);
                   await submitForm();
                 }
               }}
@@ -81,7 +87,10 @@ export const FormButtonNavigation = ({
               text="Next"
               variant={ButtonTypes.SOLID}
               disabled={disableNext}
-              onClick={handleNext}
+              onClick={() => {
+                handleNext();
+                saveUpdateForm(values);
+              }}
             />
           )}
         </div>

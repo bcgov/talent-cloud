@@ -33,6 +33,7 @@ export interface FormFields {
   section?: string;
   component?: (props: any) => JSX.Element;
   content?: string | ReactComponentElement<any>;
+  value?: any;
 }
 
 export interface FormTab {
@@ -148,9 +149,9 @@ export interface SectionChoiceBcws {
   thirdChoiceSection?: string;
 }
 
-export interface SectionRolesBcws {
-  roles: { [key: string]: string[] }[];
-}
+// export interface SectionRolesBcws {
+//   roles: { [key: string]: string[] }[];
+// }
 
 export interface ProgramAck {
   program?: Program;

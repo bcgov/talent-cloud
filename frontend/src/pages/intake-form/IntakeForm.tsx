@@ -173,6 +173,7 @@ const IntakeForm = () => {
                 }
                 disableNext={step === formTabs.length - 2}
                 disablePrevious={step === 0}
+                handleSetCompletedStep={handleSetCompletedStep}
               />
             </div>
           </Form>

@@ -19,7 +19,7 @@ export const Complete = () => {
       <Button
         text="Go to My Dashboard"
         variant={ButtonTypes.TERTIARY}
-        onClick={() => navigate(Routes.Dashboard)}
+        onClick={() => navigate(Routes.MemberProfile)}
       />
     </div>
   );
