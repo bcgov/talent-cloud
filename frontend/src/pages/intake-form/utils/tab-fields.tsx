@@ -982,7 +982,7 @@ export const formTabs: FormTab[] = [
                       <a
                         href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
                         target="_blank"
-                        className="text-linkBlue hover:underline"
+                        className="text-linkBlue underline"
                       >
                         Incident Command System (ICS) Training
                       </a>
@@ -998,7 +998,7 @@ export const formTabs: FormTab[] = [
                       <a
                         href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
                         target="_blank"
-                        className="text-linkBlue hover:underline"
+                        className="text-linkBlue underline"
                       >
                         “Intro to CORE”
                       </a>{' '}
@@ -1008,7 +1008,7 @@ export const formTabs: FormTab[] = [
                       <a
                         href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/2024_willingness_statement_-_in_progress.pdf"
                         target="_blank"
-                        className="text-linkBlue hover:underline"
+                        className="text-linkBlue underline"
                       >
                         Willingness Statement{' '}
                       </a>
@@ -1017,7 +1017,7 @@ export const formTabs: FormTab[] = [
                       <a
                         href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
                         target="_blank"
-                        className="text-linkBlue hover:underline"
+                        className="text-linkBlue underline"
                       >
                         PAR-Q+ form
                       </a>{' '}
@@ -1030,7 +1030,7 @@ export const formTabs: FormTab[] = [
                     Submit to{' '}
                     <a
                       href="mailto:EMCR.CORETeam@gov.bc.ca"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                     >
                       EMCR.CORETeam@gov.bc.ca
                     </a>
@@ -1043,7 +1043,7 @@ export const formTabs: FormTab[] = [
                     <a
                       href="https://intranet.gov.bc.ca/bcws/core-team"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                     >
                       Find my Fire Centre
                     </a>

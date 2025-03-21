@@ -41,7 +41,11 @@ export const components = [
           <ul className="list-disc list-inside text-darkGrey text-base font-normal">
             <li>Supervisor Approval for EMCR</li>
             <li>
-              <a href="#" target="_blank" className="text-linkBlue hover:underline">
+              <a
+                href="https://learning.gov.bc.ca/psc/CHIPSPLM/EMPLOYEE/ELM/c/LM_OD_EMPLOYEE_FL.LM_CRS_DTL_FL.GBL?Page=LM_CRS_DTL_FL&#38;Action=U&#38;ForceSearch=Y&#38;LM_CI_ID=19146&#38;"
+                target="_blank"
+                className="text-linkBlue underline"
+              >
                 Incident Command System (ICS) Training
               </a>
             </li>
@@ -52,22 +56,38 @@ export const components = [
         <div className="py-4 px-4">
           <ul className="list-disc list-inside text-darkGrey text-base font-normal">
             <li>
-              <a href="#" target="_blank" className="text-linkBlue hover:underline">
+              <a
+                href="https://intranet.gov.bc.ca/bcws/core-team/participating-staff"
+                target="_blank"
+                className="text-linkBlue underline"
+              >
                 Supervisor Approval for BCWS
               </a>
             </li>
             <li>
-              <a href="#" target="_blank" className="text-linkBlue hover:underline">
+              <a
+                href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
+                target="_blank"
+                className="text-linkBlue underline"
+              >
                 Intro to CORE Online Orientation (Video)
               </a>
             </li>
             <li>
-              <a href="#" target="_blank" className="text-linkBlue hover:underline">
+              <a
+                href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/2024_willingness_statement_-_in_progress.pdf"
+                target="_blank"
+                className="text-linkBlue underline"
+              >
                 Willingness Statement
               </a>
             </li>
             <li>
-              <a href="#" target="_blank" className="text-linkBlue hover:underline">
+              <a
+                href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
+                target="_blank"
+                className="text-linkBlue underline"
+              >
                 {'Physical Activity Readiness Questionnaire for Everyone (PAR-Q+)'}
               </a>
               <span>*</span>
@@ -77,9 +97,16 @@ export const components = [
         <br />
         <br />
         <p>
-          {
-            '*Please make sure you have completed, signed and submitted your BCWS PAR-Q+ to your Wildfire regional contact after submitting this application.'
-          }
+          *Please make sure you have completed, signed and submitted your BCWS PAR-Q+
+          to your{' '}
+          <a
+            href="https://intranet.gov.bc.ca/bcws/core-team"
+            target="_blank"
+            className="text-linkBlue underline"
+          >
+            Wildfire regional contact
+          </a>{' '}
+          after submitting this application.
         </p>
         <br />
         <p>
@@ -88,7 +115,11 @@ export const components = [
           </span>{' '}
           {'You can find your corresponding Fire Centre based on your home location'}
           at{' '}
-          <a href="#" target="_blank" className="text-linkBlue hover:underline">
+          <a
+            href="https://www2.gov.bc.ca/gov/content/safety/wildfire-status/about-bcws/fire-centres"
+            target="_blank"
+            className="text-linkBlue underline"
+          >
             {'Where is my closest Fire Centre?'}
           </a>
           .
