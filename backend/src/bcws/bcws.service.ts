@@ -216,7 +216,7 @@ export class BcwsService {
    * Get BCWS Personnel for CSV Export
    * Extracts full raw JSON list of all BCWS-flagged personnel
    * and associated table columns for export to CSV file
-   * @returns {string} List of personnel, converted to JSON string
+   * @returns {BcwsPersonnelEntity[]} List of personnel, converted to JSON string
    */
   async getBcwsPersonnelforCSV(): Promise<BcwsPersonnelEntity[]> {
     const qb =
