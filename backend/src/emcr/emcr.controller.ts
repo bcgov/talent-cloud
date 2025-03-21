@@ -9,24 +9,34 @@ import {
   Patch,
   Query,
   Req,
+  StreamableFile,
   UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiProduces,
+} from '@nestjs/swagger';
+import { json2csv } from 'json-2-csv';
 import { UpdateResult } from 'typeorm';
+import { Readable } from 'stream';
 import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto';
 import { EmcrService } from './emcr.service';
+import { EmcrRO } from './ro';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
-import { Roles } from '../auth/roles.decorator';
+import { Public } from '../auth/public.decorator';
+import { EmcrCsvHeaders } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
 import { GetPersonnelRO, UpdatePersonnelDTO } from '../personnel';
+import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
+import { PersonnelService } from '../personnel/personnel.service';
 import { QueryTransformPipe } from '../query-validation.pipe';
 import { EmcrUpdateAdapter } from './dto/helpers';
-import { EmcrRO } from './ro';
-import { PersonnelService } from '../personnel/personnel.service';
 import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
-import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
@@ -65,6 +75,36 @@ export class EmcrController {
       rows: query.rows,
       page: query.page,
     };
+  }
+
+  @ApiOperation({
+    summary: 'Download EMCR Personnel CSV Endpoint',
+    description: 'Returns a CSV file with all listed EMCR personnel',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @ApiProduces('text/csv')
+  //@Programs(Program.EMCR)
+  //@Roles(Role.COORDINATOR)
+  @Public()
+  @Get('/export-test')
+  async exportEmcrPersonnelToCSV(): Promise<StreamableFile> {
+    const csvRawData = await this.emcrService.getEmcrPersonnelforCSV();
+
+    //convert input data to CSV format and prettify headers
+    const csvConverted = json2csv(csvRawData, {
+      keys: EmcrCsvHeaders,
+      useLocaleFormat: true,
+    });
+
+    const csvStream = Readable.from(csvConverted);
+
+    return new StreamableFile(csvStream, {
+      type: 'text/csv',
+      disposition: 'attachment; filename="EMCR_Personnel_Details.csv"',
+    });
   }
 
   @ApiOperation({
