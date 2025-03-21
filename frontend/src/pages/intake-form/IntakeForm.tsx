@@ -112,7 +112,7 @@ const IntakeForm = () => {
         validationSchema={stepValidation[step]}
         onSubmit={handleSubmit}
       >
-        {({ validateForm }) => (
+        {({ validateForm, values }) => (
           <Form>
             <div className="h-full flex flex-col justify-between">
               <TabGroup
@@ -120,7 +120,10 @@ const IntakeForm = () => {
                 manual
                 selectedIndex={step}
                 className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-                onChange={(index) => handleValidateStep(validateForm, index)}
+                onChange={(index) => {
+                  handleValidateStep(validateForm, index);
+                  saveUpdateForm(values);
+                }}
               >
                 <TabList className="flex flex-col">
                   {formTabs.map((tab: FormTab, index: number) => (
