@@ -85,12 +85,7 @@ export const skillsDetails: Skills = {
       languageProficiency: '',
     },
   ],
-  tools: [
-    {
-      tool: undefined,
-      toolProficiency: '',
-    },
-  ],
+  tools: [{ tool: undefined, toolProficiency: '' }],
   certifications: [
     {
       certification: undefined,
@@ -102,6 +97,7 @@ export const skillsDetails: Skills = {
 export const programDetails: ProgramAck = {
   program: '',
   acknowledgement: [],
+  disabledProgram: '',
 };
 
 export const initialValueSteps: {

@@ -132,7 +132,7 @@ export class IntakeFormService {
     req: RequestWithRoles,
   ): Promise<Partial<IntakeFormRO>> {
     const personnel = await this.personnelService.findOneByEmail(req.idir);
-console.log(personnel, "PERSON")
+
     const existingform = await this.intakeFormRepository.findOneBy({
       createdByEmail: req.idir,
     });
@@ -147,6 +147,7 @@ console.log(personnel, "PERSON")
       
     ) {
       if(personnel){
+        existingform.personnel.disabledProgram = personnel.emcr ? Program.EMCR : Program.BCWS
         return existingform.toResponseObject(
           personnel.emcr ? Program.EMCR : Program.BCWS,
         );
@@ -165,6 +166,7 @@ console.log(personnel, "PERSON")
       intakeForm.program = personnel.emcr ? Program.BCWS : Program.EMCR;
       intakeForm.personnel = this.mapPersonnelToForm(personnel);
       intakeForm.personnel.program = personnel.emcr ? Program.BCWS : Program.EMCR;
+      intakeForm.personnel.disabledProgram = personnel.emcr ? Program.EMCR : Program.BCWS
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject(
         personnel.emcr ? Program.EMCR : Program.BCWS,
@@ -267,7 +269,7 @@ throw Error
       preocExperience: personnel.preocExperience === 'true' ? true : false,
       emergencyExperience:
         personnel.emergencyExperience === 'true' ? true : false,
-      experiences: personnel.functions && personnel.functions?.map((item) => {
+      experiences: personnel.functions && personnel.functions?.filter(itm => !!itm).map((item) => {
         if(item){
         const functionExp = new EmcrPersonnelExperienceDTO();
         functionExp.functionId = item.id;
@@ -344,7 +346,10 @@ throw Error
         }
         const certification = new PersonnelCertificationEntity();
         certification.certificationId = item.certification.id
-        certification.expiry = item.expiry ?? undefined;
+        if(item.expiry){
+          certification.expiry = item.expiry ?? undefined;
+        }
+        
         return certification;
       }) : [],
       emergencyContactFirstName: personnel.emergencyContactFirstName,

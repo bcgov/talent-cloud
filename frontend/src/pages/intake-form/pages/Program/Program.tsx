@@ -13,9 +13,6 @@ import { components } from './components';
 // context
 import { useFormikContext } from 'formik';
 
-// hooks
-import { useIntakeForm } from '@/hooks/useIntakeForm';
-
 // util
 import { renderIntakeFormComponent } from '../../utils/helpers';
 
@@ -30,13 +27,11 @@ import {
 
 export const ProgramPage = () => {
   const {
-    values: { program },
+    values: { program, disabledProgram },
   } = useFormikContext<IntakeFormValues>();
 
-  const { currentProgram } = useIntakeForm();
-
   const [dynamicFields, setFields] = useState<FormFields[]>([
-    { ...fields[0], disabled: currentProgram ? true : false },
+    { ...fields[0], disabled: disabledProgram ? true : false },
   ]);
 
   useEffect(() => {

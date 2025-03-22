@@ -6,6 +6,7 @@ export interface IntakeFormPersonnelData {
   firstName?: string;
   lastName?: string;
   program?: string;
+  disabledProgram?: string;
   employeeId?: string;
   paylistId?: string;
   email: string;

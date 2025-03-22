@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useAxios } from './useAxios';
 // enums & types
-import type { Program } from '@/common';
 import type {
   IntakeFormSubmissionData,
   IntakeFormValues,
@@ -15,7 +14,6 @@ export const useIntakeForm = () => {
 
   const [formData, setFormData] = useState<IntakeFormSubmissionData>();
   const [loading, setLoading] = useState(false);
-  const [currentProgram, setCurrentProgram] = useState<Program>();
 
   const { showAlert } = useAlert();
   const [disabledSteps, setDisabledSteps] = useState([5]);
@@ -28,7 +26,6 @@ export const useIntakeForm = () => {
         const res = await AxiosPrivate.get(`/intake-form`);
 
         setFormData(res.data);
-        setCurrentProgram(res.data.currentProgram);
         setStep(res.data.step);
       } catch (e) {
         showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
@@ -51,12 +48,10 @@ export const useIntakeForm = () => {
   };
 
   const handleSubmit = async (values: IntakeFormValues) => {
-    values.primaryPhoneNumber = values.primaryPhoneNumber.replace(/[^\d]/g, '');
+    values.primaryPhoneNumber = values?.primaryPhoneNumber?.replace(/[^\d]/g, '');
     values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
-    values.emergencyContactPhoneNumber = values.emergencyContactPhoneNumber.replace(
-      /[^\d]/g,
-      '',
-    );
+    values.emergencyContactPhoneNumber =
+      values?.emergencyContactPhoneNumber?.replace(/[^\d]/g, '');
     values.secondaryPhoneNumber = values.supervisorPhoneNumber?.replace(
       /[^\d]/g,
       '',
@@ -86,8 +81,6 @@ export const useIntakeForm = () => {
     setFormData,
     loading,
     handleSubmit,
-
-    currentProgram,
     step,
     handleSetStep,
     disabledSteps,

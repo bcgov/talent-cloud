@@ -68,11 +68,11 @@ export interface FormSection {
 }
 
 export interface ToolsSkill {
-  tool: {
+  tool?: {
     id: number;
     name: string;
   };
-  toolProficiency: string;
+  toolProficiency?: string;
 }
 [];
 
@@ -150,6 +150,7 @@ export interface SectionChoiceBcws {
 export interface ProgramAck {
   program?: Program | string;
   acknowledgement?: string[];
+  disabledProgram?: Program | string;
 }
 
 // other skills & qualifications
