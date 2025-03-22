@@ -1,5 +1,5 @@
 // common
-import { Ministry, Program, UnionMembership } from '@/common';
+import { Ministry, MinistryName, Program, UnionMembership } from '@/common';
 import {
   BcwsTravelPreference,
   EmcrTravelPreference,
@@ -244,7 +244,7 @@ const PersonalDetailsTab = {
           required: true,
           placeholder: 'Select an option',
           options: Object.values(Ministry).map((itm) => ({
-            label: itm,
+            label: MinistryName[itm],
             value: itm,
           })),
         },
@@ -372,7 +372,7 @@ const PersonalDetailsTab = {
         {
           name: 'supervisorPhoneNumber',
           label: 'Supervisor Phone Number',
-          type: 'text',
+          type: 'tel',
           component: TextField,
           required: false,
           placeholder: '000-000-0000',

@@ -17,16 +17,19 @@ export const useIntakeForm = () => {
 
   const { showAlert } = useAlert();
   const [disabledSteps, setDisabledSteps] = useState([5]);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<number>(0);
+  const [errorSteps, setErrorSteps] = useState<number[]>([]);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
-
         setFormData(res.data);
-        setStep(res.data.step);
+        setStep(res.data.personnel.step);
+        setErrorSteps(res.data.personnel.errorSteps);
+        setCompletedSteps(res.data.personnel.completedSteps);
       } catch (e) {
         showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
       } finally {
@@ -39,8 +42,7 @@ export const useIntakeForm = () => {
     try {
       await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
         ...formData,
-        step,
-        personnel: values,
+        personnel: { ...values, step, errorSteps, completedSteps },
       });
     } catch (e) {
       showAlert({ type: AlertType.ERROR, message: 'Error Saving Form' });
@@ -52,7 +54,7 @@ export const useIntakeForm = () => {
     values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
     values.emergencyContactPhoneNumber =
       values?.emergencyContactPhoneNumber?.replace(/[^\d]/g, '');
-    values.secondaryPhoneNumber = values.supervisorPhoneNumber?.replace(
+    values.supervisorPhoneNumber = values.supervisorPhoneNumber?.replace(
       /[^\d]/g,
       '',
     );
@@ -75,6 +77,13 @@ export const useIntakeForm = () => {
   const handleSetStep = (step: number) => {
     setStep(step);
   };
+  const handleSetErrorSteps = (steps: number[]) => {
+    setErrorSteps(steps);
+  };
+  const handleSetCompletedSteps = (steps: number[]) => {
+    setCompletedSteps(steps);
+  };
+
   return {
     saveUpdateForm,
     formData,
@@ -84,5 +93,9 @@ export const useIntakeForm = () => {
     step,
     handleSetStep,
     disabledSteps,
+    handleSetErrorSteps,
+    handleSetCompletedSteps,
+    errorSteps,
+    completedSteps,
   };
 };

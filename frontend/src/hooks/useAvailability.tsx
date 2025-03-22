@@ -47,7 +47,6 @@ const useAvailability = ({
   };
 
   const saveConfirmedUntil = async (date: Date) => {
-    console.log(date);
     await AxiosPrivate.patch(
       encodeURI(`/personnel/${personnelId}/availability/confirm`),
       { date: date },

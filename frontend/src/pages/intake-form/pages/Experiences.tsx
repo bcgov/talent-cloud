@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { FormSection } from '../components/FormSection';
 import type {
+  FormFields,
   FormSection as FormSectionType,
   IntakeFormValues,
 } from '../constants/types';
@@ -8,6 +9,7 @@ import { useFormikContext } from 'formik';
 import { FormField } from '../fields/FormField';
 import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 import { intakeFormComponents, renderIntakeFormComponent } from '../utils/helpers';
+import { CheckboxGroupField } from '../fields/CheckBoxGroupField';
 
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
@@ -19,11 +21,17 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       thirdChoiceFunction,
       firstChoiceSection,
       secondChoiceSection,
+      thirdChoiceSection,
+      program,
     },
   } = useFormikContext<IntakeFormValues>();
 
   useEffect(() => {
-    if (!functions || (functions?.length === 0 && firstChoiceFunction)) {
+    if (
+      !functions ||
+      (functions?.length === 0 && firstChoiceFunction) ||
+      functions[0] === undefined
+    ) {
       setFieldValue('functions', [firstChoiceFunction]);
     } else {
       const functionSet = functions && functions.length > 0 && new Set(functions);
@@ -76,17 +84,15 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
     }
   }, [thirdChoiceFunction]);
 
-  const { values } = useFormikContext<IntakeFormValues>();
-
   // set description based on program
   let description;
-  if (values.program === 'all') {
+  if (program === 'all') {
     description =
       'The EMCR and BCWS CORE Team program streams operate very differently with distinct sections and/or roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.';
-  } else if (values.program === 'bcws') {
+  } else if (program === 'bcws') {
     description =
       'The BCWS CORE Team program stream operates with distinct sections and roles. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.';
-  } else if (values.program === 'emcr') {
+  } else if (program === 'emcr') {
     description =
       'The EMCR CORE Team program stream operates with distinct sections. For this step, please carefully review their requirements in the blue banners as you proceed. Your responses will help us match your expertise and skillset to suitable roles.';
   } else {
@@ -106,7 +112,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                 header={section.header}
               >
                 <>
-                  {section.fields.map((fieldItm) => (
+                  {section.fields?.map((fieldItm: FormFields) => (
                     <Fragment key={fieldItm.name}>
                       {intakeFormComponents.includes(fieldItm.type) ? (
                         <div className="col-span-2">
@@ -118,6 +124,11 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
 
                           <MultiSelectGroup field={fieldItm} />
                         </div>
+                      ) : fieldItm.type === 'multiselect-group' ? (
+                        <CheckboxGroupField
+                          field={fieldItm}
+                          options={fieldItm.options}
+                        />
                       ) : (
                         <div
                           className={
@@ -129,6 +140,30 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                           <FormField
                             key={fieldItm.name}
                             {...fieldItm}
+                            options={fieldItm.options?.map((itm) => ({
+                              ...itm,
+                              disabled:
+                                ([
+                                  'firstChoiceFunction',
+                                  'secondChoiceFunction',
+                                  'thirdChoiceFunction',
+                                ].includes(fieldItm.name) &&
+                                  [
+                                    firstChoiceFunction,
+                                    secondChoiceFunction,
+                                    thirdChoiceFunction,
+                                  ].includes(itm.value)) ||
+                                ([
+                                  'firstChoiceSection',
+                                  'secondChoiceSection',
+                                  'thirdChoiceSection',
+                                ].includes(fieldItm.name) &&
+                                  [
+                                    firstChoiceSection,
+                                    secondChoiceSection,
+                                    thirdChoiceSection,
+                                  ].includes(itm.value)),
+                            }))}
                             disabled={
                               (fieldItm.name === 'secondChoiceFunction' &&
                                 !firstChoiceFunction) ||

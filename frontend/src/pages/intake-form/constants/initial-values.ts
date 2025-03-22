@@ -117,6 +117,9 @@ export const initialValueSteps: {
 };
 
 export const intakeFormInitialValues: IntakeFormValues = {
+  step: 0,
+  completedSteps: [],
+  errorSteps: [],
   ...programDetails,
   ...personalAndEmployeeDetails,
   ...experienceDetails,

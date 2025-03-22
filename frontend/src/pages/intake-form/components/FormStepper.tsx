@@ -10,7 +10,7 @@ export const FormStepper = ({
   tab,
   index,
   formTabs,
-  stepErrors,
+  errorSteps,
   completedSteps,
   disabled,
   step,
@@ -18,7 +18,7 @@ export const FormStepper = ({
   tab: FormTab;
   index: number;
   formTabs: FormTab[];
-  stepErrors?: number[] | null;
+  errorSteps?: number[] | null;
   completedSteps?: number[] | null;
 
   disabled: boolean;
@@ -28,7 +28,7 @@ export const FormStepper = ({
 
   useEffect(() => {
     (async () => {
-      if (stepErrors?.includes(step)) {
+      if (errorSteps?.includes(step)) {
         await validateForm();
       }
     })();
@@ -48,7 +48,7 @@ export const FormStepper = ({
           <div className="flex flex-row space-x-2 flex-nowrap text-nowrap h-full">
             <div
               className={clsx(
-                stepErrors?.includes(index)
+                errorSteps?.includes(index)
                   ? 'bg-errorRed text-white border-2 border-errorRed'
                   : selected || completedSteps?.includes(index)
                     ? 'bg-blue-800 text-white border-2 border-blue-800'
@@ -68,7 +68,7 @@ export const FormStepper = ({
             <div>
               <p
                 className={clsx(
-                  stepErrors?.includes(index)
+                  errorSteps?.includes(index)
                     ? 'text-errorRed font-bold'
                     : selected || completedSteps?.includes(index)
                       ? 'outline-none text-blue-800 font-bold'

@@ -21,6 +21,10 @@ const FormWrapper = () => {
     saveUpdateForm,
     disabledSteps,
     handleSetStep,
+    handleSetErrorSteps,
+    handleSetCompletedSteps,
+    errorSteps,
+    completedSteps,
   } = useIntakeForm();
 
   const { functions, locations, tools, sections, certificates } =
@@ -86,6 +90,17 @@ const FormWrapper = () => {
         return [];
     }
   };
+
+  const initialValues: IntakeFormValues = {
+    ...formData?.personnel,
+    firstName: tokenParsed?.given_name,
+    lastName: tokenParsed?.family_name
+      ? tokenParsed?.family_name
+      : tokenParsed?.given_name,
+    email: tokenParsed?.email,
+    program: formData?.personnel?.program,
+  };
+
   if (!tokenParsed) {
     return;
   }
@@ -99,16 +114,7 @@ const FormWrapper = () => {
           <Loading />
         ) : (
           <Formik
-            initialValues={{
-              ...formData.personnel,
-              firstName: tokenParsed.given_name,
-              lastName: tokenParsed.family_name
-                ? tokenParsed.family_name
-                : tokenParsed.given_name,
-              email: tokenParsed.email,
-              idir_user_guid: tokenParsed.idir_user_guid,
-              program: formData?.personnel?.program,
-            }}
+            initialValues={initialValues}
             validationSchema={stepValidation[step]}
             onSubmit={handleSubmit}
           >
@@ -117,6 +123,10 @@ const FormWrapper = () => {
                 validateForm={validateForm}
                 values={values}
                 step={step}
+                handleSetErrorSteps={handleSetErrorSteps}
+                handleSetCompletedSteps={handleSetCompletedSteps}
+                errorSteps={errorSteps}
+                completedSteps={completedSteps}
                 handleSetStep={handleSetStep}
                 saveUpdateForm={saveUpdateForm}
                 tabs={formTabs.map((tab) => ({
