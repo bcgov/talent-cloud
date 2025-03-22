@@ -74,7 +74,6 @@ export interface ToolsSkill {
   };
   toolProficiency?: string;
 }
-[];
 
 // common
 // common
