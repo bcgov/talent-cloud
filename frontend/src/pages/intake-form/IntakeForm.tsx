@@ -77,12 +77,9 @@ const IntakeForm = ({
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
   // if there are no errors on  the current step, remove this from the errorSteps array
   const handleValidateStep = async (index: number) => {
-    console.log(index, step);
     const formErrors = await validateForm();
 
-    console.log(Object.values(formErrors).length === 0);
     if (Object.values(formErrors).length === 0) {
-      console.log(formErrors, 'FORM ERRORS');
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
       await saveUpdateForm(values);
