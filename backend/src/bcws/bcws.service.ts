@@ -17,6 +17,7 @@ import {
 } from './dto/update-bcws-personnel-roles.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { BcwsRole, BcwsRoleName, SectionName, Status } from '../common/enums';
+import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 
 @Injectable()
 export class BcwsService {
@@ -216,12 +217,26 @@ export class BcwsService {
    * Get BCWS Personnel for CSV Export
    * Extracts full raw JSON list of all BCWS-flagged personnel
    * and associated table columns for export to CSV file
-   * @returns {BcwsPersonnelEntity[]} List of personnel, converted to JSON string
+   * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
    */
   async getBcwsPersonnelforCSV(): Promise<BcwsPersonnelEntity[]> {
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
-    qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
+    //join with personnel table and append last deployed date as subselection
+    qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel').addSelect(
+      (subQuery) => {
+        return subQuery
+          .select('availability.date')
+          .from(AvailabilityEntity, 'availability')
+          .where('availability.personnel = personnel.id')
+          .andWhere('availability.availabilityType = :type', {
+            type: 'DEPLOYED',
+          })
+          .orderBy('availability.date', 'DESC')
+          .take(1);
+      },
+      'last_deployed',
+    );
     qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
     qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');

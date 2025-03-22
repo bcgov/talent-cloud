@@ -6,7 +6,9 @@ using preassigned key-value pairings
 Any future adjustments to the CSV output data will require adding the appropriate
 header replacements to this const (with getRawMany(), all field names are generated
 based on their respective DB table/column (or TypeORM alias) name regardless of joins;
-for instance, personnel.first_name becomes 'personnel_first_name')
+for instance, personnel.first_name becomes 'personnel_first_name').  Note also that
+any additional columns added to existing tables also need to be accounted for here
+due to the way TypeORM handles joins
 
 Columns labelled "Internal Use" are linking PKs and the like, they don't have much
 reporting value but TypeORM's select logic makes excluding them prohibitively difficult
@@ -109,6 +111,34 @@ export const EmcrCsvHeaders = [
     title: 'Availability Confirmed On',
   },
   {
+    field: 'personnel_chips_last_ping',
+    title: 'CHIPS - Last Ping',
+  },
+  {
+    field: 'personnel_chips_last_action_date',
+    title: 'CHIPS - Last Action Date',
+  },
+  {
+    field: 'personnel_chips_profile_missing',
+    title: 'CHIPS - Profile Missing',
+  },
+  {
+    field: 'personnel_chips_last_updated_properties',
+    title: 'CHIPS - Last Updated Properties',
+  },
+  {
+    field: 'personnel_chips_issues',
+    title: 'CHIPS - Issues',
+  },
+  {
+    field: 'personnel_chips_ignore_properties',
+    title: 'CHIPS - Ignore Properties',
+  },
+  {
+    field: 'personnel_chips_training_data',
+    title: 'CHIPS - Training Data',
+  },
+  {
     field: 'personnel_work_location',
     title: 'Work Location ID (Internal Use)',
   },
@@ -157,4 +187,5 @@ export const EmcrCsvHeaders = [
     field: 'recommitmentCycle_reinitiation_end_date',
     title: 'Recommitment Cycle Reinitiation End Date',
   },
+  { field: 'last_deployed', title: 'Last Deployed Date' },
 ];
