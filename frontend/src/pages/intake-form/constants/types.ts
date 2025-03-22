@@ -1,5 +1,5 @@
 // formik
-import type { Program } from '@/common';
+import type { FunctionType, Location, Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
@@ -15,12 +15,7 @@ export interface FormFields {
   hidden?: boolean;
   label: string | ReactComponentElement<any>;
   name: string;
-  options?: {
-    label: string | ReactComponentElement<any>;
-    value: string;
-    disabled?: boolean;
-    name?: string;
-  }[];
+  options?: any[];
   placeholder?: string;
   required?: boolean;
   type: string;
@@ -28,11 +23,12 @@ export interface FormFields {
   program?: string;
   disabledProgram?: boolean;
   colSpan?: number;
-  fields?: FormFields[];
+  nestedFields?: FormFields[];
   error?: FormikErrors<any>;
   section?: string;
   component?: (props: any) => JSX.Element;
   content?: string | ReactComponentElement<any>;
+  value?: any;
 }
 
 export interface FormTab {
@@ -68,51 +64,49 @@ export interface FormSection {
   fields?: FormFields[];
   program?: string;
   header?: ReactComponentElement<any>;
+  segments?: any;
 }
 
 export interface ToolsSkill {
-  toolId: string;
-  toolProficiency: string;
+  tool?: {
+    id: number;
+    name: string;
+  };
+  toolProficiency?: string;
 }
-export const toolSkills: ToolsSkill[] = [
-  {
-    toolId: '',
-    toolProficiency: '',
-  },
-];
 
 // common
 // common
 export interface PersonalDetails {
-  firstName: string;
-  lastName: string;
-  primaryPhoneNumber: string;
+  firstName?: string;
+  lastName?: string;
+  primaryPhoneNumber?: string;
   secondaryPhoneNumber?: string;
-  homeLocation?: string;
-  email: string;
+  homeLocation?: Location;
+  email?: string;
 }
 
 // employment details
 
 export interface EmploymentDetails {
-  jobTitle: string;
-  employeeId: string;
-  email: string;
-  workPhoneNumber: string;
-  ministry: string;
-  division: string;
-  unionMembership: string;
-  paylistId: string;
-  travelPreferenceBcws: string;
-  travelPreferenceEmcr: string;
+  jobTitle?: string;
+  employeeId?: string;
+  email?: string;
+  workPhoneNumber?: string;
+  ministry?: string;
+  division?: string;
+  unionMembership?: string;
+  paylistId?: string;
+  travelPreferenceBcws?: string;
+  travelPreferenceEmcr?: string;
 }
 
 // supervisor and liaison details, travel preferences
 
 export interface SupervisorDetails {
-  supervisorFirstName: string;
-  supervisorLastName: string;
-  supervisorEmail: string;
+  supervisorFirstName?: string;
+  supervisorLastName?: string;
+  supervisorEmail?: string;
   supervisorPhoneNumber?: string;
 }
 export interface LiaisonDetails {
@@ -123,10 +117,10 @@ export interface LiaisonDetails {
   liaisonPhoneNumber?: string;
 }
 export interface EmergencyContactDetails {
-  emergencyContactFirstName: string;
-  emergencyContactLastName: string;
-  emergencyContactPhoneNumber: string;
-  emergencyContactRelationship: string;
+  emergencyContactFirstName?: string;
+  emergencyContactLastName?: string;
+  emergencyContactPhoneNumber?: string;
+  emergencyContactRelationship?: string;
 }
 export interface GeneralEmergencyManagementExperience {
   emergencyExperience?: string;
@@ -136,43 +130,47 @@ export interface GeneralEmergencyManagementExperience {
 }
 
 export interface SectionChoiceEmcr {
-  functions: string[];
-  firstChoiceFunction: string;
-  secondChoiceFunction?: string;
-  thirdChoiceFunction?: string;
+  functions?: FunctionType[];
+  firstChoiceFunction?: FunctionType;
+  secondChoiceFunction?: FunctionType;
+  thirdChoiceFunction?: FunctionType;
 }
 
 export interface SectionChoiceBcws {
-  firstChoiceSection: string;
+  firstChoiceSection?: string;
   secondChoiceSection?: string;
   thirdChoiceSection?: string;
 }
 
-export interface SectionRolesBcws {
-  roles: { [key: string]: string[] }[];
-}
+// export interface SectionRolesBcws {
+//   roles: { [key: string]: string[] }[];
+// }
 
 export interface ProgramAck {
-  program?: Program;
-  acknowledgement: string[];
+  program?: Program | string;
+  acknowledgement?: string[];
+  disabledProgram?: Program | string;
 }
 
 // other skills & qualifications
 
 export interface LanguageSkill {
-  language: string;
-  languageProficiency: string;
+  language?: string;
+  languageProficiency?: string;
 }
 
 export interface CertificationSkill {
-  certificationId: string;
+  certification?: {
+    name: string;
+    id: number;
+  };
   expiry?: Date;
 }
 export interface Skills {
-  languages: LanguageSkill[];
-  certifications: CertificationSkill[];
-  tools: ToolsSkill[];
-  driverLicense: string[];
+  languages?: LanguageSkill[];
+  certifications?: CertificationSkill[];
+  tools?: ToolsSkill[];
+  driverLicense?: string[];
 }
 // review & submit
 
@@ -203,6 +201,5 @@ export type IntakeFormValues = ProgramAck &
   LiaisonDetails &
   SectionChoiceBcws &
   SectionChoiceEmcr &
-  SectionRolesBcws &
   GeneralEmergencyManagementExperience &
   Skills;

@@ -30,7 +30,7 @@ export const DateField = ({ field }: { field: FieldInputProps<any> }) => {
         <>
           <MenuButton
             aria-label="Month Select Menu Button"
-            className={classes.menu.container}
+            className={classes.menu.formContainer}
           >
             <div className="flex flex-row items-center justify-between">
               {field.value ? (

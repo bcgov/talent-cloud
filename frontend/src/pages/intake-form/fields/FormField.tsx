@@ -66,7 +66,7 @@ export const FormField = (props: {
       {errors && (
         <div className="font-normal text-sm text-errorRed">
           {
-            (errors as FormikErrors<{ [key: string]: string }>)[
+            (errors as FormikErrors<{ [key: string]: string }>)?.[
               name as keyof typeof errors
             ]
           }

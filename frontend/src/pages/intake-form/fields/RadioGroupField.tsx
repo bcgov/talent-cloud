@@ -1,10 +1,10 @@
 // formik
 import type { FieldInputProps } from 'formik';
-import { Field } from 'formik';
+import { Field, useFormikContext } from 'formik';
 
 // form
-import { useIntakeForm } from '@/hooks/useIntakeForm';
 import clsx from 'clsx';
+import type { IntakeFormValues } from '../constants/types';
 
 export const RadioGroupField = ({
   field,
@@ -13,8 +13,8 @@ export const RadioGroupField = ({
   field: FieldInputProps<any>;
   options?: any[];
 }) => {
-  const { currentProgram } = useIntakeForm();
-  const disabled = field.name === 'program' && currentProgram ? true : false;
+  const { values } = useFormikContext<IntakeFormValues>();
+  const disabled = field.name === 'program' && values.disabledProgram ? true : false;
 
   return (
     <>

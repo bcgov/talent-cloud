@@ -1,25 +1,35 @@
-import type { FormikErrors } from 'formik';
-import { Form, Formik } from 'formik';
-import { intakeFormInitialValues } from './constants/initial-values';
-import { useKeycloak } from '@react-keycloak/web';
+import type { FormikErrors, FormikValues } from 'formik';
+import { Form } from 'formik';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useState } from 'react';
-import { stepValidation } from './constants/validation';
-import { useIntakeForm } from '@/hooks/useIntakeForm';
+
 import { FormButtonNavigation } from './components/FormButtonNavigation';
-import { FormStatus, type FormTab, type IntakeFormValues } from './constants/types';
+import { type FormTab, type IntakeFormValues } from './constants/types';
 import { formTabs } from './utils/tab-fields';
 import { FormStepper } from './components/FormStepper';
-import { Program } from '@/common';
-import { Navigate } from 'react-router';
-import { Routes } from '@/routes';
+import { handleFilterProgram } from './utils/helpers';
 
-const IntakeForm = () => {
-  const { keycloak } = useKeycloak();
-  const { tokenParsed } = keycloak;
+const IntakeForm = ({
+  validateForm,
+  values,
+  step,
+  handleSetStep,
+  saveUpdateForm,
+  disabledSteps,
+  tabs,
+}: {
+  validateForm: () => any;
+  values: any;
 
-  const { formData, saveUpdateForm, loading, step, handleSetStep, handleSubmit } =
-    useIntakeForm();
+  handleSetStep: (step: number) => void;
+
+  step: number;
+
+  saveUpdateForm: (values: FormikValues) => void;
+
+  disabledSteps: number[];
+  tabs: FormTab[];
+}) => {
   const [stepErrors, setStepErrors] = useState<number[] | null>();
   const [completedSteps, setCompletedSteps] = useState<number[] | null>();
 
@@ -80,98 +90,90 @@ const IntakeForm = () => {
     }
   };
 
-  if (!tokenParsed) {
-    return;
-  }
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (formData?.currentProgram === Program.ALL) {
-    return <Navigate to={Routes.MemberProfile} />;
-  } else {
-    return (
-      <Formik
-        initialValues={{
-          ...intakeFormInitialValues,
-          ...formData?.personnel,
-          firstName: tokenParsed.given_name,
-          lastName: tokenParsed.family_name
-            ? tokenParsed.family_name
-            : tokenParsed.given_name,
-          email: tokenParsed.email,
-          idir_user_guid: tokenParsed.idir_user_guid,
-          program: formData?.program ?? formData?.personnel?.program,
-        }}
-        validationSchema={stepValidation[step]}
-        onSubmit={async (values) => await handleSubmit(values)}
-      >
-        {({ validateForm }) => (
-          <Form>
-            <div className="h-full flex flex-col justify-between">
-              <TabGroup
-                vertical
-                manual
-                selectedIndex={step}
-                className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-                onChange={(index) => handleValidateStep(validateForm, index)}
-              >
-                <TabList className="flex flex-col">
-                  {formTabs.map((tab: FormTab, index: number) => (
-                    <FormStepper
-                      key={tab.value}
-                      tab={tab}
-                      index={index}
-                      formTabs={formTabs}
-                      stepErrors={stepErrors}
-                      completedSteps={completedSteps}
-                      disabled={formData?.status === FormStatus.SUBMITTED}
-                      step={step}
-                    />
-                  ))}
-                </TabList>
-                <TabPanels>
-                  {formTabs.map((tab: FormTab) => (
-                    <TabPanel key={tab.value}>
-                      {() => (
-                        <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
-                          <h3>{tab.title ?? tab.label}</h3>
-                          {tab.description && (
-                            <div className="text-sm py-6">{tab.description}</div>
-                          )}
-
-                          <div className="flex flex-col space-y-8  w-full">
-                            {tab.component({ sections: tab.sections })}
-                          </div>
-                        </div>
-                      )}
-                    </TabPanel>
-                  ))}
-                </TabPanels>
-              </TabGroup>
-
-              <FormButtonNavigation
-                saveUpdateForm={saveUpdateForm}
-                handlePrevious={() =>
-                  handleValidateStep(
-                    validateForm,
-                    step - (1 % Object.keys(formTabs).length),
-                  )
-                }
-                handleNext={() =>
-                  handleValidateStep(
-                    validateForm,
-                    step + (1 % Object.keys(formTabs).length),
-                  )
-                }
-                disableNext={step === formTabs.length - 2}
-                disablePrevious={step === 0}
+  return (
+    <Form>
+      <div className="h-full flex flex-col justify-between">
+        <TabGroup
+          vertical
+          manual
+          selectedIndex={step}
+          className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
+          onChange={(index) => {
+            handleValidateStep(validateForm, index);
+            saveUpdateForm(values);
+          }}
+        >
+          <TabList className="flex flex-col">
+            {tabs.map((tab: FormTab, index: number) => (
+              <FormStepper
+                key={tab.value}
+                tab={tab}
+                index={index}
+                formTabs={formTabs}
+                stepErrors={stepErrors}
+                completedSteps={completedSteps}
+                disabled={disabledSteps.includes(index)}
+                step={step}
               />
-            </div>
-          </Form>
-        )}
-      </Formik>
-    );
-  }
+            ))}
+          </TabList>
+          <TabPanels>
+            {tabs.map((tab: FormTab) => (
+              <TabPanel key={tab.value}>
+                {() => (
+                  <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
+                    <h3>{tab.title ?? tab.label}</h3>
+                    {tab.description && (
+                      <div className="text-sm py-6">{tab.description}</div>
+                    )}
+
+                    <div className="flex flex-col space-y-8  w-full">
+                      {tab.component({
+                        sections: tab.sections
+                          ?.filter((itm) =>
+                            itm.program && values.program
+                              ? handleFilterProgram(itm, values.program)
+                              : itm,
+                          )
+                          .map((itm) => ({
+                            ...itm,
+                            fields: itm.fields?.filter((itm) =>
+                              itm.program && values.program
+                                ? handleFilterProgram(itm, values.program)
+                                : itm,
+                            ),
+                          })),
+                      })}
+                    </div>
+                  </div>
+                )}
+              </TabPanel>
+            ))}
+          </TabPanels>
+        </TabGroup>
+
+        <FormButtonNavigation
+          step={step}
+          saveUpdateForm={saveUpdateForm}
+          handlePrevious={() =>
+            handleValidateStep(
+              validateForm,
+              step - (1 % Object.keys(formTabs).length),
+            )
+          }
+          handleNext={() =>
+            handleValidateStep(
+              validateForm,
+              step + (1 % Object.keys(formTabs).length),
+            )
+          }
+          disableNext={step === formTabs.length - 2}
+          disablePrevious={step === 0}
+          handleSetCompletedStep={handleSetCompletedStep}
+        />
+      </div>
+    </Form>
+  );
 };
 
 export default IntakeForm;

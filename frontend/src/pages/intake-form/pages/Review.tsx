@@ -1,19 +1,125 @@
 import { useFormikContext } from 'formik';
-import type { IntakeFormValues } from '../constants/types';
+import type {
+  FormFields,
+  FormSection as FormSectionType,
+  IntakeFormValues,
+} from '../constants/types';
 import { handleFilterProgram } from '../utils/helpers';
 import { FormSection } from '../components/FormSection';
-import { formTabs } from '../utils/tab-fields';
-import { useProgramFieldData } from '@/hooks';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { ToolsProficiencyName } from '@/common/enums/tools.enum';
-import { Program } from '@/common';
+import { format } from 'date-fns';
 import { SectionName } from '@/common/enums/sections.enum';
+import clsx from 'clsx';
+import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 
-export const Review = () => {
+const ReviewFields = ({
+  fields,
+  sectionName,
+}: {
+  fields: FormFields[];
+  sectionName: string;
+}) => {
   const { values } = useFormikContext<IntakeFormValues>();
-  const { certificates, tools, locations, functions } = useProgramFieldData(
-    Program.ALL,
+
+  const getValue = (value: any, name: string) => {
+    switch (name) {
+      case 'homeLocation':
+        return values?.homeLocation?.locationName;
+      case 'functions':
+        return values.functions
+          ?.filter((itm) => itm && itm.name && itm.name !== '')
+          .map((itm) => itm?.name ?? '')
+          .join('; ');
+      case 'certification':
+        return value ? value?.name : '--';
+      case 'expiry':
+        return value && format(value, 'yyyy-MM-dd');
+      case 'toolProficiency':
+        return ToolsProficiencyName[value as keyof typeof ToolsProficiencyName];
+      case 'travelPreferenceEmcr':
+      case 'travelPreferenceBcws':
+        return (
+          value && TravelPreferenceText[value as keyof typeof TravelPreferenceText]
+        );
+      case 'tool':
+        return value ? value?.name : '--';
+      case 'firstChoiceFunction':
+      case 'secondChoiceFunction':
+      case 'thirdChoiceFunction':
+        return value ? value?.name : '--';
+      case 'firstChoiceSection':
+      case 'secondChoiceSection':
+      case 'thirdChoiceSection':
+        return value && SectionName[value as keyof typeof SectionName];
+      case 'languageProficiency':
+        return LanguageProficiencyName[
+          value as keyof typeof LanguageProficiencyName
+        ];
+      case 'language':
+        return value;
+      default:
+        return value && value !== '' ? value : '--';
+    }
+  };
+  console.log(sectionName);
+  return (
+    <div
+      className={clsx(
+        'col-span-2 gap-y-8 grid grid-cols-2',
+        ['EMCR CORE Team Sections', 'BCWS CORE Team Sections and Roles'].includes(
+          sectionName,
+        ) && 'grid grid-cols-3',
+      )}
+    >
+      {fields?.map((field: any) => (
+        <>
+          {!field.nestedFields ? (
+            <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
+              {field.label && <div className="subtext text-sm">{field.label}</div>}
+              {field.helperText && (
+                <div className="subtext text-sm">{field.helperText}</div>
+              )}
+              <div className="text-[#262729]">
+                {/* {values[field.name as ]} */}
+                {getValue(values?.[field.name as keyof typeof values], field.name)}
+              </div>
+            </div>
+          ) : (
+            <div className="col-span-2">
+              {(values?.[field.name as keyof typeof values] as {}[])?.map(
+                (itm, index) => (
+                  <div className={`grid grid-cols-2 pb-8`} key={index}>
+                    {itm &&
+                      field.nestedFields?.map((innerField: FormFields) => (
+                        <div
+                          className="col-span-1 flex flex-col"
+                          key={innerField.name}
+                        >
+                          <div className="subtext text-sm">{innerField.label}</div>
+                          <div className="text-[#262729] ">
+                            {getValue(
+                              itm?.[innerField.name as keyof typeof itm] ?? '',
+                              innerField?.name,
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ),
+              )}
+            </div>
+          )}
+        </>
+      ))}
+    </div>
   );
+};
+
+export const Review = ({ sections }: { sections: FormSectionType[] }) => {
+  const { values, errors } = useFormikContext<IntakeFormValues>();
+
+  console.log(errors);
 
   // filter non-form related components
   const ignoreComponents = [
@@ -23,226 +129,70 @@ export const Review = () => {
     'bcwsCoreTeamSectionsHeader',
     'bcwsDivider',
   ];
-  const tabSections = formTabs
-    .flatMap((itm) => itm.sections)
-    .filter((itm) => itm !== undefined);
 
-  const sections = tabSections
-    .filter((section) =>
-      values.program && section.program
-        ? handleFilterProgram(section, values.program.toString())
-        : true,
-    )
-    .map((section) => ({
-      ...section,
-      fields: section.fields
-        ?.filter((field) => !ignoreComponents.includes(field.name))
-        .filter((field) =>
-          values.program && field.program
-            ? handleFilterProgram(field, values.program?.toString())
-            : true,
-        ),
-    }));
+  const ignoreFields = [
+    'About supervisor',
+    'Travel Preferences',
+    'bcwsCoreTeamSectionsHeader',
+  ];
 
-  // add missing sections
-  const acks = values.acknowledgement?.map((ack, index) => {
-    return (
-      <div key={index}>
-        <p>{ack}</p>
-      </div>
-    );
-  });
-  const programSectionAndAcknowledgementSection = {
-    name: 'CORE Team Program (Stream) Selection',
-    fields: [
-      {
-        name: '',
-        label: '',
-        type: 'componentBox',
-        component: () => (
-          <div className="col-span-2">
-            <p className="subtext">Acknowledgement for selected program stream(s)</p>
-          </div>
-        ),
-      },
-      {
-        name: '',
-        label: '',
-        type: 'componentBox',
-        component: () => (
-          <div className="col-span-2 flex flex-col gap-2">{acks}</div>
-        ),
-      },
-    ],
-  };
-  sections.unshift(programSectionAndAcknowledgementSection);
-
-  const sectionsWithValues = sections.map((section) => ({
+  const reviewSections = sections?.map((section) => ({
     ...section,
-    fields: section?.fields?.map((field) => {
-      if (field.name === 'homeLocation') {
-        return {
-          ...field,
-          value: locations.find((itm) => itm.id === values.homeLocation)
-            ?.locationName,
-        };
-      }
-      if (field.name === 'liaisonUnknown') {
-        return {
-          ...field,
-          label: "I don't know who my liaison is",
-          value: values.liaisonUnknown,
-        };
-      }
-      if (field.name === 'functions') {
-        return {
-          ...field,
-          label: 'Functions',
-          value: values.functions
-            ?.map((itm) => functions.find((fun) => fun.id.toString() === itm)?.name)
-            .join('; '),
-        };
-      }
-      if (
-        ['firstChoiceSection', 'secondChoiceSection', 'thirdChoiceSection'].includes(
-          field.name,
-        )
-      ) {
-        return {
-          ...field,
-          value:
-            SectionName[
-              values[field.name as keyof typeof values] as keyof typeof SectionName
-            ],
-        };
-      }
-      if (
-        [
-          'firstChoiceFunction',
-          'secondChoiceFunction',
-          'thirdChoiceFunction',
-        ].includes(field.name)
-      ) {
-        return {
-          ...field,
-          value: functions.find(
-            (itm) => itm.id.toString() === values[field.name as keyof typeof values],
-          )?.name,
-        };
-      }
-      return {
-        ...field,
-        value: values[field.name as keyof typeof values],
-      };
-    }),
+    fields: section.fields
+      ?.filter((field) => !ignoreComponents.includes(field.name))
+      .filter((itm) => itm !== undefined)
+      .filter((itm) => !ignoreFields.includes(itm.name))
+      .filter((field) =>
+        values.program && field.program
+          ? handleFilterProgram(field, values.program?.toString())
+          : true,
+      ),
   }));
 
-  // get values for the tools, languages and certifications
-  const finalSections = sectionsWithValues.map((section) => {
-    const filteredFields = section.fields;
-    if (
-      section.fields?.map((itm) =>
-        ['tools', 'certificates', 'languages'].includes(itm.name),
-      )
-    ) {
-      const adjustedFields = [];
-      if (filteredFields) {
-        for (const field of filteredFields) {
-          // remove nesting for some sections
-          if (Array.isArray(field.value)) {
-            for (const value of field.value) {
-              if (section.name === 'Languages') {
-                const languageNameField = {
-                  name: '',
-                  label: 'Language',
-                  colSpan: 1,
-                  value: value['language' as keyof typeof value],
-                  type: 'text',
-                  component: () => <></>,
-                };
-                const languageProficiencyField = {
-                  name: '',
-                  label: 'Proficiency Level',
-                  colSpan: 1,
-                  value:
-                    LanguageProficiencyName[
-                      value['languageProficiency' as keyof typeof value]
-                    ],
-                  type: 'text',
-                  component: () => <></>,
-                };
-                adjustedFields.push(languageNameField, languageProficiencyField);
-              }
+  // add missing sections
 
-              if (section.name === 'Tools & Software') {
-                const toolNameField = {
-                  name: '',
-                  label: 'Tool/Software',
-                  colSpan: 1,
-                  value: tools.find(
-                    (itm) =>
-                      itm.id.toString() === value['toolId' as keyof typeof value],
-                  )?.name, // look up tool by id
-                  type: 'text',
-                  component: () => <></>,
-                };
-                const toolProficiencyField = {
-                  name: '',
-                  label: 'Proficiency Level',
-                  colSpan: 1,
-                  value:
-                    ToolsProficiencyName[
-                      value['toolProficiency' as keyof typeof value]
-                    ],
-                  type: 'text',
-                  component: () => <></>,
-                };
-                adjustedFields.push(toolNameField, toolProficiencyField);
-              }
-              if (section.name === 'Certificates') {
-                const certificateNameField = {
-                  name: '',
-                  label: 'Certification Name',
-                  colSpan: 1,
-                  value: certificates.find(
-                    (itm) =>
-                      itm?.id?.toString() ===
-                      value['certificationId' as keyof typeof value],
-                  )?.name, // look up certification by id
-                  type: 'text',
-                  component: () => <></>,
-                };
-                adjustedFields.push(certificateNameField);
-              }
-            }
-          } else {
-            adjustedFields.push(field);
-          }
-        }
-      }
-      return { ...section, fields: adjustedFields };
-    } else {
-      return section;
-    }
-  });
   return (
-    <div>
-      {finalSections.map((section) => (
-        <FormSection section={section} key={section.name}>
-          <>
-            {section.fields?.map((field) => {
-              return field.type === 'componentBox' && field.component ? (
-                field.component('')
-              ) : (
-                <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
-                  <div className="subtext">{field.label}</div>
-                  <div className="text-[#262729]">{field.value?.toString()}</div>
+    <>
+      <FormSection section={{ name: 'CORE Team Program (Stream) Selection' }}>
+        <>
+          <div className={`col-span-2`}>
+            <div className="subtext text-sm">Program</div>
+            <div className="text-[#262729] ">{values.program}</div>
+          </div>
+          <div className={`col-span-2`}>
+            <div className="subtext text-sm">Acknowledgement</div>
+            <div className="flex flex-col">
+              {values?.acknowledgement?.map((itm: string) => (
+                <div className="text-[#262729] " key={itm}>
+                  {itm}
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          </div>
+        </>
+      </FormSection>
+      {reviewSections?.map((section) => (
+        <FormSection section={section as FormSectionType} key={section.name}>
+          <>
+            {section.segments?.map((segment: FormSectionType, index: number) => (
+              <>
+                <div className="col-span-2">
+                  <p className="font-bold">{segment.name}</p>
+                </div>
+                {segment.fields && (
+                  <ReviewFields
+                    fields={segment.fields}
+                    sectionName={segment.name ?? ''}
+                  />
+                )}
+                {index !== section.segments.length - 1 && (
+                  <div className="col-span-2 w-full border border-t-1 border-gray-400"></div>
+                )}
+              </>
+            ))}
           </>
         </FormSection>
       ))}
-    </div>
+    </>
   );
 };

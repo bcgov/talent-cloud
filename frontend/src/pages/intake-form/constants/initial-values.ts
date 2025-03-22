@@ -1,8 +1,7 @@
 // common
-import { Section } from '@/common/enums/sections.enum';
+
 import type {
   GeneralEmergencyManagementExperience,
-  SectionRolesBcws,
   ReviewAndSubmit,
   PersonalDetails,
   EmploymentDetails,
@@ -56,7 +55,6 @@ export const personalAndEmployeeDetails: PersonalDetails &
 };
 
 export const experienceDetails: GeneralEmergencyManagementExperience &
-  SectionRolesBcws &
   SectionChoiceEmcr &
   SectionChoiceBcws = {
   emergencyExperience: undefined,
@@ -67,17 +65,17 @@ export const experienceDetails: GeneralEmergencyManagementExperience &
   firstChoiceSection: '',
   secondChoiceSection: '',
   thirdChoiceSection: '',
-  firstChoiceFunction: '',
-  secondChoiceFunction: '',
-  thirdChoiceFunction: '',
-  roles: [
-    { [Section.PLANNING.toString()]: [] },
-    { [Section.LOGISTICS.toString()]: [] },
-    { [Section.FINANCE_ADMIN.toString()]: [] },
-    { [Section.OPERATIONS.toString()]: [] },
-    { [Section.COMMAND.toString()]: [] },
-    { [Section.AVIATION.toString()]: [] },
-  ],
+  firstChoiceFunction: undefined,
+  secondChoiceFunction: undefined,
+  thirdChoiceFunction: undefined,
+  // roles: [
+  //   { [Section.PLANNING.toString()]: [] },
+  //   { [Section.LOGISTICS.toString()]: [] },
+  //   { [Section.FINANCE_ADMIN.toString()]: [] },
+  //   { [Section.OPERATIONS.toString()]: [] },
+  //   { [Section.COMMAND.toString()]: [] },
+  //   { [Section.AVIATION.toString()]: [] },
+  // ],
 };
 
 export const skillsDetails: Skills = {
@@ -87,32 +85,25 @@ export const skillsDetails: Skills = {
       languageProficiency: '',
     },
   ],
-  tools: [
-    {
-      toolId: '',
-      toolProficiency: '',
-    },
-  ],
+  tools: [{ tool: undefined, toolProficiency: '' }],
   certifications: [
     {
-      certificationId: '',
+      certification: undefined,
     },
   ],
   driverLicense: [],
 };
 
 export const programDetails: ProgramAck = {
-  program: undefined,
+  program: '',
   acknowledgement: [],
+  disabledProgram: '',
 };
 
 export const initialValueSteps: {
   0: ProgramAck;
   1: PersonalDetails;
-  2: GeneralEmergencyManagementExperience &
-    SectionRolesBcws &
-    SectionChoiceEmcr &
-    SectionChoiceBcws;
+  2: GeneralEmergencyManagementExperience & SectionChoiceEmcr & SectionChoiceBcws;
   3: Skills;
   4: any;
   5: any;

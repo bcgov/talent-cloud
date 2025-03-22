@@ -9,6 +9,7 @@ import {
   secondaryPhone,
   supervisorPhone,
   workPhone,
+  homeLocation,
 } from '@/components/profile/forms/constants';
 import * as Yup from 'yup';
 
@@ -21,7 +22,7 @@ export const personalDetailsSchema = Yup.object().shape({
   lastName: lastName,
   primaryPhoneNumber: primaryPhone,
   secondaryPhoneNumber: secondaryPhone,
-  homeLocation: Yup.string().required('Home location is required.'),
+  homeLocation,
 });
 
 export const employmentDetailsSchema = Yup.object().shape({
@@ -33,7 +34,11 @@ export const employmentDetailsSchema = Yup.object().shape({
   ministry: Yup.string().required('Ministry is required.'),
   unionMembership: Yup.string().required('Union membership is required.'),
   division: Yup.string().required('Division is required.'),
-  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
+  purchaseCardHolder: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.EMCR,
+    then: () => Yup.string().required('Purchase Card holder is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
   travelPreferenceEmcr: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
     then: () => Yup.string().required('Travel preference is required'),
@@ -64,8 +69,8 @@ export const supervisorDetailsSchema = Yup.object().shape({
 });
 
 export const liaisonDetailsSchema = Yup.object().shape({
-  liaisonFirstName: Yup.string().min(2).max(50),
-  liaisonLastName: Yup.string().min(2).max(50),
+  liaisonFirstName: Yup.string().min(2).max(50).optional().nullable(),
+  liaisonLastName: Yup.string().min(2).max(50).optional().nullable(),
   liaisonEmail: Yup.string()
     .optional()
     .nullable()
@@ -115,15 +120,22 @@ export const generalEmergencyManagementExperienceSchema = Yup.object().shape({
     otherwise: () => Yup.string().notRequired(),
   }),
 });
-
+const functionShape = {
+  id: Yup.number(),
+  name: Yup.string(),
+};
 export const sectionChoiceEmcrSchema = Yup.object().shape({
-  firstChoiceFunction: Yup.string().when('program', {
-    is: (val: Program) => val !== Program.BCWS,
-    then: () => Yup.string().required('First choice is required.'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
-  secondChoiceFunction: Yup.string().optional().nullable(),
-  thirdChoiceFunction: Yup.string().optional().nullable(),
+  firstChoiceFunction: Yup.object()
+    .shape(functionShape)
+    .when('program', {
+      is: (val: Program) => val !== Program.BCWS,
+      then: () =>
+        Yup.object().shape(functionShape).required('First choice is required.'),
+      otherwise: () => Yup.object().shape(functionShape).notRequired(),
+    }),
+
+  secondChoiceFunction: Yup.object().shape(functionShape).optional().nullable(),
+  thirdChoiceFunction: Yup.object().shape(functionShape).nullable(),
 });
 
 export const sectionChoiceBcwsSchema = Yup.object().shape({
@@ -132,8 +144,8 @@ export const sectionChoiceBcwsSchema = Yup.object().shape({
     then: () => Yup.string().required('First  choice section is required.'),
     otherwise: () => Yup.string().notRequired(),
   }),
-  secondChoiceSection: Yup.string().optional(),
-  thirdChoiceSection: Yup.string().optional(),
+  secondChoiceSection: Yup.string().optional().nullable(),
+  thirdChoiceSection: Yup.string().optional().nullable(),
 });
 
 export const sectionRolesBcwsSchema = Yup.object()
@@ -188,7 +200,10 @@ export const languageSkillsSchema = Yup.object().shape({
 export const softwareSkillsSchema = Yup.object().shape({
   tools: Yup.array().of(
     Yup.object().shape({
-      toolId: Yup.string(),
+      tool: Yup.object().shape({
+        id: Yup.number(),
+        name: Yup.string(),
+      }),
       toolProficiency: Yup.string().when('toolId', {
         is: (val: string) => val !== undefined,
         then: () => Yup.string().required('Proficiency Level is required.'),
@@ -217,13 +232,16 @@ const programStepValidation = Yup.object().shape({
 });
 
 const emcrFunctionSchema = Yup.object().shape({
-  functions: Yup.array().of(Yup.string()),
+  functions: Yup.array().optional(),
 });
 
 const certificationsSchema = Yup.object().shape({
   certifications: Yup.array().of(
     Yup.object().shape({
-      certificationId: Yup.string(),
+      certification: Yup.object().shape({
+        id: Yup.number(),
+        name: Yup.string(),
+      }),
       expiry: Yup.date(),
     }),
   ),

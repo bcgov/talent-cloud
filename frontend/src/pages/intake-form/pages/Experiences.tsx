@@ -5,15 +5,9 @@ import type {
   IntakeFormValues,
 } from '../constants/types';
 import { useFormikContext } from 'formik';
-
-import { useIntakeForm } from '@/hooks/useIntakeForm';
 import { FormField } from '../fields/FormField';
 import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
-import {
-  handleFilterProgram,
-  intakeFormComponents,
-  renderIntakeFormComponent,
-} from '../utils/helpers';
+import { intakeFormComponents, renderIntakeFormComponent } from '../utils/helpers';
 
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
@@ -25,7 +19,6 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       thirdChoiceFunction,
       firstChoiceSection,
       secondChoiceSection,
-      thirdChoiceSection,
     },
   } = useFormikContext<IntakeFormValues>();
 
@@ -36,8 +29,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       const functionSet = functions && functions.length > 0 && new Set(functions);
       if (
         functionSet &&
-        !functionSet.has(firstChoiceFunction) &&
-        firstChoiceFunction !== ''
+        firstChoiceFunction &&
+        !functionSet.has(firstChoiceFunction)
       ) {
         setFieldValue('functions', [
           ...Array.from(functionSet),
@@ -55,8 +48,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       if (
         functionSet &&
         secondChoiceFunction &&
-        !functionSet.has(secondChoiceFunction) &&
-        secondChoiceFunction !== ''
+        !functionSet.has(secondChoiceFunction)
       ) {
         setFieldValue('functions', [
           ...Array.from(functionSet),
@@ -74,8 +66,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       if (
         thirdChoiceFunction &&
         functionSet &&
-        !functionSet.has(thirdChoiceFunction) &&
-        thirdChoiceFunction !== ''
+        !functionSet.has(thirdChoiceFunction)
       ) {
         setFieldValue('functions', [
           ...Array.from(functionSet),
@@ -85,7 +76,6 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
     }
   }, [thirdChoiceFunction]);
 
-  const { getOptions } = useIntakeForm();
   const { values } = useFormikContext<IntakeFormValues>();
 
   // set description based on program
@@ -107,83 +97,57 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       <div className="text-sm py-6">{description}</div>
 
       <div className="pb-24">
-        {sections
-          .filter(
-            (section) =>
-              values.program &&
-              section.program &&
-              handleFilterProgram(section, values.program.toString()),
-          )
-          .map(
-            (section) =>
-              section.fields && (
-                <FormSection
-                  section={section}
-                  key={section.name}
-                  header={section.header}
-                >
-                  <>
-                    {section.fields.map((fieldItm) => (
-                      <Fragment key={fieldItm.name}>
-                        {intakeFormComponents.includes(fieldItm.type) ? (
-                          <div className="col-span-2">
-                            {renderIntakeFormComponent(fieldItm)}
-                          </div>
-                        ) : fieldItm.type === 'multiselect-group' ? (
-                          <div className="col-span-2">
-                            {fieldItm.label}
+        {sections.map(
+          (section) =>
+            section.fields && (
+              <FormSection
+                section={section}
+                key={section.name}
+                header={section.header}
+              >
+                <>
+                  {section.fields.map((fieldItm) => (
+                    <Fragment key={fieldItm.name}>
+                      {intakeFormComponents.includes(fieldItm.type) ? (
+                        <div className="col-span-2">
+                          {renderIntakeFormComponent(fieldItm)}
+                        </div>
+                      ) : fieldItm.type === 'multiselect-group' ? (
+                        <div className="col-span-2">
+                          {fieldItm.label}
 
-                            <MultiSelectGroup field={fieldItm} />
-                          </div>
-                        ) : (
-                          <div
-                            className={
-                              fieldItm.colSpan
-                                ? `col-span-${fieldItm.colSpan}`
-                                : 'col-span-1'
+                          <MultiSelectGroup field={fieldItm} />
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            fieldItm.colSpan
+                              ? `col-span-${fieldItm.colSpan}`
+                              : 'col-span-1'
+                          }
+                        >
+                          <FormField
+                            key={fieldItm.name}
+                            {...fieldItm}
+                            disabled={
+                              (fieldItm.name === 'secondChoiceFunction' &&
+                                !firstChoiceFunction) ||
+                              (fieldItm.name === 'thirdChoiceFunction' &&
+                                !secondChoiceFunction) ||
+                              (fieldItm.name === 'secondChoiceSection' &&
+                                !firstChoiceSection) ||
+                              (fieldItm.name === 'thirdChoiceSection' &&
+                                !secondChoiceSection)
                             }
-                          >
-                            <FormField
-                              key={fieldItm.name}
-                              {...fieldItm}
-                              disabled={
-                                (fieldItm.name === 'secondChoiceFunction' &&
-                                  !firstChoiceFunction) ||
-                                (fieldItm.name === 'thirdChoiceFunction' &&
-                                  !secondChoiceFunction) ||
-                                (fieldItm.name === 'secondChoiceSection' &&
-                                  !firstChoiceSection) ||
-                                (fieldItm.name === 'thirdChoiceSection' &&
-                                  !secondChoiceSection)
-                              }
-                              options={
-                                fieldItm.options && fieldItm.options.length === 0
-                                  ? getOptions(fieldItm.name).map((option) => ({
-                                      ...option,
-                                      disabled: [
-                                        firstChoiceFunction,
-                                        secondChoiceFunction,
-                                        thirdChoiceFunction,
-                                      ].includes(option.value.toString()),
-                                    }))
-                                  : fieldItm.options?.map((option) => ({
-                                      ...option,
-                                      disabled: [
-                                        firstChoiceSection,
-                                        secondChoiceSection,
-                                        thirdChoiceSection,
-                                      ].includes(option.value.toString()),
-                                    }))
-                              }
-                            />
-                          </div>
-                        )}
-                      </Fragment>
-                    ))}
-                  </>
-                </FormSection>
-              ),
-          )}
+                          />
+                        </div>
+                      )}
+                    </Fragment>
+                  ))}
+                </>
+              </FormSection>
+            ),
+        )}
       </div>
     </div>
   );
