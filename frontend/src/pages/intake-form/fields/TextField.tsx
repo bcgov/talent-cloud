@@ -1,5 +1,5 @@
 import { classes } from '@/components/filters/classes';
-import type { FieldInputProps } from 'formik';
+import { useFormikContext, type FieldInputProps } from 'formik';
 import { formatPaylistID, formatPhone } from '@/utils';
 import clsx from 'clsx';
 
@@ -20,10 +20,11 @@ export const TextField = ({
   if (field.name === 'paylistId') {
     field.value = formatPaylistID(field.value);
   }
-
+  const { setFieldValue } = useFormikContext();
   return (
     <input
-      {...field}
+      value={field.value ?? ''}
+      onChange={(e) => setFieldValue(field.name, e.target.value)}
       placeholder={placeholder}
       className={clsx(disabled ? classes.menu.disabled : classes.menu.formContainer)}
       disabled={disabled}

@@ -8,8 +8,6 @@ import { Fragment } from 'react';
 import { intakeFormComponents, renderIntakeFormComponent } from '../utils/helpers';
 
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
-  console.log(PersonalDetails, 'DETAILS');
-
   return (
     <div className="pb-24">
       <Banner

@@ -35,9 +35,6 @@ export class IntakeFormRO{
   @ValidateIf((o) => o.currentProgram)
   currentProgram?: Program;
 
-  @IsOptional()
-  step: number;
-
   @IsString()
   @IsOptional()
   createdByEmail: string;

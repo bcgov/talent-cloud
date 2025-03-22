@@ -5,14 +5,14 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Program } from '../../../auth/interface';
-import { IntakeFormDTO } from '../../../intake-form/dto/intake-form.dto';
 import { IntakeFormPersonnelData } from '../../../intake-form/types';
 
 
-
+@Unique(['createdByEmail', 'program', 'status'])
 @Entity('intake_form')
 export class IntakeFormEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -41,8 +41,6 @@ export class IntakeFormEntity {
   @Column({ name: 'program', nullable: true, type: 'enum', enum: Program })
   program: Program;
 
-  @Column({nullable: true}) 
-  step: number;
 
   toResponseObject(currentProgram?: Program): IntakeFormRO {
     return {
@@ -52,7 +50,6 @@ export class IntakeFormEntity {
       updatedAt: this.updatedAt,
       createdByEmail: this.createdByEmail,
       status: this.status ?? FormStatusEnum.DRAFT,
-      step: this.step ?? 0, 
       program: this.program,
       currentProgram: currentProgram,
     };

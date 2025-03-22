@@ -13,7 +13,7 @@ export const RadioGroupField = ({
   field: FieldInputProps<any>;
   options?: any[];
 }) => {
-  const { values } = useFormikContext<IntakeFormValues>();
+  const { values, setFieldValue } = useFormikContext<IntakeFormValues>();
   const disabled = field.name === 'program' && values.disabledProgram ? true : false;
 
   return (
@@ -24,7 +24,9 @@ export const RadioGroupField = ({
           <label key={itm.value} className="font-normal">
             <Field
               {...field}
-              name={field.name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFieldValue(field.name, e.target.value)
+              }
               value={itm.value}
               type="radio"
               disabled={disabled}

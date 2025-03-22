@@ -167,6 +167,9 @@ export class IntakeFormService {
       intakeForm.personnel = this.mapPersonnelToForm(personnel);
       intakeForm.personnel.program = personnel.emcr ? Program.BCWS : Program.EMCR;
       intakeForm.personnel.disabledProgram = personnel.emcr ? Program.EMCR : Program.BCWS
+      intakeForm.personnel.step = 0;
+      intakeForm.personnel.completedSteps = []
+      intakeForm.personnel.errorSteps = []
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject(
         personnel.emcr ? Program.EMCR : Program.BCWS,
@@ -179,6 +182,7 @@ export class IntakeFormService {
 
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
+      
 
       const chipsData = await this.getChipsForIntake(req);
       if (chipsData) {
@@ -187,6 +191,10 @@ export class IntakeFormService {
           email: req.idir,
         };
       }
+      
+      intakeForm.personnel.step = 0;
+      intakeForm.personnel.completedSteps = []
+      intakeForm.personnel.errorSteps = []
 
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject();

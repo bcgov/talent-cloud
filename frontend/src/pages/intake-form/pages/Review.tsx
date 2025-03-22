@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { SectionName } from '@/common/enums/sections.enum';
 import clsx from 'clsx';
 import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
+import { Fragment } from 'react';
 
 const ReviewFields = ({
   fields,
@@ -62,7 +63,7 @@ const ReviewFields = ({
         return value && value !== '' ? value : '--';
     }
   };
-  console.log(sectionName);
+
   return (
     <div
       className={clsx(
@@ -72,8 +73,8 @@ const ReviewFields = ({
         ) && 'grid grid-cols-3',
       )}
     >
-      {fields?.map((field: any) => (
-        <>
+      {fields?.map((field: any, index: number) => (
+        <Fragment key={field.name + index.toString()}>
           {!field.nestedFields ? (
             <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
               {field.label && <div className="subtext text-sm">{field.label}</div>}
@@ -89,7 +90,10 @@ const ReviewFields = ({
             <div className="col-span-2">
               {(values?.[field.name as keyof typeof values] as {}[])?.map(
                 (itm, index) => (
-                  <div className={`grid grid-cols-2 pb-8`} key={index}>
+                  <div
+                    className={`grid grid-cols-2 pb-8`}
+                    key={index.toString() + itm}
+                  >
                     {itm &&
                       field.nestedFields?.map((innerField: FormFields) => (
                         <div
@@ -110,16 +114,14 @@ const ReviewFields = ({
               )}
             </div>
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );
 };
 
 export const Review = ({ sections }: { sections: FormSectionType[] }) => {
-  const { values, errors } = useFormikContext<IntakeFormValues>();
-
-  console.log(errors);
+  const { values } = useFormikContext<IntakeFormValues>();
 
   // filter non-form related components
   const ignoreComponents = [
@@ -162,8 +164,8 @@ export const Review = ({ sections }: { sections: FormSectionType[] }) => {
           <div className={`col-span-2`}>
             <div className="subtext text-sm">Acknowledgement</div>
             <div className="flex flex-col">
-              {values?.acknowledgement?.map((itm: string) => (
-                <div className="text-[#262729] " key={itm}>
+              {values?.acknowledgement?.map((itm: string, index: number) => (
+                <div className="text-[#262729] " key={itm + index.toString()}>
                   {itm}
                 </div>
               ))}
@@ -171,11 +173,14 @@ export const Review = ({ sections }: { sections: FormSectionType[] }) => {
           </div>
         </>
       </FormSection>
-      {reviewSections?.map((section) => (
-        <FormSection section={section as FormSectionType} key={section.name}>
+      {reviewSections?.map((section, index) => (
+        <FormSection
+          section={section as FormSectionType}
+          key={section.name + index.toString()}
+        >
           <>
             {section.segments?.map((segment: FormSectionType, index: number) => (
-              <>
+              <Fragment key={segment.name + index.toString()}>
                 <div className="col-span-2">
                   <p className="font-bold">{segment.name}</p>
                 </div>
@@ -188,7 +193,7 @@ export const Review = ({ sections }: { sections: FormSectionType[] }) => {
                 {index !== section.segments.length - 1 && (
                   <div className="col-span-2 w-full border border-t-1 border-gray-400"></div>
                 )}
-              </>
+              </Fragment>
             ))}
           </>
         </FormSection>

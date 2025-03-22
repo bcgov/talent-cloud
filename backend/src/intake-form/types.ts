@@ -3,6 +3,9 @@
 import { LocationDTO } from "../personnel/dto/details/personnel-details.dto";
 
 export interface IntakeFormPersonnelData {
+  completedSteps?: number[];
+  errorSteps?: number[];
+  step?: number;
   firstName?: string;
   lastName?: string;
   program?: string;

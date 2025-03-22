@@ -1,5 +1,4 @@
 import { ButtonTypes } from '@/common';
-import type { FormikValues } from 'formik';
 import { useFormikContext } from 'formik';
 import { Button } from '@/components';
 import type { IntakeFormValues } from '../constants/types';
@@ -14,14 +13,16 @@ export const FormButtonNavigation = ({
   disableNext,
   disablePrevious,
   step,
+
   handleSetCompletedStep,
 }: {
-  saveUpdateForm: (values: FormikValues) => void;
+  saveUpdateForm: (values: IntakeFormValues) => void;
   handlePrevious: () => void;
   handleNext: () => void;
   disableNext: boolean;
   disablePrevious: boolean;
   step: number;
+
   handleSetCompletedStep: (step: number) => void;
 }) => {
   const { values, submitForm, isValid, validateForm } =
@@ -59,10 +60,7 @@ export const FormButtonNavigation = ({
             text="Previous"
             disabled={disablePrevious || step === 5}
             variant={ButtonTypes.OUTLINED}
-            onClick={() => {
-              handlePrevious();
-              saveUpdateForm(values);
-            }}
+            onClick={handlePrevious}
           />
           {[5, 4].includes(step) ? (
             <Button
@@ -87,10 +85,7 @@ export const FormButtonNavigation = ({
               text="Next"
               variant={ButtonTypes.SOLID}
               disabled={disableNext}
-              onClick={() => {
-                handleNext();
-                saveUpdateForm(values);
-              }}
+              onClick={handleNext}
             />
           )}
         </div>

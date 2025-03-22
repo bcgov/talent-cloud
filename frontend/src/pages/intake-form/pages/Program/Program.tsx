@@ -24,26 +24,35 @@ import {
   expectationsBoth,
   expectationsEmcr,
 } from '../../constants/enums';
+import { CheckboxGroupField } from '../../fields/CheckBoxGroupField';
 
 export const ProgramPage = () => {
-  const {
-    values: { program, disabledProgram },
-  } = useFormikContext<IntakeFormValues>();
+  const { values, setValues } = useFormikContext<IntakeFormValues>();
 
   const [dynamicFields, setFields] = useState<FormFields[]>([
-    { ...fields[0], disabled: disabledProgram ? true : false },
+    { ...fields[0], disabled: values.disabledProgram ? true : false },
   ]);
 
   useEffect(() => {
-    if (program) {
-      if (program === Program.BCWS) {
+    if (values.program) {
+      if (values.program === Program.BCWS) {
+        if (values.acknowledgement === undefined) {
+          setValues({ ...values, acknowledgement: [] });
+        }
         setFields([fields[0], { ...fields[1], options: expectationsBcws }]);
-      } else if (program === Program.EMCR) {
+      } else if (values.program === Program.EMCR) {
         setFields([fields[0], { ...fields[1], options: expectationsEmcr }]);
-      } else setFields([fields[0], { ...fields[1], options: expectationsBoth }]);
+        if (values.acknowledgement === undefined) {
+          setValues({ ...values, acknowledgement: [] });
+        }
+      } else {
+        setFields([fields[0], { ...fields[1], options: expectationsBoth }]);
+        if (values.acknowledgement === undefined) {
+          setValues({ ...values, acknowledgement: [] });
+        }
+      }
     }
-  }, [program]);
-
+  }, [values.program]);
   return (
     <>
       <div className="flex flex-col gap-10">
@@ -70,9 +79,12 @@ export const ProgramPage = () => {
           </div>
           <div className="col-span-2">
             {/* Add custom components and styling as needed here - this page is not like the others :)  */}
-            {dynamicFields[1] && (
+            {dynamicFields[1]?.options && (
               <div className="bg-dark-200 border-[#1A5A96] border-l-[10px] px-4 py-4">
-                <FormField key={dynamicFields[1].name} {...dynamicFields[1]} />
+                <CheckboxGroupField
+                  field={dynamicFields[1]}
+                  options={dynamicFields[1].options}
+                />
               </div>
             )}
           </div>

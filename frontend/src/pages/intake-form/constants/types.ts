@@ -188,12 +188,17 @@ export type IntakeFormSubmissionData = {
   createdByEmail: string;
   program: Program; //
   status: FormStatus;
-  step: number;
   currentProgram: Program;
   personnel: IntakeFormValues;
 };
 
-export type IntakeFormValues = ProgramAck &
+export type FormData = {
+  step?: number;
+  completedSteps?: number[];
+  errorSteps?: number[];
+};
+export type IntakeFormValues = FormData &
+  ProgramAck &
   PersonalDetails &
   EmploymentDetails &
   SupervisorDetails &
