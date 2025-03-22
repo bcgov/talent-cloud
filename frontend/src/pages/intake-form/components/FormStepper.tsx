@@ -37,7 +37,7 @@ export const FormStepper = ({
     <Tab
       key={tab.value}
       value={tab.value}
-      disabled={disabled || index === 5}
+      disabled={disabled}
       className={clsx(
         'data-[selected]:outline-none pb-16',
         index !== formTabs.length - 1 && 'border-blue-800 border-l border-dashed',

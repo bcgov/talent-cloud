@@ -14,9 +14,9 @@ import {
   ChipsMinistryName,
   DriverLicense,
   Experience,
+  LanguageLevelType,
   LanguageProficiency,
   Ministry,
-  Section,
   Status,
   ToolsProficiency,
   UnionMembership,
@@ -47,6 +47,7 @@ export class IntakeFormService {
     private personnelService: PersonnelService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
+    
   ) {}
   /**
    * Creates new Personnel, EMCR Personnel, BCWS Personnel from Intake Form data
@@ -63,10 +64,11 @@ export class IntakeFormService {
       const email = req.idir;
       const existingPerson =
         await this.personnelService.findOneWithAllRelationsByEmail(email);
+        
       const personnelFromFormData = await this.createPersonnel(
         createIntakeFormDto.personnel,
       );
-
+    
       if (!existingPerson) {
         await this.personnelService.createPerson(personnelFromFormData);
         await this.intakeFormRepository.save({
@@ -90,6 +92,7 @@ export class IntakeFormService {
     } catch (e) {
       throw new BadRequestException(e.message);
     }
+    
   }
 
   /**
@@ -143,26 +146,33 @@ export class IntakeFormService {
       
     ) {
       if(personnel){
+        existingform.personnel.disabledProgram = personnel.emcr ? Program.EMCR : Program.BCWS
         return existingform.toResponseObject(
           personnel.emcr ? Program.EMCR : Program.BCWS,
         );
       }
+
       return existingform.toResponseObject();
     }
 
     if (
         existingform && existingform.status === FormStatusEnum.SUBMITTED 
     ) {
-      const intakeForm = new IntakeFormEntity();
+      if(personnel){
+      
+        const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
       intakeForm.program = personnel.emcr ? Program.BCWS : Program.EMCR;
       intakeForm.personnel = this.mapPersonnelToForm(personnel);
+      intakeForm.personnel.program = personnel.emcr ? Program.BCWS : Program.EMCR;
+      intakeForm.personnel.disabledProgram = personnel.emcr ? Program.EMCR : Program.BCWS
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject(
         personnel.emcr ? Program.EMCR : Program.BCWS,
       );
     }
+  }
 
     if (!existingform && !personnel) {
       const intakeForm = new IntakeFormEntity();
@@ -209,18 +219,18 @@ export class IntakeFormService {
       status: Status.PENDING,
       dateApplied: new Date(),
       travelPreference: BcwsTravelPreference[personnel.travelPreferenceBcws],
-      liaisonFirstName: personnel.liaisonFirstName,
-      liaisonLastName: personnel.liaisonLastName,
-      liaisonPhoneNumber: personnel.liaisonPhoneNumber,
-      liaisonEmail: personnel.liaisonEmail,
-
-      firstChoiceSection: Section[personnel.firstChoiceSection],
-      secondChoiceSection: personnel.secondChoiceSection
-        ? Section[personnel?.secondChoiceSection]
-        : undefined,
+      liaisonFirstName: personnel.liaisonFirstName ?? undefined,
+      liaisonLastName: personnel.liaisonLastName ?? undefined,
+      liaisonPhoneNumber: personnel.liaisonPhoneNumber?? undefined,
+      liaisonEmail: personnel.liaisonEmail ?? undefined,
+      purchaseCardHolder: personnel.purchaseCardHolder ?? undefined,
+      firstChoiceSection: personnel.firstChoiceSection ?? undefined,
+      secondChoiceSection: personnel.secondChoiceSection ?? undefined,
+        
       thirdChoiceSection: personnel.thirdChoiceSection
-        ? Section[personnel?.thirdChoiceSection]
-        : undefined,
+        
+        ?? undefined,
+        roles: []
         // TODO
       // roles: roles.length > 0 ? roles?.map((item) => {
       //   const role = new CreateBcwsPersonnelRolesDTO();
@@ -245,24 +255,25 @@ export class IntakeFormService {
       travelPreference: EmcrTravelPreference[personnel.travelPreferenceEmcr],
       dateApplied: new Date(),
       status: Status.PENDING,
-      firstChoiceSection: parseInt(personnel.firstChoiceFunction),
-      secondChoiceSection: personnel.secondChoiceFunction
-        ? parseInt(personnel.secondChoiceFunction)
-        : undefined,
-      thirdChoiceSection: personnel.thirdChoiceFunction
-        ? parseInt(personnel.thirdChoiceFunction)
-        : undefined,
+      firstChoiceSection: personnel.firstChoiceFunction?.name ?? undefined,
+      secondChoiceSection: personnel.secondChoiceFunction?.name ?? undefined,
+      
+      thirdChoiceSection: personnel.thirdChoiceFunction?.name
+        ?? undefined,
+      
       firstNationExperienceLiving:
         personnel.firstNationsExperience === 'true' ? true : false,
       peccExperience: personnel.peccExperience === 'true' ? true : false,
       preocExperience: personnel.preocExperience === 'true' ? true : false,
       emergencyExperience:
         personnel.emergencyExperience === 'true' ? true : false,
-      experiences: personnel.functions?.map((item) => {
+      experiences: personnel.functions && personnel.functions?.filter(itm => !!itm).map((item) => {
+        if(item){
         const functionExp = new EmcrPersonnelExperienceDTO();
-        functionExp.functionId = parseInt(item);
+        functionExp.functionId = item.id;
         functionExp.experienceType = Experience.INTERESTED;
         return functionExp;
+        }
       }),
     };
 
@@ -279,13 +290,13 @@ export class IntakeFormService {
     locations: LocationEntity[],
   ): CreatePersonnelDTO {
     const person = new CreatePersonnelDTO();
-    if(personnel.tools[0].toolId === '' && personnel.tools[0].toolProficiency === ''){
+    if(!personnel.tools || personnel.tools.length === 0   || personnel.tools?.[0].tool === undefined && personnel.tools[0].toolProficiency === undefined){
       delete personnel.tools
     }
-    if(personnel.languages[0].language === '' && personnel.languages[0].languageProficiency === ''){
+    if(!personnel.languages || personnel.languages[0].language === '' && personnel.languages[0].languageProficiency === ''){
       delete personnel.languages
     }
-    if(personnel.certifications[0].certificationId === ''){
+    if(!personnel.certifications || personnel.certifications.length ===  0 || personnel.certifications[0].certification === undefined){
       delete personnel.certifications
     }
     const personData = {
@@ -293,7 +304,6 @@ export class IntakeFormService {
       lastName: personnel.lastName,
       employeeId: personnel.employeeId,
       paylistId: personnel.paylistId,
-      purchaseCardHolder: personnel.purchaseCardHolder,
       email: personnel.email,
       primaryPhone: personnel.primaryPhoneNumber,
       secondaryPhone: personnel.secondaryPhoneNumber,
@@ -303,18 +313,19 @@ export class IntakeFormService {
       supervisorLastName: personnel.supervisorLastName,
       supervisorEmail: personnel.supervisorEmail,
       supervisorPhone: personnel.supervisorPhoneNumber,
-      driverLicense: personnel.driverLicense.map((itm) => DriverLicense[itm]),
+      driverLicense: personnel.driverLicense?.map((itm) => DriverLicense[itm]),
       homeLocation: locations?.find(
-        (itm) => itm.id === parseInt(personnel.homeLocation),
+        (itm) => itm.id === personnel.homeLocation.id,
       ),
       ministry: Ministry[personnel.ministry],
       division: personnel.division,
       tools: personnel.tools ? personnel.tools?.map((item) => {
-        
+        if(item && item?.tool && item?.tool?.id){
         const tool = new PersonnelTools();
-        tool.toolId = parseInt(item.toolId);
+        tool.toolId = item.tool.id
         tool.proficiencyLevel = ToolsProficiency[item.toolProficiency];
         return tool;
+        }
       }) : [],
       languages: personnel.languages ? personnel.languages.map((item) => {
         if(item.language === '' && item.languageProficiency === ''){
@@ -323,15 +334,19 @@ export class IntakeFormService {
         const language = new LanguageEntity();
         language.language = item.language;
         language.level = LanguageProficiency[item.languageProficiency];
+        language.type = LanguageLevelType.BOTH
         return language;
       }) : [],
       certifications: personnel.certifications ? personnel.certifications?.map((item) => {
-        if(item.certificationId === '' && item.expiry === undefined){
+        if(item.certification === undefined && item.expiry === undefined){
           return
         }
         const certification = new PersonnelCertificationEntity();
-        certification.certificationId = parseInt(item.certificationId);
-        certification.expiry = item.expiry ?? undefined;
+        certification.certificationId = item.certification.id
+        if(item.expiry){
+          certification.expiry = item.expiry ?? undefined;
+        }
+        
         return certification;
       }) : [],
       emergencyContactFirstName: personnel.emergencyContactFirstName,
@@ -347,9 +362,11 @@ export class IntakeFormService {
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    
+    const functions = personnel?.emcr?.experiences?.map(itm => ({name: itm.function.name, id: itm.functionId}))
     return {
       firstName: personnel.firstName,
+      jobTitle: personnel.jobTitle,
+      
       program:
         personnel.bcws && personnel.emcr
           ? Program.ALL
@@ -369,38 +386,44 @@ export class IntakeFormService {
       supervisorEmail: personnel?.supervisorEmail,
       supervisorPhoneNumber: personnel?.supervisorPhone,
       driverLicense: personnel.driverLicense?.map((itm) => itm.toString()),
-      homeLocation: personnel.homeLocation.id.toString(),
+      homeLocation: personnel.homeLocation,
       ministry: personnel.ministry,
       division: personnel.division,
-      tools: personnel.tools.length === 0 ? [{
-        toolId: '',
+      tools: personnel.tools?.length === 0 ? [{
+        tool: undefined,
         toolProficiency: '',
       }]:personnel.tools?.map((item) => ({
-        toolId: item.tool.id.toString(),
+        tool: {
+          id: item.tool.id, 
+        name: item.tool.name
+      },
         toolProficiency: item.proficiencyLevel,
       })),
-      languages: personnel.languages.length === 0 ? [{language: '', languageProficiency: ''}]: personnel.languages?.map((item) => ({
+      languages: personnel.languages?.length === 0 ? [{language: '', languageProficiency: ''}]: personnel.languages?.map((item) => ({
         language: item.language,
         languageProficiency: item.level,
       })),
-      certifications: personnel.certifications.length === 0 ? [{
-        certificationId: '',
+      certifications: personnel.certifications?.length === 0 ? [{
+        certification: undefined,
         expiry: undefined,
         
       }]: personnel.certifications?.map((item) => ({
-        certificationId: item.certificationId.toString(),
+        certification: {
+          id: item.certification.id, 
+        name: item.certification.name},
         expiry: item.expiry ? new Date(item.expiry) : undefined,
       })),
       emergencyContactFirstName: personnel?.emergencyContactFirstName,
       emergencyContactLastName: personnel?.emergencyContactLastName,
       emergencyContactPhoneNumber: personnel?.emergencyContactPhoneNumber,
       emergencyContactRelationship: personnel?.emergencyContactRelationship,
-      firstChoiceFunction: personnel.emcr?.firstChoiceSection,
-      secondChoiceFunction: personnel.emcr?.secondChoiceSection,
-      thirdChoiceFunction: personnel.emcr?.thirdChoiceSection,
-      functions: personnel.emcr?.experiences?.map((item) =>
-        item.functionId.toString(),
-      ),
+      firstChoiceFunction: functions?.find(itm => itm.name === personnel.emcr?.firstChoiceSection),
+      secondChoiceFunction: functions?.find(itm => itm.name ===personnel.emcr?.secondChoiceSection),
+      thirdChoiceFunction: functions?.find(itm => itm.name ===personnel.emcr?.thirdChoiceSection),
+      functions: personnel.emcr?.experiences?.map(itm => ({
+        id: itm.functionId, 
+        name: itm.function.name
+      })),
       travelPreferenceEmcr: personnel.emcr?.travelPreference,
       travelPreferenceBcws: personnel.bcws?.travelPreference,
       firstNationsExperience: personnel.emcr?.firstNationExperienceLiving
@@ -434,12 +457,11 @@ export class IntakeFormService {
 
       const allLocations =
         await this.locationService.getAllLocations();
-      let workLocation = allLocations.find(
-        (l) => l.locationName === data.workCity?.trim(),
-      )?.id?.toString();
+      
+      
       let homeLocation = allLocations.find(
         (l) => l.locationName === data.homeCity?.trim(),
-      )?.id?.toString();
+      )
 
       let unionMembership;
       if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
@@ -456,7 +478,6 @@ export class IntakeFormService {
         jobTitle: data.currentPositionTitle || '',
         unionMembership,
         ministry,
-        workLocation,
         homeLocation,
         paylistId: data.deptId,
         supervisorLastName: data.currentSupervisorName.split(',')[0],

@@ -22,7 +22,7 @@ import { FireCentreName } from '@/common/enums/firecentre.enum';
 import type { Section } from '@/common/enums/sections.enum';
 import { SectionName } from '@/common/enums/sections.enum';
 import type { FieldInterface } from '@/components';
-import type { Tools, ToolsName } from '@/common/enums/tools.enum';
+import { type Tools, type ToolsName } from '@/common/enums/tools.enum';
 
 export const useProgramFieldData = (program?: Program) => {
   const [bcwsRoles, setBcwsRoles] = useState<BcwsRoleInterface[]>([]);

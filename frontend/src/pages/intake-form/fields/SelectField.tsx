@@ -33,14 +33,16 @@ export const SelectField = ({
     >
       {({ open }) => (
         <div className={clsx('relative')}>
-          <ListboxButton className={clsx(classes.menu.container)}>
+          <ListboxButton className={clsx(classes.menu.formContainer)}>
             <div className="flex flex-row justify-between items-center">
-              {field.value ? (
-                <span className="truncate">
-                  {options?.find((itm) => itm.value === field.value).label}
-                </span>
-              ) : (
+              {!field.value || field.value === '' || field.value === undefined ? (
                 <span className="text-gray-500 text-sm">{placeholder}</span>
+              ) : (
+                <span className="truncate">
+                  {options?.find((itm) => itm.value.id === field.value.id)?.label ||
+                    field.value?.name ||
+                    field.value.toString()}
+                </span>
               )}
 
               {open ? (

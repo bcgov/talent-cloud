@@ -13,33 +13,34 @@ import { components } from './components';
 // context
 import { useFormikContext } from 'formik';
 
-// hooks
-import { useIntakeForm } from '@/hooks/useIntakeForm';
-
 // util
 import { renderIntakeFormComponent } from '../../utils/helpers';
 
 // ui
 import { Banner } from '@/components/ui/Banner';
+import { Program } from '@/common';
+import {
+  expectationsBcws,
+  expectationsBoth,
+  expectationsEmcr,
+} from '../../constants/enums';
 
 export const ProgramPage = () => {
   const {
-    values: { program },
+    values: { program, disabledProgram },
   } = useFormikContext<IntakeFormValues>();
 
-  const { getOptions, currentProgram } = useIntakeForm();
-
   const [dynamicFields, setFields] = useState<FormFields[]>([
-    { ...fields[0], disabled: currentProgram ? true : false },
+    { ...fields[0], disabled: disabledProgram ? true : false },
   ]);
 
   useEffect(() => {
     if (program) {
-      const options = getOptions(fields[1].name, program) as {
-        label: string;
-        value: string;
-      }[];
-      setFields([fields[0], { ...fields[1], options }]);
+      if (program === Program.BCWS) {
+        setFields([fields[0], { ...fields[1], options: expectationsBcws }]);
+      } else if (program === Program.EMCR) {
+        setFields([fields[0], { ...fields[1], options: expectationsEmcr }]);
+      } else setFields([fields[0], { ...fields[1], options: expectationsBoth }]);
     }
   }, [program]);
 
