@@ -27,7 +27,11 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   } = useFormikContext<IntakeFormValues>();
 
   useEffect(() => {
-    if (!functions || (functions?.length === 0 && firstChoiceFunction)) {
+    if (
+      !functions ||
+      (functions?.length === 0 && firstChoiceFunction) ||
+      functions[0] === undefined
+    ) {
       setFieldValue('functions', [firstChoiceFunction]);
     } else {
       const functionSet = functions && functions.length > 0 && new Set(functions);

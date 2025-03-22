@@ -61,7 +61,7 @@ export const experienceDetails: GeneralEmergencyManagementExperience &
   preocExperience: undefined,
   peccExperience: undefined,
   firstNationsExperience: undefined,
-
+  functions: [],
   firstChoiceSection: '',
   secondChoiceSection: '',
   thirdChoiceSection: '',

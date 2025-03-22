@@ -54,7 +54,7 @@ export const useIntakeForm = () => {
     values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
     values.emergencyContactPhoneNumber =
       values?.emergencyContactPhoneNumber?.replace(/[^\d]/g, '');
-    values.secondaryPhoneNumber = values.supervisorPhoneNumber?.replace(
+    values.supervisorPhoneNumber = values.supervisorPhoneNumber?.replace(
       /[^\d]/g,
       '',
     );

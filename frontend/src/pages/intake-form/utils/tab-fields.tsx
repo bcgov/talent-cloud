@@ -372,7 +372,7 @@ const PersonalDetailsTab = {
         {
           name: 'supervisorPhoneNumber',
           label: 'Supervisor Phone Number',
-          type: 'text',
+          type: 'tel',
           component: TextField,
           required: false,
           placeholder: '000-000-0000',
