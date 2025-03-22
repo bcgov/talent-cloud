@@ -237,11 +237,12 @@ export class EmcrService {
    * Get EMCR Personnel for CSV Export
    * Extracts full raw JSON list of all EMCR-flagged personnel
    * and associated table columns for export to CSV file
-   * @returns {EmcrPersonnelEntity[]} List of personnel, converted to JSON string
+   * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
    */
   async getEmcrPersonnelforCSV(): Promise<EmcrPersonnelEntity[]> {
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    //join with personnel table and append last deployed date as subselection
     qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
       (subQuery) => {
         return subQuery
