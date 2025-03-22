@@ -71,7 +71,7 @@ export const FormButtonNavigation = ({
               disabled={!isValid || step === 5}
               onClick={async () => {
                 const errors = await validateForm();
-                if (Object.keys(errors).length > 0) {
+                if (errors && Object.keys(errors).length > 0) {
                   showAlert({
                     type: AlertType.ERROR,
                     message: 'Please resolve validation errors.',

@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import { LocationDTO } from "../personnel/dto/details/personnel-details.dto";
+
 export interface IntakeFormPersonnelData {
   firstName?: string;
   lastName?: string;
@@ -16,20 +18,23 @@ export interface IntakeFormPersonnelData {
   supervisorEmail?: string;
   supervisorPhoneNumber?: string;
   driverLicense?: string[];
-  homeLocation?: string;
-  workLocation?: string;
+  homeLocation?: LocationDTO;
   ministry?: string;
   division?: string;
   tools?: {
-    toolId: string;
-    toolProficiency: string;
+    tool?: {
+      id: number, name: string
+    }
+    toolProficiency?: string;
   }[];
   languages?: {
-    language: string;
-    languageProficiency: string;
+    language?: string;
+    languageProficiency?: string;
   }[];
   certifications?: {
-    certificationId: string;
+    certification?: {
+      id: number, name: string
+    }
     expiry?: Date;
   }[];
   emergencyContactFirstName?: string;
@@ -37,15 +42,23 @@ export interface IntakeFormPersonnelData {
   emergencyContactPhoneNumber?: string;
   emergencyContactRelationship?: string;
 
-  firstChoiceFunction?: string;
-  secondChoiceFunction?: string;
-  thirdChoiceFunction?: string;
+  firstChoiceFunction?: {
+    id: number, name: string
+  }
+  secondChoiceFunction?: {
+    id: number, name: string
+  }
+  thirdChoiceFunction?: {
+    id: number, name: string
+  }
 
   firstNationsExperience?: string;
   peccExperience?: string;
   preocExperience?: string;
   emergencyExperience?: string;
-  functions?: string[];
+  functions?: ({
+    id?: number, name?: string
+  }|null)[];
   purchaseCardHolder?: boolean;
   liaisonFirstName?: string;
   liaisonLastName?: string;

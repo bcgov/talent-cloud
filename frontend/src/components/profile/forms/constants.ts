@@ -39,7 +39,7 @@ const workLocation = Yup.object().shape({
   fireCentre: Yup.string(),
 });
 
-const homeLocation = Yup.object().shape({
+export const homeLocation = Yup.object().shape({
   locationName: Yup.string(),
   region: Yup.string(),
   fireCentre: Yup.string(),

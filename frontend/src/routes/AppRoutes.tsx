@@ -18,7 +18,7 @@ const NotFound = lazy(() => import('../pages/NotFound'));
 const SplashPage = lazy(() => import('../pages/SplashPage'));
 const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 const Unauthenticated = lazy(() => import('../pages/Unauthenticated'));
-const IntakeForm = lazy(() => import('../pages/intake-form/IntakeForm'));
+const IntakeForm = lazy(() => import('../pages/intake-form/FormWrapper'));
 
 export default () => {
   return (

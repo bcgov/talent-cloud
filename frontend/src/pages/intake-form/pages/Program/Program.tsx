@@ -21,13 +21,19 @@ import { renderIntakeFormComponent } from '../../utils/helpers';
 
 // ui
 import { Banner } from '@/components/ui/Banner';
+import { Program } from '@/common';
+import {
+  expectationsBcws,
+  expectationsBoth,
+  expectationsEmcr,
+} from '../../constants/enums';
 
 export const ProgramPage = () => {
   const {
     values: { program },
   } = useFormikContext<IntakeFormValues>();
 
-  const { getOptions, currentProgram } = useIntakeForm();
+  const { currentProgram } = useIntakeForm();
 
   const [dynamicFields, setFields] = useState<FormFields[]>([
     { ...fields[0], disabled: currentProgram ? true : false },
@@ -35,11 +41,11 @@ export const ProgramPage = () => {
 
   useEffect(() => {
     if (program) {
-      const options = getOptions(fields[1].name, program) as {
-        label: string;
-        value: string;
-      }[];
-      setFields([fields[0], { ...fields[1], options }]);
+      if (program === Program.BCWS) {
+        setFields([fields[0], { ...fields[1], options: expectationsBcws }]);
+      } else if (program === Program.EMCR) {
+        setFields([fields[0], { ...fields[1], options: expectationsEmcr }]);
+      } else setFields([fields[0], { ...fields[1], options: expectationsBoth }]);
     }
   }, [program]);
 

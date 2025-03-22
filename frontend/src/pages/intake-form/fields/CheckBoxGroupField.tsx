@@ -35,7 +35,7 @@ export const CheckboxGroupField = ({
         <>
           {options?.map((itm, index) => (
             <div
-              key={itm.value.toString()}
+              key={itm.value.toString() + index.toString()}
               className="flex flex-row space-x-4 items-center"
             >
               <Checkbox

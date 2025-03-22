@@ -6,17 +6,120 @@ import type {
 } from '../constants/types';
 import { handleFilterProgram } from '../utils/helpers';
 import { FormSection } from '../components/FormSection';
-import { formTabs } from '../utils/tab-fields';
-import { useProgramFieldData } from '@/hooks';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { ToolsProficiencyName } from '@/common/enums/tools.enum';
-import { Program } from '@/common';
+import { format } from 'date-fns';
+import { SectionName } from '@/common/enums/sections.enum';
+import clsx from 'clsx';
+import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 
-export const Review = () => {
+const ReviewFields = ({
+  fields,
+  sectionName,
+}: {
+  fields: FormFields[];
+  sectionName: string;
+}) => {
   const { values } = useFormikContext<IntakeFormValues>();
-  const { certificates, tools, locations, functions } = useProgramFieldData(
-    Program.ALL,
+
+  const getValue = (value: any, name: string) => {
+    switch (name) {
+      case 'homeLocation':
+        return values?.homeLocation?.locationName;
+      case 'functions':
+        return values.functions
+          ?.filter((itm) => itm && itm.name && itm.name !== '')
+          .map((itm) => itm?.name ?? '')
+          .join('; ');
+      case 'certification':
+        return value ? value?.name : '--';
+      case 'expiry':
+        return value && format(value, 'yyyy-MM-dd');
+      case 'toolProficiency':
+        return ToolsProficiencyName[value as keyof typeof ToolsProficiencyName];
+      case 'travelPreferenceEmcr':
+      case 'travelPreferenceBcws':
+        return (
+          value && TravelPreferenceText[value as keyof typeof TravelPreferenceText]
+        );
+      case 'tool':
+        return value ? value?.name : '--';
+      case 'firstChoiceFunction':
+      case 'secondChoiceFunction':
+      case 'thirdChoiceFunction':
+        return value ? value?.name : '--';
+      case 'firstChoiceSection':
+      case 'secondChoiceSection':
+      case 'thirdChoiceSection':
+        return value && SectionName[value as keyof typeof SectionName];
+      case 'languageProficiency':
+        return LanguageProficiencyName[
+          value as keyof typeof LanguageProficiencyName
+        ];
+      case 'language':
+        return value;
+      default:
+        return value && value !== '' ? value : '--';
+    }
+  };
+  console.log(sectionName);
+  return (
+    <div
+      className={clsx(
+        'col-span-2 gap-y-8 grid grid-cols-2',
+        ['EMCR CORE Team Sections', 'BCWS CORE Team Sections and Roles'].includes(
+          sectionName,
+        ) && 'grid grid-cols-3',
+      )}
+    >
+      {fields?.map((field: any) => (
+        <>
+          {!field.nestedFields ? (
+            <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
+              {field.label && <div className="subtext text-sm">{field.label}</div>}
+              {field.helperText && (
+                <div className="subtext text-sm">{field.helperText}</div>
+              )}
+              <div className="text-[#262729]">
+                {/* {values[field.name as ]} */}
+                {getValue(values?.[field.name as keyof typeof values], field.name)}
+              </div>
+            </div>
+          ) : (
+            <div className="col-span-2">
+              {(values?.[field.name as keyof typeof values] as {}[])?.map(
+                (itm, index) => (
+                  <div className={`grid grid-cols-2 pb-8`} key={index}>
+                    {itm &&
+                      field.nestedFields?.map((innerField: FormFields) => (
+                        <div
+                          className="col-span-1 flex flex-col"
+                          key={innerField.name}
+                        >
+                          <div className="subtext text-sm">{innerField.label}</div>
+                          <div className="text-[#262729] ">
+                            {getValue(
+                              itm?.[innerField.name as keyof typeof itm] ?? '',
+                              innerField?.name,
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ),
+              )}
+            </div>
+          )}
+        </>
+      ))}
+    </div>
   );
+};
+
+export const Review = ({ sections }: { sections: FormSectionType[] }) => {
+  const { values, errors } = useFormikContext<IntakeFormValues>();
+
+  console.log(errors);
 
   // filter non-form related components
   const ignoreComponents = [
@@ -32,84 +135,35 @@ export const Review = () => {
     'Travel Preferences',
     'bcwsCoreTeamSectionsHeader',
   ];
-  const tabSections = formTabs
-    .flatMap((itm) => itm.sections)
-    .filter((itm) => itm !== undefined);
 
-  const sections = tabSections
-    .filter((section) =>
-      values.program && section.program
-        ? handleFilterProgram(section, values.program.toString())
-        : true,
-    )
-    .filter((itm) => itm !== undefined)
-    .map((section) => ({
-      ...section,
-      fields: section.fields
-        ?.filter((field) => !ignoreComponents.includes(field.name))
-        .filter((itm) => itm !== undefined)
-        .filter((itm) => !ignoreFields.includes(itm.name))
-        .filter((field) =>
-          values.program && field.program
-            ? handleFilterProgram(field, values.program?.toString())
-            : true,
-        ),
-    }));
+  const reviewSections = sections?.map((section) => ({
+    ...section,
+    fields: section.fields
+      ?.filter((field) => !ignoreComponents.includes(field.name))
+      .filter((itm) => itm !== undefined)
+      .filter((itm) => !ignoreFields.includes(itm.name))
+      .filter((field) =>
+        values.program && field.program
+          ? handleFilterProgram(field, values.program?.toString())
+          : true,
+      ),
+  }));
 
   // add missing sections
 
-  const getValue = (value: any, name: string) => {
-    switch (name) {
-      case 'homeLocation':
-        return locations.find((itm) => itm.id?.toString())?.locationName;
-      case 'functions':
-        return (value as string[])
-          ?.map(
-            (itm: string) =>
-              functions.find((func) => func.id.toString() === itm)?.name,
-          )
-          .join('; ');
-      case 'certificationId':
-        return certificates.find((itm) => itm?.id?.toString() === value)?.name;
-      case 'expiry':
-        return value;
-      case 'toolProficiency':
-        return ToolsProficiencyName[value as keyof typeof ToolsProficiencyName];
-
-      case 'toolId':
-        return tools.find((tool) => tool.id.toString() === value)?.fullName;
-
-      case 'languageProficiency':
-        return LanguageProficiencyName[
-          value as keyof typeof LanguageProficiencyName
-        ];
-      case 'language':
-        return value;
-      default:
-        return value && value !== '' ? value : '--';
-    }
-  };
-  const getLabel = (label: any, name: string) => {
-    switch (name) {
-      case 'functions':
-        return 'Functions';
-      default:
-        return label;
-    }
-  };
   return (
     <>
       <FormSection section={{ name: 'CORE Team Program (Stream) Selection' }}>
         <>
           <div className={`col-span-2`}>
-            <div className="subtext">Program</div>
-            <div className="text-[#262729]">{values.program}</div>
+            <div className="subtext text-sm">Program</div>
+            <div className="text-[#262729] ">{values.program}</div>
           </div>
           <div className={`col-span-2`}>
-            <div className="subtext">Acknowledgement</div>
+            <div className="subtext text-sm">Acknowledgement</div>
             <div className="flex flex-col">
-              {values.acknowledgement.map((itm: string) => (
-                <div className="text-[#262729]" key={itm}>
+              {values?.acknowledgement?.map((itm: string) => (
+                <div className="text-[#262729] " key={itm}>
                   {itm}
                 </div>
               ))}
@@ -117,49 +171,22 @@ export const Review = () => {
           </div>
         </>
       </FormSection>
-      {sections?.map((section) => (
+      {reviewSections?.map((section) => (
         <FormSection section={section as FormSectionType} key={section.name}>
           <>
-            {section.fields?.map((field: any) => (
+            {section.segments?.map((segment: FormSectionType, index: number) => (
               <>
-                {!field.fields ? (
-                  <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
-                    {field.label && (
-                      <div className="subtext">
-                        {getLabel(field.label, field.name)}
-                      </div>
-                    )}
-                    <div className="text-[#262729]">
-                      {getValue(
-                        values?.[field.name as keyof typeof values],
-                        field.name,
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="col-span-2">
-                    {(values?.[field.name as keyof typeof values] as {}[])?.map(
-                      (itm, index) => (
-                        <div className={`grid grid-cols-2 pb-8`} key={index}>
-                          {itm &&
-                            field.fields?.map((innerField: FormFields) => (
-                              <div
-                                className="col-span-1 flex flex-col"
-                                key={innerField.name}
-                              >
-                                <div className="subtext">{innerField.label}</div>
-                                <div className="text-[#262729]">
-                                  {getValue(
-                                    itm[innerField.name as keyof typeof itm] ?? '',
-                                    innerField.name,
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ),
-                    )}
-                  </div>
+                <div className="col-span-2">
+                  <p className="font-bold">{segment.name}</p>
+                </div>
+                {segment.fields && (
+                  <ReviewFields
+                    fields={segment.fields}
+                    sectionName={segment.name ?? ''}
+                  />
+                )}
+                {index !== section.segments.length - 1 && (
+                  <div className="col-span-2 w-full border border-t-1 border-gray-400"></div>
                 )}
               </>
             ))}

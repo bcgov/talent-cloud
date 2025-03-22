@@ -65,9 +65,9 @@ export const experienceDetails: GeneralEmergencyManagementExperience &
   firstChoiceSection: '',
   secondChoiceSection: '',
   thirdChoiceSection: '',
-  firstChoiceFunction: '',
-  secondChoiceFunction: '',
-  thirdChoiceFunction: '',
+  firstChoiceFunction: undefined,
+  secondChoiceFunction: undefined,
+  thirdChoiceFunction: undefined,
   // roles: [
   //   { [Section.PLANNING.toString()]: [] },
   //   { [Section.LOGISTICS.toString()]: [] },
@@ -87,20 +87,20 @@ export const skillsDetails: Skills = {
   ],
   tools: [
     {
-      toolId: '',
+      tool: undefined,
       toolProficiency: '',
     },
   ],
   certifications: [
     {
-      certificationId: '',
+      certification: undefined,
     },
   ],
   driverLicense: [],
 };
 
 export const programDetails: ProgramAck = {
-  program: undefined,
+  program: '',
   acknowledgement: [],
 };
 
