@@ -34,7 +34,11 @@ export const employmentDetailsSchema = Yup.object().shape({
   ministry: Yup.string().required('Ministry is required.'),
   unionMembership: Yup.string().required('Union membership is required.'),
   division: Yup.string().required('Division is required.'),
-  purchaseCardHolder: Yup.string().required('Purchase card holder is required'),
+  purchaseCardHolder: Yup.string().when('program', {
+    is: (val: Program) => val !== Program.EMCR,
+    then: () => Yup.string().required('Purchase Card holder is required'),
+    otherwise: () => Yup.string().notRequired(),
+  }),
   travelPreferenceEmcr: Yup.string().when('program', {
     is: (val: Program) => val !== Program.BCWS,
     then: () => Yup.string().required('Travel preference is required'),

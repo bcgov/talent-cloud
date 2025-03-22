@@ -68,7 +68,6 @@ export class IntakeFormController {
     @Body() createIntakeFormDto: IntakeFormDTO,
     @Req() req: RequestWithRoles,
   ): Promise<IntakeFormRO> {
-    console.log(createIntakeFormDto)
     return await this.intakeFormService.submitIntakeForm(
       createIntakeFormDto,
       req,

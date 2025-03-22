@@ -17,7 +17,6 @@ import {
   LanguageLevelType,
   LanguageProficiency,
   Ministry,
-  Section,
   Status,
   ToolsProficiency,
   UnionMembership,
@@ -61,7 +60,7 @@ export class IntakeFormService {
     createIntakeFormDto: IntakeFormDTO,
     req: RequestWithRoles,
   ): Promise<IntakeFormRO> {
-    // try {
+    try {
       const email = req.idir;
       const existingPerson =
         await this.personnelService.findOneWithAllRelationsByEmail(email);
@@ -90,9 +89,9 @@ export class IntakeFormService {
         ...createIntakeFormDto,
         status: FormStatusEnum.SUBMITTED,
       });
-    // } catch (e) {
-    //   throw new BadRequestException(e.message);
-    // }
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
     
   }
 
@@ -160,6 +159,7 @@ export class IntakeFormService {
         existingform && existingform.status === FormStatusEnum.SUBMITTED 
     ) {
       if(personnel){
+      
         const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
@@ -171,10 +171,8 @@ export class IntakeFormService {
       return form.toResponseObject(
         personnel.emcr ? Program.EMCR : Program.BCWS,
       );
-      } else {
-throw Error
     }
-    }
+  }
 
     if (!existingform && !personnel) {
       const intakeForm = new IntakeFormEntity();
@@ -225,7 +223,7 @@ throw Error
       liaisonLastName: personnel.liaisonLastName ?? undefined,
       liaisonPhoneNumber: personnel.liaisonPhoneNumber?? undefined,
       liaisonEmail: personnel.liaisonEmail ?? undefined,
-
+      purchaseCardHolder: personnel.purchaseCardHolder ?? undefined,
       firstChoiceSection: personnel.firstChoiceSection ?? undefined,
       secondChoiceSection: personnel.secondChoiceSection ?? undefined,
         
@@ -306,7 +304,6 @@ throw Error
       lastName: personnel.lastName,
       employeeId: personnel.employeeId,
       paylistId: personnel.paylistId,
-      purchaseCardHolder: personnel.purchaseCardHolder,
       email: personnel.email,
       primaryPhone: personnel.primaryPhoneNumber,
       secondaryPhone: personnel.secondaryPhoneNumber,
@@ -368,6 +365,8 @@ throw Error
     const functions = personnel?.emcr?.experiences?.map(itm => ({name: itm.function.name, id: itm.functionId}))
     return {
       firstName: personnel.firstName,
+      jobTitle: personnel.jobTitle,
+      
       program:
         personnel.bcws && personnel.emcr
           ? Program.ALL
@@ -458,9 +457,8 @@ throw Error
 
       const allLocations =
         await this.locationService.getAllLocations();
-      let workLocation = allLocations.find(
-        (l) => l.locationName === data.workCity?.trim(),
-      )?.id?.toString();
+      
+      
       let homeLocation = allLocations.find(
         (l) => l.locationName === data.homeCity?.trim(),
       )

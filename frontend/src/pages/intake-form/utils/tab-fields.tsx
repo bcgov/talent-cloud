@@ -285,7 +285,7 @@ const PersonalDetailsTab = {
           component: SelectField,
           required: true,
           placeholder: 'Select an option',
-
+          program: Program.BCWS,
           options: [
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
