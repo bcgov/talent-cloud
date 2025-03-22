@@ -9,28 +9,34 @@ import {
   Patch,
   Query,
   Req,
+  StreamableFile,
   UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  GetEmcrPersonnelDTO,
-  
-  UpdateEmcrPersonnelDTO,
-} from './dto';
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiProduces,
+} from '@nestjs/swagger';
+import { json2csv } from 'json-2-csv';
+import { UpdateResult } from 'typeorm';
+import { Readable } from 'stream';
+import { GetEmcrPersonnelDTO, UpdateEmcrPersonnelDTO } from './dto';
 import { EmcrService } from './emcr.service';
+import { EmcrRO } from './ro';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
-import { AppLogger } from '../logger/logger.service';
-import { GetPersonnelRO, PersonnelRO, UpdatePersonnelDTO  } from '../personnel';
-import { QueryTransformPipe } from '../query-validation.pipe';
-import { EmcrRO } from './ro';
-import { PersonnelService } from '../personnel/personnel.service';
-import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
-import { EmcrUpdateAdapter } from './dto/helpers';
-import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
-import { Roles } from '../auth/roles.decorator';
-import { UpdateResult } from 'typeorm';
+import { Public } from '../auth/public.decorator';
+import { EmcrCsvHeaders } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
+import { AppLogger } from '../logger/logger.service';
+import { GetPersonnelRO, UpdatePersonnelDTO } from '../personnel';
+import { UpdateSkillsDTO } from '../personnel/dto/skills/update-personnel-skills.dto';
+import { PersonnelService } from '../personnel/personnel.service';
+import { QueryTransformPipe } from '../query-validation.pipe';
+import { EmcrUpdateAdapter } from './dto/helpers';
+import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
@@ -69,6 +75,36 @@ export class EmcrController {
       rows: query.rows,
       page: query.page,
     };
+  }
+
+  @ApiOperation({
+    summary: 'Download EMCR Personnel CSV Endpoint',
+    description: 'Returns a CSV file with all listed EMCR personnel',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @ApiProduces('text/csv')
+  //@Programs(Program.EMCR)
+  //@Roles(Role.COORDINATOR)
+  @Public()
+  @Get('/export-test')
+  async exportEmcrPersonnelToCSV(): Promise<StreamableFile> {
+    const csvRawData = await this.emcrService.getEmcrPersonnelforCSV();
+
+    //convert input data to CSV format and prettify headers
+    const csvConverted = json2csv(csvRawData, {
+      keys: EmcrCsvHeaders,
+      useLocaleFormat: true,
+    });
+
+    const csvStream = Readable.from(csvConverted);
+
+    return new StreamableFile(csvStream, {
+      type: 'text/csv',
+      disposition: 'attachment; filename="EMCR_Personnel_Details.csv"',
+    });
   }
 
   @ApiOperation({
@@ -111,38 +147,37 @@ export class EmcrController {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
     const person = new EmcrUpdateAdapter(personnel);
-    
-    if(personnel.trainings){
+
+    if (personnel.trainings) {
       await this.emcrService.updateTraining(personnel.trainings, id);
     }
-    
+
     await this.emcrService.updateEmcrPersonnel(person.emcr, id);
 
-    return await this.personnelService.updatePersonnelDetails(person.details, id);
+    return await this.personnelService.updatePersonnelDetails(
+      person.details,
+      id,
+    );
   }
 
   @ApiOperation({
     summary: 'Coordinator/Logistics Update Emcr Personnel Experiences',
     description: 'Coordinator/logistics endpoint to update emcr experiences',
-})
+  })
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
   })
-  @Roles(Role.COORDINATOR, Role.LOGISTICS)  
+  @Roles(Role.COORDINATOR, Role.LOGISTICS)
   @Programs(Program.EMCR)
   @Patch(':id/experiences')
   async updatePersonnelExperiences(
-    @Body() experiences: UpdateEmcrExperiencesDTO[],    
+    @Body() experiences: UpdateEmcrExperiencesDTO[],
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
   ) {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    return await this.emcrService.updatePersonnelExperiences(
-      id,
-      experiences,
-      
-    );
+    return await this.emcrService.updatePersonnelExperiences(id, experiences);
   }
 
   @ApiOperation({
@@ -159,13 +194,9 @@ export class EmcrController {
     @Body() personnel: UpdateSkillsDTO,
     @Request() req: RequestWithRoles,
     @Param('id') id: string,
-  ): Promise<PersonnelEntity>{
+  ): Promise<PersonnelEntity> {
     this.logger.log(`${req.method}: ${req.url} - ${req.username}`);
 
-    return await this.personnelService.updatePersonnelSkills(
-      personnel,
-      id,
-      
-    );
+    return await this.personnelService.updatePersonnelSkills(personnel, id);
   }
 }

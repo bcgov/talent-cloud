@@ -16,6 +16,7 @@ import {
   EmcrTrainingEntity,
   EmcrFunctionEntity,
 } from '../database/entities/emcr';
+import { AvailabilityEntity } from '../database/entities/personnel/availability.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
@@ -231,6 +232,41 @@ export class EmcrService {
     });
     return { personnel, count };
   }
+
+  /**
+   * Get EMCR Personnel for CSV Export
+   * Extracts full raw JSON list of all EMCR-flagged personnel
+   * and associated table columns for export to CSV file
+   * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
+   */
+  async getEmcrPersonnelforCSV(): Promise<EmcrPersonnelEntity[]> {
+    const qb =
+      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    //join with personnel table and append last deployed date as subselection
+    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
+      (subQuery) => {
+        return subQuery
+          .select('availability.date')
+          .from(AvailabilityEntity, 'availability')
+          .where('availability.personnel = personnel.id')
+          .andWhere('availability.availabilityType = :type', {
+            type: 'DEPLOYED',
+          })
+          .orderBy('availability.date', 'DESC')
+          .take(1);
+      },
+      'last_deployed',
+    );
+    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
+    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
+
+    const personnel = await qb.getRawMany();
+
+    return personnel;
+  }
+
   /**
    * Get Personnel By ID
    * Returns a default availability range of 31 days for a single personnel
