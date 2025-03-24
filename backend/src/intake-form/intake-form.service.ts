@@ -73,9 +73,9 @@ export class IntakeFormService {
       );
     
       if (!existingPerson) {
-        const res = await this.personnelService.createPerson(personnelFromFormData);
+        await this.personnelService.createPerson(personnelFromFormData);
         
-        const formRes = await this.intakeFormRepository.save({
+        await this.intakeFormRepository.save({
           ...createIntakeFormDto,
           status: FormStatusEnum.SUBMITTED,
         });
@@ -276,7 +276,7 @@ export class IntakeFormService {
       preocExperience: personnel.preocExperience === 'true' ? true : false,
       emergencyExperience:
         personnel.emergencyExperience === 'true' ? true : false,
-      experiences: personnel?.functions && Array.from(new Set(personnel.functions))?.filter(itm => !!itm).map((item) => {
+      experiences: personnel?.functions && Array.from(new Set(personnel.functions))?.filter(itm => !!itm).filter(itm => itm.id !== itm.id).map((item) => {
         if(item){
         const functionExp = new EmcrPersonnelExperienceDTO();
         functionExp.functionId = item.id;
