@@ -43,6 +43,7 @@ import {
 } from '../bcws/dto';
 import { LocationEntity } from '../database/entities/location.entity';
 import { BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
+import { CreatePersonnelToolsDTO } from 'src/personnel/dto/skills/create-personnel-tools.dto';
 
 @Injectable()
 export class IntakeFormService {
@@ -303,7 +304,7 @@ export class IntakeFormService {
     locations: LocationEntity[],
   ): CreatePersonnelDTO {
     const person = new CreatePersonnelDTO();
-    if(!personnel.tools || personnel.tools.length === 0   || personnel.tools?.[0].tool === undefined && personnel.tools[0].toolProficiency === undefined){
+    if(!personnel.tools || personnel.tools.length === 0   || !personnel.tools[0].tool || personnel.tools?.[0].tool === undefined && personnel.tools[0].toolProficiency === undefined){
       delete personnel.tools
     }
     if(!personnel.languages || personnel.languages[0].language === '' && personnel.languages[0].languageProficiency === ''){
@@ -334,12 +335,12 @@ export class IntakeFormService {
       division: personnel.division,
       tools: personnel.tools ? personnel.tools?.map((item) => {
         if(item && item?.tool && item?.tool?.id){
-        const tool = new PersonnelTools();
-        tool.toolId = item.tool.id
+        const tool = new CreatePersonnelToolsDTO();
+        tool.toolId = item?.tool?.id
         tool.proficiencyLevel = ToolsProficiency[item.toolProficiency];
         return tool;
         }
-      }) : [],
+      }).filter(itm => itm.toolId !== undefined) : [],
       languages: personnel.languages ? personnel.languages.map((item) => {
         if(item.language === '' && item.languageProficiency === ''){
           return
