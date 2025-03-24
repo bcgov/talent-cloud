@@ -46,8 +46,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2024-03-15'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: true,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: false,
       preocExperience: false,
       emergencyExperience: false,
@@ -131,8 +131,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2024-01-10'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: false,
       preocExperience: true,
       emergencyExperience: false,
@@ -223,8 +223,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2024-01-30'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: false,
       preocExperience: false,
       emergencyExperience: true,
@@ -319,8 +319,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date(new Date(2023, 5, 11)),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: true,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: false,
       preocExperience: false,
       emergencyExperience: false,
@@ -414,8 +414,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2023-05-31'),
 
       psychologicalFirstAid: true,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: true,
+      
+      firstNationExperience: true,
       peccExperience: true,
       preocExperience: false,
       emergencyExperience: false,
@@ -483,8 +483,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2024-02-03'),
 
       psychologicalFirstAid: true,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: false,
       preocExperience: false,
       emergencyExperience: false,
@@ -553,8 +553,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2023-12-03'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: true,
+      
+      firstNationExperience: true,
       peccExperience: true,
       preocExperience: false,
       emergencyExperience: true,
@@ -642,8 +642,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2024-03-10'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: true,
-      firstNationExperienceWorking: false,
+      
+      firstNationExperience: false,
       peccExperience: true,
       preocExperience: false,
       emergencyExperience: false,
@@ -733,8 +733,8 @@ export const personnel: CreatePersonnelDTO[] = [
       firstAidExpiry: new Date('2023-12-04'),
 
       psychologicalFirstAid: false,
-      firstNationExperienceLiving: false,
-      firstNationExperienceWorking: true,
+      
+      firstNationExperience: true,
       peccExperience: false,
       preocExperience: false,
       emergencyExperience: false,

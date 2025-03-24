@@ -40,17 +40,13 @@ export class EmcrRO {
   })
   travelPreference?: TravelPreference;
 
-  @ApiProperty({
-    description: 'Has experience living with First Nations',
-    required: false,
-  })
-  firstNationExperienceLiving?: boolean;
+  
 
   @ApiProperty({
     description: 'Has experience working with First Nations',
     required: false,
   })
-  firstNationExperienceWorking?: boolean;
+  firstNationExperience?: boolean;
 
   @ApiProperty({
     description: 'Has experience with PECC',

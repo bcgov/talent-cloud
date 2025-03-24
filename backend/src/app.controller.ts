@@ -80,13 +80,11 @@ export class AppController {
     this.logger.log(`${req.url} ${req.roles}`);
 
     const sections = await this.bcwsService.getRoles();
-    const certificates = await this.personnelService.getCertificates(true);
+    const certificates = await this.personnelService.getCertificates();
     const tools = await this.personnelService.getTools();
     const roles = await this.bcwsService.getAllRoles();
     const functions = await this.emcrService.getFunctions();
-    /**
-     * !! IMPORANT - ensure any changes made to this endpoint are reflected in the CHEFS form !!
-     */
+    
     return {
       ministries: Object.values(Ministry).map((ministry) => ({
         value: ministry,

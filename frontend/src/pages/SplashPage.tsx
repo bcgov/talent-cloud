@@ -1,12 +1,10 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { createCustomLoginUrl } from '@/utils/keycloak';
-import { useEffect, useState } from 'react';
 import { ButtonTypes } from '@/common';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Button, PublicLayout } from '@/components';
 import { SplashImage } from '@/components/images';
 import { Banner } from '@/components/ui/Banner';
-import { AxiosPublic } from '@/utils';
 import { Routes } from '@/routes';
 import { useNavigate } from 'react-router';
 
@@ -15,19 +13,7 @@ const SplashPage = () => {
   const login = () => {
     window.location.replace(createCustomLoginUrl(keycloak, Routes.Redirect, ''));
   };
-  const [formId, setFormId] = useState<string>();
-  const [formEnabled, setFormEnabled] = useState<boolean>(false);
-  const [env, setEnv] = useState();
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await AxiosPublic.get('/form');
-
-      setFormId(data.formId);
-      setFormEnabled(data.formEnabled);
-      setEnv(data.env);
-    })();
-  }, []);
   const navigate = useNavigate();
   const content = {
     title: 'Welcome to CORE Team',
@@ -46,37 +32,19 @@ const SplashPage = () => {
       <div className="grid pt-40 lg:pt-16 grid-cols-1 px-6 lg:grid-cols-2 xl:grid-cols-3 sm:px-8 md:px-12  lg:px-0 2xl:px-64">
         <div className="col-span-1  xl:col-span-2 flex flex-col items-start justify-start text-left lg:py-24 lg:px-16 xl:pl-40 xl:pr-64 2xl:px-64">
           <div>
-            {/* Update env vars to change form url and to enable/disable form*/}
-            {formId && formEnabled ? (
-              <Banner
-                type={BannerType.INFO}
-                content={
-                  <>
-                    <span className="font-bold">CORE</span>
-                    {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
-                    <a
-                      href={
-                        env === 'prod'
-                          ? `https://submit.digital.gov.bc.ca/app/form/submit?f=${formId}`
-                          : Routes.IntakeForm
-                      }
-                    >
-                      <span className="font-bold">here.</span>
-                    </a>
-                  </>
-                }
-              />
-            ) : (
-              <Banner
-                type={BannerType.INFO}
-                content={
-                  <>
-                    <span className="font-bold mr-2">CORE</span>
-                    {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are not yet open for ${new Date().getFullYear()}. Please stay tuned. Details coming soon.`}
-                  </>
-                }
-              />
-            )}
+            <Banner
+              type={BannerType.INFO}
+              content={
+                <>
+                  <span className="font-bold">CORE</span>
+                  {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
+                  <a href={Routes.IntakeForm}>
+                    <span className="font-bold">here.</span>
+                  </a>
+                </>
+              }
+            />
+
             <div className="pt-16 lg:pt-24">
               <span className="text-info lg:mt-32">{content.subtitle}</span>
               <h1 className="font-bold pt-8 pb-16">{content.title}</h1>
