@@ -382,7 +382,7 @@ const PersonalDetailsTab = {
           type: 'text',
           component: TextField,
           required: true,
-          placeholder: 'Smith',
+          placeholder: 'John.Smith@gov.bc.ca',
         },
         {
           name: 'supervisorPhoneNumber',
