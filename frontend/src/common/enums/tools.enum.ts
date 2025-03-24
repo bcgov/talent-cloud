@@ -32,6 +32,19 @@ export enum ToolsProficiencyName {
   ADVANCED = 'Advanced',
 }
 
+export enum Certification {
+  OFA_I = 'OFA_I',
+  OFA_II = 'OFA_II',
+  OFA_III = 'OFA_III',
+  FOODSAFE_I = 'FOODSAFE_I',
+  FOODSAFE_II = 'FOODSAFE_II',
+  QUAD_ATV = 'QUAD_ATV',
+  RADIO_OPERATOR = 'RADIO_OPERATOR',
+  VOLUNTEER_FIRE_DEPT = 'VOLUNTEER_FIRE_DEPT',
+  FORKLIFT = 'FORKLIFT',
+  PSYCHOLOGICAL_FIRST_AID = 'PSYCHOLOGICAL_FIRST_AID',
+}
+
 export enum CertificationName {
   OFA_I = 'OFA I',
   OFA_II = 'OFA II',

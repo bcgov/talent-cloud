@@ -11,7 +11,6 @@ import { BcwsModule } from './bcws/bcws.module';
 import { DatabaseModule } from './database/database.module';
 import { EmcrModule } from './emcr/emcr.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
-import { FormModule } from './form/form.module';
 import { LoggerModule } from './logger/logger.module';
 import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
@@ -36,7 +35,6 @@ import { IntakeFormModule } from './intake-form/intake-form.module';
     PersonnelModule,
     BcwsModule,
     EmcrModule,
-    FormModule,
     RegionsAndLocationsModule,
     RecommitmentModule,
     AuditModule,

@@ -85,25 +85,12 @@ export class EmcrPersonnelEntity {
   })
   status: Status;
 
-  @Column({
-    name: 'first_aid_level',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  firstAidLevel?: string;
+  
 
-  @Column({ name: 'first_aid_expiry', type: 'date', nullable: true })
-  firstAidExpiry?: Date;
+  @Column({ name: 'first_nation_exp', type: 'boolean', nullable: true })
+  firstNationExperience?: boolean;
 
-  @Column({ name: 'psychological_first_aid', type: 'boolean', nullable: true })
-  psychologicalFirstAid?: boolean;
-
-  @Column({ name: 'first_nation_exp_living', type: 'boolean', nullable: true })
-  firstNationExperienceLiving?: boolean;
-
-  @Column({ name: 'first_nation_exp_working', type: 'boolean', nullable: true })
-  firstNationExperienceWorking?: boolean;
+  
 
   @Column({
     name: 'travel_preference',
@@ -154,11 +141,7 @@ export class EmcrPersonnelEntity {
       coordinatorNotes: this.coordinatorNotes,
       logisticsNotes: this.logisticsNotes,
       approvedBySupervisor: this.approvedBySupervisor,
-      firstAidLevel: this.firstAidLevel ?? '',
-      firstAidExpiry: this.firstAidExpiry ?? '',
-      psychologicalFirstAid: this.psychologicalFirstAid ?? '',
-      firstNationExperienceLiving: this.firstNationExperienceLiving ?? '',
-      firstNationExperienceWorking: this.firstNationExperienceWorking ?? '',
+      firstNationExperience: this.firstNationExperience ?? '',
       peccExperience: this.peccExperience ?? '',
       preocExperience: this.preocExperience ?? '',
       emergencyExperience: this.emergencyExperience ?? '',

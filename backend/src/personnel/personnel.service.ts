@@ -959,16 +959,9 @@ export class PersonnelService {
    * @returns {CertificationEntity[]} List of certifications
    *
    */
-  async getCertificates(
-    filterCommonCerts: boolean,
-  ): Promise<CertificationEntity[]> {
-    const certificates = await this.certificationRepository.find();
-    if (!filterCommonCerts) {
-      return certificates;
-    } else {
-      // filter out the OFA I, II, and III certifications and the PFA certification as these are listed separately on the CHEFS form
-      return certificates.filter((itm) => ![2, 8, 9, 10].includes(itm.id));
-    }
+  async getCertificates(): Promise<CertificationEntity[]> {
+
+    return await this.certificationRepository.find();
   }
 
   /**

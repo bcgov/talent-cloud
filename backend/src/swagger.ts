@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import { AuthModule } from './auth/auth.module';
 import { BcwsModule } from './bcws/bcws.module';
 import { EmcrModule } from './emcr/emcr.module';
-import { FormModule } from './form/form.module';
 import { MailModule } from './mail/mail.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { RecommitmentModule } from './recommitment/recommitment.module';
@@ -26,7 +25,6 @@ export const Documentation = (app: INestApplication) => {
       PersonnelModule,
       BcwsModule,
       EmcrModule,
-      FormModule,
       RegionsAndLocationsModule,
       MailModule,
       RecommitmentModule,

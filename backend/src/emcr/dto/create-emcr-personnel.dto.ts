@@ -100,17 +100,11 @@ export class CreatePersonnelEmcrDTO {
   @Type(() => EmcrPersonnelExperienceDTO)
   experiences?: EmcrPersonnelExperienceDTO[];
 
-  @ApiProperty({
-    description: 'First Nation Experience Living',
-  })
-  @IsOptional()
-  firstNationExperienceLiving?: boolean;
 
   @ApiProperty({
-    description: 'First Nation Experience Working',
-  })
+    description: 'First Nation Experience'})
   @IsOptional()
-  firstNationExperienceWorking?: boolean;
+  firstNationExperience?: boolean;
 
   @ApiProperty({
     description: 'PECC Experience',
