@@ -34,29 +34,21 @@ const FormWrapper = () => {
 
   const getFieldOptions = (name: string, values: IntakeFormValues) => {
     switch (name) {
-      case 'program':
-        return Object.values(Program).map((itm) => ({
-          label: itm,
-          value: itm,
-        }));
-      case 'roles':
-        return sections;
-
       case 'homeLocation':
         return locations.map((loc: any) => ({
           label: loc.locationName,
-          value: loc,
-        })) as unknown as { label: string; value: string }[];
+          value: { id: loc.id, name: loc.locationName },
+        }));
       case 'tool':
         return tools.map((tool: any) => ({
           label: tool.fullName,
-          value: tool,
-        })) as unknown as { label: string; value: string }[];
+          value: { id: tool.id, name: tool.fullName },
+        }));
       case 'certification':
         return certificates.map((cert: any) => ({
           label: cert.name,
-          value: cert,
-        })) as unknown as { label: string; value: string }[];
+          value: { id: cert.id, name: cert.name },
+        }));
       case 'firstChoiceSection':
       case 'secondChoiceSection':
       case 'thirdChoiceSection':
@@ -128,7 +120,7 @@ const FormWrapper = () => {
         return functions.map((itm: any) => ({
           label: itm.name,
           value: itm,
-        })) as unknown as { label: string; value: any }[];
+        }));
 
       default:
         return [];

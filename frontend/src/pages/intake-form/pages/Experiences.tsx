@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { FormSection } from '../components/FormSection';
 import type {
+  FormComponent,
   FormFields,
   FormSection as FormSectionType,
   IntakeFormValues,
@@ -20,6 +21,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       secondChoiceFunction,
       thirdChoiceFunction,
       program,
+      firstChoiceSection,
     },
   } = useFormikContext<IntakeFormValues>();
 
@@ -95,6 +97,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   } else {
     description = '';
   }
+  console.log(firstChoiceSection);
   return (
     <div>
       <div className="text-sm py-6">{description}</div>
@@ -111,9 +114,10 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                 <>
                   {section.fields?.map((fieldItm: FormFields) => (
                     <Fragment key={fieldItm.name}>
-                      {intakeFormComponents.includes(fieldItm.type) ? (
+                      {fieldItm.type &&
+                      intakeFormComponents.includes(fieldItm.type) ? (
                         <div className="col-span-2">
-                          {renderIntakeFormComponent(fieldItm)}
+                          {renderIntakeFormComponent(fieldItm as FormComponent)}
                         </div>
                       ) : fieldItm.type === 'multiselect-group' ? (
                         <div className="col-span-2">

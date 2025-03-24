@@ -259,7 +259,7 @@ const PersonalDetailsTab = {
           required: true,
           placeholder: 'Select an option',
           options: Object.values(Ministry).map((itm) => ({
-            label: MinistryName[itm],
+            label: MinistryName[itm].toString(),
             value: itm,
           })),
         },
@@ -279,7 +279,7 @@ const PersonalDetailsTab = {
           component: SelectField,
           required: true,
           options: Object.values(UnionMembership).map((itm) => ({
-            label: itm,
+            label: itm.toString(),
             value: itm,
           })),
         },

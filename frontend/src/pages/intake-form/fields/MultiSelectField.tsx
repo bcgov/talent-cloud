@@ -23,7 +23,7 @@ export const MultiSelectField = ({
   placeholder?: string;
 }) => {
   const { values, setFieldValue } = useFormikContext<IntakeFormValues>();
-
+  console.log(values, field.name);
   const handleClose = (v: any) => {
     setFieldValue(
       field.name,
@@ -35,6 +35,7 @@ export const MultiSelectField = ({
   };
   const handleChange = (v: any) => {
     const fieldValues = values[field.name as keyof typeof values] as any[];
+    console.log(fieldValues);
     if (field.name === 'driverLicense') {
       if (fieldValues.map((itm) => itm.value).includes(v.value)) {
         const filterValue = fieldValues.filter((itm) => itm.value !== v.value);
@@ -43,8 +44,8 @@ export const MultiSelectField = ({
         setFieldValue(field.name, [...fieldValues, v]);
       }
     } else if (field.name !== 'driverLicense') {
-      if (fieldValues?.map((itm) => itm?.value.id)?.includes(v.value.id)) {
-        const filterValue = fieldValues.filter((itm) => itm.value.id !== v.value.id);
+      if (fieldValues?.map((itm) => itm?.id)?.includes(v.id)) {
+        const filterValue = fieldValues.filter((itm) => itm.id !== v.id);
         setFieldValue(field.name, filterValue);
       } else {
         setFieldValue(field.name, [...fieldValues, v]);
@@ -78,17 +79,24 @@ export const MultiSelectField = ({
                   ) : (
                     (values[field.name as keyof typeof values] as any[]) &&
                     (values[field.name as keyof typeof values] as any[]).map(
-                      (itm: any) => {
+                      (itm: any, index: number) => {
                         return (
                           <Chip
-                            key={itm}
+                            key={index.toString() + field.name + (itm.name ?? '')}
                             value={
                               <Typography
                                 placeholder={undefined}
                                 variant="small"
                                 className="font-bold text-info capitalize leading-none"
                               >
-                                {itm?.label ?? ''}
+                                {
+                                  options?.find(
+                                    (option) =>
+                                      (option.value?.id &&
+                                        option.value?.id === itm.id) ||
+                                      itm.value === itm,
+                                  )?.label
+                                }
                               </Typography>
                             }
                             variant="ghost"
@@ -124,7 +132,7 @@ export const MultiSelectField = ({
                 className="flex flex-row items-center gap-x-1 pl-2"
               >
                 <Checkbox
-                  onChange={() => handleChange(itm)}
+                  onChange={() => handleChange(itm.value)}
                   id="vertical-list-react"
                   ripple={false}
                   className="hover:before:opacity-0 checkbox rounded-none"

@@ -54,7 +54,6 @@ export const personalAndEmployeeDetails: PersonalDetails &
   travelPreferenceBcws: '',
   travelPreferenceEmcr: '',
   paylistId: '',
-  functions: [],
 };
 
 export const experienceDetails: GeneralEmergencyManagementExperience &
@@ -103,26 +102,11 @@ export const programDetails: ProgramAck = {
   disabledProgram: '',
 };
 
-export const initialValueSteps: {
-  0: ProgramAck;
-  1: PersonalDetails;
-  2: GeneralEmergencyManagementExperience & SectionChoiceEmcr & SectionChoiceBcws;
-  3: Skills;
-  4: any;
-  5: any;
-} = {
-  0: programDetails,
-  1: personalAndEmployeeDetails,
-  2: experienceDetails,
-  3: skillsDetails,
-  4: {},
-  5: {},
-};
-
 export const intakeFormInitialValues: IntakeFormValues = {
   step: 0,
   completedSteps: [],
   errorSteps: [],
+  reviewAck: undefined,
   ...programDetails,
   ...personalAndEmployeeDetails,
   ...experienceDetails,

@@ -19,7 +19,7 @@ export const SelectField = ({
 }: {
   field: FieldInputProps<any>;
   disabled?: boolean;
-  options?: { label: string; value: any; disabled?: boolean }[];
+  options?: any[];
   placeholder?: string;
 }) => {
   const { setFieldValue } = useFormikContext<IntakeFormValues>();
@@ -30,13 +30,19 @@ export const SelectField = ({
         <div className={clsx('relative')}>
           <ListboxButton className={clsx(classes.menu.formContainer)}>
             <div className="flex flex-row justify-between items-center">
-              {!field.value || field.value === '' || field.value === undefined ? (
+              {!field.value ||
+              field.value.name === '' ||
+              field.value === undefined ? (
                 <span className="text-gray-500 text-sm">{placeholder}</span>
               ) : (
                 <span className="truncate">
-                  {options?.find((itm) => itm.value === field.value)?.label ||
-                    field.value?.name ||
-                    field.value.toString()}
+                  {
+                    options?.find(
+                      (itm) =>
+                        (itm.value?.id && itm.value.id === field.value.id) ||
+                        itm.value === field.value,
+                    )?.label
+                  }
                 </span>
               )}
 

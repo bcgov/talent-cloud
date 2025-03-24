@@ -39,7 +39,9 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                                     ] as any[]
                                   )?.find(
                                     (value) =>
-                                      value[nested.name]?.id === option.value?.id,
+                                      value[nested.name]?.id ===
+                                      (option.value as { id: any; name: string })
+                                        ?.id,
                                   ) ?? false,
                               }))
                             : nested.options

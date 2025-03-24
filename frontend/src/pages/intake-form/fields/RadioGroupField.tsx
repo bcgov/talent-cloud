@@ -14,14 +14,15 @@ export const RadioGroupField = ({
   options?: any[];
 }) => {
   const { values, setFieldValue } = useFormikContext<IntakeFormValues>();
-  const disabled = field.name === 'program' && values.disabledProgram ? true : false;
+  const disabled =
+    field.name === 'program' && values?.disabledProgram ? true : false;
 
   return (
     <>
       <div id="my-radio-group"></div>
       <div role="group" aria-labelledby="my-radio-group" className="flex flex-col">
-        {options?.map((itm: any) => (
-          <label key={itm.value} className="font-normal">
+        {options?.map((itm: any, index: number) => (
+          <label key={itm?.value + index?.toString()} className="font-normal">
             <Field
               {...field}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -29,7 +30,7 @@ export const RadioGroupField = ({
               }
               value={itm.value}
               type="radio"
-              disabled={disabled}
+              disabled={values.disabledProgram?.toString() === itm.value.toString()}
               className={clsx(disabled && 'bg-gray-200')}
             />
             <span
