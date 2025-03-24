@@ -19,21 +19,13 @@ export const CheckboxField = ({
   placeholder: string;
 }) => {
   const { setFieldValue } = useFormikContext<IntakeFormValues>();
-
-  const handleChange = (value: any) => {
-    const valueSet = new Set(field.value);
-    if (valueSet.has(value)) {
-      valueSet.delete(value);
-    } else {
-      valueSet.add(value);
-    }
-    setFieldValue(field.name, Array.from(valueSet));
-  };
   return (
     <>
       <div className="w-full flex flex-row font-normal mt-2 text-sm gap-2 text-defaultGray text-wrap">
         <Checkbox
-          onChange={(e) => handleChange(e ? 'true' : 'false')}
+          onChange={(e) => setFieldValue(field.name, e ? 'true' : 'false')}
+          checked={field.value === 'true'}
+          defaultValue={'false'}
           name={`${field.name}`}
           className="group block size-4 rounded border border-gray-700 bg-white data-[checked]:bg-gray-700 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[checked]:data-[disabled]:bg-gray-500 "
         >
