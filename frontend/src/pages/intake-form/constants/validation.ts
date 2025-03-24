@@ -412,9 +412,7 @@ const certificationsSchema = Yup.object().shape({
       expiry: Yup.date(),
     }),
   ),
-  driverLicense: Yup.array().of(
-    Yup.object().shape({ label: Yup.string(), id: Yup.string() }),
-  ),
+  driverLicense: Yup.array().optional(),
 });
 
 const personnelStepValidation = personalDetailsSchema

@@ -37,8 +37,8 @@ export const MultiSelectField = ({
     const fieldValues = values[field.name as keyof typeof values] as any[];
     console.log(fieldValues);
     if (field.name === 'driverLicense') {
-      if (fieldValues.map((itm) => itm.value).includes(v.value)) {
-        const filterValue = fieldValues.filter((itm) => itm.value !== v.value);
+      if (fieldValues.includes(v)) {
+        const filterValue = fieldValues.filter((itm) => itm !== v);
         setFieldValue(field.name, filterValue);
       } else {
         setFieldValue(field.name, [...fieldValues, v]);
@@ -94,7 +94,7 @@ export const MultiSelectField = ({
                                     (option) =>
                                       (option.value?.id &&
                                         option.value?.id === itm.id) ||
-                                      itm.value === itm,
+                                      option.value === itm,
                                   )?.label
                                 }
                               </Typography>

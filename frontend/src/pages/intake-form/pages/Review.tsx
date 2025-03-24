@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { DriverLicenseName, MinistryName } from '@/common';
+import { BcwsRoleName } from '@/common/enums/sections.enum';
 
 const ReviewFields = ({
   fields,
@@ -37,7 +38,7 @@ const ReviewFields = ({
       case 'expiry':
         return value && format(value, 'yyyy-MM-dd');
       case 'toolProficiency':
-        return (value && value.name) || '--';
+        return (value && value) || '--';
       case 'travelPreferenceEmcr':
       case 'travelPreferenceBcws':
         return value && value.name;
@@ -50,14 +51,18 @@ const ReviewFields = ({
       case 'firstChoiceSection':
       case 'secondChoiceSection':
       case 'thirdChoiceSection':
-        return value && value?.name ? value.name : '--';
+        return value ? value?.name : '--';
       case 'PLANNING':
       case 'LOGISTICS':
       case 'FINANCE_ADMIN':
       case 'OPERATIONS':
       case 'COMMAND':
       case 'AVIATION':
-        return (value as any[])?.map((itm) => itm.name)?.join('; ') ?? '--';
+        return (
+          (value as any[])
+            ?.map((itm) => BcwsRoleName[itm.name as keyof typeof BcwsRoleName])
+            ?.join('; ') ?? '--'
+        );
       case 'languageProficiency':
         return (
           (value &&
@@ -73,10 +78,7 @@ const ReviewFields = ({
           (value &&
             value.length > 0 &&
             (value as any[])
-              .map(
-                (itm) =>
-                  DriverLicenseName[itm?.value as keyof typeof DriverLicenseName],
-              )
+              .map((itm) => DriverLicenseName[itm as keyof typeof DriverLicenseName])
               .join('; ')) ||
           '--'
         );

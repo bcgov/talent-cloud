@@ -276,7 +276,7 @@ export class IntakeFormService {
       preocExperience: personnel.preocExperience === 'true' ? true : false,
       emergencyExperience:
         personnel.emergencyExperience === 'true' ? true : false,
-      experiences: personnel.functions && Array.from(new Set(personnel.functions))?.filter(itm => !!itm).map((item) => {
+      experiences: personnel?.functions && Array.from(new Set(personnel.functions))?.filter(itm => !!itm).map((item) => {
         if(item){
         const functionExp = new EmcrPersonnelExperienceDTO();
         functionExp.functionId = item.id;
