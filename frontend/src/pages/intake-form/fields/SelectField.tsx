@@ -30,13 +30,19 @@ export const SelectField = ({
         <div className={clsx('relative')}>
           <ListboxButton className={clsx(classes.menu.formContainer)}>
             <div className="flex flex-row justify-between items-center">
-              {!field.value || field.value === '' || field.value === undefined ? (
+              {!field.value ||
+              field.value.name === '' ||
+              field.value === undefined ? (
                 <span className="text-gray-500 text-sm">{placeholder}</span>
               ) : (
                 <span className="truncate">
-                  {options?.find((itm) => itm.value.id === field.value.id)?.label ||
-                    field.value?.name ||
-                    field.value.toString()}
+                  {
+                    options?.find(
+                      (itm) =>
+                        (itm.value?.id && itm.value.id === field.value.id) ||
+                        itm.value === field.value,
+                    )?.label
+                  }
                 </span>
               )}
 
@@ -63,15 +69,15 @@ export const SelectField = ({
                     'text-gray-400 ml-3 block truncate font-normal group-data-selected:font-semibold',
                   )}
                 >
-                  Select and option
+                  Select an option
                 </span>
               </div>
             </ListboxOption>
             {options?.map((option, index) => (
               <ListboxOption
-                key={`${field.name}.${option.value.id}.${index}`}
+                key={`${field.name}.${option.value?.id}.${index}`}
                 value={option.value}
-                disabled={option.disabled}
+                disabled={option?.disabled}
                 className="group relative cursor-default py-2 pr-9 pl-3 select-none data-focus:bg-[#3B8FDD] data-focus:text-white data-focus:outline-hidden"
               >
                 <div className="flex items-center">

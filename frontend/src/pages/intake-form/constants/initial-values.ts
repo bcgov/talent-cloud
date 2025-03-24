@@ -13,6 +13,7 @@ import type {
   Skills,
   ProgramAck,
   IntakeFormValues,
+  BCWSRoles,
 } from './types';
 
 export const reviewAndSubmit: ReviewAndSubmit = {
@@ -35,6 +36,7 @@ export const personalAndEmployeeDetails: PersonalDetails &
   workPhoneNumber: '',
   ministry: '',
   division: '',
+  purchaseCardHolder: '',
   supervisorFirstName: '',
   supervisorLastName: '',
   supervisorEmail: '',
@@ -56,26 +58,25 @@ export const personalAndEmployeeDetails: PersonalDetails &
 
 export const experienceDetails: GeneralEmergencyManagementExperience &
   SectionChoiceEmcr &
-  SectionChoiceBcws = {
+  SectionChoiceBcws &
+  BCWSRoles = {
   emergencyExperience: undefined,
   preocExperience: undefined,
   peccExperience: undefined,
   firstNationsExperience: undefined,
   functions: [],
-  firstChoiceSection: '',
-  secondChoiceSection: '',
-  thirdChoiceSection: '',
+  firstChoiceSection: undefined,
+  secondChoiceSection: undefined,
+  thirdChoiceSection: undefined,
   firstChoiceFunction: undefined,
   secondChoiceFunction: undefined,
   thirdChoiceFunction: undefined,
-  // roles: [
-  //   { [Section.PLANNING.toString()]: [] },
-  //   { [Section.LOGISTICS.toString()]: [] },
-  //   { [Section.FINANCE_ADMIN.toString()]: [] },
-  //   { [Section.OPERATIONS.toString()]: [] },
-  //   { [Section.COMMAND.toString()]: [] },
-  //   { [Section.AVIATION.toString()]: [] },
-  // ],
+  PLANNING: [],
+  LOGISTICS: [],
+  FINANCE_ADMIN: [],
+  OPERATIONS: [],
+  COMMAND: [],
+  AVIATION: [],
 };
 
 export const skillsDetails: Skills = {
@@ -89,6 +90,7 @@ export const skillsDetails: Skills = {
   certifications: [
     {
       certification: undefined,
+      expiry: undefined,
     },
   ],
   driverLicense: [],
@@ -100,26 +102,11 @@ export const programDetails: ProgramAck = {
   disabledProgram: '',
 };
 
-export const initialValueSteps: {
-  0: ProgramAck;
-  1: PersonalDetails;
-  2: GeneralEmergencyManagementExperience & SectionChoiceEmcr & SectionChoiceBcws;
-  3: Skills;
-  4: any;
-  5: any;
-} = {
-  0: programDetails,
-  1: personalAndEmployeeDetails,
-  2: experienceDetails,
-  3: skillsDetails,
-  4: {},
-  5: {},
-};
-
 export const intakeFormInitialValues: IntakeFormValues = {
   step: 0,
   completedSteps: [],
   errorSteps: [],
+  reviewAck: undefined,
   ...programDetails,
   ...personalAndEmployeeDetails,
   ...experienceDetails,

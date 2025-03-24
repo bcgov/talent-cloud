@@ -1,6 +1,8 @@
 /* eslint-disable */
 
+import { BcwsRoleName, Section, SectionName } from "../common/enums";
 import { LocationDTO } from "../personnel/dto/details/personnel-details.dto";
+import { Program } from "../auth/interface";
 
 export interface IntakeFormPersonnelData {
   completedSteps?: number[];
@@ -8,8 +10,9 @@ export interface IntakeFormPersonnelData {
   step?: number;
   firstName?: string;
   lastName?: string;
-  program?: string;
-  disabledProgram?: string;
+  program?: Program;
+  disabledProgram?: Program;
+  acknowledgement?: string[]
   employeeId?: string;
   paylistId?: string;
   email: string;
@@ -22,18 +25,20 @@ export interface IntakeFormPersonnelData {
   supervisorEmail?: string;
   supervisorPhoneNumber?: string;
   driverLicense?: string[];
-  homeLocation?: LocationDTO;
-  ministry?: string;
+  homeLocation?: LocationDTO & {
+    name: string
+  };
+  ministry?: string
   division?: string;
   tools?: {
     tool?: {
       id: number, name: string
     }
-    toolProficiency?: string;
+    toolProficiency?: string
   }[];
   languages?: {
     language?: string;
-    languageProficiency?: string;
+    languageProficiency?: string
   }[];
   certifications?: {
     certification?: {
@@ -63,17 +68,31 @@ export interface IntakeFormPersonnelData {
   functions?: ({
     id?: number, name?: string
   }|null)[];
-  purchaseCardHolder?: boolean;
+  purchaseCardHolder?: string
   liaisonFirstName?: string;
   liaisonLastName?: string;
   liaisonPhoneNumber?: string;
   liaisonEmail?: string;
-  firstChoiceSection?: string;
-  secondChoiceSection?: string;
-  thirdChoiceSection?: string;
-  travelPreferenceBcws?: string;
-  travelPreferenceEmcr?: string;
-  roles?: string[];
+  firstChoiceSection?: {
+    id: Section, 
+    name: SectionName
+  };
+  secondChoiceSection?: {
+    id: Section, 
+    name: SectionName
+  };
+  thirdChoiceSection?: {
+    id: Section, 
+    name: SectionName
+  };
+  travelPreferenceBcws?: string
+  travelPreferenceEmcr?: string
   chipsLastActionDate?: Date;
   jobTitle?: string;
+  PLANNING?:  {id: number, name: BcwsRoleName}[],
+  LOGISTICS?: {id: number, name: BcwsRoleName}[],
+  FINANCE_ADMIN?:  {id: number, name: BcwsRoleName}[],
+  OPERATIONS?:  {id: number, name: BcwsRoleName}[],
+  COMMAND?:  {id: number, name: BcwsRoleName}[],
+  AVIATION?:  {id: number, name: BcwsRoleName}[],
 }

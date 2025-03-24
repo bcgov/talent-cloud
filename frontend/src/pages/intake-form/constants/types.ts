@@ -1,5 +1,5 @@
 // formik
-import type { FunctionType, Location, Program } from '@/common';
+import type { FunctionType, Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
@@ -15,7 +15,12 @@ export interface FormFields {
   hidden?: boolean;
   label: string | ReactComponentElement<any>;
   name: string;
-  options?: any[];
+  options?: {
+    label: any;
+    disabled?: boolean;
+    value: any;
+  }[];
+
   placeholder?: string;
   required?: boolean;
   type: string;
@@ -82,7 +87,10 @@ export interface PersonalDetails {
   lastName?: string;
   primaryPhoneNumber?: string;
   secondaryPhoneNumber?: string;
-  homeLocation?: Location;
+  homeLocation?: Location & {
+    id: number;
+    name: string;
+  };
   email?: string;
 }
 
@@ -99,6 +107,7 @@ export interface EmploymentDetails {
   paylistId?: string;
   travelPreferenceBcws?: string;
   travelPreferenceEmcr?: string;
+  purchaseCardHolder?: string;
 }
 
 // supervisor and liaison details, travel preferences
@@ -136,10 +145,19 @@ export interface SectionChoiceEmcr {
   thirdChoiceFunction?: FunctionType;
 }
 
+export interface BCWSRoles {
+  PLANNING: { id: number; name: string }[];
+  LOGISTICS: { id: number; name: string }[];
+  FINANCE_ADMIN: { id: number; name: string }[];
+  OPERATIONS: { id: number; name: string }[];
+  COMMAND: { id: number; name: string }[];
+  AVIATION: { id: number; name: string }[];
+}
+
 export interface SectionChoiceBcws {
-  firstChoiceSection?: string;
-  secondChoiceSection?: string;
-  thirdChoiceSection?: string;
+  firstChoiceSection?: { id: string; name: string };
+  secondChoiceSection?: { id: string; name: string };
+  thirdChoiceSection?: { id: string; name: string };
 }
 
 // export interface SectionRolesBcws {
@@ -150,6 +168,10 @@ export interface ProgramAck {
   program?: Program | string;
   acknowledgement?: string[];
   disabledProgram?: Program | string;
+}
+
+export interface ReviewAck {
+  reviewAck?: boolean;
 }
 
 // other skills & qualifications
@@ -166,11 +188,15 @@ export interface CertificationSkill {
   };
   expiry?: Date;
 }
+export interface DriverLicense {
+  label: string;
+  id: string;
+}
 export interface Skills {
   languages?: LanguageSkill[];
   certifications?: CertificationSkill[];
   tools?: ToolsSkill[];
-  driverLicense?: string[];
+  driverLicense?: DriverLicense[];
 }
 // review & submit
 
@@ -207,4 +233,6 @@ export type IntakeFormValues = FormData &
   SectionChoiceBcws &
   SectionChoiceEmcr &
   GeneralEmergencyManagementExperience &
-  Skills;
+  Skills &
+  BCWSRoles &
+  ReviewAck;

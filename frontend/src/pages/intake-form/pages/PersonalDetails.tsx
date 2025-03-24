@@ -1,5 +1,8 @@
 import { FormSection } from '../components/FormSection';
-import type { FormSection as FormSectionType } from '../constants/types';
+import type {
+  FormComponent,
+  FormSection as FormSectionType,
+} from '../constants/types';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
 import { FormField } from '../fields/FormField';
@@ -27,9 +30,10 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
               <>
                 {itm.fields?.map((fieldItm) => (
                   <Fragment key={fieldItm.name}>
-                    {intakeFormComponents.includes(fieldItm.type) ? (
+                    {fieldItm.type &&
+                    intakeFormComponents.includes(fieldItm?.type) ? (
                       <div className={'col-span-2'}>
-                        {renderIntakeFormComponent(fieldItm)}
+                        {renderIntakeFormComponent(fieldItm as FormComponent)}
                       </div>
                     ) : (
                       <div
@@ -40,7 +44,7 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
                             : 'col-span-1'
                         }
                       >
-                        <FormField key={fieldItm.name} {...fieldItm} />
+                        <FormField {...fieldItm} key={fieldItm.name} />
                       </div>
                     )}
                   </Fragment>

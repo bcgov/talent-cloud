@@ -4,6 +4,12 @@ export enum LanguageProficiency {
   FLUENT = 'FLUENT',
 }
 
+export enum LanguageProficiencyName {
+  BASIC = 'Basic',
+  INTERMEDIATE = 'Intermediate',
+  FLUENT = 'Fluent',
+}
+
 export enum LanguageLevelType {
   VERBAL = 'VERBAL',
   WRITTEN = 'WRITTEN',

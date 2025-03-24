@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { FormSection } from '../components/FormSection';
 import type {
+  FormComponent,
   FormFields,
   FormSection as FormSectionType,
   IntakeFormValues,
@@ -19,10 +20,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       functions,
       secondChoiceFunction,
       thirdChoiceFunction,
-      firstChoiceSection,
-      secondChoiceSection,
-      thirdChoiceSection,
       program,
+      firstChoiceSection,
     },
   } = useFormikContext<IntakeFormValues>();
 
@@ -98,6 +97,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   } else {
     description = '';
   }
+  console.log(firstChoiceSection);
   return (
     <div>
       <div className="text-sm py-6">{description}</div>
@@ -114,9 +114,10 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                 <>
                   {section.fields?.map((fieldItm: FormFields) => (
                     <Fragment key={fieldItm.name}>
-                      {intakeFormComponents.includes(fieldItm.type) ? (
+                      {fieldItm.type &&
+                      intakeFormComponents.includes(fieldItm.type) ? (
                         <div className="col-span-2">
-                          {renderIntakeFormComponent(fieldItm)}
+                          {renderIntakeFormComponent(fieldItm as FormComponent)}
                         </div>
                       ) : fieldItm.type === 'multiselect-group' ? (
                         <div className="col-span-2">
@@ -137,44 +138,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               : 'col-span-1'
                           }
                         >
-                          <FormField
-                            key={fieldItm.name}
-                            {...fieldItm}
-                            options={fieldItm.options?.map((itm) => ({
-                              ...itm,
-                              disabled:
-                                ([
-                                  'firstChoiceFunction',
-                                  'secondChoiceFunction',
-                                  'thirdChoiceFunction',
-                                ].includes(fieldItm.name) &&
-                                  [
-                                    firstChoiceFunction,
-                                    secondChoiceFunction,
-                                    thirdChoiceFunction,
-                                  ].includes(itm.value)) ||
-                                ([
-                                  'firstChoiceSection',
-                                  'secondChoiceSection',
-                                  'thirdChoiceSection',
-                                ].includes(fieldItm.name) &&
-                                  [
-                                    firstChoiceSection,
-                                    secondChoiceSection,
-                                    thirdChoiceSection,
-                                  ].includes(itm.value)),
-                            }))}
-                            disabled={
-                              (fieldItm.name === 'secondChoiceFunction' &&
-                                !firstChoiceFunction) ||
-                              (fieldItm.name === 'thirdChoiceFunction' &&
-                                !secondChoiceFunction) ||
-                              (fieldItm.name === 'secondChoiceSection' &&
-                                !firstChoiceSection) ||
-                              (fieldItm.name === 'thirdChoiceSection' &&
-                                !secondChoiceSection)
-                            }
-                          />
+                          <FormField key={fieldItm.name} {...fieldItm} />
                         </div>
                       )}
                     </Fragment>

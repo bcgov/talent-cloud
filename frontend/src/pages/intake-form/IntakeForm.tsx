@@ -139,6 +139,20 @@ const IntakeForm = ({
                           )
                           .map((itm) => ({
                             ...itm,
+                            segments: itm.segments
+                              ?.filter((itm: any) =>
+                                itm.program && values.program
+                                  ? handleFilterProgram(itm, values.program)
+                                  : itm,
+                              )
+                              .map((itm: any) => ({
+                                ...itm,
+                                fields: itm.fields?.filter((field: any) =>
+                                  field.program && values.program
+                                    ? handleFilterProgram(field, values.program)
+                                    : field,
+                                ),
+                              })),
                             fields: itm.fields?.filter((itm) =>
                               itm.program && values.program
                                 ? handleFilterProgram(itm, values.program)

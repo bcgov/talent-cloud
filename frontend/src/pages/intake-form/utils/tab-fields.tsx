@@ -1,5 +1,12 @@
 // common
-import { Ministry, MinistryName, Program, UnionMembership } from '@/common';
+import {
+  DriverLicense,
+  DriverLicenseName,
+  Ministry,
+  MinistryName,
+  Program,
+  UnionMembership,
+} from '@/common';
 import {
   BcwsTravelPreference,
   EmcrTravelPreference,
@@ -27,7 +34,6 @@ import { bcws, emcr } from '@/components/profile/sections-roles/roles';
 import { Accordion } from '../components/Accordion';
 import { CheckboxField } from '../fields/CheckboxField';
 import { MultiSelectField } from '../fields/MultiSelectField';
-import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 import { ToolsProficiency, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import {
   LanguageProficiency,
@@ -116,7 +122,16 @@ const bcwsDefinitionsModalButton = (
     Learn more about BCWS CORE Team sections
   </a>
 );
-
+const bcwsRolesFields = Object.values(Section).map((itm) => ({
+  name: itm,
+  label: `${SectionName[itm]} Roles`,
+  type: 'multiselect',
+  component: MultiSelectField,
+  required: false,
+  colSpan: 2,
+  placeholder: 'Select option(s)',
+  options: [],
+}));
 const programTab = {
   label: 'Program Selection & Acknowledgement',
   component: () => <ProgramPage />,
@@ -244,7 +259,7 @@ const PersonalDetailsTab = {
           required: true,
           placeholder: 'Select an option',
           options: Object.values(Ministry).map((itm) => ({
-            label: MinistryName[itm],
+            label: MinistryName[itm].toString(),
             value: itm,
           })),
         },
@@ -264,7 +279,7 @@ const PersonalDetailsTab = {
           component: SelectField,
           required: true,
           options: Object.values(UnionMembership).map((itm) => ({
-            label: itm,
+            label: itm.toString(),
             value: itm,
           })),
         },
@@ -734,10 +749,7 @@ const ExperiencesTab = {
           required: true,
           placeholder: 'Select an option',
           program: Program.BCWS,
-          options: Object.values(Section).map((itm) => ({
-            label: SectionName[itm],
-            value: itm,
-          })),
+          options: [],
         },
         {
           name: 'secondChoiceSection',
@@ -747,10 +759,7 @@ const ExperiencesTab = {
           required: false,
           placeholder: 'Select an option',
           program: Program.BCWS,
-          options: Object.values(Section).map((itm) => ({
-            label: SectionName[itm],
-            value: itm,
-          })),
+          options: [],
         },
         {
           name: 'thirdChoiceSection',
@@ -760,10 +769,7 @@ const ExperiencesTab = {
           required: false,
           placeholder: 'Select an option',
           program: Program.BCWS,
-          options: Object.values(Section).map((itm) => ({
-            label: SectionName[itm],
-            value: itm,
-          })),
+          options: [],
         },
         {
           name: 'bcwsDivider',
@@ -789,18 +795,9 @@ const ExperiencesTab = {
               </div>
             </div>
           ),
-          type: 'multiselect-group',
-          component: MultiSelectGroup,
-          nestedFields: Object.values(Section).map((itm) => ({
-            name: itm,
-            label: `${SectionName[itm]} Roles`,
-            type: 'multiselect',
-            component: MultiSelectField,
-            required: false,
-            placeholder: 'Select option(s)',
-            options: [],
-          })),
+          type: 'infoBox',
         },
+        ...bcwsRolesFields,
       ],
     },
   ],
@@ -930,19 +927,19 @@ const SkillsTab = {
           ],
         },
         // TODO
-        // {
-        //   name: 'driversLicense',
-        //   label: 'Driver License',
-        //   type: 'multiselect',
-        //   component: SelectField,
-        //   required: false,
-        //   colSpan: 2,
-        //   placeholder: 'Select an option',
-        //   options: Object.keys(DriverLicense).map((key) => ({
-        //     label: DriverLicenseName[key as keyof typeof DriverLicenseName],
-        //     value: key,
-        //   })),
-        // },
+        {
+          name: 'driverLicense',
+          label: 'Driver License',
+          type: 'multiselect',
+          component: MultiSelectField,
+          required: false,
+          colSpan: 2,
+          placeholder: 'Select an option',
+          options: Object.keys(DriverLicense).map((key) => ({
+            label: DriverLicenseName[key as keyof typeof DriverLicenseName],
+            value: key,
+          })),
+        },
       ],
     },
   ],
@@ -1126,6 +1123,13 @@ const ReviewTab = {
               'firstChoiceSection',
               'secondChoiceSection',
               'thirdChoiceSection',
+              'PLANNING',
+
+              'LOGISTICS',
+              'FINANCE_ADMIN',
+              'OPERATIONS',
+              'COMMAND',
+              'AVIATION',
             ].includes(itm.name),
           ),
         },
