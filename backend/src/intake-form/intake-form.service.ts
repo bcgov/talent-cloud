@@ -248,8 +248,8 @@ export class IntakeFormService {
       liaisonEmail: personnel.liaisonEmail ?? undefined,
       purchaseCardHolder: personnel.purchaseCardHolder ?? undefined,
       firstChoiceSection: Section[personnel.firstChoiceSection.id] ?? undefined,
-      secondChoiceSection: Section[personnel.secondChoiceSection.id] ?? undefined,
-      thirdChoiceSection: Section[personnel.thirdChoiceSection.id] ?? undefined,
+      secondChoiceSection: Section[personnel.secondChoiceSection?.id] ?? undefined,
+      thirdChoiceSection: Section[personnel.thirdChoiceSection?.id] ?? undefined,
       roles
       
     };
@@ -271,7 +271,6 @@ export class IntakeFormService {
       status: Status.PENDING,
       firstChoiceSection: personnel.firstChoiceFunction?.name ?? undefined,
       secondChoiceSection: personnel.secondChoiceFunction?.name ?? undefined,
-      
       thirdChoiceSection: personnel.thirdChoiceFunction?.name
         ?? undefined,
       
