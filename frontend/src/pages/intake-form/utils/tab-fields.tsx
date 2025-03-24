@@ -1008,7 +1008,7 @@ const CompleteTab = {
                   </li>
                   <li>
                     <a
-                      href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/2024_willingness_statement_-_in_progress.pdf"
+                      href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
                       target="_blank"
                       className="text-linkBlue hover:underline"
                       rel="noreferrer"

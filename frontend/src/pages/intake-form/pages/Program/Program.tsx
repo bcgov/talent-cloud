@@ -108,7 +108,7 @@ export const ProgramPage = () => {
                   information to the CORE Team Coordinator,{' '}
                   <a
                     href="mailto:EMCR.CORETeam@gov.bc.ca"
-                    className="text-[#0066CC] hover:underline"
+                    className="text-[#0066CC] underline"
                   >
                     EMCR.CORETeam@gov.bc.ca
                   </a>

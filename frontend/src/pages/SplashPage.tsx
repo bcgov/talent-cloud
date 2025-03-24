@@ -59,7 +59,7 @@ const SplashPage = () => {
                   <li>
                     <a
                       href="https://intranet.gov.bc.ca/emcr/employees-workplace/hr/core-team"
-                      className="hover:underline"
+                      className="underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -69,7 +69,7 @@ const SplashPage = () => {
                   <li>
                     <a
                       href="https://intranet.gov.bc.ca/bcws/core-team"
-                      className="hover:underline"
+                      className="underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -86,7 +86,7 @@ const SplashPage = () => {
                   <div>
                     <p className="font-bold">EMCR CORE Team:</p>
                     <a
-                      className="text-primaryBlue hover:underline"
+                      className="text-primaryBlue underline"
                       href="mailto:EMCR.CORETeam@gov.bc.ca"
                     >
                       EMCR.CORETeam@gov.bc.ca
@@ -95,7 +95,7 @@ const SplashPage = () => {
                   <div>
                     <p className="font-bold">BCWS CORE Team:</p>
                     <a
-                      className="text-primaryBlue hover:underline"
+                      className="text-primaryBlue underline"
                       href="mailto:BCWS.CORETeam@gov.bc.ca"
                     >
                       EMCR.CORETeam@gov.bc.ca

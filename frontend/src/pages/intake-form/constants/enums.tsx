@@ -43,7 +43,12 @@ export const expectationsBoth = [
     label: (
       <span>
         As a BCWS CORE Team applicant, I confirm that I have read and understood the{' '}
-        <a href="#" target="_blank" className="text-linkBlue hover:underline">
+        <a
+          href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
+          target="_blank"
+          className="text-linkBlue underline"
+          rel="noreferrer"
+        >
           Willingness Statement
         </a>{' '}
         and wish to participate.
@@ -99,7 +104,12 @@ export const expectationsBcws = [
     label: (
       <span>
         I confirm that I have read and understood the{' '}
-        <a href="#" target="_blank" className="text-linkBlue hover:underline">
+        <a
+          href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
+          target="_blank"
+          className="text-linkBlue underline"
+          rel="noreferrer"
+        >
           Willingness Statement
         </a>{' '}
         and wish to participate.
