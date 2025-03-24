@@ -1122,8 +1122,10 @@ export class PersonnelService {
     let unionMembership;
     if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
       unionMembership = UnionMembership[data.employeeGroup?.toUpperCase()];
-    } else {
+    } else if (data.employeeGroup === 'Management') {
       unionMembership = UnionMembership.EXCLUDED;
+    } else {
+      unionMembership = UnionMembership.OTHER;
     }
 
     const personnelUpdates: Partial<PersonnelEntity> = {
