@@ -14,12 +14,12 @@ import { PersonnelService } from '../personnel/personnel.service';
   const logger = new AppLogger();
   let personnelUpdates = 0;
   try {
-    logger.log(`Starting CHIPS updates`);
+    logger.log(`CHIPS: Starting CHIPS updates`);
     const personnelService = app.get(PersonnelService);
     const personnel = await personnelService.getChipsPersonnelToUpdate();
 
     if (personnel.length === 0) {
-      logger.log(`No personnel left to update from CHIPS`);
+      logger.log(`CHIPS: No personnel left to update from CHIPS`);
       return;
     }
     logger.log(
@@ -28,33 +28,39 @@ import { PersonnelService } from '../personnel/personnel.service';
 
     for (const p of personnel) {
       const chipsResponse = await personnelService.getChipsMemberData(p.email);
-      if (chipsResponse?.success && chipsResponse.data) {
+      if (chipsResponse?.success && chipsResponse?.data) {
         if (
           isAfter(chipsResponse.data.actionDate, p.chipsLastActionDate) ||
           !p.chipsLastActionDate
         ) {
-          logger.log(`Updating personnel ${p.id} from CHIPS`);
+          logger.log(`CHIPS: Updating personnel ${p.id}`);
           await personnelService.updatePersonnelChipsData(
             p,
             chipsResponse.data,
           );
           personnelUpdates += 1;
         } else {
-          logger.log(`No CHIPS personnel update for ${p.id}`);
+          logger.log(`CHIPS: No recent updates for ${p.id}`);
           await personnelService.updatePersonnelChipsMeta(p);
         }
-      } else if (!chipsResponse?.success) {
+      } else if (chipsResponse?.success && !chipsResponse?.data) {
         logger.log(
-          `No CHIPS data available for ${p.id}, setting profile missing to TRUE`,
+          `CHIPS: No data available for ${p.id}, setting profile missing to TRUE`,
         );
         await personnelService.updatePersonnelChipsMeta(p, true);
+      } else {
+        logger.error(
+          `CHIPS: Error from CHIPS when requesting data for ${p.id}`,
+        );
       }
     }
   } catch (error) {
-    logger.error(`Error from CHIPS, ${personnelUpdates} members updated`);
+    logger.error(
+      `CHIPS: Error from CHIPS, ${personnelUpdates} members updated`,
+    );
     logger.error(error);
   } finally {
-    logger.log(`End of job, ${personnelUpdates} members updated`);
+    logger.log(`CHIPS: End of job, ${personnelUpdates} members updated`);
     process.exit(0);
   }
 })();
