@@ -19,7 +19,7 @@ export const SelectField = ({
 }: {
   field: FieldInputProps<any>;
   disabled?: boolean;
-  options?: any[];
+  options?: { label: string; value: any; disabled?: boolean }[];
   placeholder?: string;
 }) => {
   const { setFieldValue } = useFormikContext<IntakeFormValues>();
@@ -34,7 +34,7 @@ export const SelectField = ({
                 <span className="text-gray-500 text-sm">{placeholder}</span>
               ) : (
                 <span className="truncate">
-                  {options?.find((itm) => itm.value.id === field.value.id)?.label ||
+                  {options?.find((itm) => itm.value === field.value)?.label ||
                     field.value?.name ||
                     field.value.toString()}
                 </span>
@@ -63,15 +63,15 @@ export const SelectField = ({
                     'text-gray-400 ml-3 block truncate font-normal group-data-selected:font-semibold',
                   )}
                 >
-                  Select and option
+                  Select an option
                 </span>
               </div>
             </ListboxOption>
             {options?.map((option, index) => (
               <ListboxOption
-                key={`${field.name}.${option.value.id}.${index}`}
+                key={`${field.name}.${option.value?.id}.${index}`}
                 value={option.value}
-                disabled={option.disabled}
+                disabled={option?.disabled}
                 className="group relative cursor-default py-2 pr-9 pl-3 select-none data-focus:bg-[#3B8FDD] data-focus:text-white data-focus:outline-hidden"
               >
                 <div className="flex items-center">

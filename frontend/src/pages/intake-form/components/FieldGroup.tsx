@@ -9,7 +9,6 @@ import { FormField } from '../fields/FormField';
 export const FieldGroup = ({ field }: { field: FormFields }) => {
   const { values, errors } = useFormikContext<IntakeFormValues>();
   const fieldErrors = errors[field.name as keyof typeof errors];
-
   return (
     <>
       {field.label}
@@ -24,16 +23,32 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
           <>
             {(values?.[field.name as keyof typeof values] as {}[])?.map(
               (value: any, index: number) => (
-                <div key={value} className="grid grid-cols-3 gap-4">
-                  {field.nestedFields?.map((itm: FormFields) => (
-                    <div key={itm.name} className="col-span-1">
+                <div key={index} className="grid grid-cols-3 gap-4">
+                  {field.nestedFields?.map((nested: FormFields) => (
+                    <div key={nested.name + index.toString()} className="col-span-1">
                       <FormField
-                        {...itm}
-                        value={value?.[index]?.[itm.name]}
-                        name={`${field.name}.${index}.${itm.name}`}
+                        {...nested}
+                        options={
+                          ['tool', 'certification'].includes(nested.name)
+                            ? nested.options?.map((option) => ({
+                                ...option,
+                                disabled:
+                                  (
+                                    values[
+                                      field.name as keyof typeof values
+                                    ] as any[]
+                                  )?.find(
+                                    (value) =>
+                                      value[nested.name]?.id === option.value?.id,
+                                  ) ?? false,
+                              }))
+                            : nested.options
+                        }
+                        value={value?.[index]?.[nested.name]}
+                        name={`${field.name}.${index}.${nested.name}`}
                       />
                       <div className="font-normal text-errorRed">
-                        {fieldErrors && (fieldErrors as any)?.[index]?.[itm.name]}
+                        {fieldErrors && (fieldErrors as any)?.[index]?.[nested.name]}
                       </div>
                     </div>
                   ))}

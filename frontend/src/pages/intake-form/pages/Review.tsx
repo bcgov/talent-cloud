@@ -7,12 +7,13 @@ import type {
 import { handleFilterProgram } from '../utils/helpers';
 import { FormSection } from '../components/FormSection';
 import { LanguageProficiencyName } from '@/common/enums/language.enum';
-import { ToolsProficiencyName } from '@/common/enums/tools.enum';
+import { ToolsName, ToolsProficiencyName } from '@/common/enums/tools.enum';
 import { format } from 'date-fns';
 import { SectionName } from '@/common/enums/sections.enum';
 import clsx from 'clsx';
 import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 import { Fragment } from 'react';
+import { MinistryName } from '@/common';
 
 const ReviewFields = ({
   fields,
@@ -28,10 +29,12 @@ const ReviewFields = ({
       case 'homeLocation':
         return values?.homeLocation?.locationName;
       case 'functions':
-        return values.functions
-          ?.filter((itm) => itm && itm.name && itm.name !== '')
-          .map((itm) => itm?.name ?? '')
-          .join('; ');
+        return (value as any[])
+          .map((itm) => itm?.name)
+          .filter(
+            (itm) => (itm && itm?.name !== undefined) || (itm && itm?.name !== ''),
+          )
+          ?.join('; ');
       case 'certification':
         return value ? value?.name : '--';
       case 'expiry':
@@ -44,7 +47,7 @@ const ReviewFields = ({
           value && TravelPreferenceText[value as keyof typeof TravelPreferenceText]
         );
       case 'tool':
-        return value ? value?.name : '--';
+        return value ? ToolsName[value?.name as keyof typeof ToolsName] : '--';
       case 'firstChoiceFunction':
       case 'secondChoiceFunction':
       case 'thirdChoiceFunction':
@@ -52,13 +55,27 @@ const ReviewFields = ({
       case 'firstChoiceSection':
       case 'secondChoiceSection':
       case 'thirdChoiceSection':
-        return value && SectionName[value as keyof typeof SectionName];
+        return value && value?.name
+          ? SectionName[value.name as keyof typeof SectionName]
+          : '--';
+      case 'PLANNING':
+      case 'LOGISTICS':
+      case 'FINANCE_ADMIN':
+      case 'OPERATIONS':
+      case 'COMMAND':
+      case 'AVIATION':
+        return (value as any[])?.map((itm) => itm.label)?.join('; ') ?? '--';
       case 'languageProficiency':
         return LanguageProficiencyName[
           value as keyof typeof LanguageProficiencyName
         ];
       case 'language':
         return value;
+      case 'driverLicense':
+        return (value as any[]).map((itm) => itm.label).join('; ');
+      case 'ministry':
+        return MinistryName[value as keyof typeof MinistryName];
+
       default:
         return value && value !== '' ? value : '--';
     }

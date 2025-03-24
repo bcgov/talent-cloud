@@ -11,12 +11,16 @@ import { FormStatusEnum } from '../common/enums/form-status.enum';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { IntakeFormPersonnelData } from './types';
 import {
+  BcwsRole,
   ChipsMinistryName,
   DriverLicense,
   Experience,
+  ExperienceLevel,
   LanguageLevelType,
   LanguageProficiency,
   Ministry,
+  Section,
+  SectionName,
   Status,
   ToolsProficiency,
   UnionMembership,
@@ -34,9 +38,11 @@ import {
   EmcrPersonnelExperienceDTO,
 } from '../emcr/dto';
 import {
+  CreateBcwsPersonnelRolesDTO,
   CreatePersonnelBcwsDTO,
 } from '../bcws/dto';
 import { LocationEntity } from '../database/entities/location.entity';
+import { BcwsSectionsAndRolesEntity } from 'src/database/entities/bcws';
 
 @Injectable()
 export class IntakeFormService {
@@ -130,7 +136,7 @@ export class IntakeFormService {
   async getSavedIntakeForm(
     req: RequestWithRoles,
   ): Promise<Partial<IntakeFormRO>> {
-    const personnel = await this.personnelService.findOneByEmail(req.idir);
+    const personnel = await this.personnelService.findOneWithAllRelationsByEmail(req.idir);
 
     const existingform = await this.intakeFormRepository.findOneBy({
       createdByEmail: req.idir,
@@ -223,6 +229,14 @@ export class IntakeFormService {
     
     
     const bcwsPerson = new CreatePersonnelBcwsDTO();
+    const roles = [...personnel.PLANNING, ...personnel.AVIATION, ...personnel.COMMAND, ...personnel.FINANCE_ADMIN, ...personnel.OPERATIONS, ...personnel.LOGISTICS ].map(itm => {
+      const entity = new CreateBcwsPersonnelRolesDTO()
+      entity.roleId = itm.value.id
+      
+        entity.expLevel=ExperienceLevel.INTERESTED
+        return entity
+      }
+    )
     const bcwsData = {
       status: Status.PENDING,
       dateApplied: new Date(),
@@ -232,20 +246,11 @@ export class IntakeFormService {
       liaisonPhoneNumber: personnel.liaisonPhoneNumber?? undefined,
       liaisonEmail: personnel.liaisonEmail ?? undefined,
       purchaseCardHolder: personnel.purchaseCardHolder ?? undefined,
-      firstChoiceSection: personnel.firstChoiceSection ?? undefined,
-      secondChoiceSection: personnel.secondChoiceSection ?? undefined,
-        
-      thirdChoiceSection: personnel.thirdChoiceSection
-        
-        ?? undefined,
-        roles: []
-        // TODO
-      // roles: roles.length > 0 ? roles?.map((item) => {
-      //   const role = new CreateBcwsPersonnelRolesDTO();
-      //   role.roleId = parseInt(item);
-      //   role.expLevel = ExperienceLevel.INTERESTED;
-      //   return role;
-      // }) : [],
+      firstChoiceSection: Section[personnel.firstChoiceSection.id] ?? undefined,
+      secondChoiceSection: Section[personnel.secondChoiceSection.id] ?? undefined,
+      thirdChoiceSection: Section[personnel.thirdChoiceSection.id] ?? undefined,
+      roles
+      
     };
     return Object.assign(bcwsData, bcwsPerson);
   }
@@ -397,21 +402,21 @@ export class IntakeFormService {
       homeLocation: personnel.homeLocation,
       ministry: personnel.ministry,
       division: personnel.division,
-      tools: personnel.tools?.length === 0 ? [{
+      tools: !personnel.tools || personnel.tools?.length === 0 ? [{
         tool: undefined,
         toolProficiency: '',
-      }]:personnel.tools?.map((item) => ({
+      }]: personnel.tools?.map((item) => ({
         tool: {
           id: item.tool.id, 
         name: item.tool.name
       },
         toolProficiency: item.proficiencyLevel,
       })),
-      languages: personnel.languages?.length === 0 ? [{language: '', languageProficiency: ''}]: personnel.languages?.map((item) => ({
+      languages: !personnel.languages || personnel.languages?.length === 0 ? [{language: '', languageProficiency: ''}]: personnel.languages?.map((item) => ({
         language: item.language,
         languageProficiency: item.level,
       })),
-      certifications: personnel.certifications?.length === 0 ? [{
+      certifications: !personnel.certifications || personnel.certifications?.length === 0 ? [{
         certification: undefined,
         expiry: undefined,
         
@@ -447,10 +452,16 @@ export class IntakeFormService {
       liaisonLastName: personnel.bcws?.liaisonLastName,
       liaisonPhoneNumber: personnel.bcws?.liaisonPhoneNumber,
       liaisonEmail: personnel.bcws?.liaisonEmail,
-      firstChoiceSection: personnel.bcws?.firstChoiceSection,
-      secondChoiceSection: personnel.bcws?.secondChoiceSection,
-      thirdChoiceSection: personnel.bcws?.thirdChoiceSection,
-      roles: personnel.bcws?.roles?.map((item) => item.roleId.toString()),
+      firstChoiceSection: {id: personnel.bcws?.firstChoiceSection, label: SectionName[personnel.bcws?.firstChoiceSection]},
+      secondChoiceSection: {id: personnel.bcws?.secondChoiceSection, label: SectionName[personnel.bcws?.secondChoiceSection]},
+      thirdChoiceSection: {id: personnel.bcws?.thirdChoiceSection, label: SectionName[personnel.bcws?.thirdChoiceSection]},
+      PLANNING: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.PLANNING).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'PLANNING', name: itm.role.name}})),
+      LOGISTICS: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.LOGISTICS).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'LOGISTICS', name: itm.role.name}})),
+      FINANCE_ADMIN: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.FINANCE_ADMIN).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'FINANCE_ADMIN', name: itm.role.name}})),
+      OPERATIONS: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.OPERATIONS).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'OPERATIONS', name: itm.role.name}})),
+      COMMAND: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.COMMAND).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'COMMAND', name: itm.role.name}})),
+      AVIATION: personnel.bcws?.roles?.filter(itm => itm.role.section === Section.AVIATION).map(itm => ({label: itm.role.name.toString(), value: {id: itm.role.id, label: itm.role.name.toString(), section:'AVIATION', name: itm.role.name}})),
+      
     };
   }
 

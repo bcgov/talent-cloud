@@ -10,6 +10,8 @@ import { Routes } from '@/routes';
 import { useProgramFieldData } from '@/hooks';
 import IntakeForm from './IntakeForm';
 import { Loading } from '@/components';
+import { BcwsRoleName, Section, SectionName } from '@/common/enums/sections.enum';
+import { intakeFormInitialValues } from './constants/initial-values';
 
 const FormWrapper = () => {
   const { keycloak } = useKeycloak();
@@ -27,7 +29,7 @@ const FormWrapper = () => {
     completedSteps,
   } = useIntakeForm();
 
-  const { functions, locations, tools, sections, certificates } =
+  const { functions, locations, tools, sections, certificates, bcwsRoles } =
     useProgramFieldData(Program.ALL);
 
   const getFieldOptions = (name: string, values: IntakeFormValues) => {
@@ -58,13 +60,13 @@ const FormWrapper = () => {
       case 'firstChoiceSection':
       case 'secondChoiceSection':
       case 'thirdChoiceSection':
-        return sections.map((itm: any) => ({
-          label: itm.name,
-          value: itm,
+        return Object.keys(sections).map((itm: any) => ({
+          label: SectionName[itm as keyof typeof SectionName],
+          value: { id: itm, name: SectionName[itm as keyof typeof SectionName] },
           disabled: [
-            values.firstChoiceSection,
-            values.secondChoiceSection,
-            values.thirdChoiceSection,
+            values.firstChoiceSection?.id,
+            values.secondChoiceSection?.id,
+            values.thirdChoiceSection?.id,
           ].includes(itm),
         }));
       case 'firstChoiceFunction':
@@ -79,6 +81,48 @@ const FormWrapper = () => {
             values.thirdChoiceFunction,
           ].includes(itm),
         })) as unknown as { label: string; value: any }[];
+      case Section.PLANNING:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.PLANNING)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
+      case Section.AVIATION:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.AVIATION)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
+      case Section.COMMAND:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.COMMAND)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
+      case Section.OPERATIONS:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.OPERATIONS)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
+      case Section.FINANCE_ADMIN:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.FINANCE_ADMIN)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
+      case Section.LOGISTICS:
+        return bcwsRoles
+          .filter((itm) => itm.section === Section.LOGISTICS)
+          .map((itm) => ({
+            label: BcwsRoleName[itm.name],
+            value: itm,
+          }));
 
       case 'functions':
         return functions.map((itm: any) => ({
@@ -92,6 +136,7 @@ const FormWrapper = () => {
   };
 
   const initialValues: IntakeFormValues = {
+    ...intakeFormInitialValues,
     ...formData?.personnel,
     firstName: tokenParsed?.given_name,
     lastName: tokenParsed?.family_name

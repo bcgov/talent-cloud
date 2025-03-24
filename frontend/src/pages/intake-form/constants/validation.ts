@@ -138,47 +138,202 @@ export const sectionChoiceEmcrSchema = Yup.object().shape({
   thirdChoiceFunction: Yup.object().shape(functionShape).nullable(),
 });
 
+const sectionShape = {
+  id: Yup.string(),
+  name: Yup.string(),
+};
+
 export const sectionChoiceBcwsSchema = Yup.object().shape({
-  firstChoiceSection: Yup.string().when('program', {
-    is: (val: Program) => val !== Program.EMCR,
-    then: () => Yup.string().required('First  choice section is required.'),
-    otherwise: () => Yup.string().notRequired(),
-  }),
-  secondChoiceSection: Yup.string().optional().nullable(),
-  thirdChoiceSection: Yup.string().optional().nullable(),
+  firstChoiceSection: Yup.object()
+    .shape(sectionShape)
+    .when('program', {
+      is: (val: Program) => val !== Program.EMCR,
+      then: () =>
+        Yup.object()
+          .shape(sectionShape)
+          .required('First  choice section is required.'),
+      otherwise: () => Yup.string().notRequired(),
+    }),
+  secondChoiceSection: Yup.object().shape(sectionShape).optional().nullable(),
+  thirdChoiceSection: Yup.object().shape(sectionShape).optional().nullable(),
 });
 
-export const sectionRolesBcwsSchema = Yup.object()
-  .shape({
-    roles: Yup.array().of(
-      Yup.object().shape({
-        [Section.PLANNING.toString()]: Yup.array().when('firstChoiceSection', {
-          is: (val: string) => val === Section.PLANNING.toString(),
-          then: () =>
-            Yup.array()
-              .of(Yup.string())
-              .min(1)
-              .required('Choose at least one role from your preferred section(s)'),
-        }),
-        [Section.LOGISTICS]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.FINANCE_ADMIN]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.OPERATIONS]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.AVIATION]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-        [Section.COMMAND]: Yup.array().of(
-          Yup.string().required('Roles are required'),
-        ),
-      }),
-    ),
-  })
-  .required();
+export const sectionRolesBcwsSchema = Yup.object().shape({
+  PLANNING: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.PLANNING.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.PLANNING.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.PLANNING.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+  LOGISTICS: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.LOGISTICS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.LOGISTICS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.LOGISTICS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+  FINANCE_ADMIN: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.FINANCE_ADMIN.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.FINANCE_ADMIN.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.FINANCE_ADMIN.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+  OPERATIONS: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.OPERATIONS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.OPERATIONS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.OPERATIONS.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+  AVIATION: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.AVIATION.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.AVIATION.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.AVIATION.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+  COMMAND: Yup.array()
+    .of(Yup.object().shape(sectionShape))
+    .when('firstChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.COMMAND.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your first choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('secondChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.COMMAND.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your second choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    })
+    .when('thirdChoiceSection', {
+      is: (val: { id: string; name: string }) =>
+        val.id === Section.COMMAND.toString(),
+      then: () =>
+        Yup.array()
+          .of(Yup.object().shape(sectionShape))
+          .min(1, 'Please select at least one role from your third choice section')
+          .required('Choose at least one role from your preferred section(s)'),
+    }),
+});
 
 export const languageSkillsSchema = Yup.object().shape({
   languages: Yup.array()
@@ -245,7 +400,9 @@ const certificationsSchema = Yup.object().shape({
       expiry: Yup.date(),
     }),
   ),
-  driverLicense: Yup.array().of(Yup.string()),
+  driverLicense: Yup.array().of(
+    Yup.object().shape({ label: Yup.string(), id: Yup.string() }),
+  ),
 });
 
 const personnelStepValidation = personalDetailsSchema

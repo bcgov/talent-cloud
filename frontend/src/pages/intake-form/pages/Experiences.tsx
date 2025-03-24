@@ -19,9 +19,6 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       functions,
       secondChoiceFunction,
       thirdChoiceFunction,
-      firstChoiceSection,
-      secondChoiceSection,
-      thirdChoiceSection,
       program,
     },
   } = useFormikContext<IntakeFormValues>();
@@ -137,44 +134,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               : 'col-span-1'
                           }
                         >
-                          <FormField
-                            key={fieldItm.name}
-                            {...fieldItm}
-                            options={fieldItm.options?.map((itm) => ({
-                              ...itm,
-                              disabled:
-                                ([
-                                  'firstChoiceFunction',
-                                  'secondChoiceFunction',
-                                  'thirdChoiceFunction',
-                                ].includes(fieldItm.name) &&
-                                  [
-                                    firstChoiceFunction,
-                                    secondChoiceFunction,
-                                    thirdChoiceFunction,
-                                  ].includes(itm.value)) ||
-                                ([
-                                  'firstChoiceSection',
-                                  'secondChoiceSection',
-                                  'thirdChoiceSection',
-                                ].includes(fieldItm.name) &&
-                                  [
-                                    firstChoiceSection,
-                                    secondChoiceSection,
-                                    thirdChoiceSection,
-                                  ].includes(itm.value)),
-                            }))}
-                            disabled={
-                              (fieldItm.name === 'secondChoiceFunction' &&
-                                !firstChoiceFunction) ||
-                              (fieldItm.name === 'thirdChoiceFunction' &&
-                                !secondChoiceFunction) ||
-                              (fieldItm.name === 'secondChoiceSection' &&
-                                !firstChoiceSection) ||
-                              (fieldItm.name === 'thirdChoiceSection' &&
-                                !secondChoiceSection)
-                            }
-                          />
+                          <FormField key={fieldItm.name} {...fieldItm} />
                         </div>
                       )}
                     </Fragment>

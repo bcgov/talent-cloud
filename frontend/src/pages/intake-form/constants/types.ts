@@ -99,6 +99,7 @@ export interface EmploymentDetails {
   paylistId?: string;
   travelPreferenceBcws?: string;
   travelPreferenceEmcr?: string;
+  purchaseCardHolder: string;
 }
 
 // supervisor and liaison details, travel preferences
@@ -136,10 +137,19 @@ export interface SectionChoiceEmcr {
   thirdChoiceFunction?: FunctionType;
 }
 
+export interface BCWSRoles {
+  PLANNING: { id: number; label: string; name: string }[];
+  LOGISTICS: { id: number; label: string; name: string }[];
+  FINANCE_ADMIN: { id: number; label: string; name: string }[];
+  OPERATIONS: { id: number; label: string; name: string }[];
+  COMMAND: { id: number; label: string; name: string }[];
+  AVIATION: { id: number; label: string; name: string }[];
+}
+
 export interface SectionChoiceBcws {
-  firstChoiceSection?: string;
-  secondChoiceSection?: string;
-  thirdChoiceSection?: string;
+  firstChoiceSection?: { id: string; name: string };
+  secondChoiceSection?: { id: string; name: string };
+  thirdChoiceSection?: { id: string; name: string };
 }
 
 // export interface SectionRolesBcws {
@@ -166,11 +176,15 @@ export interface CertificationSkill {
   };
   expiry?: Date;
 }
+export interface DriverLicense {
+  label: string;
+  id: string;
+}
 export interface Skills {
   languages?: LanguageSkill[];
   certifications?: CertificationSkill[];
   tools?: ToolsSkill[];
-  driverLicense?: string[];
+  driverLicense?: DriverLicense[];
 }
 // review & submit
 

@@ -68,12 +68,27 @@ export interface IntakeFormPersonnelData {
   liaisonLastName?: string;
   liaisonPhoneNumber?: string;
   liaisonEmail?: string;
-  firstChoiceSection?: string;
-  secondChoiceSection?: string;
-  thirdChoiceSection?: string;
+  firstChoiceSection?: {
+    id: string, 
+    label: string
+  };
+  secondChoiceSection?: {
+    id: string, 
+    label: string
+  };
+  thirdChoiceSection?: {
+    id: string, 
+    label: string
+  };
   travelPreferenceBcws?: string;
   travelPreferenceEmcr?: string;
-  roles?: string[];
+
   chipsLastActionDate?: Date;
   jobTitle?: string;
+  PLANNING?: {value: {id: number, section?: string, name?: string}, label: string}[],
+  LOGISTICS?: {value: {id: number, section?: string, name?: string}, label: string}[],
+  FINANCE_ADMIN?: {value: {id: number, section?: string, name?: string}, label: string}[],
+  OPERATIONS?: {value: {id: number, section?: string, name?: string}, label: string}[],
+  COMMAND?: {value: {id: number, section?: string, name?: string}, label: string}[],
+  AVIATION?: {value: {id: number, section?: string, name?: string}, label: string}[],
 }
