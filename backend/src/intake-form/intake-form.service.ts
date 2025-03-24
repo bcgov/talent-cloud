@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreatePersonnelDTO } from '../personnel';
@@ -62,32 +62,31 @@ export class IntakeFormService {
     createIntakeFormDto: IntakeFormDTO,
     req: RequestWithRoles,
   ): Promise<IntakeFormRO> {
-   
-      const email = req.idir;
-      const existingPerson =
-        await this.personnelService.findOneWithAllRelationsByEmail(email);
+    const email = req.idir;
+    const existingPerson =
+      await this.personnelService.findOneWithAllRelationsByEmail(email);
 
-      const personnelFromFormData = await this.createPersonnel(
-        createIntakeFormDto.personnel,
-      );
+    const personnelFromFormData = await this.createPersonnel(
+      createIntakeFormDto.personnel,
+    );
 
-      if (!existingPerson) {
-        await this.personnelService.createPerson(personnelFromFormData);
+    if (!existingPerson) {
+      await this.personnelService.createPerson(personnelFromFormData);
 
-        await this.intakeFormRepository.save({
-          ...createIntakeFormDto,
-          status: FormStatusEnum.SUBMITTED,
-        });
-      } else {
-        await this.personnelService.updatePerson({
-          ...existingPerson,
-          ...personnelFromFormData,
-        });
-      }
-      return await this.intakeFormRepository.save({
+      await this.intakeFormRepository.save({
         ...createIntakeFormDto,
         status: FormStatusEnum.SUBMITTED,
       });
+    } else {
+      await this.personnelService.updatePerson({
+        ...existingPerson,
+        ...personnelFromFormData,
+      });
+    }
+    return await this.intakeFormRepository.save({
+      ...createIntakeFormDto,
+      status: FormStatusEnum.SUBMITTED,
+    });
   }
 
   /**
@@ -181,6 +180,10 @@ export class IntakeFormService {
       if (chipsData) {
         intakeForm.personnel = {
           ...chipsData,
+          email: req.idir,
+        };
+      } else {
+        intakeForm.personnel = {
           email: req.idir,
         };
       }
@@ -527,7 +530,7 @@ export class IntakeFormService {
     req: RequestWithRoles,
   ): Promise<Partial<IntakeFormPersonnelData> | null> {
     const chipsData = await this.personnelService.getChipsMemberData(req.idir);
-    if (chipsData.success && chipsData.data) {
+    if (chipsData && chipsData.success && chipsData.data) {
       const data = chipsData.data;
       let ministry = '';
       if (ChipsMinistryName[data.organization.trim()]) {
