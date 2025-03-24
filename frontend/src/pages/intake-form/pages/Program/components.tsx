@@ -7,13 +7,13 @@ export const components = [
     placeholder: '',
     component: (
       <>
-        <p>
+        <p className="text-sm">
           {
             "Approval into both streams does not guarantee deployment. If you received a deployment request, you may be required to be prepared for deployment on short notice and potentially for extended periods. This may involve travelling to an activation that's located anywhere in the province, and spending time away from family and other personal obligations. However, if you have any personal or work commitments that you must attend at the time of a deployment, you can choose to turn down a deployment opportunity."
           }
         </p>
         <br />
-        <p>
+        <p className="text-sm">
           {
             'You are expected to have a high level of adaptability, commitment, and professionalism in all of your endeavours for both EMCR and BCWS CORE Team.'
           }
@@ -29,16 +29,16 @@ export const components = [
     placeholder: '',
     component: (
       <>
-        <p>
+        <p className="text-sm">
           {
             'To ensure a smooth application process, please make sure you complete and submit the following requirements relevant to the program(s) you are applying to (you can click on the following links to learn more or access the document):'
           }
         </p>
         <br />
 
-        <p className="font-bold">EMCR Requirements</p>
+        <p className="font-bold text-sm">EMCR Requirements</p>
         <div className="py-4 px-4">
-          <ul className="list-disc list-inside text-darkGrey text-base font-normal">
+          <ul className="list-disc list-inside text-dark-700 text-sm font-normal">
             <li>Supervisor Approval for EMCR</li>
             <li>
               <a
@@ -53,9 +53,9 @@ export const components = [
           </ul>
         </div>
         <br />
-        <p className="font-bold">BCWS Requirements</p>
+        <p className="font-bold text-sm">BCWS Requirements</p>
         <div className="py-4 px-4">
-          <ul className="list-disc list-inside text-darkGrey text-base font-normal">
+          <ul className="list-disc list-inside text-dark-700 text-sm font-normal">
             <li>
               <a
                 href="https://intranet.gov.bc.ca/bcws/core-team/participating-staff"
@@ -101,32 +101,19 @@ export const components = [
         </div>
         <br />
         <br />
-        <p>
-          *Please make sure you have completed, signed and submitted your BCWS PAR-Q+
-          to your{' '}
-          <a
-            href="https://intranet.gov.bc.ca/bcws/core-team"
-            target="_blank"
-            className="text-linkBlue underline"
-            rel="noreferrer"
-          >
-            Wildfire regional contact
-          </a>{' '}
-          after submitting this application.
+        <p className="text-sm">
+          {
+            '*Please make sure you have completed, signed and submitted your BCWS PAR-Q+ to your Wildfire regional contact after submitting this application.'
+          }
         </p>
         <br />
-        <p>
-          <span className="font-bold">
-            {"Don't know which Fire Centre email to submit your documents to?"}
-          </span>{' '}
-          {'You can find your corresponding Fire Centre based on your home location'}
-          at{' '}
-          <a
-            href="https://www2.gov.bc.ca/gov/content/safety/wildfire-status/about-bcws/fire-centres"
-            target="_blank"
-            className="text-linkBlue underline"
-            rel="noreferrer"
-          >
+        <p className="text-sm">
+          <span className="font-bold text-dark-700">
+            {"Don't know which Fire Centre email to submit your documents to? "}
+          </span>
+          {'You can find your corresponding Fire Centre based on your home location at '}
+          
+          <a href="#" target="_blank" className="text-linkBlue underline">
             {'Where is my closest Fire Centre?'}
           </a>
           .
@@ -142,29 +129,28 @@ export const components = [
     placeholder: '',
     component: (
       <>
-        <p>
+        <p className="text-sm">
           {
             'You may be asked to do multiple deployments as required by the event. However, you may accept or decline a request depending on your own availability, vacation leave, and/or regular work commitments.'
           }
         </p>
         <br />
         <br />
-        <p className="font-bold">
+        <p className="text-sm font-bold">
           {'Deployment Timeframes for each program stream:'}
         </p>
-        <div className="py-4 px-4">
-          <ul className="list-disc list-inside text-darkGrey text-base font-normal">
+        <div className="py-4 px-4 text-sm">
+          <ul className="list-disc list-inside text-dark-700 text-sm font-normal">
             <li>
-              <span className="font-bold">EMCR CORE Team:</span>You can be deployed
-              for up <span className="font-bold">to 10 consecutive days</span>,
-              followed by a
-              <span className="font-bold">mandatory two-day rest period</span> before
+              <span className="font-bold ext-dark-700 ">EMCR CORE Team:</span>You can be deployed
+              for up <span className="font-bold ext-dark-700 ">to 10 consecutive days</span>,
+              followed by a<span className="font-bold ext-dark-700 "> mandatory two-day rest period</span> before
               potential redeployment.
             </li>
             <li>
-              <span className="font-bold">BCWS CORE Team:</span> You can be deployed
+              <span className="text-dark-700  font-bold">BCWS CORE Team:</span> You can be deployed
               for
-              <span className="font-bold">up to 14 consecutive days</span>at a time
+              <span className="text-dark-700  font-bold">up to 14 consecutive days</span>at a time
               (including travel duration).
             </li>
           </ul>

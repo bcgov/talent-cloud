@@ -100,7 +100,7 @@ export const ProgramPage = () => {
             <Banner
               title={'Collection Notice'}
               content={
-                <span>
+                <span className='text-sm'>
                   Your personal information is collected under s. 26(c) of the
                   Freedom of Information and Protection of Privacy Act (FOIPPA) for
                   the purpose of managing the CORE Team program. Please direct any
@@ -108,7 +108,9 @@ export const ProgramPage = () => {
                   information to the CORE Team Coordinator,{' '}
                   <a
                     href="mailto:EMCR.CORETeam@gov.bc.ca"
-                    className="text-[#0066CC] underline"
+
+                    className="text-[#0066CC] underline text-sm"
+
                   >
                     EMCR.CORETeam@gov.bc.ca
                   </a>
