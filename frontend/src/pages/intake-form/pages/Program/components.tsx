@@ -45,6 +45,7 @@ export const components = [
                 href="https://learning.gov.bc.ca/psc/CHIPSPLM/EMPLOYEE/ELM/c/LM_OD_EMPLOYEE_FL.LM_CRS_DTL_FL.GBL?Page=LM_CRS_DTL_FL&#38;Action=U&#38;ForceSearch=Y&#38;LM_CI_ID=19146&#38;"
                 target="_blank"
                 className="text-linkBlue underline"
+                rel="noreferrer"
               >
                 Incident Command System (ICS) Training
               </a>
@@ -60,6 +61,7 @@ export const components = [
                 href="https://intranet.gov.bc.ca/bcws/core-team/participating-staff"
                 target="_blank"
                 className="text-linkBlue underline"
+                rel="noreferrer"
               >
                 Supervisor Approval for BCWS
               </a>
@@ -69,15 +71,17 @@ export const components = [
                 href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
                 target="_blank"
                 className="text-linkBlue underline"
+                rel="noreferrer"
               >
                 Intro to CORE Online Orientation (Video)
               </a>
             </li>
             <li>
               <a
-                href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/2024_willingness_statement_-_in_progress.pdf"
+                href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
                 target="_blank"
                 className="text-linkBlue underline"
+                rel="noreferrer"
               >
                 Willingness Statement
               </a>
@@ -87,6 +91,7 @@ export const components = [
                 href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
                 target="_blank"
                 className="text-linkBlue underline"
+                rel="noreferrer"
               >
                 {'Physical Activity Readiness Questionnaire for Everyone (PAR-Q+)'}
               </a>
@@ -103,6 +108,7 @@ export const components = [
             href="https://intranet.gov.bc.ca/bcws/core-team"
             target="_blank"
             className="text-linkBlue underline"
+            rel="noreferrer"
           >
             Wildfire regional contact
           </a>{' '}
@@ -119,6 +125,7 @@ export const components = [
             href="https://www2.gov.bc.ca/gov/content/safety/wildfire-status/about-bcws/fire-centres"
             target="_blank"
             className="text-linkBlue underline"
+            rel="noreferrer"
           >
             {'Where is my closest Fire Centre?'}
           </a>
