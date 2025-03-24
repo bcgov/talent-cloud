@@ -433,7 +433,7 @@ export class IntakeFormService {
       })),
       travelPreferenceEmcr: EmcrTravelPreference[personnel.emcr?.travelPreference],
       travelPreferenceBcws: BcwsTravelPreference[personnel.bcws?.travelPreference],
-      firstNationsExperience: personnel.emcr?.firstNationExperienceWorking
+      firstNationsExperience: personnel.emcr?.firstNationExperience
         ? 'true'
         
         : 'false',
