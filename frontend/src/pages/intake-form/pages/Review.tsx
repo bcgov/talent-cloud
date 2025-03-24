@@ -38,7 +38,7 @@ const ReviewFields = ({
       case 'expiry':
         return value && format(value, 'yyyy-MM-dd');
       case 'toolProficiency':
-        return (value && value) || '--';
+        return value ?? '--';
       case 'travelPreferenceEmcr':
       case 'travelPreferenceBcws':
         return value && value.name;
