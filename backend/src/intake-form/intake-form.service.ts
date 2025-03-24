@@ -63,7 +63,7 @@ export class IntakeFormService {
     createIntakeFormDto: IntakeFormDTO,
     req: RequestWithRoles,
   ): Promise<IntakeFormRO> {
-    try {
+   
       const email = req.idir;
       const existingPerson =
         await this.personnelService.findOneWithAllRelationsByEmail(email);
@@ -93,9 +93,7 @@ export class IntakeFormService {
         ...createIntakeFormDto,
         status: FormStatusEnum.SUBMITTED,
       });
-    } catch (e) {
-      throw new BadRequestException(e.message);
-    }
+    
     
   }
 
