@@ -17,7 +17,12 @@ import { AvailabilityRO, PersonnelRO } from './ro';
 import { UpdatePreferencesDTO } from './update-preferences.dto';
 import { Program, RequestWithRoles } from '../auth/interface';
 import { sampleData, sampleTrainingData } from '../common/chips/sample-data';
-import { ChipsMinistryName, Ministry, Section, UnionMembership } from '../common/enums';
+import {
+  ChipsMinistryName,
+  Ministry,
+  Section,
+  UnionMembership,
+} from '../common/enums';
 import {
   AvailabilityType,
   AvailabilityTypeLabel,
@@ -78,23 +83,21 @@ export class PersonnelService {
    * @returns
    */
   async findOne(id: string): Promise<PersonnelEntity> {
-    
-
-      const person = await this.personnelRepository.findOneOrFail({
-        where: { id },
-        relations: [
-          'certifications',
-          'certifications.certification',
-          'tools',
-          'tools.tool',
-          'homeLocation',
-          'workLocation',
-          'recommitment',
-          'recommitment.recommitmentCycle',
-          'languages',
-        ],
-      });
-      return person; 
+    const person = await this.personnelRepository.findOneOrFail({
+      where: { id },
+      relations: [
+        'certifications',
+        'certifications.certification',
+        'tools',
+        'tools.tool',
+        'homeLocation',
+        'workLocation',
+        'recommitment',
+        'recommitment.recommitmentCycle',
+        'languages',
+      ],
+    });
+    return person;
   }
 
   /**
@@ -109,25 +112,25 @@ export class PersonnelService {
     });
   }
 
-  async findOneWithAllRelationsByEmail(email: string):  Promise<PersonnelEntity>{
-    
-   return await this.personnelRepository.findOne({
-        where: { email },
-        relations: [
-          'bcws',
-          'emcr',
-          'bcws.roles',
-          'emcr.experiences',
-          'emcr.trainings',
-          'certifications',
-          'certifications.certification',
-          'tools',
-          'tools.tool',
-          'homeLocation',
-          'languages',
-        ],
-      });
-    
+  async findOneWithAllRelationsByEmail(
+    email: string,
+  ): Promise<PersonnelEntity> {
+    return await this.personnelRepository.findOne({
+      where: { email },
+      relations: [
+        'bcws',
+        'emcr',
+        'bcws.roles',
+        'emcr.experiences',
+        'emcr.trainings',
+        'certifications',
+        'certifications.certification',
+        'tools',
+        'tools.tool',
+        'homeLocation',
+        'languages',
+      ],
+    });
   }
 
   async findOneById(id: string): Promise<PersonnelEntity> {
@@ -960,7 +963,6 @@ export class PersonnelService {
    *
    */
   async getCertificates(): Promise<CertificationEntity[]> {
-
     return await this.certificationRepository.find();
   }
 
@@ -1178,36 +1180,39 @@ export class PersonnelService {
       }
     | undefined
   > {
-    if (process.env.TEST_CHIPS_RESPONSE === 'true') {
+    if (process.env.TEST_CHIPS_RESPONSE === 'xxx') {
       return {
         success: true,
         data: mapToChipsResponse(sampleData),
       };
     }
-    const response = await axios.get(
-      `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${memberEmail}'`,
-      {
-        headers: {
-          'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+    try {
+      const response = await axios.get(
+        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${memberEmail}'`,
+        {
+          headers: {
+            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
+          },
         },
-      },
-    );
-    if (response?.data) {
-      if (response.data.value?.length > 0) {
-        this.logger.log(`CHIPS profile found for ${memberEmail}`);
-        return {
-          success: true,
-          data: mapToChipsResponse(response.data.value[0]),
-        };
-      } else {
-        this.logger.log(`No CHIPS profile for ${memberEmail}`);
-        return {
-          success: true,
-          data: undefined,
-        };
+      );
+      if (response?.data) {
+        if (response.data.value?.length > 0) {
+          this.logger.log(`CHIPS profile found for ${memberEmail}`);
+          return {
+            success: true,
+            data: mapToChipsResponse(response.data.value[0]),
+          };
+        } else {
+          this.logger.log(`No CHIPS profile for ${memberEmail}`);
+          return {
+            success: true,
+            data: undefined,
+          };
+        }
       }
-    } else {
+    } catch (error) {
       this.logger.error(`CHIPS error`);
+      this.logger.error(error);
       return undefined;
     }
   }
