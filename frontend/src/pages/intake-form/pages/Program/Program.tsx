@@ -24,7 +24,7 @@ import {
   expectationsBoth,
   expectationsEmcr,
 } from '../../constants/enums';
-import { CheckboxGroupField } from '../../fields/CheckBoxGroupField';
+
 
 export const ProgramPage = () => {
   const { values, setValues } = useFormikContext<IntakeFormValues>();

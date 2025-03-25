@@ -1,5 +1,5 @@
 // formik
-import { ErrorMessage, Field, useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 
 // types
 import type { FormFields, IntakeFormValues } from '../constants/types';
@@ -12,13 +12,13 @@ export const CheckboxGroupField = ({
   options: any;
 }) => {
   
-  const { setFieldValue, values , errors} = useFormikContext<IntakeFormValues>();
+  const { setFieldValue, values } = useFormikContext<IntakeFormValues>();
 
   const handleChange = (value: any) => {
     const valueSet = new Set(field.value)
     valueSet.delete(null)
     valueSet.delete(undefined)
-    console.log(valueSet, field.value, value)
+    
     if(valueSet.has(value)){
       valueSet.delete(value)
     } else {
@@ -44,7 +44,7 @@ export const CheckboxGroupField = ({
                 : (values?.[field.name as keyof typeof values] as any).includes(
                     itm.value,
                   );
-console.log(itm)
+
             return (
               <div
                 key={itm.label + index.toString()}
@@ -69,10 +69,7 @@ console.log(itm)
                     </>
                   )}
                 </label>
-                {/* <ErrorMessage name={field.name}>
-                  {(msg) => <div>{msg}</div>}
-                </ErrorMessage> */}
-                {/* {errors && (errors?.[field.name as keyof typeof errors] as any[])?.map(itm => <div>{itm}</div>)} */}
+                
               </div>
             );
           })}

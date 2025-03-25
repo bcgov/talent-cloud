@@ -5,7 +5,7 @@ import { FieldArray, useFormikContext } from 'formik';
 import { dynamicFields } from '../utils/helpers';
 import { PlusIcon } from '@/components/ui/Icons';
 import { FormField } from '../fields/FormField';
-import clsx from 'clsx';
+
 
 export const FieldGroup = ({ field }: { field: FormFields }) => {
   const { values, errors } = useFormikContext<IntakeFormValues>();

@@ -52,7 +52,7 @@ export const DateField = ({ field }: { field: FieldInputProps<any> }) => {
             leaveTo="transform opacity-0 scale-95"
           >
             <MenuItems className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              {/* <div className="w-full flex flex-col items-center p-6 px-8"> */}
+
                 <MenuItem>
                   <DayPicker
                     classNames={calendarClass}
@@ -64,7 +64,7 @@ export const DateField = ({ field }: { field: FieldInputProps<any> }) => {
                     }}
                   />
                 </MenuItem>
-              {/* </div> */}
+
             </MenuItems>
           </Transition>
         </>

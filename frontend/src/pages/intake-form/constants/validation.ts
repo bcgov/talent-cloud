@@ -1,5 +1,4 @@
 import { Program } from '@/common';
-import { Section } from '@/common/enums/sections.enum';
 import {
   firstName,
   lastName,

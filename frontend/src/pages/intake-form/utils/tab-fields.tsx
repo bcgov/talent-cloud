@@ -867,7 +867,7 @@ const SkillsTab = {
               label: 'Tool/Software',
               type: 'select',
               component: SelectField,
-              required: true,
+              required: false,
               placeholder: 'Select an option',
               options: [],
             },

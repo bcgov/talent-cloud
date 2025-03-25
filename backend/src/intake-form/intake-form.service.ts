@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as nunjucks from 'nunjucks';
-import { MailService } from 'src/mail/mail.service';
 import { Repository, UpdateResult } from 'typeorm';
+import { MailService } from '../mail/mail.service';
 import { CreatePersonnelDTO } from '../personnel';
 
 import { IntakeFormDTO } from './dto/intake-form.dto';

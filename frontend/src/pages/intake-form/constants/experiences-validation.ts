@@ -1,16 +1,10 @@
-// const testUnique = (list: any) => {
-//     return list.length === new Set(list.map(list)).size;
-//   }
+
 import * as Yup from 'yup'
 
 import { Program } from "@/common";
 import { Section } from "@/common/enums/sections.enum";
 
-// const emcrFunctionSchema = { functions: Yup.array().of(Yup.object().shape({
-//   id: Yup.number().required(), 
-//   name: Yup.string().required()
-// })).test('duplicate function', 'functions', a => testUnique(a)).min(1, "First Choice Function is Required")
-// };
+
 
 export  const functionShape = {
   id: Yup.number().when('program', {

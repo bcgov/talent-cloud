@@ -23,7 +23,7 @@ export const MultiSelectField = ({
   placeholder?: string;
 }) => {
   const { values, setFieldValue } = useFormikContext<IntakeFormValues>();
-  console.log(values, field.name);
+  
   const handleClose = (v: any) => {
     setFieldValue(
       field.name,
@@ -35,7 +35,7 @@ export const MultiSelectField = ({
   };
   const handleChange = (v: any) => {
     const fieldValues = values[field.name as keyof typeof values] as any[];
-    console.log(fieldValues);
+    
     if (field.name === 'driverLicense') {
       if (fieldValues.includes(v)) {
         const filterValue = fieldValues.filter((itm) => itm !== v);
