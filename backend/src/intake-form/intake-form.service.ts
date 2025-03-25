@@ -424,7 +424,7 @@ export class IntakeFormService {
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    return {
+    const person = {
       firstName: personnel.firstName,
       jobTitle: personnel.jobTitle,
       program:
@@ -485,6 +485,16 @@ export class IntakeFormService {
       emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
       emergencyContactRelationship: personnel.emergencyContactRelationship,
     };
+    if (person.certifications.length === 0) {
+      delete person.certifications;
+    }
+    if (person.tools.length === 0) {
+      delete person.tools;
+    }
+    if (person.languages.length === 0) {
+      delete person.languages;
+    }
+    return person;
   }
 
   async getChipsForIntake(
