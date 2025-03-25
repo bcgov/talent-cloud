@@ -86,7 +86,7 @@ export const useIntakeForm = () => {
        delete values.peccExperience;
     }
     if (values.program === Program.EMCR) {
-      Object.keys(Section).map((itm) => delete values[itm as keyof typeof values]);
+      Object.keys(Section).forEach((itm) => delete values[itm as keyof typeof values]);
 
       delete values.firstChoiceSection;
       delete values.secondChoiceSection;
