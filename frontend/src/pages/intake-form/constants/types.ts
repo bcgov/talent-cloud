@@ -74,13 +74,12 @@ export interface FormSection {
 
 export interface ToolsSkill {
   tool?: {
-    id: number;
-    name: string;
-  };
+    id?: number;
+    name?: string;
+  }|string;
   toolProficiency?: string;
 }
 
-// common
 // common
 export interface PersonalDetails {
   firstName?: string;
@@ -183,9 +182,9 @@ export interface LanguageSkill {
 
 export interface CertificationSkill {
   certification?: {
-    name: string;
-    id: number;
-  };
+    name?: string;
+    id?: number;
+  }|string;
   expiry?: Date;
 }
 export interface DriverLicense {
@@ -198,8 +197,8 @@ export interface Skills {
   tools?: ToolsSkill[];
   driverLicense?: DriverLicense[];
 }
-// review & submit
 
+// review & submit
 export interface ReviewAndSubmit {
   acknowledgeSubmit: boolean;
 }

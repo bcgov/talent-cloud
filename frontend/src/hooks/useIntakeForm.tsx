@@ -64,17 +64,24 @@ export const useIntakeForm = () => {
       '',
     );
     values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
-    values.languages = values.languages?.filter(
-      (itm) => itm.language !== '' && itm.languageProficiency !== '',
-    );
-    values.certifications = values.certifications?.filter(
-      (itm) => itm.certification && itm.certification.name !== '',
-    );
-    values.languages = values.languages?.filter(
-      (itm) => itm.language !== '' && itm.languageProficiency !== '',
-    );
+    
+    
+    values.languages = values.languages?.filter(itm => itm.language !== '')
 
-    values.tools = values.tools?.filter((itm) => itm.tool && itm.tool.name !== '');
+    values.certifications =  values.certifications?.filter(itm => itm.certification !== '')
+    
+    values.tools = values.tools?.filter(itm => itm.tool !== '')
+    
+if(values.languages?.length === 0){
+delete values.languages
+}
+if (values.certifications?.length === 0){
+  delete values.certifications
+}
+if(values.tools?.length == 0 ){
+delete values.tools
+}
+    
     if (values.program === Program.BCWS) {
        delete values.functions;
        delete values.firstChoiceFunction;

@@ -80,10 +80,10 @@ export const skillsDetails: Skills = {
       languageProficiency: '',
     },
   ],
-  tools: [{ tool: undefined, toolProficiency: '' }],
+  tools: [{ tool: '', toolProficiency: '' }],
   certifications: [
     {
-      certification: undefined,
+      certification: '',
       expiry: undefined,
     },
   ],
