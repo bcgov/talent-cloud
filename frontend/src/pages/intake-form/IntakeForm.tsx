@@ -96,11 +96,13 @@ const IntakeForm = ({
       await saveUpdateForm(values);
       values.program && handleSetStep(index);
     }
+    const element = document.getElementById('top');
+    element && element.scrollIntoView({ inline: 'start'});
   };
   
   return (
     <Form>
-      <div className="h-full flex flex-col justify-between">
+      <div id="top" className="h-full flex flex-col justify-between">
         <TabGroup
           vertical
           // manual
