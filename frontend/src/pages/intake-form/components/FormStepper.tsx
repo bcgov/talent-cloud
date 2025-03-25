@@ -24,7 +24,7 @@ export const FormStepper = ({
   disabled: boolean;
   step: number;
 }) => {
-  const { validateForm } = useFormikContext<IntakeFormValues>();
+  const { values, validateForm } = useFormikContext<IntakeFormValues>();
 
   useEffect(() => {
     (async () => {
@@ -37,7 +37,7 @@ export const FormStepper = ({
     <Tab
       key={tab.value}
       value={tab.value}
-      disabled={disabled}
+      disabled={!values.program || disabled }
       className={clsx(
         'data-[selected]:outline-none pb-16',
         index !== formTabs.length - 1 && 'border-blue-800 border-l border-dashed',
