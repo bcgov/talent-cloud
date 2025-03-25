@@ -14,23 +14,17 @@ import {
   CreatePersonnelBcwsDTO,
 } from '../bcws/dto';
 import {
-  BcwsRoleName,
   ChipsMinistryName,
   Experience,
   ExperienceLevel,
   LanguageLevelType,
   LanguageProficiency,
   Section,
-  SectionName,
   Status,
   ToolsProficiency,
   UnionMembership,
 } from '../common/enums';
 import { FormStatusEnum } from '../common/enums/form-status.enum';
-import {
-  BcwsTravelPreference,
-  EmcrTravelPreference,
-} from '../common/enums/travel-preference.enum';
 import { IntakeFormEntity } from '../database/entities/form/intake-form.entity';
 import { LocationEntity } from '../database/entities/location.entity';
 import { PersonnelCertificationEntity } from '../database/entities/personnel/personnel-certification.entity';
@@ -364,12 +358,13 @@ export class IntakeFormService {
     const personData = {
       firstName: personnel.firstName,
       lastName: personnel.lastName,
+      jobTitle: personnel.jobTitle,
       employeeId: personnel.employeeId,
       paylistId: personnel.paylistId,
       email: personnel.email,
       primaryPhone: personnel.primaryPhoneNumber,
       secondaryPhone: personnel.secondaryPhoneNumber,
-      workPhone: personnel.workPhoneNumber,
+      workPhoneNumber: personnel.workPhoneNumber,
       unionMembership: personnel.unionMembership,
       supervisorFirstName: personnel.supervisorFirstName,
       supervisorLastName: personnel.supervisorLastName,
@@ -429,14 +424,9 @@ export class IntakeFormService {
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    const functions = personnel?.emcr?.experiences?.map((itm) => ({
-      name: itm?.function?.name,
-      id: itm?.functionId,
-    }));
     return {
       firstName: personnel.firstName,
       jobTitle: personnel.jobTitle,
-
       program:
         personnel.bcws && personnel.emcr
           ? Program.ALL
@@ -444,8 +434,8 @@ export class IntakeFormService {
           ? Program.BCWS
           : Program.EMCR,
       lastName: personnel.lastName,
-      employeeId: personnel?.employeeId,
-      paylistId: personnel?.paylistId,
+      employeeId: personnel.employeeId,
+      paylistId: personnel.paylistId,
       email: personnel.email,
       primaryPhoneNumber: personnel.primaryPhone,
       secondaryPhoneNumber: personnel.secondaryPhone,
@@ -453,8 +443,8 @@ export class IntakeFormService {
       unionMembership: personnel.unionMembership,
       supervisorFirstName: personnel.supervisorFirstName,
       supervisorLastName: personnel.supervisorLastName,
-      supervisorEmail: personnel?.supervisorEmail,
-      supervisorPhoneNumber: personnel?.supervisorPhone,
+      supervisorEmail: personnel.supervisorEmail,
+      supervisorPhoneNumber: personnel.supervisorPhone,
       driverLicense: personnel.driverLicense?.map((itm) => itm),
       homeLocation: {
         ...personnel.homeLocation,
@@ -500,68 +490,10 @@ export class IntakeFormService {
               },
               expiry: item.expiry ? new Date(item.expiry) : undefined,
             })),
-      emergencyContactFirstName: personnel?.emergencyContactFirstName,
-      emergencyContactLastName: personnel?.emergencyContactLastName,
-      emergencyContactPhoneNumber: personnel?.emergencyContactPhoneNumber,
-      emergencyContactRelationship: personnel?.emergencyContactRelationship,
-      firstChoiceFunction: functions?.find(
-        (itm) => itm?.name === personnel.emcr?.firstChoiceSection,
-      ),
-      secondChoiceFunction: functions?.find(
-        (itm) => itm?.name === personnel.emcr?.secondChoiceSection,
-      ),
-      thirdChoiceFunction: functions?.find(
-        (itm) => itm?.name === personnel.emcr?.thirdChoiceSection,
-      ),
-      functions: personnel.emcr?.experiences?.map((itm) => ({
-        id: itm.functionId,
-        name: itm.function?.name,
-      })),
-      travelPreferenceEmcr:
-        EmcrTravelPreference[personnel.emcr?.travelPreference],
-      travelPreferenceBcws:
-        BcwsTravelPreference[personnel.bcws?.travelPreference],
-      firstNationsExperience: personnel.emcr?.firstNationExperience
-        ? 'true'
-        : 'false',
-      peccExperience: personnel.emcr?.peccExperience.toString(),
-      preocExperience: personnel.emcr?.preocExperience.toString(),
-      emergencyExperience: personnel.emcr?.emergencyExperience.toString(),
-      purchaseCardHolder: personnel.bcws?.purchaseCardHolder.toString(),
-      liaisonFirstName: personnel.bcws?.liaisonFirstName,
-      liaisonLastName: personnel.bcws?.liaisonLastName,
-      liaisonPhoneNumber: personnel.bcws?.liaisonPhoneNumber,
-      liaisonEmail: personnel.bcws?.liaisonEmail,
-      firstChoiceSection: {
-        id: personnel.bcws?.firstChoiceSection,
-        name: SectionName[personnel.bcws?.firstChoiceSection],
-      },
-      secondChoiceSection: {
-        id: personnel.bcws?.secondChoiceSection,
-        name: SectionName[personnel.bcws?.secondChoiceSection],
-      },
-      thirdChoiceSection: {
-        id: personnel.bcws?.thirdChoiceSection,
-        name: SectionName[personnel.bcws?.thirdChoiceSection],
-      },
-      PLANNING: personnel.bcws?.roles
-        ?.filter((itm) => itm?.role?.section === Section.PLANNING)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
-      LOGISTICS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role?.section === Section.LOGISTICS)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
-      FINANCE_ADMIN: personnel.bcws?.roles
-        ?.filter((itm) => itm.role?.section === Section.FINANCE_ADMIN)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
-      OPERATIONS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role?.section === Section.OPERATIONS)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
-      COMMAND: personnel.bcws?.roles
-        ?.filter((itm) => itm.role?.section === Section.COMMAND)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
-      AVIATION: personnel.bcws?.roles
-        ?.filter((itm) => itm.role?.section === Section.AVIATION)
-        .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
+      emergencyContactFirstName: personnel.emergencyContactFirstName,
+      emergencyContactLastName: personnel.emergencyContactLastName,
+      emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
+      emergencyContactRelationship: personnel.emergencyContactRelationship,
     };
   }
 
