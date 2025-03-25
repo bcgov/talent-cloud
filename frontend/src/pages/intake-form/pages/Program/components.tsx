@@ -103,7 +103,7 @@ export const components = [
         <br />
         <p className="text-sm">
           {
-            '*Please make sure you have completed, signed and submitted your BCWS PAR-Q+ to your Wildfire regional contact after submitting this application.'
+            '*Please make sure you have completed, signed and submitted your BCWS PAR-Q+ to your Wildfire regional contact after submitting this application. '
           }
         </p>
         <br />
@@ -142,16 +142,12 @@ export const components = [
         <div className="py-4 px-4 text-sm">
           <ul className="list-disc list-inside text-dark-700 text-sm font-normal">
             <li>
-              <span className="font-bold ext-dark-700 ">EMCR CORE Team:</span>You can be deployed
-              for up <span className="font-bold ext-dark-700 ">to 10 consecutive days</span>,
-              followed by a<span className="font-bold ext-dark-700 "> mandatory two-day rest period</span> before
-              potential redeployment.
+              <span className="font-bold text-dark-700 ">{"EMCR CORE Team: "}</span>{"You can be deployed for up "} <span className="font-bold text-dark-700 ">{"to 10 consecutive days "}</span>
+              {"followed by a "}<span className="font-bold text-dark-700 ">{"mandatory two-day rest period "}</span>{"before potential redeployment."}
             </li>
             <li>
-              <span className="text-dark-700  font-bold">BCWS CORE Team:</span> You can be deployed
-              for
-              <span className="text-dark-700  font-bold">up to 14 consecutive days</span>at a time
-              (including travel duration).
+              <span className="text-dark-700  font-bold">{"BCWS CORE Team: "}</span>{"You can be deployed for "}
+              <span className="text-dark-700  font-bold">{"up to 14 consecutive days "}</span>{"at a time (including travel duration)."}
             </li>
           </ul>
         </div>
