@@ -3,7 +3,6 @@ import {
   DriverLicense,
   DriverLicenseName,
   Ministry,
-  MinistryName,
   Program,
   UnionMembership,
 } from '@/common';
@@ -259,7 +258,7 @@ const PersonalDetailsTab = {
           required: true,
           placeholder: 'Select an option',
           options: Object.values(Ministry).map((itm) => ({
-            label: MinistryName[itm].toString(),
+            label: itm,
             value: itm,
           })),
         },
@@ -276,6 +275,7 @@ const PersonalDetailsTab = {
           name: 'unionMembership',
           label: 'Union Membership',
           type: 'select',
+          placeholder: 'Select an option',
           component: SelectField,
           required: true,
           options: Object.values(UnionMembership).map((itm) => ({
@@ -329,13 +329,45 @@ const PersonalDetailsTab = {
           ),
         },
         {
+          name: 'infoSupervisorAll',
+          label: 'About supervisor and liaison',
+          type: 'infoBox',
+          component: TextField,
+          required: false,
+          placeholder: '',
+          program: Program.ALL,
+          content: (
+            <>
+              <p className="text-info text-sm">
+                We will notify your supervisor about the outcome of your application.
+                If there is a change in your position or supervisor at any point, you
+                must update this information and obtain your new supervisor’s
+                approval to participate.
+              </p>
+              <br />
+              <br />
+              <p className="text-info text-sm">
+                Liaison information is required for BCWS CORE Team applicants and is
+                applicable only if you belong to any of the following: 1) Ministry of
+                Forests, 2) Ministry of Water, Land and Resource Stewardship, 3) The
+                Recreation Sites and Trails, and the BC Parks division under Ministry
+                of Environment.{' '}
+              </p>
+              <br />
+              <p className="text-info text-sm">
+                Please reach out to your supervisor about who your liaison is.{' '}
+              </p>
+            </>
+          ),
+        },
+        {
           name: 'infoSupervisorBCWS',
           label: 'About supervisor and liaison',
           type: 'infoBox',
           component: TextField,
           required: false,
           placeholder: '',
-          program: Program.BCWS || Program.ALL,
+          program: Program.BCWS,
           content: (
             <>
               <p className="text-info text-sm">
@@ -978,7 +1010,7 @@ const CompleteTab = {
                     <a
                       href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       Incident Command System (ICS) Training
@@ -995,7 +1027,7 @@ const CompleteTab = {
                     <a
                       href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       “Intro to CORE”
@@ -1006,7 +1038,7 @@ const CompleteTab = {
                     <a
                       href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       Willingness Statement{' '}
@@ -1016,7 +1048,7 @@ const CompleteTab = {
                     <a
                       href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       PAR-Q+ form
@@ -1030,7 +1062,7 @@ const CompleteTab = {
                   Submit to{' '}
                   <a
                     href="mailto:EMCR.CORETeam@gov.bc.ca"
-                    className="text-linkBlue hover:underline"
+                    className="text-linkBlue underline"
                   >
                     EMCR.CORETeam@gov.bc.ca
                   </a>
@@ -1043,7 +1075,7 @@ const CompleteTab = {
                   <a
                     href="https://intranet.gov.bc.ca/bcws/core-team"
                     target="_blank"
-                    className="text-linkBlue hover:underline"
+                    className="text-linkBlue underline"
                     rel="noreferrer"
                   >
                     Find my Fire Centre
@@ -1071,7 +1103,7 @@ const ReviewTab = {
       segments: PersonalDetailsTab.sections.map((itm) => ({
         ...itm,
         label: itm.name,
-        fields: itm.fields.filter((field) => field.type !== 'infoBox'),
+        fields: itm.fields.filter((field) => field.type !== 'infoBox').map(itm => ({...itm, helperText: itm.name === 'liaisonUnknown' && 'Liaison Unknown'})),
       })),
     },
 
@@ -1099,7 +1131,7 @@ const ReviewTab = {
                 'secondChoiceFunction',
                 'thirdChoiceFunction',
               ].includes(itm.name),
-            ),
+            ).map(itm => ({...itm, colSpan: 1})),
             {
               colSpan: 3,
               helperText:
