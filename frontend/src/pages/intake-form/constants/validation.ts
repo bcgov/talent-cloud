@@ -142,20 +142,12 @@ export const softwareSkillsSchema = Yup.object().shape({
 
 const programStepValidation = Yup.object().shape({
   program: Yup.string().required('Program is required.'),
-  acknowledgement: Yup.array()
-    .of(Yup.string())
-    .when('program', {
+  acknowledgement: Yup.array().when('program', {
       is: (val: Program) => val === Program.EMCR,
       then: () =>
-        Yup.array()
-          .of(Yup.string())
-          .min(2, 'All acknowledgement fields must be checked')
-          .max(2, 'All acknowledgement fields must be checked'),
+        Yup.array().min(2, 'All acknowledgement fields must be checked'),
       otherwise: () =>
-        Yup.array()
-          .of(Yup.string())
-          .min(5, 'All acknowledgement fields must be checked')
-          .max(5, 'All acknowledgement fields must be checked'),
+        Yup.array().min(5, 'All acknowledgement fields must be checked'),
     }),
 });
 

@@ -185,7 +185,6 @@ export class PersonnelService {
   }
 
   async updatePerson(personnel: UpdatePersonnelDTO): Promise<PersonnelEntity> {
-    console.log(personnel, 'UPDATE DTO');
     try {
       return await this.personnelRepository.save(personnel);
     } catch (e) {

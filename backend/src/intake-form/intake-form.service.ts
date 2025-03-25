@@ -81,57 +81,45 @@ export class IntakeFormService {
       createIntakeFormDto.personnel,
     );
 
-    let mailToPerson;
     if (!existingPerson) {
-      mailToPerson = await this.personnelService.createPerson(
-        personnelFromFormData,
-      );
-
-      await this.intakeFormRepository.save({
-        ...createIntakeFormDto,
-        status: FormStatusEnum.SUBMITTED,
-      });
+      await this.personnelService.createPerson(personnelFromFormData);
     } else {
-      mailToPerson = await this.personnelService.updatePerson({
+      await this.personnelService.updatePerson({
         ...existingPerson,
         ...personnelFromFormData,
       });
     }
 
-    const res = await this.intakeFormRepository.save({
+    const formSubmitted = await this.intakeFormRepository.save({
       ...createIntakeFormDto,
       status: FormStatusEnum.SUBMITTED,
     });
-
-    const emailTemplate = new MailDto({
-      subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
-      body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
-        ...envs,
-      }),
-      attachments: [],
-      contexts: [
-        {
-          to: [mailToPerson.email],
-          cc: [],
-          bcc: [],
-          tag: `${EmailTags.INTAKE_CONFIRM}_${process.env.ENV}`,
-          delayTS: 0,
-          context: {
-            emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
-            bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
-            ...envs,
+    if (formSubmitted) {
+      const emailTemplate = new MailDto({
+        subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
+        body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          ...envs,
+        }),
+        attachments: [],
+        contexts: [
+          {
+            to: [req.idir],
+            cc: [],
+            bcc: [],
+            tag: `${EmailTags.INTAKE_CONFIRM}_${process.env.ENV}`,
+            delayTS: 0,
+            context: {
+              emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
+              bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
+              ...envs,
+            },
           },
-        },
-      ],
-    });
-    console.log(emailTemplate);
-    const emailres = await this.mailService.sendMail(
-      emailTemplate,
-      EmailTags.INTAKE_CONFIRM,
-    );
-    console.log(emailres);
+        ],
+      });
 
-    return res;
+      await this.mailService.sendMail(emailTemplate, EmailTags.INTAKE_CONFIRM);
+    }
+    return formSubmitted;
   }
 
   /**
