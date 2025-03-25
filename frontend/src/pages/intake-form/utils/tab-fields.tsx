@@ -1011,7 +1011,7 @@ const CompleteTab = {
                     <a
                       href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       Incident Command System (ICS) Training
@@ -1028,7 +1028,7 @@ const CompleteTab = {
                     <a
                       href="https://www.for.gov.bc.ca/ftp/HPR/gov_internal/!publish/BCWS%20Intranet/Staff%20Development/Wildfire%20TEAMS%20Orientation%20-%20Storyline%20output/story.html"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       “Intro to CORE”
@@ -1039,7 +1039,7 @@ const CompleteTab = {
                     <a
                       href="https://intranet.gov.bc.ca/assets/intranet/bcws-intranet/wildfire-teams/documents/willingness_statement_-_last_updated_feb_2025.pdf"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       Willingness Statement{' '}
@@ -1049,7 +1049,7 @@ const CompleteTab = {
                     <a
                       href="https://www.for.gov.bc.ca/ftp/hpr/gov_internal/!Publish/wmb/TEAMS/PARQ.pdf"
                       target="_blank"
-                      className="text-linkBlue hover:underline"
+                      className="text-linkBlue underline"
                       rel="noreferrer"
                     >
                       PAR-Q+ form
@@ -1063,7 +1063,7 @@ const CompleteTab = {
                   Submit to{' '}
                   <a
                     href="mailto:EMCR.CORETeam@gov.bc.ca"
-                    className="text-linkBlue hover:underline"
+                    className="text-linkBlue underline"
                   >
                     EMCR.CORETeam@gov.bc.ca
                   </a>
@@ -1076,7 +1076,7 @@ const CompleteTab = {
                   <a
                     href="https://intranet.gov.bc.ca/bcws/core-team"
                     target="_blank"
-                    className="text-linkBlue hover:underline"
+                    className="text-linkBlue underline"
                     rel="noreferrer"
                   >
                     Find my Fire Centre

@@ -14,6 +14,7 @@ import { DriverLicenseName, MinistryName, Program } from '@/common';
 import { BcwsRoleName } from '@/common/enums/sections.enum';
 import { expectationsBcws, expectationsBoth, expectationsEmcr } from '../constants/enums';
 import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
+import { ToolsProficiencyName } from '@/common/enums/tools.enum';
 
 const ReviewFields = ({
   fields,
@@ -44,7 +45,7 @@ const ReviewFields = ({
       case 'expiry':
         return value && format(value, 'yyyy-MM-dd');
       case 'toolProficiency':
-        return value ?? '--';
+        return value ? ToolsProficiencyName[value as keyof typeof ToolsProficiencyName] : '--';
       case 'travelPreferenceEmcr':
       case 'travelPreferenceBcws':
         return value && TravelPreferenceText[value as keyof typeof TravelPreferenceText];
