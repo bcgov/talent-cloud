@@ -1,5 +1,5 @@
 // formik
-import type { FunctionType, Program } from '@/common';
+import type {  Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
