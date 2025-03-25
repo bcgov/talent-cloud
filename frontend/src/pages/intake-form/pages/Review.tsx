@@ -114,10 +114,10 @@ const ReviewFields = ({
   return (
     <div
       className={clsx(
-        'col-span-2 gap-y-8 grid grid-cols-2',
+        'col-span-2 gap-y-8 grid',
         ['EMCR CORE Team Sections', 'BCWS CORE Team Sections and Roles'].includes(
           sectionName,
-        ) && 'grid grid-cols-3',
+        ) ? 'grid grid-cols-3' :  'grid-cols-2',
       )}
     >
       {fields

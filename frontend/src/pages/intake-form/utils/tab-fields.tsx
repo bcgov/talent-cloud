@@ -290,7 +290,7 @@ const PersonalDetailsTab = {
           component: TextField,
           required: true,
 
-          placeholder: '123-4567',
+          placeholder: '123-456',
           helper: 'You can find this information on your paystub.',
         },
         {

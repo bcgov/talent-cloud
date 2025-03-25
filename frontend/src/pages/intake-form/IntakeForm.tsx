@@ -132,7 +132,7 @@ const IntakeForm = ({
               <TabPanel key={tab.value}>
                 {() => (
                   <div className="min-h-[calc(100vh-300px)] flex flex-col max-w-4xl">
-                    {index===0 && values.disabledProgram !== undefined && (
+                    {index=== 0 && values.disabledProgram !== "" && (
                       <div className="pb-16">
                       <Banner content={bannerContent} type={BannerType.INFO} />
                       </div>
