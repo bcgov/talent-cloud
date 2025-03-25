@@ -57,7 +57,7 @@ export const MemberAvailabilityTab = ({
       setShowEmcrBanner(false);
     }
   };
-  const { recommitmentCycle } = useRecommitmentCycle();
+  const { recommitmentCycle, isRecommitmentCycleOpen, isRecommitmentReinitiationOpen } = useRecommitmentCycle();
   const openConfirmAvailability = () => {
     setShowConfirmAvailability(!showConfirmAvailability);
   };
@@ -124,10 +124,14 @@ export const MemberAvailabilityTab = ({
   };
   return (
     <>
-      {member && recommitmentCycle && (
+      {
+        member &&
+        recommitmentCycle &&
+        member.recommitment && member.recommitment.length > 0 &&
+        (isRecommitmentCycleOpen || isRecommitmentReinitiationOpen) &&
         <RecommitmentProfileBanner
           year={recommitmentCycle?.year}
-          endDate={recommitmentCycle?.endDate}
+          endDate={(isRecommitmentReinitiationOpen && recommitmentCycle?.reinitiationEndDate) ? recommitmentCycle?.reinitiationEndDate : recommitmentCycle?.endDate}
           member={member}
           handleClick={handleOpenRecommitmentForm}
           handleCloseBanner={handleCloseBanner}
@@ -135,7 +139,7 @@ export const MemberAvailabilityTab = ({
           showEmcrBanner={showEmcrBanner}
           showBcwsBanner={showBcwsBanner}
         />
-      )}
+      }
       {[member.emcr?.status, member.bcws?.status].includes(Status.ACTIVE) &&
         !showSuccessConfirmationBanner && (
           <BannerTransition show={showConfirmationWarningBanner}>
