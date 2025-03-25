@@ -548,22 +548,22 @@ export class IntakeFormService {
         name: SectionName[personnel.bcws?.thirdChoiceSection],
       },
       PLANNING: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.PLANNING)
+        ?.filter((itm) => itm?.role?.section === Section.PLANNING)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       LOGISTICS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.LOGISTICS)
+        ?.filter((itm) => itm.role?.section === Section.LOGISTICS)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       FINANCE_ADMIN: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.FINANCE_ADMIN)
+        ?.filter((itm) => itm.role?.section === Section.FINANCE_ADMIN)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       OPERATIONS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.OPERATIONS)
+        ?.filter((itm) => itm.role?.section === Section.OPERATIONS)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       COMMAND: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.COMMAND)
+        ?.filter((itm) => itm.role?.section === Section.COMMAND)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       AVIATION: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.AVIATION)
+        ?.filter((itm) => itm.role?.section === Section.AVIATION)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
     };
   }
