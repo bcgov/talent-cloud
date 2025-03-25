@@ -309,7 +309,7 @@ const PersonalDetailsTab = {
       ],
     },
     {
-      name: 'Supervisor and Liason Details, Travel Preferences',
+      name: 'Supervisor Details and Travel Preferences',
       fields: [
         {
           name: 'infoSupervisorEMCR',
@@ -335,7 +335,7 @@ const PersonalDetailsTab = {
           component: TextField,
           required: false,
           placeholder: '',
-          program: Program.BCWS,
+          program: Program.BCWS || Program.ALL,
           content: (
             <>
               <p className="text-info text-sm">

@@ -25,7 +25,7 @@ export interface FormFields {
   required?: boolean;
   type: string;
   disabled?: boolean;
-  program?: string;
+  program?: string|boolean;
   disabledProgram?: boolean;
   colSpan?: number;
   nestedFields?: FormFields[];
