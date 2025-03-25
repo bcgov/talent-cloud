@@ -17,6 +17,7 @@ export const MonthSelector = (props: SelectorProps) => (
         <MenuButton
           aria-label="month selecter"
           className="w-full flex  font-bold  items-center pb-1"
+          type="button"
         >
           <span className="pr-1 text-gray-900">
             {months.find((itm) => itm.value === props.displayMonth.getMonth())
@@ -44,6 +45,7 @@ export const MonthSelector = (props: SelectorProps) => (
             <MenuItem key={itm.value}>
               <button
                 aria-label="month selecter"
+                type="button"
                 onClick={() =>
                   props.goToMonth(
                     new Date(props.displayMonth.getFullYear(), itm.value, 1),

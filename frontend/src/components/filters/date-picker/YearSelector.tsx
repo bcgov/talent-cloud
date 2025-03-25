@@ -16,8 +16,9 @@ export const YearSelector = (props: SelectorProps) => (
     <div className="flex flex-row">
       <MenuButton
         className="w-full flex  font-bold  items-center mb-1"
+        type="button"
         aria-label="open"
-      >
+        >
         <span className="text-gray-900 pr-1">{getYear(props.displayMonth)}</span>
         <ChevronDownIcon className="font-bold h-5 w-5 stroke-4 color-icon text-icon" />
       </MenuButton>
@@ -38,6 +39,7 @@ export const YearSelector = (props: SelectorProps) => (
             <MenuItem key={itm.value}>
               <button
                 aria-label="year selector"
+                type="button"
                 onClick={() =>
                   props.goToMonth(
                     new Date(itm.value, props.displayMonth.getMonth(), 1),
