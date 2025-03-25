@@ -20,7 +20,7 @@ export enum FunctionName {
   LIAISON = 'Liaison',
   LOGISTICS = 'Logistics',
   PLANNING = 'Planning',
-  ADVANCED_PLANNING_UNIT = 'Advanced Planning Unit',
+  ADVANCED_PLANNING_UNIT = 'Advance Planning Unit',
   RECOVERY = 'Recovery',
   DEPUTY_DIRECTOR = 'Director',
   RESPONSE_INFORMATION = 'Response Information',

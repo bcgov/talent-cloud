@@ -15,7 +15,7 @@ export const functionSql = `INSERT INTO public."emcr_function" (name,abbreviatio
 	 ('Liaison','Liaison'),
 	 ('Logistics','Logs'),
 	 ('Planning','Plans'),
-	 ('Advanced Planning Unit','APU'),
+	 ('Advance Planning Unit','APU'),
 	 ('Recovery','Recovery'),
 	 ('Deputy Director','DDir'),
 	 ('Response Information', 'Response');`;

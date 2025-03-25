@@ -1,8 +1,8 @@
 export const emcr = [
   {
-    title: 'Advanced Planning Unit',
+    title: 'Advance Planning Unit',
     description:
-      'Responsible for analyzing beyond operational period to identify potential consequences or issues. Advanced Planning is a function within the Planning section.',
+      'Responsible for analyzing beyond operational period to identify potential consequences or issues. Advance Planning is a function within the Planning section.',
   },
   {
     title: 'Deputy Director',
@@ -99,7 +99,7 @@ export const bcws = [
       {
         title: 'Plans Section Chief',
         description:
-          'Overseeing the Planning Section of the Incident. This can include: Advanced Planning, Resource Prioritization,Supervision of the Incident Action Plan, Identification of Specialized Resources, Fire Analysis, Fire Behaviour, etc.',
+          'Overseeing the Planning Section of the Incident. This can include: Advance Planning, Resource Prioritization,Supervision of the Incident Action Plan, Identification of Specialized Resources, Fire Analysis, Fire Behaviour, etc.',
       },
 
       {
@@ -432,7 +432,7 @@ export const bcws = [
       {
         title: 'Planning Officer',
         description:
-          'Overseeing the Planning Section of the Fire Centre. This can include: Advanced Planning, Fire Behaviour, Fire Analysis, Fire Centre Preparedness Planning, Rehabilitation Initiation, etc.',
+          'Overseeing the Planning Section of the Fire Centre. This can include: Advance Planning, Fire Behaviour, Fire Analysis, Fire Centre Preparedness Planning, Rehabilitation Initiation, etc.',
       },
 
       {
