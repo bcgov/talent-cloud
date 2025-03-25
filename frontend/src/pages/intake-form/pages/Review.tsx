@@ -10,7 +10,7 @@ import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { format } from 'date-fns';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { DriverLicenseName, MinistryName, Program } from '@/common';
+import { DriverLicenseName, Program } from '@/common';
 import { BcwsRoleName } from '@/common/enums/sections.enum';
 import {
   expectationsBcws,
@@ -19,6 +19,7 @@ import {
 } from '../constants/enums';
 import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 import { ToolsProficiencyName } from '@/common/enums/tools.enum';
+import { formatPhone } from '@/utils';
 
 const ReviewFields = ({
   fields,
@@ -34,6 +35,13 @@ const ReviewFields = ({
     if (value === 'false') return 'No';
     if (!value || value === '' || value.length === 0) return '--';
     switch (name) {
+      case 'primaryPhoneNumber':
+      case 'secondaryPhoneNumber':
+      case 'emergencyContactPhoneNumber':
+      case 'emergencyContactPhoneNumber':
+      case 'supervisorPhoneNumber':
+      case 'workPhoneNumber':
+        return formatPhone(value);
       case 'homeLocation':
         return value?.name ?? '--';
       case 'functions':

@@ -3,7 +3,6 @@ import {
   DriverLicense,
   DriverLicenseName,
   Ministry,
-  MinistryName,
   Program,
   UnionMembership,
 } from '@/common';
