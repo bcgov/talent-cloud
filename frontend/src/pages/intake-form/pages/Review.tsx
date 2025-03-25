@@ -38,7 +38,6 @@ const ReviewFields = ({
       case 'primaryPhoneNumber':
       case 'secondaryPhoneNumber':
       case 'emergencyContactPhoneNumber':
-      case 'emergencyContactPhoneNumber':
       case 'supervisorPhoneNumber':
       case 'workPhoneNumber':
         return formatPhone(value);
