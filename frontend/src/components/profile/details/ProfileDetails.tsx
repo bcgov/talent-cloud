@@ -1,8 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { Personnel, Role, Status } from '@/common';
 import { DialogUI } from '@/components/ui';
 import { ProfileEditForm } from '../forms';
