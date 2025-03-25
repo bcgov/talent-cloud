@@ -120,7 +120,7 @@ push-prod:
 open-db-tunnel-dev:
 	@oc project $(OS_NAMESPACE_PREFIX)-dev
 # Use patroni-0 to make EDIT changes, patroni-1 for READ ONLY
-	@oc port-forward $(APP_NAME)-patroni-0 5432
+	@oc port-forward $(APP_NAME)-patroni-1 5432
 
 open-db-tunnel-test:
 	@oc project $(OS_NAMESPACE_PREFIX)-test
