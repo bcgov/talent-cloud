@@ -161,6 +161,7 @@ export class IntakeFormService {
 
     const existingform = await this.intakeFormRepository.findOneBy({
       createdByEmail: req.idir,
+      status: FormStatusEnum.DRAFT,
     });
 
     // Member cannot submit
@@ -170,7 +171,7 @@ export class IntakeFormService {
 
     // This is  WIP form and the chips data has already been mapped
     // return the form but ensure the program is locked in case a member already exists
-    if (existingform && existingform.status === FormStatusEnum.DRAFT) {
+    if (existingform) {
       // lock program
       if (personnel) {
         existingform.personnel.disabledProgram = personnel.emcr
@@ -186,12 +187,7 @@ export class IntakeFormService {
     // If there is a personnel entry (one program only), and no existing form, then they have been migrated in to one of the programs already:
     // If there is a personnel entry (one program only) and there is an existing form that has previously been submitted:
     // then generate a new draft form with the chips data and lock the program:
-    if (
-      (personnel && !existingform) ||
-      (personnel &&
-        existingform &&
-        existingform.status === FormStatusEnum.SUBMITTED)
-    ) {
+    if (personnel && !existingform) {
       const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
@@ -214,6 +210,7 @@ export class IntakeFormService {
 
     // If there is no existing form and no personnel entry then generate a new draft form with  chips data
     if (!existingform && !personnel) {
+      console.log('....');
       const intakeForm = new IntakeFormEntity();
 
       intakeForm.createdByEmail = req.idir;
