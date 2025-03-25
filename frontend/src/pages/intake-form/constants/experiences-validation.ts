@@ -21,10 +21,18 @@ export  const functionShape = {
   }),
 };
 
-const sectionShape = {
-  id: Yup.string(),
-  name: Yup.string(),
-};
+const sectionShape = Yup.object().shape({
+  id: Yup.string().when('program', {
+    is: (val: Program)=> val === Program.ALL || val === Program.BCWS,
+    then: ()=> Yup.string().required('First choice is required'),
+    otherwise: ()=> Yup.string().notRequired()
+  }),
+  name: Yup.string().when('program', {
+    is: (val: Program)=> val === Program.ALL || val === Program.BCWS,
+    then: ()=> Yup.string().required('First choice is required'),
+    otherwise: ()=> Yup.string().notRequired()
+  }),
+})
 
 
 
@@ -50,13 +58,25 @@ export const experiencesValidation = Yup.object().shape({
     otherwise: () => Yup.string().notRequired(),
   }),
 
-  firstChoiceSection: Yup.object().when('program', {
+  firstChoiceSection: sectionShape.when('program', {
     is: (val: Program)=> val === Program.ALL || val === Program.BCWS,
     then: ()=> Yup.object().required('First choice is required'),
     otherwise: ()=> Yup.object().notRequired()
   }),
-  secondChoiceSection: Yup.object().shape(sectionShape).optional().nullable(),
-  thirdChoiceSection: Yup.object().shape(sectionShape).optional().nullable(),
+  secondChoiceSection: Yup.object().shape({
+    id: Yup.string().when('program', {
+      is: (val: Program)=> val === Program.ALL || val === Program.BCWS,
+      then: ()=> Yup.string(),
+    }),
+    name: Yup.string(),
+  }).optional().nullable(),
+  thirdChoiceSection: Yup.object().shape({
+    id: Yup.string().when('program', {
+      is: (val: Program)=> val === Program.ALL || val === Program.BCWS,
+      then: ()=> Yup.string(),
+    }),
+    name: Yup.string(),
+  }).optional().nullable(),
 
   PLANNING: Yup.array().when('firstChoiceSection', {
     is: (val: { id: string; name: string }) =>

@@ -23,6 +23,9 @@ export const useIntakeForm = () => {
 
   useEffect(() => {
     (async () => {
+      if (loading) {
+        return;
+      }
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);

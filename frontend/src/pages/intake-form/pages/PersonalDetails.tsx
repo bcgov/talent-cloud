@@ -2,6 +2,7 @@ import { FormSection } from '../components/FormSection';
 import type {
   FormComponent,
   FormSection as FormSectionType,
+  IntakeFormValues,
 } from '../constants/types';
 import { BannerType } from '@/common/enums/banner-enum';
 import { Banner } from '@/components/ui/Banner';
@@ -9,8 +10,11 @@ import { FormField } from '../fields/FormField';
 
 import { Fragment } from 'react';
 import { intakeFormComponents, renderIntakeFormComponent } from '../utils/helpers';
+import { useFormikContext } from 'formik';
 
 export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) => {
+  const {values} = useFormikContext<IntakeFormValues>()
+
   return (
     <div className="pb-24">
       <Banner
@@ -33,7 +37,7 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
                     {fieldItm.type &&
                     intakeFormComponents.includes(fieldItm?.type) ? (
                       <div className={'col-span-2'}>
-                        {renderIntakeFormComponent(fieldItm as FormComponent)}
+                        {!fieldItm.program ? renderIntakeFormComponent(fieldItm as FormComponent) : values?.program === fieldItm?.program  && renderIntakeFormComponent(fieldItm as FormComponent)}
                       </div>
                     ) : (
                       <div

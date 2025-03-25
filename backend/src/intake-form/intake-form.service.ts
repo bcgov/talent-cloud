@@ -161,6 +161,7 @@ export class IntakeFormService {
 
     const existingform = await this.intakeFormRepository.findOneBy({
       createdByEmail: req.idir,
+      status: FormStatusEnum.DRAFT,
     });
 
     // Member cannot submit
@@ -170,7 +171,7 @@ export class IntakeFormService {
 
     // This is  WIP form and the chips data has already been mapped
     // return the form but ensure the program is locked in case a member already exists
-    if (existingform && existingform.status === FormStatusEnum.DRAFT) {
+    if (existingform) {
       // lock program
       if (personnel) {
         existingform.personnel.disabledProgram = personnel.emcr
@@ -186,12 +187,7 @@ export class IntakeFormService {
     // If there is a personnel entry (one program only), and no existing form, then they have been migrated in to one of the programs already:
     // If there is a personnel entry (one program only) and there is an existing form that has previously been submitted:
     // then generate a new draft form with the chips data and lock the program:
-    if (
-      (personnel && !existingform) ||
-      (personnel &&
-        existingform &&
-        existingform.status === FormStatusEnum.SUBMITTED)
-    ) {
+    if (personnel && !existingform) {
       const intakeForm = new IntakeFormEntity();
       intakeForm.createdByEmail = req.idir;
       intakeForm.status = FormStatusEnum.DRAFT;
@@ -214,6 +210,7 @@ export class IntakeFormService {
 
     // If there is no existing form and no personnel entry then generate a new draft form with  chips data
     if (!existingform && !personnel) {
+      console.log('....');
       const intakeForm = new IntakeFormEntity();
 
       intakeForm.createdByEmail = req.idir;
@@ -548,22 +545,22 @@ export class IntakeFormService {
         name: SectionName[personnel.bcws?.thirdChoiceSection],
       },
       PLANNING: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.PLANNING)
+        ?.filter((itm) => itm?.role?.section === Section.PLANNING)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       LOGISTICS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.LOGISTICS)
+        ?.filter((itm) => itm.role?.section === Section.LOGISTICS)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       FINANCE_ADMIN: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.FINANCE_ADMIN)
+        ?.filter((itm) => itm.role?.section === Section.FINANCE_ADMIN)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       OPERATIONS: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.OPERATIONS)
+        ?.filter((itm) => itm.role?.section === Section.OPERATIONS)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       COMMAND: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.COMMAND)
+        ?.filter((itm) => itm.role?.section === Section.COMMAND)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
       AVIATION: personnel.bcws?.roles
-        ?.filter((itm) => itm.role.section === Section.AVIATION)
+        ?.filter((itm) => itm.role?.section === Section.AVIATION)
         .map((itm) => ({ name: BcwsRoleName[itm.role.name], id: itm.role.id })),
     };
   }

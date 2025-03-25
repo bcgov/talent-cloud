@@ -309,7 +309,7 @@ const PersonalDetailsTab = {
       ],
     },
     {
-      name: 'Supervisor and Liason Details, Travel Preferences',
+      name: 'Supervisor Details and Travel Preferences',
       fields: [
         {
           name: 'infoSupervisorEMCR',
@@ -335,7 +335,7 @@ const PersonalDetailsTab = {
           component: TextField,
           required: false,
           placeholder: '',
-          program: Program.BCWS,
+          program: Program.BCWS || Program.ALL,
           content: (
             <>
               <p className="text-info text-sm">
@@ -776,27 +776,23 @@ const ExperiencesTab = {
           label: '',
           type: 'componentBox',
           component: () => (
+            <>
             <hr className="mt-6 mb-2 h-0.5 border-t-0 bg-[#cfcfcf]" />
-          ),
-        },
-        {
-          name: 'roles',
-          colSpan: 2,
-          label: (
-            <div>
+            <div className='pt-8'>
               <div className="text-black text-sm font-normal">
                 For each section below, please indicate any role(s) that you are
                 interested in for deployment.
               </div>
-              <div className=" pb-8">
+              <div>
                 <span className="text-xs font-normal text-gray-700">
                   You must select AT LEAST ONE role under your FIRST choice.
                 </span>
               </div>
             </div>
+            </>
           ),
-          type: 'infoBox',
         },
+        
         ...bcwsRolesFields,
       ],
     },
