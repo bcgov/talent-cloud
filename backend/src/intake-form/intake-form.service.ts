@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as nunjucks from 'nunjucks';
 import { Repository, UpdateResult } from 'typeorm';
+import { MailService } from '../mail/mail.service';
 import { CreatePersonnelDTO } from '../personnel';
+
 import { IntakeFormDTO } from './dto/intake-form.dto';
 import { IntakeFormRO } from './ro/intake-form.ro';
 import { IntakeFormPersonnelData } from './types';
@@ -37,6 +40,13 @@ import {
   CreatePersonnelEmcrDTO,
   EmcrPersonnelExperienceDTO,
 } from '../emcr/dto';
+import {
+  EmailSubjects,
+  EmailTags,
+  EmailTemplates,
+  envs,
+} from '../mail/constants';
+import { MailDto } from '../mail/mail.dto';
 import { CreatePersonnelToolsDTO } from '../personnel/dto/skills/create-personnel-tools.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
@@ -50,6 +60,7 @@ export class IntakeFormService {
     private personnelService: PersonnelService,
     @Inject(RegionsAndLocationsService)
     private locationService: RegionsAndLocationsService,
+    @Inject(MailService) private mailService: MailService,
   ) {}
   /**
    * Creates new Personnel, EMCR Personnel, BCWS Personnel from Intake Form data
@@ -72,21 +83,43 @@ export class IntakeFormService {
 
     if (!existingPerson) {
       await this.personnelService.createPerson(personnelFromFormData);
-
-      await this.intakeFormRepository.save({
-        ...createIntakeFormDto,
-        status: FormStatusEnum.SUBMITTED,
-      });
     } else {
       await this.personnelService.updatePerson({
         ...existingPerson,
         ...personnelFromFormData,
       });
     }
-    return await this.intakeFormRepository.save({
+
+    const formSubmitted = await this.intakeFormRepository.save({
       ...createIntakeFormDto,
       status: FormStatusEnum.SUBMITTED,
     });
+    if (formSubmitted) {
+      const emailTemplate = new MailDto({
+        subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
+        body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          ...envs,
+        }),
+        attachments: [],
+        contexts: [
+          {
+            to: [req.idir],
+            cc: [],
+            bcc: [],
+            tag: `${EmailTags.INTAKE_CONFIRM}_${process.env.ENV}`,
+            delayTS: 0,
+            context: {
+              emcr_contact: 'EMCR.CORETEAM@gov.bc.ca',
+              bcws_contact: 'BCWS.CORETEAM@gov.bc.ca',
+              ...envs,
+            },
+          },
+        ],
+      });
+
+      await this.mailService.sendMail(emailTemplate, EmailTags.INTAKE_CONFIRM);
+    }
+    return formSubmitted;
   }
 
   /**

@@ -83,12 +83,12 @@ const IntakeForm = ({
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
       await saveUpdateForm(values);
-      return handleSetStep(index);
+      values.program && handleSetStep(index);
     } else {
       handleSetErrors(step);
       handleRemoveCompletedStep(step);
       await saveUpdateForm(values);
-      return handleSetStep(index);
+      values.program && handleSetStep(index);
     }
   };
 

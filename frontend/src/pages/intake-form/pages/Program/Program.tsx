@@ -24,7 +24,7 @@ import {
   expectationsBoth,
   expectationsEmcr,
 } from '../../constants/enums';
-import { CheckboxGroupField } from '../../fields/CheckBoxGroupField';
+
 
 export const ProgramPage = () => {
   const { values, setValues } = useFormikContext<IntakeFormValues>();
@@ -81,8 +81,8 @@ export const ProgramPage = () => {
             {/* Add custom components and styling as needed here - this page is not like the others :)  */}
             {dynamicFields[1]?.options && (
               <div className="bg-dark-200 border-[#1A5A96] border-l-[10px] px-4 py-4">
-                <CheckboxGroupField
-                  field={dynamicFields[1]}
+                <FormField
+                  {...dynamicFields[1]}
                   options={dynamicFields[1].options}
                 />
               </div>

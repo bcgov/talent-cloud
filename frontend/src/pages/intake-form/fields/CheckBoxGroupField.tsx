@@ -11,33 +11,20 @@ export const CheckboxGroupField = ({
   field: FormFields;
   options: any;
 }) => {
-  const { setValues, values } = useFormikContext<IntakeFormValues>();
+  
+  const { setFieldValue, values } = useFormikContext<IntakeFormValues>();
 
   const handleChange = (value: any) => {
-    if (
-      !values[field.name as keyof typeof values] ||
-      (values[field.name as keyof typeof values] as any[])[0] === '' ||
-      (values[field.name as keyof typeof values] as any[])[0] === undefined
-    ) {
-      setValues({ ...values, [field.name]: [value] });
+    const valueSet = new Set(field.value)
+    valueSet.delete(null)
+    valueSet.delete(undefined)
+    
+    if(valueSet.has(value)){
+      valueSet.delete(value)
     } else {
-      if ((values[field.name as keyof typeof values] as any[]).includes(value)) {
-        setValues({
-          ...values,
-          [field.name]: (values[field.name as keyof typeof values] as any[]).filter(
-            (itm) => itm !== value,
-          ),
-        });
-      } else {
-        setValues({
-          ...values,
-          [field.name]: [
-            ...(values[field.name as keyof typeof values] as any[]),
-            value,
-          ],
-        });
-      }
+      valueSet.add(value)
     }
+    setFieldValue( field.name, Array.from(valueSet))
   };
 
   return (
@@ -68,9 +55,10 @@ export const CheckboxGroupField = ({
                   checked={checked}
                   label={''}
                   type={'checkbox'}
-                  onChange={() => handleChange(itm.value)}
-                  name={`${field.name}.${index}`}
+                  onChange={() =>  handleChange(itm.value)}
+                  name={field.name}
                   className="cursor-pointer"
+                  disabled={itm.disabled}
                 />
                 <label htmlFor={`${field?.name}.${index}`} className="font-normal">
                   {itm.label}
@@ -81,6 +69,7 @@ export const CheckboxGroupField = ({
                     </>
                   )}
                 </label>
+                
               </div>
             );
           })}

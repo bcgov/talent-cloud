@@ -1,5 +1,5 @@
 // formik
-import type { FunctionType, Program } from '@/common';
+import type {  Program } from '@/common';
 import type { FormikErrors } from 'formik';
 
 // react
@@ -139,10 +139,10 @@ export interface GeneralEmergencyManagementExperience {
 }
 
 export interface SectionChoiceEmcr {
-  functions?: FunctionType[];
-  firstChoiceFunction?: FunctionType;
-  secondChoiceFunction?: FunctionType;
-  thirdChoiceFunction?: FunctionType;
+  functions?: {id?: number, name?: string}[];
+  firstChoiceFunction?: {id?: number, name?: string};
+  secondChoiceFunction?: {id?: number, name?: string};
+  thirdChoiceFunction?: {id?: number, name?: string};
 }
 
 export interface BCWSRoles {

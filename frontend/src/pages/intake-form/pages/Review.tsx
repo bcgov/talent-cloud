@@ -25,7 +25,7 @@ const ReviewFields = ({
   const getValue = (value: any, name: string) => {
     switch (name) {
       case 'homeLocation':
-        return value.name;
+        return value?.name ?? '--';
       case 'functions':
         return (value as any[])
           .map((itm) => itm?.name)
