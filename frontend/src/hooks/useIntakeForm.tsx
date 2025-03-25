@@ -8,6 +8,8 @@ import type {
 } from '@/pages/intake-form/constants/types';
 import { AlertType } from '@/providers/Alert';
 import { useAlert } from './useAlert';
+import { Program } from '@/common';
+import { Section } from '@/common/enums/sections.enum';
 
 export const useIntakeForm = () => {
   const { AxiosPrivate } = useAxios();
@@ -62,6 +64,41 @@ export const useIntakeForm = () => {
       '',
     );
     values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
+    values.languages = values.languages?.filter(
+      (itm) => itm.language !== '' && itm.languageProficiency !== '',
+    );
+    values.certifications = values.certifications?.filter(
+      (itm) => itm.certification && itm.certification.name !== '',
+    );
+    values.languages = values.languages?.filter(
+      (itm) => itm.language !== '' && itm.languageProficiency !== '',
+    );
+
+    values.tools = values.tools?.filter((itm) => itm.tool && itm.tool.name !== '');
+    if (values.program === Program.BCWS) {
+      values.functions && delete values.functions;
+      values.firstChoiceFunction && delete values.firstChoiceFunction;
+      values.secondChoiceFunction && delete values.secondChoiceFunction;
+      values.thirdChoiceFunction && delete values.thirdChoiceFunction;
+
+      values.emergencyExperience && delete values.emergencyExperience;
+      values.firstNationsExperience && delete values.firstNationsExperience;
+      values.preocExperience && delete values.preocExperience;
+      values.peccExperience && delete values.peccExperience;
+    }
+    if (values.program === Program.EMCR) {
+      Object.keys(Section).map((itm) => delete values[itm as keyof typeof values]);
+
+      values.firstChoiceSection && delete values.firstChoiceSection;
+      values.secondChoiceSection && delete values.secondChoiceSection;
+      values.thirdChoiceSection && delete values.thirdChoiceSection;
+
+      values.liaisonEmail && delete values.liaisonEmail;
+      values.liaisonFirstName && delete values.liaisonFirstName;
+      values.liaisonPhoneNumber && delete values.liaisonPhoneNumber;
+      values.liaisonUnknown && delete values.liaisonUnknown;
+      values.purchaseCardHolder && delete values.purchaseCardHolder;
+    }
 
     try {
       const res = await AxiosPrivate.post(`/intake-form/${formData?.id}/submit`, {
