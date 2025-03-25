@@ -10,7 +10,6 @@ import { useFormikContext } from 'formik';
 import { FormField } from '../fields/FormField';
 import { MultiSelectGroup } from '../components/MultiSelectFieldGroup';
 import { intakeFormComponents, renderIntakeFormComponent } from '../utils/helpers';
-import { CheckboxGroupField } from '../fields/CheckBoxGroupField';
 
 export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   const {
@@ -20,8 +19,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
       functions,
       secondChoiceFunction,
       thirdChoiceFunction,
+      firstChoiceSection, thirdChoiceSection, secondChoiceSection,
       program,
-      firstChoiceSection,
     },
   } = useFormikContext<IntakeFormValues>();
 
@@ -97,7 +96,7 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
   } else {
     description = '';
   }
-  console.log(firstChoiceSection);
+  
   return (
     <div>
       <div className="text-sm py-6">{description}</div>
@@ -125,11 +124,6 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
 
                           <MultiSelectGroup field={fieldItm} />
                         </div>
-                      ) : fieldItm.type === 'multiselect-group' ? (
-                        <CheckboxGroupField
-                          field={fieldItm}
-                          options={fieldItm.options}
-                        />
                       ) : (
                         <div
                           className={
@@ -138,7 +132,19 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                               : 'col-span-1'
                           }
                         >
-                          <FormField key={fieldItm.name} {...fieldItm} />
+                          <FormField
+                            key={fieldItm.name}
+                            {...fieldItm}
+                            options={fieldItm?.options?.map((itm) => ({
+                              ...itm,
+                              disabled: [
+                                firstChoiceFunction?.id,
+                                secondChoiceFunction?.id,
+                                thirdChoiceFunction?.id,
+                                firstChoiceSection?.id, thirdChoiceSection?.id, secondChoiceSection?.id
+                              ].includes(itm.value.id),
+                            }))}
+                          />
                         </div>
                       )}
                     </Fragment>

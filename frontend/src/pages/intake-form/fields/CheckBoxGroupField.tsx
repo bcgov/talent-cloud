@@ -1,5 +1,5 @@
 // formik
-import { Field, useFormikContext } from 'formik';
+import { ErrorMessage, Field, useFormikContext } from 'formik';
 
 // types
 import type { FormFields, IntakeFormValues } from '../constants/types';
@@ -11,33 +11,20 @@ export const CheckboxGroupField = ({
   field: FormFields;
   options: any;
 }) => {
-  const { setValues, values } = useFormikContext<IntakeFormValues>();
+  
+  const { setFieldValue, values , errors} = useFormikContext<IntakeFormValues>();
 
   const handleChange = (value: any) => {
-    if (
-      !values[field.name as keyof typeof values] ||
-      (values[field.name as keyof typeof values] as any[])[0] === '' ||
-      (values[field.name as keyof typeof values] as any[])[0] === undefined
-    ) {
-      setValues({ ...values, [field.name]: [value] });
+    const valueSet = new Set(field.value)
+    valueSet.delete(null)
+    valueSet.delete(undefined)
+    console.log(valueSet, field.value, value)
+    if(valueSet.has(value)){
+      valueSet.delete(value)
     } else {
-      if ((values[field.name as keyof typeof values] as any[]).includes(value)) {
-        setValues({
-          ...values,
-          [field.name]: (values[field.name as keyof typeof values] as any[]).filter(
-            (itm) => itm !== value,
-          ),
-        });
-      } else {
-        setValues({
-          ...values,
-          [field.name]: [
-            ...(values[field.name as keyof typeof values] as any[]),
-            value,
-          ],
-        });
-      }
+      valueSet.add(value)
     }
+    setFieldValue( field.name, Array.from(valueSet))
   };
 
   return (
@@ -57,7 +44,7 @@ export const CheckboxGroupField = ({
                 : (values?.[field.name as keyof typeof values] as any).includes(
                     itm.value,
                   );
-
+console.log(itm)
             return (
               <div
                 key={itm.label + index.toString()}
@@ -68,9 +55,10 @@ export const CheckboxGroupField = ({
                   checked={checked}
                   label={''}
                   type={'checkbox'}
-                  onChange={() => handleChange(itm.value)}
-                  name={`${field.name}.${index}`}
+                  onChange={() =>  handleChange(itm.value)}
+                  name={field.name}
                   className="cursor-pointer"
+                  disabled={itm.disabled}
                 />
                 <label htmlFor={`${field?.name}.${index}`} className="font-normal">
                   {itm.label}
@@ -81,6 +69,10 @@ export const CheckboxGroupField = ({
                     </>
                   )}
                 </label>
+                {/* <ErrorMessage name={field.name}>
+                  {(msg) => <div>{msg}</div>}
+                </ErrorMessage> */}
+                {/* {errors && (errors?.[field.name as keyof typeof errors] as any[])?.map(itm => <div>{itm}</div>)} */}
               </div>
             );
           })}
