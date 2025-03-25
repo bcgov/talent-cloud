@@ -76,28 +76,26 @@ export const useIntakeForm = () => {
 
     values.tools = values.tools?.filter((itm) => itm.tool && itm.tool.name !== '');
     if (values.program === Program.BCWS) {
-      values.functions && delete values.functions;
-      values.firstChoiceFunction && delete values.firstChoiceFunction;
-      values.secondChoiceFunction && delete values.secondChoiceFunction;
-      values.thirdChoiceFunction && delete values.thirdChoiceFunction;
-
-      values.emergencyExperience && delete values.emergencyExperience;
-      values.firstNationsExperience && delete values.firstNationsExperience;
-      values.preocExperience && delete values.preocExperience;
-      values.peccExperience && delete values.peccExperience;
+       delete values.functions;
+       delete values.firstChoiceFunction;
+       delete values.secondChoiceFunction;
+       delete values.thirdChoiceFunction;
+       delete values.emergencyExperience;
+       delete values.firstNationsExperience;
+       delete values.preocExperience;
+       delete values.peccExperience;
     }
     if (values.program === Program.EMCR) {
       Object.keys(Section).map((itm) => delete values[itm as keyof typeof values]);
 
-      values.firstChoiceSection && delete values.firstChoiceSection;
-      values.secondChoiceSection && delete values.secondChoiceSection;
-      values.thirdChoiceSection && delete values.thirdChoiceSection;
-
-      values.liaisonEmail && delete values.liaisonEmail;
-      values.liaisonFirstName && delete values.liaisonFirstName;
-      values.liaisonPhoneNumber && delete values.liaisonPhoneNumber;
-      values.liaisonUnknown && delete values.liaisonUnknown;
-      values.purchaseCardHolder && delete values.purchaseCardHolder;
+      delete values.firstChoiceSection;
+      delete values.secondChoiceSection;
+      delete values.thirdChoiceSection;
+      delete values.liaisonEmail;
+      delete values.liaisonFirstName;
+      delete values.liaisonPhoneNumber;
+      delete values.liaisonUnknown;
+      delete values.purchaseCardHolder;
     }
 
     try {
