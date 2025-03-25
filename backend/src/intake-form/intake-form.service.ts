@@ -364,7 +364,7 @@ export class IntakeFormService {
       email: personnel.email,
       primaryPhone: personnel.primaryPhoneNumber,
       secondaryPhone: personnel.secondaryPhoneNumber,
-      workPhoneNumber: personnel.workPhoneNumber,
+      workPhone: personnel.workPhoneNumber,
       unionMembership: personnel.unionMembership,
       supervisorFirstName: personnel.supervisorFirstName,
       supervisorLastName: personnel.supervisorLastName,
