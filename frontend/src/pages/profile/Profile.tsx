@@ -112,7 +112,7 @@ const Profile = () => {
 
   return (
     <div
-      className={`min-h-screen    w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
+      className={`min-h-screen w-full overflow-x-hidden lg:px-32 xl:px-32 2xl:px-64`}
     >
       <div
         className={`${personnel?.status === Status.PENDING ? 'bg-defaultGray' : 'bg-grayBackground'} pt-32`}
@@ -160,8 +160,8 @@ const Profile = () => {
               />
             </div>
           )}
-          {personnel && <RecommitmentDetails />}
-          {personnel && <ProfileDetails />}
+          {personnel && <RecommitmentDetails personnel={personnel} />}
+          {personnel && <ProfileDetails personnel={personnel} profileData={profileData} updatePersonnel={updatePersonnel} />}
           {personnel && program === Program.EMCR && (
             <ProfileFunctions
               functions={functions}
