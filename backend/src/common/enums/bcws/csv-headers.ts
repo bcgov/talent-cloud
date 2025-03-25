@@ -9,17 +9,9 @@ based on their respective DB table/column (or TypeORM alias) name regardless of 
 for instance, personnel.first_name becomes 'personnel_first_name').  Note also that
 any additional columns added to existing tables also need to be accounted for here
 due to the way TypeORM handles joins
-
-Columns labelled "Internal Use" are linking PKs and the like, they don't have much
-reporting value but TypeORM's select logic makes excluding them prohibitively difficult
-so they're labelled for convenient removal for future reporting purposes
 */
 
 export const BcwsCsvHeaders = [
-  {
-    field: 'bcws_personnel_personnel_id',
-    title: 'BCWS Personnel ID (Internal Use)',
-  },
   { field: 'bcws_personnel_status', title: 'Status' },
   { field: 'bcws_personnel_date_applied', title: 'Date Applied' },
   { field: 'bcws_personnel_date_approved', title: 'Date Approved' },
@@ -68,7 +60,6 @@ export const BcwsCsvHeaders = [
   },
   { field: 'personnel_created_at', title: 'Date Created' },
   { field: 'personnel_updated_at', title: 'Date Updated' },
-  { field: 'personnel_id', title: 'General Personnel ID (Internal Use)' },
   { field: 'personnel_first_name', title: 'First Name' },
   { field: 'personnel_last_name', title: 'Last Name' },
   { field: 'personnel_primary_phone', title: 'Primary Phone' },
@@ -139,20 +130,10 @@ export const BcwsCsvHeaders = [
     field: 'personnel_chips_training_data',
     title: 'CHIPS - Training Data',
   },
-  {
-    field: 'personnel_work_location',
-    title: 'Work Location ID (Internal Use)',
-  },
-  {
-    field: 'personnel_home_location',
-    title: 'Home Location ID (Internal Use)',
-  },
-  { field: 'home_loc_id', title: 'Home Location ID (Internal Use)' },
   { field: 'home_loc_location_name', title: 'Home Location Name' },
   { field: 'home_loc_region', title: 'Home Region' },
   { field: 'home_loc_fire_centre', title: 'Home Fire Centre' },
   { field: 'home_loc_fire_zone', title: 'Home Fire Zone' },
-  { field: 'work_loc_id', title: 'Work Location ID (Internal Use)' },
   { field: 'work_loc_location_name', title: 'Work Location Name' },
   { field: 'work_loc_region', title: 'Work Region' },
   { field: 'work_loc_fire_centre', title: 'Work Fire Centre' },
@@ -174,10 +155,6 @@ export const BcwsCsvHeaders = [
   {
     field: 'recommitment_supervisor_reason',
     title: 'Supervisor Recommitment Reason',
-  },
-  {
-    field: 'recommitmentCycle_year',
-    title: 'Recommitment Cycle Year (Internal Use)',
   },
   {
     field: 'recommitmentCycle_start_date',

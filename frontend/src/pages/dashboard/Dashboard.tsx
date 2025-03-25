@@ -7,7 +7,7 @@ import { useRoleContext } from '@/providers';
 import { useTable } from '@/hooks';
 
 // common
-import { Filters, Role } from '@/common';
+import { Filters, Role, Program } from '@/common';
 import { Status } from '@/common';
 import { ActiveRecommitmentStatusFilter, InactiveRecommitmentStatusFilter  } from '@/common/enums/recommitment-status';
 
@@ -27,11 +27,13 @@ import { button as buttonClass } from '@/components/ui/classes';
 
 // icons
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { useExportToCSV } from '@/hooks/useExportToCSV';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
   const { program, roles } = useRoleContext();
+  const { emcrExport, bcwsExport } = useExportToCSV();
 
   const {
     totalRows,
@@ -83,6 +85,39 @@ const Dashboard = () => {
                     !loading && setLoading(true);
                   }}
                 />
+              )}
+              {roles && roles.includes(Role.COORDINATOR) && (
+                <button
+                  onClick={async () => {if (program === Program.BCWS) {
+                        const csvReceipt = await bcwsExport();
+                        const url = window.URL.createObjectURL(new Blob([csvReceipt]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', "BCWS_Personnel_Details.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        
+                    } else {if (program === Program.EMCR) {
+                      const csvReceipt = await emcrExport();
+                        const url = window.URL.createObjectURL(new Blob([csvReceipt]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', "EMCR_Personnel_Details.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                      } 
+                    }
+                  }
+                }  
+                  className={buttonClass.tertiaryButton}
+                >
+                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
+                    {' '}
+                    <p className="font-bold text-white">Download All Members</p>
+                  </span>
+                </button>
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
                 <button
