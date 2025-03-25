@@ -43,7 +43,8 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
           firstChoiceFunction,
         ]);
       }
-    }
+    }  
+    
   }, [firstChoiceFunction]);
 
   useEffect(() => {
@@ -135,15 +136,18 @@ export const Experiences = ({ sections }: { sections: FormSectionType[] }) => {
                           <FormField
                             key={fieldItm.name}
                             {...fieldItm}
+                            disabled={fieldItm.name === 'secondChoiceSection' && !firstChoiceSection || fieldItm.name === 'thirdChoiceSection' && !secondChoiceSection || fieldItm.name === 'secondChoiceFunction' && !firstChoiceFunction || fieldItm.name === 'thirdChoiceFunction' && !secondChoiceFunction}
                             options={fieldItm?.options?.map((itm) => ({
+                              
+                              
                               ...itm,
                               disabled: [
                                 firstChoiceFunction?.id,
                                 secondChoiceFunction?.id,
                                 thirdChoiceFunction?.id,
                                 firstChoiceSection?.id, thirdChoiceSection?.id, secondChoiceSection?.id
-                              ].includes(itm.value.id),
-                            }))}
+                              ].includes(itm.value?.id),
+                             })) }
                           />
                         </div>
                       )}

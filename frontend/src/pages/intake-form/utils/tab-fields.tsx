@@ -276,6 +276,7 @@ const PersonalDetailsTab = {
           name: 'unionMembership',
           label: 'Union Membership',
           type: 'select',
+          placeholder: 'Select an option',
           component: SelectField,
           required: true,
           options: Object.values(UnionMembership).map((itm) => ({
@@ -329,13 +330,45 @@ const PersonalDetailsTab = {
           ),
         },
         {
+          name: 'infoSupervisorAll',
+          label: 'About supervisor and liaison',
+          type: 'infoBox',
+          component: TextField,
+          required: false,
+          placeholder: '',
+          program: Program.ALL,
+          content: (
+            <>
+              <p className="text-info text-sm">
+                We will notify your supervisor about the outcome of your application.
+                If there is a change in your position or supervisor at any point, you
+                must update this information and obtain your new supervisor’s
+                approval to participate.
+              </p>
+              <br />
+              <br />
+              <p className="text-info text-sm">
+                Liaison information is required for BCWS CORE Team applicants and is
+                applicable only if you belong to any of the following: 1) Ministry of
+                Forests, 2) Ministry of Water, Land and Resource Stewardship, 3) The
+                Recreation Sites and Trails, and the BC Parks division under Ministry
+                of Environment.{' '}
+              </p>
+              <br />
+              <p className="text-info text-sm">
+                Please reach out to your supervisor about who your liaison is.{' '}
+              </p>
+            </>
+          ),
+        },
+        {
           name: 'infoSupervisorBCWS',
           label: 'About supervisor and liaison',
           type: 'infoBox',
           component: TextField,
           required: false,
           placeholder: '',
-          program: Program.BCWS || Program.ALL,
+          program: Program.BCWS,
           content: (
             <>
               <p className="text-info text-sm">
@@ -1071,7 +1104,7 @@ const ReviewTab = {
       segments: PersonalDetailsTab.sections.map((itm) => ({
         ...itm,
         label: itm.name,
-        fields: itm.fields.filter((field) => field.type !== 'infoBox'),
+        fields: itm.fields.filter((field) => field.type !== 'infoBox').map(itm => ({...itm, helperText: itm.name === 'liaisonUnknown' && 'Liaison Unknown'})),
       })),
     },
 
@@ -1099,7 +1132,7 @@ const ReviewTab = {
                 'secondChoiceFunction',
                 'thirdChoiceFunction',
               ].includes(itm.name),
-            ),
+            ).map(itm => ({...itm, colSpan: 1})),
             {
               colSpan: 3,
               helperText:

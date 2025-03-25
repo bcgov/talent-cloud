@@ -10,8 +10,10 @@ import { LanguageProficiencyName } from '@/common/enums/language.enum';
 import { format } from 'date-fns';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { DriverLicenseName, MinistryName } from '@/common';
+import { DriverLicenseName, MinistryName, Program } from '@/common';
 import { BcwsRoleName } from '@/common/enums/sections.enum';
+import { expectationsBcws, expectationsBoth, expectationsEmcr } from '../constants/enums';
+import { TravelPreferenceText } from '@/common/enums/travel-preference.enum';
 
 const ReviewFields = ({
   fields,
@@ -23,7 +25,11 @@ const ReviewFields = ({
   const { values } = useFormikContext<IntakeFormValues>();
 
   const getValue = (value: any, name: string) => {
-    switch (name) {
+
+    if(value === 'true') return 'Yes'
+    if (value === 'false') return "No"
+    if (!value || value === "" || value.length === 0 ) return '--'
+    switch (name) {        
       case 'homeLocation':
         return value?.name ?? '--';
       case 'functions':
@@ -41,7 +47,7 @@ const ReviewFields = ({
         return value ?? '--';
       case 'travelPreferenceEmcr':
       case 'travelPreferenceBcws':
-        return value && value.name;
+        return value && TravelPreferenceText[value as keyof typeof TravelPreferenceText];
       case 'tool':
         return (value && value.name) || '--';
       case 'firstChoiceFunction':
@@ -108,10 +114,10 @@ const ReviewFields = ({
         .map((field: any, index: number) => (
           <Fragment key={field.name + index.toString()}>
             {!field.nestedFields ? (
-              <div key={field.name} className={`col-span-${field.colSpan || 1}`}>
-                {field.label && <div className="subtext text-sm">{field.label}</div>}
+              <div key={field.name} className={clsx(field.colSpan ? `col-span-${field.colSpan}` : 'col-span-1')}>
+                {field.label && <div className="subtext text-sm pb-2">{field.label}</div>}
                 {field.helperText && (
-                  <div className="subtext text-sm">{field.helperText}</div>
+                  <div className="subtext text-sm pb-2">{field.helperText}</div>
                 )}
                 <div className="text-[#262729]">
                   {/* {values[field.name as ]} */}
@@ -119,7 +125,7 @@ const ReviewFields = ({
                 </div>
               </div>
             ) : (
-              <div className="col-span-2">
+              <div className={'col-span-2'}>
                 {(values?.[field.name as keyof typeof values] as {}[])?.map(
                   (itm, index) => (
                     <div
@@ -132,7 +138,7 @@ const ReviewFields = ({
                             className="col-span-1 flex flex-col"
                             key={innerField.name}
                           >
-                            <div className="subtext text-sm">{innerField.label}</div>
+                            <div className="subtext text-sm pb-2">{innerField.label}</div>
                             <div className="text-[#262729] ">
                               {getValue(
                                 itm?.[innerField.name as keyof typeof itm] ?? '',
@@ -191,16 +197,21 @@ export const Review = ({ sections }: { sections: FormSectionType[] }) => {
         <>
           <div className={`col-span-2`}>
             <div className="subtext text-sm">Program</div>
-            <div className="text-[#262729] ">{values.program}</div>
+            <div className="text-[#262729] ">{values.program && values.program === Program.ALL ?  "EMCR & BCWS" : values.program && values.program.toUpperCase()
+            
+        }</div>
           </div>
           <div className={`col-span-2`}>
-            <div className="subtext text-sm">Acknowledgement</div>
-            <div className="flex flex-col">
-              {values?.acknowledgement?.map((itm: string, index: number) => (
-                <div className="text-[#262729] " key={itm + index.toString()}>
-                  {itm}
-                </div>
-              ))}
+            <div className="subtext text-sm pb-4">Acknowledgement</div>
+            <div className="flex flex-col gap-y-4">
+              
+
+{values.acknowledgement && values.program === Program.EMCR && expectationsEmcr.map((itm, index) => <div className="text-[#262729] text-sm" key={index.toString() + 'ack'}>{itm.label}</div>) }
+          
+{values.acknowledgement && (values.program === Program.ALL) && expectationsBoth.map((itm, index) => <div className="text-[#262729] text-sm" key={index.toString() + 'ack'}>{itm.label}</div>)}
+
+{values.acknowledgement && (values.program === Program.BCWS) && expectationsBcws.map((itm, index) => <div className="text-[#262729] text-sm" key={index.toString() + 'ack'}>{itm.label}</div>)}
+
             </div>
           </div>
         </>

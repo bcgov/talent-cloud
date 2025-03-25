@@ -50,8 +50,6 @@ const FormWrapper = () => {
           value: { id: cert.id, name: cert.name },
         }));
       case 'firstChoiceSection':
-      case 'secondChoiceSection':
-      case 'thirdChoiceSection':
         return Object.keys(sections).map((itm: any) => ({
           label: SectionName[itm as keyof typeof SectionName],
           value: { id: itm, name: SectionName[itm as keyof typeof SectionName] },
@@ -60,10 +58,19 @@ const FormWrapper = () => {
             values.secondChoiceSection?.id,
             values.thirdChoiceSection?.id,
           ].includes(itm),
-        }));
+        }))
+      case 'secondChoiceSection':
+      case 'thirdChoiceSection':
+        return [{label: 'None', value: {id: 'None', name: 'None'}, disabled: false}, ...Object.keys(sections).map((itm: any) => ({
+          label: SectionName[itm as keyof typeof SectionName],
+          value: { id: itm, name: SectionName[itm as keyof typeof SectionName] },
+          disabled: [
+            values.firstChoiceSection?.id,
+            values.secondChoiceSection?.id,
+            values.thirdChoiceSection?.id,
+          ].includes(itm),
+        }))];
       case 'firstChoiceFunction':
-      case 'secondChoiceFunction':
-      case 'thirdChoiceFunction':
         return functions.map((itm: any) => ({
           label: itm.name,
           value: itm,
@@ -73,6 +80,17 @@ const FormWrapper = () => {
             values.thirdChoiceFunction,
           ].includes(itm),
         })) as unknown as { label: string; value: any }[];
+      case 'secondChoiceFunction':
+      case 'thirdChoiceFunction':
+        return [{label: 'None', disabled: false, value: {name: 'None', id: 'None'}}, ...functions.map((itm: any) => ({
+          label: itm.name,
+          value: itm,
+          disabled: [
+            values.firstChoiceFunction?.id,
+            values.secondChoiceFunction?.id,
+            values.thirdChoiceFunction?.id,
+          ].includes(itm),
+        })) as unknown as { label: string; value: any }[]];
       case Section.PLANNING:
         return bcwsRoles
           .filter((itm) => itm.section === Section.PLANNING)
