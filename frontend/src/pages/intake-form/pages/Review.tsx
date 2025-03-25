@@ -90,7 +90,7 @@ const ReviewFields = ({
           '--'
         );
       case 'ministry':
-        return (value && MinistryName[value as keyof typeof MinistryName]) || '--';
+        return value || '--';
 
       default:
         return value?.name ? value.name : value ? value : '--';

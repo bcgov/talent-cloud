@@ -259,7 +259,7 @@ const PersonalDetailsTab = {
           required: true,
           placeholder: 'Select an option',
           options: Object.values(Ministry).map((itm) => ({
-            label: MinistryName[itm].toString(),
+            label: itm,
             value: itm,
           })),
         },
