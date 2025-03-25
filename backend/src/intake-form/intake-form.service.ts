@@ -163,11 +163,15 @@ export class IntakeFormService {
       createdByEmail: req.idir,
     });
 
+    // Member cannot submit
     if (personnel?.emcr && personnel?.bcws) {
       return { currentProgram: Program.ALL };
     }
 
+    // This is  WIP form and the chips data has already been mapped
+    // return the form but ensure the program is locked in case a member already exists
     if (existingform && existingform.status === FormStatusEnum.DRAFT) {
+      // lock program
       if (personnel) {
         existingform.personnel.disabledProgram = personnel.emcr
           ? Program.EMCR
@@ -176,33 +180,39 @@ export class IntakeFormService {
           personnel.emcr ? Program.EMCR : Program.BCWS,
         );
       }
-
       return existingform.toResponseObject();
     }
 
-    if (existingform && existingform.status === FormStatusEnum.SUBMITTED) {
-      if (personnel) {
-        const intakeForm = new IntakeFormEntity();
-        intakeForm.createdByEmail = req.idir;
-        intakeForm.status = FormStatusEnum.DRAFT;
-        intakeForm.program = personnel.emcr ? Program.BCWS : Program.EMCR;
-        intakeForm.personnel = this.mapPersonnelToForm(personnel);
-        intakeForm.personnel.program = personnel.emcr
-          ? Program.BCWS
-          : Program.EMCR;
-        intakeForm.personnel.disabledProgram = personnel.emcr
-          ? Program.EMCR
-          : Program.BCWS;
-        intakeForm.personnel.step = 0;
-        intakeForm.personnel.completedSteps = [];
-        intakeForm.personnel.errorSteps = [];
-        const form = await this.intakeFormRepository.save(intakeForm);
-        return form.toResponseObject(
-          personnel.emcr ? Program.EMCR : Program.BCWS,
-        );
-      }
+    // If there is a personnel entry (one program only), and no existing form, then they have been migrated in to one of the programs already:
+    // If there is a personnel entry (one program only) and there is an existing form that has previously been submitted:
+    // then generate a new draft form with the chips data and lock the program:
+    if (
+      (personnel && !existingform) ||
+      (personnel &&
+        existingform &&
+        existingform.status === FormStatusEnum.SUBMITTED)
+    ) {
+      const intakeForm = new IntakeFormEntity();
+      intakeForm.createdByEmail = req.idir;
+      intakeForm.status = FormStatusEnum.DRAFT;
+      intakeForm.program = personnel.emcr ? Program.BCWS : Program.EMCR;
+      intakeForm.personnel = this.mapPersonnelToForm(personnel);
+      intakeForm.personnel.program = personnel.emcr
+        ? Program.BCWS
+        : Program.EMCR;
+      intakeForm.personnel.disabledProgram = personnel.emcr
+        ? Program.EMCR
+        : Program.BCWS;
+      intakeForm.personnel.step = 0;
+      intakeForm.personnel.completedSteps = [];
+      intakeForm.personnel.errorSteps = [];
+      const form = await this.intakeFormRepository.save(intakeForm);
+      return form.toResponseObject(
+        personnel.emcr ? Program.EMCR : Program.BCWS,
+      );
     }
 
+    // If there is no existing form and no personnel entry then generate a new draft form with  chips data
     if (!existingform && !personnel) {
       const intakeForm = new IntakeFormEntity();
 
@@ -228,7 +238,6 @@ export class IntakeFormService {
       const form = await this.intakeFormRepository.save(intakeForm);
       return form.toResponseObject();
     }
-    return {};
   }
   /***
    * Updates the form progress

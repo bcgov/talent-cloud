@@ -36,11 +36,12 @@ const SplashPage = () => {
               type={BannerType.INFO}
               content={
                 <>
-                  <span className="font-bold">CORE</span>
-                  {`(Coordinated Operation Response in Emergencies) applications, formerly known as TEAMS, are now open for ${new Date().getFullYear()}. Access intake form `}
+                  {"CORE Team applications are now open. Access intake form "}
                   <a href={Routes.IntakeForm}>
                     <span className="font-bold">here.</span>
+                    <br></br>
                   </a>
+                  {"If you're already a member, you will be directed to your member dashboard."}
                 </>
               }
             />

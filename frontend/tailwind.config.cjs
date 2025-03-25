@@ -199,13 +199,13 @@ module.exports = withMT({
         warningBannerDark: '#F9F1C6',
         warningBannerLight: '#FDFAE6',
         infoBannerDark: '#1A5A96',
-        infoBannerLight: '#ECF5FB',
+        infoBannerLight: '#D9EAF7',
       },
       textColor: {
         defaultGray: '#606060',
         backgroundBlue: '#003366',
         blue700: '#004D99',
-        info: '#1a5a96',
+        info: '#1A5A96',
         active: '#2D4821',
         inactive: '#343633',
 
