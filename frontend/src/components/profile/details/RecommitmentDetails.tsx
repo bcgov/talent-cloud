@@ -5,7 +5,6 @@ import { Fragment, useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 
 // hooks
-import usePersonnel from '@/hooks/usePersonnel';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
 import { useRoleContext } from '@/providers';
 
@@ -23,10 +22,13 @@ import {
 import { datePST } from '@/utils';
 
 // common
-import { Recommitment, RecommitmentCycle } from '@/common';
+import { Personnel, Recommitment, RecommitmentCycle } from '@/common';
 
-export const RecommitmentDetails = () => {
-  const { personnel } = usePersonnel();
+export const RecommitmentDetails = ({
+  personnel,
+}: {
+  personnel: Personnel,
+}) => {
   const { program } = useRoleContext();
   const { recommitmentCycle } = useRecommitmentCycle();
   const [open, setOpen] = useState(true);

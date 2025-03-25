@@ -38,8 +38,8 @@ const [isRecommitmentCycleOpen, setIsRecommitmentCycleOpen] = useState<boolean>(
           offsetTimezoneDate(data.startDate) <= new Date()){
         setIsRecommitmentCycleOpen(true);
       }
-        if (today > endDate && today <= reinitiationEndDate)  {
-          setIsRecommitmentReinitCycleOpen(true);
+      if (today > endDate && today <= reinitiationEndDate)  {
+        setIsRecommitmentReinitCycleOpen(true);
       } else {
         setIsRecommitmentReinitCycleOpen(false);
       }

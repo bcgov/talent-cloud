@@ -36,6 +36,7 @@ const usePersonnel = (): {
       const response =
         program && (await AxiosPrivate.get(`/${program}/${profileId}`));
       if (response?.data) {
+        console.log('set');
         setPersonnel(response.data);
       }
     } catch (e) {
@@ -49,14 +50,12 @@ const usePersonnel = (): {
 
   const updatePersonnel = async (personnel: FormikValues, endpoint = '') => {
     //TODO: refactor this to use the training array on the FE or set as a single field on the emcr personnel in the BE
-    if (personnel.icsTraining) {
-      if (personnel.icsTraining === 'true' || personnel.icsTraining === true) {
-        personnel.trainings = [{ name: Training.ICS_TRAINING_NAME }];
-        delete personnel.icsTraining;
-      } else {
-        personnel.trainings = [];
-        delete personnel.icsTraining;
-      }
+    if (personnel.icsTraining === 'true' || personnel.icsTraining === true) {
+      personnel.trainings = [{ name: Training.ICS_TRAINING_NAME }];
+      delete personnel.icsTraining;
+    } else {
+      personnel.trainings = [];
+    delete personnel.icsTraining;
     }
     if (endpoint === PersonnelEndpoint.Roles) {
       const roles: UpdateBcwsRoles[] = personnel.roles.map(

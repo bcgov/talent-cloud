@@ -3,18 +3,26 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import DetailsSection from './DetailsSection';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import { Role, Status } from '@/common';
+import { Personnel, Role, Status } from '@/common';
 import { DialogUI } from '@/components/ui';
 import { ProfileEditForm } from '../forms';
-import usePersonnel from '@/hooks/usePersonnel';
 import { useRoleContext } from '@/providers';
 import { Banner } from '@/components/ui/Banner';
 import { BannerType } from '../../../common/enums/banner-enum';
 import { differenceInDays } from 'date-fns';
 import { offsetTimezoneDate } from '../../../utils';
+import { ProfileData } from '../../../pages/profile/types';
+import { FormikValues } from 'formik';
 
-export const ProfileDetails = () => {
-  const { personnel, profileData, updatePersonnel } = usePersonnel();
+export const ProfileDetails = ({
+  personnel,
+  profileData,
+  updatePersonnel,
+}: {
+  personnel: Personnel,
+  profileData: ProfileData,
+  updatePersonnel: (person: FormikValues | Personnel) => Promise<void>;
+}) => {
   const [openEditProfilePopUp, setOpenEditProfilePopUp] = useState(false);
   const { program, roles } = useRoleContext();
   const allowEditing = roles?.includes(Role.COORDINATOR);
