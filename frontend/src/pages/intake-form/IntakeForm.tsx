@@ -6,6 +6,9 @@ import { type FormTab, type IntakeFormValues } from './constants/types';
 import { formTabs } from './utils/tab-fields';
 import { FormStepper } from './components/FormStepper';
 import { handleFilterProgram } from './utils/helpers';
+import { Banner } from '@/components/ui/Banner';
+import { BannerType } from '@/common/enums/banner-enum';
+import { useState } from 'react';
 
 const IntakeForm = ({
   values,
@@ -72,6 +75,9 @@ const IntakeForm = ({
       handleSetErrorSteps(errorSteps.filter((step) => step !== errorStep));
     }
   };
+  
+  const bannerContent =
+    'Based on your IDIR credentials, it looks like you are already a registered member of one of the two CORE Team programs. We have automatically set your selection to the program that you are applying for as a new member.';
 
   // call validate form (runs for the current step only)
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
@@ -91,7 +97,7 @@ const IntakeForm = ({
       values.program && handleSetStep(index);
     }
   };
-
+  
   return (
     <Form>
       <div className="h-full flex flex-col justify-between">
@@ -120,10 +126,13 @@ const IntakeForm = ({
             ))}
           </TabList>
           <TabPanels>
-            {tabs.map((tab: FormTab) => (
+            {tabs.map((tab: FormTab, index: number) => (
               <TabPanel key={tab.value}>
                 {() => (
                   <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
+                    {index===0 && values.disabledProgram !== undefined && (
+                      <Banner content={bannerContent} type={BannerType.INFO} />
+                    )}
                     <h3>{tab.title ?? tab.label}</h3>
                     {tab.description && (
                       <div className="text-sm py-6">{tab.description}</div>
