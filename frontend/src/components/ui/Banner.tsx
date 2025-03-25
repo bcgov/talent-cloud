@@ -37,12 +37,12 @@ export const CustomBanner = ({
   onClose?: (props?: any) => void;
 }) => (
   <div
-    className={`flex flex-row py-4 px-6 rounded-md bg-${bgColor} items-start justify-between space-x-2 w-full  shadow-lg`}
+    className={`flex flex-row py-2 px-6 rounded-md bg-${bgColor} items-start justify-between space-x-2 w-full  shadow-sm`}
   >
     <div
-      className={`flex flex-row py-4 px-6 items-start justify-start space-x-2 w-full`}
+      className={`flex flex-row py-2  items-start justify-start space-x-2 w-full`}
     >
-      <div className="pt-3">{icon}</div>
+      <div className="pt-3 pr-2">{icon}</div>
       <div className="flex flex-col">
         {title && (
           <div className={`text-sm font-bold text-${textColor}`}>{title}</div>

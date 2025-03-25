@@ -129,9 +129,11 @@ const IntakeForm = ({
             {tabs.map((tab: FormTab, index: number) => (
               <TabPanel key={tab.value}>
                 {() => (
-                  <div className="min-h-[calc(100vh-300px)] flex flex-col xl:pr-24 w-[900px]">
+                  <div className="min-h-[calc(100vh-300px)] flex flex-col max-w-4xl">
                     {index===0 && values.disabledProgram !== undefined && (
+                      <div className="pb-16">
                       <Banner content={bannerContent} type={BannerType.INFO} />
+                      </div>
                     )}
                     <h3>{tab.title ?? tab.label}</h3>
                     {tab.description && (
