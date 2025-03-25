@@ -364,7 +364,7 @@ export class IntakeFormService {
       email: personnel.email,
       primaryPhone: personnel.primaryPhoneNumber,
       secondaryPhone: personnel.secondaryPhoneNumber,
-      workPhoneNumber: personnel.workPhoneNumber,
+      workPhone: personnel.workPhoneNumber,
       unionMembership: personnel.unionMembership,
       supervisorFirstName: personnel.supervisorFirstName,
       supervisorLastName: personnel.supervisorLastName,
@@ -389,7 +389,7 @@ export class IntakeFormService {
           })
           .filter((itm) => itm.toolId !== undefined),
       languages: personnel.languages
-        ? personnel.languages.map((item) => {
+        ? personnel.languages?.map((item) => {
             const language = new LanguageEntity();
             language.language = item.language;
             language.level = LanguageProficiency[item.languageProficiency];
@@ -397,13 +397,13 @@ export class IntakeFormService {
             return language;
           })
         : [],
-      certifications: personnel.certifications
+      certifications: personnel?.certifications
         ? personnel.certifications?.map((item) => {
             if (item.certification === undefined && item.expiry === undefined) {
               return;
             }
             const certification = new PersonnelCertificationEntity();
-            certification.certificationId = item.certification.id;
+            certification.certificationId = item.certification?.id;
             if (item.expiry) {
               certification.expiry = item.expiry ?? undefined;
             }
@@ -424,7 +424,7 @@ export class IntakeFormService {
    * @returns
    */
   mapPersonnelToForm(personnel: PersonnelEntity): IntakeFormPersonnelData {
-    return {
+    const person = {
       firstName: personnel.firstName,
       jobTitle: personnel.jobTitle,
       program:
@@ -455,12 +455,7 @@ export class IntakeFormService {
       division: personnel.division,
       tools:
         !personnel.tools || personnel.tools?.length === 0
-          ? [
-              {
-                tool: undefined,
-                toolProficiency: '',
-              },
-            ]
+          ? []
           : personnel.tools?.map((item) => ({
               tool: {
                 id: item.tool?.id,
@@ -470,19 +465,14 @@ export class IntakeFormService {
             })),
       languages:
         !personnel.languages || personnel.languages?.length === 0
-          ? [{ language: '', languageProficiency: '' }]
+          ? []
           : personnel.languages?.map((item) => ({
               language: item.language,
               languageProficiency: item.level,
             })),
       certifications:
         !personnel.certifications || personnel.certifications?.length === 0
-          ? [
-              {
-                certification: undefined,
-                expiry: undefined,
-              },
-            ]
+          ? []
           : personnel.certifications?.map((item) => ({
               certification: {
                 id: item.certification.id,
@@ -495,6 +485,16 @@ export class IntakeFormService {
       emergencyContactPhoneNumber: personnel.emergencyContactPhoneNumber,
       emergencyContactRelationship: personnel.emergencyContactRelationship,
     };
+    if (person.certifications.length === 0) {
+      delete person.certifications;
+    }
+    if (person.tools.length === 0) {
+      delete person.tools;
+    }
+    if (person.languages.length === 0) {
+      delete person.languages;
+    }
+    return person;
   }
 
   async getChipsForIntake(
