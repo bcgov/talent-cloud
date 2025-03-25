@@ -56,13 +56,14 @@ export const MultiSelectField = ({
     <Listbox disabled={disabled} multiple>
       {({ open }) => (
         <div className={clsx('relative')}>
-          <ListboxButton className={clsx(classes.menu.formContainer)}>
+          <ListboxButton as="div" className={clsx(classes.menu.formContainer)}>
             <div className="flex flex-row justify-between items-center">
               {field.value && field.value !== '' && field.value?.length ? (
                 <div className={classes.menu.chipsContainer}>
                   {(values[field.name as keyof typeof values] as any[]).length >
                   3 ? (
                     <Chip
+                    
                       value={
                         <Typography
                           placeholder={undefined}

@@ -5,6 +5,7 @@ import { FieldArray, useFormikContext } from 'formik';
 import { dynamicFields } from '../utils/helpers';
 import { PlusIcon } from '@/components/ui/Icons';
 import { FormField } from '../fields/FormField';
+import clsx from 'clsx';
 
 export const FieldGroup = ({ field }: { field: FormFields }) => {
   const { values, errors } = useFormikContext<IntakeFormValues>();
@@ -23,9 +24,9 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
           <>
             {(values?.[field.name as keyof typeof values] as {}[])?.map(
               (value: any, index: number) => (
-                <div key={index} className="grid grid-cols-3 gap-4">
+                <div key={index} className="grid grid-cols-5 gap-4">
                   {field.nestedFields?.map((nested: FormFields) => (
-                    <div key={nested.name + index.toString()} className="col-span-1">
+                    <div key={nested.name + index.toString()} className={ "col-span-2"}>
                       <FormField
                         {...nested}
                         options={

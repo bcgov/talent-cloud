@@ -34,7 +34,7 @@ export const FormSection = ({
               </div>
             </DisclosureButton>
             <DisclosurePanel className="text-gray-500 w-full">
-              <div className="grid grid-cols-2 gap-12 pt-[36px] pb-[50px] px-[40px] items-start ">
+              <div className="grid grid-cols-2 gap-12 pt-[36px] pb-[50px] px-[36px] items-start ">
                 {children}
               </div>
             </DisclosurePanel>
