@@ -149,7 +149,7 @@ export const personnel: CreatePersonnelDTO[] = [
         {
           function: {
             id: 8,
-            name: 'Advanced Planning Unit',
+            name: 'Advance Planning Unit',
             abbreviation: 'APU',
           } as EmcrFunctionEntity,
           experienceType: Experience['INTERESTED'],
@@ -248,7 +248,7 @@ export const personnel: CreatePersonnelDTO[] = [
         {
           function: {
             id: 8,
-            name: 'Advanced Planning Unit',
+            name: 'Advance Planning Unit',
             abbreviation: 'APU',
           } as EmcrFunctionEntity,
           experienceType: Experience['OUTSIDE_EXPERIENCED'],
