@@ -134,6 +134,7 @@ export const MultiSelectField = ({
               >
                 <Checkbox
                   onChange={() => handleChange(itm.value)}
+                  checked={field.value.includes(itm.value)}
                   id="vertical-list-react"
                   ripple={false}
                   className="hover:before:opacity-0 checkbox rounded-none"

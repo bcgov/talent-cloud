@@ -13,6 +13,7 @@ import {
 import * as Yup from 'yup';
 import { experiencesValidation, } from './experiences-validation';
 
+
 export const programSelectionSchema = Yup.object().shape({
   program: Yup.string().required('Program is required.'),
 });
@@ -104,40 +105,42 @@ export const emergencyContactDetailsSchema = Yup.object().shape({
 });
 
 
+const languageSchema = Yup.object().shape({
+  language: Yup.string().when('languageProficiency', {
+    is: (val: string) => val,
+    then: ()=> Yup.string().required('Language is required')
+  }),
+  languageProficiency: Yup.string().when('language', {
+    is: (val: string) => val,
+    then: () => Yup.string().required('Proficiency Level is required.'),
+  }),
+}, [['language', 'languageProficiency']])
 
 export const languageSkillsSchema = Yup.object()
   .shape({
     languages: Yup.array()
       .of(
-        Yup.object().shape({
-          language: Yup.string(),
-          languageProficiency: Yup.string().when('language', {
-            is: (val: string) => val !== undefined,
-            then: () => Yup.string().required('Proficiency Level is required.'),
-          }),
-        }),
+        languageSchema
       )
-      .when('language', {
-        is: (val: string) => val !== undefined,
-        then: () => Yup.string().required('Proficiency Level is required.'),
-      }),
   })
   
+const toolSchema = Yup.object().shape({
+  tool: Yup.object().when('toolProficiency', {
+    is: (val: string) => !val, 
+    then:()=> Yup.object().notRequired(),
+    otherwise:() => Yup.object().required("Tool/Software is required"),
+  }),
+  toolProficiency: Yup.string().when('tool', {
+    is: (val: {id: number, name: string}) => val,
+    then:() => Yup.string().required("Tool Proficiency is required"),
+  }), 
+}, [['tool', 'toolProficiency']]
+)
 
 export const softwareSkillsSchema = Yup.object().shape({
   tools: Yup.array().of(
-    Yup.object().shape({
-      tool: Yup.object().shape({
-        id: Yup.number(),
-        name: Yup.string(),
-      }),
-      toolProficiency: Yup.string().when('toolId', {
-        is: (val: string) => val !== undefined,
-        then: () => Yup.string().required('Proficiency Level is required.'),
-      }),
-    }),
-  ),
-});
+    toolSchema)})
+
 
 const programStepValidation = Yup.object().shape({
   program: Yup.string().required('Program is required.'),
@@ -155,8 +158,15 @@ const programStepValidation = Yup.object().shape({
 const certificationsSchema = Yup.object().shape({
   certifications: Yup.array().of(
     Yup.object().shape({
-      certification: Yup.object().shape({
-        id: Yup.number(),
+      certification: Yup.object().when('expiry', {
+        is: (val: Date)=> !val,
+        then:()=>  Yup.object().notRequired(),
+        otherwise: ()=> Yup.object().required('Certification Name is required')
+      }).shape({
+        id: Yup.number().when('expiry', {
+          is: (val: Date)=> val !== undefined,
+          then: ()=> Yup.number().required()
+        }),
         name: Yup.string(),
       }),
       expiry: Yup.date(),

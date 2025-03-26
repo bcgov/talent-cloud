@@ -38,7 +38,7 @@ const SplashPage = () => {
                 <>
                   {"CORE Team applications are now open. Access intake form "}
                   <a href={Routes.IntakeForm}>
-                    <span className="font-bold">here.</span>
+                    <span className="font-bold underline">here.</span>
                     <br></br>
                   </a>
                   {"If you're already a member, you will be directed to your member dashboard."}
