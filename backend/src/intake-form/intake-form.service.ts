@@ -92,6 +92,7 @@ export class IntakeFormService {
       const emailTemplate = new MailDto({
         subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
         body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          name: createIntakeFormDto.personnel.firstName,
           ...envs,
         }),
         attachments: [],
