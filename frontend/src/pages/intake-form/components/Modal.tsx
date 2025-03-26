@@ -1,6 +1,7 @@
 import { ButtonTypes } from '@/common';
 import { Button } from '@/components';
-import { ReactComponentElement, useState } from 'react';
+import type { ReactComponentElement } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 // types
@@ -30,11 +31,13 @@ export const ModalGridItem = ({
   return (
     <>
       <div
-        className={`col-span-1 !text-sm !text-[#1A5A96] !font-bold ${titleStyle}`}
+        className={`col-span-1 !text-sm !text-[#1A5A96] !font-bold !font-sans ${titleStyle}`}
       >
         {title}
       </div>
-      <div className="col-span-5 !text-sm !text-[#313132]">{description}</div>
+      <div className="col-span-5 !text-sm !text-[#313132] !font-sans !font-normal">
+        {description}
+      </div>
     </>
   );
 };
@@ -66,7 +69,7 @@ const ModalContent = ({
       className="fixed top-0 left-0 w-screen h-screen flex 
   items-center justify-center bg-black bg-opacity-20 z-40"
     >
-      <div className="flex flex-col items-stretch w-[70%] h-[75%] bg-red-500 bg-white shadow-md rounded-sm overflow-scroll">
+      <div className="flex flex-col items-stretch w-[70%] h-[75%] bg-red-500 bg-white shadow-md rounded-sm overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {/* Header */}
         <div className="flex w-full bg-[#F6F9FC] border-b-[2px] border-[#F2F2F2] py-6 px-6">
           <p className="font-bold text-lg text-[#003366]">{contentHeader}</p>
