@@ -1,20 +1,17 @@
+import { Program } from '@/common';
 import { useAxios } from './useAxios';
 
 export const useExportToCSV = () => {
     const { AxiosPrivate } = useAxios();
 
-    const bcwsExport = async () => {
-        const csvData = (await AxiosPrivate.get('/bcws/export-test')).data;
-        return csvData;
-    }
-
-    const emcrExport = async () => {
-        const csvData = (await AxiosPrivate.get('/emcr/export-test')).data;
+    const csvExport = async (program: Program | undefined) => {
+        const exportEndpoint = 'export-test';
+        const progPath = program?.toString();
+        const csvData = (await AxiosPrivate.get(`/${progPath}/${exportEndpoint}`)).data;
         return csvData;
     }
 
     return {
-        bcwsExport,
-        emcrExport,
+        csvExport,
     };
 };
