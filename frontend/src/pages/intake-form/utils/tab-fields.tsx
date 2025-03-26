@@ -867,7 +867,7 @@ const SkillsTab = {
               type: 'select',
               component: SelectField,
               required: true,
-              placeholder: 'Select Proficieny Level',
+              placeholder: 'Select an option',
               options: Object.values(LanguageProficiency).map((itm) => ({
                 label: LanguageProficiencyName[itm],
                 value: itm,
