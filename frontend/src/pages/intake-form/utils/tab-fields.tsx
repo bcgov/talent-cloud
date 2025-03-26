@@ -867,7 +867,7 @@ const SkillsTab = {
               type: 'select',
               component: SelectField,
               required: true,
-              placeholder: 'Select Proficieny Level',
+              placeholder: 'Select an option',
               options: Object.values(LanguageProficiency).map((itm) => ({
                 label: LanguageProficiencyName[itm],
                 value: itm,
@@ -1008,7 +1008,7 @@ const CompleteTab = {
                 <ul className="list-disc list-inside text-info text-sm font-normal">
                   <li>
                     <a
-                      href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
+                      href="https://learning.gov.bc.ca/psc/CHIPSPLM/EMPLOYEE/ELM/c/LM_OD_EMPLOYEE_FL.LM_CRS_DTL_FL.GBL?Page=LM_CRS_DTL_FL&#38;Action=U&#38;ForceSearch=Y&#38;LM_CI_ID=19146&#38;"
                       target="_blank"
                       className="text-linkBlue underline"
                       rel="noreferrer"

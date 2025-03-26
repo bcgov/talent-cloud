@@ -17,7 +17,7 @@ export const years = () => {
   const yearsArray = [];
   const today = new Date();
   const currentYear = today.getFullYear();
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 10; i++) {
     yearsArray.push({
       label: currentYear + i,
       value: currentYear + i,
