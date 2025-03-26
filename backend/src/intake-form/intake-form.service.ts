@@ -68,17 +68,21 @@ export class IntakeFormService {
     req: RequestWithRoles,
   ): Promise<IntakeFormRO> {
     const email = req.idir;
+
     const existingPerson =
       await this.personnelService.findOneWithAllRelationsByEmail(email);
 
+    let mailToPerson = existingPerson;
     const personnelFromFormData = await this.createPersonnel(
       createIntakeFormDto.personnel,
     );
 
     if (!existingPerson) {
-      await this.personnelService.createPerson(personnelFromFormData);
+      mailToPerson = await this.personnelService.createPerson(
+        personnelFromFormData,
+      );
     } else {
-      await this.personnelService.updatePerson({
+      mailToPerson = await this.personnelService.updatePerson({
         ...existingPerson,
         ...personnelFromFormData,
       });
@@ -92,6 +96,7 @@ export class IntakeFormService {
       const emailTemplate = new MailDto({
         subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
         body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          name: mailToPerson.firstName,
           ...envs,
         }),
         attachments: [],
