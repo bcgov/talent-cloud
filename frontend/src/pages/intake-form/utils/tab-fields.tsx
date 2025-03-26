@@ -430,7 +430,7 @@ const PersonalDetailsTab = {
           type: 'checkbox',
           component: CheckboxField,
           required: false,
-          placeholder: 'I am unsure who my liaison is',
+          placeholder: 'I am unsure who my liaison is.',
           program: Program.BCWS,
           colSpan: 2,
         },
