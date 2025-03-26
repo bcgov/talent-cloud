@@ -36,9 +36,13 @@ export const PersonalDetails = ({ sections }: { sections: FormSectionType[] }) =
                   <Fragment key={fieldItm.name}>
                     {fieldItm.type &&
                     intakeFormComponents.includes(fieldItm?.type) ? (
-                      <div className={'col-span-2'}>
-                        {!fieldItm.program ? renderIntakeFormComponent(fieldItm as FormComponent) : values?.program === fieldItm?.program  && renderIntakeFormComponent(fieldItm as FormComponent)}
-                      </div>
+                      <>
+                        {(!fieldItm.program || values?.program === fieldItm?.program) &&
+                          <div className={'col-span-2'}>
+                            {renderIntakeFormComponent(fieldItm as FormComponent)}
+                          </div>
+                        }
+                      </>
                     ) : (
                       <div
                         key={fieldItm.name}
