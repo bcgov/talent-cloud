@@ -27,7 +27,7 @@ export const personalDetailsSchema = Yup.object().shape({
 
 export const employmentDetailsSchema = Yup.object().shape({
   jobTitle: Yup.string().required('Job title is required.'),
-  employeeId: Yup.string().min(6).max(6).required('Employee number is required.'),
+  employeeId: Yup.string().min(6, 'Employee number must be exactly 6 characters').max(6, 'Employee number must be exactly 6 characters').required('Employee number is required.'),
   email: Yup.string().required('Email is required.'),
   workPhoneNumber: workPhone,
   paylistId: Yup.string().required('Paylist ID is required'),
@@ -70,8 +70,8 @@ export const supervisorDetailsSchema = Yup.object().shape({
 
 export const liaisonDetailsSchema = Yup.object()
   .shape({
-    liaisonFirstName: Yup.string().min(2).max(50).optional().nullable(),
-    liaisonLastName: Yup.string().min(2).max(50).optional().nullable(),
+    liaisonFirstName: Yup.string().min(2, 'Min length 2 characters').max(50, 'Max length 50 characters').optional().nullable(),
+    liaisonLastName: Yup.string().min(2, 'Min length 2 characters').max(50, 'Max length 50 characters').optional().nullable(),
     liaisonEmail: Yup.string()
       .optional()
       .nullable()
@@ -86,12 +86,12 @@ export const liaisonDetailsSchema = Yup.object()
 
 export const emergencyContactDetailsSchema = Yup.object().shape({
   emergencyContactFirstName: Yup.string()
-    .min(2)
-    .max(50)
+    .min(2, 'Min length 2 characters')
+    .max(50, 'Max length 50 characters')
     .required("Emergency contact's first name is required."),
   emergencyContactLastName: Yup.string()
-    .min(2)
-    .max(50)
+    .min(2, 'Min length 2 characters')
+    .max(50, 'Max length 50 characters')
     .required("Emergency contact's last name is required."),
   emergencyContactPhoneNumber: Yup.string()
     .test(
