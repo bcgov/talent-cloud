@@ -32,6 +32,13 @@ export const useIntakeForm = () => {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
         setFormData(res.data);
+        if (!res.data.personnel) {
+          if (!res.data.currentProgram) {
+            throw new Error();
+          } else {
+            return;
+          }
+        }
         setStep(res.data.personnel.step);
         setErrorSteps(res.data.personnel.errorSteps);
         setCompletedSteps(res.data.personnel.completedSteps);
