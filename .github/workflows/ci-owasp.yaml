@@ -1,0 +1,13 @@
+name: owasp-scan
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  zap-owasp:
+    uses: bcgov/pipeline-templates/.github/workflows/owasp-scan.yaml@main
+    with:
+      ZAP_SCAN_TYPE: 'base' # Accepted values are base and full.
+      ZAP_TARGET_URL: https://coreteam.gov.bc.ca/
+      ZAP_DURATION: '2'
+      ZAP_MAX_DURATION: '5'
+      ZAP_GCP_PUBLISH: false
