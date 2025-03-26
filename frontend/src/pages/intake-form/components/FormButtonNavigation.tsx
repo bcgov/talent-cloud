@@ -2,9 +2,9 @@ import { ButtonTypes } from '@/common';
 import { useFormikContext } from 'formik';
 import { Button } from '@/components';
 import type { IntakeFormValues } from '../constants/types';
-
 import { AlertType, useAlertContext } from '@/providers/Alert';
-import { useNavigate } from 'react-router';
+import { logoutUrl } from '@/utils/keycloak';
+import { useKeycloak } from '@react-keycloak/web';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,
@@ -13,8 +13,9 @@ export const FormButtonNavigation = ({
   disableNext,
   disablePrevious,
   step,
-
+  handleRemoveErrorStep,
   handleSetCompletedStep,
+  handleSetErrors
 }: {
   saveUpdateForm: (values: IntakeFormValues) => void;
   handlePrevious: () => void;
@@ -24,11 +25,14 @@ export const FormButtonNavigation = ({
   step: number;
 
   handleSetCompletedStep: (step: number) => void;
+  handleRemoveErrorStep: (step: number) => void;
+  handleSetErrors:(step: number)=> void
 }) => {
-  const { values, submitForm, isValid, validateForm } =
+  const { values, submitForm, isValid, validateForm, isValidating, isSubmitting } =
     useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
-  const navigate = useNavigate();
+
+  const { keycloak } = useKeycloak();
   return (
     <div>
       <div className="border border-t-grey-200"></div>
@@ -39,7 +43,7 @@ export const FormButtonNavigation = ({
             variant={ButtonTypes.TEXT}
             disabled={step === 5}
             // TODO: Save and navigate? Delete form?
-            onClick={() => navigate('/')}
+            onClick={() => window.location.replace(logoutUrl(keycloak))}
           />
           <Button
             text="Save For Later"
@@ -66,18 +70,20 @@ export const FormButtonNavigation = ({
             <Button
               text="Submit"
               variant={ButtonTypes.SOLID}
-              disabled={!isValid || step === 5}
+              loading={isValidating || isSubmitting}
+              disabled={!isValid || step === 5 || isValidating || isSubmitting}
               onClick={async () => {
                 const errors = await validateForm();
                 if (errors && Object.keys(errors).length > 0) {
-                  showAlert({
+                  handleSetErrors(4)
+                  return showAlert({
                     type: AlertType.ERROR,
                     message: 'Please resolve validation errors.',
                   });
-                } else {
-                  handleSetCompletedStep(4);
-                  await submitForm();
                 }
+                handleRemoveErrorStep(4);
+                handleSetCompletedStep(4);
+                await submitForm();
               }}
             />
           ) : (

@@ -8,7 +8,7 @@ import { FormStepper } from './components/FormStepper';
 import { handleFilterProgram } from './utils/helpers';
 import { Banner } from '@/components/ui/Banner';
 import { BannerType } from '@/common/enums/banner-enum';
-
+import { useEffect } from 'react';
 
 const IntakeForm = ({
   values,
@@ -48,18 +48,6 @@ const IntakeForm = ({
     }
   };
 
-  const handleRemoveCompletedStep = (step: number) => {
-    if (completedSteps && completedSteps.length > 0) {
-      if (completedSteps.includes(step)) {
-        handleSetCompletedSteps(
-          completedSteps.filter((completedStep) => completedStep !== step),
-        );
-      }
-    } else {
-      handleSetCompletedSteps([]);
-    }
-  };
-
   const handleSetErrors = (errorStep: number) => {
     if (errorSteps && errorSteps.length > 0) {
       if (!errorSteps.includes(errorStep)) {
@@ -75,31 +63,45 @@ const IntakeForm = ({
       handleSetErrorSteps(errorSteps.filter((step) => step !== errorStep));
     }
   };
-  
+
   const bannerContent =
     'Based on your IDIR credentials, it looks like you are already a registered member of one of the two CORE Team programs. We have automatically set your selection to the program that you are applying for as a new member.';
 
   // call validate form (runs for the current step only)
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
   // if there are no errors on  the current step, remove this from the errorSteps array
-  const handleValidateStep = async (index: number) => {
+  const handleValidateStep = async (step: number, index: number) => {
     const formErrors = await validateForm();
 
-    if (Object.values(formErrors).length === 0) {
+    if (!formErrors || Object.values(formErrors).length === 0) {
+      
+      handleRemoveStepError(4);
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
-      await saveUpdateForm(values);
       values.program && handleSetStep(index);
+      await saveUpdateForm(values);
     } else {
       handleSetErrors(step);
-      handleRemoveCompletedStep(step);
-      await saveUpdateForm(values);
+      
       values.program && handleSetStep(index);
+      await saveUpdateForm(values);
     }
+
     const element = document.getElementById('top');
-    element && element.scrollIntoView({ inline: 'start'});
+    element && element.scrollIntoView({ inline: 'start' });
   };
-  
+
+  useEffect(() => {
+      (async () => {
+        if (errorSteps?.includes(step)) {
+          const errors = await validateForm();
+          if(!errors){
+            handleRemoveStepError(step)
+          }
+        }
+      })();
+    }, [step]);
+
   return (
     <Form>
       <div id="top" className="h-full flex flex-col justify-between">
@@ -108,10 +110,7 @@ const IntakeForm = ({
           // manual
           selectedIndex={step}
           className="flex flex-row space-x-24 xl:space-x-32 px-16 lg:px-24 xl:px-32 w-full pt-24"
-          onChange={(index) => {
-            handleValidateStep(index);
-            saveUpdateForm({ ...values, step, errorSteps, completedSteps });
-          }}
+          onChange={(index) => handleValidateStep(step, index)}
         >
           <TabList className="flex flex-col">
             {tabs.map((tab: FormTab, index: number) => (
@@ -123,7 +122,7 @@ const IntakeForm = ({
                 errorSteps={errorSteps}
                 completedSteps={completedSteps}
                 disabled={disabledSteps.includes(index)}
-                step={step}
+                values={values}
               />
             ))}
           </TabList>
@@ -132,9 +131,9 @@ const IntakeForm = ({
               <TabPanel key={tab.value}>
                 {() => (
                   <div className="min-h-[calc(100vh-300px)] flex flex-col max-w-4xl">
-                    {index=== 0 && values.disabledProgram !== "" && (
+                    {index === 0 && values.disabledProgram !== '' && (
                       <div className="pb-16">
-                      <Banner content={bannerContent} type={BannerType.INFO} />
+                        <Banner content={bannerContent} type={BannerType.INFO} />
                       </div>
                     )}
                     <h3>{tab.title ?? tab.label}</h3>
@@ -185,14 +184,16 @@ const IntakeForm = ({
           step={step}
           saveUpdateForm={saveUpdateForm}
           handlePrevious={() =>
-            handleValidateStep(step - (1 % Object.keys(formTabs).length))
+            handleValidateStep(step, step - (1 % Object.keys(formTabs).length))
           }
           handleNext={() =>
-            handleValidateStep(step + (1 % Object.keys(formTabs).length))
+            handleValidateStep(step, step + (1 % Object.keys(formTabs).length))
           }
           disableNext={step === formTabs.length - 2}
           disablePrevious={step === 0}
           handleSetCompletedStep={handleSetCompletedStep}
+          handleRemoveErrorStep={handleRemoveStepError}
+          handleSetErrors={handleSetErrors}
         />
       </div>
     </Form>

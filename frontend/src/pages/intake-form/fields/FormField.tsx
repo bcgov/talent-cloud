@@ -36,7 +36,8 @@ export const FormField = (props: {
     component,
     colSpan,
   } = props;
-  const { errors } = useFormikContext<IntakeFormValues>();
+  const { errors  } = useFormikContext<IntakeFormValues>();
+
 
   return (
     <>
@@ -63,7 +64,7 @@ export const FormField = (props: {
         component={component}
       />
       {helper && <p className={clsx('subtext', 'py-2')}>{helper}</p>}
-      {errors && (
+      {errors[name as keyof typeof errors] && (
         <div className="font-normal text-sm text-errorRed">
           {
             (errors as FormikErrors<{ [key: string]: string }>)?.[
