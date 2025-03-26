@@ -197,6 +197,7 @@ const reviewAckValidation = Yup.object().shape({
 
 const reviewValidation = programStepValidation
   .concat(personnelStepValidation)
+  .concat(experiencesValidation)
   .concat(skillsValidation)
   .concat(reviewAckValidation);
 
