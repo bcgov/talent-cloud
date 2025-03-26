@@ -23,6 +23,7 @@ export const classes = {
     checkboxContainer: 'checkboxContainer',
     disabled:
       'rounded-sm  shadow-md bg-gray-200  border-0  w-full font-normal h-10 mt-2 text-sm px-4 focus:outline-none flex flex-row items-center justify-between text-[#828282] border border-[#606060] color-[#828282] ',
+    disabledForm: 'bg-gray-100 rounded-[4px]  shadow-sm w-full font-normal h-[34px] pt-[5px] pb-[5px] text-sm px-[7px]  focus:outline-none outline-none text-gray-500 flex flex-row flex-nowrap items-center text-ellipsis text-nowrap   placeholder-gray-500 truncate flex flex-row items-center justify-between grid w-full cursor-default grid-cols-1    text-left border border-gray-200'
   },
 };
 

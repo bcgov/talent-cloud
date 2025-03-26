@@ -12,6 +12,7 @@ import IntakeForm from './IntakeForm';
 import { Loading } from '@/components';
 import { BcwsRoleName, Section, SectionName } from '@/common/enums/sections.enum';
 import { intakeFormInitialValues } from './constants/initial-values';
+import { CertificationName } from '@/common/enums/tools.enum';
 
 const FormWrapper = () => {
   const { keycloak } = useKeycloak();
@@ -47,7 +48,7 @@ const FormWrapper = () => {
       case 'certification':
         return certificates.map((cert: any) => ({
           label: cert.name,
-          value: { id: cert.id, name: cert.name },
+          value: { id: cert.id, name: CertificationName[cert.name as keyof typeof CertificationName] },
         }));
       case 'firstChoiceSection':
         return Object.keys(sections).map((itm: any) => ({

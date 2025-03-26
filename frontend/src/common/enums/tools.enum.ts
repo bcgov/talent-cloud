@@ -46,9 +46,9 @@ export enum Certification {
 }
 
 export enum CertificationName {
-  OFA_I = 'OFA I',
-  OFA_II = 'OFA II',
-  OFA_III = 'OFA III',
+  OFA_I = 'First Aid Level I',
+  OFA_II = 'First Aid Level II',
+  OFA_III = 'First Aid Level III',
   FOODSAFE_I = 'Food Safe Level I',
   FOODSAFE_II = 'Food Safe Level II',
   QUAD_ATV = 'Quad/ATV',
