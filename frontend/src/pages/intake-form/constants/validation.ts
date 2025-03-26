@@ -12,7 +12,7 @@ import {
 } from '@/components/profile/forms/constants';
 import * as Yup from 'yup';
 import { experiencesValidation, } from './experiences-validation';
-import { ToolsProficiency } from '@/common/enums/tools.enum';
+
 
 export const programSelectionSchema = Yup.object().shape({
   program: Yup.string().required('Program is required.'),
