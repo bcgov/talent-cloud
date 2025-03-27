@@ -1,13 +1,12 @@
 // react
 import type { ReactComponentElement } from 'react';
-
 // formik
 import type { FormikErrors } from 'formik';
 import { Field, useFormikContext } from 'formik';
-
 // styles
 import clsx from 'clsx';
 import type { IntakeFormValues } from '../constants/types';
+import { useStepContext } from '@/providers/StepperContext';
 
 export const FormField = (props: {
   name: string;
@@ -15,7 +14,6 @@ export const FormField = (props: {
   required?: boolean;
   type: string;
   helper?: string;
-
   disabled?: boolean;
   options?: any[];
   placeholder?: string;
@@ -30,14 +28,14 @@ export const FormField = (props: {
     placeholder,
     disabled,
     helper,
-
     label,
     required,
     component,
     colSpan,
   } = props;
-  const { errors  } = useFormikContext<IntakeFormValues>();
-
+  const { errors } = useFormikContext<IntakeFormValues>();
+  const { errorSteps, step } = useStepContext();
+  const showError= step && errorSteps?.includes(step) && errors[name as keyof typeof errors] ? true : false
 
   return (
     <>
@@ -64,7 +62,7 @@ export const FormField = (props: {
         component={component}
       />
       {helper && <p className={clsx('subtext', 'py-2')}>{helper}</p>}
-      {errors[name as keyof typeof errors] && (
+      {showError && (
         <div className="font-normal text-sm text-errorRed">
           {
             (errors as FormikErrors<{ [key: string]: string }>)?.[

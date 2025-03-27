@@ -1,5 +1,4 @@
-import type { FormikErrors } from 'formik';
-import { Form } from 'formik';
+import { Form, useFormikContext } from 'formik';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { FormButtonNavigation } from './components/FormButtonNavigation';
 import { type FormTab, type IntakeFormValues } from './constants/types';
@@ -11,70 +10,38 @@ import { BannerType } from '@/common/enums/banner-enum';
 import { useEffect } from 'react';
 
 const IntakeForm = ({
-  values,
-  validateForm,
+  saveUpdateForm,
+  tabs,
   step,
   handleSetStep,
-  completedSteps,
-  errorSteps,
-  handleSetCompletedSteps,
-  handleSetErrorSteps,
-  saveUpdateForm,
   disabledSteps,
-  tabs,
+  errorSteps,
+  completedSteps,
+  handleRemoveStepError,
+  handleSetErrors,
+  handleSetCompletedStep,
 }: {
-  handleSetErrorSteps: (steps: number[]) => void;
-  handleSetCompletedSteps: (steps: number[]) => void;
-  errorSteps: number[];
-  completedSteps: number[];
-
-  handleSetStep: (step: number) => void;
-
-  step: number;
-
   saveUpdateForm: (values: IntakeFormValues) => Promise<void>;
-  values: IntakeFormValues;
-  validateForm: () => Promise<FormikErrors<IntakeFormValues>>;
-  disabledSteps: number[];
   tabs: FormTab[];
+  step: number;
+  disabledSteps: number[];
+  errorSteps?: number[];
+  completedSteps?: number[];
+  handleSetStep: (step: number) => void;
+  handleRemoveStepError: (step: number) => void;
+  handleSetErrors: (step: number) => void;
+  handleSetCompletedStep: (step: number) => void;
 }) => {
-  const handleSetCompletedStep = (step: number) => {
-    if (completedSteps && completedSteps.length > 0) {
-      if (!completedSteps.includes(step)) {
-        handleSetCompletedSteps([...completedSteps, step]);
-      }
-    } else {
-      handleSetCompletedSteps([step]);
-    }
-  };
-
-  const handleSetErrors = (errorStep: number) => {
-    if (errorSteps && errorSteps.length > 0) {
-      if (!errorSteps.includes(errorStep)) {
-        handleSetErrorSteps([...errorSteps, errorStep]);
-      }
-    } else {
-      handleSetErrorSteps([errorStep]);
-    }
-  };
-
-  const handleRemoveStepError = (errorStep: number) => {
-    if (errorSteps && errorSteps.length > 0 && errorSteps.includes(errorStep)) {
-      handleSetErrorSteps(errorSteps.filter((step) => step !== errorStep));
-    }
-  };
-
-  const bannerContent =
-    'Based on your IDIR credentials, it looks like you are already a registered member of one of the two CORE Team programs. We have automatically set your selection to the program that you are applying for as a new member.';
+  const { values, validateForm, errors } = useFormikContext<IntakeFormValues>();
+  console.log(errors, step);
 
   // call validate form (runs for the current step only)
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
   // if there are no errors on  the current step, remove this from the errorSteps array
   const handleValidateStep = async (step: number, index: number) => {
     const formErrors = await validateForm();
-
+    console.log(formErrors, 'FORM ERRORS');
     if (!formErrors || Object.values(formErrors).length === 0) {
-      
       handleRemoveStepError(4);
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
@@ -82,7 +49,7 @@ const IntakeForm = ({
       await saveUpdateForm(values);
     } else {
       handleSetErrors(step);
-      
+
       values.program && handleSetStep(index);
       await saveUpdateForm(values);
     }
@@ -92,15 +59,16 @@ const IntakeForm = ({
   };
 
   useEffect(() => {
-      (async () => {
-        if (errorSteps?.includes(step)) {
-          const errors = await validateForm();
-          if(!errors){
-            handleRemoveStepError(step)
-          }
+    (async () => {
+      if (errorSteps?.includes(step)) {
+        const errors = await validateForm();
+
+        if (!errors) {
+          handleRemoveStepError(step);
         }
-      })();
-    }, [step]);
+      }
+    })();
+  }, [step]);
 
   return (
     <Form>
@@ -133,7 +101,12 @@ const IntakeForm = ({
                   <div className="min-h-[calc(100vh-300px)] flex flex-col max-w-4xl">
                     {index === 0 && values.disabledProgram !== '' && (
                       <div className="pb-16">
-                        <Banner content={bannerContent} type={BannerType.INFO} />
+                        <Banner
+                          content={
+                            'Based on your IDIR credentials, it looks like you are already a registered member of one of the two CORE Team programs. We have automatically set your selection to the program that you are applying for as a new member.'
+                          }
+                          type={BannerType.INFO}
+                        />
                       </div>
                     )}
                     <h3>{tab.title ?? tab.label}</h3>
