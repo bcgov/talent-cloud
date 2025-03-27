@@ -40,7 +40,7 @@ export const useIntakeForm = () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
-        setFormData(res.data);
+        setFormData({...res.data, disabledProgram: res.data.currentProgram ? true : false });
         if (!res.data.personnel) {
           if (!res.data.currentProgram) {
             throw new Error();
