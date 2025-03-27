@@ -48,7 +48,7 @@ const FormWrapper = () => {
       case 'certification':
         return certificates.map((cert: any) => ({
           label: cert.name,
-          value: { id: cert.id, name: CertificationName[cert.name as keyof typeof CertificationName] },
+          value: { id: cert.id, name: cert.name },
         }));
       case 'firstChoiceSection':
         return Object.keys(sections).map((itm: any) => ({
