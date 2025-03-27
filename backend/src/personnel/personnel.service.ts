@@ -1120,6 +1120,10 @@ export class PersonnelService {
       issues.name = `Unable to parse name "${data.name}" from CHIPS.`;
     }
 
+    if (!data.currentSupervisorName) {
+      issues.supervisorEmail = `No supervisor found from CHIPS.`;
+    }
+
     let unionMembership;
     if (UnionMembership[data.employeeGroup?.toUpperCase()]) {
       unionMembership = UnionMembership[data.employeeGroup?.toUpperCase()];
@@ -1142,9 +1146,13 @@ export class PersonnelService {
       workLocation,
       homeLocation,
       paylistId: data.deptId,
-      supervisorLastName: data.currentSupervisorName.split(',')[0],
-      supervisorFirstName: data.currentSupervisorName.split(',')[1],
-      supervisorEmail: data.currentSupervisorEmail,
+      supervisorLastName:
+        data.currentSupervisorName?.split(',')[0] ||
+        personnel.supervisorLastName,
+      supervisorFirstName:
+        data.currentSupervisorName?.split(',')[1] ||
+        personnel.supervisorFirstName,
+      supervisorEmail: data.currentSupervisorEmail || personnel.supervisorEmail,
       chipsLastPing: new Date(),
       chipsLastActionDate: data.actionDate,
       chipsIssues: issues,
@@ -1179,7 +1187,7 @@ export class PersonnelService {
       }
     | undefined
   > {
-    if (process.env.TEST_CHIPS_RESPONSE === 'xxx') {
+    if (process.env.TEST_CHIPS_RESPONSE === 'true') {
       return {
         success: true,
         data: mapToChipsResponse(sampleData),
