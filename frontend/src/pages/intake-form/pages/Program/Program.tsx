@@ -30,7 +30,7 @@ export const ProgramPage = () => {
   const { values, setValues } = useFormikContext<IntakeFormValues>();
 
   const [dynamicFields, setFields] = useState<FormFields[]>([
-    { ...fields[0], disabled: values.disabledProgram ? true : false },
+  fields[0]
   ]);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const ProgramPage = () => {
                 <span className="text-red-400">*</span> (Required)
               </p>
             </div>
-            <FormField key={dynamicFields[0].name} {...dynamicFields[0]} />
+            <FormField key={dynamicFields[0].name} {...dynamicFields[0]} disabled={values.disabledProgram !== '' && values.program ? true : false}/>
           </div>
           <div className="col-span-2">
             {/* Add custom components and styling as needed here - this page is not like the others :)  */}

@@ -32,8 +32,8 @@ const IntakeForm = ({
   handleSetErrors: (step: number) => void;
   handleSetCompletedStep: (step: number) => void;
 }) => {
-  const { values, validateForm, errors } = useFormikContext<IntakeFormValues>();
-  console.log(errors, step);
+  const { values, validateForm } = useFormikContext<IntakeFormValues>();
+  
 
   // call validate form (runs for the current step only)
   // if there are errors, include the current step in the errorSteps array to show red on the stepper
@@ -99,7 +99,7 @@ const IntakeForm = ({
               <TabPanel key={tab.value}>
                 {() => (
                   <div className="min-h-[calc(100vh-300px)] flex flex-col max-w-4xl">
-                    {index === 0 && values.disabledProgram !== '' && (
+                    {index === 0 && values.disabledProgram  && (
                       <div className="pb-16">
                         <Banner
                           content={

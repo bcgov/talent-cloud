@@ -239,6 +239,7 @@ export class IntakeFormService {
     form: IntakeFormDTO,
   ): Promise<UpdateResult> {
     delete form.currentProgram;
+    delete form.disabledProgram;
     return await this.intakeFormRepository.update(id, form);
   }
   /**
