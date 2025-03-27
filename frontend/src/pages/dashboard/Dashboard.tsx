@@ -1,5 +1,5 @@
 // react
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 // hooks
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
@@ -7,7 +7,7 @@ import { useRoleContext } from '@/providers';
 import { useTable } from '@/hooks';
 
 // common
-import { Filters, Role, Program } from '@/common';
+import { Filters, Role } from '@/common';
 import { Status } from '@/common';
 import { ActiveRecommitmentStatusFilter, InactiveRecommitmentStatusFilter  } from '@/common/enums/recommitment-status';
 
@@ -28,7 +28,6 @@ import { button as buttonClass } from '@/components/ui/classes';
 // icons
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { useExportToCSV } from '@/hooks/useExportToCSV';
-import { concat } from '~/@types/lodash';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
