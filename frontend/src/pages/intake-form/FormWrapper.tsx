@@ -12,7 +12,6 @@ import IntakeForm from './IntakeForm';
 import { Loading } from '@/components';
 import { BcwsRoleName, Section, SectionName } from '@/common/enums/sections.enum';
 import { intakeFormInitialValues } from './constants/initial-values';
-import { CertificationName } from '@/common/enums/tools.enum';
 
 const FormWrapper = () => {
   const { keycloak } = useKeycloak();
