@@ -25,8 +25,8 @@ const IntakeForm = ({
   tabs: FormTab[];
   step: number;
   disabledSteps: number[];
-  errorSteps: number[];
-  completedSteps: number[];
+  errorSteps?: number[];
+  completedSteps?: number[];
   handleSetStep: (step: number) => void;
   handleRemoveStepError: (step: number) => void;
   handleSetErrors: (step: number) => void;
