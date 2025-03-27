@@ -1,5 +1,5 @@
 // react
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 // hooks
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
@@ -7,7 +7,7 @@ import { useRoleContext } from '@/providers';
 import { useTable } from '@/hooks';
 
 // common
-import { Filters, Role } from '@/common';
+import { Filters, Role, Program } from '@/common';
 import { Status } from '@/common';
 import { ActiveRecommitmentStatusFilter, InactiveRecommitmentStatusFilter  } from '@/common/enums/recommitment-status';
 
@@ -27,11 +27,16 @@ import { button as buttonClass } from '@/components/ui/classes';
 
 // icons
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { useExportToCSV } from '@/hooks/useExportToCSV';
+import { concat } from '~/@types/lodash';
 
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
   const { program, roles } = useRoleContext();
+  const { csvExport } = useExportToCSV();
+  const [ dlButtonText, setDlButtonText ] = useState('Downloading All Members');
+  const [ dlDisabled, setDlDisabled ] = useState(false);
 
   const {
     totalRows,
@@ -83,6 +88,37 @@ const Dashboard = () => {
                     !loading && setLoading(true);
                   }}
                 />
+              )}
+              {roles && roles.includes(Role.COORDINATOR) && (
+                <button
+                  disabled={dlDisabled}
+                  onClick={async () => {
+                    //Disable button while download method runs
+                    setDlDisabled(true);
+                    setDlButtonText('Downloading...')
+
+                    //download file from export hook according to coordinator's program and name appropriately
+                    const csvReceipt = await csvExport(program);
+                    const url = window.URL.createObjectURL(new Blob([csvReceipt]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = program?.toString().toUpperCase() + '_Personnel_Details.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+
+                    //Re-enable button after download is complete
+                    setDlButtonText('Download All Members');
+                    setDlDisabled(false);
+                  }
+                } 
+                  className={buttonClass.tertiaryButton}
+                > 
+                  {dlButtonText}
+                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
+                    {' '}
+                  </span>
+                </button>
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
                 <button
