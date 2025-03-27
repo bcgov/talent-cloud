@@ -99,7 +99,7 @@ const SplashPage = () => {
                       className="text-primaryBlue underline"
                       href="mailto:BCWS.CORETeam@gov.bc.ca"
                     >
-                      EMCR.CORETeam@gov.bc.ca
+                      BCWS.CORETeam@gov.bc.ca
                     </a>
                   </div>
                 </div>
