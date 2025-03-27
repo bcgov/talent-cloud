@@ -53,6 +53,9 @@ async function bootstrap() {
 
   Documentation(app);
 
+  const server = app.getHttpServer();
+  server.setTimeout(4 * 60 * 1000);
+
   await app.listen(port);
   logger.log(`Server running on PORT ${port}`, 'Bootstrap');
 }
