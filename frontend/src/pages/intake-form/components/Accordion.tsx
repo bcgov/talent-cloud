@@ -1,4 +1,5 @@
 // react
+import { MinusIcon, PlusIcon } from '@/components/ui/Icons';
 import {
   Accordion as MuiAccordion,
   AccordionHeader,
@@ -8,7 +9,7 @@ import type { ReactComponentElement, ReactElement } from 'react';
 import { useState } from 'react';
 
 // icons
-import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
+
 
 export const Accordion = ({
   title,
@@ -29,9 +30,9 @@ export const Accordion = ({
           open={open === 0}
           icon={
             open ? (
-              <PlusIcon className="w-[16px] h-[16px] fill-infoDark" />
+              <PlusIcon fill="#1A5A96"/>
             ) : (
-              <MinusIcon className="w-[16px] h-[16px] fill-infoDark" />
+              <MinusIcon  />
             )
           }
         >

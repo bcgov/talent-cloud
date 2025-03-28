@@ -1,5 +1,12 @@
 import { AlertType } from '@/providers/Alert';
 
+export const MinusIcon = ()=> {
+  return(
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="3" viewBox="0 0 14 3" fill="none">
+<path d="M13 0H1C0.447812 0 0 0.447812 0 1V2C0 2.55219 0.447812 3 1 3H13C13.5522 3 14 2.55219 14 2V1C14 0.447812 13.5522 0 13 0Z" fill="#1A5A96"/>
+</svg>
+  )
+}
 export const ChevronDownIcon = () => {
   return (
     <svg
@@ -66,7 +73,7 @@ export const ExclamationCircleIcon = ({
   if (type === AlertType.ERROR) {
     fill = '#A12622';
   } else if (type === AlertType.WARNING) {
-    fill = '#6C4A00';
+    fill = '#D18F00';
   } else if (type === AlertType.INFO) {
     fill = '#1A5A96';
   } else {
@@ -138,7 +145,7 @@ export const QuestionIcon = () => {
   );
 };
 
-export const PlusIcon = () => {
+export const PlusIcon = ({fill = 'white'}) => {
   return (
     <svg
       width="12"
@@ -149,7 +156,7 @@ export const PlusIcon = () => {
     >
       <path
         d="M14.75 6.3125H9.6875V1.25C9.6875 0.628789 9.18371 0.125 8.5625 0.125H7.4375C6.81629 0.125 6.3125 0.628789 6.3125 1.25V6.3125H1.25C0.628789 6.3125 0.125 6.81629 0.125 7.4375V8.5625C0.125 9.18371 0.628789 9.6875 1.25 9.6875H6.3125V14.75C6.3125 15.3712 6.81629 15.875 7.4375 15.875H8.5625C9.18371 15.875 9.6875 15.3712 9.6875 14.75V9.6875H14.75C15.3712 9.6875 15.875 9.18371 15.875 8.5625V7.4375C15.875 6.81629 15.3712 6.3125 14.75 6.3125Z"
-        fill="white"
+        fill={fill}
       />
     </svg>
   );

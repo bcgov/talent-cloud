@@ -53,6 +53,7 @@ module.exports = withMT({
           // Info text, background
           800: '#1A5A96',
           900: '#003366'
+          
         },
         ink: {
           300: '#007FFF',
@@ -154,18 +155,18 @@ module.exports = withMT({
         activeGreen: '#d6ebd0',
         inputGray: '#606060',
         disabledGray: '#CFCFCF',
-        linkBlue: '#1a5a96',
+        linkBlue: '#003366',
         // semantic colours
         error: '#A12622',
         success: '#2e8540',
         warning: '#EED202',
-        info: '#1a5a96',
+        info: '#003366',
         focus: '#3B99FC',
         active: '#2D4821',
         inactive: '#343633',
         warningDark: '#6C4A00',
         successDark: '#2D4821',
-        infoDark: '#1A5A96',
+        infoDark: '#003366',
         white: '#FFFFFF',
         calGreen: '#eef7eb',
         calGreenTwo: '#84967d',
@@ -198,8 +199,9 @@ module.exports = withMT({
         successBannerLight: '#E5F3E0',
         warningBannerDark: '#F9F1C6',
         warningBannerLight: '#FDFAE6',
-        infoBannerDark: '#1A5A96',
+        infoBannerDark: '#003366',
         infoBannerLight: '#D9EAF7',
+        
       },
       textColor: {
         defaultGray: '#606060',

@@ -12,7 +12,7 @@ export const button = {
     'text-white font-bold bg-primaryBlue text-white  rounded-sm  px-6 h-[34px] border-primaryBlue text-center block  text-xs text-decoration-none whitespace-nowrap hover:bg-primaryBlue hover:opacity-80 hover:text-white disabled:bg-[#7E93B3]',
 
   solidSecondary:
-    'text-primaryBlue  bg-white   rounded-sm  px-6 h-[34px] border-primaryBlue text-center block  text-xs text-decoration-none whitespace-nowrap hover:bg-primaryBlue hover:opacity-80 hover:text-white disabled:bg-[#7E93B3]',
+    'font-bold text-primaryBlue  bg-white   rounded-sm  px-6 h-[34px] border-primaryBlue text-center block  text-xs text-decoration-none whitespace-nowrap hover:underline disabled:text-[#7E93B3]',
 
   disabledButton:
     'bg-gray-300 text-gray-500 rounded-sm  px-6 h-[34px] border-gray-300 text-center block  text-xs text-decoration-none whitespace-nowrap',
