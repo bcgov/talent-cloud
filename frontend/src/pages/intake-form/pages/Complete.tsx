@@ -13,11 +13,7 @@ export const Complete = () => {
   const { keycloak } = useKeycloak();
   return (
     <div className="mt-4">
-      <p className="mb-2">
-        You can go to your dashboard to view and make changes to your profile by
-        clicking “Go to My Dashboard”.
-      </p>
-      <div className="mt-4">
+  
         <p className="mb-2">
           You can go to your dashboard to view and make changes to your profile by
           clicking “Go to My Dashboard”.
@@ -32,6 +28,6 @@ export const Complete = () => {
           }
         />
       </div>
-    </div>
+  
   );
 };
