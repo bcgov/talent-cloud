@@ -13,9 +13,6 @@ export const FormButtonNavigation = ({
   disableNext,
   disablePrevious,
   step,
-  handleRemoveErrorStep,
-  handleSetCompletedStep,
-  handleSetErrors
 }: {
   saveUpdateForm: (values: IntakeFormValues) => void;
   handlePrevious: () => void;
@@ -23,12 +20,8 @@ export const FormButtonNavigation = ({
   disableNext: boolean;
   disablePrevious: boolean;
   step: number;
-
-  handleSetCompletedStep: (step: number) => void;
-  handleRemoveErrorStep: (step: number) => void;
-  handleSetErrors:(step: number)=> void
 }) => {
-  const { values, submitForm, isValid, validateForm, isValidating, isSubmitting } =
+  const { values, submitForm, isValid, isSubmitting } =
     useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
 
@@ -42,7 +35,6 @@ export const FormButtonNavigation = ({
             text="Cancel"
             variant={ButtonTypes.TEXT}
             disabled={step === 5}
-            // TODO: Save and navigate? Delete form?
             onClick={() => window.location.replace(logoutUrl(keycloak))}
           />
           <Button
@@ -70,21 +62,9 @@ export const FormButtonNavigation = ({
             <Button
               text="Submit"
               variant={ButtonTypes.SOLID}
-              loading={isValidating || isSubmitting}
-              disabled={!isValid || step === 5 || isValidating || isSubmitting}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (errors && Object.keys(errors).length > 0) {
-                  handleSetErrors(4)
-                  return showAlert({
-                    type: AlertType.ERROR,
-                    message: 'Please resolve validation errors.',
-                  });
-                }
-                handleRemoveErrorStep(4);
-                handleSetCompletedStep(4);
-                await submitForm();
-              }}
+              loading={isSubmitting}
+              disabled={!isValid || step === 5 || isSubmitting}
+              onClick={submitForm}
             />
           ) : (
             <Button
