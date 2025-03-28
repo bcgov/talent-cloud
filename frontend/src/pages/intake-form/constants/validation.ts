@@ -23,7 +23,7 @@ export const personalDetailsSchema = Yup.object().shape({
   lastName: lastName,
   primaryPhoneNumber: primaryPhone,
   secondaryPhoneNumber: secondaryPhone,
-  homeLocation,
+  homeLocation: Yup.mixed().required('Home Location is required.')
 });
 
 export const employmentDetailsSchema = Yup.object().shape({

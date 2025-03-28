@@ -35,7 +35,7 @@ export const FormField = (props: {
   } = props;
   const { errors } = useFormikContext<IntakeFormValues>();
   const { errorSteps, step } = useStepContext();
-  const showError= step && errorSteps?.includes(step) && errors[name as keyof typeof errors] ? true : false
+  const showError= errorSteps?.includes(step) && errors[name as keyof typeof errors] ? true : false
 
   return (
     <>

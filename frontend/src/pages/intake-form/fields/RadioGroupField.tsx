@@ -37,7 +37,7 @@ export const RadioGroupField = ({
             <span
               className={clsx(
                 itm.value === field.value && 'text-dark-900 font-normal',
-                disabled && 'text-gray-400 font-normal',
+                
                 'px-2',
               )}
             >
