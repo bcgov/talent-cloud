@@ -204,7 +204,6 @@ const PersonalDetailsTab = {
           component: SelectField,
           required: true,
           placeholder: 'Select an option',
-
           options: [],
           helper:
             'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',

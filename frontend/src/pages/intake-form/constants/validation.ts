@@ -8,7 +8,7 @@ import {
   secondaryPhone,
   supervisorPhone,
   workPhone,
-  homeLocation,
+
 } from '@/components/profile/forms/constants';
 import * as Yup from 'yup';
 import { experiencesValidation, } from './experiences-validation';
@@ -23,7 +23,7 @@ export const personalDetailsSchema = Yup.object().shape({
   lastName: lastName,
   primaryPhoneNumber: primaryPhone,
   secondaryPhoneNumber: secondaryPhone,
-  homeLocation,
+  homeLocation: Yup.mixed().required('Home Location is required.')
 });
 
 export const employmentDetailsSchema = Yup.object().shape({

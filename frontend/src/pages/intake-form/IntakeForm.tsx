@@ -40,17 +40,17 @@ const IntakeForm = ({
   // if there are no errors on  the current step, remove this from the errorSteps array
   const handleValidateStep = async (step: number, index: number) => {
     const formErrors = await validateForm();
-    console.log(formErrors, 'FORM ERRORS');
+    
     if (!formErrors || Object.values(formErrors).length === 0) {
       handleRemoveStepError(4);
       handleRemoveStepError(step);
       handleSetCompletedStep(step);
-      values.program && handleSetStep(index);
+      values.program && values.acknowledgement && handleSetStep(index);
       await saveUpdateForm(values);
     } else {
       handleSetErrors(step);
 
-      values.program && handleSetStep(index);
+      values.program && values.acknowledgement && handleSetStep(index);
       await saveUpdateForm(values);
     }
 
