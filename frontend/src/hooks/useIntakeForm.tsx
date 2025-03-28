@@ -40,7 +40,10 @@ export const useIntakeForm = () => {
       try {
         setLoading(true);
         const res = await AxiosPrivate.get(`/intake-form`);
-        setFormData({...res.data, disabledProgram: res.data.currentProgram ? true : false });
+        setFormData({
+          ...res.data,
+          disabledProgram: res.data.currentProgram ? true : false,
+        });
         if (!res.data.personnel) {
           if (!res.data.currentProgram) {
             throw new Error();
@@ -70,7 +73,21 @@ export const useIntakeForm = () => {
     }
   };
 
-  const handleSubmit = async (values: IntakeFormValues) => {
+  const { handleRemoveStepError, handleSetCompletedStep } = useStepContext();
+
+  const handleSubmit = async (values: IntakeFormValues, actions: any) => {
+    const errors = await actions.validateForm();
+    if (errors && Object.keys(errors).length > 0) {
+      handleSetErrors(4);
+      return showAlert({
+        type: AlertType.ERROR,
+        message: 'Please resolve validation errors.',
+      });
+    } else {
+      handleRemoveStepError(4);
+      handleSetCompletedStep(4);
+    }
+
     values.primaryPhoneNumber = values?.primaryPhoneNumber?.replace(/[^\d]/g, '');
     values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
     values.emergencyContactPhoneNumber =
