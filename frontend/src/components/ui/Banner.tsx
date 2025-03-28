@@ -5,7 +5,6 @@ import type { ReactComponentElement, ReactElement } from 'react';
 import { BannerType } from '@/common/enums/banner-enum';
 
 // icons
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { CloseIcon, ExclamationCircleIcon } from './Icons';
 import { AlertType } from '@/providers/Alert';
 
@@ -142,7 +141,7 @@ export const Banner = ({
               hideIcon ? (
                 <></>
               ) : (
-                <ExclamationTriangleIcon className="text-warning  h-6 mx-2 " />
+                <ExclamationCircleIcon className="text-warning" type={AlertType.WARNING}/>
               )
             }
           />
