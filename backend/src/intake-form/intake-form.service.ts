@@ -533,8 +533,8 @@ export class IntakeFormService {
         ministry,
         homeLocation: { id: homeLocation.id, name: homeLocation.locationName },
         paylistId: data.deptId,
-        supervisorLastName: data.currentSupervisorName.split(',')[0],
-        supervisorFirstName: data.currentSupervisorName.split(',')[1],
+        supervisorLastName: data.currentSupervisorName?.split(',')[0],
+        supervisorFirstName: data.currentSupervisorName?.split(',')[1],
         supervisorEmail: data.currentSupervisorEmail,
         chipsLastActionDate: data.actionDate,
       };
