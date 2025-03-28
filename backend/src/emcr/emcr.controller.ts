@@ -26,7 +26,6 @@ import { EmcrService } from './emcr.service';
 import { EmcrRO } from './ro';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
-import { Public } from '../auth/public.decorator';
 import { EmcrCsvHeaders } from '../common/enums';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
@@ -86,9 +85,8 @@ export class EmcrController {
     status: HttpStatus.OK,
   })
   @ApiProduces('text/csv')
-  //@Programs(Program.EMCR)
-  //@Roles(Role.COORDINATOR)
-  @Public()
+  @Programs(Program.EMCR)
+  @Roles(Role.COORDINATOR)
   @Get('/export-test')
   async exportEmcrPersonnelToCSV(): Promise<StreamableFile> {
     const csvRawData = await this.emcrService.getEmcrPersonnelforCSV();
