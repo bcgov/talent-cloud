@@ -55,7 +55,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       </div>
                     </div>
                   ))}
-                  <div className="col-span-1 pt-6">
+                  <div className="col-span-1 pt-9">
                     <Button
                       variant={ButtonTypes.OUTLINED}
                       text="Delete"
