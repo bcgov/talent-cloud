@@ -8,6 +8,8 @@ export const config = {
   username: process.env.DB_USER ?? 'tc_user',
   password: process.env.DB_PASSWORD ?? 'tc_password',
   database: process.env.DB_NAME ?? 'tc',
+  logging: process.env.ENV !== 'prod',
+  maxQueryExecutionTime: process.env.ENV === 'test' ? 2000 : 1000,
   // TODO change this to false in production
   synchronize: process.env.ENV === 'ci',
   entities: [join(__dirname, '**', '*.entity.{ts,js}')],
