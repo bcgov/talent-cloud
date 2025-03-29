@@ -27,6 +27,7 @@ import { GetBcwsPersonnelDTO } from './dto/get-bcws-personnel.dto';
 import { UpdateBcwsPersonnelDTO } from './dto/update-bcws-personnel.dto';
 import { Program, RequestWithRoles, Role } from '../auth/interface';
 import { Programs } from '../auth/program.decorator';
+import { Public } from '../auth/public.decorator';
 import { Roles } from '../auth/roles.decorator';
 import { PersonnelEntity } from '../database/entities/personnel/personnel.entity';
 import { AppLogger } from '../logger/logger.service';
@@ -155,8 +156,9 @@ export class BcwsController {
     status: HttpStatus.OK,
   })
   @ApiProduces('text/csv')
-  @Programs(Program.BCWS)
-  @Roles(Role.COORDINATOR)
+  //@Programs(Program.BCWS)
+  //@Roles(Role.COORDINATOR)
+  @Public()
   @Get('/export-test')
   async exportBcwsPersonnelToCSV(): Promise<StreamableFile> {
     const csvRawData = await this.bcwsService.getBcwsPersonnelforCSV();
