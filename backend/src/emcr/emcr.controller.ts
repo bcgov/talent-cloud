@@ -37,6 +37,7 @@ import { QueryTransformPipe } from '../query-validation.pipe';
 import { EmcrUpdateAdapter } from './dto/helpers';
 import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
 import { Roles } from '../auth/roles.decorator';
+import { EmcrPersonnelEntity } from '../database/entities/emcr';
 
 @Controller('emcr')
 @ApiTags('EMCR Personnel API')
@@ -91,8 +92,9 @@ export class EmcrController {
   @Public()
   @Get('/export-test')
   async exportEmcrPersonnelToCSV(): Promise<StreamableFile> {
+    this.logger.log('Getting personnel');
     const csvRawData = await this.emcrService.getEmcrPersonnelforCSV();
-
+    this.logger.log('Exporting');
     //convert input data to CSV format and prettify headers
     const csvConverted = json2csv(csvRawData, {
       keys: EmcrCsvHeaders,
@@ -106,6 +108,48 @@ export class EmcrController {
       type: 'text/csv',
       disposition: 'attachment; filename="EMCR_Personnel_Details.csv"',
     });
+  }
+
+  @ApiOperation({
+    summary: 'Download endpoint take 200',
+    description: 'Download endpoint take 200',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @Public()
+  @Get('/export-test-take')
+  async exportSomePersonnel(): Promise<EmcrPersonnelEntity[]> {
+    return this.emcrService.getEmcrPersonnelTake();
+  }
+
+  @ApiOperation({
+    summary: 'Download endpoint raw query',
+    description: 'Download endpoint raw query',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @Public()
+  @Get('/export-test-raw')
+  async exportRawQueryPersonnel(): Promise<EmcrPersonnelEntity[]> {
+    return this.emcrService.getEmcrPersonnelRaw();
+  }
+
+  @ApiOperation({
+    summary: 'Download endpoint split relations',
+    description: 'Download endpoint split relations',
+  })
+  @ApiResponse({
+    type: StreamableFile,
+    status: HttpStatus.OK,
+  })
+  @Public()
+  @Get('/export-test-raw')
+  async exportPersonnelSplitRelations(): Promise<EmcrPersonnelEntity[]> {
+    return this.emcrService.getEmcrPersonnelMinimalRelations();
   }
 
   @ApiOperation({

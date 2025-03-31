@@ -20,6 +20,7 @@ import { AvailabilityEntity } from '../database/entities/personnel/availability.
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
+import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
 export class EmcrService {
@@ -32,6 +33,10 @@ export class EmcrService {
     private readonly trainingRepository: Repository<EmcrTrainingEntity>,
     @InjectRepository(EmcrFunctionEntity)
     private readonly functionRepository: Repository<EmcrFunctionEntity>,
+    @InjectRepository(AvailabilityEntity)
+    private readonly availabilityRepository: Repository<AvailabilityEntity>,
+    @InjectRepository(LocationEntity)
+    private readonly locationRepository: Repository<LocationEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(EmcrService.name);
@@ -264,6 +269,66 @@ export class EmcrService {
 
     const personnel = await qb.getRawMany();
 
+    return personnel;
+  }
+
+  async getEmcrPersonnelTake(): Promise<EmcrPersonnelEntity[]> {
+    const qb =
+      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
+      (subQuery) => {
+        return subQuery
+          .select('availability.date')
+          .from(AvailabilityEntity, 'availability')
+          .where('availability.personnel = personnel.id')
+          .andWhere('availability.availabilityType = :type', {
+            type: 'DEPLOYED',
+          })
+          .orderBy('availability.date', 'DESC')
+          .take(1);
+      },
+      'last_deployed',
+    );
+    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
+    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
+    qb.take(200);
+    qb.skip(0);
+
+    const personnel = await qb.getRawMany();
+    return personnel;
+  }
+
+  async getEmcrPersonnelRaw(): Promise<EmcrPersonnelEntity[]> {
+    const personnel = await this.emcrPersonnelRepository.query(
+      `SELECT *, (SELECT "availability"."date" AS "availability_date" FROM "availability" "availability" WHERE "availability"."personnel" = "personnel"."id" AND "availability"."availability_type" = 'DEPLOYED' ORDER BY "availability_date" DESC LIMIT 1) AS "last_deployed" FROM "emcr_personnel" LEFT JOIN "personnel" ON "personnel"."id"="emcr_personnel"."personnel_id" LEFT JOIN "location" "home_loc" ON "home_loc"."id"="personnel"."home_location"  LEFT JOIN "location" "work_loc" ON "work_loc"."id"="personnel"."work_location"  LEFT JOIN "recommitment" ON "recommitment"."personnel"="personnel"."id" LEFT JOIN "recommitment_cycle" "recommitmentCycle" ON "recommitmentCycle"."year"="recommitment"."year";`,
+    );
+    return personnel;
+  }
+
+  async getEmcrPersonnelMinimalRelations(): Promise<EmcrPersonnelEntity[]> {
+    this.logger.log('personnel');
+    const qb =
+      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
+    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
+    const personnel = await qb.getRawMany();
+    this.logger.log('end personnel');
+    this.logger.log('deployed');
+    await this.availabilityRepository.query(`SELECT 
+    personnel,
+    MAX(date) AS last_deployed_date
+    FROM 
+        availability
+    WHERE 
+        availability_type = 'DEPLOYED'
+    GROUP BY 
+    personnel;`);
+    this.logger.log('end deployed');
+    this.logger.log('location');
+    await this.locationRepository.find();
+    this.logger.log('endlocation');
     return personnel;
   }
 
