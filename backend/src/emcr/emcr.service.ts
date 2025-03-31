@@ -244,70 +244,7 @@ export class EmcrService {
    * and associated table columns for export to CSV file
    * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
    */
-  async getEmcrPersonnelforCSV(): Promise<EmcrPersonnelEntity[]> {
-    const qb =
-      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
-    //join with personnel table and append last deployed date as subselection
-    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
-      (subQuery) => {
-        return subQuery
-          .select('availability.date')
-          .from(AvailabilityEntity, 'availability')
-          .where('availability.personnel = personnel.id')
-          .andWhere('availability.availabilityType = :type', {
-            type: 'DEPLOYED',
-          })
-          .orderBy('availability.date', 'DESC')
-          .take(1);
-      },
-      'last_deployed',
-    );
-    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
-    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
-    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
-
-    const personnel = await qb.getRawMany();
-
-    return personnel;
-  }
-
-  async getEmcrPersonnelTake(): Promise<EmcrPersonnelEntity[]> {
-    const qb =
-      this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
-    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
-      (subQuery) => {
-        return subQuery
-          .select('availability.date')
-          .from(AvailabilityEntity, 'availability')
-          .where('availability.personnel = personnel.id')
-          .andWhere('availability.availabilityType = :type', {
-            type: 'DEPLOYED',
-          })
-          .orderBy('availability.date', 'DESC')
-          .take(1);
-      },
-      'last_deployed',
-    );
-    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
-    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
-    qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
-    qb.take(200);
-    qb.skip(0);
-
-    const personnel = await qb.getRawMany();
-    return personnel;
-  }
-
-  async getEmcrPersonnelRaw(): Promise<EmcrPersonnelEntity[]> {
-    const personnel = await this.emcrPersonnelRepository.query(
-      `SELECT *, (SELECT "availability"."date" AS "availability_date" FROM "availability" "availability" WHERE "availability"."personnel" = "personnel"."id" AND "availability"."availability_type" = 'DEPLOYED' ORDER BY "availability_date" DESC LIMIT 1) AS "last_deployed" FROM "emcr_personnel" LEFT JOIN "personnel" ON "personnel"."id"="emcr_personnel"."personnel_id" LEFT JOIN "location" "home_loc" ON "home_loc"."id"="personnel"."home_location"  LEFT JOIN "location" "work_loc" ON "work_loc"."id"="personnel"."work_location"  LEFT JOIN "recommitment" ON "recommitment"."personnel"="personnel"."id" LEFT JOIN "recommitment_cycle" "recommitmentCycle" ON "recommitmentCycle"."year"="recommitment"."year";`,
-    );
-    return personnel;
-  }
-
-  async getEmcrPersonnelMinimalRelations(): Promise<EmcrPersonnelEntity[]> {
+  async getEmcrPersonnelForExport(): Promise<EmcrPersonnelEntity[]> {
     this.logger.log('personnel');
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');

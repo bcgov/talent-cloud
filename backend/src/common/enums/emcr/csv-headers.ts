@@ -89,7 +89,7 @@ export const EmcrCsvHeaders = [
   },
   {
     field: 'personnel_availability_confirmed_on',
-    title: 'Availability Confirmed On',
+    title: 'Availability Confirmed Date',
   },
   {
     field: 'personnel_chips_last_ping',
@@ -106,10 +106,6 @@ export const EmcrCsvHeaders = [
   {
     field: 'personnel_chips_last_updated_properties',
     title: 'CHIPS - Last Updated Properties',
-  },
-  {
-    field: 'personnel_chips_issues',
-    title: 'CHIPS - Issues',
   },
   {
     field: 'personnel_chips_ignore_properties',
@@ -132,7 +128,7 @@ export const EmcrCsvHeaders = [
     title: 'Member Recommitment Decision Date',
   },
   { field: 'recommitment_member_reason', title: 'Member Recommitment Reason' },
-  { field: 'recommitment_supervisor_idir', title: 'Supervisor IDIR' },
+  { field: 'recommitment_supervisor_idir', title: 'Supervisor Email' },
   {
     field: 'recommitment_supervisor_decision_date',
     title: 'Supervisor Recommitment Decision Date',
@@ -140,15 +136,6 @@ export const EmcrCsvHeaders = [
   {
     field: 'recommitment_supervisor_reason',
     title: 'Supervisor Recommitment Reason',
-  },
-  {
-    field: 'recommitmentCycle_start_date',
-    title: 'Recommitment Cycle Start Date',
-  },
-  { field: 'recommitmentCycle_end_date', title: 'Recommitment Cycle End Date' },
-  {
-    field: 'recommitmentCycle_reinitiation_end_date',
-    title: 'Recommitment Cycle Reinitiation End Date',
   },
   { field: 'last_deployed', title: 'Last Deployed Date' },
 ];
