@@ -354,13 +354,15 @@ export class EmcrService {
       ...p,
       last_deployed: lastDeployedMap[p.personnel_id],
       home_loc_location_name:
-        locationMap[p.personnel_home_location]['location_location_name'],
+        locationMap[p.personnel_home_location]?.['location_location_name'] ||
+        '',
       home_loc_region:
-        locationMap[p.personnel_home_location]['location_region'],
+        locationMap[p.personnel_home_location]?.['location_region'] || '',
       work_loc_location_name:
-        locationMap[p.personnel_work_location]['location_location_name'],
+        locationMap[p.personnel_work_location]?.['location_location_name'] ||
+        '',
       work_loc_region:
-        locationMap[p.personnel_work_location]['location_region'],
+        locationMap[p.personnel_work_location]?.['location_region'] || '',
     }));
 
     return mappedPersonnel;
