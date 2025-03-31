@@ -1,11 +1,10 @@
-import { Request, Controller, Get, Inject, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request, Controller, Get, Inject } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheckService,
   HealthCheck,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import axios from 'axios';
 import { RequestWithRoles } from './auth/interface';
 import { Public } from './auth/public.decorator';
 import { BcwsService } from './bcws/bcws.service';
@@ -84,7 +83,7 @@ export class AppController {
     const tools = await this.personnelService.getTools();
     const roles = await this.bcwsService.getAllRoles();
     const functions = await this.emcrService.getFunctions();
-    
+
     return {
       ministries: Object.values(Ministry).map((ministry) => ({
         value: ministry,
@@ -113,72 +112,5 @@ export class AppController {
   @Get('/recommitment')
   async checkRecommitmentPeriod() {
     return await this.recommitmentService.checkRecommitmentPeriod();
-  }
-
-  @Public()
-  @Get('/chips')
-  @ApiQuery({
-    name: 'email',
-    type: String,
-    description: 'Email',
-    required: false,
-  })
-  async chips(@Query('email') email?: string) {
-    if (process.env.ENV !== 'dev') {
-      return {};
-    }
-    this.logger.log('CHIPS');
-    try {
-      const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_EmployeeData/?$filter=Work_Email%20eq%20'${email}'`,
-        {
-          headers: {
-            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
-          },
-        },
-      );
-      this.logger.log('SUCCESS');
-      this.logger.log(response);
-      return response.data?.value?.[0] || {};
-    } catch (e) {
-      this.logger.error('ERROR');
-      this.logger.error(e);
-      return { error: 'error' };
-    }
-  }
-
-  @Public()
-  @Get('/chipstraining')
-  @ApiQuery({
-    name: 'govid',
-    type: String,
-    description: 'Email',
-    required: false,
-  })
-  async training(@Query('govid') govid?: string) {
-    if (process.env.ENV !== 'dev') {
-      return {};
-    }
-    this.logger.log('TRAINING');
-    try {
-      const response = await axios.get(
-        `${process.env.CHIPS_API}/Datamart_COREProg_dbo_vw_report_CoreProg_LearningData/?$filter=EMPLID%20eq%20'${govid}')`,
-        {
-          headers: {
-            'x-cdata-authtoken': process.env.CHIPS_API_KEY,
-          },
-        },
-      );
-      this.logger.log('SUCCESS');
-      this.logger.log(response);
-      this.logger.log(typeof response.data);
-      this.logger.log(response.data);
-      this.logger.log(response.data?.value);
-      return response.data?.value || [];
-    } catch (e) {
-      this.logger.error('ERROR');
-      this.logger.error(e);
-      return 'error';
-    }
   }
 }

@@ -24,6 +24,7 @@ import { BannerType } from '@/common/enums/banner-enum';
 import { BannerTransition } from '../ui/BannerTransition';
 import { RecommitmentProfileBanner } from '../profile/banners/RecommitmentProfileBanner';
 import { useRecommitmentCycle } from '@/hooks/useRecommitment';
+import { RecommitmentStatus } from '../../common/enums/recommitment-status';
 
 export const MemberAvailabilityTab = ({
   bcwsRoles,
@@ -128,7 +129,7 @@ export const MemberAvailabilityTab = ({
         member &&
         recommitmentCycle &&
         member.recommitment && member.recommitment.length > 0 &&
-        (isRecommitmentCycleOpen || isRecommitmentReinitiationOpen) &&
+        (isRecommitmentCycleOpen || (isRecommitmentReinitiationOpen && member.recommitment?.find(r => r.status === RecommitmentStatus.PENDING))) &&
         <RecommitmentProfileBanner
           year={recommitmentCycle?.year}
           endDate={(isRecommitmentReinitiationOpen && recommitmentCycle?.reinitiationEndDate) ? recommitmentCycle?.reinitiationEndDate : recommitmentCycle?.endDate}
