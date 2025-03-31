@@ -23,6 +23,18 @@ Running The Project:
 - `cd backend && npm i`
 - `make build-local`
 
+Setting Up The Database:
+
+- `make migration-run` to set up the DB
+- `make seed-local` to provide the initial data for local development
+- `make seed-local-personnel` to add test data into the `personnel` table
+- `make seed-local-recommitment` to add test data to `recommitment-cycle` (optional)
+
+Useful DB Queries:
+- To add yourself as a Supervisor: `update personnel set supervisor_email = '<YOUR_EMAIL>@gov.bc.ca' where id = (select personnel_id from bcws_personnel bp where bp.status = 'ACTIVE' limit 1)`
+- To add yourself as Member: `update personnel set email = '<YOUR_EMAIL>@gov.bc.ca' where id = (select personnel_id from bcws_personnel bp where bp.status = 'ACTIVE' limit 1)`
+- To access the intake form again after submission, delete all the entries with your email in `intake_form` table and run: `UPDATE "personnel" SET email = 'test@yopmail.com' WHERE email = '<YOUR_EMAIL>@gov.bc.ca';`
+
 Local Dev Containers:
 
 - Nginx Reverse Proxy: http://localhost:3050
