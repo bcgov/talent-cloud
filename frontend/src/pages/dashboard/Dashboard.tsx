@@ -27,11 +27,12 @@ import { DashboardFilters } from './DashboardFilters';
 import { MemberStatusGuide } from './MemberStatusGuide';
 import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
 import { StatusFilter } from '@/components/filters/StatusFilter';
-import { button as buttonClass } from '@/components/ui/classes';
 
 // icons
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+
 import { useExportToCSV } from '@/hooks/useExportToCSV';
+import { QuestionIcon } from '@/components/ui/Icons';
+import { classes } from '@/components/filters/classes';
 
 const DownloadModal = ({
   program,
@@ -67,10 +68,13 @@ const DownloadModal = ({
   };
 
   return (
-    <div className="max-w-3xl px-8 pb-8 flex flex-col itmes-center justify-between space-y-8">
-      <div>Export all active and inactive members, as well as applicants pending approval, to a CSV file.</div>
-
+    <div className="max-w-md px-6 pb-8">
+      <div className='flex flex-col space-y-2'>
+      <p className="text-sm text-[#606060] pb-6 pt-2">Export all active, inactive members and pending approval applicants.</p>
+      <div className="pb-32">
+        <label>Export as</label>
       <input
+        className={classes.menu.container}
         disabled={submitting}
         id="memberDownload"
         type="text"
@@ -78,7 +82,9 @@ const DownloadModal = ({
         value={submitting ? 'Please wait...' : downloadName}
         onChange={(e) => setDownloadName(e.target.value)}
       />
-      <div className="flex flex-row items-start justify-right space-x-2 pt-4">
+      </div>
+      <div className="w-full border border-t-gray-500 border-t-.5"></div>
+      <div className="flex flex-row items-center justify-end space-x-2">
       <Button
           variant={ButtonTypes.SECONDARY}
           text={'Cancel'}
@@ -88,11 +94,12 @@ const DownloadModal = ({
         <Button
           loading={submitting}
           variant={ButtonTypes.SOLID}
-          text={'Download CSV'}
+          text={'Export'}
           disabled={!downloadName || submitting}
           onClick={downloadClick}
         />
       </div>
+    </div>
     </div>
   );
 };
@@ -157,27 +164,25 @@ const Dashboard = () => {
                   }}
                 />
               )}
+              <div className="flex flex-row items-center space-x-8" >
               {roles && roles.includes(Role.COORDINATOR) && (
-                <button
+                <Button
                   // disabled={dlDisabled}
                   onClick={() => setShowDownloadModal(true)}
-                  className={buttonClass.secondaryButton}
-                >
-                  <p className="font-bold text-black ">Export All</p>
-                </button>
+                  text="Export All" 
+                  variant={ButtonTypes.PRIMARY}                />
+                  
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
-                <button
+                <Button
                   onClick={() => setShowDescriptionsModal(!showDescriptionsModal)}
-                  className={buttonClass.tertiaryButton}
-                >
-                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
-                    {' '}
-                    <QuestionMarkCircleIcon className="w-6" />
-                    <p className="font-bold text-white">Member Status Guide</p>
-                  </span>
-                </button>
+                  variant={ButtonTypes.SOLID}
+                  textIcon={<QuestionIcon fill = 'white'/>}
+                  text="Member Status Guide"
+                >                  
+                </Button>
               )}
+              </div>
             </div>
             {searchParams.get(Filters.STATUS) !== Status.PENDING && (
               <StatusFilter

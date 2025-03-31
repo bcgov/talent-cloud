@@ -156,10 +156,10 @@ export class BcwsController {
     status: HttpStatus.OK,
   })
   @ApiProduces('text/csv')
-  //@Programs(Program.BCWS)
-  //@Roles(Role.COORDINATOR)
+  @Programs(Program.BCWS)
+  @Roles(Role.COORDINATOR)
   @Public()
-  @Get('/export-test')
+  @Get('/export')
   async exportBcwsPersonnelToCSV(): Promise<StreamableFile> {
     const csvRawData = await this.bcwsService.getBcwsPersonnelforCSV();
 
@@ -168,7 +168,6 @@ export class BcwsController {
       keys: BcwsCsvHeaders,
       useLocaleFormat: true,
       emptyFieldValue: '',
-
     });
 
     const csvStream = Readable.from(csvConverted);

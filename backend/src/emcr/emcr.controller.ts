@@ -86,10 +86,10 @@ export class EmcrController {
     status: HttpStatus.OK,
   })
   @ApiProduces('text/csv')
-  //@Programs(Program.EMCR)
-  //@Roles(Role.COORDINATOR)
+  @Programs(Program.EMCR)
+  @Roles(Role.COORDINATOR)
   @Public()
-  @Get('/export-test')
+  @Get('/export')
   async exportPersonnelSplitRelations(): Promise<StreamableFile> {
     const csvData = await this.emcrService.getEmcrPersonnelForExport();
     const csvConverted = json2csv(csvData, {
