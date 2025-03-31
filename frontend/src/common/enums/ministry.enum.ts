@@ -1,20 +1,22 @@
 export enum Ministry {
   AF = 'AF',
   AG = 'AG',
-  MCF = 'MCF',
   CITZ = 'CITZ',
   ECC = 'ECC',
   EMCR = 'EMCR',
-  EMLI = 'EMLI',
+  ECS = 'ECS',
   ENV = 'ENV',
   FIN = 'FIN',
   FOR = 'FOR',
   GCPE = 'GCPE',
   HLTH = 'HLTH',
   HOUS = 'HOUS',
+  INF = 'INF',
   IRR = 'IRR',
   JEDI = 'JEDI',
   LBR = 'LBR',
+  MCFD = 'MCFD', // Same as MCF
+  MCM = 'MCM',
   MMHA = 'MMHA',
   MUNI = 'MUNI',
   PREM = 'PREM',
@@ -23,9 +25,9 @@ export enum Ministry {
   PSSG = 'PSSG',
   SDPR = 'SDPR',
   TACS = 'TACS',
-  MOTI = 'MOTI',
+  TT = 'TT',  // Same as MOTI
   WLRS = 'WLRS',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
 }
 
 export enum MinistryName {
@@ -41,7 +43,7 @@ export enum MinistryName {
   GCPE = 'Government Communications and Public Engagement',
   FOR = 'Forests',
   HLTH = 'Health',
-  HOUS = 'Housing',
+  HOUS = 'Housing and Municipal Affairs',
   IRR = 'Indigenous Relations & Reconciliation',
   JEDI = 'Jobs, Economic Development and Innovation',
   LBR = 'Labour',
@@ -53,15 +55,20 @@ export enum MinistryName {
   PSSG = 'Public Safety and Solicitor General',
   SDPR = 'Social Development and Poverty Reduction',
   TACS = 'Tourism, Arts, Culture and Sport',
-  MOTI = 'Transportation and Infrastructure',
+  MOTI = 'Transportation and Transit',
   WLRS = 'Water, Land and Resource Stewardship',
-  OTHER='Other'
-}
+  ECS = 'Energy and Climate Solutions',
+  MCM = 'Mining and Critical Minirals',
+  INF = 'Infrastructure',
+  MCFD = MCF,
+  TT = MOTI,
+  OTHER = 'Other',
+};
 
 export const ChipsMinistryName = {
   'Agriculture and Food': 'AF',
   'Attorney General': 'AG',
-  'Children and Family Development': 'MCF',
+  'Children and Family Development': 'MCFD',
   "Citizens' Services": 'CITZ',
   'Education and Child Care': 'ECC',
   'Emergency Management and Climate Readiness': 'EMCR',
@@ -72,6 +79,7 @@ export const ChipsMinistryName = {
   'Government Communications and Public Engagement': 'GCPE',
   Health: 'HLTH',
   Housing: 'HOUS',
+  'Housing and Municipal Affairs': 'HOUS',
   'Indigenous Relations & Reconciliation': 'IRR',
   'Jobs, Economic Development and Innovation': 'JEDI',
   Labour: 'LBR',
@@ -84,7 +92,11 @@ export const ChipsMinistryName = {
   'Public Safety and Solicitor General': 'PSSG',
   'Social Development and Poverty Reduction': 'SDPR',
   'Tourism, Arts, Culture and Sport': 'TACS',
-  'Transportation and Infrastructure': 'MOTI',
+  'Transportation and Infrastructure': 'TT',
   'Water, Land and Resource Stewardship': 'WLRS',
   Other: 'OTHER',
+  'Energy and Climate Solutions': 'ECS',
+  'Mining and Critical Minirals': 'MCM',
+  'Infrastructure': 'INF',
+  'Transportation and Transit': 'TT',
 };
