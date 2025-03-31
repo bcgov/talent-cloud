@@ -311,6 +311,7 @@ export class EmcrService {
     this.logger.log('personnel');
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
+    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel');
     qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
     const personnel = await qb.getRawMany();
