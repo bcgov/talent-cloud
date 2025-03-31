@@ -236,10 +236,12 @@ export const MemberAvailabilityTab = ({
                       {
                         name: 'Section Name',
                         key: 'section',
+                        size: '1/2',
                       },
                       {
                         name: 'Role',
                         key: 'role',
+                        size: '1/2',
                       },
                     ]}
                     preferences={{

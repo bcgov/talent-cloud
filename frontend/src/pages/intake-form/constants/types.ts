@@ -86,9 +86,9 @@ export interface PersonalDetails {
   lastName?: string;
   primaryPhoneNumber?: string;
   secondaryPhoneNumber?: string;
-  homeLocation?: Location & {
-    id: number;
-    name: string;
+  homeLocation?:  {
+    id?: number;
+    name?: string;
   };
   email?: string;
 }

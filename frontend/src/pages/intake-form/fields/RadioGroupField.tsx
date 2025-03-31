@@ -9,13 +9,14 @@ import type { IntakeFormValues } from '../constants/types';
 export const RadioGroupField = ({
   field,
   options,
+  disabled
 }: {
   field: FieldInputProps<any>;
   options?: any[];
+  disabled?: boolean
 }) => {
-  const { values, setFieldValue } = useFormikContext<IntakeFormValues>();
-  const disabled =
-    field.name === 'program' && values?.disabledProgram ? true : false;
+
+  const { setFieldValue } = useFormikContext<IntakeFormValues>();
 
   return (
     <>
@@ -30,13 +31,13 @@ export const RadioGroupField = ({
               }
               value={itm.value}
               type="radio"
-              disabled={values.disabledProgram?.toString() === itm.value.toString()}
+              disabled={disabled}
               className={clsx(disabled && 'bg-gray-200')}
             />
             <span
               className={clsx(
                 itm.value === field.value && 'text-dark-900 font-normal',
-                disabled && 'text-gray-400 font-normal',
+                
                 'px-2',
               )}
             >

@@ -65,7 +65,7 @@ export const SelectField = ({
                 key={`${field.name}.${option.value?.id}.${index}`}
                 value={option.value}
                 disabled={option?.disabled}
-                className="group relative cursor-default py-2 pr-9 pl-3 select-none data-focus:bg-[#3B8FDD] data-focus:text-white data-focus:outline-hidden"
+                className="group relative cursor-pointer py-2 pr-9 pl-3 select-none data-focus:bg-[#3B8FDD] data-focus:text-white data-focus:outline-hidden hover:bg-gray-200"
               >
                 <div className="flex items-center">
                   <span

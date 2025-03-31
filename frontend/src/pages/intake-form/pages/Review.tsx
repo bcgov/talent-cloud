@@ -117,7 +117,7 @@ const ReviewFields = ({
         'col-span-2 gap-y-8 grid',
         ['EMCR CORE Team Sections', 'BCWS CORE Team Sections and Roles'].includes(
           sectionName,
-        ) ? 'grid grid-cols-3' :  'grid-cols-2',
+        ) ? 'grid-cols-3' :  'grid-cols-2',
       )}
     >
       {fields
@@ -131,10 +131,10 @@ const ReviewFields = ({
             {!field.nestedFields ? (
               <div
                 key={field.name}
-                className={clsx(
-                  field.colSpan ? `col-span-${field.colSpan}` : 'col-span-1',
-                )}
+                className={clsx(field.colSpan ? `col-span-${field.colSpan}` : 'col-span-1')}
               >
+                
+                      
                 {field.label && (
                   <div className="subtext text-sm pb-2">{field.label}</div>
                 )}
@@ -142,12 +142,14 @@ const ReviewFields = ({
                   <div className="subtext text-sm pb-2">{field.helperText}</div>
                 )}
                 <div className="text-[#262729]">
-                  {/* {values[field.name as ]} */}
+                  
                   {getValue(values?.[field.name as keyof typeof values], field.name)}
                 </div>
-              </div>
+                </div>
+                
+              
             ) : (
-              <div className={'col-span-2'}>
+<div className={'col-span-2'}>
                 {(values?.[field.name as keyof typeof values] as {}[])?.map(
                   (itm, index) => (
                     <div

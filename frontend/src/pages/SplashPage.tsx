@@ -38,7 +38,7 @@ const SplashPage = () => {
                 <>
                   {"CORE Team applications are now open. Access intake form "}
                   <a href={Routes.IntakeForm}>
-                    <span className="font-bold">here.</span>
+                    <span className="font-bold underline">here.</span>
                     <br></br>
                   </a>
                   {"If you're already a member, you will be directed to your member dashboard."}
@@ -99,7 +99,7 @@ const SplashPage = () => {
                       className="text-primaryBlue underline"
                       href="mailto:BCWS.CORETeam@gov.bc.ca"
                     >
-                      EMCR.CORETeam@gov.bc.ca
+                      BCWS.CORETeam@gov.bc.ca
                     </a>
                   </div>
                 </div>
@@ -134,8 +134,8 @@ const SplashPage = () => {
         <div className="hidden col-span-1 w-full px-0 lg:flex relative">
           <SplashImage />
 
-          <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-80 rounded-md h-[200px] mr-24"></div>
-          <div className="absolute inset-0 top-1/3  border-l-4 h-[200px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
+          <div className="absolute inset-0 top-1/3 bg-[#013366] opacity-80 rounded-md h-[220px] mr-24"></div>
+          <div className="absolute inset-0 top-1/3  border-l-4 h-[220px] border-primaryYellow  pt-6 px-6 space-y-6 mr-24">
             <h3 className="font-normal text-white">Login</h3>
             <p className="text-white">{content.login.description}</p>
             <div className="flex flex-row space-x-4">

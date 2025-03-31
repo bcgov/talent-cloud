@@ -2,9 +2,9 @@ import { ButtonTypes } from '@/common';
 import { useFormikContext } from 'formik';
 import { Button } from '@/components';
 import type { IntakeFormValues } from '../constants/types';
-
 import { AlertType, useAlertContext } from '@/providers/Alert';
-import { useNavigate } from 'react-router';
+import { logoutUrl } from '@/utils/keycloak';
+import { useKeycloak } from '@react-keycloak/web';
 
 export const FormButtonNavigation = ({
   saveUpdateForm,
@@ -13,8 +13,6 @@ export const FormButtonNavigation = ({
   disableNext,
   disablePrevious,
   step,
-
-  handleSetCompletedStep,
 }: {
   saveUpdateForm: (values: IntakeFormValues) => void;
   handlePrevious: () => void;
@@ -22,13 +20,12 @@ export const FormButtonNavigation = ({
   disableNext: boolean;
   disablePrevious: boolean;
   step: number;
-
-  handleSetCompletedStep: (step: number) => void;
 }) => {
-  const { values, submitForm, isValid, validateForm } =
+  const { values, submitForm, isValid, isSubmitting } =
     useFormikContext<IntakeFormValues>();
   const { showAlert } = useAlertContext();
-  const navigate = useNavigate();
+
+  const { keycloak } = useKeycloak();
   return (
     <div>
       <div className="border border-t-grey-200"></div>
@@ -38,8 +35,7 @@ export const FormButtonNavigation = ({
             text="Cancel"
             variant={ButtonTypes.TEXT}
             disabled={step === 5}
-            // TODO: Save and navigate? Delete form?
-            onClick={() => navigate('/')}
+            onClick={() => window.location.replace(logoutUrl(keycloak))}
           />
           <Button
             text="Save For Later"
@@ -66,19 +62,9 @@ export const FormButtonNavigation = ({
             <Button
               text="Submit"
               variant={ButtonTypes.SOLID}
-              disabled={!isValid || step === 5}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (errors && Object.keys(errors).length > 0) {
-                  showAlert({
-                    type: AlertType.ERROR,
-                    message: 'Please resolve validation errors.',
-                  });
-                } else {
-                  handleSetCompletedStep(4);
-                  await submitForm();
-                }
-              }}
+              loading={isSubmitting}
+              disabled={!isValid || step === 5 || isSubmitting}
+              onClick={submitForm}
             />
           ) : (
             <Button

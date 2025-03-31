@@ -81,10 +81,12 @@ export const MemberSkillsAndCertifications = ({
                 {
                   name: 'Language',
                   key: 'language',
+                  size: '1/2',
                 },
                 {
                   name: 'Proficiency',
                   key: 'proficiency',
+                  size: '1/2',
                 },
               ]}
               displayEmpty={true}
@@ -103,10 +105,12 @@ export const MemberSkillsAndCertifications = ({
                 {
                   name: 'Tool',
                   key: 'tool',
+                  size: '1/2',
                 },
                 {
                   name: 'Proficiency',
                   key: 'proficiency',
+                  size: '1/2',
                 },
               ]}
               displayEmpty={true}
@@ -125,10 +129,12 @@ export const MemberSkillsAndCertifications = ({
                 {
                   name: 'Certification',
                   key: 'certification',
+                  size: '1/2',
                 },
                 {
                   name: 'Expiry',
                   key: 'expiry',
+                  size: '1/2',
                 },
               ]}
               displayEmpty={true}

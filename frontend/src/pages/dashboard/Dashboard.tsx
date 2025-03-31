@@ -100,6 +100,9 @@ const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
   const { program, roles } = useRoleContext();
+  const { csvExport } = useExportToCSV();
+  const [ dlButtonText, setDlButtonText ] = useState('Downloading All Members');
+  const [ dlDisabled, setDlDisabled ] = useState(false);
 
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -161,9 +164,6 @@ const Dashboard = () => {
                   className={buttonClass.secondaryButton}
                 >
                   <p className="font-bold text-black ">Export All</p>
-                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
-                    {' '}
-                  </span>
                 </button>
               )}
               {roles && roles.includes(Role.COORDINATOR) && (

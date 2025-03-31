@@ -92,6 +92,7 @@ export class IntakeFormService {
       const emailTemplate = new MailDto({
         subject: EmailSubjects[EmailTags.INTAKE_CONFIRM],
         body: nunjucks.render(EmailTemplates.INTAKE_CONFIRM, {
+          name: createIntakeFormDto.personnel.firstName,
           ...envs,
         }),
         attachments: [],
@@ -238,6 +239,7 @@ export class IntakeFormService {
     form: IntakeFormDTO,
   ): Promise<UpdateResult> {
     delete form.currentProgram;
+    delete form.disabledProgram;
     return await this.intakeFormRepository.update(id, form);
   }
   /**
@@ -531,8 +533,8 @@ export class IntakeFormService {
         ministry,
         homeLocation: { id: homeLocation.id, name: homeLocation.locationName },
         paylistId: data.deptId,
-        supervisorLastName: data.currentSupervisorName.split(',')[0],
-        supervisorFirstName: data.currentSupervisorName.split(',')[1],
+        supervisorLastName: data.currentSupervisorName?.split(',')[0],
+        supervisorFirstName: data.currentSupervisorName?.split(',')[1],
         supervisorEmail: data.currentSupervisorEmail,
         chipsLastActionDate: data.actionDate,
       };

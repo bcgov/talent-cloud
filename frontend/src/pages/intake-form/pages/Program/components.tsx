@@ -102,18 +102,32 @@ export const components = [
         <br />
         <br />
         <p className="text-sm">
-          {
-            '*Please make sure you have completed, signed and submitted your BCWS PAR-Q+ to your Wildfire regional contact after submitting this application. '
-          }
+          *Please make sure you have completed, signed and submitted your BCWS PAR-Q+
+          to your{' '}
+          <a
+            href="https://intranet.gov.bc.ca/bcws/core-team?"
+            target="_blank"
+            className="text-linkBlue underline"
+            rel="noreferrer"
+          >
+            Wildfire regional contact
+          </a>{' '}
+          after submitting this application.
         </p>
         <br />
         <p className="text-sm">
           <span className="font-bold text-dark-700">
             {"Don't know which Fire Centre email to submit your documents to? "}
           </span>
-          {'You can find your corresponding Fire Centre based on your home location at '}
-          
-          <a href="#" target="_blank" className="text-linkBlue underline">
+          {
+            'You can find your corresponding Fire Centre based on your home location at '
+          }
+          <a
+            href="https://www2.gov.bc.ca/gov/content/safety/wildfire-status/about-bcws/fire-centres"
+            target="_blank"
+            className="text-linkBlue underline"
+            rel="noreferrer"
+          >
             {'Where is my closest Fire Centre?'}
           </a>
           .
@@ -142,12 +156,24 @@ export const components = [
         <div className="py-4 px-4 text-sm">
           <ul className="list-disc list-inside text-dark-700 text-sm font-normal">
             <li>
-              <span className="font-bold text-dark-700 ">{"EMCR CORE Team: "}</span>{"You can be deployed for up "} <span className="font-bold text-dark-700 ">{"to 10 consecutive days "}</span>
-              {"followed by a "}<span className="font-bold text-dark-700 ">{"mandatory two-day rest period "}</span>{"before potential redeployment."}
+              <span className="font-bold text-dark-700 ">{'EMCR CORE Team: '}</span>
+              {'You can be deployed for up '}{' '}
+              <span className="font-bold text-dark-700 ">
+                {'to 10 consecutive days '}
+              </span>
+              {'followed by a '}
+              <span className="font-bold text-dark-700 ">
+                {'mandatory two-day rest period '}
+              </span>
+              {'before potential redeployment.'}
             </li>
             <li>
-              <span className="text-dark-700  font-bold">{"BCWS CORE Team: "}</span>{"You can be deployed for "}
-              <span className="text-dark-700  font-bold">{"up to 14 consecutive days "}</span>{"at a time (including travel duration)."}
+              <span className="text-dark-700  font-bold">{'BCWS CORE Team: '}</span>
+              {'You can be deployed for '}
+              <span className="text-dark-700  font-bold">
+                {'up to 14 consecutive days '}
+              </span>
+              {'at a time (including travel duration).'}
             </li>
           </ul>
         </div>

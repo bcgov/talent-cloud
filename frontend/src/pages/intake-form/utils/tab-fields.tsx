@@ -204,7 +204,6 @@ const PersonalDetailsTab = {
           component: SelectField,
           required: true,
           placeholder: 'Select an option',
-
           options: [],
           helper:
             'Your home location will help us determine which region and/or fire centre you belong to. If your home location is not listed, please select the nearest location to your place of residence.',
@@ -430,7 +429,7 @@ const PersonalDetailsTab = {
           type: 'checkbox',
           component: CheckboxField,
           required: false,
-          placeholder: 'I am unsure who my liaison is',
+          placeholder: 'I am unsure who my liaison is.',
           program: Program.BCWS,
           colSpan: 2,
         },
@@ -809,22 +808,22 @@ const ExperiencesTab = {
           type: 'componentBox',
           component: () => (
             <>
-            <hr className="mt-6 mb-2 h-0.5 border-t-0 bg-[#cfcfcf]" />
-            <div className='pt-8'>
-              <div className="text-black text-sm font-normal">
-                For each section below, please indicate any role(s) that you are
-                interested in for deployment.
+              <hr className="mt-6 mb-2 h-0.5 border-t-0 bg-[#cfcfcf]" />
+              <div className="pt-8">
+                <div className="text-black text-sm font-normal">
+                  For each section below, please indicate any role(s) that you are
+                  interested in for deployment.
+                </div>
+                <div>
+                  <span className="text-xs font-normal text-gray-700">
+                    You must select AT LEAST ONE role under your FIRST choice.
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="text-xs font-normal text-gray-700">
-                  You must select AT LEAST ONE role under your FIRST choice.
-                </span>
-              </div>
-            </div>
             </>
           ),
         },
-        
+
         ...bcwsRolesFields,
       ],
     },
@@ -867,7 +866,7 @@ const SkillsTab = {
               type: 'select',
               component: SelectField,
               required: true,
-              placeholder: 'Select Proficieny Level',
+              placeholder: 'Select an option',
               options: Object.values(LanguageProficiency).map((itm) => ({
                 label: LanguageProficiencyName[itm],
                 value: itm,
@@ -986,13 +985,10 @@ const CompleteTab = {
         </p>
         <br />
         <p>
-          A CORE Team coordinator may reach out to you in the next 7 to 10 working
-          days via email to further assess your experience and deployment readiness.
-          Our response time may vary depending on ongoing operational tasks such as
-          responding to emergency and wildfire across the province.
+          Only applicants with the required documents and skills for emergency
+          deployments will be contacted via email. Response times may vary based on
+          operational demands.
         </p>
-        <br />
-        <p>Please be aware that duplicate submissions will NOT be considered.</p>
       </div>
       <div>
         <Banner
@@ -1008,7 +1004,7 @@ const CompleteTab = {
                 <ul className="list-disc list-inside text-info text-sm font-normal">
                   <li>
                     <a
-                      href="https://www2.gov.bc.ca/gov/content/careers-myhr/forms-tools/all-employees"
+                      href="https://learning.gov.bc.ca/psc/CHIPSPLM/EMPLOYEE/ELM/c/LM_OD_EMPLOYEE_FL.LM_CRS_DTL_FL.GBL?Page=LM_CRS_DTL_FL&#38;Action=U&#38;ForceSearch=Y&#38;LM_CI_ID=19146&#38;"
                       target="_blank"
                       className="text-linkBlue underline"
                       rel="noreferrer"
@@ -1058,7 +1054,7 @@ const CompleteTab = {
                 </ul>
               </div>
               <div className="col-span-1">
-                <p className="text-sm">
+                <p className="text-sm text-[#003366]">
                   Submit to{' '}
                   <a
                     href="mailto:EMCR.CORETeam@gov.bc.ca"
@@ -1070,7 +1066,7 @@ const CompleteTab = {
                 </p>
               </div>
               <div className="col-span-1">
-                <p className="text-sm">
+                <p className="text-sm text-[#003366]">
                   Submit to your Fire Centre’s email.{' '}
                   <a
                     href="https://intranet.gov.bc.ca/bcws/core-team"
@@ -1103,7 +1099,12 @@ const ReviewTab = {
       segments: PersonalDetailsTab.sections.map((itm) => ({
         ...itm,
         label: itm.name,
-        fields: itm.fields.filter((field) => field.type !== 'infoBox').map(itm => ({...itm, helperText: itm.name === 'liaisonUnknown' && 'Liaison Unknown'})),
+        fields: itm.fields
+          .filter((field) => field.type !== 'infoBox')
+          .map((itm) => ({
+            ...itm,
+            helperText: itm.name === 'liaisonUnknown' && 'Liaison Unknown',
+          })),
       })),
     },
 
@@ -1125,13 +1126,15 @@ const ReviewTab = {
         {
           name: 'EMCR CORE Team Sections',
           fields: [
-            ...ExperiencesTab.sections[1].fields.filter((itm) =>
-              [
-                'firstChoiceFunction',
-                'secondChoiceFunction',
-                'thirdChoiceFunction',
-              ].includes(itm.name),
-            ).map(itm => ({...itm, colSpan: 1})),
+            ...ExperiencesTab.sections[1].fields
+              .filter((itm) =>
+                [
+                  'firstChoiceFunction',
+                  'secondChoiceFunction',
+                  'thirdChoiceFunction',
+                ].includes(itm.name),
+              )
+              .map((itm) => ({ ...itm, colSpan: 1 })),
             {
               colSpan: 3,
               helperText:

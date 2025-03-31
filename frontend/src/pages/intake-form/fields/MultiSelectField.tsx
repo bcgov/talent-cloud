@@ -130,10 +130,11 @@ export const MultiSelectField = ({
             {options?.map((itm, index) => (
               <div
                 key={itm.label + index.toString()}
-                className="flex flex-row items-center gap-x-1 pl-2"
+                className="flex flex-row items-center gap-x-1 pl-2 hover:bg-gray-200"
               >
                 <Checkbox
                   onChange={() => handleChange(itm.value)}
+                  checked={field.value.includes(itm.value)}
                   id="vertical-list-react"
                   ripple={false}
                   className="hover:before:opacity-0 checkbox rounded-none"

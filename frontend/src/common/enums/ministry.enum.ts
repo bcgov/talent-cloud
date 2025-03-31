@@ -25,6 +25,7 @@ export enum Ministry {
   TACS = 'TACS',
   MOTI = 'MOTI',
   WLRS = 'WLRS',
+  OTHER = 'OTHER'
 }
 
 export enum MinistryName {
@@ -54,6 +55,7 @@ export enum MinistryName {
   TACS = 'Tourism, Arts, Culture and Sport',
   MOTI = 'Transportation and Infrastructure',
   WLRS = 'Water, Land and Resource Stewardship',
+  OTHER='Other'
 }
 
 export const ChipsMinistryName = {

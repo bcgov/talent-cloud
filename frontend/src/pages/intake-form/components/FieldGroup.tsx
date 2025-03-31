@@ -26,7 +26,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
               (value: any, index: number) => (
                 <div key={index} className="grid grid-cols-5 gap-4">
                   {field.nestedFields?.map((nested: FormFields) => (
-                    <div key={nested.name + index.toString()} className={ "col-span-2"}>
+                    <div key={nested.name + index.toString()} className={ "col-span-2 py-3"}>
                       <FormField
                         {...nested}
                         options={
@@ -55,7 +55,7 @@ export const FieldGroup = ({ field }: { field: FormFields }) => {
                       </div>
                     </div>
                   ))}
-                  <div className="col-span-1 pt-6">
+                  <div className="col-span-1 pt-9">
                     <Button
                       variant={ButtonTypes.OUTLINED}
                       text="Delete"

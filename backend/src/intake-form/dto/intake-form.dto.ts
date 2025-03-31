@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { IsOptional } from 'class-validator';
+import { IntakeFormPersonnelData } from '../types';
 import { Program } from '../../auth/interface';
 
-import { IntakeFormPersonnelData } from '../types';
 import { FormStatusEnum } from '../../common/enums/form-status.enum';
 
 export class IntakeFormDTO {
@@ -27,6 +27,13 @@ export class IntakeFormDTO {
   })
   @IsOptional()
   currentProgram: Program;
+
+  @ApiProperty({
+    description: 'Disabled Program',
+    required: false,
+  })
+  @IsOptional()
+  disabledProgram: Program;
 
   @ApiProperty({
     description: 'Program',

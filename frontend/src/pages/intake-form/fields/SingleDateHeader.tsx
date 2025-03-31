@@ -14,12 +14,14 @@ export const SingleDateHeader = (props: CaptionProps) => {
 
         <button
           aria-label="previous month"
+          type="button"
           onClick={() => previousMonth && goToMonth(previousMonth)}
         >
           <ChevronLeftIcon className="h-5 w-5 stroke-4  text-black mb-2" />
         </button>
         <button
           aria-label="next month"
+          type="button"
           onClick={() => nextMonth && goToMonth(nextMonth)}
         >
           <ChevronRightIcon className="h-5 w-5 stroke-4  text-black mb-2" />

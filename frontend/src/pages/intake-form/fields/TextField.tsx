@@ -26,7 +26,7 @@ export const TextField = ({
       value={field.value ?? ''}
       onChange={(e) => setFieldValue(field.name, e.target.value)}
       placeholder={placeholder}
-      className={clsx(disabled ? classes.menu.disabled : classes.menu.formContainer)}
+      className={clsx(disabled ? classes.menu.disabledForm : classes.menu.formContainer)}
       disabled={disabled}
     />
   );

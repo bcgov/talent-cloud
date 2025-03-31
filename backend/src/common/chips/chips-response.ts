@@ -18,8 +18,8 @@ export interface ChipsResponse {
   currentPositionNumber: string;
   currentPositionTitle: string;
   // currentReportsTo?: string; // Position number of supervisor
-  currentSupervisorName: string;
-  currentSupervisorEmail: string;
+  currentSupervisorName?: string;
+  currentSupervisorEmail?: string;
   // currentSupervisorEmplId: string;
   deptId: string; // Paylist
   deptIdDescr: string;

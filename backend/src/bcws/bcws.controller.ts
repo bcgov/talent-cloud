@@ -168,6 +168,7 @@ export class BcwsController {
       keys: BcwsCsvHeaders,
       useLocaleFormat: true,
       emptyFieldValue: '',
+
     });
 
     const csvStream = Readable.from(csvConverted);
