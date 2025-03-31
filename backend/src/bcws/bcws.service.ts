@@ -225,7 +225,6 @@ export class BcwsService {
    * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
    */
   async getBcwsPersonnelforCSV(): Promise<BcwsPersonnelEntity[]> {
-    this.logger.log('personnel');
     const qb =
       this.bcwsPersonnelRepository.createQueryBuilder('bcws_personnel');
     qb.leftJoinAndSelect('bcws_personnel.personnel', 'personnel');
@@ -237,8 +236,7 @@ export class BcwsService {
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
 
     const personnel = await qb.getRawMany();
-    this.logger.log('end personnel');
-    this.logger.log('deployed');
+
     const lastDeployeds = await this.availabilityRepository.query(`SELECT 
         personnel,
         MAX(date) AS last_deployed_date
@@ -248,12 +246,11 @@ export class BcwsService {
             availability_type = 'DEPLOYED'
         GROUP BY 
         personnel;`);
-    this.logger.log('end deployed');
-    this.logger.log('location');
+
     const locations = await this.locationRepository
       .createQueryBuilder('location')
       .getRawMany();
-    this.logger.log('endlocation');
+
     const lastDeployedMap = lastDeployeds.reduce(
       (
         acc: Record<string, Date>,
