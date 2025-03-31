@@ -60,8 +60,8 @@ export enum MinistryName {
   ECS = 'Energy and Climate Solutions',
   MCM = 'Mining and Critical Minirals',
   INF = 'Infrastructure',
-  MCFD = 'Children and Family Development',
-  TT = 'Transportation and Transit',
+  MCFD = MCF,
+  TT = MOTI,
   OTHER = 'Other',
 };
 
