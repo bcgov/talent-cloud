@@ -108,8 +108,8 @@ export const EmcrCsvHeaders = [
     title: 'CHIPS - Last Updated Properties',
   },
   {
-    field: 'personnel_chips_ignore_properties',
-    title: 'CHIPS - Ignore Properties',
+    field: 'personnel_chips_issues',
+    title: 'CHIPS - Issues',
   },
   {
     field: 'personnel_chips_training_data',
