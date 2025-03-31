@@ -146,9 +146,22 @@ export class EmcrController {
     status: HttpStatus.OK,
   })
   @Public()
+  @ApiProduces('text/csv')
   @Get('/export-test-relations')
-  async exportPersonnelSplitRelations(): Promise<EmcrPersonnelEntity[]> {
-    return this.emcrService.getEmcrPersonnelMinimalRelations();
+  async exportPersonnelSplitRelations(): Promise<StreamableFile> {
+    const csvData = await this.emcrService.getEmcrPersonnelMinimalRelations();
+    const csvConverted = json2csv(csvData, {
+      keys: EmcrCsvHeaders,
+      useLocaleFormat: true,
+      emptyFieldValue: '',
+    });
+
+    const csvStream = Readable.from(csvConverted);
+
+    return new StreamableFile(csvStream, {
+      type: 'text/csv',
+      disposition: 'attachment; filename="EMCR_Personnel_Details.csv"',
+    });
   }
 
   @ApiOperation({
