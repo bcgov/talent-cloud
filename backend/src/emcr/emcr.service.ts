@@ -317,7 +317,7 @@ export class EmcrService {
     const personnel = await qb.getRawMany();
     this.logger.log('end personnel');
     this.logger.log('deployed');
-    await this.availabilityRepository.query(`SELECT 
+    const lastDeployeds = await this.availabilityRepository.query(`SELECT 
     personnel,
     MAX(date) AS last_deployed_date
     FROM 
@@ -328,9 +328,42 @@ export class EmcrService {
     personnel;`);
     this.logger.log('end deployed');
     this.logger.log('location');
-    await this.locationRepository.find();
+    const locations = await this.locationRepository
+      .createQueryBuilder('location')
+      .getRawMany();
     this.logger.log('endlocation');
-    return personnel;
+    const lastDeployedMap = lastDeployeds.reduce(
+      (
+        acc: Record<string, Date>,
+        entry: { personnel: string; last_deployed_date: Date },
+      ) => {
+        acc[entry.personnel] = entry.last_deployed_date;
+        return acc;
+      },
+      {},
+    );
+    const locationMap = locations.reduce(
+      (acc: Record<number, Omit<LocationEntity, 'id'>>, location) => {
+        const { location_id, ...rest } = location;
+        acc[location_id] = rest;
+        return acc;
+      },
+      {},
+    );
+    const mappedPersonnel = personnel.map((p) => ({
+      ...p,
+      last_deployed: lastDeployedMap[p.personnel_id],
+      home_loc_location_name:
+        locationMap[p.personnel_home_location]['location_location_name'],
+      home_loc_region:
+        locationMap[p.personnel_home_location]['location_region'],
+      work_loc_location_name:
+        locationMap[p.personnel_work_location]['location_location_name'],
+      work_loc_region:
+        locationMap[p.personnel_work_location]['location_region'],
+    }));
+
+    return mappedPersonnel;
   }
 
   /**
