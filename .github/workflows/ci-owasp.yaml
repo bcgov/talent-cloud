@@ -14,14 +14,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: ZAP baseline scan
-        uses: zaproxy/action-baseline@v0.4.0
+        uses: zaproxy/action-baseline@v0.14.0
         with:
           target: https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/
           cmd_options: '-I'
       - name: Upload ZAP report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: OWASP ZAP CORE Backend Report
           path: report_html.html
