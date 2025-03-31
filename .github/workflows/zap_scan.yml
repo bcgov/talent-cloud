@@ -1,7 +1,8 @@
 name: ZAP baseline scan
 on:
   workflow_dispatch:
-
+  push:
+    
 
 jobs: 
   zap_scan:    
