@@ -147,7 +147,7 @@ export class EmcrController {
     status: HttpStatus.OK,
   })
   @Public()
-  @Get('/export-test-raw')
+  @Get('/export-test-relations')
   async exportPersonnelSplitRelations(): Promise<EmcrPersonnelEntity[]> {
     return this.emcrService.getEmcrPersonnelMinimalRelations();
   }
