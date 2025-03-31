@@ -167,6 +167,8 @@ export class BcwsController {
     const csvConverted = json2csv(csvRawData, {
       keys: BcwsCsvHeaders,
       useLocaleFormat: true,
+      emptyFieldValue: '',
+
     });
 
     const csvStream = Readable.from(csvConverted);

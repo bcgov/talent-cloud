@@ -7,12 +7,16 @@ import { useRoleContext } from '@/providers';
 import { useTable } from '@/hooks';
 
 // common
-import { Filters, Role } from '@/common';
+import { ButtonTypes, Filters, Program, Role } from '@/common';
 import { Status } from '@/common';
-import { ActiveRecommitmentStatusFilter, InactiveRecommitmentStatusFilter  } from '@/common/enums/recommitment-status';
+import {
+  ActiveRecommitmentStatusFilter,
+  InactiveRecommitmentStatusFilter,
+} from '@/common/enums/recommitment-status';
 
 // ui
 import {
+  Button,
   DialogUI,
   Table,
   TableFooterNav,
@@ -29,6 +33,69 @@ import { button as buttonClass } from '@/components/ui/classes';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { useExportToCSV } from '@/hooks/useExportToCSV';
 
+const DownloadModal = ({
+  program,
+  onClose,
+}: {
+  program: Program;
+  onClose: () => void;
+}) => {
+  const [downloadName, setDownloadName] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const { csvExport } = useExportToCSV();
+
+  const downloadClick = async () => {
+    setSubmitting(true);
+    try {
+      const csvReceipt = await csvExport(program);
+      const url = window.URL.createObjectURL(new Blob([csvReceipt]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download =
+        program?.toString().toUpperCase() + ' - ' + downloadName + '.csv';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubmitting(false);
+      setDownloadName('');
+      onClose();
+    }
+  };
+
+  return (
+    <div className="max-w-3xl px-8 pb-8 flex flex-col itmes-center justify-between space-y-8">
+      <div>Export all active and inactive members, as well as applicants pending approval, to a CSV file.</div>
+
+      <input
+        disabled={submitting}
+        id="memberDownload"
+        type="text"
+        placeholder="Enter a filename for your CSV download..."
+        value={submitting ? 'Please wait...' : downloadName}
+        onChange={(e) => setDownloadName(e.target.value)}
+      />
+      <div className="flex flex-row items-start justify-right space-x-2 pt-4">
+      <Button
+          variant={ButtonTypes.SECONDARY}
+          text={'Cancel'}
+          disabled={submitting}
+          onClick={onClose}
+        />
+        <Button
+          loading={submitting}
+          variant={ButtonTypes.SOLID}
+          text={'Download CSV'}
+          disabled={!downloadName || submitting}
+          onClick={downloadClick}
+        />
+      </div>
+    </div>
+  );
+};
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
@@ -36,6 +103,8 @@ const Dashboard = () => {
   const { csvExport } = useExportToCSV();
   const [ dlButtonText, setDlButtonText ] = useState('Downloading All Members');
   const [ dlDisabled, setDlDisabled ] = useState(false);
+
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const {
     totalRows,
@@ -90,33 +159,11 @@ const Dashboard = () => {
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
                 <button
-                  disabled={dlDisabled}
-                  onClick={async () => {
-                    //Disable button while download method runs
-                    setDlDisabled(true);
-                    setDlButtonText('Downloading...')
-
-                    //download file from export hook according to coordinator's program and name appropriately
-                    const csvReceipt = await csvExport(program);
-                    const url = window.URL.createObjectURL(new Blob([csvReceipt]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = program?.toString().toUpperCase() + '_Personnel_Details.csv';
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-
-                    //Re-enable button after download is complete
-                    setDlButtonText('Download All Members');
-                    setDlDisabled(false);
-                  }
-                } 
-                  className={buttonClass.tertiaryButton}
-                > 
-                  {dlButtonText}
-                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
-                    {' '}
-                  </span>
+                  // disabled={dlDisabled}
+                  onClick={() => setShowDownloadModal(true)}
+                  className={buttonClass.secondaryButton}
+                >
+                  <p className="font-bold text-black ">Export All</p>
                 </button>
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
@@ -134,13 +181,18 @@ const Dashboard = () => {
             </div>
             {searchParams.get(Filters.STATUS) !== Status.PENDING && (
               <StatusFilter
-                statusFilter={searchParams.get(Filters.STATUS) && searchParams.get(Filters.STATUS) === Status.ACTIVE ? ActiveRecommitmentStatusFilter : InactiveRecommitmentStatusFilter}
+                statusFilter={
+                  searchParams.get(Filters.STATUS) &&
+                  searchParams.get(Filters.STATUS) === Status.ACTIVE
+                    ? ActiveRecommitmentStatusFilter
+                    : InactiveRecommitmentStatusFilter
+                }
                 searchParams={searchParams}
                 setSearchParams={setSearchParams}
               />
             )}
-            <Table rows={rows} columns={columns} loading={loading} auto={true} />
 
+            <Table rows={rows} columns={columns} loading={loading} auto={true} />
             <div className="flex flex-row justify-between p-4">
               <TableFooterPageSelect
                 totalRows={totalRows}
@@ -172,6 +224,19 @@ const Dashboard = () => {
       >
         <MemberStatusGuide />
       </DialogUI>
+      {program && (
+        <DialogUI
+          open={showDownloadModal}
+          onClose={() => setShowDownloadModal(!showDownloadModal)}
+          handleOpen={() => setShowDownloadModal(!showDownloadModal)}
+          title={'Export All'}
+        >
+          <DownloadModal
+            program={program}
+            onClose={() => setShowDownloadModal(!showDownloadModal)}
+          />
+        </DialogUI>
+      )}
     </>
   );
 };

@@ -97,6 +97,7 @@ export class EmcrController {
     const csvConverted = json2csv(csvRawData, {
       keys: EmcrCsvHeaders,
       useLocaleFormat: true,
+      emptyFieldValue: '',
     });
 
     const csvStream = Readable.from(csvConverted);
