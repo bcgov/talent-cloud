@@ -533,7 +533,7 @@ export class PersonnelService {
       const end = parse(availabilityToDate, 'yyyy-MM-dd', new Date());
 
       this.logger.log(`Availability From Date: ${start}`);
-      this.logger.log(`Availability From Date: ${end}`);
+      this.logger.log(`Availability To Date: ${end}`);
       this.logger.log(
         `Difference In Days: ${differenceInDays(
           availabilityToDate,
@@ -565,7 +565,7 @@ export class PersonnelService {
             `personnel.id not IN (${allAvailable.getQuery()})`,
             allAvailable.getParameters(),
           )
-          .andWhere('personnel.availability_confirmed_until > :date', {
+          .andWhere('personnel.availability_confirmed_until >= :date', {
             date: end,
           });
 

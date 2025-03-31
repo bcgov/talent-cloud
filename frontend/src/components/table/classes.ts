@@ -9,6 +9,8 @@ export const tableClass = {
 
 export const getUnionMembershipClass = (value?: string) => {
   switch (value) {
+    case UnionMembership.OTHER:
+      return `${tableClass.classificationClass} text-warning bg-warningBannerLight border-warningDark`;
     case UnionMembership.BCGEU:
       return `${tableClass.classificationClass} text-info bg-infoBannerLight border-infoDark`;
     case UnionMembership.EXCLUDED:
