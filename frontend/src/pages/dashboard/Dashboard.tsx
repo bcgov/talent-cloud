@@ -7,7 +7,7 @@ import { useRoleContext } from '@/providers';
 import { useTable } from '@/hooks';
 
 // common
-import { ButtonTypes, Filters, Program, Role } from '@/common';
+import { ButtonTypes, Filters, Role } from '@/common';
 import { Status } from '@/common';
 import {
   ActiveRecommitmentStatusFilter,
@@ -27,82 +27,15 @@ import { DashboardFilters } from './DashboardFilters';
 import { MemberStatusGuide } from './MemberStatusGuide';
 import { RecommitmentDashBanner } from '@/components/profile/banners/RecommitmentDashBanner';
 import { StatusFilter } from '@/components/filters/StatusFilter';
-import { button as buttonClass } from '@/components/ui/classes';
 
 // icons
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
-import { useExportToCSV } from '@/hooks/useExportToCSV';
+import { QuestionIcon } from '@/components/ui/Icons';
+import { DownloadModal } from './DownloadModal';
 
-const DownloadModal = ({
-  program,
-  onClose,
-}: {
-  program: Program;
-  onClose: () => void;
-}) => {
-  const [downloadName, setDownloadName] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-
-  const { csvExport } = useExportToCSV();
-
-  const downloadClick = async () => {
-    setSubmitting(true);
-    try {
-      const csvReceipt = await csvExport(program);
-      const url = window.URL.createObjectURL(new Blob([csvReceipt]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download =
-        program?.toString().toUpperCase() + ' - ' + downloadName + '.csv';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setSubmitting(false);
-      setDownloadName('');
-      onClose();
-    }
-  };
-
-  return (
-    <div className="max-w-3xl px-8 pb-8 flex flex-col itmes-center justify-between space-y-8">
-      <div>Export all active and inactive members, as well as applicants pending approval, to a CSV file.</div>
-
-      <input
-        disabled={submitting}
-        id="memberDownload"
-        type="text"
-        placeholder="Enter a filename for your CSV download..."
-        value={submitting ? 'Please wait...' : downloadName}
-        onChange={(e) => setDownloadName(e.target.value)}
-      />
-      <div className="flex flex-row items-start justify-right space-x-2 pt-4">
-      <Button
-          variant={ButtonTypes.SECONDARY}
-          text={'Cancel'}
-          disabled={submitting}
-          onClick={onClose}
-        />
-        <Button
-          loading={submitting}
-          variant={ButtonTypes.SOLID}
-          text={'Download CSV'}
-          disabled={!downloadName || submitting}
-          onClick={downloadClick}
-        />
-      </div>
-    </div>
-  );
-};
 const Dashboard = () => {
   const { recommitmentCycle, isRecommitmentCycleOpen } = useRecommitmentCycle();
   const [showDescriptionsModal, setShowDescriptionsModal] = useState(false);
   const { program, roles } = useRoleContext();
-  const { csvExport } = useExportToCSV();
-  const [ dlButtonText, setDlButtonText ] = useState('Downloading All Members');
-  const [ dlDisabled, setDlDisabled ] = useState(false);
 
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -157,27 +90,25 @@ const Dashboard = () => {
                   }}
                 />
               )}
+              <div className="flex flex-row items-center space-x-8" >
               {roles && roles.includes(Role.COORDINATOR) && (
-                <button
+                <Button
                   // disabled={dlDisabled}
                   onClick={() => setShowDownloadModal(true)}
-                  className={buttonClass.secondaryButton}
-                >
-                  <p className="font-bold text-black ">Export All</p>
-                </button>
+                  text="Export All" 
+                  variant={ButtonTypes.PRIMARY}                />
+                  
               )}
               {roles && roles.includes(Role.COORDINATOR) && (
-                <button
+                <Button
                   onClick={() => setShowDescriptionsModal(!showDescriptionsModal)}
-                  className={buttonClass.tertiaryButton}
-                >
-                  <span className="flex flex-row items-center justify-center space-x-2 font-bold">
-                    {' '}
-                    <QuestionMarkCircleIcon className="w-6" />
-                    <p className="font-bold text-white">Member Status Guide</p>
-                  </span>
-                </button>
+                  variant={ButtonTypes.SOLID}
+                  textIcon={<QuestionIcon fill = 'white'/>}
+                  text="Member Status Guide"
+                >                  
+                </Button>
               )}
+              </div>
             </div>
             {searchParams.get(Filters.STATUS) !== Status.PENDING && (
               <StatusFilter

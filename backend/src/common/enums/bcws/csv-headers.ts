@@ -100,7 +100,7 @@ export const BcwsCsvHeaders = [
   },
   {
     field: 'personnel_availability_confirmed_on',
-    title: 'Availability Confirmed On',
+    title: 'Availability Confirmed Date',
   },
   {
     field: 'personnel_chips_last_ping',
@@ -123,19 +123,13 @@ export const BcwsCsvHeaders = [
     title: 'CHIPS - Issues',
   },
   {
-    field: 'personnel_chips_ignore_properties',
-    title: 'CHIPS - Ignore Properties',
-  },
-  {
     field: 'personnel_chips_training_data',
     title: 'CHIPS - Training Data',
   },
   { field: 'home_loc_location_name', title: 'Home Location Name' },
-  { field: 'home_loc_region', title: 'Home Region' },
   { field: 'home_loc_fire_centre', title: 'Home Fire Centre' },
   { field: 'home_loc_fire_zone', title: 'Home Fire Zone' },
   { field: 'work_loc_location_name', title: 'Work Location Name' },
-  { field: 'work_loc_region', title: 'Work Region' },
   { field: 'work_loc_fire_centre', title: 'Work Fire Centre' },
   { field: 'work_loc_fire_zone', title: 'Work Fire Zone' },
   { field: 'recommitment_personnel', title: 'Recommitment - Personnel ID' },
@@ -147,7 +141,7 @@ export const BcwsCsvHeaders = [
     title: 'Member Recommitment Decision Date',
   },
   { field: 'recommitment_member_reason', title: 'Member Recommitment Reason' },
-  { field: 'recommitment_supervisor_idir', title: 'Supervisor IDIR' },
+  { field: 'recommitment_supervisor_idir', title: 'Supervisor Email' },
   {
     field: 'recommitment_supervisor_decision_date',
     title: 'Supervisor Recommitment Decision Date',
@@ -155,15 +149,6 @@ export const BcwsCsvHeaders = [
   {
     field: 'recommitment_supervisor_reason',
     title: 'Supervisor Recommitment Reason',
-  },
-  {
-    field: 'recommitmentCycle_start_date',
-    title: 'Recommitment Cycle Start Date',
-  },
-  { field: 'recommitmentCycle_end_date', title: 'Recommitment Cycle End Date' },
-  {
-    field: 'recommitmentCycle_reinitiation_end_date',
-    title: 'Recommitment Cycle Reinitiation End Date',
   },
   { field: 'last_deployed', title: 'Last Deployed Date' },
 ];

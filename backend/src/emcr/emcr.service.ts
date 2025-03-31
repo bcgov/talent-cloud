@@ -20,6 +20,7 @@ import { AvailabilityEntity } from '../database/entities/personnel/availability.
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelService } from '../personnel/personnel.service';
 import { UpdateEmcrExperiencesDTO } from './dto/update-emcr-experiences.dto';
+import { LocationEntity } from '../database/entities/location.entity';
 
 @Injectable()
 export class EmcrService {
@@ -32,6 +33,10 @@ export class EmcrService {
     private readonly trainingRepository: Repository<EmcrTrainingEntity>,
     @InjectRepository(EmcrFunctionEntity)
     private readonly functionRepository: Repository<EmcrFunctionEntity>,
+    @InjectRepository(AvailabilityEntity)
+    private readonly availabilityRepository: Repository<AvailabilityEntity>,
+    @InjectRepository(LocationEntity)
+    private readonly locationRepository: Repository<LocationEntity>,
     private readonly logger: AppLogger,
   ) {
     this.logger.setContext(EmcrService.name);
@@ -239,32 +244,67 @@ export class EmcrService {
    * and associated table columns for export to CSV file
    * @returns {Entity[]} Merged TypeORM list of personnel, converted to JSON string
    */
-  async getEmcrPersonnelforCSV(): Promise<EmcrPersonnelEntity[]> {
+  async getEmcrPersonnelForExport(): Promise<EmcrPersonnelEntity[]> {
     const qb =
       this.emcrPersonnelRepository.createQueryBuilder('emcr_personnel');
-    //join with personnel table and append last deployed date as subselection
-    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel').addSelect(
-      (subQuery) => {
-        return subQuery
-          .select('availability.date')
-          .from(AvailabilityEntity, 'availability')
-          .where('availability.personnel = personnel.id')
-          .andWhere('availability.availabilityType = :type', {
-            type: 'DEPLOYED',
-          })
-          .orderBy('availability.date', 'DESC')
-          .take(1);
-      },
-      'last_deployed',
+    qb.leftJoinAndSelect('emcr_personnel.personnel', 'personnel');
+    qb.leftJoinAndSelect(
+      'personnel.recommitment',
+      'recommitment',
+      `recommitment.program = 'emcr'`,
     );
-    qb.leftJoinAndSelect('personnel.homeLocation', 'home_loc');
-    qb.leftJoinAndSelect('personnel.workLocation', 'work_loc');
-    qb.leftJoinAndSelect('personnel.recommitment', 'recommitment');
     qb.leftJoinAndSelect('recommitment.recommitmentCycle', 'recommitmentCycle');
 
     const personnel = await qb.getRawMany();
 
-    return personnel;
+    const lastDeployeds = await this.availabilityRepository.query(`SELECT 
+    personnel,
+    MAX(date) AS last_deployed_date
+    FROM 
+        availability
+    WHERE 
+        availability_type = 'DEPLOYED'
+    GROUP BY 
+    personnel;`);
+
+    const locations = await this.locationRepository
+      .createQueryBuilder('location')
+      .getRawMany();
+
+    const lastDeployedMap = lastDeployeds.reduce(
+      (
+        acc: Record<string, Date>,
+        entry: { personnel: string; last_deployed_date: Date },
+      ) => {
+        acc[entry.personnel] = entry.last_deployed_date;
+        return acc;
+      },
+      {},
+    );
+    const locationMap = locations.reduce(
+      (acc: Record<number, Omit<LocationEntity, 'id'>>, location) => {
+        const { location_id, ...rest } = location;
+        acc[location_id] = rest;
+        return acc;
+      },
+      {},
+    );
+    const mappedPersonnel = personnel.map((p) => ({
+      ...p,
+      last_deployed: lastDeployedMap[p.personnel_id],
+      home_loc_location_name:
+        locationMap[p.personnel_home_location]?.['location_location_name'] ||
+        '',
+      home_loc_region:
+        locationMap[p.personnel_home_location]?.['location_region'] || '',
+      work_loc_location_name:
+        locationMap[p.personnel_work_location]?.['location_location_name'] ||
+        '',
+      work_loc_region:
+        locationMap[p.personnel_work_location]?.['location_region'] || '',
+    }));
+
+    return mappedPersonnel;
   }
 
   /**

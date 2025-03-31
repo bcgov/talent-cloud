@@ -9,6 +9,7 @@ import {
   BcwsSectionsAndRolesEntity,
 } from '../database/entities/bcws';
 import { BcwsRoleEntity } from '../database/entities/bcws/bcws-role.entity';
+import { LocationEntity } from '../database/entities/location.entity';
 import { AppLogger } from '../logger/logger.service';
 import { PersonnelModule } from '../personnel/personnel.module';
 
@@ -17,6 +18,7 @@ import { PersonnelModule } from '../personnel/personnel.module';
     TypeOrmModule.forFeature([
       BcwsPersonnelEntity,
       BcwsSectionsAndRolesEntity,
+      LocationEntity,
       BcwsRoleEntity,
     ]),
     PersonnelModule,
