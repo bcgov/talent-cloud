@@ -1,13 +1,27 @@
-name: owasp-scan
+name: ZAP baseline scan
 on:
   workflow_dispatch:
   push:
-jobs:
-  zap-owasp:
-    uses: bcgov/pipeline-templates/.github/workflows/owasp-scan.yaml@main
-    with:
-      ZAP_SCAN_TYPE: 'base' # Accepted values are base and full.
-      ZAP_TARGET_URL: https://coreteam.gov.bc.ca/
-      ZAP_DURATION: '2'
-      ZAP_MAX_DURATION: '5'
-      ZAP_GCP_PUBLISH: false
+    tags:
+      - dev
+env:
+  ENV_NAME: dev
+
+jobs: 
+  zap_scan:    
+    name: ZAP baseline scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/
+          cmd_options: '-I'
+      - name: Upload ZAP report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OWASP ZAP CORE Backend Report
+          path: report_html.html
