@@ -566,7 +566,7 @@ export class PersonnelService {
             allAvailable.getParameters(),
           )
           .andWhere('personnel.availability_confirmed_until >= :date', {
-            date: end,
+            date: start,
           });
 
         queryBuilder.leftJoinAndSelect(
