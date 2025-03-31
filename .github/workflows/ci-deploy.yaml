@@ -120,19 +120,33 @@ jobs:
           wget https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz
           tar -xvf oc.tar.gz
           sudo mv oc /usr/local/bin/
-      # - uses: dorny/paths-filter@v2
-      #   id: frontend_changes
-      #   with:
-      #     # filters: |
-      #     #   frontend:
-      #     #     - 'frontend/**'
-      #     base: ${{ github.ref}}
       - name: Build & Deploy Frontend
         env:
           OS_NAMESPACE_SUFFIX: dev
-        # if: steps.frontend_changes.outputs.frontend == 'true'
         run: |
           cd "$GITHUB_WORKSPACE"
           oc login --token="$TOOLS_TOKEN" --server="$CLUSTER"
           make deployment-build-client
           make deployment-tag-to-deploy-client
+
+  zap_scan:    
+    name: ZAP baseline scan
+    runs-on: ubuntu-latest
+    needs: 
+      - config
+      - build-backend
+      - build-frontend
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: https://tcloud-client-cd4869-dev.apps.gold.devops.gov.bc.ca/
+          cmd_options: '-I'
+      - name: Upload ZAP report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OWASP ZAP CORE Backend Report
+          path: report_html.html
