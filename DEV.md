@@ -1,5 +1,9 @@
 # TC - Developer Set Up
 
+### First Steps:
+
+If you are an independent contributor, please read the contributor guidelines. Otherwise, internal team members should clone the repository rather than fork in order to sync their changes with other developers.
+
 ### Dependencies:
 
 - npm v10.2.4
@@ -37,9 +41,8 @@ Useful DB Queries:
 
 Local Dev Containers:
 
-- Nginx Reverse Proxy: http://localhost:3050
-- Frontend/React: http://localhost:3050
-- Backend/NestJS: http://localhost:3050/api
+- Frontend/React: http://localhost:3000
+- Backend/NestJS: http://localhost:3000/api
 - Keycloak: http://localhost:8080
 - Postgres: http://localhost:5432
 
