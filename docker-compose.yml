@@ -20,16 +20,21 @@ services:
       - tc
 
   frontend:
-    container_name:  ${PROJECT}-frontend-${ENV}
-    entrypoint: sh -c "npm ci && npm run dev"
+    container_name: ${PROJECT}-frontend-${ENV}
+    entrypoint: sh -c "npm ci && VITE_HMR_HOST=localhost npm run dev"
     environment:
       NODE_ENV: ${ENV}
       PORT: 3000
       BACKEND_URL: http://backend:3000
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      VITE_HMR_HOST: "localhost"
     image: node:20-bullseye
-    ports: 
+    ports:
       - "3000:3000"
-    volumes: ["./frontend:/app", "/app/node_modules"]
+    volumes:
+      - "./frontend:/app:delegated"
+      - "/app/node_modules"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
     working_dir: "/app"
@@ -38,7 +43,7 @@ services:
     depends_on:
       - backend
   caddy:
-    container_name:  ${PROJECT}-caddy-${ENV}
+    container_name: ${PROJECT}-caddy-${ENV}
     profiles: ["caddy"]
     build: ./frontend
     environment:
@@ -51,7 +56,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
     depends_on:
-    - backend
+      - backend
     networks:
       - tc
   backend:
@@ -60,10 +65,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile.local
     stdin_open: true
-    ports: 
-    - "3001:3000"
-    - 9229:9229 # 9229 is the default node debug port
-    volumes: 
+    ports:
+      - "3001:3000"
+      - 9229:9229 # 9229 is the default node debug port
+    volumes:
       - "./backend:/usr/src/app"
       - "/usr/src/app/node_modules"
     environment:
@@ -73,7 +78,7 @@ services:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
-      KEYCLOAK_REALM:  ${KEYCLOAK_REALM}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
       KEYCLOAK_AUTH_URL: ${KEYCLOAK_AUTH_URL}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT}
       BCWS_TOKEN: ${BCWS_TOKEN}
@@ -82,7 +87,7 @@ services:
       CHEFS_API_KEY: ${CHEFS_API_KEY}
       CHIPS_API: ${CHIPS_API}
       CHIPS_API_KEY: ${CHIPS_API_KEY}
-      CHEFS_FORM_ENABLED: ${CHEFS_FORM_ENABLED} 
+      CHEFS_FORM_ENABLED: ${CHEFS_FORM_ENABLED}
       CHEFS_FORM_ID: ${CHEFS_FORM_ID}
       CHES_API: ${CHES_API}
       CHES_AUTH_API: ${CHES_AUTH_API}
