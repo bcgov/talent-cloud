@@ -108,14 +108,16 @@ services:
       - tc
   keycloak:
     container_name: ${PROJECT}-keycloak-${ENV}
+    image: ${PROJECT}-keycloak
     build:
       context: ./keycloak
+      dockerfile: Dockerfile
     command:
       - start-dev
       - --import-realm
       - --hostname-strict=false
       - --hostname-strict-https=false
-    platform: linux/arm64/v8
+    platform: linux/amd64 
     volumes:
       - keycloak:/opt/keycloak/data
       - ./keycloak/export:/opt/keycloak/data/import
@@ -140,7 +142,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8080:8080"
+      - "0.0.0.0:8081:8080" # Explicitly bind to all interfaces
       - "8787:8787" # debug port
     networks:
       - tc

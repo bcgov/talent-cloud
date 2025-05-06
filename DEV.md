@@ -43,7 +43,7 @@ Local Dev Containers:
 
 - Frontend/React: http://localhost:3000
 - Backend/NestJS: http://localhost:3000/api
-- Keycloak: http://localhost:8080
+- Keycloak: http://localhost:8081
 - Postgres: http://localhost:5432
 
 ### Keycloak - Local

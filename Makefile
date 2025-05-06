@@ -93,7 +93,7 @@ local-backend-workspace:
 	@docker exec -it $(PROJECT)-backend sh
 
 local-frontend-workspace:
-	@docker exec -it $(PROJECT)-frontend sh
+	@docker exec -it $(PROJECT)-frontend-$(ENV) sh
 
 local-nginx-workspace:
 	@docker exec -it $(PROJECT)-nginx sh
