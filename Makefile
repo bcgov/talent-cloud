@@ -5,8 +5,8 @@ SHELL := /bin/bash
 
 # Environment variables for project
 export $(sed 's/=.*//' .env)
-ENV := $(PWD)/.env
-include $(ENV)
+ENV_FILE := $(PWD)/.env
+include $(ENV_FILE)
 
 # Project
 export PROJECT := tc
@@ -93,7 +93,7 @@ local-backend-workspace:
 	@docker exec -it $(PROJECT)-backend sh
 
 local-frontend-workspace:
-	@docker exec -it $(PROJECT)-frontend-$(ENV) sh
+	@docker exec -it $(PROJECT)-frontend sh
 
 local-nginx-workspace:
 	@docker exec -it $(PROJECT)-nginx sh
