@@ -47,6 +47,9 @@ jobs:
       - name: migrate
         run: make migration-run
 
+      - name: Seed Reference Data
+        run: make seed-local
+
       - name: Seed Test Data
         run: make seed-local-personnel
       
