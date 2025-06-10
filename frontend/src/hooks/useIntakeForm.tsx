@@ -96,6 +96,7 @@ export const useIntakeForm = () => {
       /[^\d]/g,
       '',
     );
+    values.liaisonPhoneNumber = values.liaisonPhoneNumber?.replace(/[^\d]/g, '');
     values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
 
     values.languages = values.languages?.filter((itm) => itm.language !== '');
