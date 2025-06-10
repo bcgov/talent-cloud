@@ -1,18 +1,18 @@
 // hooks
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAxios } from './useAxios';
 // enums & types
+import { Program } from '@/common';
+import { BcwsRoleName, Section, SectionName } from '@/common/enums/sections.enum';
 import type {
   IntakeFormSubmissionData,
   IntakeFormValues,
 } from '@/pages/intake-form/constants/types';
-import { AlertType } from '@/providers/Alert';
-import { useAlert } from './useAlert';
-import { Program } from '@/common';
-import { BcwsRoleName, Section, SectionName } from '@/common/enums/sections.enum';
-import { useProgramFieldData } from './useProgramFieldData';
 import { formTabs } from '@/pages/intake-form/utils/tab-fields';
+import { AlertType } from '@/providers/Alert';
 import { useStepContext } from '@/providers/StepperContext';
+import { useAlert } from './useAlert';
+import { useProgramFieldData } from './useProgramFieldData';
 
 export const useIntakeForm = () => {
   const { AxiosPrivate } = useAxios();
@@ -96,6 +96,7 @@ export const useIntakeForm = () => {
       /[^\d]/g,
       '',
     );
+    values.liaisonPhoneNumber = values.liaisonPhoneNumber?.replace(/[^\d]/g, '');
     values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
 
     values.languages = values.languages?.filter((itm) => itm.language !== '');
