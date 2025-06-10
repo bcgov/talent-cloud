@@ -62,6 +62,10 @@ export const useIntakeForm = () => {
     })();
   }, []);
 
+  function sanitizePhone(phone?: string): string {
+    return phone ? phone.replace(/[^\d]/g, '') : '';
+  }
+
   const saveUpdateForm = async (values: any) => {
     try {
       await AxiosPrivate.patch(`/intake-form/${formData?.id}`, {
@@ -88,16 +92,14 @@ export const useIntakeForm = () => {
       handleSetCompletedStep(4);
     }
 
-    values.primaryPhoneNumber = values?.primaryPhoneNumber?.replace(/[^\d]/g, '');
-    values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
-    values.emergencyContactPhoneNumber =
-      values?.emergencyContactPhoneNumber?.replace(/[^\d]/g, '');
-    values.supervisorPhoneNumber = values.supervisorPhoneNumber?.replace(
-      /[^\d]/g,
-      '',
+    values.primaryPhoneNumber = sanitizePhone(values.primaryPhoneNumber);
+    values.secondaryPhoneNumber = sanitizePhone(values.secondaryPhoneNumber);
+    values.emergencyContactPhoneNumber = sanitizePhone(
+      values.emergencyContactPhoneNumber,
     );
-    values.liaisonPhoneNumber = values.liaisonPhoneNumber?.replace(/[^\d]/g, '');
-    values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
+    values.supervisorPhoneNumber = sanitizePhone(values.supervisorPhoneNumber);
+    values.liaisonPhoneNumber = sanitizePhone(values.liaisonPhoneNumber);
+    values.workPhoneNumber = sanitizePhone(values.workPhoneNumber);
 
     values.languages = values.languages?.filter((itm) => itm.language !== '');
 
