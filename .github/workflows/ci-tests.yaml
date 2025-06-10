@@ -12,6 +12,9 @@ env:
   KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
   KEYCLOAK_USER: ${{ secrets.KEYCLOAK_USER }}
   KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+  VITE_KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT }}
+  VITE_KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
+  VITE_KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   CYPRESS_BASE_URL: http://localhost:3000
   CYPRESS_AUTH_ORIGIN: https://logontest7.gov.bc.ca/
   TARGET: dev
