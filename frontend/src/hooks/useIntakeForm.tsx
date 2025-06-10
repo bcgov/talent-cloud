@@ -55,6 +55,7 @@ export const useIntakeForm = () => {
         handleSetErrors(res.data.personnel.errorSteps);
         handleSetCompletedSteps(res.data.personnel.completedSteps);
       } catch (e) {
+        console.error('Error loading intake form:', e);
         showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
       } finally {
         setLoading(false);
@@ -73,6 +74,7 @@ export const useIntakeForm = () => {
         personnel: { ...values, step, errorSteps, completedSteps },
       });
     } catch (e) {
+      console.error('Error saving intake form:', e);
       showAlert({ type: AlertType.ERROR, message: 'Error Saving Form' });
     }
   };
@@ -155,6 +157,7 @@ export const useIntakeForm = () => {
       handleSetStep(5);
       showAlert({ type: AlertType.SUCCESS, message: 'Form has been submitted!' });
     } catch (e) {
+      console.error('Error submitting intake form:', e);
       showAlert({ type: AlertType.ERROR, message: 'Error Submitting Form' });
     }
   };
