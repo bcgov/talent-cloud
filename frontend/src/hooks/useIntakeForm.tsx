@@ -55,12 +55,17 @@ export const useIntakeForm = () => {
         handleSetErrors(res.data.personnel.errorSteps);
         handleSetCompletedSteps(res.data.personnel.completedSteps);
       } catch (e) {
+        console.error('Error loading intake form:', e);
         showAlert({ type: AlertType.ERROR, message: 'Error Loading Form' });
       } finally {
         setLoading(false);
       }
     })();
   }, []);
+
+  function sanitizePhone(phone?: string): string {
+    return phone ? phone.replace(/[^\d]/g, '') : '';
+  }
 
   const saveUpdateForm = async (values: any) => {
     try {
@@ -69,6 +74,7 @@ export const useIntakeForm = () => {
         personnel: { ...values, step, errorSteps, completedSteps },
       });
     } catch (e) {
+      console.error('Error saving intake form:', e);
       showAlert({ type: AlertType.ERROR, message: 'Error Saving Form' });
     }
   };
@@ -88,15 +94,14 @@ export const useIntakeForm = () => {
       handleSetCompletedStep(4);
     }
 
-    values.primaryPhoneNumber = values?.primaryPhoneNumber?.replace(/[^\d]/g, '');
-    values.secondaryPhoneNumber = values.secondaryPhoneNumber?.replace(/[^\d]/g, '');
-    values.emergencyContactPhoneNumber =
-      values?.emergencyContactPhoneNumber?.replace(/[^\d]/g, '');
-    values.supervisorPhoneNumber = values.supervisorPhoneNumber?.replace(
-      /[^\d]/g,
-      '',
+    values.primaryPhoneNumber = sanitizePhone(values.primaryPhoneNumber);
+    values.secondaryPhoneNumber = sanitizePhone(values.secondaryPhoneNumber);
+    values.emergencyContactPhoneNumber = sanitizePhone(
+      values.emergencyContactPhoneNumber,
     );
-    values.workPhoneNumber = values.workPhoneNumber?.replace(/[^\d]/g, '');
+    values.supervisorPhoneNumber = sanitizePhone(values.supervisorPhoneNumber);
+    values.liaisonPhoneNumber = sanitizePhone(values.liaisonPhoneNumber);
+    values.workPhoneNumber = sanitizePhone(values.workPhoneNumber);
 
     values.languages = values.languages?.filter((itm) => itm.language !== '');
 
@@ -152,6 +157,7 @@ export const useIntakeForm = () => {
       handleSetStep(5);
       showAlert({ type: AlertType.SUCCESS, message: 'Form has been submitted!' });
     } catch (e) {
+      console.error('Error submitting intake form:', e);
       showAlert({ type: AlertType.ERROR, message: 'Error Submitting Form' });
     }
   };

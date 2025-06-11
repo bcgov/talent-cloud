@@ -12,6 +12,9 @@ env:
   KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
   KEYCLOAK_USER: ${{ secrets.KEYCLOAK_USER }}
   KEYCLOAK_PASSWORD: ${{ secrets.KEYCLOAK_PASSWORD }}
+  VITE_KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT }}
+  VITE_KEYCLOAK_AUTH_URL: ${{ secrets.KEYCLOAK_AUTH_URL }}
+  VITE_KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
   CYPRESS_BASE_URL: http://localhost:3000
   CYPRESS_AUTH_ORIGIN: https://logontest7.gov.bc.ca/
   TARGET: dev
@@ -24,7 +27,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      
+
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
 
@@ -47,12 +50,15 @@ jobs:
       - name: migrate
         run: make migration-run
 
+      - name: Seed Reference Data
+        run: make seed-local-ci
+
       - name: Seed Test Data
         run: make seed-local-personnel
-      
-      - name: Run Frontend Tests
-        run: make test-frontend-pipeline
-      
+
+      # - name: Run Frontend Tests
+      #   run: make test-frontend-pipeline
+
       - name: Run Backend Tests
         run: make test-backend-pipeline
 

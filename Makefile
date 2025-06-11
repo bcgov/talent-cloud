@@ -23,7 +23,6 @@ export KEYCLOAK_AUTH_DEV=https://dev.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_TEST=https://test.loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH_PROD=https://loginproxy.gov.bc.ca/auth
 export KEYCLOAK_AUTH=$(KEYCLOAK_AUTH_TEST)
-export SERVER_POD:=$(shell oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1)
 
 
 # Git
@@ -269,20 +268,26 @@ seed-local-personnel:
 	@docker exec tc-backend-${ENV} ./node_modules/.bin/ts-node -e 'require("./src/database/seed/seed-both.ts")'
 
 seed-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/create-availability-functions.js")'; \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed.js")'
 	
 seed-oc-personnel:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-both.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-both.js")'
 
 seed-oc-bcws:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-bcws.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-bcws.js")'
+
 
 seed-oc-emcr:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-emcr.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-emcr.js")'
 
 seed-oc-recommitment:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js").handler("$(START_DATE)", "$(END_DATE)")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/database/seed/seed-recommitment.js").handler("$(START_DATE)", "$(END_DATE)")'
 
 
 delete-db:
@@ -290,8 +295,8 @@ delete-db:
 	@docker exec -it tc-db-$(ENV) psql -U tc_user -d tc  -c "CREATE SCHEMA public;"
 
 migration-run-oc:
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
-
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node ./node_modules/typeorm/cli migration:run -d ./dist/database/datasource.js
 
 copy-keycloak-realm:
 	@echo "+\n++ Make: Export Keycloak ...\n+"
@@ -326,19 +331,23 @@ check-mail-status:
 
 start-recommitment-oc:
 	@echo "Trigger recommitment job ${ENV}"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/jobs/start_recommitment.js")'
 
 end-recommitment-oc:
 	@echo "Trigger end recommitment job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/jobs/end_recommitment.js")'
 
 send-notification-oc:
 	@echo "Trigger send notification job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/jobs/automated_reminders.js")'
 
 check-mail-status-oc:
 	@echo "Trigger check mail status Job"
-	@oc rsh $(SERVER_POD) ./node_modules/.bin/ts-node -e 'require("./dist/jobs/mail-status.js")'
+	@SERVER_POD=$$(oc get pods -o custom-columns=POD:.metadata.name --no-headers -l name=tcloud-server | head -n 1); \
+	oc rsh $$SERVER_POD ./node_modules/.bin/ts-node -e 'require("./dist/jobs/mail-status.js")'
 
 create-start-recommitment-cron:
 	@oc process -f openshift/cron-start-recommitment.yml -p APP_NAME=$(APP_NAME) IMAGE_NAMESPACE=$(TOOLS_NAMESPACE) IMAGE_TAG=$(OS_NAMESPACE_SUFFIX) START_RECOMMITMENT_SCHEDULE="$(START_RECOMMITMENT_SCHEDULE)" | oc apply -n $(TARGET_NAMESPACE) -f -
