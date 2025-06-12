@@ -542,7 +542,9 @@ export class IntakeFormService {
         jobTitle: data.currentPositionTitle || '',
         unionMembership,
         ministry,
-        homeLocation: { id: homeLocation.id, name: homeLocation.locationName },
+        homeLocation: homeLocation
+          ? { id: homeLocation.id, name: homeLocation.locationName }
+          : undefined,
         paylistId: data.deptId,
         supervisorLastName: data.currentSupervisorName?.split(',')[0],
         supervisorFirstName: data.currentSupervisorName?.split(',')[1],
