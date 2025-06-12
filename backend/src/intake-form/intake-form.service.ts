@@ -5,9 +5,6 @@ import { Repository, UpdateResult } from 'typeorm';
 import { MailService } from '../mail/mail.service';
 import { CreatePersonnelDTO } from '../personnel';
 
-import { IntakeFormDTO } from './dto/intake-form.dto';
-import { IntakeFormRO } from './ro/intake-form.ro';
-import { IntakeFormPersonnelData } from './types';
 import { Program, RequestWithRoles } from '../auth/interface';
 import {
   CreateBcwsPersonnelRolesDTO,
@@ -44,6 +41,9 @@ import { MailDto } from '../mail/mail.dto';
 import { CreatePersonnelToolsDTO } from '../personnel/dto/skills/create-personnel-tools.dto';
 import { PersonnelService } from '../personnel/personnel.service';
 import { RegionsAndLocationsService } from '../region-location/region-location.service';
+import { IntakeFormDTO } from './dto/intake-form.dto';
+import { IntakeFormRO } from './ro/intake-form.ro';
+import { IntakeFormPersonnelData } from './types';
 
 @Injectable()
 export class IntakeFormService {
@@ -56,6 +56,15 @@ export class IntakeFormService {
     private locationService: RegionsAndLocationsService,
     @Inject(MailService) private mailService: MailService,
   ) {}
+
+  private deduplicateEmcrExperiences(personnel: CreatePersonnelDTO) {
+    if (personnel.emcr && Array.isArray(personnel.emcr.experiences)) {
+      personnel.emcr.experiences = personnel.emcr.experiences.filter(
+        (exp, index, self) =>
+          index === self.findIndex((e) => e.functionId === exp.functionId),
+      );
+    }
+  }
   /**
    * Creates new Personnel, EMCR Personnel, BCWS Personnel from Intake Form data
    * @param createIntakeFormDto
@@ -74,6 +83,8 @@ export class IntakeFormService {
     const personnelFromFormData = await this.createPersonnel(
       createIntakeFormDto.personnel,
     );
+
+    this.deduplicateEmcrExperiences(personnelFromFormData);
 
     if (!existingPerson) {
       await this.personnelService.createPerson(personnelFromFormData);
@@ -531,7 +542,9 @@ export class IntakeFormService {
         jobTitle: data.currentPositionTitle || '',
         unionMembership,
         ministry,
-        homeLocation: { id: homeLocation.id, name: homeLocation.locationName },
+        homeLocation: homeLocation
+          ? { id: homeLocation.id, name: homeLocation.locationName }
+          : undefined,
         paylistId: data.deptId,
         supervisorLastName: data.currentSupervisorName?.split(',')[0],
         supervisorFirstName: data.currentSupervisorName?.split(',')[1],
