@@ -4,6 +4,7 @@
 name: OpenShift Deploy/Promotion to Prod
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - prod
@@ -43,7 +44,7 @@ jobs:
           filters: |
             src:
               - 'openshift/**'
-          base: 'refs/tags/prod'
+          base: "refs/tags/prod"
       - name: Apply Changes
         env:
           OS_NAMESPACE_SUFFIX: prod
