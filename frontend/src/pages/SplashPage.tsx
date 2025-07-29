@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router';
 
 const SplashPage = () => {
   const { keycloak } = useKeycloak();
-  const login = () => {
-    window.location.replace(createCustomLoginUrl(keycloak, Routes.Redirect, ''));
+  const login = async () => {
+    const url = await createCustomLoginUrl(keycloak, Routes.Redirect, '');
+    window.location.replace(url);
   };
 
   const navigate = useNavigate();
