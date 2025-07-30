@@ -160,6 +160,7 @@ export const memberFormConfig = (personnelData: Member, locations: Location[]) =
         liaisonFirstName: personnel?.bcws?.liaisonFirstName ?? '',
         liaisonLastName: personnel?.bcws?.liaisonLastName ?? '',
         liaisonEmail: personnel?.bcws?.liaisonEmail ?? '',
+        liaisonPhoneNumber: personnel?.bcws?.liaisonPhoneNumber ?? '',
       },
       ministry: personnel.ministry,
       division: personnel.division ?? '',
