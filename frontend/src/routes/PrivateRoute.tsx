@@ -11,8 +11,9 @@ const PrivateRoute = () => {
   /**
    * Redirects to login page if user is not authenticated, and then logs in to the current page
    */
-  const login = () => {
-    window.location.replace(createCustomLoginUrl(keycloak, location.pathname, ''));
+  const login = async () => {
+    const url = await createCustomLoginUrl(keycloak, location.pathname, '');
+    window.location.replace(url);
   };
 
   if (keycloak && !keycloak.authenticated) {

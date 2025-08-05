@@ -8,14 +8,15 @@ import type Keycloak from 'keycloak-js';
  * @param route custom route portion of redirect
  * @param idpHint keycloak idp hint
  */
-export const createCustomLoginUrl = (
+export const createCustomLoginUrl = async (
   kcInstance: Keycloak,
   route: string,
   idpHint: string,
 ) => {
   const idps = ['idir'];
 
-  const loginUrl = kcInstance.createLoginUrl({
+  // Await the loginUrl if createLoginUrl returns a Promise
+  const loginUrl = await kcInstance.createLoginUrl({
     idpHint,
     redirectUri: `${window.location.origin}${route}`,
   });
