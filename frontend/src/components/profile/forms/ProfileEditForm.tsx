@@ -40,16 +40,16 @@ export const ProfileEditForm = ({
     }
     if (values?.bcws?.liaisonPhoneNumber) {
       values.bcws.liaisonPhoneNumber = values?.bcws.liaisonPhoneNumber?.replace(
-        /[(]|-|[)]|\s/gi,
+        /[^\d]/g,
         '',
       );
     }
+    if (values?.liaisonPhoneNumber) {
+      values.liaisonPhoneNumber = values?.liaisonPhoneNumber?.replace(/[^\d]/g, '');
+    }
 
     if (values.supervisorPhone) {
-      values.supervisorPhone = values?.supervisorPhone?.replace(
-        /[(]|-|[)]|\s/gi,
-        '',
-      );
+      values.supervisorPhone = values?.supervisorPhone?.replace(/[^\d]/g, '');
     }
 
     delete values.dateApplied;
