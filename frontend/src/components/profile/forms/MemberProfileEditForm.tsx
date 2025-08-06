@@ -32,28 +32,28 @@ export const MemberProfileEditForm = ({
   ) => {
     // trim all the formatted characters out of the phone numbers
     if (values?.primaryPhone && values?.primaryPhone !== member.primaryPhone) {
-      values.primaryPhone = values?.primaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+      values.primaryPhone = values?.primaryPhone?.replace(/[^\d]/g, '');
     }
     if (values?.workPhone && values?.workPhone !== member.workPhone) {
-      values.workPhone = values?.workPhone?.replace(/[(]|-|[)]|\s/gi, '');
+      values.workPhone = values?.workPhone?.replace(/[^\d]/g, '');
     }
 
     if (values?.secondaryPhone && values?.secondaryPhone !== member.secondaryPhone) {
-      values.secondaryPhone = values?.secondaryPhone?.replace(/[(]|-|[)]|\s/gi, '');
+      values.secondaryPhone = values?.secondaryPhone?.replace(/[^\d]/g, '');
     }
     if (
       values?.emergencyContactPhoneNumber &&
       values?.emergencyContactPhoneNumber !== member.emergencyContactPhoneNumber
     ) {
       values.emergencyContactPhoneNumber =
-        values?.emergencyContactPhoneNumber.replace(/[(]|-|[)]|\s/gi, '');
+        values?.emergencyContactPhoneNumber.replace(/[^\d]/g, '');
     }
     if (
       values?.bcws?.liaisonPhoneNumber &&
       values?.bcws?.liaisonPhoneNumber !== member.bcws?.liaisonPhoneNumber
     ) {
       values.bcws.liaisonPhoneNumber = values?.bcws.liaisonPhoneNumber?.replace(
-        /[(]|-|[)]|\s/gi,
+        /[^\d]/g,
         '',
       );
     }
@@ -62,16 +62,13 @@ export const MemberProfileEditForm = ({
       values?.supervisorPhone &&
       values?.supervisorPhone !== member.supervisorPhone
     ) {
-      values.supervisorPhone = values?.supervisorPhone?.replace(
-        /[(]|-|[)]|\s/gi,
-        '',
-      );
+      values.supervisorPhone = values?.supervisorPhone?.replace(/[^\d]/g, '');
     }
 
     delete values.dateApplied;
     delete values.dateApproved;
     delete values.employeeId; // Cannot be changed
-    delete values.paylistId; // Cannot be changed    
+    delete values.paylistId; // Cannot be changed
     if (values?.icsTraining === 'true') {
       values.icsTraining = true;
     }
@@ -122,6 +119,6 @@ export const MemberProfileEditForm = ({
       fieldChangeHandler={fieldChangeHandler}
       handleClose={handleClose}
       showHeaders={false}
-    />  
+    />
   );
 };

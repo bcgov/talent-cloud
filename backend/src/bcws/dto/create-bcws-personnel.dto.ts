@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsAlphanumeric,
   Length,
   ValidateIf,
 } from 'class-validator';
@@ -85,7 +86,10 @@ export class CreatePersonnelBcwsDTO {
   @ApiProperty({
     description: 'Liaison Phone Number',
   })
+  @IsAlphanumeric()
+  @Length(10, 10)
   @IsOptional()
+  @ValidateIf((o) => o.liaisonPhoneNumber && o.liaisonPhoneNumber !== '')
   liaisonPhoneNumber?: string;
 
   @ApiProperty({

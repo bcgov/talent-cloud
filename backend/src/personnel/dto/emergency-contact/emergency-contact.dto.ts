@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsAlphanumeric, Length, ValidateIf } from 'class-validator';
 
 export class EmergencyContactInfo {
   @ApiProperty({
@@ -17,7 +17,10 @@ export class EmergencyContactInfo {
   @ApiProperty({
     description: 'Emergency Contact Phone Number',
   })
+  @IsAlphanumeric()
+  @Length(10, 10)
   @IsOptional()
+  @ValidateIf((o) => o.emergencyContactPhoneNumber && o.emergencyContactPhoneNumber !== '')
   emergencyContactPhoneNumber?: string;
 
   @ApiProperty({
