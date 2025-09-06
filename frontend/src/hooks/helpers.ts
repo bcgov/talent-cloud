@@ -18,11 +18,8 @@ export const getAvailabilityValue = (
   availabilityDates: DateRange,
   availability: Availability[],
 ) => {
-  const totalAvailableDays =
-    availabilityType === AvailabilityType.AVAILABLE
-      ? availability.filter((itm) => itm.availabilityType !== availabilityType)
-          .length
-      : availability.filter((itm) => itm.availabilityType === availabilityType)
+  const totalDaysOfAvailabilityType =
+        availability.filter((itm) => itm.availabilityType === availabilityType)
           .length;
   const totalDaysSearched =
     differenceInDays(
@@ -30,17 +27,17 @@ export const getAvailabilityValue = (
       availabilityDates.from ?? new Date(),
     ) + 1;
 
-  if (totalDaysSearched === 1 || totalDaysSearched === totalAvailableDays) {
+  if (totalDaysSearched === 1 || totalDaysSearched === totalDaysOfAvailabilityType) {
     return {
       availability:
         AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType],
     };
   }
 
-  if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
+  if (totalDaysSearched > 1 && totalDaysOfAvailabilityType >= 1) {
     return {
       availability: AvailabilityTypeName[availabilityType],
-      days: `${totalAvailableDays} of ${totalDaysSearched} days`,
+      days: `${totalDaysOfAvailabilityType} of ${totalDaysSearched} days`,
     };
   }
 
