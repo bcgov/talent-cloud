@@ -18,26 +18,30 @@ export const getAvailabilityValue = (
   availabilityDates: DateRange,
   availability: Availability[],
 ) => {
-  const totalDaysOfAvailabilityType =
-        availability.filter((itm) => itm.availabilityType === availabilityType)
-          .length;
+
   const totalDaysSearched =
     differenceInDays(
       availabilityDates.to ?? new Date(),
       availabilityDates.from ?? new Date(),
     ) + 1;
 
-  if (totalDaysSearched === 1 || totalDaysSearched === totalDaysOfAvailabilityType) {
-    return {
+  const totalAvailableDays =
+    availabilityType === AvailabilityType.AVAILABLE
+      ? totalDaysSearched - availability.filter((itm) => itm.availabilityType !== availabilityType).length
+      : availability.filter((itm) => itm.availabilityType === availabilityType).length
+  
+
+  if (totalDaysSearched === 1 || totalDaysSearched === totalAvailableDays) {
+      return {
       availability:
         AvailabilityTypeName[availabilityType as keyof typeof AvailabilityType],
     };
   }
 
-  if (totalDaysSearched > 1 && totalDaysOfAvailabilityType >= 1) {
+  if (totalDaysSearched > 1 && totalAvailableDays >= 1) {
     return {
       availability: AvailabilityTypeName[availabilityType],
-      days: `${totalDaysOfAvailabilityType} of ${totalDaysSearched} days`,
+      days: `${totalAvailableDays} of ${totalDaysSearched} days`,
     };
   }
 
