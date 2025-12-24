@@ -20,6 +20,9 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 
     const testEmails = process.env?.TEST_EMAIL?.split(',') || undefined;
     const viewsPath = process.env?.VIEWS || 'views';
+    const recommitmentYear = parseInt(process.env?.RECOMMITMENT_YEAR)
+      ? parseInt(process.env.RECOMMITMENT_YEAR)
+      : undefined;
 
     const testRun = process.env?.TEST_RUN === 'true' || false;
 
@@ -27,6 +30,8 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 
     logger.log(`Test run: ${testRun}`, 'End Recommitment');
     logger.log(`Test Emails: ${testEmails}`, 'End Recommitment');
+    logger.log(`Recommitment Year: ${recommitmentYear}`, 'End Recommitment');
+    
 
     app.useStaticAssets(join(__dirname, '..', viewsPath));
     app.setBaseViewsDir(join(__dirname, '..', viewsPath));
@@ -60,7 +65,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
       { endDate: datePST(new Date()) },
     );
 
-    return await recommitmentService.handleEndRecommitment(testRun, testEmails);
+    return await recommitmentService.handleEndRecommitment(testRun, testEmails, recommitmentYear);
   } catch (e) {
     console.error(e);
   } finally {

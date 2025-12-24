@@ -19,11 +19,13 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     const viewsPath = process.env.VIEWS;
     const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
     const testRun = process.env.TEST_RUN === 'true';
+    const recommitmentYear = parseInt(process.env.RECOMMITMENT_YEAR) || undefined;
 
     logger.log(`Views path: ${viewsPath}`, 'Start Recommitment');
     logger.log(`Recommiting for ministry ${ministry}`, 'Start Recommitment');
     logger.log(`Test run: ${testRun}`, 'Start Recommitment');
     logger.log(`Test Emails: ${testEmails}`, 'Start Recommitment');
+    logger.log(`Recommitment Year: ${recommitmentYear}`, 'Start Recommitment');
 
     app.useStaticAssets(join(__dirname, '..', viewsPath));
     app.setBaseViewsDir(join(__dirname, '..', viewsPath));
@@ -45,6 +47,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
 
     const data = await recommitmentService.handleStartRecommitment(
       testRun,
+      recommitmentYear,
       testEmails,
       ministry,
     );

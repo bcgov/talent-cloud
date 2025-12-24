@@ -279,9 +279,7 @@ export class RecommitmentService {
       );
     }
 
-    const recommitmentCycle = await this.recommitmentCycleRepository.findOne({
-      where: { year: new Date().getFullYear() },
-    });
+    const recommitmentCycle = await this.checkRecommitmentPeriod();
     const currentPST = datePST(new Date());
     const endDate = recommitmentCycle.reinitiationEndDate
       ? recommitmentCycle.reinitiationEndDate
@@ -510,9 +508,10 @@ export class RecommitmentService {
    * Checks if the current date is within the recommitment period.
    * @returns {Promise<RecommitmentCycleRO>} - The recommitment cycle information.
    */
-  async checkRecommitmentPeriod(): Promise<RecommitmentCycleRO> {
+  async checkRecommitmentPeriod(recommitmentYear?: number): Promise<RecommitmentCycleRO> {
+
     const cycle = await this.recommitmentCycleRepository.findOne({
-      where: { year: new Date().getFullYear() },
+      where: { year: recommitmentYear || new Date().getFullYear()},
     });
     this.logger.log(cycle);
     return cycle;
@@ -546,12 +545,11 @@ export class RecommitmentService {
    */
   async handleStartRecommitment(
     dryRun: boolean = false,
+    recommitmentYear?: number,
     testEmail?: string[],
     ministry?: string,
   ): Promise<{ member: MailRO; supervisor: MailRO }> {
-    const cycle = await this.recommitmentCycleRepository.findOne({
-      where: { year: new Date().getFullYear() },
-    });
+    const cycle = await this.checkRecommitmentPeriod(recommitmentYear);
 
     const recommitmentQb =
       this.recommitmentRepository.createQueryBuilder('recommitment');
@@ -624,8 +622,9 @@ export class RecommitmentService {
     dryRun: boolean = false,
     testEmail?: string[],
     ministry?: string,
+    recommitmentYear?: number
   ) {
-    const recommitmentCycle = await this.checkRecommitmentPeriod();
+    const recommitmentCycle = await this.checkRecommitmentPeriod(recommitmentYear);
 
     const { memberPending, memberCommitted } =
       await this.findMembersByRecommitmentStatus();
@@ -686,9 +685,10 @@ export class RecommitmentService {
   async handleEndRecommitment(
     dryRun: boolean = false,
     testEmail?: string[],
+    recommitmentYear?: number,
   ): Promise<{ member: MailRO; supervisor: MailRO }> {
     const { memberPending, memberCommitted, memberDeclined, supervisorDenied } =
-      await this.findMembersByRecommitmentStatus();
+      await this.findMembersByRecommitmentStatus(recommitmentYear);
 
     this.logger.log(
       `Found: ${memberPending.length} Pending Members`,
@@ -707,7 +707,7 @@ export class RecommitmentService {
       'Supervisor Denied',
     );
 
-    const recommitmentCycle = await this.checkRecommitmentPeriod();
+    const recommitmentCycle = await this.checkRecommitmentPeriod(recommitmentYear);
 
     await this.updatePersonnelStatus(
       memberPending.map((itm) => itm.toResponseObject()),
@@ -814,14 +814,15 @@ export class RecommitmentService {
    * Finds members who are still pending in the recommitment process.
    * @returns {Promise<{ memberPending: RecommitmentEntity[]; memberCommittedBCWS: RecommitmentEntity[]; memberCommittedEMCR: RecommitmentEntity[] }>}
    */
-  async findMembersByRecommitmentStatus(): Promise<{
+  async findMembersByRecommitmentStatus(recommitmentYear?: number): Promise<{
     memberPending: RecommitmentEntity[];
     memberCommitted: RecommitmentEntity[];
     memberDeclined: RecommitmentEntity[];
     supervisorDenied: RecommitmentEntity[];
+    recommitmentYear?: number;
   }> {
     const members = await this.recommitmentRepository.find({
-      where: { recommitmentCycle: { year: new Date().getFullYear() } },
+      where: { recommitmentCycle: { year: recommitmentYear || new Date().getFullYear() } },
       relations: ['personnel', 'recommitmentCycle'],
     });
 

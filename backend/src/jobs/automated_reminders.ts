@@ -19,6 +19,7 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     const testEmails = process.env?.TEST_EMAIL?.split(',') || undefined;
     const viewsPath = process.env.VIEWS;
     const ministry = process.env.RECOMMITMENT_MINISTRY || undefined;
+    const recommitmentYear = process.env.RECOMMITMENT_YEAR ? parseInt(process.env.RECOMMITMENT_YEAR) : undefined;
     const testRun = process.env.TEST_RUN === 'true';
 
     logger.log(`Views path: ${viewsPath}`, 'Start Recommitment');
@@ -45,23 +46,14 @@ import { RecommitmentService } from '../recommitment/recommitment.service';
     const recommitmentService = app.get(RecommitmentService);
 
     const today = datePST(new Date());
-    const recommitment_cycle =
-      await recommitmentService.checkRecommitmentPeriod();
-    if (
-      today < recommitment_cycle.endDate &&
-      today > recommitment_cycle.startDate
-    ) {
-      await recommitmentService.handleSendAutomatedReminders(
-        testRun,
-        testEmails,
-        ministry,
-      );
-      logger.log('Job completed', 'Automated Reminder');
-      return;
-    } else {
-      logger.log('Not in recommitment period', 'Automated Recommitment');
-      return;
-    }
+    await recommitmentService.handleSendAutomatedReminders(
+      testRun,
+      testEmails,
+      ministry,
+      recommitmentYear
+    );
+    logger.log('Job completed', 'Automated Reminder');
+    return;
   } catch (e) {
     console.error(e);
   } finally {
