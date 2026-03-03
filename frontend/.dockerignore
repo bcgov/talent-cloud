@@ -1,8 +1,0 @@
-coverage
-.vscode
-.idea
-dist
-node_modules
-.husky
-vitest.config.ts
-dev-dist/*

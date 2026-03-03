@@ -1,9 +1,0 @@
-@import '@bcgov/bc-sans/css/BC_Sans.css';
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-@import './utils.css';
-@import './typography.css';
-@import './login.css';
-
-
